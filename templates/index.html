@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AnsibleAI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="shell">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sb-logo">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+  </div>
+  <button class="sb-btn active" data-panel="generate" data-tip="Generate" onclick="showPanel('generate',this)">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+  </button>
+  <button class="sb-btn" data-panel="history" data-tip="History" onclick="showPanel('history',this)">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+  </button>
+  <button class="sb-btn" data-panel="stats" data-tip="Statistics" onclick="showPanel('stats',this)">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+  </button>
+  <div class="sb-sep"></div>
+  <button class="sb-btn" data-tip="Clear history" onclick="clearHistory()">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+  </button>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-logo"><span>Ansible</span>AI</div>
+    <div class="topbar-right">
+      <div class="tb-stat">Generated <b id="tb-total">0</b></div>
+      <div class="tb-stat">Valid <b id="tb-valid" style="color:var(--a1)">0</b></div>
+      <div class="tb-stat"><div class="live-dot"></div>Ready</div>
+    </div>
+  </header>
+
+  <!-- GENERATE PANEL -->
+  <div class="panel active" id="panel-generate">
+    <div class="gen-layout">
+
+      <!-- Left: input + result -->
+      <div>
+        <div class="icard">
+          <div class="slabel">Describe your task</div>
+          <textarea id="user-input" placeholder="e.g. deploy redis using helm in the production namespace with persistence enabled..."></textarea>
+          <div class="btn-row">
+            <button class="btn-gen" id="gen-btn" onclick="generate()">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Generate
+            </button>
+            <button class="btn-ghost" onclick="clearInput()">Clear</button>
+            <span class="shortcut-hint">Ctrl+Enter</span>
+          </div>
+          <div class="chips">
+            <button class="chip" onclick="setChip(this)">execute a command in a pod</button>
+            <button class="chip" onclick="setChip(this)">deploy nginx using helm</button>
+            <button class="chip" onclick="setChip(this)">scale a deployment to 3 replicas</button>
+            <button class="chip" onclick="setChip(this)">copy a file to a pod</button>
+            <button class="chip" onclick="setChip(this)">get logs from a pod</button>
+            <button class="chip" onclick="setChip(this)">drain a node for maintenance</button>
+          </div>
+        </div>
+
+        <div id="err-box"></div>
+        <div id="loading">
+          <div class="spin"></div>
+          <div class="load-txt" id="load-txt">Generating...</div>
+        </div>
+
+        <div id="result">
+          <div class="mod-tag">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+            <span id="mod-name">—</span>
+          </div>
+          <div class="result-grid">
+            <div class="code-card">
+              <div class="code-hdr">
+                <div style="display:flex;align-items:center">
+                  <div class="dots">
+                    <div class="dot r"></div>
+                    <div class="dot y"></div>
+                    <div class="dot g"></div>
+                  </div>
+                  <span class="fname" id="code-fname">playbook.yml</span>
+                </div>
+                <button class="copy-btn" onclick="copyCode()">copy</button>
+              </div>
+              <pre id="code-out"></pre>
+            </div>
+            <div class="val-card">
+              <div class="slabel">Validation</div>
+              <div id="val-status" class="val-status ok"></div>
+              <div id="val-checks"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: live overview -->
+      <div class="right-col">
+        <div>
+          <div class="slabel">Overview</div>
+          <div class="stat-grid">
+            <div class="scard"><div class="scard-val green" id="sc-total">0</div><div class="scard-lbl">Generated</div></div>
+            <div class="scard"><div class="scard-val blue"  id="sc-valid">0</div><div class="scard-lbl">Valid</div></div>
+            <div class="scard"><div class="scard-val orange" id="sc-warn">0</div><div class="scard-lbl">Warnings</div></div>
+            <div class="scard"><div class="scard-val pink"  id="sc-err">0</div><div class="scard-lbl">Errors</div></div>
+          </div>
+        </div>
+        <div>
+          <div class="slabel">Module usage</div>
+          <div class="mod-list-card" id="mod-list">
+            <div class="no-data">No generations yet</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HISTORY PANEL -->
+  <div class="panel" id="panel-history">
+    <div class="slabel">Generation history</div>
+    <div id="hist-content">
+      <div class="hist-empty">No generations yet — go generate something!</div>
+    </div>
+  </div>
+
+  <!-- STATS PANEL -->
+  <div class="panel" id="panel-stats">
+    <div class="slabel">Statistics</div>
+    <div class="big-stats">
+      <div class="bstat"><div class="bstat-val green" id="bs-total">0</div><div class="bstat-lbl">Total generated</div></div>
+      <div class="bstat"><div class="bstat-val blue"  id="bs-rate">—</div><div class="bstat-lbl">Validity rate</div><div class="bstat-sub" id="bs-rate-sub"></div></div>
+      <div class="bstat"><div class="bstat-val orange" id="bs-top">—</div><div class="bstat-lbl">Top module</div><div class="bstat-sub" id="bs-top-sub">most used</div></div>
+      <div class="bstat"><div class="bstat-val pink" id="bs-warns">0</div><div class="bstat-lbl">With warnings</div></div>
+    </div>
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-title">Module frequency</div>
+        <div class="bar-chart" id="bc-mods">
+          <div class="no-data" style="padding:0">No data yet</div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Validation breakdown</div>
+        <div class="donut-wrap">
+          <canvas id="donut" width="110" height="110"></canvas>
+          <div class="donut-legend" id="donut-leg"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- .main -->
+</div><!-- .shell -->
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

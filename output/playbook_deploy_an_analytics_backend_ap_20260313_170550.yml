@@ -1,0 +1,115 @@
+---
+- name: Deploy analytics-backend application
+  hosts: kubernetes
+  gather_facts: yes
+  collections:
+    - kubernetes.core
+
+  tasks:
+    - name: Create ConfigMap for analytics-backend configuration
+      kubernetes.core.k8s:
+        field_manager: Local
+        api_version: v1
+        kind: ConfigMap
+        metadata:
+          name: analytics-backend-config
+        data:
+          # Replace these values with the actual configuration data
+          config_key1: config_value1
+          config_key2: config_value2
+        state: present
+
+    - name: Create Secret for database credentials
+      kubernetes.core.k8s:
+        field_manager: Local
+        api_version: v1
+        kind: Secret
+        metadata:
+          name: analytics-backend-db-credentials
+        data:
+          # Replace these values with the actual database credentials
+          db_user: db_user_password
+          db_password: db_password
+        stringData:
+          # Add any additional sensitive data as stringData
+
+    - name: Create Deployment for analytics-backend
+      kubernetes.core.k8s:
+        field_manager: Local
+        api_version: apps/v1
+        kind: Deployment
+        metadata:
+          name: analytics-backend
+        spec:
+          replicas: 3
+          selector:
+            matchLabels:
+              app: analytics-backend
+          template:
+            metadata:
+              labels:
+                app: analytics-backend
+            spec:
+              containers:
+                - name: analytics-backend
+                  image: myregistry/analytics-api:latest
+                  ports:
+                    - containerPort: 8080
+                  envFrom:
+                    - configMapRef:
+                        name: analytics-backend-config
+                  volumeMounts:
+                    - name: config-volume
+                      mountPath: /config
+              volumes:
+                - name: config-volume
+                  configMap:
+                    name: analytics-backend-config
+              imagePullSecrets:
+                - name: registry-credentials  # Replace with the name of the Secret containing the registry credentials
+              serviceAccountName: default
+              serviceAccount:
+                annotations:
+                  eks.amazonaws.com/role-arn: arn:aws:iam::123456789012:role/eks-cluster-service-account  # Replace with the ARN of the service account role
+              nodeSelector:
+                k8s-app: analytics-backend
+              affinity:
+                podAntiAffinity:
+                  requiredDuringSchedulingIgnoredDuringExecution:
+                    - labelAffinity:
+                        labelSelector:
+                          matchExpressions:
+                            - key: k8s-app
+                              operator: In
+                              values:
+                                - analytics-backend
+                        topologyKey: kubernetes.io/hostname
+              tolerations:
+                - operator: Exists
+                  effect: NoSchedule
+                  tolerationSeconds: 300
+
+    - name: Create Service for analytics-backend
+      kubernetes.core.k8s:
+        field_manager: Local
+        api_version: v1
+        kind: Service
+        metadata:
+          name: analytics-backend
+        spec:
+          selector:
+            app: analytics-backend
+          ports:
+            - port: 8080
+              targetPort: 8080
+          clusterIP: None
+          type: LoadBalancer
+          externalTrafficPolicy: Local
+          sessionAffinity: None
+          serviceAccountName: default
+          serviceAccount:
+            annotations:
+              eks.amazonaws.com/service-aliases: |
+                - name: analytics-backend
+                  target: postgres-service
+                  port: 5432

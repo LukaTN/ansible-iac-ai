@@ -1,0 +1,283 @@
+{
+  "module": "kubernetes.core.k8s_cp",
+  "slug": "k8s_cp_module",
+  "description": "Use the Kubernetes Python client to copy files and directories to and from containers inside a pod.",
+  "parameters": [
+    {
+      "name": "api_key",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Token used to authenticate with the API. Can also be specified via K8S_AUTH_API_KEY environment variable."
+    },
+    {
+      "name": "ca_cert",
+      "aliases": [
+        "ssl_ca_cert"
+      ],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to a CA certificate used to authenticate with the API. The full certificate chain must be provided to avoid certificate validation errors. Can also be specified via K8S_AUTH_SSL_CA_CERT environment variable."
+    },
+    {
+      "name": "client_cert",
+      "aliases": [
+        "cert_file"
+      ],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to a certificate used to authenticate with the API. Can also be specified via K8S_AUTH_CERT_FILE environment variable."
+    },
+    {
+      "name": "client_key",
+      "aliases": [
+        "key_file"
+      ],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to a key file used to authenticate with the API. Can also be specified via K8S_AUTH_KEY_FILE environment variable."
+    },
+    {
+      "name": "container",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The name of the container in the pod to copy files/directories from/to. Defaults to the only container if there is only one container in the pod."
+    },
+    {
+      "name": "content",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "When used instead of local_path, sets the contents of a local file directly to the specified value. Works only when remote_path is a file. Creates the file if it does not exist. For advanced formatting or if the content contains a variable, use the ansible.builtin.template module. Mutually exclusive with local_path."
+    },
+    {
+      "name": "context",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The name of a context found in the config file. Can also be specified via K8S_AUTH_CONTEXT environment variable."
+    },
+    {
+      "name": "host",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Provide a URL for accessing the API. Can also be specified via K8S_AUTH_HOST environment variable."
+    },
+    {
+      "name": "impersonate_groups",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Group(s) to impersonate for the operation. Can also be specified via K8S_AUTH_IMPERSONATE_GROUPS environment. Example: Group1,Group2"
+    },
+    {
+      "name": "impersonate_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Username to impersonate for the operation. Can also be specified via K8S_AUTH_IMPERSONATE_USER environment."
+    },
+    {
+      "name": "kubeconfig",
+      "aliases": [],
+      "type": "any",
+      "required": false,
+      "default": "configuration",
+      "choices": [],
+      "description": "Path to an existing Kubernetes config file. If not provided, and no other connection options are provided, the Kubernetes client will attempt to load the default configuration file from ~/.kube/config. Can also be specified via K8S_AUTH_KUBECONFIG environment variable. Multiple Kubernetes config file can be provided using separator ‘;’ for Windows platform or ‘:’ for others platforms. The kubernetes configuration can be provided as dictionary. This feature requires a python kubernetes client version >= 17.17.0. Added in version 2.2.0."
+    },
+    {
+      "name": "local_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path of the local file or directory. Required when state is set to from_pod. Mutually exclusive with content."
+    },
+    {
+      "name": "namespace",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The pod namespace name."
+    },
+    {
+      "name": "no_preserve",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "The copied file/directory’s ownership and permissions will not be preserved in the container. This option is ignored when content is set or when state is set to from_pod. Choices: false ← (default) true"
+    },
+    {
+      "name": "no_proxy",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The comma separated list of hosts/domains/IP/CIDR that shouldn’t go through proxy. Can also be specified via K8S_AUTH_NO_PROXY environment variable. Please note that this module does not pick up typical proxy settings from the environment (e.g. NO_PROXY). This feature requires kubernetes>=19.15.0. When kubernetes library is less than 19.15.0, it fails even no_proxy set in correct. example value is “localhost,.local,.example.com,127.0.0.1,127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16”"
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Provide a password for authenticating with the API. Can also be specified via K8S_AUTH_PASSWORD environment variable. Please read the description of the username option for a discussion of when this option is applicable."
+    },
+    {
+      "name": "persist_config",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "to",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Whether or not to save the kube config refresh tokens. Can also be specified via K8S_AUTH_PERSIST_CONFIG environment variable. When the k8s context is using a user credentials with refresh tokens (like oidc or gke/gcloud auth), the token is refreshed by the k8s python client library but not saved by default. So the old refresh token can expire and the next auth might fail. Setting this flag to true will tell the k8s python client to save the new refresh token to the kube config file. Default to false. Please note that the current version of the k8s python client library does not support setting this flag to True yet. The fix for this k8s python library is here: https://github.com/kubernetes-client/python-base/pull/169 Choices: false true"
+    },
+    {
+      "name": "pod",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The pod name."
+    },
+    {
+      "name": "proxy",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The URL of an HTTP proxy to use for the connection. Can also be specified via K8S_AUTH_PROXY environment variable. Please note that this module does not pick up typical proxy settings from the environment (e.g. HTTP_PROXY)."
+    },
+    {
+      "name": "proxy_headers",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The Header used for the HTTP proxy. Documentation can be found here https://urllib3.readthedocs.io/en/latest/reference/urllib3.util.html?highlight=proxy_headers#urllib3.util.make_headers."
+    },
+    {
+      "name": "basic_auth",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Colon-separated username:password for basic authentication header. Can also be specified via K8S_AUTH_PROXY_HEADERS_BASIC_AUTH environment."
+    },
+    {
+      "name": "proxy_basic_auth",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Colon-separated username:password for proxy basic authentication header. Can also be specified via K8S_AUTH_PROXY_HEADERS_PROXY_BASIC_AUTH environment."
+    },
+    {
+      "name": "user_agent",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "String representing the user-agent you want, such as foo/1.0. Can also be specified via K8S_AUTH_PROXY_HEADERS_USER_AGENT environment."
+    },
+    {
+      "name": "remote_path",
+      "aliases": [],
+      "type": "path",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Path of the file or directory to copy."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"to_pod\" ← (default)",
+        "\"from_pod\""
+      ],
+      "description": "When set to to_pod, the local local_path file or directory will be copied to remote_path into the pod. When set to from_pod, the remote file or directory remote_path from pod will be copied locally to local_path. Choices: \"to_pod\" ← (default) \"from_pod\""
+    },
+    {
+      "name": "username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Provide a username for authenticating with the API. Can also be specified via K8S_AUTH_USERNAME environment variable. Please note that this only works with clusters configured to use HTTP Basic Auth. If your cluster has a different form of authentication (e.g. OAuth2 in OpenShift), this option will not work as expected and you should look into the community.okd.k8s_auth module, as that might do what you need."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [
+        "verify_ssl"
+      ],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Whether or not to verify the API server’s SSL certificates. Can also be specified via K8S_AUTH_VERIFY_SSL environment variable. Choices: false true"
+    }
+  ],
+  "examples": [
+    "# kubectl cp /tmp/foo some-namespace/some-pod:/tmp/bar\n- name: Copy /tmp/foo local file to /tmp/bar in a remote pod\n  kubernetes.core.k8s_cp:\n    namespace: some-namespace\n    pod: some-pod\n    remote_path: /tmp/bar\n    local_path: /tmp/foo\n\n# kubectl cp /tmp/foo_dir some-namespace/some-pod:/tmp/bar_dir\n- name: Copy /tmp/foo_dir local directory to /tmp/bar_dir in a remote pod\n  kubernetes.core.k8s_cp:\n    namespace: some-namespace\n    pod: some-pod\n    remote_path: /tmp/bar_dir\n    local_path: /tmp/foo_dir\n\n# kubectl cp /tmp/foo some-namespace/some-pod:/tmp/bar -c some-container\n- name: Copy /tmp/foo local file to /tmp/bar in a remote pod in a specific container\n  kubernetes.core.k8s_cp:\n    namespace: some-namespace\n    pod: some-pod\n    container: some-container\n    remote_path: /tmp/bar\n    local_path: /tmp/foo\n    no_preserve: True\n    state: to_pod\n\n# kubectl cp some-namespace/some-pod:/tmp/foo /tmp/bar\n- name: Copy /tmp/foo from a remote pod to /tmp/bar locally\n  kubernetes.core.k8s_cp:\n    namespace: some-namespace\n    pod: some-pod\n    remote_path: /tmp/foo\n    local_path: /tmp/bar\n    state: from_pod\n\n# copy content into a file in the remote pod\n- name: Copy content into a file in the remote pod\n  kubernetes.core.k8s_cp:\n    state: to_pod\n    namespace: some-namespace\n    pod: some-pod\n    remote_path: /tmp/foo.txt\n    content: \"This content will be copied into remote file\""
+  ],
+  "return_values": [
+    {
+      "name": "result",
+      "type": "string",
+      "description": "message describing the copy operation successfully done. Returned: success",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/kubernetes/core/k8s_cp_module.html",
+  "parsed_at": "2026-03-13T04:12:46.043694"
+}

@@ -1,0 +1,52 @@
+---
+- name: Deploy analytics-backend application
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - kubernetes.core
+  tasks:
+    - name: Create analytics-backend deployment
+      kubernetes.core.k8s:
+        field_manager: Local
+        api_version: apps/v1
+        kind: Deployment
+        metadata:
+          name: analytics-backend
+        spec:
+          replicas: 3
+          selector:
+            matchLabels:
+              app: analytics-backend
+          template:
+            metadata:
+              labels:
+                app: analytics-backend
+            spec:
+              containers:
+                - name: analytics-backend
+                  image: myregistry/analytics-api:latest
+                  ports:
+                    - containerPort: 8080
+              imagePullSecrets:
+                - name: registry-credentials
+              envFrom:
+                - configMapRef:
+                    name: analytics-backend-config
+                - secretRef:
+                    name: analytics-backend-db-credentials
+              serviceAccountName: default
+    - name: Create analytics-backend service
+      kubernetes.core.k8s:
+        field_manager: Local
+        api_version: v1
+        kind: Service
+        metadata:
+          name: analytics-backend
+        spec:
+          selector:
+            app: analytics-backend
+          ports:
+            - port: 8080
+              targetPort: 8080
+          type: ClusterIP
