@@ -1,0 +1,72 @@
+{
+  "validated_at": "2026-03-13T16:21:45.484819",
+  "total": 4,
+  "valid": 4,
+  "invalid": 0,
+  "results": [
+    {
+      "file": "playbook_deploy_nginx_using_helm_in_the_20260313_161716.yml",
+      "valid": true,
+      "passed": [
+        "YAML syntax is valid",
+        "Play name: \"Deploy nginx using Helm in the default namespace\"",
+        "Playbook structure is correct",
+        "Module found: kubernetes.core.helm",
+        "All required params present: ['release_name', 'release_namespace']",
+        "No placeholder values detected"
+      ],
+      "warnings": [
+        "No 'hosts' field — Ansible needs 'hosts' to run the play"
+      ],
+      "errors": []
+    },
+    {
+      "file": "playbook_execute_a_command_in_a_kuberne_20260313_161621.yml",
+      "valid": true,
+      "passed": [
+        "YAML syntax is valid",
+        "Play name: \"Execute a command in a Kubernetes pod\"",
+        "Playbook structure is correct",
+        "Module found: kubernetes.core.k8s_exec",
+        "All required params present: ['command', 'namespace', 'pod']"
+      ],
+      "warnings": [
+        "No 'hosts' field — Ansible needs 'hosts' to run the play",
+        "Possible placeholder values found: ['your-namespace-here', 'your-pod-name-here', 'your-command-here']"
+      ],
+      "errors": []
+    },
+    {
+      "file": "playbook_scale_a_deployment_to_3_replic_20260313_161240.yml",
+      "valid": true,
+      "passed": [
+        "YAML syntax is valid",
+        "Play name: \"Scale Deployment to 3 replicas\"",
+        "Playbook structure is correct",
+        "Module found: kubernetes.core.k8s",
+        "No required parameters for this module"
+      ],
+      "warnings": [
+        "No 'hosts' field — Ansible needs 'hosts' to run the play",
+        "Possible placeholder values found: ['your-namespace', 'your-deployment-name']"
+      ],
+      "errors": []
+    },
+    {
+      "file": "playbook_scale_a_deployment_to_3_replic_20260313_161533.yml",
+      "valid": true,
+      "passed": [
+        "YAML syntax is valid",
+        "Play name: \"Scale deployment to 3 replicas\"",
+        "Playbook structure is correct",
+        "Module found: kubernetes.core.k8s_scale",
+        "All required params present: ['replicas']",
+        "No placeholder values detected"
+      ],
+      "warnings": [
+        "No 'hosts' field — Ansible needs 'hosts' to run the play"
+      ],
+      "errors": []
+    }
+  ]
+}
