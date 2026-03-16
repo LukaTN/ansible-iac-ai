@@ -4,13 +4,6 @@
   Run  : python app.py
   Open : http://localhost:5000
 =============================================================
-  Structure:
-    app.py                  <- Flask routes + DB init
-    models.py               <- SQLAlchemy models
-    templates/index.html    <- HTML markup
-    static/css/style.css    <- Styles
-    static/js/app.js        <- Frontend logic
-=============================================================
 """
 
 import os
@@ -18,37 +11,87 @@ import sys
 from flask import Flask, render_template, request, jsonify
 from models import db, Generation
 
-# Always run from project root
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "pipeline"))
 
-from phase4_generator import generate_playbook
+from phase4_generator import generate_playbook, load_knowledge_base, find_best_module
 from validator import validate_playbook, load_knowledge_base as load_kb_val, K8S_CORE_MODULES
-
-# ─────────────────────────────────────────────
-#  APP + DB CONFIG
-# ─────────────────────────────────────────────
 
 app = Flask(__name__)
 
-# MySQL connection string — edit user/password/host/dbname as needed
-# Format: mysql+pymysql://<user>:<password>@<host>:<port>/<database>
 app.config["SQLALCHEMY_DATABASE_URI"] = (
     "mysql+pymysql://root@localhost:3306/ansibleai"
 )
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
-    "pool_pre_ping": True,   # auto-reconnect if connection drops
-    "pool_recycle" : 300,    # recycle connections every 5 min
+    "pool_pre_ping": True,
+    "pool_recycle" : 300,
 }
 
-# Bind SQLAlchemy to this app
 db.init_app(app)
 
-# Auto-create tables on startup (like spring.jpa.hibernate.ddl-auto=update)
 with app.app_context():
     db.create_all()
     print("  [DB] Tables created / verified ✓")
+
+
+# ─────────────────────────────────────────────
+#  HELPER — build module reference metadata
+# ─────────────────────────────────────────────
+
+def build_module_reference(module_name: str, kb_modules: dict) -> dict:
+    """
+    Return rich metadata about the module used for generation.
+    This powers the 'Sources' panel in the UI.
+    """
+    # Find slug from full module name (e.g. kubernetes.core.k8s_taint → k8s_taint_module)
+    short  = module_name.split(".")[-1]
+    slug   = short + "_module"
+    entry  = kb_modules.get(slug, {})
+
+    if not entry:
+        return {"module": module_name, "found": False}
+
+    # Build the official docs URL
+    # Pattern: https://docs.ansible.com/ansible/latest/collections/kubernetes/core/<slug>.html
+    doc_url = entry.get("source_url") or (
+        f"https://docs.ansible.com/ansible/latest/collections/kubernetes/core/{slug}.html"
+    )
+
+    # Required params with types
+    required = [
+        {"name": p["name"], "type": p.get("type", "any"), "description": p.get("description", "")[:120]}
+        for p in entry.get("parameters", [])
+        if p.get("required")
+    ]
+
+    # Top 5 optional useful params
+    skip = {"api_key","ca_cert","client_cert","client_key","proxy","proxy_headers",
+            "basic_auth","validate_certs","host","username","password"}
+    optional = [
+        {"name": p["name"], "type": p.get("type","any")}
+        for p in entry.get("parameters", [])
+        if not p.get("required") and p["name"] not in skip
+    ][:5]
+
+    # Intent keywords that matched
+    keywords = entry.get("task_keywords", [])
+
+    # Category
+    category = entry.get("category", "k8s")
+
+    return {
+        "found"          : True,
+        "module"         : module_name,
+        "slug"           : slug,
+        "description"    : entry.get("description", ""),
+        "doc_url"        : doc_url,
+        "category"       : category,
+        "required_params": required,
+        "optional_params": optional,
+        "keywords"       : keywords,
+        "total_params"   : len(entry.get("parameters", [])),
+    }
 
 
 # ─────────────────────────────────────────────
@@ -87,7 +130,7 @@ def api_generate():
             lines = lines[start:]
         playbook_clean = "\n".join(lines).strip()
 
-        # 4. Write cleaned YAML back so validator reads clean content
+        # 4. Write cleaned YAML back
         with open(output_path, "w", encoding="utf-8") as f:
             f.write(playbook_clean)
 
@@ -99,15 +142,20 @@ def api_generate():
         matches  = [m for m in K8S_CORE_MODULES if m in playbook_clean]
         detected = max(matches, key=len) if matches else "unknown"
 
-        # 7. Save to MySQL
+        # 7. Build module reference (intent matching details + doc link)
+        kb_full   = load_knowledge_base()
+        module_ref = build_module_reference(detected, kb_full["modules"])
+
+        # 8. Save to MySQL
         entry = Generation(
-            request  = user_request,
-            module   = detected,
-            filename = os.path.basename(output_path),
-            playbook = playbook_clean,
-            is_valid = result.is_valid,
-            warnings = len(result.warnings),
-            errors   = len(result.errors),
+            request    = user_request,
+            module     = detected,
+            filename   = os.path.basename(output_path),
+            playbook   = playbook_clean,
+            is_valid   = result.is_valid,
+            warnings   = len(result.warnings),
+            errors     = len(result.errors),
+            module_ref = module_ref,
         )
         db.session.add(entry)
         db.session.commit()
@@ -117,6 +165,7 @@ def api_generate():
             "module"    : detected,
             "file"      : os.path.basename(output_path),
             "id"        : entry.id,
+            "module_ref": module_ref,
             "validation": {
                 "is_valid"   : result.is_valid,
                 "passed"     : len(result.passed),
@@ -135,14 +184,12 @@ def api_generate():
 
 @app.route("/history", methods=["GET"])
 def api_history():
-    """Return all generations ordered by most recent."""
     entries = Generation.query.order_by(Generation.created_at.desc()).limit(100).all()
     return jsonify([e.to_dict() for e in entries])
 
 
 @app.route("/history/<int:entry_id>", methods=["DELETE"])
 def api_delete(entry_id):
-    """Delete a single generation entry."""
     entry = Generation.query.get_or_404(entry_id)
     db.session.delete(entry)
     db.session.commit()
@@ -151,7 +198,6 @@ def api_delete(entry_id):
 
 @app.route("/history", methods=["DELETE"])
 def api_clear_history():
-    """Delete all generation history."""
     Generation.query.delete()
     db.session.commit()
     return jsonify({"cleared": True})
@@ -159,22 +205,17 @@ def api_clear_history():
 
 @app.route("/stats", methods=["GET"])
 def api_stats():
-    """Aggregate statistics from the database."""
     from sqlalchemy import func
-
     total   = Generation.query.count()
     valid   = Generation.query.filter_by(is_valid=True).count()
     warns   = Generation.query.filter(Generation.warnings > 0).count()
     invalid = total - valid
-
-    # Module usage counts
     module_counts = (
         db.session.query(Generation.module, func.count(Generation.id).label("cnt"))
         .group_by(Generation.module)
         .order_by(func.count(Generation.id).desc())
         .all()
     )
-
     return jsonify({
         "total"  : total,
         "valid"  : valid,
@@ -182,6 +223,14 @@ def api_stats():
         "warns"  : warns,
         "modules": [{"module": m, "count": c} for m, c in module_counts],
     })
+
+
+@app.route("/module/<slug>", methods=["GET"])
+def api_module_info(slug):
+    """Return full reference info for a module slug."""
+    kb  = load_knowledge_base()
+    ref = build_module_reference(f"kubernetes.core.{slug.replace('_module','')}", kb["modules"])
+    return jsonify(ref)
 
 
 # ─────────────────────────────────────────────

@@ -27,18 +27,20 @@ class Generation(db.Model):
     is_valid   = db.Column(db.Boolean,     default=False)
     warnings   = db.Column(db.Integer,     default=0)
     errors     = db.Column(db.Integer,     default=0)
+    module_ref = db.Column(db.JSON,        nullable=True)
     created_at = db.Column(db.DateTime,    default=datetime.utcnow)
 
     def to_dict(self):
         """Serialize to JSON-safe dict for API responses."""
         return {
-            "id"        : self.id,
-            "request"   : self.request,
-            "module"    : self.module,
-            "file"      : self.filename,
-            "playbook"  : self.playbook,
-            "valid"     : self.is_valid,
-            "warnings"  : self.warnings,
-            "errors"    : self.errors,
-            "ts"        : self.created_at.isoformat(),
+            "id"         : self.id,
+            "request"    : self.request,
+            "module"     : self.module,
+            "file"       : self.filename,
+            "playbook"   : self.playbook,
+            "valid"      : self.is_valid,
+            "warnings"   : self.warnings,
+            "errors"     : self.errors,
+            "module_ref" : self.module_ref,
+            "ts"         : self.created_at.isoformat(),
         }
