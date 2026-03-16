@@ -105,6 +105,48 @@
             </div>
           </div>
         </div>
+
+        <!-- Sources panel -->
+        <div class="sources-wrap" id="sources-wrap" style="display:none">
+          <div class="sources-hdr" onclick="toggleSources()">
+            <div class="sources-hdr-left">
+              <div class="sources-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--a1)" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+              </div>
+              <div>
+                <div class="sources-title">Documentation source — <span id="src-module-name">—</span></div>
+                <div class="sources-subtitle" id="src-module-sub">Ansible kubernetes.core</div>
+              </div>
+            </div>
+            <svg id="src-chevron" class="sources-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="sources-body" id="src-body">
+            <a class="doc-link-card" id="src-doc-link" href="#" target="_blank">
+              <div class="doc-link-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--a1)" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </div>
+              <div class="doc-link-text">
+                <div class="doc-link-name" id="src-doc-name">—</div>
+                <div class="doc-link-url" id="src-doc-url">docs.ansible.com</div>
+              </div>
+              <svg class="doc-link-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </a>
+            <p class="src-desc" id="src-desc">—</p>
+            <div id="src-required-section">
+              <div class="src-section-title">Required parameters</div>
+              <div class="params-grid" id="src-required-params"></div>
+            </div>
+            <div id="src-optional-section">
+              <div class="src-section-title">Key optional parameters</div>
+              <div class="params-grid" id="src-optional-params"></div>
+            </div>
+            <div class="src-section-title">Intent keywords used for module matching</div>
+            <div class="keywords-wrap" id="src-keywords"></div>
+            <div class="src-section-title">How the AI selected this module</div>
+            <div class="reasoning-box" id="src-reasoning"></div>
+          </div>
+        </div>
+
       </div>
 
       <!-- Right: live overview -->
