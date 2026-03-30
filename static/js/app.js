@@ -6,6 +6,7 @@ function showPanel(name, btn) {
   if (btn) btn.classList.add('active');
   if (name === 'history') loadHistory();
   if (name === 'stats')   loadStats();
+  if (name === 'docs')    { docsLoadStatus(); docsLoadRollback(); docsLoadSessions(); }
 }
 
 // ── INPUT ──
@@ -355,3 +356,214 @@ document.addEventListener('keydown', e => { if((e.ctrlKey||e.metaKey)&&e.key==='
 
 // ── INIT ──
 loadOverview();
+
+
+// ─────────────────────────────────────────────
+//  DOCS MANAGEMENT PANEL
+// ─────────────────────────────────────────────
+
+let _docsLastCheck = null;       // { session_id, changed:[...], ... } from /docs/sessions/<id>
+let _docsChangedSlugs = [];
+let _docsEvtSrc = null;
+
+function docsClearLog() {
+  document.getElementById('docs-terminal').textContent = '';
+}
+
+function _docsAppendLog(line) {
+  const term = document.getElementById('docs-terminal');
+  term.textContent += (term.textContent ? '\n' : '') + line;
+  term.scrollTop = term.scrollHeight;
+}
+
+function _docsSetLiveStatus(txt, kind) {
+  const el = document.getElementById('docs-live-status');
+  el.textContent = txt;
+  el.className = 'pill ' + (kind || 'idle');
+}
+
+function _docsConnectStream(sessionId) {
+  if (_docsEvtSrc) { try { _docsEvtSrc.close(); } catch(e){} }
+  _docsSetLiveStatus('streaming', 'ok');
+  const es = new EventSource(`/docs/stream/${sessionId}`);
+  _docsEvtSrc = es;
+  es.onmessage = (ev) => {
+    const line = (ev.data || '').replaceAll('\\n', '\n');
+    if (line.includes('STREAM_END')) {
+      _docsSetLiveStatus('done', 'idle');
+      try { es.close(); } catch(e){}
+      return;
+    }
+    _docsAppendLog(line);
+  };
+  es.addEventListener('ping', () => {});
+  es.onerror = () => {
+    _docsSetLiveStatus('disconnected', 'warn');
+  };
+}
+
+async function docsLoadStatus() {
+  try {
+    const res = await fetch('/docs/status');
+    const data = await res.json();
+    document.getElementById('kb-generated-at').textContent = data.kb_metadata?.generated_at || '—';
+    document.getElementById('kb-total-mods').textContent = data.kb_metadata?.total_modules ?? '—';
+
+    // health list (worst first)
+    const list = document.getElementById('docs-health-list');
+    const rows = (data.module_health || []).slice(0, 12);
+    if (!rows.length) {
+      list.innerHTML = '<div class="no-data">No KB loaded.</div>';
+      return;
+    }
+    list.innerHTML = rows.map(r => {
+      const bad = r.health_score < 70;
+      return `<div class="doc-row">
+        <div class="doc-row-left">
+          <div class="doc-row-title">${r.slug}</div>
+          <div class="doc-row-sub">params=${r.param_count} · examples=${r.example_count} · required=${r.required_count}</div>
+        </div>
+        <div class="score ${bad ? 'bad' : 'ok'}">${bad ? '⚠️' : '✅'} ${r.health_score}%</div>
+      </div>`;
+    }).join('');
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+async function docsLoadRollback() {
+  try {
+    const res = await fetch('/docs/rollback/list');
+    const data = await res.json();
+    const list = document.getElementById('docs-rollback-list');
+    const vers = data.versions || [];
+    if (!vers.length) { list.innerHTML = '<div class="no-data">No backups yet.</div>'; return; }
+    list.innerHTML = vers.slice(0, 10).map(v => `
+      <div class="doc-row">
+        <div class="doc-row-left">
+          <div class="doc-row-title">${v.filename}</div>
+          <div class="doc-row-sub">${new Date(v.modified_at).toLocaleString()} · ${(v.size/1024).toFixed(1)} KB</div>
+        </div>
+        <button class="btn-ghost" onclick="docsRestore('${v.filename}')">Restore</button>
+      </div>
+    `).join('');
+  } catch (e) { console.error(e); }
+}
+
+async function docsRestore(filename) {
+  if (!confirm(`Restore ${filename}? This will overwrite data/knowledge_base.json`)) return;
+  const res = await fetch('/docs/rollback/restore', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ filename })
+  });
+  const data = await res.json();
+  if (!res.ok || data.error) return alert(data.error || 'Restore failed');
+  await docsLoadStatus();
+  alert('Restored: ' + data.restored);
+}
+
+async function docsLoadSessions() {
+  try {
+    const res = await fetch('/docs/sessions?limit=10');
+    const sessions = await res.json();
+    const box = document.getElementById('docs-changelog');
+    if (!sessions.length) { box.innerHTML = '<div class="no-data">No sessions yet.</div>'; return; }
+    const latest = sessions[0];
+    const detRes = await fetch(`/docs/sessions/${latest.id}`);
+    const det = await detRes.json();
+    const diffs = det.session?.summary?.diffs || det.session?.summary?.changed || [];
+    if (!diffs.length) {
+      box.innerHTML = `<div class="no-data">Latest session #${latest.id} has no diffs.</div>`;
+      return;
+    }
+    box.innerHTML = diffs.slice(0, 10).map(d => `
+      <div class="doc-row">
+        <div class="doc-row-left">
+          <div class="doc-row-title">${d.module_slug || d.slug}</div>
+          <div class="doc-row-sub">${d.diff_summary || 'changed'}</div>
+        </div>
+        ${d.health_score != null ? `<div class="score ${d.health_score < 70 ? 'bad':'ok'}">${d.health_score}%</div>` : ''}
+      </div>
+    `).join('');
+  } catch (e) { console.error(e); }
+}
+
+async function docsCheckUpdates() {
+  docsClearLog();
+  _docsSetLiveStatus('running', 'warn');
+  document.getElementById('docs-check-btn').disabled = true;
+  document.getElementById('docs-rescrape-btn').disabled = true;
+  document.getElementById('docs-changed-list').innerHTML = '<div class="no-data">Checking...</div>';
+
+  const res = await fetch('/docs/check-updates', { method: 'POST' });
+  const data = await res.json();
+  if (!res.ok || data.error) {
+    _docsSetLiveStatus('failed', 'bad');
+    document.getElementById('docs-check-btn').disabled = false;
+    return alert(data.error || 'Check failed');
+  }
+  _docsConnectStream(data.session_id);
+
+  // poll for results
+  const out = await docsWaitSession(data.session_id);
+  _docsLastCheck = out;
+  const changed = out.session?.summary?.changed || [];
+  _docsChangedSlugs = changed.map(c => c.slug);
+
+  const list = document.getElementById('docs-changed-list');
+  if (!changed.length) {
+    list.innerHTML = '<div class="no-data">No changes detected.</div>';
+  } else {
+    list.innerHTML = changed.map(c => `
+      <div class="doc-row">
+        <div class="doc-row-left">
+          <div class="doc-row-title">${c.slug}</div>
+          <div class="doc-row-sub">remote_hash=${(c.remote_hash||'').slice(0,10)}… · local_hash=${(c.local_hash||'').slice(0,10)}…</div>
+        </div>
+        <span class="pill warn">changed</span>
+      </div>
+    `).join('');
+  }
+  document.getElementById('docs-rescrape-btn').disabled = !_docsChangedSlugs.length;
+  document.getElementById('docs-check-btn').disabled = false;
+  await docsLoadSessions();
+}
+
+async function docsRescrapeChanged() {
+  if (!_docsChangedSlugs.length) return;
+  if (!confirm(`Re-scrape ${_docsChangedSlugs.length} changed module(s)?`)) return;
+  docsClearLog();
+  _docsSetLiveStatus('running', 'warn');
+  document.getElementById('docs-rescrape-btn').disabled = true;
+
+  const res = await fetch('/docs/rescrape', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ modules: _docsChangedSlugs })
+  });
+  const data = await res.json();
+  if (!res.ok || data.error) {
+    _docsSetLiveStatus('failed', 'bad');
+    document.getElementById('docs-rescrape-btn').disabled = false;
+    return alert(data.error || 'Re-scrape failed');
+  }
+  _docsConnectStream(data.session_id);
+  await docsWaitSession(data.session_id);
+  await docsLoadStatus();
+  await docsLoadRollback();
+  await docsLoadSessions();
+  _docsSetLiveStatus('done', 'idle');
+}
+
+async function docsWaitSession(sessionId) {
+  // lightweight polling helper
+  for (let i = 0; i < 240; i++) { // up to ~2 minutes
+    const res = await fetch(`/docs/sessions/${sessionId}`);
+    const data = await res.json();
+    const st = data.session?.status;
+    if (st && st !== 'running') return data;
+    await new Promise(r => setTimeout(r, 500));
+  }
+  return await (await fetch(`/docs/sessions/${sessionId}`)).json();
+}

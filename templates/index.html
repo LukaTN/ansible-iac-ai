@@ -26,6 +26,11 @@
   <button class="sb-btn" data-panel="stats" data-tip="Statistics" onclick="showPanel('stats',this)">
     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
   </button>
+  <button class="sb-btn" data-panel="docs" data-tip="Docs" onclick="showPanel('docs',this)">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/>
+    </svg>
+  </button>
   <div class="sb-sep"></div>
   <button class="sb-btn" data-tip="Clear history" onclick="clearHistory()">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
@@ -199,6 +204,100 @@
         <div class="donut-wrap">
           <canvas id="donut" width="110" height="110"></canvas>
           <div class="donut-legend" id="donut-leg"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOCS PANEL -->
+  <div class="panel" id="panel-docs">
+    <div class="slabel">Documentation management</div>
+
+    <div class="docs-grid">
+      <div class="docs-left">
+        <div class="doc-card">
+          <div class="doc-card-hdr">
+            <div>
+              <div class="doc-title">Auto-update scheduler</div>
+              <div class="doc-sub">Compare remote HTML SHA with local scrape. Re-scrape only modified modules.</div>
+            </div>
+            <div class="doc-actions">
+              <button class="btn-gen" id="docs-check-btn" onclick="docsCheckUpdates()">Check for updates</button>
+              <button class="btn-ghost" id="docs-rescrape-btn" onclick="docsRescrapeChanged()" disabled>Re-scrape changed</button>
+            </div>
+          </div>
+          <div class="doc-body">
+            <div class="doc-kv">
+              <div><span class="kv-k">KB generated_at</span><span class="kv-v" id="kb-generated-at">—</span></div>
+              <div><span class="kv-k">Total modules</span><span class="kv-v" id="kb-total-mods">—</span></div>
+            </div>
+            <div class="doc-list" id="docs-changed-list">
+              <div class="no-data">No update check run yet.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-card">
+          <div class="doc-card-hdr">
+            <div>
+              <div class="doc-title">Rollback</div>
+              <div class="doc-sub">Automatic backup before re-scrape. Restore any previous KB version.</div>
+            </div>
+            <button class="btn-ghost" onclick="docsLoadRollback()">Refresh</button>
+          </div>
+          <div class="doc-body">
+            <div class="doc-list" id="docs-rollback-list">
+              <div class="no-data">Loading...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="docs-right">
+        <div class="doc-card">
+          <div class="doc-card-hdr">
+            <div>
+              <div class="doc-title">Scrape log (live)</div>
+              <div class="doc-sub">Real-time terminal feed via Server-Sent Events.</div>
+            </div>
+            <div class="doc-actions">
+              <span class="pill" id="docs-live-status">idle</span>
+              <button class="btn-ghost" onclick="docsClearLog()">Clear</button>
+            </div>
+          </div>
+          <div class="doc-body">
+            <div class="terminal" id="docs-terminal"></div>
+          </div>
+        </div>
+
+        <div class="doc-card">
+          <div class="doc-card-hdr">
+            <div>
+              <div class="doc-title">Module health score</div>
+              <div class="doc-sub">Score based on parsed params, examples, and required params detection. &lt; 70% is flagged.</div>
+            </div>
+            <button class="btn-ghost" onclick="docsLoadStatus()">Refresh</button>
+          </div>
+          <div class="doc-body">
+            <div class="doc-list" id="docs-health-list">
+              <div class="no-data">Loading...</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-card">
+          <div class="doc-card-hdr">
+            <div>
+              <div class="doc-title">Changelog (latest re-scrape)</div>
+              <div class="doc-sub">Auto-generated diffs per module after re-scrape.</div>
+            </div>
+            <button class="btn-ghost" onclick="docsLoadSessions()">Refresh</button>
+          </div>
+          <div class="doc-body">
+            <div class="doc-list" id="docs-changelog">
+              <div class="no-data">No sessions yet.</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
