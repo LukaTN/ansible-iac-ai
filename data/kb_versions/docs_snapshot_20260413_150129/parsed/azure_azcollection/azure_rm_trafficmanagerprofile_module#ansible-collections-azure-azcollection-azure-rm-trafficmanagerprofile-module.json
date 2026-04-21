@@ -1,0 +1,457 @@
+{
+  "collection_ns": "azure_azcollection",
+  "collection": "azure.azcollection",
+  "module": "azure.azcollection.azure_rm_trafficmanagerprofile",
+  "slug": "azure_rm_trafficmanagerprofile_module#ansible-collections-azure-azcollection-azure-rm-trafficmanagerprofile-module",
+  "description": "Create, update and delete a Traffic Manager profile.",
+  "parameters": [
+    {
+      "name": "ad_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory username. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "adfs_authority_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure AD authority url. Use when authenticating with Username/password, and has your own ADFS authority."
+    },
+    {
+      "name": "allowed_endpoint_record_types",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"DomainName\"",
+        "\"IPv4Address\"",
+        "\"IPv6Address\"",
+        "\"Any\""
+      ],
+      "description": "The list of allowed endpoint record types. Choices: \"DomainName\" \"IPv4Address\" \"IPv6Address\" \"Any\""
+    },
+    {
+      "name": "api_profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "Selects an API profile to use when communicating with Azure services. Default value of latest is appropriate for public clouds; future values will allow use with Azure Stack. Default: \"latest\""
+    },
+    {
+      "name": "append_tags",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Use to control if tags field is canonical or just appends to existing tags. When canonical, any tags not found in the tags parameter will be removed from the object’s metadata. Choices: false true ← (default)"
+    },
+    {
+      "name": "auth_source",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "az",
+      "choices": [
+        "\"auto\" ← (default)",
+        "\"cli\"",
+        "\"credential_file\"",
+        "\"env\"",
+        "\"msi\""
+      ],
+      "description": "Controls the source of the credentials to use for authentication. Can also be set via the ANSIBLE_AZURE_AUTH_SOURCE environment variable. When set to auto (the default) the precedence is module parameters -> env -> credential_file -> cli. When set to env, the credentials will be read from the environment variables When set to credential_file, it will read the profile from ~/.azure/credentials. When set to cli, the credentials will be sources from the Azure CLI profile. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if more than one is present otherwise the default az cli subscription is used. When set to msi, the host machine must be an azure resource with an enabled MSI extension. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if the resource is granted access to more than one subscription, otherwise the first subscription is chosen. The msi was added in Ansible 2.6. Choices: \"auto\" ← (default) \"cli\" \"credential_file\" \"env\" \"msi\""
+    },
+    {
+      "name": "cert_validation_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ignore\"",
+        "\"validate\""
+      ],
+      "description": "Controls the certificate validation behavior for Azure endpoints. By default, all modules will validate the server certificate, but when an HTTPS proxy is in use, or against Azure Stack, it may be necessary to disable this behavior by passing ignore. Can also be set via credential file profile or the AZURE_CERT_VALIDATION environment variable. Choices: \"ignore\" \"validate\""
+    },
+    {
+      "name": "client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client ID. Use when authenticating with a Service Principal or Managed Identity (msi). Can also be set via the AZURE_CLIENT_ID environment variable."
+    },
+    {
+      "name": "cloud_environment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "AzureCloud",
+      "choices": [],
+      "description": "For cloud environments other than the US public cloud, the environment name (as defined by Azure Python SDK, eg, AzureChinaCloud, AzureUSGovernment), or a metadata discovery endpoint URL (required for Azure Stack). Can also be set via credential file profile or the AZURE_CLOUD_ENVIRONMENT environment variable. Default: \"AzureCloud\""
+    },
+    {
+      "name": "disable_instance_discovery",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Determines whether or not instance discovery is performed when attempting to authenticate. Setting this to true will completely disable both instance discovery and authority validation. This functionality is intended for use in scenarios where the metadata endpoint cannot be reached such as in private clouds or Azure Stack. The process of instance discovery entails retrieving authority metadata from https://login.microsoft.com/ to validate the authority. By setting this to **True**, the validation of the authority is disabled. As a result, it is crucial to ensure that the configured authority host is valid and trustworthy. Set via credential file profile or the AZURE_DISABLE_INSTANCE_DISCOVERY environment variable. Choices: false ← (default) true"
+    },
+    {
+      "name": "dns_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The DNS settings of the Traffic Manager profile."
+    },
+    {
+      "name": "relative_name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The relative DNS name provided by this Traffic Manager profile. If not provided, name of the Traffic Manager will be used."
+    },
+    {
+      "name": "ttl",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The DNS Time-To-Live (TTL), in seconds."
+    },
+    {
+      "name": "location",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "public",
+      "choices": [],
+      "description": "Valid Azure location. Defaults to global because in default public Azure cloud, Traffic Manager profile can only be deployed globally. Reference https://docs.microsoft.com/en-us/azure/traffic-manager/quickstart-create-traffic-manager-profile#create-a-traffic-manager-profile. Default: \"global\""
+    },
+    {
+      "name": "log_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "log_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "max_return",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Maximum number of endpoints to be returned for MultiValue routing type."
+    },
+    {
+      "name": "monitor_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{",
+      "choices": [],
+      "description": "The endpoint monitoring settings of the Traffic Manager profile. Default: {\"path\": \"/\", \"port\": 80, \"protocol\": \"HTTP\"}"
+    },
+    {
+      "name": "custom_headers",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of custom headers."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Header name."
+    },
+    {
+      "name": "value",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Header value."
+    },
+    {
+      "name": "expected_status_code_ranges",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of expected status code ranges."
+    },
+    {
+      "name": "max",
+      "aliases": [],
+      "type": "integer",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Max status code."
+    },
+    {
+      "name": "min",
+      "aliases": [],
+      "type": "integer",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Min status code."
+    },
+    {
+      "name": "interval",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The monitor interval for endpoints in this profile in seconds."
+    },
+    {
+      "name": "path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The path relative to the endpoint domain name used to probe for endpoint health."
+    },
+    {
+      "name": "port",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The TCP port used to probe for endpoint health."
+    },
+    {
+      "name": "profile_monitor_status",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"CheckingEndpoint\"",
+        "\"Online\"",
+        "\"Degraded\"",
+        "\"Inactive\"",
+        "\"Stopped\"",
+        "\"Disabled\""
+      ],
+      "description": "The profile-level monitoring status of the Traffic Manager. Choices: \"CheckingEndpoint\" \"Online\" \"Degraded\" \"Inactive\" \"Stopped\" \"Disabled\""
+    },
+    {
+      "name": "protocol",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"HTTPS\"",
+        "\"HTTP\"",
+        "\"TCP\""
+      ],
+      "description": "The protocol HTTP, HTTPS or TCP used to probe for endpoint health. Choices: \"HTTPS\" \"HTTP\" \"TCP\""
+    },
+    {
+      "name": "timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The monitor timeout for endpoints in this profile in seconds."
+    },
+    {
+      "name": "tolerated_failures",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The number of consecutive failed health check before declaring an endpoint in this profile Degraded after the next failed health check."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory user password. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security profile found in ~/.azure/credentials file."
+    },
+    {
+      "name": "profile_status",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"enabled\" ← (default)",
+        "\"disabled\""
+      ],
+      "description": "The status of the Traffic Manager profile. Choices: \"enabled\" ← (default) \"disabled\""
+    },
+    {
+      "name": "resource_group",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of a resource group where the Traffic Manager profile exists or will be created."
+    },
+    {
+      "name": "routing_method",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"performance\" ← (default)",
+        "\"priority\"",
+        "\"weighted\"",
+        "\"geographic\""
+      ],
+      "description": "The traffic routing method of the Traffic Manager profile. Choices: \"performance\" ← (default) \"priority\" \"weighted\" \"geographic\""
+    },
+    {
+      "name": "secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client secret. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)"
+      ],
+      "description": "Assert the state of the Traffic Manager profile. Use present to create or update a Traffic Manager profile and absent to delete it. Choices: \"absent\" \"present\" ← (default)"
+    },
+    {
+      "name": "subscription_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Your Azure subscription Id."
+    },
+    {
+      "name": "tags",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Dictionary of string:string pairs to assign as metadata to the object. Metadata tags on the object will be updated with any provided values. To remove tags set append_tags option to false. Currently, Azure DNS zones and Traffic Manager services also don’t allow the use of spaces in the tag. Azure Front Door doesn’t support the use of Azure Automation and Azure CDN only support 15 tags on resources."
+    },
+    {
+      "name": "tenant",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure tenant ID. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "thumbprint",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The thumbprint of the private key specified in x509_certificate_path. Use when authenticating with a Service Principal. Required if x509_certificate_path is defined."
+    },
+    {
+      "name": "x509_certificate_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the X509 certificate used to create the service principal in PEM format. The certificate must be appended to the private key. Use when authenticating with a Service Principal."
+    }
+  ],
+  "examples": [
+    "- name: Create a Traffic Manager Profile\n  azure_rm_trafficmanagerprofile:\n    name: tmtest\n    resource_group: myResourceGroup\n    location: global\n    profile_status: enabled\n    routing_method: priority\n    dns_config:\n      relative_name: tmtest\n      ttl: 60\n    monitor_config:\n      protocol: HTTPS\n      port: 80\n      path: '/'\n    tags:\n      Environment: Test\n\n- name: Delete a Traffic Manager Profile\n  azure_rm_trafficmanagerprofile:\n    state: absent\n    name: tmtest\n    resource_group: myResourceGroup"
+  ],
+  "return_values": [
+    {
+      "name": "endpoints",
+      "type": "list",
+      "description": "List of endpoint IDs attached to the profile. Returned: when traffic manager endpoints exists Sample: [\"/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/tmt/providers/Microsoft.Network/trafficManagerProfiles/tm049b1ae293/exter nalEndpoints/e2\", \"/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/tmt/providers/Microsoft.Network/trafficManagerProfiles/tm049b1ae293/exter nalEndpoints/e1\"]",
+      "returned": "when"
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "description": "The ID of the traffic manager profile. Returned: when traffic manager profile exists Sample: \"/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/tmt/providers/Microsoft.Network/trafficManagerProfiles/tmtest\"",
+      "returned": "when"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_trafficmanagerprofile_module#ansible-collections-azure-azcollection-azure-rm-trafficmanagerprofile-module.html",
+  "parsed_at": "2026-04-11T13:53:08.155899"
+}

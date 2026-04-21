@@ -1,0 +1,155 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.pamd",
+  "slug": "pamd_module#ansible-collections-community-general-pamd-module",
+  "description": "Edit PAM service’s type, control, module path and module arguments.",
+  "parameters": [
+    {
+      "name": "backup",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Create a backup file including the timestamp information so you can get the original file back if you somehow clobbered it incorrectly. Choices: false ← (default) true"
+    },
+    {
+      "name": "control",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The control of the PAM rule being modified. This may be a complicated control with brackets. If this is the case, be sure to put “[bracketed controls]” in quotes. The type, control, and module_path options all must match a rule to be modified."
+    },
+    {
+      "name": "module_arguments",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "When state=updated, the module_arguments replace existing module_arguments. When state=args_absent args matching those listed in module_arguments are removed. When state=args_present any args listed in module_arguments are added if missing from the existing rule. Furthermore, if the module argument takes a value denoted by =, the value changes to that specified in module_arguments."
+    },
+    {
+      "name": "module_path",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The module path of the PAM rule being modified. The type, control, and module_path options all must match a rule to be modified."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name generally refers to the PAM service file to change, for example system-auth."
+    },
+    {
+      "name": "new_control",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The new control to assign to the new rule."
+    },
+    {
+      "name": "new_module_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The new module path to be assigned to the new rule."
+    },
+    {
+      "name": "new_type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"account\"",
+        "\"-account\"",
+        "\"auth\"",
+        "\"-auth\"",
+        "\"password\"",
+        "\"-password\"",
+        "\"session\"",
+        "\"-session\""
+      ],
+      "description": "The new type to assign to the new rule. Choices: \"account\" \"-account\" \"auth\" \"-auth\" \"password\" \"-password\" \"session\" \"-session\""
+    },
+    {
+      "name": "path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "/etc/pam.d",
+      "choices": [],
+      "description": "This is the path to the PAM service files. Default: \"/etc/pam.d\""
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "of",
+      "choices": [
+        "\"absent\"",
+        "\"before\"",
+        "\"after\"",
+        "\"args_absent\"",
+        "\"args_present\"",
+        "\"updated\" ← (default)"
+      ],
+      "description": "The default of updated modifies an existing rule if type, control and module_path all match an existing rule. With before, the new rule is inserted before a rule matching type, control and module_path. Similarly, with after, the new rule is inserted after an existing rulematching type, control and module_path. With either before or after new_type, new_control, and new_module_path must all be specified. If state is args_absent or args_present, new_type, new_control, and new_module_path are ignored. State absent removes the rule. Choices: \"absent\" \"before\" \"after\" \"args_absent\" \"args_present\" \"updated\" ← (default)"
+    },
+    {
+      "name": "type",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [
+        "\"account\"",
+        "\"-account\"",
+        "\"auth\"",
+        "\"-auth\"",
+        "\"password\"",
+        "\"-password\"",
+        "\"session\"",
+        "\"-session\""
+      ],
+      "description": "The type of the PAM rule being modified. The type, control, and module_path options all must match a rule to be modified. Choices: \"account\" \"-account\" \"auth\" \"-auth\" \"password\" \"-password\" \"session\" \"-session\""
+    }
+  ],
+  "examples": [
+    "- name: Update pamd rule's control in /etc/pam.d/system-auth\n  community.general.pamd:\n    name: system-auth\n    type: auth\n    control: required\n    module_path: pam_faillock.so\n    new_control: sufficient\n\n- name: Update pamd rule's complex control in /etc/pam.d/system-auth\n  community.general.pamd:\n    name: system-auth\n    type: session\n    control: '[success=1 default=ignore]'\n    module_path: pam_succeed_if.so\n    new_control: '[success=2 default=ignore]'\n\n- name: Insert a new rule before an existing rule\n  community.general.pamd:\n    name: system-auth\n    type: auth\n    control: required\n    module_path: pam_faillock.so\n    new_type: auth\n    new_control: sufficient\n    new_module_path: pam_faillock.so\n    state: before\n\n- name: Insert a new rule pam_wheel.so with argument 'use_uid' after an existing rule pam_rootok.so\n  community.general.pamd:\n    name: su\n    type: auth\n    control: sufficient\n    module_path: pam_rootok.so\n    new_type: auth\n    new_control: required\n    new_module_path: pam_wheel.so\n    module_arguments: 'use_uid'\n    state: after\n\n- name: Remove module arguments from an existing rule\n  community.general.pamd:\n    name: system-auth\n    type: auth\n    control: required\n    module_path: pam_faillock.so\n    module_arguments: ''\n    state: updated\n\n- name: Replace all module arguments in an existing rule\n  community.general.pamd:\n    name: system-auth\n    type: auth\n    control: required\n    module_path: pam_faillock.so\n    module_arguments: 'preauth silent deny=3 unlock_time=604800 fail_interval=900'\n    state: updated\n\n- name: Remove specific arguments from a rule\n  community.general.pamd:\n    name: system-auth\n    type: session\n    control: '[success=1 default=ignore]'\n    module_path: pam_succeed_if.so\n    module_arguments: crond,quiet\n    state: args_absent\n\n- name: Ensure specific arguments are present in a rule\n  community.general.pamd:\n    name: system-auth\n    type: session\n    control: '[success=1 default=ignore]'\n    module_path: pam_succeed_if.so\n    module_arguments: crond,quiet\n    state: args_present\n\n- name: Ensure specific arguments are present in a rule (alternative)\n  community.general.pamd:\n    name: system-auth\n    type: session\n    control: '[success=1 default=ignore]'\n    module_path: pam_succeed_if.so\n    module_arguments:\n      - crond\n      - quiet\n    state: args_present\n\n- name: Module arguments requiring commas must be listed as a Yaml list\n  community.general.pamd:\n    name: special-module\n    type: account\n    control: required\n    module_path: pam_access.so\n    module_arguments:\n      - listsep=,\n    state: args_present\n\n- name: Update specific argument value in a rule\n  community.general.pamd:\n    name: system-auth\n    type: auth\n    control: required\n    module_path: pam_faillock.so\n    module_arguments: 'fail_interval=300'\n    state: args_present\n\n- name: Add pam common-auth rule for duo\n  community.general.pamd:\n    name: common-auth\n    new_type: auth\n    new_control: '[success=1 default=ignore]'\n    new_module_path: '/lib64/security/pam_duo.so'\n    state: after\n    type: auth\n    module_path: pam_sss.so\n    control: 'requisite'"
+  ],
+  "return_values": [
+    {
+      "name": "backupdest",
+      "type": "string",
+      "description": "The file name of the backup file, if created. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "change_count",
+      "type": "integer",
+      "description": "How many rules were changed. Returned: success Sample: 1",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/pamd_module#ansible-collections-community-general-pamd-module.html",
+  "parsed_at": "2026-04-11T13:53:23.523290"
+}

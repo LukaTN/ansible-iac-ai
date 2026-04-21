@@ -1,0 +1,218 @@
+{
+  "collection_ns": "azure_azcollection",
+  "collection": "azure.azcollection",
+  "module": "azure.azcollection.azure_rm_ml_workspace_info",
+  "slug": "azure_rm_ml_workspace_info_module#ansible-collections-azure-azcollection-azure-rm-ml-workspace-info-module",
+  "description": "List ML Workspaces.",
+  "parameters": [
+    {
+      "name": "ad_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory username. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "adfs_authority_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure AD authority url. Use when authenticating with Username/password, and has your own ADFS authority."
+    },
+    {
+      "name": "api_profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "Selects an API profile to use when communicating with Azure services. Default value of latest is appropriate for public clouds; future values will allow use with Azure Stack. Default: \"latest\""
+    },
+    {
+      "name": "auth_source",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "az",
+      "choices": [
+        "\"auto\" ← (default)",
+        "\"cli\"",
+        "\"credential_file\"",
+        "\"env\"",
+        "\"msi\""
+      ],
+      "description": "Controls the source of the credentials to use for authentication. Can also be set via the ANSIBLE_AZURE_AUTH_SOURCE environment variable. When set to auto (the default) the precedence is module parameters -> env -> credential_file -> cli. When set to env, the credentials will be read from the environment variables When set to credential_file, it will read the profile from ~/.azure/credentials. When set to cli, the credentials will be sources from the Azure CLI profile. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if more than one is present otherwise the default az cli subscription is used. When set to msi, the host machine must be an azure resource with an enabled MSI extension. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if the resource is granted access to more than one subscription, otherwise the first subscription is chosen. The msi was added in Ansible 2.6. Choices: \"auto\" ← (default) \"cli\" \"credential_file\" \"env\" \"msi\""
+    },
+    {
+      "name": "cert_validation_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ignore\"",
+        "\"validate\""
+      ],
+      "description": "Controls the certificate validation behavior for Azure endpoints. By default, all modules will validate the server certificate, but when an HTTPS proxy is in use, or against Azure Stack, it may be necessary to disable this behavior by passing ignore. Can also be set via credential file profile or the AZURE_CERT_VALIDATION environment variable. Choices: \"ignore\" \"validate\""
+    },
+    {
+      "name": "client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client ID. Use when authenticating with a Service Principal or Managed Identity (msi). Can also be set via the AZURE_CLIENT_ID environment variable."
+    },
+    {
+      "name": "cloud_environment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "AzureCloud",
+      "choices": [],
+      "description": "For cloud environments other than the US public cloud, the environment name (as defined by Azure Python SDK, eg, AzureChinaCloud, AzureUSGovernment), or a metadata discovery endpoint URL (required for Azure Stack). Can also be set via credential file profile or the AZURE_CLOUD_ENVIRONMENT environment variable. Default: \"AzureCloud\""
+    },
+    {
+      "name": "disable_instance_discovery",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Determines whether or not instance discovery is performed when attempting to authenticate. Setting this to true will completely disable both instance discovery and authority validation. This functionality is intended for use in scenarios where the metadata endpoint cannot be reached such as in private clouds or Azure Stack. The process of instance discovery entails retrieving authority metadata from https://login.microsoft.com/ to validate the authority. By setting this to **True**, the validation of the authority is disabled. As a result, it is crucial to ensure that the configured authority host is valid and trustworthy. Set via credential file profile or the AZURE_DISABLE_INSTANCE_DISCOVERY environment variable. Choices: false ← (default) true"
+    },
+    {
+      "name": "filtered_kinds",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [
+        "\"default\"",
+        "\"hub\"",
+        "\"project\""
+      ],
+      "description": "List only the specified kinds of ml workspaces. Choices: \"default\" \"hub\" \"project\" Default: []"
+    },
+    {
+      "name": "log_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "log_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Retrieve details about a specific ml workspace."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory user password. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security profile found in ~/.azure/credentials file."
+    },
+    {
+      "name": "resource_group",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of a resource group to limit ml workspaces from. If not specified the subscription will be searched."
+    },
+    {
+      "name": "secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client secret. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "subscription_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Your Azure subscription Id."
+    },
+    {
+      "name": "tenant",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure tenant ID. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "thumbprint",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The thumbprint of the private key specified in x509_certificate_path. Use when authenticating with a Service Principal. Required if x509_certificate_path is defined."
+    },
+    {
+      "name": "x509_certificate_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the X509 certificate used to create the service principal in PEM format. The certificate must be appended to the private key. Use when authenticating with a Service Principal."
+    }
+  ],
+  "examples": [
+    "- name: Get info on a specific ml workspaces\n  azure.azcollection.azure_rm_ml_workspace_info:\n    name: my_workspace\n    resource_group: test_ml_workspace\n  register: result\n\n- name: List all ml workspaces in subscription\n  azure.azcollection.azure_rm_ml_workspace_info:\n  register: results\n\n- name: List all hub workspaces in resource group\n  azure.azcollection.azure_rm_ml_workspace_info:\n    resource_group: test_ml_workspace\n    filtered_kinds:\n      - hub\n  register: results"
+  ],
+  "return_values": [
+    {
+      "name": "ml_workspaces",
+      "type": "dictionary",
+      "description": "List of ML Workspaces. Returned: always Sample: [{\"allow_roleassignment_on_rg\": true, \"application_insights\": \"/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/test-ml-workspace/providers/Microsoft.insights/components/workspacinsightsxxxxxxxx\", \"description\": \"Workspace Integration Tests\", \"discovery_url\": \"https://westus3.api.azureml.ms/discovery\", \"display_name\": \"workspace-xxxxxxx-xxx\", \"enable_data_isolation\": false, \"hbi_workspace\": false, \"id\": \"/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/test-ml-workspace/providers/Microsoft.MachineLearningServices/workspaces/workspace-xxxxxxx-xxx\", \"identity\": {\"principal_id\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\", \"tenant_id\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\", \"type\": \"system_assigned\"}, \"key_vault\": \"/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/test-ml-workspace/providers/Microsoft.Keyvault/vaults/workspackeyvaultxxxxxxxx\", \"location\": \"westus3\", \"managed_network\": {\"firewall_sku\": \"standard\", \"isolation_mode\": \"allow_only_approved_outbound\", \"network_id\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\", \"outbound_rules\": [{\"category\": \"user_defined\", \"destination\": \"microsoft.com\", \"name\": \"microsoft\", \"status\": \"Inactive\", \"type\": \"fqdn\"}, {\"category\": \"user_defined\", \"destination\": {\"address_prefixes\": [\"168.63.129.16\", \"10.0.0.0/24\"], \"port_ranges\": \"80, 8080-8089\", \"protocol\": \"TCP\", \"service_tag\": \"sometag\"}, \"name\": \"servicetag-w-prefixes\", \"status\": \"Inactive\", \"type\": \"service_tag\"}, {\"category\": \"required\", \"destination\": {\"address_prefixes\": [], \"port_ranges\": \"443\", \"protocol\": \"TCP\", \"service_tag\": \"AzureMonitor\"}, \"name\": \"__SYS_ST_AzureMonitor_TCP\", \"status\": \"Inactive\", \"type\": \"service_tag\"}, {\"category\": \"required\", \"destination\": {\"address_prefixes\": [], \"port_ranges\": \"443\", \"protocol\": \"TCP\", \"service_tag\": \"AzureResourceManager\"}, \"name\": \"__SYS_ST_AzureResourceManager_TCP\", \"status\": \"Inactive\", \"type\": \"service_tag\"}, {\"category\": \"required\", \"destination\": {\"service_resource_id\": \"/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/test-ml-workspace/providers/Microsoft.Storage/storageAccounts/workspacstoragexxxxxxxxx\", \"spark_enabled\": true, \"subresource_target\": \"file\"}, \"name\": \"__SYS_PE_workspacstoragexxxxxxxxx_file_xxxxxxxx\", \"status\": \"Inactive\", \"type\": \"private_endpoint\"}, {\"category\": \"required\", \"destination\": {\"address_prefixes\": [], \"port_ranges\": \"443\", \"protocol\": \"TCP\", \"service_tag\": \"MicrosoftContainerRegistry.westus3\"}, \"name\": \"__SYS_ST_MicrosoftContainerRegistry.westus3_TCP\", \"status\": \"Inactive\", \"type\": \"service_tag\"}, {\"category\": \"required\", \"destination\": {\"address_prefixes\": [], \"port_ranges\": \"*\", \"protocol\": \"*\", \"service_tag\": \"VirtualNetwork\"}, \"name\": \"__SYS_ST_VirtualNetwork\", \"status\": \"Inactive\", \"type\": \"service_tag\"}, {\"category\": \"required\", \"destination\": {\"address_prefixes\": [], \"port_ranges\": \"443\", \"protocol\": \"TCP\", \"service_tag\": \"BatchNodeManagement\"}, \"name\": \"__SYS_ST_BatchNodeManagement_TCP\", \"status\": \"Inactive\", \"type\": \"service_tag\"}, {\"category\": \"required\", \"destination\": {\"address_prefixes\": [], \"port_ranges\": \"80, 443\", \"protocol\": \"TCP\", \"service_tag\": \"AzureActiveDirectory\"}, \"name\": \"__SYS_ST_AzureActiveDirectory_TCP\", \"status\": \"Inactive\", \"type\": \"service_tag\"}, {\"category\": \"required\", \"destination\": {\"service_resource_id\": \"/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/test-ml-workspace/providers/Microsoft.Storage/storageAccounts/workspacstoragexxxxxxxxx\", \"spark_enabled\": true, \"subresource_target\": \"blob\"}, \"name\": \"__SYS_PE_workspacstoragexxxxxxxxx_blob_xxxxxxxx\", \"status\": \"Inactive\", \"type\": \"private_endpoint\"}, {\"category\": \"required\", \"destination\": {\"service_resource_id\": \"/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/test-ml-workspace/providers/Microsoft.MachineLearningServices/workspaces/workspace-xxxxxxx-xxx\", \"spark_enabled\": true, \"subresource_target\": \"amlworkspace\"}, \"name\": \"__SYS_PE_workspace-xxxxxxx-xxx_amlworkspace_xxxxxxxx\", \"status\": \"Inactive\", \"type\": \"private_endpoint\"}, {\"category\": \"required\", \"destination\": {\"address_prefixes\": [], \"port_ranges\": \"*\", \"protocol\": \"*\", \"service_tag\": \"AzureFrontDoor.FirstParty\"}, \"name\": \"__SYS_ST_AzureFrontDoor.FirstParty\", \"status\": \"Inactive\", \"type\": \"service_tag\"}, {\"category\": \"required\", \"destination\": {\"address_prefixes\": [], \"port_ranges\": \"443\", \"protocol\": \"TCP\", \"service_tag\": \"AzureMachineLearning\"}, \"name\": \"__SYS_ST_AzureMachineLearning_TCP\", \"status\": \"Inactive\", \"type\": \"service_tag\"}, {\"category\": \"required\", \"destination\": {\"service_resource_id\": \"/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/test-ml-workspace/providers/Microsoft.Keyvault/vaults/workspackeyvaultxxxxxxxx\", \"spark_enabled\": true, \"subresource_target\": \"vault\"}, \"name\": \"__SYS_PE_workspackeyvault2aa0c6bf_vault_xxxxxxxx\", \"status\": \"Inactive\", \"type\": \"private_endpoint\"}, {\"category\": \"required\", \"destination\": {\"address_prefixes\": [], \"port_ranges\": \"5831\", \"protocol\": \"UDP\", \"service_tag\": \"AzureMachineLearning\"}, \"name\": \"__SYS_ST_AzureMachineLearning_UDP\", \"status\": \"Inactive\", \"type\": \"service_tag\"}], \"status\": {\"spark_ready\": false, \"status\": \"Inactive\"}}, \"mlflow_tracking_uri\": \"azureml://westus3.api.azureml.ms/mlflow/v1.0/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/test-ml-workspace/providers/Microsoft.MachineLearningServices/workspaces/workspace-xxxxxxx-xxx\", \"name\": \"workspace-xxxxxxx-xxx\", \"network_acls\": {\"default_action\": \"Allow\", \"ip_rules\": []}, \"provision_network_now\": false, \"public_network_access\": \"Disabled\", \"resource_group\": \"test-ml-workspace\", \"serverless_compute\": {\"no_public_ip\": false}, \"storage_account\": \"/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/test-ml-workspace/providers/Microsoft.Storage/storageAccounts/workspacstoragefxxxxxxxx\", \"system_datastores_auth_mode\": \"accesskey\", \"tags\": {}}]",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_ml_workspace_info_module#ansible-collections-azure-azcollection-azure-rm-ml-workspace-info-module.html",
+  "parsed_at": "2026-04-11T13:53:01.694929"
+}

@@ -1,0 +1,295 @@
+{
+  "collection_ns": "azure_azcollection",
+  "collection": "azure.azcollection",
+  "module": "azure.azcollection.azure_rm_resourcehealthstates_info",
+  "slug": "azure_rm_resourcehealthstates_info_module#ansible-collections-azure-azcollection-azure-rm-resourcehealthstates-info-module",
+  "description": "Get or list the current availability status for the resource.",
+  "parameters": [
+    {
+      "name": "ad_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory username. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "adfs_authority_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure AD authority url. Use when authenticating with Username/password, and has your own ADFS authority."
+    },
+    {
+      "name": "api_profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "Selects an API profile to use when communicating with Azure services. Default value of latest is appropriate for public clouds; future values will allow use with Azure Stack. Default: \"latest\""
+    },
+    {
+      "name": "auth_source",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "az",
+      "choices": [
+        "\"auto\" ← (default)",
+        "\"cli\"",
+        "\"credential_file\"",
+        "\"env\"",
+        "\"msi\""
+      ],
+      "description": "Controls the source of the credentials to use for authentication. Can also be set via the ANSIBLE_AZURE_AUTH_SOURCE environment variable. When set to auto (the default) the precedence is module parameters -> env -> credential_file -> cli. When set to env, the credentials will be read from the environment variables When set to credential_file, it will read the profile from ~/.azure/credentials. When set to cli, the credentials will be sources from the Azure CLI profile. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if more than one is present otherwise the default az cli subscription is used. When set to msi, the host machine must be an azure resource with an enabled MSI extension. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if the resource is granted access to more than one subscription, otherwise the first subscription is chosen. The msi was added in Ansible 2.6. Choices: \"auto\" ← (default) \"cli\" \"credential_file\" \"env\" \"msi\""
+    },
+    {
+      "name": "cert_validation_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ignore\"",
+        "\"validate\""
+      ],
+      "description": "Controls the certificate validation behavior for Azure endpoints. By default, all modules will validate the server certificate, but when an HTTPS proxy is in use, or against Azure Stack, it may be necessary to disable this behavior by passing ignore. Can also be set via credential file profile or the AZURE_CERT_VALIDATION environment variable. Choices: \"ignore\" \"validate\""
+    },
+    {
+      "name": "client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client ID. Use when authenticating with a Service Principal or Managed Identity (msi). Can also be set via the AZURE_CLIENT_ID environment variable."
+    },
+    {
+      "name": "cloud_environment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "AzureCloud",
+      "choices": [],
+      "description": "For cloud environments other than the US public cloud, the environment name (as defined by Azure Python SDK, eg, AzureChinaCloud, AzureUSGovernment), or a metadata discovery endpoint URL (required for Azure Stack). Can also be set via credential file profile or the AZURE_CLOUD_ENVIRONMENT environment variable. Default: \"AzureCloud\""
+    },
+    {
+      "name": "disable_instance_discovery",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Determines whether or not instance discovery is performed when attempting to authenticate. Setting this to true will completely disable both instance discovery and authority validation. This functionality is intended for use in scenarios where the metadata endpoint cannot be reached such as in private clouds or Azure Stack. The process of instance discovery entails retrieving authority metadata from https://login.microsoft.com/ to validate the authority. By setting this to **True**, the validation of the authority is disabled. As a result, it is crucial to ensure that the configured authority host is valid and trustworthy. Set via credential file profile or the AZURE_DISABLE_INSTANCE_DISCOVERY environment variable. Choices: false ← (default) true"
+    },
+    {
+      "name": "list_all",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Whether lists all historical availability transitions and impacting events for a single resource. Choices: false ← (default) true"
+    },
+    {
+      "name": "log_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "log_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory user password. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security profile found in ~/.azure/credentials file."
+    },
+    {
+      "name": "resource_group",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of resource group."
+    },
+    {
+      "name": "resource_uri",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The fully qualified ID of the resource, including the resource name and resource type. Currently the API support not nested and one nesting level resource types, such as ‘/subscriptions/{subscriptionId}/resourceGroups/{resource-group-name}/providers/{resource-provider-name}/ {resource-type}/{resource-name}’ and ‘/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/ providers/{resource-provider-name}/{parentResourceType}/{parentResourceName}/{resourceType}/{resourceName}’."
+    },
+    {
+      "name": "secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client secret. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "subscription_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Your Azure subscription Id."
+    },
+    {
+      "name": "tenant",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure tenant ID. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "thumbprint",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The thumbprint of the private key specified in x509_certificate_path. Use when authenticating with a Service Principal. Required if x509_certificate_path is defined."
+    },
+    {
+      "name": "x509_certificate_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the X509 certificate used to create the service principal in PEM format. The certificate must be appended to the private key. Use when authenticating with a Service Principal."
+    }
+  ],
+  "examples": [
+    "- name: Lists the current availability status for all the resources in the subscription.\n  azure_rm_resourcehealthstates_info:\n\n- name: Lists the current availability status for all the resources in the resource group.\n  azure_rm_resourcehealthstates_info:\n    resource_group: \"{{ resource_group }}\"\n\n- name: Gets current availability status for a single resource.\n  azure_rm_resourcehealthstates_info:\n    resource_uri: \"/subscriptions/xxxx-xxx/resourcegroups/v-xisurg/providers/microsoft.compute/virtualmachines/testvm\"\n\n- name: Lists all historical availability transitions and impacting events for a single resource.\n  azure_rm_resourcehealthstates_info:\n    resource_uri: \"/subscriptions/xxxx-xxx/resourcegroups/v-xisurg/providers/microsoft.compute/virtualmachines/testvm\"\n    list_all: true"
+  ],
+  "return_values": [
+    {
+      "name": "health_states",
+      "type": "complex",
+      "description": "The facts of availabilityStatus of a resource. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "description": "Azure Resource Manager Identity for the availabilityStatuses resource. Returned: always Sample: \"/subscriptions/xxxx-xxx/resourcegroups/defaultresourcegroup-wus2/providers/microsoft.operationalinsights/workspaces/ defaultworkspace-e393adb3-b5be-4789-bdc9-848367f0d152-wus2/providers/Microsoft.ResourceHealth/availabilityStatuses/current\"",
+      "returned": "always"
+    },
+    {
+      "name": "location",
+      "type": "string",
+      "description": "Azure Resource Manager geo location of the resource. Returned: always Sample: \"westus2\"",
+      "returned": "always"
+    },
+    {
+      "name": "properties",
+      "type": "complex",
+      "description": "Properties of availability state. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "availability_state",
+      "type": "string",
+      "description": "Availability status of the resource. Returned: always Sample: \"Unknown\"",
+      "returned": "always"
+    },
+    {
+      "name": "category",
+      "type": "string",
+      "description": "When a context field is set to Platform, this field will reflect if the event was planned or unplanned. If the context field does not have a value of Platform, then this field will be ignored. Returned: always Sample: \"Not Applicable\"",
+      "returned": "always"
+    },
+    {
+      "name": "context",
+      "type": "string",
+      "description": "This field is connected to the category field in this object. Returned: always Sample: \"Not Applicable\"",
+      "returned": "always"
+    },
+    {
+      "name": "occured_time",
+      "type": "string",
+      "description": "Timestamp for when last change in health status occurred. Returned: always Sample: \"2025-03-05T01:50:29.67632Z\"",
+      "returned": "always"
+    },
+    {
+      "name": "reason_chronicity",
+      "type": "string",
+      "description": "Chronicity of the availability transition. Returned: always Sample: \"Transient\"",
+      "returned": "always"
+    },
+    {
+      "name": "reason_type",
+      "type": "string",
+      "description": "When the resource’s availabilityState is Unavailable, it describes where the health impacting event was originated. Returned: always Sample: \"\"",
+      "returned": "always"
+    },
+    {
+      "name": "reported_time",
+      "type": "string",
+      "description": "Timestamp for when the health was last checked. Returned: always Sample: \"2025-03-05T01:50:29.67632Z\"",
+      "returned": "always"
+    },
+    {
+      "name": "summary",
+      "type": "string",
+      "description": "Summary description of the availability status. Returned: always Sample: \"We're currently unable to determine the health of this workspace. Either no queries were run on this workspace, or no data was ingested to this workspace recently.\"",
+      "returned": "always"
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "description": "Title description of the availability status. Returned: always Sample: \"Unkown\"",
+      "returned": "always"
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "description": "Microsoft.ResourceHealth/AvailabilityStatuses. Returned: always Sample: \"Microsoft.ResourceHealth/AvailabilityStatuses\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_resourcehealthstates_info_module#ansible-collections-azure-azcollection-azure-rm-resourcehealthstates-info-module.html",
+  "parsed_at": "2026-04-11T13:53:05.781801"
+}

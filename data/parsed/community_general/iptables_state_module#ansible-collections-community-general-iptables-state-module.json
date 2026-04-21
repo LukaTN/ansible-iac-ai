@@ -1,0 +1,142 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.iptables_state",
+  "slug": "iptables_state_module#ansible-collections-community-general-iptables-state-module",
+  "description": "iptables is used to set up, maintain, and inspect the tables of IP packet filter rules in the Linux kernel.",
+  "parameters": [
+    {
+      "name": "counters",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Save or restore the values of all packet and byte counters. When true, the module is not idempotent. Choices: false ← (default) true"
+    },
+    {
+      "name": "ip_version",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ipv4\" ← (default)",
+        "\"ipv6\""
+      ],
+      "description": "Which version of the IP protocol this module should apply to. Choices: \"ipv4\" ← (default) \"ipv6\""
+    },
+    {
+      "name": "modprobe",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specify the path to the modprobe program internally used by iptables related commands to load kernel modules. By default, /proc/sys/kernel/modprobe is inspected to determine the executable’s path."
+    },
+    {
+      "name": "noflush",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "For state=restored, ignored otherwise. If false, restoring iptables rules from a file flushes (deletes) all previous contents of the respective table(s). If true, the previous rules are left untouched (but policies are updated anyway, for all built-in chains). Choices: false ← (default) true"
+    },
+    {
+      "name": "path",
+      "aliases": [],
+      "type": "path",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The file the iptables state should be saved to. The file the iptables state should be restored from."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [
+        "\"saved\"",
+        "\"restored\""
+      ],
+      "description": "Whether the firewall state should be saved (into a file) or restored (from a file). Choices: \"saved\" \"restored\""
+    },
+    {
+      "name": "table",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"filter\"",
+        "\"nat\"",
+        "\"mangle\"",
+        "\"raw\"",
+        "\"security\""
+      ],
+      "description": "When state=restored, restore only the named table even if the input file contains other tables. Fail if the named table is not declared in the file. When state=saved, restrict output to the specified table. If not specified, output includes all active tables. Choices: \"filter\" \"nat\" \"mangle\" \"raw\" \"security\""
+    },
+    {
+      "name": "wait",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Wait N seconds for the xtables lock to prevent instant failure in case multiple instances of the program are running concurrently."
+    }
+  ],
+  "examples": [
+    "# This will apply to all loaded/active IPv4 tables.\n- name: Save current state of the firewall in system file\n  community.general.iptables_state:\n    state: saved\n    path: /etc/sysconfig/iptables\n\n# This will apply only to IPv6 filter table.\n- name: save current state of the firewall in system file\n  community.general.iptables_state:\n    ip_version: ipv6\n    table: filter\n    state: saved\n    path: /etc/iptables/rules.v6\n\n# This will load a state from a file, with a rollback in case of access loss\n- name: restore firewall state from a file\n  community.general.iptables_state:\n    state: restored\n    path: /run/iptables.apply\n  async: \"{{ ansible_timeout }}\"\n  poll: 0\n\n# This will load new rules by appending them to the current ones\n- name: restore firewall state from a file\n  community.general.iptables_state:\n    state: restored\n    path: /run/iptables.apply\n    noflush: true\n  async: \"{{ ansible_timeout }}\"\n  poll: 0\n\n# This will only retrieve information\n- name: get current state of the firewall\n  community.general.iptables_state:\n    state: saved\n    path: /tmp/iptables\n  check_mode: true\n  changed_when: false\n  register: iptables_state\n\n- name: show current state of the firewall\n  ansible.builtin.debug:\n    var: iptables_state.initial_state"
+  ],
+  "return_values": [
+    {
+      "name": "applied",
+      "type": "boolean",
+      "description": "Whether or not the wanted state has been successfully restored. Returned: always Sample: true",
+      "returned": "always"
+    },
+    {
+      "name": "initial_state",
+      "type": "list",
+      "description": "The current state of the firewall when module starts. Returned: always Sample: [\"# Generated by xtables-save v1.8.2\", \"*filter\", \":INPUT ACCEPT [0:0]\", \":FORWARD ACCEPT [0:0]\", \":OUTPUT ACCEPT [0:0]\", \"COMMIT\", \"# Completed\"]",
+      "returned": "always"
+    },
+    {
+      "name": "restored",
+      "type": "list",
+      "description": "The state the module restored, whenever it is finally applied or not. Returned: always Sample: [\"# Generated by xtables-save v1.8.2\", \"*filter\", \":INPUT DROP [0:0]\", \":FORWARD DROP [0:0]\", \":OUTPUT ACCEPT [0:0]\", \"-A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT\", \"-A INPUT -m conntrack --ctstate INVALID -j DROP\", \"-A INPUT -i lo -j ACCEPT\", \"-A INPUT -p icmp -j ACCEPT\", \"-A INPUT -p tcp -m tcp --dport 22 -j ACCEPT\", \"COMMIT\", \"# Completed\"]",
+      "returned": "always"
+    },
+    {
+      "name": "saved",
+      "type": "list",
+      "description": "The iptables state the module saved. Returned: always Sample: [\"# Generated by xtables-save v1.8.2\", \"*filter\", \":INPUT ACCEPT [0:0]\", \":FORWARD DROP [0:0]\", \":OUTPUT ACCEPT [0:0]\", \"COMMIT\", \"# Completed\"]",
+      "returned": "always"
+    },
+    {
+      "name": "tables",
+      "type": "dictionary",
+      "description": "The iptables on the system before the module has run, separated by table. If the option table is used, only this table is included. Returned: always Sample: {\"filter\": [\":INPUT ACCEPT\", \":FORWARD ACCEPT\", \":OUTPUT ACCEPT\", \"-A INPUT -i lo -j ACCEPT\", \"-A INPUT -p icmp -j ACCEPT\", \"-A INPUT -p tcp -m tcp --dport 22 -j ACCEPT\", \"-A INPUT -j REJECT --reject-with icmp-host-prohibited\"], \"nat\": [\":PREROUTING ACCEPT\", \":INPUT ACCEPT\", \":OUTPUT ACCEPT\", \":POSTROUTING ACCEPT\"]}",
+      "returned": "always"
+    },
+    {
+      "name": "table",
+      "type": "list",
+      "description": "Policies and rules for all chains of the named table. Returned: success",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/iptables_state_module.html",
+  "parsed_at": "2026-04-13T16:29:49.246259"
+}

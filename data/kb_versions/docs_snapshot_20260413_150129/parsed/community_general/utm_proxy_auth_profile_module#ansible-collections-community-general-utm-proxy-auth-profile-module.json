@@ -1,0 +1,528 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.utm_proxy_auth_profile",
+  "slug": "utm_proxy_auth_profile_module#ansible-collections-community-general-utm-proxy-auth-profile-module",
+  "description": "Create, update or destroy a reverse_proxy auth_profile entry in SOPHOS UTM.",
+  "parameters": [
+    {
+      "name": "aaa",
+      "aliases": [],
+      "type": "list",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "List of references to utm_aaa objects (allowed users or groups)."
+    },
+    {
+      "name": "backend_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"Basic\"",
+        "\"None\" ← (default)"
+      ],
+      "description": "Specifies if the backend server needs authentication ([Basic|None]). Choices: \"Basic\" \"None\" ← (default)"
+    },
+    {
+      "name": "backend_strip_basic_auth",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Should the login data be stripped when proxying the request to the backend host. Choices: false true ← (default)"
+    },
+    {
+      "name": "backend_user_prefix",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Prefix string to prepend to the username for backend authentication. Default: \"\""
+    },
+    {
+      "name": "backend_user_suffix",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Suffix string to append to the username for backend authentication. Default: \"\""
+    },
+    {
+      "name": "basic_prompt",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The message in the basic authentication prompt."
+    },
+    {
+      "name": "comment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Optional comment string. Default: \"\""
+    },
+    {
+      "name": "frontend_cookie",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Frontend cookie name."
+    },
+    {
+      "name": "frontend_cookie_secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Frontend cookie secret."
+    },
+    {
+      "name": "frontend_form",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Frontend authentication form name."
+    },
+    {
+      "name": "frontend_form_template",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Frontend authentication form template. Default: \"\""
+    },
+    {
+      "name": "frontend_login",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Frontend login name."
+    },
+    {
+      "name": "frontend_logout",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Frontend logout name."
+    },
+    {
+      "name": "frontend_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"Basic\" ← (default)",
+        "\"Form\""
+      ],
+      "description": "Frontend authentication mode (Form|Basic). Choices: \"Basic\" ← (default) \"Form\""
+    },
+    {
+      "name": "frontend_realm",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Frontend authentication realm."
+    },
+    {
+      "name": "frontend_session_allow_persistency",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Allow session persistency. Choices: false ← (default) true"
+    },
+    {
+      "name": "frontend_session_lifetime",
+      "aliases": [],
+      "type": "integer",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Session lifetime."
+    },
+    {
+      "name": "frontend_session_lifetime_limited",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Specifies if limitation of session lifetime is active. Choices: false true ← (default)"
+    },
+    {
+      "name": "frontend_session_lifetime_scope",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"days\"",
+        "\"hours\" ← (default)",
+        "\"minutes\""
+      ],
+      "description": "Scope for frontend_session_lifetime (days|hours|minutes). Choices: \"days\" \"hours\" ← (default) \"minutes\""
+    },
+    {
+      "name": "frontend_session_timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Session timeout."
+    },
+    {
+      "name": "frontend_session_timeout_enabled",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Specifies if session timeout is active. Choices: false true ← (default)"
+    },
+    {
+      "name": "frontend_session_timeout_scope",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"days\"",
+        "\"hours\"",
+        "\"minutes\" ← (default)"
+      ],
+      "description": "Scope for frontend_session_timeout (days|hours|minutes). Choices: \"days\" \"hours\" \"minutes\" ← (default)"
+    },
+    {
+      "name": "headers",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "A dictionary of additional headers to be sent to POST and PUT requests. Is needed for some modules. Default: {}"
+    },
+    {
+      "name": "logout_delegation_urls",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "List of logout URLs that logouts are delegated to. Default: []"
+    },
+    {
+      "name": "logout_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"None\" ← (default)",
+        "\"Delegation\""
+      ],
+      "description": "Mode of logout (None|Delegation). Choices: \"None\" ← (default) \"Delegation\""
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the object that identifies the entry."
+    },
+    {
+      "name": "redirect_to_requested_url",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Should a redirect to the requested URL be made. Choices: false ← (default) true"
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)"
+      ],
+      "description": "The desired state of the object. present creates or updates an object. absent deletes an object if present. Choices: \"absent\" \"present\" ← (default)"
+    },
+    {
+      "name": "utm_host",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The REST Endpoint of the Sophos UTM."
+    },
+    {
+      "name": "utm_port",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "4444",
+      "choices": [],
+      "description": "The port of the REST interface. Default: 4444"
+    },
+    {
+      "name": "utm_protocol",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"http\"",
+        "\"https\" ← (default)"
+      ],
+      "description": "The protocol of the REST Endpoint. Choices: \"http\" \"https\" ← (default)"
+    },
+    {
+      "name": "utm_token",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The token used to identify at the REST-API. See https://www.sophos.com/en-us/medialibrary/PDFs/documentation/UTMonAWS/Sophos-UTM-RESTful-API.pdf?la=en, Chapter 2.4.2."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether the REST interface’s SSL certificate should be verified or not. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Create UTM proxy_auth_profile\n  community.general.utm_proxy_auth_profile:\n    utm_host: sophos.host.name\n    utm_token: abcdefghijklmno1234\n    name: TestAuthProfileEntry\n    aaa: [REF_OBJECT_STRING, REF_ANOTHEROBJECT_STRING]\n    basic_prompt: \"Authentication required: Please login\"\n    frontend_session_lifetime: 1\n    frontend_session_timeout: 1\n    state: present\n\n- name: Remove UTM proxy_auth_profile\n  community.general.utm_proxy_auth_profile:\n    utm_host: sophos.host.name\n    utm_token: abcdefghijklmno1234\n    name: TestAuthProfileEntry\n    state: absent\n\n- name: Read UTM proxy_auth_profile\n  community.general.utm_proxy_auth_profile:\n    utm_host: sophos.host.name\n    utm_token: abcdefghijklmno1234\n    name: TestAuthProfileEntry\n    state: info"
+  ],
+  "return_values": [
+    {
+      "name": "result",
+      "type": "complex",
+      "description": "The utm object that was created. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "_locked",
+      "type": "boolean",
+      "description": "Whether or not the object is currently locked. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "_ref",
+      "type": "string",
+      "description": "The reference name of the object. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "_type",
+      "type": "string",
+      "description": "The type of the object. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "aaa",
+      "type": "list",
+      "description": "List of references to utm_aaa objects (allowed users or groups). Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "backend_mode",
+      "type": "string",
+      "description": "Specifies if the backend server needs authentication ([Basic|None]). Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "backend_strip_basic_auth",
+      "type": "boolean",
+      "description": "Should the login data be stripped when proxying the request to the backend host. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "backend_user_prefix",
+      "type": "string",
+      "description": "Prefix string to prepend to the username for backend authentication. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "backend_user_suffix",
+      "type": "string",
+      "description": "Suffix string to append to the username for backend authentication. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "basic_prompt",
+      "type": "string",
+      "description": "The message in the basic authentication prompt. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "comment",
+      "type": "string",
+      "description": "Optional comment string. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "frontend_cookie",
+      "type": "string",
+      "description": "Frontend cookie name. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "frontend_form",
+      "type": "string",
+      "description": "Frontend authentication form name. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "frontend_form_template",
+      "type": "string",
+      "description": "Frontend authentication form template. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "frontend_login",
+      "type": "string",
+      "description": "Frontend login name. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "frontend_logout",
+      "type": "string",
+      "description": "Frontend logout name. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "frontend_mode",
+      "type": "string",
+      "description": "Frontend authentication mode (Form|Basic). Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "frontend_realm",
+      "type": "string",
+      "description": "Frontend authentication realm. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "frontend_session_allow_persistency",
+      "type": "boolean",
+      "description": "Allow session persistency. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "frontend_session_lifetime",
+      "type": "integer",
+      "description": "Session lifetime. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "frontend_session_lifetime_limited",
+      "type": "boolean",
+      "description": "Specifies if limitation of session lifetime is active. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "frontend_session_lifetime_scope",
+      "type": "string",
+      "description": "Scope for frontend_session_lifetime (days|hours|minutes). Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "frontend_session_timeout",
+      "type": "integer",
+      "description": "Session timeout. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "frontend_session_timeout_enabled",
+      "type": "boolean",
+      "description": "Specifies if session timeout is active. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "frontend_session_timeout_scope",
+      "type": "string",
+      "description": "Scope for frontend_session_timeout (days|hours|minutes). Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "logout_delegation_urls",
+      "type": "list",
+      "description": "List of logout URLs that logouts are delegated to. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "logout_mode",
+      "type": "string",
+      "description": "Mode of logout (None|Delegation). Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "The name of the object. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "redirect_to_requested_url",
+      "type": "boolean",
+      "description": "Should a redirect to the requested URL be made. Returned: success",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/utm_proxy_auth_profile_module#ansible-collections-community-general-utm-proxy-auth-profile-module.html",
+  "parsed_at": "2026-04-11T13:53:28.073699"
+}

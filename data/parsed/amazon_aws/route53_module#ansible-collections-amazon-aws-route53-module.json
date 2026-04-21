@@ -1,0 +1,466 @@
+{
+  "collection_ns": "amazon_aws",
+  "collection": "amazon.aws",
+  "module": "amazon.aws.route53",
+  "slug": "route53_module#ansible-collections-amazon-aws-route53-module",
+  "description": "Creates and deletes DNS records in Amazons Route 53 service.",
+  "parameters": [
+    {
+      "name": "access_key",
+      "aliases": [
+        "aws_access_key_id",
+        "aws_access_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS access key ID. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY environment variables may also be used in decreasing order of preference. The aws_access_key and profile options are mutually exclusive. The aws_access_key_id alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "alias",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Indicates if this is an alias record. Mutually exclusive with ttl. Defaults to false. Choices: false true"
+    },
+    {
+      "name": "alias_evaluate_target_health",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Whether or not to evaluate an alias target health. Useful for aliases to Elastic Load Balancers. Choices: false ← (default) true"
+    },
+    {
+      "name": "alias_hosted_zone_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The hosted zone identifier."
+    },
+    {
+      "name": "aws_ca_bundle",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The location of a CA Bundle to use when validating SSL certificates. The AWS_CA_BUNDLE environment variable may also be used."
+    },
+    {
+      "name": "aws_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary to modify the botocore configuration. Parameters can be found in the AWS documentation https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html#botocore.config.Config."
+    },
+    {
+      "name": "debug_botocore_endpoint_logs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use a botocore.endpoint logger to parse the unique (rather than total) \"resource:action\" API calls made during a task, outputing the set to the resource_actions key in the task results. Use the aws_resource_action callback to output to total list made during a playbook. The ANSIBLE_DEBUG_BOTOCORE_LOGS environment variable may also be used. Choices: false ← (default) true"
+    },
+    {
+      "name": "endpoint_url",
+      "aliases": [
+        "aws_endpoint_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "AWS",
+      "choices": [],
+      "description": "URL to connect to instead of the default AWS endpoints. While this can be used to connection to other AWS-compatible services the amazon.aws and community.aws collections are only tested against AWS. The AWS_URL environment variable may also be used."
+    },
+    {
+      "name": "failover",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"SECONDARY\"",
+        "\"PRIMARY\""
+      ],
+      "description": "Failover resource record sets only. Whether this is the primary or secondary resource record set. Allowed values are PRIMARY and SECONDARY. Mutually exclusive with weight and region. Choices: \"SECONDARY\" \"PRIMARY\""
+    },
+    {
+      "name": "geo_location",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Allows to control how Amazon Route 53 responds to DNS queries based on the geographic origin of the query. Two geolocation resource record sets that specify same geographic location cannot be created. Non-geolocation resource record sets that have the same values for the Name and Type elements as geolocation resource record sets cannot be created."
+    },
+    {
+      "name": "health_check",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Health check to associate with this record"
+    },
+    {
+      "name": "hosted_zone_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The Hosted Zone ID of the DNS zone to modify. This is a required parameter, if parameter zone is not supplied."
+    },
+    {
+      "name": "identifier",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Have to be specified for Weighted, latency-based and failover resource record sets only. An identifier that differentiates among multiple resource record sets that have the same combination of DNS name and type."
+    },
+    {
+      "name": "overwrite",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Whether an existing record should be overwritten on create if values do not match. Choices: false true"
+    },
+    {
+      "name": "private_zone",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "is",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If set to true, the private zone matching the requested name within the domain will be used if there are both public and private zones. The default is to use the public zone. Choices: false ← (default) true"
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "aws_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A named AWS profile to use for authentication. See the AWS documentation for more information about named profiles https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html. The AWS_PROFILE environment variable may also be used. The profile option is mutually exclusive with the aws_access_key, aws_secret_key and session_token options."
+    },
+    {
+      "name": "record",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The full DNS record to create or delete."
+    },
+    {
+      "name": "region",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Latency-based resource record sets only Among resource record sets that have the same combination of DNS name and type, a value that determines which region this should be associated with for the latency-based routing Mutually exclusive with weight and failover."
+    },
+    {
+      "name": "retry_interval",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "of",
+      "choices": [],
+      "description": "In the case that Route 53 is still servicing a prior request, this module will wait and try again after this many seconds. If you have many domain names, the default of 500 seconds may be too long. Default: 500"
+    },
+    {
+      "name": "secret_key",
+      "aliases": [
+        "aws_secret_access_key",
+        "aws_secret_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS secret access key. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SECRET_ACCESS_KEY or AWS_SECRET_KEY environment variables may also be used in decreasing order of preference. The secret_key and profile options are mutually exclusive. The aws_secret_access_key alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "session_token",
+      "aliases": [
+        "aws_session_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS STS session token for use with temporary credentials. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SESSION_TOKEN environment variable may also be used. The session_token and profile options are mutually exclusive."
+    },
+    {
+      "name": "state",
+      "aliases": [
+        "command"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [
+        "\"present\"",
+        "\"absent\"",
+        "\"get\"",
+        "\"create\"",
+        "\"delete\""
+      ],
+      "description": "Specifies the state of the resource record. Choices: \"present\" \"absent\" \"get\" \"create\" \"delete\""
+    },
+    {
+      "name": "ttl",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "3600",
+      "choices": [],
+      "description": "The TTL, in second, to give the new record. Mutually exclusive with alias. Default: 3600"
+    },
+    {
+      "name": "type",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [
+        "\"A\"",
+        "\"CNAME\"",
+        "\"MX\"",
+        "\"AAAA\"",
+        "\"TXT\"",
+        "\"PTR\"",
+        "\"SRV\"",
+        "\"SPF\"",
+        "\"CAA\"",
+        "\"NS\"",
+        "\"SOA\"",
+        "\"SSHFP\""
+      ],
+      "description": "The type of DNS record to create. Support for SSHFP was added in release 9.2.0. See AWS Doc for more information https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/ResourceRecordTypes.html. Choices: \"A\" \"CNAME\" \"MX\" \"AAAA\" \"TXT\" \"PTR\" \"SRV\" \"SPF\" \"CAA\" \"NS\" \"SOA\" \"SSHFP\""
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to false, SSL certificates will not be validated for communication with the AWS APIs. Setting validate_certs=false is strongly discouraged, as an alternative, consider setting aws_ca_bundle instead. Choices: false true ← (default)"
+    },
+    {
+      "name": "value",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The new value when creating a DNS record. YAML lists or multiple comma-spaced values are allowed for non-alias records."
+    },
+    {
+      "name": "vpc_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "When used in conjunction with private_zone=true, this will only modify records in the private hosted zone attached to this VPC. This allows you to have multiple private hosted zones, all with the same name, attached to different VPCs."
+    },
+    {
+      "name": "wait",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Wait until the changes have been replicated to all Amazon Route 53 DNS servers. Choices: false ← (default) true"
+    },
+    {
+      "name": "wait_timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "300",
+      "choices": [],
+      "description": "How long to wait for the changes to be replicated, in seconds. Default: 300"
+    },
+    {
+      "name": "weight",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Weighted resource record sets only. Among resource record sets that have the same combination of DNS name and type, a value that determines what portion of traffic for the current resource record set is routed to the associated location. Mutually exclusive with region and failover."
+    },
+    {
+      "name": "zone",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The DNS zone to modify. This is a required parameter, if parameter hosted_zone_id is not supplied."
+    }
+  ],
+  "examples": [
+    "- name: Add new.foo.com as an A record with 3 IPs and wait until the changes have been replicated\n  amazon.aws.route53:\n    state: present\n    zone: foo.com\n    record: new.foo.com\n    type: A\n    ttl: 7200\n    value: 1.1.1.1,2.2.2.2,3.3.3.3\n    wait: true\n\n- name: Update new.foo.com as an A record with a list of 3 IPs and wait until the changes have been replicated\n  amazon.aws.route53:\n    state: present\n    zone: foo.com\n    record: new.foo.com\n    type: A\n    ttl: 7200\n    value:\n      - 1.1.1.1\n      - 2.2.2.2\n      - 3.3.3.3\n    wait: true\n\n- name: Retrieve the details for new.foo.com\n  amazon.aws.route53:\n    state: get\n    zone: foo.com\n    record: new.foo.com\n    type: A\n  register: rec\n\n- name: Delete new.foo.com A record using the results from the get command\n  amazon.aws.route53:\n    state: absent\n    zone: foo.com\n    record: \"{{ rec.set.record }}\"\n    ttl: \"{{ rec.set.ttl }}\"\n    type: \"{{ rec.set.type }}\"\n    value: \"{{ rec.set.value }}\"\n\n# Add an AAAA record.  Note that because there are colons in the value\n# that the IPv6 address must be quoted. Also shows using the old form command=create.\n- name: Add an AAAA record\n  amazon.aws.route53:\n    command: create\n    zone: foo.com\n    record: localhost.foo.com\n    type: AAAA\n    ttl: 7200\n    value: \"::1\"\n\n# For more information on SRV records see:\n# https://en.wikipedia.org/wiki/SRV_record\n- name: Add a SRV record with multiple fields for a service on port 22222\n  amazon.aws.route53:\n    state: present\n    zone: foo.com\n    record: \"_example-service._tcp.foo.com\"\n    type: SRV\n    value: \"0 0 22222 host1.foo.com,0 0 22222 host2.foo.com\"\n\n# Note that TXT and SPF records must be surrounded\n# by quotes when sent to Route 53:\n- name: Add a TXT record.\n  amazon.aws.route53:\n    state: present\n    zone: foo.com\n    record: localhost.foo.com\n    type: TXT\n    ttl: 7200\n    value: '\"bar\"'\n\n- name: Add an alias record that points to an Amazon ELB\n  amazon.aws.route53:\n    state: present\n    zone: foo.com\n    record: elb.foo.com\n    type: A\n    value: \"{{ elb_dns_name }}\"\n    alias: true\n    alias_hosted_zone_id: \"{{ elb_zone_id }}\"\n\n- name: Retrieve the details for elb.foo.com\n  amazon.aws.route53:\n    state: get\n    zone: foo.com\n    record: elb.foo.com\n    type: A\n  register: rec\n\n- name: Delete an alias record using the results from the get command\n  amazon.aws.route53:\n    state: absent\n    zone: foo.com\n    record: \"{{ rec.set.record }}\"\n    ttl: \"{{ rec.set.ttl }}\"\n    type: \"{{ rec.set.type }}\"\n    value: \"{{ rec.set.value }}\"\n    alias: true\n    alias_hosted_zone_id: \"{{ rec.set.alias_hosted_zone_id }}\"\n\n- name: Add an alias record that points to an Amazon ELB and evaluates it health\n  amazon.aws.route53:\n    state: present\n    zone: foo.com\n    record: elb.foo.com\n    type: A\n    value: \"{{ elb_dns_name }}\"\n    alias: true\n    alias_hosted_zone_id: \"{{ elb_zone_id }}\"\n    alias_evaluate_target_health: true\n\n- name: Add an AAAA record with Hosted Zone ID\n  amazon.aws.route53:\n    state: present\n    zone: foo.com\n    hosted_zone_id: Z2AABBCCDDEEFF\n    record: localhost.foo.com\n    type: AAAA\n    ttl: 7200\n    value: \"::1\"\n\n- name: Use a routing policy to distribute traffic\n  amazon.aws.route53:\n    state: present\n    zone: foo.com\n    record: www.foo.com\n    type: CNAME\n    value: host1.foo.com\n    ttl: 30\n    # Routing policy\n    identifier: \"host1@www\"\n    weight: 100\n    health_check: \"d994b780-3150-49fd-9205-356abdd42e75\"\n\n- name: Add a CAA record (RFC 6844)\n  amazon.aws.route53:\n    state: present\n    zone: example.com\n    record: example.com\n    type: CAA\n    value:\n      - 0 issue \"ca.example.net\"\n      - 0 issuewild \";\"\n      - 0 iodef \"mailto:security@example.com\"\n\n- name: Create a record with geo_location - country_code\n  amazon.aws.route53:\n    state: present\n    zone: '{{ zone_one }}'\n    record: 'geo-test.{{ zone_one }}'\n    identifier: \"geohost@www\"\n    type: A\n    value: 1.1.1.1\n    ttl: 30\n    geo_location:\n      country_code: US\n\n- name: Create a record with geo_location - subdivision code\n  amazon.aws.route53:\n    state: present\n    zone: '{{ zone_one }}'\n    record: 'geo-test.{{ zone_one }}'\n    identifier: \"geohost@www\"\n    type: A\n    value: 1.1.1.1\n    ttl: 30\n    geo_location:\n      country_code: US\n      subdivision_code: TX\n\n- name: Add new.foo.com as an SSHFP record\n  amazon.aws.route53:\n    state: present\n    zone: test-zone.com\n    record: new.foo.com\n    type: SSHFP\n    ttl: 7200\n    value: 1 1 11F1A11D1111112B111C1B11B1C11C11C1234567\n\n- name: Delete new.foo.com as an SSHFP record\n  amazon.aws.route53:\n    state: absent\n    zone: test-zone.com\n    record: new.foo.com\n    type: SSHFP"
+  ],
+  "return_values": [
+    {
+      "name": "nameservers",
+      "type": "list",
+      "description": "Nameservers associated with the zone. Returned: when state is ‘get’ Sample: [\"ns-1036.awsdns-00.org.\", \"ns-516.awsdns-00.net.\", \"ns-1504.awsdns-00.co.uk.\", \"ns-1.awsdns-00.com.\"]",
+      "returned": "when"
+    },
+    {
+      "name": "resource_record_sets",
+      "type": "complex",
+      "description": "Info specific to the resource record. Returned: when state is ‘get’",
+      "returned": "when"
+    },
+    {
+      "name": "alias",
+      "type": "boolean",
+      "description": "Whether this is an alias. Returned: always Sample: false",
+      "returned": "always"
+    },
+    {
+      "name": "failover",
+      "type": "string",
+      "description": "Whether this is the primary or secondary resource record set. Returned: always Sample: \"PRIMARY\"",
+      "returned": "always"
+    },
+    {
+      "name": "geo_location",
+      "type": "dictionary",
+      "description": "Geograpic location based on which Route53 resonds to DNS queries. Returned: when configured Sample: {\"continent_code\": \"NA\", \"country_code\": \"US\", \"subdivision_code\": \"CA\"}",
+      "returned": "when"
+    },
+    {
+      "name": "health_check",
+      "type": "string",
+      "description": "Health check associated with this record. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "identifier",
+      "type": "string",
+      "description": "An identifier that differentiates among multiple resource record sets that have the same combination of DNS name and type. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "Domain name for the record set. Returned: always Sample: \"new.foo.com\"",
+      "returned": "always"
+    },
+    {
+      "name": "record",
+      "type": "string",
+      "description": "Domain name for the record set. Returned: always Sample: \"new.foo.com\"",
+      "returned": "always"
+    },
+    {
+      "name": "record_values",
+      "type": "list",
+      "description": "Record values as a list. Returned: always Sample: [\"52.43.18.27\"]",
+      "returned": "always"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "description": "Which region this should be associated with for latency-based routing. Returned: always Sample: \"us-west-2\"",
+      "returned": "always"
+    },
+    {
+      "name": "resource_records",
+      "type": "list",
+      "description": "Information about the resource records to act upon. Returned: always Sample: [{\"value\": \"1.1.1.1\"}]",
+      "returned": "always"
+    },
+    {
+      "name": "ttl",
+      "type": "string",
+      "description": "Resource record cache TTL. Returned: always Sample: \"3600\"",
+      "returned": "always"
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "description": "Resource record set type. Returned: always Sample: \"A\"",
+      "returned": "always"
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "description": "Record value. Returned: always Sample: \"52.43.18.27\"",
+      "returned": "always"
+    },
+    {
+      "name": "values",
+      "type": "list",
+      "description": "Record values as a list. This return value has been deprecated and will be removed in a release after 2026-12-01. Use resource_record_sets.record_values instead. Returned: always Sample: [\"52.43.18.27\"]",
+      "returned": "always"
+    },
+    {
+      "name": "weight",
+      "type": "string",
+      "description": "Weight of the record. Returned: always Sample: \"3\"",
+      "returned": "always"
+    },
+    {
+      "name": "zone",
+      "type": "string",
+      "description": "Zone this record set belongs to. Returned: always Sample: \"foo.bar.com\"",
+      "returned": "always"
+    },
+    {
+      "name": "wait_id",
+      "type": "string",
+      "description": "The wait ID for the applied change. Can be used to wait for the change to propagate later on when wait=false. Returned: when changed",
+      "returned": "when"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/amazon/aws/route53_module.html",
+  "parsed_at": "2026-04-13T16:29:24.249544"
+}

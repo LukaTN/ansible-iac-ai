@@ -1,0 +1,189 @@
+{
+  "description": "AnsibleAI RAG evaluation dataset — 20 queries covering all collections",
+  "version": "1.0",
+  "created": "2026",
+  "metrics": ["faithfulness", "answer_relevancy", "context_precision", "context_recall"],
+  "samples": [
+
+    {
+      "id": 1,
+      "collection": "kubernetes.core",
+      "question": "execute a shell command inside a running kubernetes pod",
+      "ground_truth": "The playbook should use kubernetes.core.k8s_exec module with required parameters: command, namespace, and pod. It should run on localhost with connection local.",
+      "expected_module": "kubernetes.core.k8s_exec",
+      "tags": ["k8s", "exec", "pod"]
+    },
+
+    {
+      "id": 2,
+      "collection": "kubernetes.core",
+      "question": "scale a deployment named analytics-backend to 3 replicas in the production namespace",
+      "ground_truth": "The playbook should use kubernetes.core.k8s_scale module with replicas: 3, name: analytics-backend, namespace: production, kind: Deployment, api_version: apps/v1.",
+      "expected_module": "kubernetes.core.k8s_scale",
+      "tags": ["k8s", "scale", "deployment"]
+    },
+
+    {
+      "id": 3,
+      "collection": "kubernetes.core",
+      "question": "deploy nginx using helm chart in the monitoring namespace with release name nginx-ingress",
+      "ground_truth": "The playbook should use kubernetes.core.helm module with chart_ref, release_name: nginx-ingress, release_namespace: monitoring, and state: present.",
+      "expected_module": "kubernetes.core.helm",
+      "tags": ["helm", "deploy", "nginx"]
+    },
+
+    {
+      "id": 4,
+      "collection": "kubernetes.core",
+      "question": "copy a configuration file from local machine to a kubernetes pod in the default namespace",
+      "ground_truth": "The playbook should use kubernetes.core.k8s_cp module with local_path, remote_path, pod, namespace: default parameters.",
+      "expected_module": "kubernetes.core.k8s_cp",
+      "tags": ["k8s", "copy", "pod"]
+    },
+
+    {
+      "id": 5,
+      "collection": "kubernetes.core",
+      "question": "get logs from a pod named api-server in the backend namespace",
+      "ground_truth": "The playbook should use kubernetes.core.k8s_log module with name: api-server, namespace: backend. Logs are returned in the result.",
+      "expected_module": "kubernetes.core.k8s_log",
+      "tags": ["k8s", "logs", "pod"]
+    },
+
+    {
+      "id": 6,
+      "collection": "kubernetes.core",
+      "question": "drain a kubernetes node named worker-01 for maintenance ignoring daemonsets",
+      "ground_truth": "The playbook should use kubernetes.core.k8s_drain module with name: worker-01, delete_options.ignore_daemonsets: true, and state: drain.",
+      "expected_module": "kubernetes.core.k8s_drain",
+      "tags": ["k8s", "drain", "node", "maintenance"]
+    },
+
+    {
+      "id": 7,
+      "collection": "kubernetes.core",
+      "question": "create a kubernetes secret named db-credentials with username and password using stringData",
+      "ground_truth": "The playbook should use kubernetes.core.k8s module with kind: Secret, api_version: v1, and stringData containing username and password fields.",
+      "expected_module": "kubernetes.core.k8s",
+      "tags": ["k8s", "secret", "stringData"]
+    },
+
+    {
+      "id": 8,
+      "collection": "kubernetes.core",
+      "question": "deploy an analytics backend deployment with 3 replicas using existing ConfigMap analytics-config and Secret analytics-db-secret",
+      "ground_truth": "The playbook should use kubernetes.core.k8s with kind: Deployment, replicas: 3, and envFrom containing both configMapRef name: analytics-config and secretRef name: analytics-db-secret inside the container spec.",
+      "expected_module": "kubernetes.core.k8s",
+      "tags": ["k8s", "deployment", "configmap", "secret", "envFrom"]
+    },
+
+    {
+      "id": 9,
+      "collection": "kubernetes.core",
+      "question": "get information about all pods in the kube-system namespace",
+      "ground_truth": "The playbook should use kubernetes.core.k8s_info module with kind: Pod, namespace: kube-system. Results are registered for further use.",
+      "expected_module": "kubernetes.core.k8s_info",
+      "tags": ["k8s", "info", "pods"]
+    },
+
+    {
+      "id": 10,
+      "collection": "kubernetes.core",
+      "question": "rollback a helm release named prometheus in the monitoring namespace",
+      "ground_truth": "The playbook should use kubernetes.core.helm_rollback or kubernetes.core.k8s_rollback module targeting the prometheus release in the monitoring namespace.",
+      "expected_module": "kubernetes.core.k8s_rollback",
+      "tags": ["helm", "rollback", "prometheus"]
+    },
+
+    {
+      "id": 11,
+      "collection": "amazon.aws",
+      "question": "create an EC2 instance of type t3.micro in us-east-1 region with tag Name=webserver",
+      "ground_truth": "The playbook should use amazon.aws.ec2_instance module with instance_type: t3.micro, region: us-east-1, and tags.Name: webserver. Requires AWS credentials.",
+      "expected_module": "amazon.aws.ec2_instance",
+      "tags": ["aws", "ec2", "instance"]
+    },
+
+    {
+      "id": 12,
+      "collection": "amazon.aws",
+      "question": "create an S3 bucket named my-app-backups in us-west-2 with versioning enabled",
+      "ground_truth": "The playbook should use amazon.aws.s3_bucket module with name: my-app-backups, region: us-west-2, and versioning: true.",
+      "expected_module": "amazon.aws.s3_bucket",
+      "tags": ["aws", "s3", "bucket"]
+    },
+
+    {
+      "id": 13,
+      "collection": "amazon.aws",
+      "question": "create an IAM user named ci-deployer with programmatic access",
+      "ground_truth": "The playbook should use amazon.aws.iam_user module with name: ci-deployer and state: present.",
+      "expected_module": "amazon.aws.iam_user",
+      "tags": ["aws", "iam", "user"]
+    },
+
+    {
+      "id": 14,
+      "collection": "azure.azcollection",
+      "question": "create an Azure resource group named rg-production in East US",
+      "ground_truth": "The playbook should use azure.azcollection.azure_rm_resourcegroup module with name: rg-production, location: eastus, and state: present.",
+      "expected_module": "azure.azcollection.azure_rm_resourcegroup",
+      "tags": ["azure", "resource group", "eastus"]
+    },
+
+    {
+      "id": 15,
+      "collection": "azure.azcollection",
+      "question": "create an Azure virtual machine named vm-api in the rg-production resource group",
+      "ground_truth": "The playbook should use azure.azcollection.azure_rm_virtualmachine module with name: vm-api, resource_group: rg-production.",
+      "expected_module": "azure.azcollection.azure_rm_virtualmachine",
+      "tags": ["azure", "vm", "compute"]
+    },
+
+    {
+      "id": 16,
+      "collection": "community.general",
+      "question": "create a new linux user named deploy with home directory and bash shell",
+      "ground_truth": "The playbook should use ansible.builtin.user or community.general user module with name: deploy, shell: /bin/bash, and create_home: true.",
+      "expected_module": "ansible.builtin.user",
+      "tags": ["linux", "user", "system"]
+    },
+
+    {
+      "id": 17,
+      "collection": "community.general",
+      "question": "add a cron job that runs a backup script every day at 2am",
+      "ground_truth": "The playbook should use ansible.builtin.cron module with minute: 0, hour: 2, and job pointing to the backup script.",
+      "expected_module": "ansible.builtin.cron",
+      "tags": ["cron", "scheduling", "backup"]
+    },
+
+    {
+      "id": 18,
+      "collection": "kubernetes.core",
+      "question": "taint a kubernetes node worker-02 with key env and value production using NoSchedule effect",
+      "ground_truth": "The playbook should use kubernetes.core.k8s_taint module with name: worker-02, taints containing key: env, value: production, effect: NoSchedule.",
+      "expected_module": "kubernetes.core.k8s_taint",
+      "tags": ["k8s", "taint", "node"]
+    },
+
+    {
+      "id": 19,
+      "collection": "kubernetes.core",
+      "question": "get cluster information including kubernetes version and available APIs",
+      "ground_truth": "The playbook should use kubernetes.core.k8s_cluster_info module which returns cluster version and available API groups.",
+      "expected_module": "kubernetes.core.k8s_cluster_info",
+      "tags": ["k8s", "cluster", "info", "version"]
+    },
+
+    {
+      "id": 20,
+      "collection": "kubernetes.core",
+      "question": "create a kubernetes service of type LoadBalancer for the analytics-backend deployment on port 80 targeting port 8080",
+      "ground_truth": "The playbook should use kubernetes.core.k8s module with kind: Service, spec.type: LoadBalancer, spec.ports containing port: 80 and targetPort: 8080, and spec.selector matching the deployment labels.",
+      "expected_module": "kubernetes.core.k8s",
+      "tags": ["k8s", "service", "loadbalancer", "port"]
+    }
+
+  ]
+}

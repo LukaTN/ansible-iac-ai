@@ -10,302 +10,234 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-<div class="shell">
+<div class="app">
 
-<!-- SIDEBAR -->
-<aside class="sidebar">
-  <div class="sb-logo">
-    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+<!-- ───────────────── LEFT: THREADS ───────────────── -->
+<aside class="threads">
+  <div class="threads-hdr">
+    <div class="threads-brand">
+      <div class="threads-logo">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+      </div>
+      <div class="threads-title"><span>Ansible</span>AI</div>
+    </div>
+    <button class="btn-new" data-action="new-thread" title="New chat">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      New chat
+    </button>
   </div>
-  <button class="sb-btn active" data-panel="generate" data-tip="Generate" onclick="showPanel('generate',this)">
-    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-  </button>
-  <button class="sb-btn" data-panel="history" data-tip="History" onclick="showPanel('history',this)">
-    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-  </button>
-  <button class="sb-btn" data-panel="stats" data-tip="Statistics" onclick="showPanel('stats',this)">
-    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-  </button>
-  <button class="sb-btn" data-panel="docs" data-tip="Docs" onclick="showPanel('docs',this)">
-    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/>
-    </svg>
-  </button>
-  <div class="sb-sep"></div>
-  <button class="sb-btn" data-tip="Clear history" onclick="clearHistory()">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
-  </button>
+
+  <div class="threads-search">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input id="thread-search" type="text" placeholder="Search chats...">
+  </div>
+
+  <div class="threads-list" id="threads-list">
+    <div class="threads-empty">No chats yet</div>
+  </div>
+
+  <div class="threads-footer">
+    <button class="tfoot-btn" data-action="toggle-stats" title="Stats">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Stats
+    </button>
+    <button class="tfoot-btn" data-action="toggle-docs" title="Docs">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+      Docs
+    </button>
+    <button class="tfoot-btn danger" data-action="clear-all" title="Delete all chats">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+    </button>
+  </div>
 </aside>
 
-<!-- MAIN -->
-<div class="main">
-
-  <!-- TOPBAR -->
-  <header class="topbar">
-    <div class="topbar-logo"><span>Ansible</span>AI</div>
-    <div class="topbar-right">
+<!-- ───────────────── CENTER: CHAT ───────────────── -->
+<main class="chat">
+  <header class="chat-topbar">
+    <div class="chat-topbar-left">
+      <div class="chat-title" id="chat-title">New chat</div>
+      <div class="chat-sub">AnsibleAI agent · grounded on indexed Ansible docs</div>
+    </div>
+    <div class="chat-topbar-right">
       <div class="tb-stat">Generated <b id="tb-total">0</b></div>
       <div class="tb-stat">Valid <b id="tb-valid" style="color:var(--a1)">0</b></div>
-      <div class="tb-stat"><div class="live-dot"></div>Ready</div>
+      <div class="tb-stat"><div class="live-dot"></div><span id="rag-status-label">Ready</span></div>
+      <button class="tb-panel-btn" id="tb-panel-toggle" data-action="toggle-right-panel" title="Toggle side panel">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="15" y1="3" x2="15" y2="21"/></svg>
+      </button>
     </div>
   </header>
 
-  <!-- GENERATE PANEL -->
-  <div class="panel active" id="panel-generate">
-    <div class="gen-layout">
-
-      <!-- Left: input + result -->
-      <div>
-        <div class="icard">
-          <div class="slabel">Describe your task</div>
-          <textarea id="user-input" placeholder="e.g. deploy redis using helm in the production namespace with persistence enabled..."></textarea>
-          <div class="btn-row">
-            <button class="btn-gen" id="gen-btn" onclick="generate()">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-              Generate
-            </button>
-            <button class="btn-ghost" onclick="clearInput()">Clear</button>
-            <span class="shortcut-hint">Ctrl+Enter</span>
-          </div>
-          <div class="chips">
-            <button class="chip" onclick="setChip(this)">execute a command in a pod</button>
-            <button class="chip" onclick="setChip(this)">deploy nginx using helm</button>
-            <button class="chip" onclick="setChip(this)">scale a deployment to 3 replicas</button>
-            <button class="chip" onclick="setChip(this)">copy a file to a pod</button>
-            <button class="chip" onclick="setChip(this)">get logs from a pod</button>
-            <button class="chip" onclick="setChip(this)">drain a node for maintenance</button>
-          </div>
-        </div>
-
-        <div id="err-box"></div>
-        <div id="loading">
-          <div class="spin"></div>
-          <div class="load-txt" id="load-txt">Generating...</div>
-        </div>
-
-        <div id="result">
-          <div class="mod-tag">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
-            <span id="mod-name">—</span>
-          </div>
-          <div class="result-grid">
-            <div class="code-card">
-              <div class="code-hdr">
-                <div style="display:flex;align-items:center">
-                  <div class="dots">
-                    <div class="dot r"></div>
-                    <div class="dot y"></div>
-                    <div class="dot g"></div>
-                  </div>
-                  <span class="fname" id="code-fname">playbook.yml</span>
-                </div>
-                <button class="copy-btn" onclick="copyCode()">copy</button>
-              </div>
-              <pre id="code-out"></pre>
-            </div>
-            <div class="val-card">
-              <div class="slabel">Validation</div>
-              <div id="val-status" class="val-status ok"></div>
-              <div id="val-checks"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Sources panel -->
-        <div class="sources-wrap" id="sources-wrap" style="display:none">
-          <div class="sources-hdr" onclick="toggleSources()">
-            <div class="sources-hdr-left">
-              <div class="sources-icon">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--a1)" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
-              </div>
-              <div>
-                <div class="sources-title">Documentation source — <span id="src-module-name">—</span></div>
-                <div class="sources-subtitle" id="src-module-sub">Ansible kubernetes.core</div>
-              </div>
-            </div>
-            <svg id="src-chevron" class="sources-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-          </div>
-          <div class="sources-body" id="src-body">
-            <a class="doc-link-card" id="src-doc-link" href="#" target="_blank">
-              <div class="doc-link-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--a1)" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-              </div>
-              <div class="doc-link-text">
-                <div class="doc-link-name" id="src-doc-name">—</div>
-                <div class="doc-link-url" id="src-doc-url">docs.ansible.com</div>
-              </div>
-              <svg class="doc-link-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-            </a>
-            <p class="src-desc" id="src-desc">—</p>
-            <div id="src-required-section">
-              <div class="src-section-title">Required parameters</div>
-              <div class="params-grid" id="src-required-params"></div>
-            </div>
-            <div id="src-optional-section">
-              <div class="src-section-title">Key optional parameters</div>
-              <div class="params-grid" id="src-optional-params"></div>
-            </div>
-            <div class="src-section-title">Intent keywords used for module matching</div>
-            <div class="keywords-wrap" id="src-keywords"></div>
-            <div class="src-section-title">How the AI selected this module</div>
-            <div class="reasoning-box" id="src-reasoning"></div>
-          </div>
-        </div>
-
+  <div class="chat-feed" id="chat-feed">
+    <!-- Welcome message (shown on empty thread) -->
+    <div class="welcome" id="welcome">
+      <div class="welcome-orb">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
       </div>
-
-      <!-- Right: live overview -->
-      <div class="right-col">
-        <div>
-          <div class="slabel">Overview</div>
-          <div class="stat-grid">
-            <div class="scard"><div class="scard-val green" id="sc-total">0</div><div class="scard-lbl">Generated</div></div>
-            <div class="scard"><div class="scard-val blue"  id="sc-valid">0</div><div class="scard-lbl">Valid</div></div>
-            <div class="scard"><div class="scard-val orange" id="sc-warn">0</div><div class="scard-lbl">Warnings</div></div>
-            <div class="scard"><div class="scard-val pink"  id="sc-err">0</div><div class="scard-lbl">Errors</div></div>
-          </div>
-        </div>
-        <div>
-          <div class="slabel">Module usage</div>
-          <div class="mod-list-card" id="mod-list">
-            <div class="no-data">No generations yet</div>
-          </div>
-        </div>
+      <h1>What do you want to automate today?</h1>
+      <p>Ask for a playbook, explain a module, troubleshoot YAML, or compare approaches. The agent consults the indexed Ansible documentation as needed.</p>
+      <div class="welcome-chips">
+        <button class="wchip" data-action="suggest-chip">Deploy nginx using Helm in production</button>
+        <button class="wchip" data-action="suggest-chip">Explain the kubernetes.core.k8s module</button>
+        <button class="wchip" data-action="suggest-chip">Scale a deployment to 3 replicas</button>
+        <button class="wchip" data-action="suggest-chip">Drain a node for maintenance</button>
+        <button class="wchip" data-action="suggest-chip">What is the difference between k8s and helm?</button>
+        <button class="wchip" data-action="suggest-chip">Copy a file to a pod</button>
       </div>
     </div>
   </div>
 
-  <!-- HISTORY PANEL -->
-  <div class="panel" id="panel-history">
-    <div class="slabel">Generation history</div>
-    <div id="hist-content">
-      <div class="hist-empty">No generations yet — go generate something!</div>
+  <div class="chat-input-wrap">
+    <div class="chat-input-card">
+      <textarea id="msg-input" placeholder="Message the AnsibleAI agent... (Ctrl+Enter to send)"
+        rows="1"></textarea>
+      <div class="chat-input-row">
+        <div class="chat-input-hint">
+          <span class="kbd">Ctrl</span><span>+</span><span class="kbd">Enter</span>
+          <span class="hint-sep">·</span>
+          <span id="thread-hint">Starts a new chat</span>
+        </div>
+        <button id="send-btn" class="btn-send">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Send
+        </button>
+      </div>
     </div>
   </div>
+</main>
 
-  <!-- STATS PANEL -->
-  <div class="panel" id="panel-stats">
-    <div class="slabel">Statistics</div>
-    <div class="big-stats">
-      <div class="bstat"><div class="bstat-val green" id="bs-total">0</div><div class="bstat-lbl">Total generated</div></div>
-      <div class="bstat"><div class="bstat-val blue"  id="bs-rate">—</div><div class="bstat-lbl">Validity rate</div><div class="bstat-sub" id="bs-rate-sub"></div></div>
-      <div class="bstat"><div class="bstat-val orange" id="bs-top">—</div><div class="bstat-lbl">Top module</div><div class="bstat-sub" id="bs-top-sub">most used</div></div>
-      <div class="bstat"><div class="bstat-val pink" id="bs-warns">0</div><div class="bstat-lbl">With warnings</div></div>
-    </div>
-    <div class="charts-row">
+<!-- ───────────────── RIGHT: STATS / DOCS PANEL ───────────────── -->
+<aside class="side" id="side-panel">
+  <div class="side-tabs">
+    <button class="side-tab active" data-tab="stats" data-action="side-tab-stats">Stats</button>
+    <button class="side-tab" data-tab="docs" data-action="side-tab-docs">Docs</button>
+    <button class="side-collapse" data-action="toggle-right-panel" title="Collapse">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+  </div>
+
+  <div class="side-body">
+    <!-- STATS PANEL -->
+    <div class="side-pane active" id="side-stats">
+      <div class="slabel">Overview</div>
+      <div class="big-stats">
+        <div class="bstat"><div class="bstat-val green" id="bs-total">0</div><div class="bstat-lbl">Generated</div></div>
+        <div class="bstat"><div class="bstat-val blue"  id="bs-rate">—</div><div class="bstat-lbl">Valid rate</div><div class="bstat-sub" id="bs-rate-sub"></div></div>
+        <div class="bstat"><div class="bstat-val orange" id="bs-warns">0</div><div class="bstat-lbl">Warnings</div></div>
+        <div class="bstat"><div class="bstat-val pink" id="bs-err">0</div><div class="bstat-lbl">Errors</div></div>
+      </div>
+
+      <div class="slabel">Top modules</div>
       <div class="chart-card">
-        <div class="chart-title">Module frequency</div>
         <div class="bar-chart" id="bc-mods">
           <div class="no-data" style="padding:0">No data yet</div>
         </div>
       </div>
+
+      <div class="slabel">Validation breakdown</div>
       <div class="chart-card">
-        <div class="chart-title">Validation breakdown</div>
         <div class="donut-wrap">
           <canvas id="donut" width="110" height="110"></canvas>
           <div class="donut-legend" id="donut-leg"></div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- DOCS PANEL -->
-  <div class="panel" id="panel-docs">
-    <div class="slabel">Documentation management</div>
-
-    <div class="docs-grid">
-      <div class="docs-left">
-        <div class="doc-card">
-          <div class="doc-card-hdr">
-            <div>
-              <div class="doc-title">Auto-update scheduler</div>
-              <div class="doc-sub">Compare remote HTML SHA with local scrape. Re-scrape only modified modules.</div>
-            </div>
-            <div class="doc-actions">
-              <button class="btn-gen" id="docs-check-btn" onclick="docsCheckUpdates()">Check for updates</button>
-              <button class="btn-ghost" id="docs-rescrape-btn" onclick="docsRescrapeChanged()" disabled>Re-scrape changed</button>
-            </div>
-          </div>
-          <div class="doc-body">
-            <div class="doc-kv">
-              <div><span class="kv-k">KB generated_at</span><span class="kv-v" id="kb-generated-at">—</span></div>
-              <div><span class="kv-k">Total modules</span><span class="kv-v" id="kb-total-mods">—</span></div>
-            </div>
-            <div class="doc-list" id="docs-changed-list">
-              <div class="no-data">No update check run yet.</div>
-            </div>
+    <!-- DOCS PANEL -->
+    <div class="side-pane" id="side-docs">
+      <div class="slabel">Auto-update scheduler</div>
+      <div class="doc-card">
+        <div class="doc-card-hdr">
+          <div>
+            <div class="doc-title">Documentation index</div>
+            <div class="doc-sub">Compare remote HTML SHA with local scrape. Re-scrape only modified modules.</div>
           </div>
         </div>
-
-        <div class="doc-card">
-          <div class="doc-card-hdr">
-            <div>
-              <div class="doc-title">Rollback</div>
-              <div class="doc-sub">Automatic backup before re-scrape. Restore any previous KB version.</div>
-            </div>
-            <button class="btn-ghost" onclick="docsLoadRollback()">Refresh</button>
+        <div class="doc-body">
+          <div class="doc-actions" style="margin-bottom:.8rem">
+            <button class="btn-gen-sm" id="docs-check-btn" data-action="docs-check">Check for updates</button>
+            <button class="btn-ghost" id="docs-rescrape-btn" data-action="docs-rescrape" disabled>Re-scrape changed</button>
           </div>
-          <div class="doc-body">
-            <div class="doc-list" id="docs-rollback-list">
-              <div class="no-data">Loading...</div>
-            </div>
+          <div class="doc-kv">
+            <div><span class="kv-k">Generated at</span><span class="kv-v" id="kb-generated-at">—</span></div>
+            <div><span class="kv-k">Total modules</span><span class="kv-v" id="kb-total-mods">—</span></div>
+          </div>
+          <div class="doc-list" id="docs-changed-list">
+            <div class="no-data">No update check run yet.</div>
           </div>
         </div>
       </div>
 
-      <div class="docs-right">
-        <div class="doc-card">
-          <div class="doc-card-hdr">
-            <div>
-              <div class="doc-title">Scrape log (live)</div>
-              <div class="doc-sub">Real-time terminal feed via Server-Sent Events.</div>
-            </div>
-            <div class="doc-actions">
-              <span class="pill" id="docs-live-status">idle</span>
-              <button class="btn-ghost" onclick="docsClearLog()">Clear</button>
-            </div>
+      <div class="slabel">Rollback</div>
+      <div class="doc-card">
+        <div class="doc-card-hdr">
+          <div>
+            <div class="doc-title">Backups</div>
+            <div class="doc-sub">Restore a previous KB version.</div>
           </div>
-          <div class="doc-body">
-            <div class="terminal" id="docs-terminal"></div>
+          <button class="btn-ghost" data-action="docs-rollback-refresh">Refresh</button>
+        </div>
+        <div class="doc-body">
+          <div class="doc-list" id="docs-rollback-list">
+            <div class="no-data">Loading…</div>
           </div>
         </div>
+      </div>
 
-        <div class="doc-card">
-          <div class="doc-card-hdr">
-            <div>
-              <div class="doc-title">Module health score</div>
-              <div class="doc-sub">Score based on parsed params, examples, and required params detection. &lt; 70% is flagged.</div>
-            </div>
-            <button class="btn-ghost" onclick="docsLoadStatus()">Refresh</button>
+      <div class="slabel">Scrape log (live)</div>
+      <div class="doc-card">
+        <div class="doc-card-hdr">
+          <div>
+            <div class="doc-title">Terminal feed</div>
+            <div class="doc-sub">Real-time events via SSE.</div>
           </div>
-          <div class="doc-body">
-            <div class="doc-list" id="docs-health-list">
-              <div class="no-data">Loading...</div>
-            </div>
+          <div class="doc-actions">
+            <span class="pill" id="docs-live-status">idle</span>
+            <button class="btn-ghost" data-action="docs-clear-log">Clear</button>
           </div>
         </div>
+        <div class="doc-body">
+          <div class="terminal" id="docs-terminal"></div>
+        </div>
+      </div>
 
-        <div class="doc-card">
-          <div class="doc-card-hdr">
-            <div>
-              <div class="doc-title">Changelog (latest re-scrape)</div>
-              <div class="doc-sub">Auto-generated diffs per module after re-scrape.</div>
-            </div>
-            <button class="btn-ghost" onclick="docsLoadSessions()">Refresh</button>
+      <div class="slabel">Module health</div>
+      <div class="doc-card">
+        <div class="doc-card-hdr">
+          <div>
+            <div class="doc-title">Scoring</div>
+            <div class="doc-sub">Based on params, examples, required detection. &lt;70% is flagged.</div>
           </div>
-          <div class="doc-body">
-            <div class="doc-list" id="docs-changelog">
-              <div class="no-data">No sessions yet.</div>
-            </div>
+          <button class="btn-ghost" data-action="docs-status-refresh">Refresh</button>
+        </div>
+        <div class="doc-body">
+          <div class="doc-list" id="docs-health-list">
+            <div class="no-data">Loading…</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="slabel">Changelog (latest re-scrape)</div>
+      <div class="doc-card">
+        <div class="doc-card-hdr">
+          <div>
+            <div class="doc-title">Diffs</div>
+            <div class="doc-sub">Auto-generated per-module diffs.</div>
+          </div>
+          <button class="btn-ghost" data-action="docs-sessions-refresh">Refresh</button>
+        </div>
+        <div class="doc-body">
+          <div class="doc-list" id="docs-changelog">
+            <div class="no-data">No sessions yet.</div>
           </div>
         </div>
       </div>
     </div>
   </div>
+</aside>
 
-</div><!-- .main -->
-</div><!-- .shell -->
+</div><!-- .app -->
 
-<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+<script type="module" src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>

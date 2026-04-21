@@ -1,0 +1,98 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.pkgin",
+  "slug": "pkgin_module#ansible-collections-community-general-pkgin-module",
+  "description": "The standard package manager for SmartOS, but also usable on NetBSD or any OS that uses pkgsrc. (Home: http://pkgin.net/).",
+  "parameters": [
+    {
+      "name": "clean",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Clean packages cache. Choices: false ← (default) true"
+    },
+    {
+      "name": "force",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Force package reinstall. Choices: false ← (default) true"
+    },
+    {
+      "name": "full_upgrade",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Upgrade all packages to their newer versions. Choices: false ← (default) true"
+    },
+    {
+      "name": "name",
+      "aliases": [
+        "pkg"
+      ],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of package to install/remove; Multiple names may be given, separated by commas."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Intended state of the package. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "update_cache",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Update repository database. Can be run with other steps or on its own. Choices: false ← (default) true"
+    },
+    {
+      "name": "upgrade",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Upgrade main packages to their newer versions. Choices: false ← (default) true"
+    }
+  ],
+  "examples": [
+    "- name: Install package foo\n  community.general.pkgin:\n    name: foo\n    state: present\n\n- name: Install specific version of foo package\n  community.general.pkgin:\n    name: foo-2.0.1\n    state: present\n\n- name: Update cache and install foo package\n  community.general.pkgin:\n    name: foo\n    update_cache: true\n\n- name: Remove package foo\n  community.general.pkgin:\n    name: foo\n    state: absent\n\n- name: Remove packages foo and bar\n  community.general.pkgin:\n    name: foo,bar\n    state: absent\n\n- name: Update repositories as a separate step\n  community.general.pkgin:\n    update_cache: true\n\n- name: Upgrade main packages (equivalent to pkgin upgrade)\n  community.general.pkgin:\n    upgrade: true\n\n- name: Upgrade all packages (equivalent to pkgin full-upgrade)\n  community.general.pkgin:\n    full_upgrade: true\n\n- name: Force-upgrade all packages (equivalent to pkgin -F full-upgrade)\n  community.general.pkgin:\n    full_upgrade: true\n    force: true\n\n- name: Clean packages cache (equivalent to pkgin clean)\n  community.general.pkgin:\n    clean: true"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/pkgin_module.html",
+  "parsed_at": "2026-04-13T16:29:56.157315"
+}

@@ -1,0 +1,25 @@
+# ============================================================
+# AnsibleAI RAG Generator — LangChain + ChromaDB
+# Date        : 2026-04-16 13:44:41
+# Request     : deploy nginx using helm chart in the monitoring namespace with release name nginx-ingress
+# Module      : kubernetes.core.helm
+# Collection  : kubernetes.core
+# RAG score   : 0.718
+# Chunks used : 6
+# Source URL  : https://docs.ansible.com/ansible/latest/collections/kubernetes/core/helm_module#ansible-collections-kubernetes-core-helm-module.html
+# LLM model   : qwen2.5-coder:7b
+# ============================================================
+
+---
+- name: Deploy nginx using helm chart in the monitoring namespace with release name nginx-ingress
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - kubernetes.core
+  tasks:
+    - name: Deploy latest version of Nginx chart inside monitoring namespace
+      kubernetes.core.helm:
+        release_name: nginx-ingress
+        chart_ref: stable/nginx-ingress
+        release_namespace: monitoring

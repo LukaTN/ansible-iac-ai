@@ -1,0 +1,157 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.influxdb_database",
+  "slug": "influxdb_database_module#ansible-collections-community-general-influxdb-database-module",
+  "description": "Manage InfluxDB databases.",
+  "parameters": [
+    {
+      "name": "database_name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the database."
+    },
+    {
+      "name": "hostname",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "localhost",
+      "choices": [],
+      "description": "The hostname or IP address on which InfluxDB server is listening. Default: \"localhost\""
+    },
+    {
+      "name": "password",
+      "aliases": [
+        "login_password"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "root",
+      "choices": [],
+      "description": "Password that is used to authenticate against InfluxDB server. Default: \"root\""
+    },
+    {
+      "name": "path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The path on which InfluxDB server is accessible. Only available when using python-influxdb >= 5.1.0. Default: \"\""
+    },
+    {
+      "name": "port",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "8086",
+      "choices": [],
+      "description": "The port on which InfluxDB server is listening. Default: 8086"
+    },
+    {
+      "name": "proxies",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "HTTP(S) proxy to use for Requests to connect to InfluxDB server. Default: {}"
+    },
+    {
+      "name": "retries",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "3",
+      "choices": [],
+      "description": "Number of retries client performs before aborting. 0 indicates try until success. Only available when using python-influxdb >= 4.1.0. Default: 3"
+    },
+    {
+      "name": "ssl",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use https instead of http to connect to InfluxDB server. Choices: false ← (default) true"
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)"
+      ],
+      "description": "Determines if the database should be created or destroyed. Choices: \"absent\" \"present\" ← (default)"
+    },
+    {
+      "name": "timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Number of seconds Requests waits for client to establish a connection."
+    },
+    {
+      "name": "udp_port",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "4444",
+      "choices": [],
+      "description": "UDP port to connect to InfluxDB server. Default: 4444"
+    },
+    {
+      "name": "use_udp",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use UDP to connect to InfluxDB server. Choices: false ← (default) true"
+    },
+    {
+      "name": "username",
+      "aliases": [
+        "login_username"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "root",
+      "choices": [],
+      "description": "Username that is used to authenticate against InfluxDB server. Default: \"root\""
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If set to false, the SSL certificates are not validated. This should only set to false used on personally controlled sites using self-signed certificates. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "# Example influxdb_database command from Ansible Playbooks\n- name: Create database\n  community.general.influxdb_database:\n    hostname: \"{{influxdb_ip_address}}\"\n    database_name: \"{{influxdb_database_name}}\"\n\n- name: Destroy database\n  community.general.influxdb_database:\n    hostname: \"{{influxdb_ip_address}}\"\n    database_name: \"{{influxdb_database_name}}\"\n    state: absent\n\n- name: Create database using custom credentials\n  community.general.influxdb_database:\n    hostname: \"{{influxdb_ip_address}}\"\n    username: \"{{influxdb_username}}\"\n    password: \"{{influxdb_password}}\"\n    database_name: \"{{influxdb_database_name}}\"\n    ssl: true\n    validate_certs: true"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/influxdb_database_module.html",
+  "parsed_at": "2026-04-13T16:29:48.182201"
+}

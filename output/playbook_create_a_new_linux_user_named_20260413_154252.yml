@@ -1,0 +1,25 @@
+# ============================================================
+# AnsibleAI RAG Generator — LangChain + ChromaDB
+# Date        : 2026-04-13 15:42:52
+# Request     : create a new linux user named deploy with home directory and bash shell
+# Module      : community.general.deploy_helper
+# Collection  : community.general
+# RAG score   : 0.679
+# Chunks used : 6
+# Source URL  : https://docs.ansible.com/ansible/latest/collections/community/general/deploy_helper_module#ansible-collections-community-general-deploy-helper-module.html
+# LLM model   : qwen2.5-coder:7b
+# ============================================================
+
+---
+- name: Create a new linux user named deploy with home directory and bash shell
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - community.general
+  tasks:
+    - name: Create the deploy user
+      user:
+        name: deploy
+        create_home: yes
+        shell: /bin/bash

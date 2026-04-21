@@ -1,0 +1,66 @@
+---
+- name: Deploy analytics-backend application
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - kubernetes.core
+
+  tasks:
+    - name: Create namespace for analytics-backend
+      kubernetes.core.k8s:
+        name: analytics-backend
+        api_version: v1
+        kind: Namespace
+        state: present
+
+    - name: Create ConfigMap for analytics-backend
+      kubernetes.core.k8s:
+        name: analytics-config
+        api_version: v1
+        kind: ConfigMap
+        metadata:
+          namespace: analytics-backend
+        spec: {}
+
+    - name: Load configuration values into analytics-backend container
+      kubernetes.core.k8s:
+        name: analytics-backend
+        api_version: apps/v1
+        kind: Deployment
+        metadata:
+          namespace: analytics-backend
+        spec:
+          replicas: 3
+          selector:
+            matchLabels:
+              app: analytics-backend
+          template:
+            metadata:
+              labels:
+                app: analytics-backend
+            spec:
+              containers:
+                - name: analytics-backend
+                  image: myregistry/analytics-api:latest
+                  ports:
+                    - containerPort: 8080
+                  envFrom:
+                    - configMapRef:
+                        name: analytics-config
+                  env:
+                    - name: DB_HOST
+                      value: postgres-service
+              imagePullSecrets:
+                - name: registry-secret
+
+    - name: Create Secret for database credentials
+      kubernetes.core.k8s:
+        name: analytics-db-secret
+        api_version: v1
+        kind: Secret
+        metadata:
+          namespace: analytics-backend
+        type: Opaque
+        data:
+          # Add the secret data here (base64 encoded)

@@ -1,0 +1,285 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.gitlab_hook",
+  "slug": "gitlab_hook_module#ansible-collections-community-general-gitlab-hook-module",
+  "description": "Adds, updates and removes project hook.",
+  "parameters": [
+    {
+      "name": "api_job_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "GitLab CI job token for logging in."
+    },
+    {
+      "name": "api_oauth_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "GitLab OAuth token for logging in."
+    },
+    {
+      "name": "api_password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The password to use for authentication against the API."
+    },
+    {
+      "name": "api_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "GitLab access token with API permissions."
+    },
+    {
+      "name": "api_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The resolvable endpoint for the API."
+    },
+    {
+      "name": "api_username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The username to use for authentication against the API."
+    },
+    {
+      "name": "ca_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The CA certificates bundle to use to verify GitLab server certificate."
+    },
+    {
+      "name": "hook_url",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The URL that you want GitLab to post to, this is used as the primary key for updates and deletion."
+    },
+    {
+      "name": "hook_validate_certs",
+      "aliases": [
+        "enable_ssl_verification"
+      ],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Whether GitLab performs SSL verification when triggering the hook. Choices: false ← (default) true"
+    },
+    {
+      "name": "issues_events",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Trigger hook on issues events. Choices: false ← (default) true"
+    },
+    {
+      "name": "job_events",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Trigger hook on job events. Choices: false ← (default) true"
+    },
+    {
+      "name": "merge_requests_events",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Trigger hook on merge requests events. Choices: false ← (default) true"
+    },
+    {
+      "name": "note_events",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Trigger hook on note events or when someone adds a comment. Choices: false ← (default) true"
+    },
+    {
+      "name": "pipeline_events",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Trigger hook on pipeline events. Choices: false ← (default) true"
+    },
+    {
+      "name": "project",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "ID or Full path of the project in the form of group/name."
+    },
+    {
+      "name": "push_events",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Trigger hook on push events. Choices: false true ← (default)"
+    },
+    {
+      "name": "push_events_branch_filter",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Branch name of wildcard to trigger hook on push events. Default: \"\""
+    },
+    {
+      "name": "releases_events",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Trigger hook on release events. Choices: false true"
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "When present the hook is updated to match the input or created if it does not exist. When absent hook is deleted if it exists. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "tag_push_events",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Trigger hook on tag push events. Choices: false ← (default) true"
+    },
+    {
+      "name": "token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Secret token to validate hook messages at the receiver. If this is present it always results in a change as it cannot be retrieved from GitLab. It shows up in the X-GitLab-Token HTTP request header."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether or not to validate SSL certs when supplying a HTTPS endpoint. Choices: false true ← (default)"
+    },
+    {
+      "name": "wiki_page_events",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Trigger hook on wiki events. Choices: false ← (default) true"
+    }
+  ],
+  "examples": [
+    "- name: \"Adding a project hook\"\n  community.general.gitlab_hook:\n    api_url: https://gitlab.example.com/\n    api_token: \"{{ access_token }}\"\n    project: \"my_group/my_project\"\n    hook_url: \"https://my-ci-server.example.com/gitlab-hook\"\n    state: present\n    push_events: true\n    tag_push_events: true\n    token: \"my-super-secret-token-that-my-ci-server-will-check\"\n\n- name: \"Delete the previous hook\"\n  community.general.gitlab_hook:\n    api_url: https://gitlab.example.com/\n    api_token: \"{{ access_token }}\"\n    project: \"my_group/my_project\"\n    hook_url: \"https://my-ci-server.example.com/gitlab-hook\"\n    state: absent\n\n- name: \"Delete a hook by numeric project id\"\n  community.general.gitlab_hook:\n    api_url: https://gitlab.example.com/\n    api_token: \"{{ access_token }}\"\n    project: 10\n    hook_url: \"https://my-ci-server.example.com/gitlab-hook\"\n    state: absent"
+  ],
+  "return_values": [
+    {
+      "name": "error",
+      "type": "string",
+      "description": "The error message returned by the GitLab API. Returned: failed Sample: \"400: path is already in use\"",
+      "returned": "failed"
+    },
+    {
+      "name": "hook",
+      "type": "dictionary",
+      "description": "API object. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "msg",
+      "type": "string",
+      "description": "Success or failure message. Returned: always Sample: \"Success\"",
+      "returned": "always"
+    },
+    {
+      "name": "result",
+      "type": "dictionary",
+      "description": "JSON parsed response from the server. Returned: always",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/gitlab_hook_module#ansible-collections-community-general-gitlab-hook-module.html",
+  "parsed_at": "2026-04-11T13:53:13.830464"
+}

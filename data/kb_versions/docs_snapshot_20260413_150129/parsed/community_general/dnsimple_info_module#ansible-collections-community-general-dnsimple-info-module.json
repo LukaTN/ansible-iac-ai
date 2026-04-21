@@ -1,0 +1,172 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.dnsimple_info",
+  "slug": "dnsimple_info_module#ansible-collections-community-general-dnsimple-info-module",
+  "description": "Retrieve existing records and domains from DNSimple API.",
+  "parameters": [
+    {
+      "name": "account_id",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The account ID to query."
+    },
+    {
+      "name": "api_key",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The API key to use."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The domain name to retrieve info from. Returns all associated records for this domain if specified. If not specified, returns all domains associated with the account ID."
+    },
+    {
+      "name": "record",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The record to find. If specified, only this record is returned instead of all records."
+    },
+    {
+      "name": "sandbox",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Whether or not to use sandbox environment. Choices: false ← (default) true"
+    }
+  ],
+  "examples": [
+    "- name: Get all domains from an account\n  community.general.dnsimple_info:\n    account_id: \"1234\"\n    api_key: \"1234\"\n\n- name: Get all records from a domain\n  community.general.dnsimple_info:\n    name: \"example.com\"\n    account_id: \"1234\"\n    api_key: \"1234\"\n\n- name: Get all info from a matching record\n  community.general.dnsimple_info:\n    name: \"example.com\"\n    record: \"subdomain\"\n    account_id: \"1234\"\n    api_key: \"1234\""
+  ],
+  "return_values": [
+    {
+      "name": "dnsimple_domain_info",
+      "type": "list",
+      "description": "Returns a list of dictionaries of all domains associated with the supplied account ID. Returned: success when name is not specified Sample: [{\"account_id\": 1234, \"created_at\": \"2021-10-16T21:25:42Z\", \"id\": 123456, \"last_transferred_at\": null, \"name\": \"example.com\", \"reverse\": false, \"secondary\": false, \"updated_at\": \"2021-11-10T20:22:50Z\"}]",
+      "returned": "success"
+    },
+    {
+      "name": "account_id",
+      "type": "integer",
+      "description": "The account ID. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "created_at",
+      "type": "string",
+      "description": "When the domain entry was created. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "id",
+      "type": "integer",
+      "description": "ID of the entry. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "last_transferred_at",
+      "type": "string",
+      "description": "Date the domain was transferred, or empty if not. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "Name of the record. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "reverse",
+      "type": "boolean",
+      "description": "Whether or not it is a reverse zone record. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "updated_at",
+      "type": "string",
+      "description": "When the domain entry was updated. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "dnsimple_record_info",
+      "type": "list",
+      "description": "Returns a list of dictionaries that match the record supplied. Returned: success when name and record are specified Sample: [{\"content\": \"1.2.3.4\", \"created_at\": \"2021-11-15T23:55:51Z\", \"id\": 123456, \"name\": \"catheadbiscuit\", \"parent_id\": null, \"priority\": null, \"regions\": [\"global\"], \"system_record\": false, \"ttl\": 3600, \"type\": \"A\", \"updated_at\": \"2021-11-15T23:55:51Z\", \"zone_id\": \"example.com\"}]",
+      "returned": "success"
+    },
+    {
+      "name": "content",
+      "type": "string",
+      "description": "Content of the returned record. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "parent_id",
+      "type": "integer",
+      "description": "Parent record or null. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "priority",
+      "type": "string",
+      "description": "Priority setting of the record. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "regions",
+      "type": "list",
+      "description": "List of regions where the record is available. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "system_record",
+      "type": "boolean",
+      "description": "Whether or not it is a system record. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "ttl",
+      "type": "integer",
+      "description": "Record TTL. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "description": "Record type. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "zone_id",
+      "type": "string",
+      "description": "ID of the zone that the record is associated with. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "dnsimple_records_info",
+      "type": "list",
+      "description": "Returns a list of dictionaries with all records for the domain supplied. Returned: success when name is specified, but record is not Sample: [{\"content\": \"ns1.dnsimple.com admin.dnsimple.com\", \"created_at\": \"2021-10-16T19:07:34Z\", \"id\": 12345, \"name\": \"catheadbiscuit\", \"parent_id\": null, \"priority\": null, \"regions\": [\"global\"], \"system_record\": true, \"ttl\": 3600, \"type\": \"SOA\", \"updated_at\": \"2021-11-15T23:55:51Z\", \"zone_id\": \"example.com\"}]",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/dnsimple_info_module#ansible-collections-community-general-dnsimple-info-module.html",
+  "parsed_at": "2026-04-11T13:53:12.722331"
+}

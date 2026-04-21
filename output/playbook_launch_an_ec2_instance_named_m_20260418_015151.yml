@@ -1,0 +1,16 @@
+---
+- name: Launch EC2 Instance
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - amazon.aws
+  tasks:
+    - name: Create an EC2 instance named melek-instance
+      amazon.aws.ec2_instance:
+        name: "melek-instance"
+        vpc_subnet_id: subnet-5ca1ab1e
+        instance_type: t3.small
+        image_id: ami-123456
+        termination_protection: true
+        wait: true

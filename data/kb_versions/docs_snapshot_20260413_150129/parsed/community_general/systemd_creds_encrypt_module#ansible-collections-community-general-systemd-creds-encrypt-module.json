@@ -1,0 +1,79 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.systemd_creds_encrypt",
+  "slug": "systemd_creds_encrypt_module#ansible-collections-community-general-systemd-creds-encrypt-module",
+  "description": "This module encrypts input using systemd‘s systemd-creds encrypt.",
+  "parameters": [
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The credential name to embed in the encrypted credential data."
+    },
+    {
+      "name": "not_after",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The time when the credential shall not be used anymore. Takes a timestamp specification in the format described in systemd.time(7)."
+    },
+    {
+      "name": "pretty",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Pretty print the output so that it may be pasted directly into a unit file. Choices: false ← (default) true"
+    },
+    {
+      "name": "secret",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The secret to encrypt."
+    },
+    {
+      "name": "timestamp",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The timestamp to embed into the encrypted credential. Takes a timestamp specification in the format described in systemd.time(7)."
+    },
+    {
+      "name": "user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A user name or numeric UID to encrypt the credential for. If set to the special string self it sets the user to the user of the calling process. Requires systemd 256 or later."
+    }
+  ],
+  "examples": [
+    "- name: Encrypt secret\n  become: true\n  community.general.systemd_creds_encrypt:\n    name: db\n    not_after: +48hr\n    secret: access_token\n  register: encrypted_secret\n\n- name: Print the encrypted secret\n  ansible.builtin.debug:\n    msg: \"{{ encrypted_secret }}\""
+  ],
+  "return_values": [
+    {
+      "name": "value",
+      "type": "string",
+      "description": "The Base64 encoded encrypted secret. Returned: always Sample: \"WhQZht+JQJax1aZemmGLxmAAAA...\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/systemd_creds_encrypt_module#ansible-collections-community-general-systemd-creds-encrypt-module.html",
+  "parsed_at": "2026-04-11T13:53:27.322248"
+}

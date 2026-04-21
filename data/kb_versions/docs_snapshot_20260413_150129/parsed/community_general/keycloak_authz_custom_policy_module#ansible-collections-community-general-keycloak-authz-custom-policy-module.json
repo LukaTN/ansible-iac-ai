@@ -1,0 +1,196 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.keycloak_authz_custom_policy",
+  "slug": "keycloak_authz_custom_policy_module#ansible-collections-community-general-keycloak-authz-custom-policy-module",
+  "description": "This module allows the administration of Keycloak client custom Javascript using the Keycloak REST API. Custom Javascript policies are only available if a client has Authorization enabled and if they have been deployed to the Keycloak server as JAR files.",
+  "parameters": [
+    {
+      "name": "auth_client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "admin-cli",
+      "choices": [],
+      "description": "OpenID Connect client_id to authenticate to the API with. Default: \"admin-cli\""
+    },
+    {
+      "name": "auth_client_secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Client Secret to use in conjunction with auth_client_id (if required)."
+    },
+    {
+      "name": "auth_keycloak_url",
+      "aliases": [
+        "url"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "URL to the Keycloak instance."
+    },
+    {
+      "name": "auth_password",
+      "aliases": [
+        "password"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Password to authenticate for API access with."
+    },
+    {
+      "name": "auth_realm",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Keycloak realm name to authenticate to for API access."
+    },
+    {
+      "name": "auth_username",
+      "aliases": [
+        "username"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Username to authenticate for API access with."
+    },
+    {
+      "name": "client_id",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The clientId of the Keycloak client that should have the custom policy attached to it. This is usually a human-readable name of the Keycloak client."
+    },
+    {
+      "name": "connection_timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "10",
+      "choices": [],
+      "description": "Controls the HTTP connections timeout period (in seconds) to Keycloak API. Default: 10"
+    },
+    {
+      "name": "http_agent",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "Ansible",
+      "choices": [],
+      "description": "Configures the HTTP User-Agent header. Default: \"Ansible\""
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the custom policy to create."
+    },
+    {
+      "name": "policy_type",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The type of the policy. This must match the name of the custom policy deployed to the server. Multiple policies pointing to the same policy type can be created, but their names have to differ."
+    },
+    {
+      "name": "realm",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the Keycloak realm the Keycloak client is in."
+    },
+    {
+      "name": "refresh_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Authentication refresh token for Keycloak API."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "State of the custom policy. On present, the custom policy is created (or updated if it exists already). On absent, the custom policy is removed if it exists. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Authentication token for Keycloak API."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Verify TLS certificates (do not disable this in production). Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Manage Keycloak custom authorization policy\n  community.general.keycloak_authz_custom_policy:\n    name: OnlyOwner\n    state: present\n    policy_type: script-policy.js\n    client_id: myclient\n    realm: myrealm\n    auth_keycloak_url: http://localhost:8080/auth\n    auth_username: keycloak\n    auth_password: keycloak\n    auth_realm: master"
+  ],
+  "return_values": [
+    {
+      "name": "end_state",
+      "type": "dictionary",
+      "description": "Representation of the custom policy after module execution. Returned: on success",
+      "returned": "on"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "Name of the custom policy. Returned: when state=present Sample: \"file:delete\"",
+      "returned": "when"
+    },
+    {
+      "name": "policy_type",
+      "type": "string",
+      "description": "Type of custom policy. Returned: when state=present Sample: \"File delete\"",
+      "returned": "when"
+    },
+    {
+      "name": "msg",
+      "type": "string",
+      "description": "Message as to what action was taken. Returned: always",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/keycloak_authz_custom_policy_module#ansible-collections-community-general-keycloak-authz-custom-policy-module.html",
+  "parsed_at": "2026-04-11T13:53:17.678210"
+}

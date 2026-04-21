@@ -1,0 +1,363 @@
+{
+  "collection_ns": "ansible_builtin",
+  "collection": "ansible.builtin",
+  "module": "ansible.builtin.find",
+  "slug": "find_module#ansible-collections-ansible-builtin-find-module",
+  "description": "Return a list of files based on specific criteria. Multiple criteria are AND’d together.",
+  "parameters": [
+    {
+      "name": "age",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Select files whose age is equal to or greater than the specified time. Use a negative age to find files equal to or less than the specified time. You can choose seconds, minutes, hours, days, or weeks by specifying the first letter of any of those words (e.g., “1w”)."
+    },
+    {
+      "name": "age_stamp",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"atime\"",
+        "\"ctime\"",
+        "\"mtime\" ← (default)"
+      ],
+      "description": "Choose the file property against which we compare age. Choices: \"atime\" \"ctime\" \"mtime\" ← (default)"
+    },
+    {
+      "name": "checksum_algorithm",
+      "aliases": [
+        "checksum",
+        "checksum_algo"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"md5\"",
+        "\"sha1\" ← (default)",
+        "\"sha224\"",
+        "\"sha256\"",
+        "\"sha384\"",
+        "\"sha512\""
+      ],
+      "description": "Algorithm to determine checksum of file. Will throw an error if the host is unable to use specified algorithm. The remote host has to support the hashing method specified, md5 can be unavailable if the host is FIPS-140 compliant. Availability might be restricted by the target system, for example FIPS systems won’t allow md5 use Choices: \"md5\" \"sha1\" ← (default) \"sha224\" \"sha256\" \"sha384\" \"sha512\""
+    },
+    {
+      "name": "contains",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A regular expression or pattern which should be matched against the file content. If read_whole_file=false it matches against the beginning of the line (uses re.match()). If read_whole_file=true, it searches anywhere for that pattern (uses re.search()). Works only when file_type is file."
+    },
+    {
+      "name": "depth",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "is",
+      "choices": [],
+      "description": "Set the maximum number of levels to descend into. Setting recurse=false will override this value, which is effectively depth 1. Default is unlimited depth."
+    },
+    {
+      "name": "encoding",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "When doing a contains search, determine the encoding of the files to be searched."
+    },
+    {
+      "name": "exact_mode",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Restrict mode matching to exact matches only, and not as a minimum set of permissions to match. Choices: false true ← (default)"
+    },
+    {
+      "name": "excludes",
+      "aliases": [
+        "exclude"
+      ],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "One or more (shell or regex) patterns, which type is controlled by use_regex option. Items whose basenames match an excludes pattern are culled from patterns matches. Multiple patterns can be specified using a list."
+    },
+    {
+      "name": "file_type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"any\"",
+        "\"directory\"",
+        "\"file\" ← (default)",
+        "\"link\""
+      ],
+      "description": "Type of file to select. The link and any choices were added in Ansible 2.3. Choices: \"any\" \"directory\" \"file\" ← (default) \"link\""
+    },
+    {
+      "name": "follow",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Set this to true to follow symlinks in path for systems with python 2.6+. Choices: false ← (default) true"
+    },
+    {
+      "name": "get_checksum",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Whether to return a checksum of the file. Choices: false ← (default) true"
+    },
+    {
+      "name": "hidden",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Set this to true to include hidden files, otherwise they will be ignored. Choices: false ← (default) true"
+    },
+    {
+      "name": "limit",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "is",
+      "choices": [],
+      "description": "Limit the maximum number of matching paths returned. After finding this many, the find action will stop looking. Matches are made from the top, down (i.e. shallowest directory first). If not set, or set to v(null), it will do unlimited matches. Default is unlimited matches."
+    },
+    {
+      "name": "mode",
+      "aliases": [],
+      "type": "any",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Choose objects matching a specified permission. This value is restricted to modes that can be applied using the python os.chmod function. The mode can be provided as an octal such as \"0644\" or as symbolic such as u=rw,g=r,o=r."
+    },
+    {
+      "name": "paths",
+      "aliases": [
+        "name",
+        "path"
+      ],
+      "type": "list",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "List of paths of directories to search. All paths must be fully qualified. From ansible-core 2.18 and onwards, the data type has changed from str to path."
+    },
+    {
+      "name": "patterns",
+      "aliases": [
+        "pattern"
+      ],
+      "type": "list",
+      "required": false,
+      "default": "as",
+      "choices": [],
+      "description": "One or more (shell or regex) patterns, which type is controlled by use_regex option. The patterns restrict the list of files to be returned to those whose basenames match at least one of the patterns specified. Multiple patterns can be specified using a list. The pattern is matched against the file base name, excluding the directory. When using regexen, the pattern MUST match the ENTIRE file name, not just parts of it. So if you are looking to match all files ending in .default, you’d need to use .*\\.default as a regexp and not just \\.default. This parameter expects a list, which can be either comma separated or YAML. If any of the patterns contain a comma, make sure to put them in a list to avoid splitting the patterns in undesirable ways. Defaults to * when use_regex=False, or .* when use_regex=True. Default: []"
+    },
+    {
+      "name": "read_whole_file",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "When doing a contains search, determines whether the whole file should be read into memory or if the regex should be applied to the file line-by-line. Setting this to true can have performance and memory implications for large files. This uses re.search() instead of re.match(). Choices: false ← (default) true"
+    },
+    {
+      "name": "recurse",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If target is a directory, recursively descend into the directory looking for files. Choices: false ← (default) true"
+    },
+    {
+      "name": "size",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Select files whose size is equal to or greater than the specified size. Use a negative size to find files equal to or less than the specified size. Unqualified values are in bytes but b, k, m, g, and t can be appended to specify bytes, kilobytes, megabytes, gigabytes, and terabytes, respectively. Size is not evaluated for directories."
+    },
+    {
+      "name": "use_regex",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If false, the patterns are file globs (shell). If true, they are python regexes. Choices: false ← (default) true"
+    }
+  ],
+  "examples": [
+    "- name: Recursively find /tmp files older than 2 days\n  ansible.builtin.find:\n    paths: /tmp\n    age: 2d\n    recurse: yes\n\n- name: Recursively find /tmp files older than 4 weeks and equal or greater than 1 megabyte\n  ansible.builtin.find:\n    paths: /tmp\n    age: 4w\n    size: 1m\n    recurse: yes\n\n- name: Recursively find /var/tmp files with last access time greater than 3600 seconds\n  ansible.builtin.find:\n    paths: /var/tmp\n    age: 3600\n    age_stamp: atime\n    recurse: yes\n\n- name: Find /var/log files equal or greater than 10 megabytes ending with .old or .log.gz\n  ansible.builtin.find:\n    paths: /var/log\n    patterns: '*.old,*.log.gz'\n    size: 10m\n\n# Note that YAML double quotes require escaping backslashes but yaml single quotes do not.\n- name: Find /var/log files equal or greater than 10 megabytes ending with .old or .log.gz via regex\n  ansible.builtin.find:\n    paths: /var/log\n    patterns: \"^.*?\\\\.(?:old|log\\\\.gz)$\"\n    size: 10m\n    use_regex: yes\n\n- name: Find /var/log all directories, exclude nginx and mysql\n  ansible.builtin.find:\n    paths: /var/log\n    recurse: no\n    file_type: directory\n    excludes: 'nginx,mysql'\n\n# When using patterns that contain a comma, make sure they are formatted as lists to avoid splitting the pattern\n- name: Use a single pattern that contains a comma formatted as a list\n  ansible.builtin.find:\n    paths: /var/log\n    file_type: file\n    use_regex: yes\n    patterns: ['^_[0-9]{2,4}_.*.log$']\n\n- name: Use multiple patterns that contain a comma formatted as a YAML list\n  ansible.builtin.find:\n    paths: /var/log\n    file_type: file\n    use_regex: yes\n    patterns:\n      - '^_[0-9]{2,4}_.*.log$'\n      - '^[a-z]{1,5}_.*log$'\n\n- name: Find file containing \"wally\" without necessarily reading all files\n  ansible.builtin.find:\n    paths: /var/log\n    file_type: file\n    contains: wally\n    read_whole_file: true\n    patterns: \"^.*\\\\.log$\"\n    use_regex: true\n    recurse: true\n    limit: 1"
+  ],
+  "return_values": [
+    {
+      "name": "age",
+      "type": "string",
+      "description": "Select files whose age is equal to or greater than the specified time. Use a negative age to find files equal to or less than the specified time. You can choose seconds, minutes, hours, days, or weeks by specifying the first letter of any of those words (e.g., “1w”).",
+      "returned": ""
+    },
+    {
+      "name": "age_stamp",
+      "type": "string",
+      "description": "Choose the file property against which we compare age. Choices: \"atime\" \"ctime\" \"mtime\" ← (default)",
+      "returned": ""
+    },
+    {
+      "name": "checksum_algorithm",
+      "type": "string",
+      "description": "Algorithm to determine checksum of file. Will throw an error if the host is unable to use specified algorithm. The remote host has to support the hashing method specified, md5 can be unavailable if the host is FIPS-140 compliant. Availability might be restricted by the target system, for example FIPS systems won’t allow md5 use Choices: \"md5\" \"sha1\" ← (default) \"sha224\" \"sha256\" \"sha384\" \"sha512\"",
+      "returned": ""
+    },
+    {
+      "name": "contains",
+      "type": "string",
+      "description": "A regular expression or pattern which should be matched against the file content. If read_whole_file=false it matches against the beginning of the line (uses re.match()). If read_whole_file=true, it searches anywhere for that pattern (uses re.search()). Works only when file_type is file.",
+      "returned": ""
+    },
+    {
+      "name": "depth",
+      "type": "integer",
+      "description": "Set the maximum number of levels to descend into. Setting recurse=false will override this value, which is effectively depth 1. Default is unlimited depth.",
+      "returned": ""
+    },
+    {
+      "name": "encoding",
+      "type": "string",
+      "description": "When doing a contains search, determine the encoding of the files to be searched.",
+      "returned": ""
+    },
+    {
+      "name": "exact_mode",
+      "type": "boolean",
+      "description": "Restrict mode matching to exact matches only, and not as a minimum set of permissions to match. Choices: false true ← (default)",
+      "returned": ""
+    },
+    {
+      "name": "excludes",
+      "type": "list",
+      "description": "One or more (shell or regex) patterns, which type is controlled by use_regex option. Items whose basenames match an excludes pattern are culled from patterns matches. Multiple patterns can be specified using a list.",
+      "returned": ""
+    },
+    {
+      "name": "file_type",
+      "type": "string",
+      "description": "Type of file to select. The link and any choices were added in Ansible 2.3. Choices: \"any\" \"directory\" \"file\" ← (default) \"link\"",
+      "returned": ""
+    },
+    {
+      "name": "follow",
+      "type": "boolean",
+      "description": "Set this to true to follow symlinks in path for systems with python 2.6+. Choices: false ← (default) true",
+      "returned": ""
+    },
+    {
+      "name": "get_checksum",
+      "type": "boolean",
+      "description": "Whether to return a checksum of the file. Choices: false ← (default) true",
+      "returned": ""
+    },
+    {
+      "name": "hidden",
+      "type": "boolean",
+      "description": "Set this to true to include hidden files, otherwise they will be ignored. Choices: false ← (default) true",
+      "returned": ""
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "description": "Limit the maximum number of matching paths returned. After finding this many, the find action will stop looking. Matches are made from the top, down (i.e. shallowest directory first). If not set, or set to v(null), it will do unlimited matches. Default is unlimited matches.",
+      "returned": ""
+    },
+    {
+      "name": "mode",
+      "type": "any",
+      "description": "Choose objects matching a specified permission. This value is restricted to modes that can be applied using the python os.chmod function. The mode can be provided as an octal such as \"0644\" or as symbolic such as u=rw,g=r,o=r.",
+      "returned": ""
+    },
+    {
+      "name": "paths",
+      "type": "list",
+      "description": "List of paths of directories to search. All paths must be fully qualified. From ansible-core 2.18 and onwards, the data type has changed from str to path.",
+      "returned": ""
+    },
+    {
+      "name": "patterns",
+      "type": "list",
+      "description": "One or more (shell or regex) patterns, which type is controlled by use_regex option. The patterns restrict the list of files to be returned to those whose basenames match at least one of the patterns specified. Multiple patterns can be specified using a list. The pattern is matched against the file base name, excluding the directory. When using regexen, the pattern MUST match the ENTIRE file name, not just parts of it. So if you are looking to match all files ending in .default, you’d need to use .*\\.default as a regexp and not just \\.default. This parameter expects a list, which can be either comma separated or YAML. If any of the patterns contain a comma, make sure to put them in a list to avoid splitting the patterns in undesirable ways. Defaults to * when use_regex=False, or .* when use_regex=True. Default: []",
+      "returned": ""
+    },
+    {
+      "name": "read_whole_file",
+      "type": "boolean",
+      "description": "When doing a contains search, determines whether the whole file should be read into memory or if the regex should be applied to the file line-by-line. Setting this to true can have performance and memory implications for large files. This uses re.search() instead of re.match(). Choices: false ← (default) true",
+      "returned": ""
+    },
+    {
+      "name": "recurse",
+      "type": "boolean",
+      "description": "If target is a directory, recursively descend into the directory looking for files. Choices: false ← (default) true",
+      "returned": ""
+    },
+    {
+      "name": "size",
+      "type": "string",
+      "description": "Select files whose size is equal to or greater than the specified size. Use a negative size to find files equal to or less than the specified size. Unqualified values are in bytes but b, k, m, g, and t can be appended to specify bytes, kilobytes, megabytes, gigabytes, and terabytes, respectively. Size is not evaluated for directories.",
+      "returned": ""
+    },
+    {
+      "name": "use_regex",
+      "type": "boolean",
+      "description": "If false, the patterns are file globs (shell). If true, they are python regexes. Choices: false ← (default) true",
+      "returned": ""
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/find_module.html",
+  "parsed_at": "2026-04-13T16:29:25.248259"
+}

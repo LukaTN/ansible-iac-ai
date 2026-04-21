@@ -1,0 +1,99 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.ibm_sa_host",
+  "slug": "ibm_sa_host_module#ansible-collections-community-general-ibm-sa-host-module",
+  "description": "This module adds hosts to or removes them from IBM Spectrum Accelerate Family storage systems.",
+  "parameters": [
+    {
+      "name": "cluster",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The name of the cluster to include the host."
+    },
+    {
+      "name": "domain",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The domains the cluster is attached to. To include more than one domain, separate domain names with commas. To include all existing domains, use an asterisk (*)."
+    },
+    {
+      "name": "endpoints",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The hostname or management IP of Spectrum Accelerate storage system."
+    },
+    {
+      "name": "host",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Host name."
+    },
+    {
+      "name": "iscsi_chap_name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The host’s CHAP name identifier."
+    },
+    {
+      "name": "iscsi_chap_secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The password of the initiator used to authenticate to the system when CHAP is enable."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Password for username on the Spectrum Accelerate storage system."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Host state. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "username",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Management user on the Spectrum Accelerate storage system."
+    }
+  ],
+  "examples": [
+    "- name: Define new host.\n  community.general.ibm_sa_host:\n    host: host_name\n    state: present\n    username: admin\n    password: secret\n    endpoints: hostdev-system\n\n- name: Delete host.\n  community.general.ibm_sa_host:\n    host: host_name\n    state: absent\n    username: admin\n    password: secret\n    endpoints: hostdev-system"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/ibm_sa_host_module.html",
+  "parsed_at": "2026-04-13T16:29:47.732940"
+}

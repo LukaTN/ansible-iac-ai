@@ -1,0 +1,145 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.manageiq_user",
+  "slug": "manageiq_user_module#ansible-collections-community-general-manageiq-user-module",
+  "description": "The manageiq_user module supports adding, updating and deleting users in ManageIQ.",
+  "parameters": [
+    {
+      "name": "email",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The users’ E-mail address."
+    },
+    {
+      "name": "group",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The name of the group to which the user belongs."
+    },
+    {
+      "name": "manageiq_connection",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "ManageIQ connection configuration information."
+    },
+    {
+      "name": "ca_cert",
+      "aliases": [
+        "ca_bundle_path"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The path to a CA bundle file or directory with certificates."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "ManageIQ password. MIQ_PASSWORD environment variable if set. Otherwise, required if no token is passed in."
+    },
+    {
+      "name": "token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "ManageIQ token. MIQ_TOKEN environment variable if set. Otherwise, required if no username or password is passed in."
+    },
+    {
+      "name": "url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "ManageIQ environment URL. MIQ_URL environment variable if set. Otherwise, it is required to pass it."
+    },
+    {
+      "name": "username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "ManageIQ username. MIQ_USERNAME environment variable if set. Otherwise, required if no token is passed in."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [
+        "verify_ssl"
+      ],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether SSL certificates should be verified for HTTPS requests. Choices: false true ← (default)"
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The users’ full name."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)"
+      ],
+      "description": "absent - user should not exist, present - user should be. Choices: \"absent\" \"present\" ← (default)"
+    },
+    {
+      "name": "update_password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"always\" ← (default)",
+        "\"on_create\""
+      ],
+      "description": "always updates passwords unconditionally. on_create only sets the password for a newly created user. Choices: \"always\" ← (default) \"on_create\""
+    },
+    {
+      "name": "userid",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The unique userid in manageiq, often mentioned as username."
+    }
+  ],
+  "examples": [
+    "- name: Create a new user in ManageIQ\n  community.general.manageiq_user:\n    userid: 'jdoe'\n    name: 'Jane Doe'\n    password: 'VerySecret'\n    group: 'EvmGroup-user'\n    email: 'jdoe@example.com'\n    manageiq_connection:\n      url: 'http://127.0.0.1:3000'\n      username: 'admin'\n      password: 'smartvm'\n      validate_certs: false # only do this when you trust the network!\n\n- name: Create a new user in ManageIQ using a token\n  community.general.manageiq_user:\n    userid: 'jdoe'\n    name: 'Jane Doe'\n    password: 'VerySecret'\n    group: 'EvmGroup-user'\n    email: 'jdoe@example.com'\n    manageiq_connection:\n      url: 'http://127.0.0.1:3000'\n      token: 'sometoken'\n      validate_certs: false # only do this when you trust the network!\n\n- name: Delete a user in ManageIQ\n  community.general.manageiq_user:\n    state: 'absent'\n    userid: 'jdoe'\n    manageiq_connection:\n      url: 'http://127.0.0.1:3000'\n      username: 'admin'\n      password: 'smartvm'\n      validate_certs: false # only do this when you trust the network!\n\n- name: Delete a user in ManageIQ using a token\n  community.general.manageiq_user:\n    state: 'absent'\n    userid: 'jdoe'\n    manageiq_connection:\n      url: 'http://127.0.0.1:3000'\n      token: 'sometoken'\n      validate_certs: false # only do this when you trust the network!\n\n- name: Update email of user in ManageIQ\n  community.general.manageiq_user:\n    userid: 'jdoe'\n    email: 'jaustine@example.com'\n    manageiq_connection:\n      url: 'http://127.0.0.1:3000'\n      username: 'admin'\n      password: 'smartvm'\n      validate_certs: false # only do this when you trust the network!\n\n- name: Update email of user in ManageIQ using a token\n  community.general.manageiq_user:\n    userid: 'jdoe'\n    email: 'jaustine@example.com'\n    manageiq_connection:\n      url: 'http://127.0.0.1:3000'\n      token: 'sometoken'\n      validate_certs: false # only do this when you trust the network!"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/manageiq_user_module#ansible-collections-community-general-manageiq-user-module.html",
+  "parsed_at": "2026-04-11T13:53:20.300078"
+}

@@ -1,0 +1,226 @@
+{
+  "collection_ns": "azure_azcollection",
+  "collection": "azure.azcollection",
+  "module": "azure.azcollection.azure_rm_virtualmachinescaleset_info",
+  "slug": "azure_rm_virtualmachinescaleset_info_module#ansible-collections-azure-azcollection-azure-rm-virtualmachinescaleset-info-module",
+  "description": "Get facts for a virtual machine scale set.",
+  "parameters": [
+    {
+      "name": "ad_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory username. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "adfs_authority_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure AD authority url. Use when authenticating with Username/password, and has your own ADFS authority."
+    },
+    {
+      "name": "api_profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "Selects an API profile to use when communicating with Azure services. Default value of latest is appropriate for public clouds; future values will allow use with Azure Stack. Default: \"latest\""
+    },
+    {
+      "name": "auth_source",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "az",
+      "choices": [
+        "\"auto\" ← (default)",
+        "\"cli\"",
+        "\"credential_file\"",
+        "\"env\"",
+        "\"msi\""
+      ],
+      "description": "Controls the source of the credentials to use for authentication. Can also be set via the ANSIBLE_AZURE_AUTH_SOURCE environment variable. When set to auto (the default) the precedence is module parameters -> env -> credential_file -> cli. When set to env, the credentials will be read from the environment variables When set to credential_file, it will read the profile from ~/.azure/credentials. When set to cli, the credentials will be sources from the Azure CLI profile. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if more than one is present otherwise the default az cli subscription is used. When set to msi, the host machine must be an azure resource with an enabled MSI extension. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if the resource is granted access to more than one subscription, otherwise the first subscription is chosen. The msi was added in Ansible 2.6. Choices: \"auto\" ← (default) \"cli\" \"credential_file\" \"env\" \"msi\""
+    },
+    {
+      "name": "cert_validation_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ignore\"",
+        "\"validate\""
+      ],
+      "description": "Controls the certificate validation behavior for Azure endpoints. By default, all modules will validate the server certificate, but when an HTTPS proxy is in use, or against Azure Stack, it may be necessary to disable this behavior by passing ignore. Can also be set via credential file profile or the AZURE_CERT_VALIDATION environment variable. Choices: \"ignore\" \"validate\""
+    },
+    {
+      "name": "client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client ID. Use when authenticating with a Service Principal or Managed Identity (msi). Can also be set via the AZURE_CLIENT_ID environment variable."
+    },
+    {
+      "name": "cloud_environment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "AzureCloud",
+      "choices": [],
+      "description": "For cloud environments other than the US public cloud, the environment name (as defined by Azure Python SDK, eg, AzureChinaCloud, AzureUSGovernment), or a metadata discovery endpoint URL (required for Azure Stack). Can also be set via credential file profile or the AZURE_CLOUD_ENVIRONMENT environment variable. Default: \"AzureCloud\""
+    },
+    {
+      "name": "disable_instance_discovery",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Determines whether or not instance discovery is performed when attempting to authenticate. Setting this to true will completely disable both instance discovery and authority validation. This functionality is intended for use in scenarios where the metadata endpoint cannot be reached such as in private clouds or Azure Stack. The process of instance discovery entails retrieving authority metadata from https://login.microsoft.com/ to validate the authority. By setting this to **True**, the validation of the authority is disabled. As a result, it is crucial to ensure that the configured authority host is valid and trustworthy. Set via credential file profile or the AZURE_DISABLE_INSTANCE_DISCOVERY environment variable. Choices: false ← (default) true"
+    },
+    {
+      "name": "format",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"curated\"",
+        "\"raw\" ← (default)"
+      ],
+      "description": "Format of the data returned. If raw is selected information will be returned in raw format from Azure Python SDK. If curated is selected the structure will be identical to input parameters of azure.azcollection.azure_rm_virtualmachinescaleset module. In Ansible 2.5 and lower facts are always returned in raw format. Please note that this option will be deprecated in 2.10 when curated format will become the only supported format. Choices: \"curated\" \"raw\" ← (default)"
+    },
+    {
+      "name": "log_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "log_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Limit results to a specific virtual machine scale set."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory user password. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security profile found in ~/.azure/credentials file."
+    },
+    {
+      "name": "resource_group",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The resource group to search for the desired virtual machine scale set."
+    },
+    {
+      "name": "secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client secret. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "subscription_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Your Azure subscription Id."
+    },
+    {
+      "name": "tags",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Limit results by providing a list of tags. Format tags as ‘key’ or ‘key:value’."
+    },
+    {
+      "name": "tenant",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure tenant ID. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "thumbprint",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The thumbprint of the private key specified in x509_certificate_path. Use when authenticating with a Service Principal. Required if x509_certificate_path is defined."
+    },
+    {
+      "name": "x509_certificate_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the X509 certificate used to create the service principal in PEM format. The certificate must be appended to the private key. Use when authenticating with a Service Principal."
+    }
+  ],
+  "examples": [
+    "- name: Get facts for a virtual machine scale set\n  azure_rm_virtualmachinescaleset_info:\n    resource_group: myResourceGroup\n    name: testvmss001\n    format: curated\n\n- name: Get facts for all virtual networks\n  azure_rm_virtualmachinescaleset_info:\n    resource_group: myResourceGroup\n\n- name: Get facts by tags\n  azure_rm_virtualmachinescaleset_info:\n    resource_group: myResourceGroup\n    tags:\n      - testing"
+  ],
+  "return_values": [
+    {
+      "name": "vmss",
+      "type": "list",
+      "description": "List of virtual machine scale sets. Returned: always Sample: [{\"constrained_maximum_capacity\": false, \"etag\": \"3\", \"id\": \"/subscriptions/xxx-xxx/resourceGroups/v-xisuRG02/providers/Microsoft.Compute/virtualMachineScaleSets/testVMSStestvmss\", \"location\": \"eastus\", \"name\": \"testVMSStestvmss\", \"orchestration_mode\": \"Flexible\", \"platform_fault_domain_count\": 1, \"provisioning_state\": \"Succeeded\", \"single_placement_group\": false, \"sku\": {\"capacity\": 1, \"name\": \"Standard_A1_v2\", \"tier\": \"Standard\"}, \"tags\": {\"key2\": \"value2\", \"key3\": \"value3\"}, \"time_created\": \"2025-04-22T08:03:29.427822Z\", \"type\": \"Microsoft.Compute/virtualMachineScaleSets\", \"unique_id\": \"da4393f5-6060-4a0e-8ae5-7616316402b8\", \"upgrade_policy\": {\"mode\": \"Manual\"}, \"virtual_machine_profile\": {\"network_profile\": {\"network_api_version\": \"2020-11-01\", \"network_interface_configurations\": [{\"auxiliary_mode\": \"None\", \"auxiliary_sku\": \"None\", \"delete_option\": \"Delete\", \"disable_tcp_state_tracking\": false, \"dns_settings\": {\"dns_servers\": []}, \"enable_ip_forwarding\": false, \"ip_configurations\": [{\"application_gateway_backend_address_pools\": [], \"application_security_groups\": [{\"id\": \"/subscriptions/xxx-xxx/resourceGroups/v-xisuRG02/providers/Microsoft.Network/applicationSecurityGroups/apptestvmss02\"}, {\"id\": \"/subscriptions/xxx-xxx/resourceGroups/v-xisuRG02/providers/Microsoft.Network/applicationSecurityGroups/apptestvmss\"}], \"load_balancer_backend_address_pools\": [], \"name\": \"default\", \"primary\": true, \"private_ip_address_version\": \"IPv4\", \"public_ip_address_configuration\": {\"idle_timeout_in_minutes\": 4, \"ip_tags\": [], \"name\": \"instancepublicip\", \"public_ip_address_version\": \"IPv4\"}, \"subnet\": {\"id\": \"/subscriptions/xxx-xxx/resourceGroups/v-xisuRG02/providers/Microsoft.Network/virtualNetworks/VMSStestVnet/subnets/VMSStestSubnet\"}}], \"name\": \"testVMSStestvmss\", \"primary\": true}]}, \"os_profile\": {\"admin_username\": \"testuser\", \"allow_extension_operations\": true, \"computer_name_prefix\": \"testVMSStestvmss\", \"linux_configuration\": {\"disable_password_authentication\": true, \"patch_settings\": {\"assessment_mode\": \"ImageDefault\", \"patch_mode\": \"ImageDefault\"}, \"provision_vm_agent\": true, \"ssh\": {\"public_keys\": [{\"key_data\": \"ssh-rsa xxxxxxxxxx xx.yy@qq.com\", \"path\": \"/home/testuser/.ssh/authorized_keys\"}]}}, \"require_guest_provision_signal\": true, \"secrets\": []}, \"storage_profile\": {\"data_disks\": [{\"caching\": \"ReadWrite\", \"create_option\": \"Empty\", \"delete_option\": \"Delete\", \"disk_size_gb\": 64, \"lun\": 0, \"managed_disk\": {\"storage_account_type\": \"Standard_LRS\"}}], \"image_reference\": {\"offer\": \"0001-com-ubuntu-server-focal\", \"publisher\": \"Canonical\", \"sku\": \"20_04-lts\", \"version\": \"20.04.202504030\"}, \"os_disk\": {\"caching\": \"ReadWrite\", \"create_option\": \"FromImage\", \"delete_option\": \"Delete\", \"disk_size_gb\": 30, \"managed_disk\": {\"storage_account_type\": \"Standard_LRS\"}, \"os_type\": \"Linux\"}}, \"time_created\": \"2025-04-22T08:53:17.201851Z\"}}]",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualmachinescaleset_info_module.html",
+  "parsed_at": "2026-04-13T16:29:41.509582"
+}

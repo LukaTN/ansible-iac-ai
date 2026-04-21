@@ -1,0 +1,483 @@
+{
+  "collection_ns": "amazon_aws",
+  "collection": "amazon.aws",
+  "module": "amazon.aws.s3_object",
+  "slug": "s3_object_module#ansible-collections-amazon-aws-s3-object-module",
+  "description": "This module allows the user to manage the objects and directories within S3 buckets. Includes support for creating and deleting objects and directories, retrieving objects as files or strings, generating download links and copying objects that are already stored in Amazon S3.",
+  "parameters": [
+    {
+      "name": "access_key",
+      "aliases": [
+        "aws_access_key_id",
+        "aws_access_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS access key ID. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY environment variables may also be used in decreasing order of preference. The aws_access_key and profile options are mutually exclusive. The aws_access_key_id alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "aws_ca_bundle",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The location of a CA Bundle to use when validating SSL certificates. The AWS_CA_BUNDLE environment variable may also be used."
+    },
+    {
+      "name": "aws_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary to modify the botocore configuration. Parameters can be found in the AWS documentation https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html#botocore.config.Config."
+    },
+    {
+      "name": "bucket",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Bucket name."
+    },
+    {
+      "name": "ceph",
+      "aliases": [
+        "rgw"
+      ],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Enable API compatibility with Ceph RGW. It takes into account the S3 API subset working with Ceph in order to provide the same module behaviour where possible. Requires endpoint_url if ceph=true. Choices: false ← (default) true"
+    },
+    {
+      "name": "content",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The content to put into an object. The parameter value will be treated as a string and converted to UTF-8 before sending it to S3. To send binary data, use the content_base64 parameter instead. One of content, content_base64 or src must be specified when mode=put otherwise ignored."
+    },
+    {
+      "name": "content_base64",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The base64-encoded binary data to put into an object. Use this if you need to put raw binary data, and don’t forget to encode in base64. One of content, content_base64 or src must be specified when mode=put otherwise ignored."
+    },
+    {
+      "name": "copy_src",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The source details of the object to copy. Required if mode=copy."
+    },
+    {
+      "name": "object",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "key name of the source object. if not specified, all the objects of the copy_src.bucket will be copied into the specified bucket."
+    },
+    {
+      "name": "prefix",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Copy all the keys that begin with the specified prefix. Ignored if copy_src.object is supplied. Default: \"\""
+    },
+    {
+      "name": "version_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "version ID of the source object."
+    },
+    {
+      "name": "debug_botocore_endpoint_logs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use a botocore.endpoint logger to parse the unique (rather than total) \"resource:action\" API calls made during a task, outputing the set to the resource_actions key in the task results. Use the aws_resource_action callback to output to total list made during a playbook. The ANSIBLE_DEBUG_BOTOCORE_LOGS environment variable may also be used. Choices: false ← (default) true"
+    },
+    {
+      "name": "dest",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The destination file path when downloading an object/key when mode=get. Ignored when mode is not get."
+    },
+    {
+      "name": "dualstack",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Enables Amazon S3 Dual-Stack Endpoints, allowing S3 communications using both IPv4 and IPv6. Support for passing dualstack and endpoint_url at the same time has been deprecated, the dualstack endpoints are automatically configured using the configured region. Support will be removed in a release after 2024-12-01. Choices: false ← (default) true"
+    },
+    {
+      "name": "encrypt",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Asks for server-side encryption of the objects when mode=put or mode=copy. Ignored when mode is neither put nor copy. Choices: false true ← (default)"
+    },
+    {
+      "name": "encryption_kms_key_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "KMS key id to use when encrypting objects using encryption_mode=aws:kms. Ignored if encryption_mode is not aws:kms."
+    },
+    {
+      "name": "encryption_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"AES256\" ← (default)",
+        "\"aws:kms\""
+      ],
+      "description": "The encryption mode to use if encrypt=true. Choices: \"AES256\" ← (default) \"aws:kms\""
+    },
+    {
+      "name": "endpoint_url",
+      "aliases": [
+        "aws_endpoint_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "AWS",
+      "choices": [],
+      "description": "URL to connect to instead of the default AWS endpoints. While this can be used to connection to other AWS-compatible services the amazon.aws and community.aws collections are only tested against AWS. The AWS_URL environment variable may also be used."
+    },
+    {
+      "name": "expected_bucket_owner",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The account ID of the expected bucket owner. If the account ID that you provide does not match the actual owner of the bucket, the request fails with the HTTP status code 403 Forbidden (access denied)."
+    },
+    {
+      "name": "expiry",
+      "aliases": [
+        "expiration"
+      ],
+      "type": "integer",
+      "required": false,
+      "default": "600",
+      "choices": [],
+      "description": "Time limit (in seconds) for the URL generated and returned by S3/Walrus when performing a mode=put or mode=geturl operation. Ignored when mode is neither put nor geturl. Default: 600"
+    },
+    {
+      "name": "headers",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "is",
+      "choices": [],
+      "description": "Custom headers to use when mode=put as a dictionary of key value pairs. Keys that match supported S3 object arguments are promoted to top‑level ExtraArgs. Supported keys include ContentType, Content-Disposition, ContentEncoding, ContentLanguage, CacheControl, Expires, ACL, GrantFullControl, GrantRead, GrantReadACP, GrantWriteACP, StorageClass, ServerSideEncryption, SSECustomerAlgorithm, SSECustomerKey, SSECustomerKeyMD5, SSEKMSKeyId, and WebsiteRedirectLocation. Remaining keys are stored under Metadata. Both header name styles ContentType and Content-Type are supported. Underscore variants like content_type are not promoted and will be placed under Metadata. If ContentType is not provided, a type is guessed from src when uploading from a file. When uploading using content or content_base64 the default is binary/octet-stream. Ignored when mode is not put."
+    },
+    {
+      "name": "ignore_nonexistent_bucket",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Overrides initial bucket lookups in case bucket or IAM policies are restrictive. This can be useful when a user may have the GetObject permission but no other permissions. In which case using mode=get will fail unless ignore_nonexistent_bucket=true is specified. Choices: false ← (default) true"
+    },
+    {
+      "name": "marker",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies the key to start with when using list mode. Object keys are returned in alphabetical order, starting with key after the marker in order."
+    },
+    {
+      "name": "max_keys",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Max number of results to return when mode=list When not set, all keys will be returned. Ignored when mode is not list."
+    },
+    {
+      "name": "metadata",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Metadata to use when mode=copy, mode=create or mode=put as a dictionary of key value pairs. Keys that match supported S3 object arguments are promoted to top‑level ExtraArgs (for example ContentType). Remaining keys are applied as user metadata under Metadata."
+    },
+    {
+      "name": "mode",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [
+        "\"get\"",
+        "\"put\"",
+        "\"create\"",
+        "\"geturl\"",
+        "\"getstr\"",
+        "\"delobj\"",
+        "\"list\"",
+        "\"copy\""
+      ],
+      "description": "Switches the module behaviour between put: upload get: download geturl: return download URL getstr: download object as string list: list keys create: create bucket directories delobj: delete object copy: copy object that is already stored in another bucket Support for creating and deleting buckets was removed in release 6.0.0. To create and manage the bucket itself please use the amazon.aws.s3_bucket module. Support for list has been deprecated and will be removed in a release after 2026-11-01. The amazon.aws.s3_object_info module should be used instead of list. Choices: \"get\" \"put\" \"create\" \"geturl\" \"getstr\" \"delobj\" \"list\" \"copy\""
+    },
+    {
+      "name": "overwrite",
+      "aliases": [
+        "force"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "different",
+      "choices": [],
+      "description": "Force overwrite either locally on the filesystem or remotely with the object/key. Used when mode=put or mode=get. Ignored when when mode is neither put nor get. Must be a Boolean, always, never, different or latest. true is the same as always. false is equal to never. When this is set to different the MD5 sum of the local file is compared with the ‘ETag’ of the object/key in S3. The ETag may or may not be an MD5 digest of the object data. See the ETag response header here https://docs.aws.amazon.com/AmazonS3/latest/API/RESTCommonResponseHeaders.html. When mode=get and overwrite=latest the last modified timestamp of local file is compared with the ‘LastModified’ of the object/key in S3. Default: \"different\""
+    },
+    {
+      "name": "permission",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[",
+      "choices": [
+        "\"private\" ← (default)",
+        "\"public-read\"",
+        "\"public-read-write\"",
+        "\"aws-exec-read\"",
+        "\"authenticated-read\"",
+        "\"bucket-owner-read\"",
+        "\"bucket-owner-full-control\""
+      ],
+      "description": "This option lets the user set the canned permissions on the object/bucket that are created. The permissions that can be set are private, public-read, public-read-write, authenticated-read for a bucket or private, public-read, public-read-write, aws-exec-read, authenticated-read, bucket-owner-read, bucket-owner-full-control for an object. Multiple permissions can be specified as a list; although only the first one will be used during the initial upload of the file. For a full list of permissions see the AWS documentation https://docs.aws.amazon.com/AmazonS3/latest/userguide/acl-overview.html#canned-acl. Choices: \"private\" ← (default) \"public-read\" \"public-read-write\" \"aws-exec-read\" \"authenticated-read\" \"bucket-owner-read\" \"bucket-owner-full-control\" Default: [\"private\"]"
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "aws_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A named AWS profile to use for authentication. See the AWS documentation for more information about named profiles https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html. The AWS_PROFILE environment variable may also be used. The profile option is mutually exclusive with the aws_access_key, aws_secret_key and session_token options."
+    },
+    {
+      "name": "purge_tags",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If purge_tags=true and tags is set, existing tags will be purged from the resource to match exactly what is defined by tags parameter. If the tags parameter is not set then tags will not be modified, even if purge_tags=True. Tag keys beginning with aws: are reserved by Amazon and can not be modified. As such they will be ignored for the purposes of the purge_tags parameter. See the Amazon documentation for more information https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html#tag-conventions. Choices: false true ← (default)"
+    },
+    {
+      "name": "region",
+      "aliases": [
+        "aws_region"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The AWS region to use. For global services such as IAM, Route53 and CloudFront, region is ignored. The AWS_REGION environment variable may also be used. See the Amazon AWS documentation for more information http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region."
+    },
+    {
+      "name": "retries",
+      "aliases": [
+        "retry"
+      ],
+      "type": "integer",
+      "required": false,
+      "default": "0",
+      "choices": [],
+      "description": "On recoverable failure, how many times to retry before actually failing. Default: 0"
+    },
+    {
+      "name": "secret_key",
+      "aliases": [
+        "aws_secret_access_key",
+        "aws_secret_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS secret access key. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SECRET_ACCESS_KEY or AWS_SECRET_KEY environment variables may also be used in decreasing order of preference. The secret_key and profile options are mutually exclusive. The aws_secret_access_key alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "session_token",
+      "aliases": [
+        "aws_session_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS STS session token for use with temporary credentials. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SESSION_TOKEN environment variable may also be used. The session_token and profile options are mutually exclusive."
+    },
+    {
+      "name": "sig_v4",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Forces the Boto SDK to use Signature Version 4. Only applies to get modes, mode=get, mode=getstr, mode=geturl. Choices: false true ← (default)"
+    },
+    {
+      "name": "src",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The source file path when performing a put operation. One of content, content_base64 or src must be specified when mode=put otherwise ignored."
+    },
+    {
+      "name": "tags",
+      "aliases": [
+        "resource_tags"
+      ],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary representing the tags to be applied to the resource. If the tags parameter is not set then tags will not be modified."
+    },
+    {
+      "name": "validate_bucket_name",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether the bucket name should be validated to conform to AWS S3 naming rules. On by default, this may be disabled for S3 backends that do not enforce these rules. See the Amazon documentation for more information about bucket naming rules https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html. Choices: false true ← (default)"
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to false, SSL certificates will not be validated for communication with the AWS APIs. Setting validate_certs=false is strongly discouraged, as an alternative, consider setting aws_ca_bundle instead. Choices: false true ← (default)"
+    },
+    {
+      "name": "version",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Version ID of the object inside the bucket. Can be used to get a specific version of a file if versioning is enabled in the target bucket."
+    }
+  ],
+  "examples": [
+    "- name: Simple PUT operation\n  amazon.aws.s3_object:\n    bucket: mybucket\n    object: /my/desired/key.txt\n    src: /usr/local/myfile.txt\n    mode: put\n\n- name: PUT operation from a rendered template\n  amazon.aws.s3_object:\n    bucket: mybucket\n    object: /object.yaml\n    content: \"{{ lookup('template', 'templates/object.yaml.j2') }}\"\n    mode: put\n\n- name: PUT content with explicit ContentType and ContentDisposition\n  amazon.aws.s3_object:\n    bucket: mybucket\n    object: /index.html\n    content: \"<html>Hello</html>\\n\"\n    mode: put\n    headers:\n      ContentType: \"text/html; charset=utf-8\"\n      ContentDisposition: inline\n\n- name: Simple PUT operation in Ceph RGW S3\n  amazon.aws.s3_object:\n    bucket: mybucket\n    object: /my/desired/key.txt\n    src: /usr/local/myfile.txt\n    mode: put\n    ceph: true\n    endpoint_url: \"http://localhost:8000\"\n\n- name: Simple GET operation\n  amazon.aws.s3_object:\n    bucket: mybucket\n    object: /my/desired/key.txt\n    dest: /usr/local/myfile.txt\n    mode: get\n\n- name: Get a specific version of an object.\n  amazon.aws.s3_object:\n    bucket: mybucket\n    object: /my/desired/key.txt\n    version: 48c9ee5131af7a716edc22df9772aa6f\n    dest: /usr/local/myfile.txt\n    mode: get\n\n- name: PUT/upload with metadata\n  amazon.aws.s3_object:\n    bucket: mybucket\n    object: /my/desired/key.txt\n    src: /usr/local/myfile.txt\n    mode: put\n    metadata:\n      Content-Encoding: gzip\n      Cache-Control: no-cache\n\n- name: PUT/upload with custom headers\n  amazon.aws.s3_object:\n    bucket: mybucket\n    object: /my/desired/key.txt\n    src: /usr/local/myfile.txt\n    mode: put\n    headers:\n      GrantFullControl: \"emailAddress=owner@example.com\"\n\n- name: List keys simple\n  amazon.aws.s3_object:\n    bucket: mybucket\n    mode: list\n\n- name: List keys all options\n  amazon.aws.s3_object:\n    bucket: mybucket\n    mode: list\n    prefix: /my/desired/\n    marker: /my/desired/0023.txt\n    max_keys: 472\n\n- name: GET an object but don't download if the file checksums match. New in 2.0\n  amazon.aws.s3_object:\n    bucket: mybucket\n    object: /my/desired/key.txt\n    dest: /usr/local/myfile.txt\n    mode: get\n    overwrite: different\n\n- name: Delete an object from a bucket\n  amazon.aws.s3_object:\n    bucket: mybucket\n    object: /my/desired/key.txt\n    mode: delobj\n\n- name: Copy an object already stored in another bucket\n  amazon.aws.s3_object:\n    bucket: mybucket\n    object: /my/desired/key.txt\n    mode: copy\n    copy_src:\n      bucket: srcbucket\n      object: /source/key.txt\n\n- name: Copy all the objects with name starting with 'ansible_'\n  amazon.aws.s3_object:\n    bucket: mybucket\n    mode: copy\n    copy_src:\n      bucket: srcbucket\n      prefix: 'ansible_'"
+  ],
+  "return_values": [
+    {
+      "name": "contents",
+      "type": "string",
+      "description": "Contents of the object as string. Returned: (for getstr operation) Sample: \"Hello, world!\"",
+      "returned": ""
+    },
+    {
+      "name": "expiry",
+      "type": "integer",
+      "description": "Number of seconds the presigned url is valid for. Returned: (for geturl operation) Sample: 600",
+      "returned": ""
+    },
+    {
+      "name": "msg",
+      "type": "string",
+      "description": "Message indicating the status of the operation. Returned: always Sample: \"PUT operation complete\"",
+      "returned": "always"
+    },
+    {
+      "name": "s3_keys",
+      "type": "list",
+      "description": "List of object keys. Returned: (for list operation) Sample: [\"prefix1/\", \"prefix1/key1\", \"prefix1/key2\"]",
+      "returned": ""
+    },
+    {
+      "name": "tags",
+      "type": "dictionary",
+      "description": "Tags of the s3 object. Returned: always Sample: {\"Owner\": \"dev001\", \"env\": \"test\"}",
+      "returned": "always"
+    },
+    {
+      "name": "url",
+      "type": "string",
+      "description": "URL of the object. Returned: (for put and geturl operations) Sample: \"https://my-bucket.s3.amazonaws.com/my-key.txt?AWSAccessKeyId=<access-key>&Expires=1506888865&Signature=<signature>\"",
+      "returned": ""
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/amazon/aws/s3_object_module#ansible-collections-amazon-aws-s3-object-module.html",
+  "parsed_at": "2026-04-11T13:52:51.043007"
+}

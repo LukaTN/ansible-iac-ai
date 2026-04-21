@@ -1,0 +1,348 @@
+{
+  "collection_ns": "amazon_aws",
+  "collection": "amazon.aws",
+  "module": "amazon.aws.iam_user",
+  "slug": "iam_user_module#ansible-collections-amazon-aws-iam-user-module",
+  "description": "A module to manage AWS IAM users.",
+  "parameters": [
+    {
+      "name": "access_key",
+      "aliases": [
+        "aws_access_key_id",
+        "aws_access_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS access key ID. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY environment variables may also be used in decreasing order of preference. The aws_access_key and profile options are mutually exclusive. The aws_access_key_id alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "aws_ca_bundle",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The location of a CA Bundle to use when validating SSL certificates. The AWS_CA_BUNDLE environment variable may also be used."
+    },
+    {
+      "name": "aws_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary to modify the botocore configuration. Parameters can be found in the AWS documentation https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html#botocore.config.Config."
+    },
+    {
+      "name": "boundary",
+      "aliases": [
+        "boundary_policy_arn",
+        "permissions_boundary"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The ARN of an IAM managed policy to apply as a boundary policy for this user. Boundary policies can be used to restrict the permissions a user can exercise, but does not grant any policies in and of itself. For more information on boundaries, see https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html. Set to the empty string \"\" to remove the boundary policy."
+    },
+    {
+      "name": "debug_botocore_endpoint_logs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use a botocore.endpoint logger to parse the unique (rather than total) \"resource:action\" API calls made during a task, outputing the set to the resource_actions key in the task results. Use the aws_resource_action callback to output to total list made during a playbook. The ANSIBLE_DEBUG_BOTOCORE_LOGS environment variable may also be used. Choices: false ← (default) true"
+    },
+    {
+      "name": "endpoint_url",
+      "aliases": [
+        "aws_endpoint_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "AWS",
+      "choices": [],
+      "description": "URL to connect to instead of the default AWS endpoints. While this can be used to connection to other AWS-compatible services the amazon.aws and community.aws collections are only tested against AWS. The AWS_URL environment variable may also be used."
+    },
+    {
+      "name": "managed_policies",
+      "aliases": [
+        "managed_policy"
+      ],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "A list of managed policy ARNs or friendly names to attach to the user. To embed an inline policy, use community.aws.iam_policy. Default: []"
+    },
+    {
+      "name": "name",
+      "aliases": [
+        "user_name"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the user. Note: user names are unique within an account. Paths (path) do not affect the uniqueness requirements of name. For example it is not permitted to have both /Path1/MyUser and /Path2/MyUser in the same account. user_name was added as an alias in release 7.2.0."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The password to apply to the user."
+    },
+    {
+      "name": "password_reset_required",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Defines if the user is required to set a new password when they log in. Ignored unless a new password is set. Choices: false ← (default) true"
+    },
+    {
+      "name": "path",
+      "aliases": [
+        "prefix",
+        "path_prefix"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The path for the user. For more information about IAM paths, see the AWS IAM identifiers documentation https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html."
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "aws_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A named AWS profile to use for authentication. See the AWS documentation for more information about named profiles https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html. The AWS_PROFILE environment variable may also be used. The profile option is mutually exclusive with the aws_access_key, aws_secret_key and session_token options."
+    },
+    {
+      "name": "purge_policies",
+      "aliases": [
+        "purge_policy",
+        "purge_managed_policies"
+      ],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "When purge_policies=true any managed policies not listed in managed_policies will be detached. Choices: false ← (default) true"
+    },
+    {
+      "name": "purge_tags",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If purge_tags=true and tags is set, existing tags will be purged from the resource to match exactly what is defined by tags parameter. If the tags parameter is not set then tags will not be modified, even if purge_tags=True. Tag keys beginning with aws: are reserved by Amazon and can not be modified. As such they will be ignored for the purposes of the purge_tags parameter. See the Amazon documentation for more information https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html#tag-conventions. Choices: false true ← (default)"
+    },
+    {
+      "name": "region",
+      "aliases": [
+        "aws_region"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The AWS region to use. For global services such as IAM, Route53 and CloudFront, region is ignored. The AWS_REGION environment variable may also be used. See the Amazon AWS documentation for more information http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region."
+    },
+    {
+      "name": "remove_password",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Option to delete user login passwords. This field is mutually exclusive to password. Choices: false true"
+    },
+    {
+      "name": "secret_key",
+      "aliases": [
+        "aws_secret_access_key",
+        "aws_secret_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS secret access key. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SECRET_ACCESS_KEY or AWS_SECRET_KEY environment variables may also be used in decreasing order of preference. The secret_key and profile options are mutually exclusive. The aws_secret_access_key alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "session_token",
+      "aliases": [
+        "aws_session_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS STS session token for use with temporary credentials. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SESSION_TOKEN environment variable may also be used. The session_token and profile options are mutually exclusive."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [
+        "\"present\"",
+        "\"absent\""
+      ],
+      "description": "Create or remove the IAM user. Choices: \"present\" \"absent\""
+    },
+    {
+      "name": "tags",
+      "aliases": [
+        "resource_tags"
+      ],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary representing the tags to be applied to the resource. If the tags parameter is not set then tags will not be modified."
+    },
+    {
+      "name": "update_password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"always\" ← (default)",
+        "\"on_create\""
+      ],
+      "description": "When to update user passwords. update_password=always will ensure the password is set to password. update_password=on_create will only set the password for newly created users. Choices: \"always\" ← (default) \"on_create\""
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to false, SSL certificates will not be validated for communication with the AWS APIs. Setting validate_certs=false is strongly discouraged, as an alternative, consider setting aws_ca_bundle instead. Choices: false true ← (default)"
+    },
+    {
+      "name": "wait",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When wait=True the module will wait for up to wait_timeout seconds for IAM user creation before returning. Choices: false true ← (default)"
+    },
+    {
+      "name": "wait_timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "120",
+      "choices": [],
+      "description": "How long (in seconds) to wait for creation / updates to complete. Default: 120"
+    }
+  ],
+  "examples": [
+    "# Note: These examples do not set authentication details, see the AWS Guide for details.\n# Note: This module does not allow management of groups that users belong to.\n#       Groups should manage their membership directly using amazon.aws.iam_group,\n#       as users belong to them.\n\n- name: Create a user\n  amazon.aws.iam_user:\n    name: testuser1\n    state: present\n\n- name: Create a user with a password\n  amazon.aws.iam_user:\n    name: testuser1\n    password: SomeSecurePassword\n    state: present\n\n- name: Create a user and attach a managed policy using its ARN\n  amazon.aws.iam_user:\n    name: testuser1\n    managed_policies:\n      - arn:aws:iam::aws:policy/AmazonSNSFullAccess\n    state: present\n\n- name: Remove all managed policies from an existing user with an empty list\n  amazon.aws.iam_user:\n    name: testuser1\n    state: present\n    purge_policies: true\n\n- name: Create user with tags\n  amazon.aws.iam_user:\n    name: testuser1\n    state: present\n    tags:\n      Env: Prod\n\n- name: Delete the user\n  amazon.aws.iam_user:\n    name: testuser1\n    state: absent"
+  ],
+  "return_values": [
+    {
+      "name": "user",
+      "type": "complex",
+      "description": "Dictionary containing all the user information. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "arn",
+      "type": "string",
+      "description": "The Amazon Resource Name (ARN) specifying the user. Returned: always Sample: \"arn:aws:iam::123456789012:user/testuser1\"",
+      "returned": "always"
+    },
+    {
+      "name": "attached_policies",
+      "type": "list",
+      "description": "List containing basic information about managed policies attached to the group. Returned: always Sample: [{\"policy_arn\": \"arn:aws:iam::123456789012:policy/test_policy\", \"policy_name\": \"test_policy\"}]",
+      "returned": "always"
+    },
+    {
+      "name": "policy_arn",
+      "type": "string",
+      "description": "The Amazon Resource Name (ARN) specifying the managed policy. Returned: success Sample: \"arn:aws:iam::123456789012:policy/test_policy\"",
+      "returned": "success"
+    },
+    {
+      "name": "policy_name",
+      "type": "string",
+      "description": "The friendly name that identifies the policy. Returned: success Sample: \"test_policy\"",
+      "returned": "success"
+    },
+    {
+      "name": "create_date",
+      "type": "string",
+      "description": "The date and time, in ISO 8601 date-time format, when the user was created. Returned: always Sample: \"2017-02-08T04:36:28+00:00\"",
+      "returned": "always"
+    },
+    {
+      "name": "path",
+      "type": "string",
+      "description": "The path to the user. Returned: always Sample: \"/\"",
+      "returned": "always"
+    },
+    {
+      "name": "tags",
+      "type": "dictionary",
+      "description": "User tags. Returned: always Sample: {\"Env\": \"Prod\"}",
+      "returned": "always"
+    },
+    {
+      "name": "user_id",
+      "type": "string",
+      "description": "The stable and unique string identifying the user. Returned: always Sample: \"AGPA12345EXAMPLE54321\"",
+      "returned": "always"
+    },
+    {
+      "name": "user_name",
+      "type": "string",
+      "description": "The friendly name that identifies the user. Returned: always Sample: \"testuser1\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/amazon/aws/iam_user_module#ansible-collections-amazon-aws-iam-user-module.html",
+  "parsed_at": "2026-04-11T13:52:49.251979"
+}

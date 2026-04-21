@@ -1,0 +1,159 @@
+{
+  "collection_ns": "ansible_builtin",
+  "collection": "ansible.builtin",
+  "module": "ansible.builtin.subversion",
+  "slug": "subversion_module#ansible-collections-ansible-builtin-subversion-module",
+  "description": "Deploy given repository URL / revision to dest. If dest exists, update to the specified revision, otherwise perform a checkout.",
+  "parameters": [
+    {
+      "name": "checkout",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If false, do not check out the repository if it does not exist locally. Choices: false true ← (default)"
+    },
+    {
+      "name": "dest",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Absolute path where the repository should be deployed. The destination directory must be specified unless checkout=no, update=no, and export=no."
+    },
+    {
+      "name": "executable",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to svn executable to use. If not supplied, the normal mechanism for resolving binary paths will be used."
+    },
+    {
+      "name": "export",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If true, do export instead of checkout/update. Choices: false ← (default) true"
+    },
+    {
+      "name": "force",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "was",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If true, modified files will be discarded. If false, module will fail if it encounters modified files. Prior to 1.9 the default was true. Choices: false ← (default) true"
+    },
+    {
+      "name": "in_place",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If the directory exists, then the working copy will be checked-out over-the-top using svn checkout --force; if force is specified then existing files with different content are reverted. Choices: false ← (default) true"
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "--password parameter passed to svn when svn is less than version 1.10.0. This is not secure and the password will be leaked to argv. --password-from-stdin parameter when svn is greater or equal to version 1.10.0."
+    },
+    {
+      "name": "repo",
+      "aliases": [
+        "name",
+        "repository"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The subversion URL to the repository."
+    },
+    {
+      "name": "revision",
+      "aliases": [
+        "rev",
+        "version"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "HEAD",
+      "choices": [],
+      "description": "Specific revision to checkout. Default: \"HEAD\""
+    },
+    {
+      "name": "switch",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If false, do not call svn switch before update. Choices: false true ← (default)"
+    },
+    {
+      "name": "update",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If false, do not retrieve new revisions from the origin repository. Choices: false true ← (default)"
+    },
+    {
+      "name": "username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "--username parameter passed to svn."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If false, passes the --trust-server-cert flag to svn. If true, does not pass the flag. Choices: false ← (default) true"
+    }
+  ],
+  "examples": [
+    "- name: Checkout subversion repository to specified folder\n  ansible.builtin.subversion:\n    repo: svn+ssh://an.example.org/path/to/repo\n    dest: /src/checkout\n\n- name: Export subversion directory to folder\n  ansible.builtin.subversion:\n    repo: svn+ssh://an.example.org/path/to/repo\n    dest: /src/export\n    export: yes\n\n- name: Get information about the repository whether or not it has already been cloned locally\n  ansible.builtin.subversion:\n    repo: svn+ssh://an.example.org/path/to/repo\n    dest: /src/checkout\n    checkout: no\n    update: no"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/subversion_module#ansible-collections-ansible-builtin-subversion-module.html",
+  "parsed_at": "2026-04-11T13:52:52.803603"
+}

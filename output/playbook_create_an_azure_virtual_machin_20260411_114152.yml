@@ -1,0 +1,102 @@
+# ============================================================
+# AnsibleAI RAG Generator — LangChain + ChromaDB
+# Date        : 2026-04-11 11:41:52
+# Request     : create an Azure virtual machine named vm-api in the rg-production resource group
+# Module      : None
+# Collection  : None
+# RAG score   : 0.0
+# Chunks used : 0
+# Source URL  : 
+# LLM model   : MISTRAL
+# ============================================================
+
+---
+- name: Create Azure virtual machine named vm-api in rg-production resource group
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - azure.azcollection
+
+  tasks:
+    - name: Login to Azure account
+      azure.core.auth.login:
+        client_id: <your_client_id>
+        subscription_id: <your_subscription_id>
+        service_principal_password: <your_service_principal_password>
+
+    - name: Create resource group if not exists
+      azure.mgmt.resource.resources:
+        resource_group:
+          name: rg-production
+          location: eastus
+          state: present
+
+    - name: Create virtual network and subnet if not exists
+      azure.mgmt.network:
+        virtual_network:
+          name: vnet-api
+          resource_group: rg-production
+          location: eastus
+          address_space:
+            - 10.0.0.0/16
+          subnets:
+            - name: api-subnet
+              address_prefix: 10.0.1.0/24
+
+    - name: Create network interface if not exists
+      azure.mgmt.network:
+        network_interface:
+          name: nic-api
+          resource_group: rg-production
+          location: eastus
+          virtual_network:
+            id: <virtual_network_id>
+          ip_configurations:
+            - name: ipconfig1
+              subnet:
+                id: <subnet_id>
+
+    - name: Create managed disk if not exists
+      azure.mgmt.compute:
+        disks:
+          name: api-disk
+          location: eastus
+          create_option: from_image
+          image_reference:
+            publisher: MicrosoftWindowsServer
+            offer: WindowsServer
+            sku: 2016-Datacenter
+            version: latest
+          size_gb: 30
+          storage_account_type: Standard_LRS
+          state: present
+
+    - name: Create virtual machine if not exists
+      azure.mgmt.compute:
+        virtual_machines:
+          name: vm-api
+          resource_group: rg-production
+          location: eastus
+          size: Standard_DS2_v2
+          os_profile:
+            computer_name: vm-api
+            admin_username: <admin_username>
+            admin_password: <admin_password>
+          network_profile:
+            network_interfaces:
+              - id: <network_interface_id>
+          storage_profile:
+            image_reference:
+              id: <managed_disk_id>
+            os_disk:
+              caching: ReadWrite
+              create_option: FromImage
+          tags:
+            environment: production
+          plan:
+            product: <windows_product>
+            publisher: MicrosoftWindowsServer
+            offer: WindowsServer
+            sku: 2016-Datacenter
+          state: present

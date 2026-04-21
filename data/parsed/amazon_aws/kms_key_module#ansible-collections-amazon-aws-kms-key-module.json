@@ -1,0 +1,475 @@
+{
+  "collection_ns": "amazon_aws",
+  "collection": "amazon.aws",
+  "module": "amazon.aws.kms_key",
+  "slug": "kms_key_module#ansible-collections-amazon-aws-kms-key-module",
+  "description": "Manage role/user access to a KMS key.",
+  "parameters": [
+    {
+      "name": "access_key",
+      "aliases": [
+        "aws_access_key_id",
+        "aws_access_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS access key ID. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY environment variables may also be used in decreasing order of preference. The aws_access_key and profile options are mutually exclusive. The aws_access_key_id alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "alias",
+      "aliases": [
+        "key_alias"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "An alias for a key. For safety, even though KMS does not require keys to have an alias, this module expects all new keys to be given an alias to make them easier to manage. Existing keys without an alias may be referred to by key_id. Use amazon.aws.kms_key_info to find key ids. Note that passing a key_id and alias will only cause a new alias to be added, an alias will never be renamed. The alias/ prefix is optional. Required if key_id is not given."
+    },
+    {
+      "name": "aws_ca_bundle",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The location of a CA Bundle to use when validating SSL certificates. The AWS_CA_BUNDLE environment variable may also be used."
+    },
+    {
+      "name": "aws_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary to modify the botocore configuration. Parameters can be found in the AWS documentation https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html#botocore.config.Config."
+    },
+    {
+      "name": "debug_botocore_endpoint_logs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use a botocore.endpoint logger to parse the unique (rather than total) \"resource:action\" API calls made during a task, outputing the set to the resource_actions key in the task results. Use the aws_resource_action callback to output to total list made during a playbook. The ANSIBLE_DEBUG_BOTOCORE_LOGS environment variable may also be used. Choices: false ← (default) true"
+    },
+    {
+      "name": "description",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A description of the CMK. Use a description that helps you decide whether the CMK is appropriate for a task."
+    },
+    {
+      "name": "enable_key_rotation",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Whether the key should be automatically rotated every year. Choices: false true"
+    },
+    {
+      "name": "enabled",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether or not a key is enabled. Choices: false true ← (default)"
+    },
+    {
+      "name": "endpoint_url",
+      "aliases": [
+        "aws_endpoint_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "AWS",
+      "choices": [],
+      "description": "URL to connect to instead of the default AWS endpoints. While this can be used to connection to other AWS-compatible services the amazon.aws and community.aws collections are only tested against AWS. The AWS_URL environment variable may also be used."
+    },
+    {
+      "name": "grants",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "A list of grants to apply to the key. Each item must contain grants.grantee_principal. Each item can optionally contain grants.retiring_principal, grants.operations, grants.constraints, grants.name. grants.grantee_principal and grants.retiring_principal must be ARNs. For full documentation of suboptions see the boto3 documentation: https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/kms.html#KMS.Client.create_grant Default: []"
+    },
+    {
+      "name": "key_id",
+      "aliases": [
+        "key_arn"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Key ID or ARN of the key. One of alias or key_id are required."
+    },
+    {
+      "name": "key_spec",
+      "aliases": [
+        "customer_master_key_spec"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"SYMMETRIC_DEFAULT\" ← (default)",
+        "\"RSA_2048\"",
+        "\"RSA_3072\"",
+        "\"RSA_4096\"",
+        "\"ECC_NIST_P256\"",
+        "\"ECC_NIST_P384\"",
+        "\"ECC_NIST_P521\"",
+        "\"ECC_SECG_P256K1\""
+      ],
+      "description": "Specifies the type of KMS key to create. The specification is not changeable once the key is created. Choices: \"SYMMETRIC_DEFAULT\" ← (default) \"RSA_2048\" \"RSA_3072\" \"RSA_4096\" \"ECC_NIST_P256\" \"ECC_NIST_P384\" \"ECC_NIST_P521\" \"ECC_SECG_P256K1\""
+    },
+    {
+      "name": "key_usage",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ENCRYPT_DECRYPT\" ← (default)",
+        "\"SIGN_VERIFY\""
+      ],
+      "description": "Determines the cryptographic operations for which you can use the KMS key. The usage is not changeable once the key is created. Choices: \"ENCRYPT_DECRYPT\" ← (default) \"SIGN_VERIFY\""
+    },
+    {
+      "name": "multi_region",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Whether to create a multi-Region primary key or not. Choices: false ← (default) true"
+    },
+    {
+      "name": "pending_window",
+      "aliases": [
+        "deletion_delay"
+      ],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The number of days between requesting deletion of the CMK and when it will actually be deleted. Only used when state=absent and the CMK has not yet been deleted. Valid values are between 7 and 30 (inclusive). See also: https://docs.aws.amazon.com/kms/latest/APIReference/API_ScheduleKeyDeletion.html#KMS-ScheduleKeyDeletion-request-PendingWindowInDays"
+    },
+    {
+      "name": "policy",
+      "aliases": [],
+      "type": "json",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Policy to apply to the KMS key. See https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html"
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "aws_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A named AWS profile to use for authentication. See the AWS documentation for more information about named profiles https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html. The AWS_PROFILE environment variable may also be used. The profile option is mutually exclusive with the aws_access_key, aws_secret_key and session_token options."
+    },
+    {
+      "name": "purge_grants",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Whether the grants argument should cause grants not in the list to be removed. Choices: false ← (default) true"
+    },
+    {
+      "name": "purge_tags",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If purge_tags=true and tags is set, existing tags will be purged from the resource to match exactly what is defined by tags parameter. If the tags parameter is not set then tags will not be modified, even if purge_tags=True. Tag keys beginning with aws: are reserved by Amazon and can not be modified. As such they will be ignored for the purposes of the purge_tags parameter. See the Amazon documentation for more information https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html#tag-conventions. Choices: false true ← (default)"
+    },
+    {
+      "name": "region",
+      "aliases": [
+        "aws_region"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The AWS region to use. For global services such as IAM, Route53 and CloudFront, region is ignored. The AWS_REGION environment variable may also be used. See the Amazon AWS documentation for more information http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region."
+    },
+    {
+      "name": "secret_key",
+      "aliases": [
+        "aws_secret_access_key",
+        "aws_secret_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS secret access key. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SECRET_ACCESS_KEY or AWS_SECRET_KEY environment variables may also be used in decreasing order of preference. The secret_key and profile options are mutually exclusive. The aws_secret_access_key alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "session_token",
+      "aliases": [
+        "aws_session_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS STS session token for use with temporary credentials. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SESSION_TOKEN environment variable may also be used. The session_token and profile options are mutually exclusive."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Whether a key should be present or absent. Note that making an existing key absent only schedules a key for deletion. Passing a key that is scheduled for deletion with state=present will cancel key deletion. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "tags",
+      "aliases": [
+        "resource_tags"
+      ],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary representing the tags to be applied to the resource. If the tags parameter is not set then tags will not be modified."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to false, SSL certificates will not be validated for communication with the AWS APIs. Setting validate_certs=false is strongly discouraged, as an alternative, consider setting aws_ca_bundle instead. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "# Create a new KMS key\n- amazon.aws.kms_key:\n    alias: mykey\n    tags:\n      Name: myKey\n      Purpose: protect_stuff\n\n# Create a new multi-region KMS key\n- amazon.aws.kms_key:\n    alias: mykey\n    multi_region: true\n    tags:\n      Name: myKey\n      Purpose: protect_stuff\n\n# Update previous key with more tags\n- amazon.aws.kms_key:\n    alias: mykey\n    tags:\n      Name: myKey\n      Purpose: protect_stuff\n      Owner: security_team\n\n# Update a known key with grants allowing an instance with the billing-prod IAM profile\n# to decrypt data encrypted with the environment: production, application: billing\n# encryption context\n- amazon.aws.kms_key:\n    key_id: abcd1234-abcd-1234-5678-ef1234567890\n    grants:\n      - name: billing_prod\n        grantee_principal: arn:aws:iam::123456789012:role/billing_prod\n        constraints:\n          encryption_context_equals:\n            environment: production\n            application: billing\n        operations:\n          - Decrypt\n          - RetireGrant\n\n- name: Update IAM policy on an existing KMS key\n  amazon.aws.kms_key:\n    alias: my-kms-key\n    policy: '{\"Version\": \"2012-10-17\", \"Id\": \"my-kms-key-permissions\", \"Statement\": [ { <SOME STATEMENT> } ]}'\n    state: present\n\n- name: Example using lookup for policy json\n  amazon.aws.kms_key:\n    alias: my-kms-key\n    policy: \"{{ lookup('template', 'kms_iam_policy_template.json.j2') }}\"\n    state: present"
+  ],
+  "return_values": [
+    {
+      "name": "aliases",
+      "type": "list",
+      "description": "List of aliases associated with the key. Returned: always Sample: [\"aws/acm\", \"aws/ebs\"]",
+      "returned": "always"
+    },
+    {
+      "name": "aws_account_id",
+      "type": "string",
+      "description": "The AWS Account ID that the key belongs to. Returned: always Sample: \"1234567890123\"",
+      "returned": "always"
+    },
+    {
+      "name": "changes_needed",
+      "type": "dictionary",
+      "description": "Grant types that would be changed/were changed. Returned: always Sample: {\"role\": \"add\", \"role grant\": \"add\"}",
+      "returned": "always"
+    },
+    {
+      "name": "creation_date",
+      "type": "string",
+      "description": "Date and time of creation of the key. Returned: always Sample: \"2017-04-18T15:12:08.551000+10:00\"",
+      "returned": "always"
+    },
+    {
+      "name": "customer_master_key_spec",
+      "type": "string",
+      "description": "Specifies the type of KMS key to create. Returned: always Sample: \"SYMMETRIC_DEFAULT\"",
+      "returned": "always"
+    },
+    {
+      "name": "deletion_date",
+      "type": "string",
+      "description": "Date and time after which KMS deletes this KMS key. Returned: when key_state is PendingDeletion Sample: \"2017-04-18T15:12:08.551000+10:00\"",
+      "returned": "when"
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "description": "Description of the key. Returned: always Sample: \"My Key for Protecting important stuff\"",
+      "returned": "always"
+    },
+    {
+      "name": "enable_key_rotation",
+      "type": "boolean",
+      "description": "Whether the automatic annual key rotation is enabled. Returns None if key rotation status can’t be determined. Returned: always Sample: false",
+      "returned": "always"
+    },
+    {
+      "name": "enabled",
+      "type": "boolean",
+      "description": "Whether the key is enabled. True if key_state is Enabled. Returned: always Sample: false",
+      "returned": "always"
+    },
+    {
+      "name": "encryption_algorithms",
+      "type": "list",
+      "description": "The encryption algorithms that the KMS key supports. Returned: always Sample: [\"SYMMETRIC_DEFAULT\"]",
+      "returned": "always"
+    },
+    {
+      "name": "grants",
+      "type": "list",
+      "description": "List of grants associated with a key. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "constraints",
+      "type": "dictionary",
+      "description": "Constraints on the encryption context that the grant allows. See https://docs.aws.amazon.com/kms/latest/APIReference/API_GrantConstraints.html for further details Returned: always Sample: {\"encryption_context_equals\": {\"aws:lambda:_function_arn\": \"arn:aws:lambda:ap-southeast-2:123456789012:function:xyz\"}}",
+      "returned": "always"
+    },
+    {
+      "name": "grant_id",
+      "type": "string",
+      "description": "The unique ID for the grant. Returned: always Sample: \"abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234abcd1234\"",
+      "returned": "always"
+    },
+    {
+      "name": "grantee_principal",
+      "type": "string",
+      "description": "The principal that receives the grant’s permissions. Returned: always Sample: \"arn:aws:sts::123456789012:assumed-role/lambda_xyz/xyz\"",
+      "returned": "always"
+    },
+    {
+      "name": "issuing_account",
+      "type": "string",
+      "description": "The AWS account under which the grant was issued. Returned: always Sample: \"arn:aws:iam::123456789012:root\"",
+      "returned": "always"
+    },
+    {
+      "name": "key_id",
+      "type": "string",
+      "description": "The key ARN to which the grant applies. Returned: always Sample: \"arn:aws:kms:ap-southeast-2:123456789012:key/abcd1234-abcd-1234-5678-ef1234567890\"",
+      "returned": "always"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "The friendly name that identifies the grant. Returned: always Sample: \"xyz\"",
+      "returned": "always"
+    },
+    {
+      "name": "operations",
+      "type": "list",
+      "description": "The list of operations permitted by the grant. Returned: always Sample: [\"Decrypt\", \"RetireGrant\"]",
+      "returned": "always"
+    },
+    {
+      "name": "retiring_principal",
+      "type": "string",
+      "description": "The principal that can retire the grant. Returned: always Sample: \"arn:aws:sts::123456789012:assumed-role/lambda_xyz/xyz\"",
+      "returned": "always"
+    },
+    {
+      "name": "had_invalid_entries",
+      "type": "boolean",
+      "description": "Whether there are invalid (non-ARN) entries in the KMS entry. These don’t count as a change, but will be removed if any changes are being made. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "key_arn",
+      "type": "string",
+      "description": "ARN of key. Returned: always Sample: \"arn:aws:kms:ap-southeast-2:123456789012:key/abcd1234-abcd-1234-5678-ef1234567890\"",
+      "returned": "always"
+    },
+    {
+      "name": "key_manager",
+      "type": "string",
+      "description": "The manager of the KMS key. Returned: always Sample: \"AWS\"",
+      "returned": "always"
+    },
+    {
+      "name": "key_policies",
+      "type": "list",
+      "description": "List of policy documents for the key. Empty when access is denied even if there are policies. Returned: always Sample: {\"Id\": \"auto-ebs-2\", \"Statement\": [{\"Action\": [\"kms:Encrypt\", \"kms:Decrypt\", \"kms:ReEncrypt*\", \"kms:GenerateDataKey*\", \"kms:CreateGrant\", \"kms:DescribeKey\"], \"Condition\": {\"StringEquals\": {\"kms:CallerAccount\": \"123456789012\", \"kms:ViaService\": \"ec2.ap-southeast-2.amazonaws.com\"}}, \"Effect\": \"Allow\", \"Principal\": {\"AWS\": \"*\"}, \"Resource\": \"*\", \"Sid\": \"Allow access through EBS for all principals in the account that are authorized to use EBS\"}, {\"Action\": [\"kms:Describe*\", \"kms:Get*\", \"kms:List*\", \"kms:RevokeGrant\"], \"Effect\": \"Allow\", \"Principal\": {\"AWS\": \"arn:aws:iam::123456789012:root\"}, \"Resource\": \"*\", \"Sid\": \"Allow direct access to key metadata to the account\"}], \"Version\": \"2012-10-17\"}",
+      "returned": "always"
+    },
+    {
+      "name": "key_spec",
+      "type": "string",
+      "description": "Specifies the type of KMS key to create. Returned: always Sample: \"SYMMETRIC_DEFAULT\"",
+      "returned": "always"
+    },
+    {
+      "name": "key_state",
+      "type": "string",
+      "description": "The state of the key. Will be one of 'Creating', 'Enabled', 'Disabled', 'PendingDeletion', 'PendingImport', 'PendingReplicaDeletion', 'Unavailable', or 'Updating'. Returned: always Sample: \"PendingDeletion\"",
+      "returned": "always"
+    },
+    {
+      "name": "key_usage",
+      "type": "string",
+      "description": "The cryptographic operations for which you can use the key. Returned: always Sample: \"ENCRYPT_DECRYPT\"",
+      "returned": "always"
+    },
+    {
+      "name": "multi_region",
+      "type": "boolean",
+      "description": "Indicates whether the CMK is a multi-Region True or regional False key. This value is True for multi-Region primary and replica CMKs and False for regional CMKs. Returned: always Sample: false",
+      "returned": "always"
+    },
+    {
+      "name": "origin",
+      "type": "string",
+      "description": "The source of the key’s key material. When this value is AWS_KMS, AWS KMS created the key material. When this value is EXTERNAL, the key material was imported or the CMK lacks key material. Returned: always Sample: \"AWS_KMS\"",
+      "returned": "always"
+    },
+    {
+      "name": "tags",
+      "type": "dictionary",
+      "description": "Dictionary of tags applied to the key. Empty when access is denied even if there are tags. Returned: always Sample: {\"Name\": \"myKey\", \"Purpose\": \"protecting_stuff\"}",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/amazon/aws/kms_key_module.html",
+  "parsed_at": "2026-04-13T16:29:22.980286"
+}

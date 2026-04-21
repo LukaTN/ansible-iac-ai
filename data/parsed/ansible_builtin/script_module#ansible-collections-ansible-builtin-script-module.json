@@ -1,0 +1,81 @@
+{
+  "collection_ns": "ansible_builtin",
+  "collection": "ansible.builtin",
+  "module": "ansible.builtin.script",
+  "slug": "script_module#ansible-collections-ansible-builtin-script-module",
+  "description": "The ansible.builtin.script module takes the script name followed by a list of space-delimited arguments.",
+  "parameters": [
+    {
+      "name": "chdir",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Change into this directory on the remote node before running the script."
+    },
+    {
+      "name": "cmd",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the local script to run followed by optional arguments."
+    },
+    {
+      "name": "creates",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A filename on the remote node, when it already exists, this step will not be run."
+    },
+    {
+      "name": "decrypt",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "This option controls the auto-decryption of source files using vault. Choices: false true ← (default)"
+    },
+    {
+      "name": "executable",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name or path of an executable to invoke the script with."
+    },
+    {
+      "name": "free_form",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the local script file followed by optional arguments."
+    },
+    {
+      "name": "removes",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A filename on the remote node, when it does not exist, this step will not be run."
+    }
+  ],
+  "examples": [
+    "- name: Run a script with arguments (free form)\n  ansible.builtin.script: /some/local/script.sh --some-argument 1234\n\n- name: Run a script with arguments (using 'cmd' parameter)\n  ansible.builtin.script:\n    cmd: /some/local/script.sh --some-argument 1234\n\n- name: Run a script only if file.txt does not exist on the remote node\n  ansible.builtin.script: /some/local/create_file.sh --some-argument 1234\n  args:\n    creates: /the/created/file.txt\n\n- name: Run a script only if file.txt exists on the remote node\n  ansible.builtin.script: /some/local/remove_file.sh --some-argument 1234\n  args:\n    removes: /the/removed/file.txt\n\n- name: Run a script using an executable in a non-system path\n  ansible.builtin.script: /some/local/script\n  args:\n    executable: /some/remote/executable\n\n- name: Run a script using an executable in a system path\n  ansible.builtin.script: /some/local/script.py\n  args:\n    executable: python3\n\n- name: Run a Powershell script on a Windows host\n  script: subdirectories/under/path/with/your/playbook/script.ps1"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/script_module.html",
+  "parsed_at": "2026-04-13T16:29:25.976397"
+}

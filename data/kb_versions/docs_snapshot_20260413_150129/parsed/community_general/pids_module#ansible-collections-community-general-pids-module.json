@@ -1,0 +1,64 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.pids",
+  "slug": "pids_module#ansible-collections-community-general-pids-module",
+  "description": "Retrieves a list of PIDs of given process name in Ansible controller/controlled machines. Returns an empty list if no process in that name exists.",
+  "parameters": [
+    {
+      "name": "ignore_case",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Ignore case in pattern if using the pattern option. Choices: false ← (default) true"
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The name of the process(es) you want to get PID(s) for."
+    },
+    {
+      "name": "pattern",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The pattern (regular expression) to match the process(es) you want to get PID(s) for."
+    }
+  ],
+  "examples": [
+    "# Pass the process name\n- name: Getting process IDs of the process\n  community.general.pids:\n    name: python\n  register: pids_of_python\n\n- name: Printing the process IDs obtained\n  ansible.builtin.debug:\n    msg: \"PIDS of python:{{pids_of_python.pids|join(',')}}\"\n\n- name: Getting process IDs of processes matching pattern\n  community.general.pids:\n    pattern: python(2(\\.7)?|3(\\.6)?)?\\s+myapp\\.py\n  register: myapp_pids"
+  ],
+  "return_values": [
+    {
+      "name": "ignore_case",
+      "type": "boolean",
+      "description": "Ignore case in pattern if using the pattern option. Choices: false ← (default) true",
+      "returned": ""
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "The name of the process(es) you want to get PID(s) for.",
+      "returned": ""
+    },
+    {
+      "name": "pattern",
+      "type": "string",
+      "description": "The pattern (regular expression) to match the process(es) you want to get PID(s) for.",
+      "returned": ""
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/pids_module#ansible-collections-community-general-pids-module.html",
+  "parsed_at": "2026-04-11T13:53:23.598839"
+}

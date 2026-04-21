@@ -1,0 +1,148 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.mksysb",
+  "slug": "mksysb_module#ansible-collections-community-general-mksysb-module",
+  "description": "This module manages a basic AIX mksysb (image) of rootvg.",
+  "parameters": [
+    {
+      "name": "backup_crypt_files",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Backup encrypted files. Choices: false true ← (default)"
+    },
+    {
+      "name": "backup_dmapi_fs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Back up DMAPI filesystem files. Choices: false true ← (default)"
+    },
+    {
+      "name": "create_map_files",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Creates a new MAP files. Choices: false ← (default) true"
+    },
+    {
+      "name": "exclude_files",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Excludes files using /etc/rootvg.exclude. Choices: false ← (default) true"
+    },
+    {
+      "name": "exclude_wpar_files",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Excludes WPAR files. Choices: false ← (default) true"
+    },
+    {
+      "name": "extended_attrs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Backup extended attributes. Choices: false true ← (default)"
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Backup name."
+    },
+    {
+      "name": "new_image_data",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Creates a new file data. Choices: false true ← (default)"
+    },
+    {
+      "name": "software_packing",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Exclude files from packing option listed in /etc/exclude_packing.rootvg. Choices: false ← (default) true"
+    },
+    {
+      "name": "storage_path",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Storage path where the mksysb backup is stored."
+    },
+    {
+      "name": "use_snapshot",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Creates backup using snapshots. Choices: false ← (default) true"
+    }
+  ],
+  "examples": [
+    "- name: Running a backup image mksysb\n  community.general.mksysb:\n    name: myserver\n    storage_path: /repository/images\n    exclude_files: true\n    exclude_wpar_files: true"
+  ],
+  "return_values": [
+    {
+      "name": "msg",
+      "type": "string",
+      "description": "Return message regarding the action. Returned: always",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/mksysb_module#ansible-collections-community-general-mksysb-module.html",
+  "parsed_at": "2026-04-11T13:53:20.657356"
+}

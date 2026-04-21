@@ -1,0 +1,438 @@
+{
+  "collection_ns": "amazon_aws",
+  "collection": "amazon.aws",
+  "module": "amazon.aws.route53_health_check",
+  "slug": "route53_health_check_module#ansible-collections-amazon-aws-route53-health-check-module",
+  "description": "Creates and deletes DNS Health checks in Amazons Route 53 service.",
+  "parameters": [
+    {
+      "name": "access_key",
+      "aliases": [
+        "aws_access_key_id",
+        "aws_access_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS access key ID. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY environment variables may also be used in decreasing order of preference. The aws_access_key and profile options are mutually exclusive. The aws_access_key_id alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "aws_ca_bundle",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The location of a CA Bundle to use when validating SSL certificates. The AWS_CA_BUNDLE environment variable may also be used."
+    },
+    {
+      "name": "aws_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary to modify the botocore configuration. Parameters can be found in the AWS documentation https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html#botocore.config.Config."
+    },
+    {
+      "name": "child_health_checks",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The child health checks used for a calculated health check. This parameter takes in the child health checks ids."
+    },
+    {
+      "name": "debug_botocore_endpoint_logs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use a botocore.endpoint logger to parse the unique (rather than total) \"resource:action\" API calls made during a task, outputing the set to the resource_actions key in the task results. Use the aws_resource_action callback to output to total list made during a playbook. The ANSIBLE_DEBUG_BOTOCORE_LOGS environment variable may also be used. Choices: false ← (default) true"
+    },
+    {
+      "name": "disabled",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Stops Route 53 from performing health checks. See the AWS documentation for more details on the exact implications. https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/health-checks-creating-values.html Defaults to true when creating a new health check. Choices: false true"
+    },
+    {
+      "name": "endpoint_url",
+      "aliases": [
+        "aws_endpoint_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "AWS",
+      "choices": [],
+      "description": "URL to connect to instead of the default AWS endpoints. While this can be used to connection to other AWS-compatible services the amazon.aws and community.aws collections are only tested against AWS. The AWS_URL environment variable may also be used."
+    },
+    {
+      "name": "failure_threshold",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "to",
+      "choices": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10"
+      ],
+      "description": "The number of consecutive health checks that an endpoint must pass or fail for Amazon Route 53 to change the current status of the endpoint from unhealthy to healthy or vice versa. Will default to 3 if not specified on creation. Choices: 1 2 3 4 5 6 7 8 9 10"
+    },
+    {
+      "name": "fqdn",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Domain name of the endpoint to check. Either this or ip_address has to be provided. When both are given the fqdn is used in the Host: header of the HTTP request."
+    },
+    {
+      "name": "health_check_id",
+      "aliases": [
+        "id"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "ID of the health check to be update or deleted. If provided, a health check can be updated or deleted based on the ID as unique identifier."
+    },
+    {
+      "name": "health_check_name",
+      "aliases": [
+        "name"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of the Health Check. Used together with use_unique_names to set/make use of health_check_name as a unique identifier."
+    },
+    {
+      "name": "health_threshold",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "1",
+      "choices": [],
+      "description": "The minimum number of healthy child health checks for a calculated health check to be considered healthy. Default: 1"
+    },
+    {
+      "name": "ip_address",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "IP address of the end-point to check. Either this or fqdn has to be provided. IP addresses must be publicly routable."
+    },
+    {
+      "name": "measure_latency",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "To enable/disable latency graphs to monitor the latency between health checkers in multiple Amazon Web Services regions and your endpoint. Value of measure_latency is immutable and can not be modified after creating a health check. See https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/monitoring-health-check-latency.html Choices: false true"
+    },
+    {
+      "name": "port",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The port on the endpoint on which you want Amazon Route 53 to perform health checks. Required for TCP checks."
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "aws_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A named AWS profile to use for authentication. See the AWS documentation for more information about named profiles https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html. The AWS_PROFILE environment variable may also be used. The profile option is mutually exclusive with the aws_access_key, aws_secret_key and session_token options."
+    },
+    {
+      "name": "purge_tags",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If purge_tags=true and tags is set, existing tags will be purged from the resource to match exactly what is defined by tags parameter. If the tags parameter is not set then tags will not be modified, even if purge_tags=True. Tag keys beginning with aws: are reserved by Amazon and can not be modified. As such they will be ignored for the purposes of the purge_tags parameter. See the Amazon documentation for more information https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html#tag-conventions. Choices: false true ← (default)"
+    },
+    {
+      "name": "region",
+      "aliases": [
+        "aws_region"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The AWS region to use. For global services such as IAM, Route53 and CloudFront, region is ignored. The AWS_REGION environment variable may also be used. See the Amazon AWS documentation for more information http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region."
+    },
+    {
+      "name": "request_interval",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [
+        "10",
+        "30 ← (default)"
+      ],
+      "description": "The number of seconds between the time that Amazon Route 53 gets a response from your endpoint and the time that it sends the next health check request. Choices: 10 30 ← (default)"
+    },
+    {
+      "name": "resource_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The path that you want Amazon Route 53 to request when performing health checks. The path can be any value for which your endpoint will return an HTTP status code of 2xx or 3xx when the endpoint is healthy, for example the file /docs/route53-health-check.html. Mutually exclusive with type='TCP'. The path must begin with a / Maximum 255 characters."
+    },
+    {
+      "name": "secret_key",
+      "aliases": [
+        "aws_secret_access_key",
+        "aws_secret_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS secret access key. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SECRET_ACCESS_KEY or AWS_SECRET_KEY environment variables may also be used in decreasing order of preference. The secret_key and profile options are mutually exclusive. The aws_secret_access_key alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "session_token",
+      "aliases": [
+        "aws_session_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS STS session token for use with temporary credentials. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SESSION_TOKEN environment variable may also be used. The session_token and profile options are mutually exclusive."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Specifies the action to take. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "string_match",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "If the check type is HTTP_STR_MATCH or HTTP_STR_MATCH, the string that you want Amazon Route 53 to search for in the response body from the specified resource. If the string appears in the first 5120 bytes of the response body, Amazon Route 53 considers the resource healthy."
+    },
+    {
+      "name": "tags",
+      "aliases": [
+        "resource_tags"
+      ],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary representing the tags to be applied to the resource. If the tags parameter is not set then tags will not be modified."
+    },
+    {
+      "name": "type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"HTTP\"",
+        "\"HTTPS\"",
+        "\"HTTP_STR_MATCH\"",
+        "\"HTTPS_STR_MATCH\"",
+        "\"TCP\"",
+        "\"CALCULATED\""
+      ],
+      "description": "The type of health check that you want to create, which indicates how Amazon Route 53 determines whether an endpoint is healthy. Once health check is created, type can not be changed. The CALCULATED choice was added in 6.3.0. Choices: \"HTTP\" \"HTTPS\" \"HTTP_STR_MATCH\" \"HTTPS_STR_MATCH\" \"TCP\" \"CALCULATED\""
+    },
+    {
+      "name": "use_unique_names",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Used together with health_check_name to set/make use of health_check_name as a unique identifier. Choices: false true"
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to false, SSL certificates will not be validated for communication with the AWS APIs. Setting validate_certs=false is strongly discouraged, as an alternative, consider setting aws_ca_bundle instead. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Create a health check for host1.example.com and use it in record\n  amazon.aws.route53_health_check:\n    state: present\n    fqdn: host1.example.com\n    type: HTTP_STR_MATCH\n    resource_path: /\n    string_match: \"Hello\"\n    request_interval: 10\n    failure_threshold: 2\n  register: my_health_check\n\n- amazon.aws.route53:\n    action: create\n    zone: \"example.com\"\n    type: CNAME\n    record: \"www.example.com\"\n    value: host1.example.com\n    ttl: 30\n    # Routing policy\n    identifier: \"host1@www\"\n    weight: 100\n    health_check: \"{{ my_health_check.health_check.id }}\"\n\n- name: create a simple health check with health_check_name as unique identifier\n  amazon.aws.route53_health_check:\n    state: present\n    health_check_name: ansible\n    fqdn: ansible.com\n    port: 443\n    type: HTTPS\n    use_unique_names: true\n\n- name: create a TCP health check with latency graphs enabled\n  amazon.aws.route53_health_check:\n    state: present\n    health_check_name: ansible\n    fqdn: ansible.com\n    port: 443\n    type: HTTPS\n    use_unique_names: true\n    measure_latency: true\n\n- name: Delete health check\n  amazon.aws.route53_health_check:\n    state: absent\n    fqdn: host1.example.com\n\n- name: Update Health check by ID - update ip_address\n  amazon.aws.route53_health_check:\n    id: 12345678-abcd-abcd-abcd-0fxxxxxxxxxx\n    ip_address: 1.2.3.4\n\n- name: Update Health check by ID - update port\n  amazon.aws.route53_health_check:\n    id: 12345678-abcd-abcd-abcd-0fxxxxxxxxxx\n    ip_address: 8080\n\n- name: Delete Health check by ID\n  amazon.aws.route53_health_check:\n    state: absent\n    id: 12345678-abcd-abcd-abcd-0fxxxxxxxxxx"
+  ],
+  "return_values": [
+    {
+      "name": "health_check",
+      "type": "dictionary",
+      "description": "Information about the health check. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "action",
+      "type": "string",
+      "description": "The action performed by the module. Returned: When a change is or would be made. Sample: \"updated\"",
+      "returned": "When"
+    },
+    {
+      "name": "health_check_config",
+      "type": "dictionary",
+      "description": "Detailed information about the health check. May contain additional values from Route 53 health check features not yet supported by this module. Returned: When the health check exists.",
+      "returned": "When"
+    },
+    {
+      "name": "disabled",
+      "type": "boolean",
+      "description": "Whether the health check has been disabled or not. Returned: When the health check exists. Sample: false",
+      "returned": "When"
+    },
+    {
+      "name": "enable_sni",
+      "type": "boolean",
+      "description": "This allows the endpoint to respond to HTTPS health check requests with the applicable SSL/TLS certificate. Returned: When the health check exists. Sample: false",
+      "returned": "When"
+    },
+    {
+      "name": "failure_threshold",
+      "type": "integer",
+      "description": "The number of consecutive health checks that an endpoint must pass or fail for Amazon Route 53 to change the current status of the endpoint from unhealthy to healthy or vice versa. Returned: When the health check exists. Sample: 3",
+      "returned": "When"
+    },
+    {
+      "name": "fully_qualified_domain_name",
+      "type": "string",
+      "description": "The FQDN configured for the health check to test. Returned: When the health check exists and an FQDN is configured. Sample: \"updated\"",
+      "returned": "When"
+    },
+    {
+      "name": "inverted",
+      "type": "boolean",
+      "description": "Specify whether you want Amazon Route 53 to invert the status of a health check. Returned: When the health check exists. Sample: false",
+      "returned": "When"
+    },
+    {
+      "name": "ip_address",
+      "type": "string",
+      "description": "The IPv4 or IPv6 IP address of the endpoint to be queried. Returned: When the health check exists and a specific IP address is configured. Sample: \"\"",
+      "returned": "When"
+    },
+    {
+      "name": "measure_latency",
+      "type": "boolean",
+      "description": "To enable/disable latency graphs to monitor the latency between health checkers in multiple Amazon Web Services regions and your endpoint. Returned: When the health check exists. Sample: false",
+      "returned": "When"
+    },
+    {
+      "name": "port",
+      "type": "string",
+      "description": "The port on the endpoint that the health check will query. Returned: When the health check exists. Sample: \"updated\"",
+      "returned": "When"
+    },
+    {
+      "name": "request_interval",
+      "type": "integer",
+      "description": "The number of seconds between health check queries. Returned: When the health check exists. Sample: 30",
+      "returned": "When"
+    },
+    {
+      "name": "resource_path",
+      "type": "string",
+      "description": "The URI path to query when performing an HTTP/HTTPS based health check. Returned: When the health check exists and a resource path has been configured. Sample: \"/healthz\"",
+      "returned": "When"
+    },
+    {
+      "name": "search_string",
+      "type": "string",
+      "description": "A string that must be present in the response for a health check to be considered successful. Returned: When the health check exists and a search string has been configured. Sample: \"ALIVE\"",
+      "returned": "When"
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "description": "The type of the health check. Returned: When the health check exists. Sample: \"HTTPS_STR_MATCH\"",
+      "returned": "When"
+    },
+    {
+      "name": "health_check_version",
+      "type": "integer",
+      "description": "The version number of the health check. Returned: When the health check exists. Sample: 14",
+      "returned": "When"
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "description": "The Unique ID assigned by AWS to the health check. Returned: When the health check exists. Sample: \"50ec8a13-9623-4c66-9834-dd8c5aedc9ba\"",
+      "returned": "When"
+    },
+    {
+      "name": "tags",
+      "type": "dictionary",
+      "description": "A dictionary representing the tags on the health check. Returned: When the health check exists. Sample: {\"my_key\": \"my_value\"}",
+      "returned": "When"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/amazon/aws/route53_health_check_module#ansible-collections-amazon-aws-route53-health-check-module.html",
+  "parsed_at": "2026-04-11T13:52:50.525052"
+}

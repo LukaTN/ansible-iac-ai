@@ -1,257 +1,282 @@
 """
 =============================================================
-  AI-Powered IaC — Phase 1 : Scraper
-  Target : Ansible kubernetes.core collection
-  URL    : https://docs.ansible.com/ansible/latest/collections/kubernetes/core/
+  AI-Powered IaC — Phase 1 : Multi-Collection Scraper
+  Supports any Ansible collection on docs.ansible.com
+  Output : data/raw_html/<collection>/<module>.html
+           reports/scrape_report_<collection>.json
 =============================================================
-  Usage (PyCharm terminal):
-      pip install requests beautifulsoup4
-      Run phase1_scraper.py
+  Usage:
+    # Scrape all configured collections
+    python pipeline/phase1_scraper_multi.py
 
-  Output:
-      data/raw_html/                 -> one .html file per module page
-      reports/scrape_report.json     -> summary of what was scraped
+    # Scrape a single collection
+    python pipeline/phase1_scraper_multi.py --collection kubernetes.core
+
+    # Add a custom collection
+    python pipeline/phase1_scraper_multi.py --collection amazon.aws
 =============================================================
 """
 
 import os
+import sys
 import json
 import time
+import argparse
 import requests
-from bs4 import BeautifulSoup
 from datetime import datetime
+from bs4 import BeautifulSoup
+from urllib.parse import urljoin
 
+os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # ─────────────────────────────────────────────
-#  CONFIG
+#  COLLECTION REGISTRY
+#  Add any Ansible collection here
 # ─────────────────────────────────────────────
 
-BASE_URL    = "https://docs.ansible.com/ansible/latest/collections/kubernetes/core/"
-INDEX_URL   = BASE_URL + "index.html"
-OUTPUT_DIR  = "data/raw_html"
-REPORT_DIR  = "reports"
-REPORT_FILE = "reports/scrape_report.json"
-DELAY_SECONDS = 1.0   # polite delay between requests
+COLLECTIONS = {
 
-HEADERS = {
-    "User-Agent": (
-        "Mozilla/5.0 (compatible; AnsibleDocScraper/1.0; "
-        "PFE-IaC-AI research project)"
-    )
+    "kubernetes.core": {
+        "index_url": "https://docs.ansible.com/ansible/latest/collections/kubernetes/core/index.html",
+        "base_url":  "https://docs.ansible.com/ansible/latest/collections/kubernetes/core/",
+        "module_suffix": "_module.html",
+        "description": "Kubernetes orchestration modules",
+    },
+
+    "amazon.aws": {
+        "index_url": "https://docs.ansible.com/ansible/latest/collections/amazon/aws/index.html",
+        "base_url":  "https://docs.ansible.com/ansible/latest/collections/amazon/aws/",
+        "module_suffix": "_module.html",
+        "description": "Amazon Web Services modules",
+    },
+
+    "azure.azcollection": {
+        "index_url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/index.html",
+        "base_url":  "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/",
+        "module_suffix": "_module.html",
+        "description": "Microsoft Azure modules",
+    },
+
+    "community.general": {
+        "index_url": "https://docs.ansible.com/ansible/latest/collections/community/general/index.html",
+        "base_url":  "https://docs.ansible.com/ansible/latest/collections/community/general/",
+        "module_suffix": "_module.html",
+        "description": "Community general-purpose modules (400+)",
+    },
+
+    "ansible.builtin": {
+        "index_url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/index.html",
+        "base_url":  "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/",
+        "module_suffix": "_module.html",
+        "description": "Ansible built-in modules",
+    },
 }
 
-
-# ─────────────────────────────────────────────
-#  KNOWN MODULES — fallback if index parse fails
-#  Source: kubernetes.core collection
-# ─────────────────────────────────────────────
-
-KNOWN_MODULES = [
-    "helm_module",
-    "helm_info_module",
-    "helm_plugin_module",
-    "helm_plugin_info_module",
-    "helm_repository_module",
-    "helm_template_module",
-    "k8s_module",
-    "k8s_cluster_info_module",
-    "k8s_cp_module",
-    "k8s_drain_module",
-    "k8s_exec_module",
-    "k8s_info_module",
-    "k8s_json_patch_module",
-    "k8s_log_module",
-    "k8s_rollback_module",
-    "k8s_scale_module",
-    "k8s_service_module",
-    "k8s_taint_module",
-]
+HEADERS = {
+    "User-Agent": "AnsibleAI-Scraper/2.0 (PFE Research Project)"
+}
+DELAY      = 0.5   # seconds between requests (be polite)
+TIMEOUT    = 30
+OUTPUT_DIR = "data/raw_html"
+REPORT_DIR = "reports"
 
 
 # ─────────────────────────────────────────────
-#  STEP 1 — Discover module URLs from index page
+#  HELPERS
 # ─────────────────────────────────────────────
 
-def get_module_urls_from_index(session):
+def get_module_links(index_url: str, base_url: str, module_suffix: str) -> list[dict]:
     """
-    Fetches the kubernetes.core index page and extracts
-    all links ending in '_module.html'.
-    Returns a dict: { module_slug: full_url }
+    Scrape the collection index page and return all module links.
+    Returns list of {"slug": "k8s_module", "url": "https://..."}
     """
-    print(f"\n[1/3] Fetching index page: {INDEX_URL}")
-
-    try:
-        resp = session.get(INDEX_URL, headers=HEADERS, timeout=15)
-        resp.raise_for_status()
-
-    except requests.RequestException as e:
-        print(f"  [WARN] Could not fetch index: {e}")
-        print("  [INFO] Falling back to KNOWN_MODULES list.")
-        return {slug: BASE_URL + slug + ".html" for slug in KNOWN_MODULES}
-
+    print(f"  Fetching index: {index_url}")
+    resp = requests.get(index_url, headers=HEADERS, timeout=TIMEOUT)
+    resp.raise_for_status()
     soup = BeautifulSoup(resp.text, "html.parser")
-    module_urls = {}
 
-    for a_tag in soup.find_all("a", href=True):
-        href = a_tag["href"]
-        # Module pages end with _module.html
-        if href.endswith("_module.html"):
-            if href.startswith("http"):
-                full_url = href
-            else:
-                full_url = BASE_URL + href.lstrip("./")
-            slug = href.split("/")[-1].replace(".html", "")
-            module_urls[slug] = full_url
+    modules = []
+    seen = set()
 
-    if module_urls:
-        print(f"  [OK] Found {len(module_urls)} module pages in index.")
-    else:
-        print("  [WARN] No modules found in index. Using fallback list.")
-        module_urls = {slug: BASE_URL + slug + ".html" for slug in KNOWN_MODULES}
+    for a in soup.find_all("a", href=True):
+        href = a["href"]
 
-    return module_urls
+        # Resolve relative URLs
+        if href.startswith("http"):
+            full_url = href
+        else:
+            full_url = urljoin(base_url, href)
+
+        # Remove query/fragment to avoid bad slugs like "..._module#anchor"
+        normalized_url = full_url.split("#", 1)[0].split("?", 1)[0]
+
+        # Only keep module pages (ending with _module.html)
+        if module_suffix in normalized_url and normalized_url not in seen:
+            seen.add(normalized_url)
+            # Extract slug from URL
+            slug = normalized_url.rstrip("/").split("/")[-1].replace(".html", "")
+            modules.append({"slug": slug, "url": normalized_url})
+
+    return modules
 
 
-# ─────────────────────────────────────────────
-#  STEP 2 — Download and save each module page
-# ─────────────────────────────────────────────
+def scrape_module(module: dict, output_dir: str) -> dict:
+    """Download and save a single module page. Returns result dict."""
+    slug     = module["slug"]
+    url      = module["url"]
+    filepath = os.path.join(output_dir, f"{slug}.html")
 
-def scrape_module_page(session, slug, url, output_dir):
-    """
-    Downloads one module page and saves the raw HTML.
-    Returns a status dict for the report.
-    """
-    filepath = os.path.join(output_dir, slug + ".html")
-
-    # Skip if already downloaded (resume support)
+    # Skip if already scraped
     if os.path.exists(filepath):
-        print(f"  [SKIP] {slug} — already downloaded.")
-        return {"slug": slug, "url": url, "status": "skipped", "file": filepath}
+        size = os.path.getsize(filepath)
+        if size > 1000:
+            return {"slug": slug, "url": url, "status": "skipped", "size": size}
 
     try:
-        resp = session.get(url, headers=HEADERS, timeout=15)
+        resp = requests.get(url, headers=HEADERS, timeout=TIMEOUT)
         resp.raise_for_status()
 
         with open(filepath, "w", encoding="utf-8") as f:
             f.write(resp.text)
 
-        print(f"  [OK]   {slug}  ({len(resp.text):,} chars)")
-        return {
-            "slug"  : slug,
-            "url"   : url,
-            "status": "ok",
-            "size"  : len(resp.text),
-            "file"  : filepath,
-        }
+        size = len(resp.text)
+        print(f"    ✓ {slug:<50} ({size:,} chars)")
+        return {"slug": slug, "url": url, "status": "ok", "size": size}
 
-    except requests.HTTPError as e:
-        print(f"  [ERR]  {slug} — HTTP {e.response.status_code}")
-        return {"slug": slug, "url": url, "status": f"http_{e.response.status_code}"}
-
-    except requests.RequestException as e:
-        print(f"  [ERR]  {slug} — {e}")
-        return {"slug": slug, "url": url, "status": "error", "detail": str(e)}
+    except Exception as e:
+        print(f"    ✗ {slug:<50} ERROR: {e}")
+        return {"slug": slug, "url": url, "status": "error", "error": str(e)}
 
 
 # ─────────────────────────────────────────────
-#  STEP 3 — Sanity check on saved HTML files
+#  MAIN SCRAPER
 # ─────────────────────────────────────────────
 
-def verify_html_files(output_dir):
-    """
-    Checks that each saved HTML contains expected Ansible doc sections.
-    Prints a warning for any file that looks incomplete.
-    """
-    print(f"\n[3/3] Verifying downloaded files in '{output_dir}/' ...")
+def scrape_collection(collection_name: str) -> dict:
+    """Scrape all modules for a single collection."""
 
-    required_sections = ["Parameters", "Examples"]
-    ok_count   = 0
-    warn_count = 0
+    if collection_name not in COLLECTIONS:
+        raise ValueError(f"Unknown collection: {collection_name}\n"
+                         f"Available: {list(COLLECTIONS.keys())}")
 
-    for filename in sorted(os.listdir(output_dir)):
-        if not filename.endswith(".html"):
-            continue
+    cfg = COLLECTIONS[collection_name]
+    ns  = collection_name.replace(".", "_")   # kubernetes_core
 
-        filepath = os.path.join(output_dir, filename)
-        with open(filepath, "r", encoding="utf-8") as f:
-            content = f.read()
+    print(f"\n{'='*60}")
+    print(f"  Scraping collection: {collection_name}")
+    print(f"  Description: {cfg['description']}")
+    print(f"{'='*60}")
 
-        missing = [s for s in required_sections if s not in content]
-        if missing:
-            print(f"  [WARN] {filename} — missing sections: {missing}")
-            warn_count += 1
-        else:
-            ok_count += 1
-
-    print(f"  {ok_count} files OK  |  {warn_count} files with warnings")
-    return ok_count, warn_count
-
-
-# ─────────────────────────────────────────────
-#  MAIN
-# ─────────────────────────────────────────────
-
-def main():
-    print("=" * 60)
-    print("  Ansible kubernetes.core — Phase 1 Scraper")
-    print(f"  Started : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print("=" * 60)
-
-    # Create output directories if they don't exist
-    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    # Create output directory
+    coll_dir = os.path.join(OUTPUT_DIR, ns)
+    os.makedirs(coll_dir, exist_ok=True)
     os.makedirs(REPORT_DIR, exist_ok=True)
 
+    # Discover modules
+    print(f"\n  Discovering modules...")
+    modules = get_module_links(
+        cfg["index_url"],
+        cfg["base_url"],
+        cfg["module_suffix"]
+    )
+    print(f"  Found {len(modules)} modules.\n")
+
+    if not modules:
+        print("  [WARNING] No modules found — check the index URL.")
+        return {"collection": collection_name, "total": 0, "results": []}
+
+    # Scrape each module
+    results = []
+    for i, module in enumerate(modules, 1):
+        print(f"  [{i:>3}/{len(modules)}] ", end="")
+        result = scrape_module(module, coll_dir)
+        results.append(result)
+        if result["status"] == "ok":
+            time.sleep(DELAY)
+
+    # Summary
+    ok      = sum(1 for r in results if r["status"] == "ok")
+    skipped = sum(1 for r in results if r["status"] == "skipped")
+    errors  = sum(1 for r in results if r["status"] == "error")
+
     report = {
-        "scrape_date": datetime.now().isoformat(),
-        "base_url"   : BASE_URL,
-        "modules"    : [],
+        "collection"  : collection_name,
+        "description" : cfg["description"],
+        "index_url"   : cfg["index_url"],
+        "scraped_at"  : datetime.now().isoformat(),
+        "total"       : len(modules),
+        "ok"          : ok,
+        "skipped"     : skipped,
+        "errors"      : errors,
+        "output_dir"  : coll_dir,
+        "results"     : results,
     }
 
-    with requests.Session() as session:
-
-        # Step 1 — Discover module URLs
-        module_urls = get_module_urls_from_index(session)
-
-        # Step 2 — Download each module page
-        print(f"\n[2/3] Downloading {len(module_urls)} module pages ...")
-        for i, (slug, url) in enumerate(sorted(module_urls.items()), start=1):
-            print(f"  [{i:02d}/{len(module_urls):02d}] ", end="")
-            result = scrape_module_page(session, slug, url, OUTPUT_DIR)
-            report["modules"].append(result)
-            if result["status"] == "ok":
-                time.sleep(DELAY_SECONDS)   # polite delay
-
-    # Step 3 — Verify files
-    ok_count, warn_count = verify_html_files(OUTPUT_DIR)
-
-    # Save report
-    report["summary"] = {
-        "total"         : len(report["modules"]),
-        "ok"            : sum(1 for m in report["modules"] if m["status"] == "ok"),
-        "skipped"       : sum(1 for m in report["modules"] if m["status"] == "skipped"),
-        "errors"        : sum(1 for m in report["modules"] if m["status"] not in ("ok", "skipped")),
-        "verified_ok"   : ok_count,
-        "verified_warn" : warn_count,
-    }
-
-    with open(REPORT_FILE, "w", encoding="utf-8") as f:
+    report_path = os.path.join(REPORT_DIR, f"scrape_report_{ns}.json")
+    with open(report_path, "w", encoding="utf-8") as f:
         json.dump(report, f, indent=2, ensure_ascii=False)
 
-    s = report["summary"]
-    print(f"""
-{'=' * 60}
-  SCRAPING COMPLETE
-  Downloaded : {s['ok']}
-  Skipped    : {s['skipped']}
-  Errors     : {s['errors']}
+    print(f"\n  ─────────────────────────────────────────")
+    print(f"  Collection : {collection_name}")
+    print(f"  Total      : {len(modules)}")
+    print(f"  ✓ OK       : {ok}")
+    print(f"  ⏭ Skipped  : {skipped}")
+    print(f"  ✗ Errors   : {errors}")
+    print(f"  Report     : {report_path}")
 
-  Raw HTML   → {OUTPUT_DIR}/
-  Report     → {REPORT_FILE}
+    return report
 
-  Next step  → run phase2_parser.py
-{'=' * 60}
-""")
 
+def scrape_all():
+    """Scrape all registered collections."""
+    print(f"\n{'='*60}")
+    print(f"  AnsibleAI — Multi-Collection Scraper")
+    print(f"  Collections: {len(COLLECTIONS)}")
+    print(f"  Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"{'='*60}")
+
+    global_report = []
+    for coll_name in COLLECTIONS:
+        try:
+            report = scrape_collection(coll_name)
+            global_report.append(report)
+        except Exception as e:
+            print(f"\n  [ERROR] {coll_name}: {e}")
+            global_report.append({"collection": coll_name, "error": str(e)})
+
+    # Global summary
+    print(f"\n{'='*60}")
+    print(f"  GLOBAL SUMMARY")
+    total_modules = sum(r.get("total", 0) for r in global_report)
+    total_ok      = sum(r.get("ok", 0) + r.get("skipped", 0) for r in global_report)
+    print(f"  Collections scraped : {len(global_report)}")
+    print(f"  Total modules       : {total_modules}")
+    print(f"  Successfully saved  : {total_ok}")
+    print(f"{'='*60}")
+
+    with open(os.path.join(REPORT_DIR, "scrape_report_global.json"), "w") as f:
+        json.dump(global_report, f, indent=2, ensure_ascii=False)
+
+
+# ─────────────────────────────────────────────
+#  ENTRY POINT
+# ─────────────────────────────────────────────
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="AnsibleAI Multi-Collection Scraper")
+    parser.add_argument("--collection", type=str, default=None,
+                        help=f"Collection to scrape. Options: {list(COLLECTIONS.keys())}")
+    parser.add_argument("--list", action="store_true",
+                        help="List all available collections")
+    args = parser.parse_args()
+
+    if args.list:
+        print("\nAvailable collections:")
+        for name, cfg in COLLECTIONS.items():
+            print(f"  {name:<30} — {cfg['description']}")
+        sys.exit(0)
+
+    if args.collection:
+        scrape_collection(args.collection)
+    else:
+        scrape_all()

@@ -1,0 +1,322 @@
+{
+  "collection_ns": "azure_azcollection",
+  "collection": "azure.azcollection",
+  "module": "azure.azcollection.azure_rm_hdinsightcluster_info",
+  "slug": "azure_rm_hdinsightcluster_info_module#ansible-collections-azure-azcollection-azure-rm-hdinsightcluster-info-module",
+  "description": "Get facts of Azure HDInsight Cluster.",
+  "parameters": [
+    {
+      "name": "ad_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory username. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "adfs_authority_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure AD authority url. Use when authenticating with Username/password, and has your own ADFS authority."
+    },
+    {
+      "name": "api_profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "Selects an API profile to use when communicating with Azure services. Default value of latest is appropriate for public clouds; future values will allow use with Azure Stack. Default: \"latest\""
+    },
+    {
+      "name": "auth_source",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "az",
+      "choices": [
+        "\"auto\" ← (default)",
+        "\"cli\"",
+        "\"credential_file\"",
+        "\"env\"",
+        "\"msi\""
+      ],
+      "description": "Controls the source of the credentials to use for authentication. Can also be set via the ANSIBLE_AZURE_AUTH_SOURCE environment variable. When set to auto (the default) the precedence is module parameters -> env -> credential_file -> cli. When set to env, the credentials will be read from the environment variables When set to credential_file, it will read the profile from ~/.azure/credentials. When set to cli, the credentials will be sources from the Azure CLI profile. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if more than one is present otherwise the default az cli subscription is used. When set to msi, the host machine must be an azure resource with an enabled MSI extension. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if the resource is granted access to more than one subscription, otherwise the first subscription is chosen. The msi was added in Ansible 2.6. Choices: \"auto\" ← (default) \"cli\" \"credential_file\" \"env\" \"msi\""
+    },
+    {
+      "name": "cert_validation_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ignore\"",
+        "\"validate\""
+      ],
+      "description": "Controls the certificate validation behavior for Azure endpoints. By default, all modules will validate the server certificate, but when an HTTPS proxy is in use, or against Azure Stack, it may be necessary to disable this behavior by passing ignore. Can also be set via credential file profile or the AZURE_CERT_VALIDATION environment variable. Choices: \"ignore\" \"validate\""
+    },
+    {
+      "name": "client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client ID. Use when authenticating with a Service Principal or Managed Identity (msi). Can also be set via the AZURE_CLIENT_ID environment variable."
+    },
+    {
+      "name": "cloud_environment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "AzureCloud",
+      "choices": [],
+      "description": "For cloud environments other than the US public cloud, the environment name (as defined by Azure Python SDK, eg, AzureChinaCloud, AzureUSGovernment), or a metadata discovery endpoint URL (required for Azure Stack). Can also be set via credential file profile or the AZURE_CLOUD_ENVIRONMENT environment variable. Default: \"AzureCloud\""
+    },
+    {
+      "name": "disable_instance_discovery",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Determines whether or not instance discovery is performed when attempting to authenticate. Setting this to true will completely disable both instance discovery and authority validation. This functionality is intended for use in scenarios where the metadata endpoint cannot be reached such as in private clouds or Azure Stack. The process of instance discovery entails retrieving authority metadata from https://login.microsoft.com/ to validate the authority. By setting this to **True**, the validation of the authority is disabled. As a result, it is crucial to ensure that the configured authority host is valid and trustworthy. Set via credential file profile or the AZURE_DISABLE_INSTANCE_DISCOVERY environment variable. Choices: false ← (default) true"
+    },
+    {
+      "name": "log_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "log_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "HDInsight cluster name."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory user password. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security profile found in ~/.azure/credentials file."
+    },
+    {
+      "name": "resource_group",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of an Azure resource group."
+    },
+    {
+      "name": "secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client secret. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "subscription_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Your Azure subscription Id."
+    },
+    {
+      "name": "tags",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Limit results by providing a list of tags. Format tags as ‘key’ or ‘key:value’."
+    },
+    {
+      "name": "tenant",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure tenant ID. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "thumbprint",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The thumbprint of the private key specified in x509_certificate_path. Use when authenticating with a Service Principal. Required if x509_certificate_path is defined."
+    },
+    {
+      "name": "x509_certificate_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the X509 certificate used to create the service principal in PEM format. The certificate must be appended to the private key. Use when authenticating with a Service Principal."
+    }
+  ],
+  "examples": [
+    "- name: Get instance of HDInsight Cluster\n  azure_rm_hdinsightcluster_info:\n    resource_group: myResourceGroup\n    name: myCluster\n\n- name: List instances of HDInsight Cluster\n  azure_rm_hdinsightcluster_info:\n    resource_group: myResourceGroup\n    tags:\n      - key:value"
+  ],
+  "return_values": [
+    {
+      "name": "clusters",
+      "type": "complex",
+      "description": "A list of dictionaries containing facts for HDInsight Cluster. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "cluster_definition",
+      "type": "complex",
+      "description": "The cluster definition. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "kind",
+      "type": "string",
+      "description": "The type of cluster. Returned: always Sample: \"spark\"",
+      "returned": "always"
+    },
+    {
+      "name": "cluster_version",
+      "type": "string",
+      "description": "The version of the cluster. Returned: always Sample: \"3.6.1000.67\"",
+      "returned": "always"
+    },
+    {
+      "name": "compute_profile_roles",
+      "type": "complex",
+      "description": "The list of roles in the cluster. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "linux_profile",
+      "type": "dictionary",
+      "description": "The Linux OS profile. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "username",
+      "type": "string",
+      "description": "User name. Returned: always Sample: \"myuser\"",
+      "returned": "always"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "The name of the role. Returned: always Sample: \"headnode\"",
+      "returned": "always"
+    },
+    {
+      "name": "target_instance_count",
+      "type": "integer",
+      "description": "The instance count of the cluster. Returned: always Sample: 2",
+      "returned": "always"
+    },
+    {
+      "name": "vm_size",
+      "type": "string",
+      "description": "The size of the VM. Returned: always Sample: \"Standard_D3\"",
+      "returned": "always"
+    },
+    {
+      "name": "connectivity_endpoints",
+      "type": "complex",
+      "description": "Cluster’s connectivity endpoints. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "location",
+      "type": "string",
+      "description": "Endpoint location. Returned: always Sample: \"myCluster-ssh.azurehdinsight.net\"",
+      "returned": "always"
+    },
+    {
+      "name": "port",
+      "type": "integer",
+      "description": "Endpoint port. Returned: always Sample: 22",
+      "returned": "always"
+    },
+    {
+      "name": "protocol",
+      "type": "string",
+      "description": "Endpoint protocol. Returned: always Sample: \"TCP\"",
+      "returned": "always"
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "description": "The unique resource identifier of the HDInsight Cluster. Returned: always Sample: \"/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/myResourceGroup/providers/Microsoft.HDInsight/clusters/myCluster\"",
+      "returned": "always"
+    },
+    {
+      "name": "os_type",
+      "type": "string",
+      "description": "The type of operating system. Returned: always Sample: \"linux\"",
+      "returned": "always"
+    },
+    {
+      "name": "resource_group",
+      "type": "string",
+      "description": "Name of an Azure resource group. Returned: always Sample: \"myResourceGroup\"",
+      "returned": "always"
+    },
+    {
+      "name": "tags",
+      "type": "dictionary",
+      "description": "The tags of the resource. Returned: always Sample: {}",
+      "returned": "always"
+    },
+    {
+      "name": "tier",
+      "type": "string",
+      "description": "The cluster tier. Returned: always Sample: \"standard\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_hdinsightcluster_info_module#ansible-collections-azure-azcollection-azure-rm-hdinsightcluster-info-module.html",
+  "parsed_at": "2026-04-11T13:52:59.343883"
+}

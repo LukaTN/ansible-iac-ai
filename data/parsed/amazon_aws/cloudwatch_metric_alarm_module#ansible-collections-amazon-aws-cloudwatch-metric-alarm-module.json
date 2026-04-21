@@ -1,0 +1,508 @@
+{
+  "collection_ns": "amazon_aws",
+  "collection": "amazon.aws",
+  "module": "amazon.aws.cloudwatch_metric_alarm",
+  "slug": "cloudwatch_metric_alarm_module#ansible-collections-amazon-aws-cloudwatch-metric-alarm-module",
+  "description": "Can create or delete AWS CloudWatch metric alarms.",
+  "parameters": [
+    {
+      "name": "access_key",
+      "aliases": [
+        "aws_access_key_id",
+        "aws_access_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS access key ID. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY environment variables may also be used in decreasing order of preference. The aws_access_key and profile options are mutually exclusive. The aws_access_key_id alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "alarm_actions",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "A list of the names action(s) taken when the alarm is in the alarm status, denoted as Amazon Resource Name(s). Default: []"
+    },
+    {
+      "name": "aws_ca_bundle",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The location of a CA Bundle to use when validating SSL certificates. The AWS_CA_BUNDLE environment variable may also be used."
+    },
+    {
+      "name": "aws_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary to modify the botocore configuration. Parameters can be found in the AWS documentation https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html#botocore.config.Config."
+    },
+    {
+      "name": "comparison",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"GreaterThanOrEqualToThreshold\"",
+        "\"GreaterThanThreshold\"",
+        "\"LessThanThreshold\"",
+        "\"LessThanOrEqualToThreshold\""
+      ],
+      "description": "Determines how the threshold value is compared Choices: \"GreaterThanOrEqualToThreshold\" \"GreaterThanThreshold\" \"LessThanThreshold\" \"LessThanOrEqualToThreshold\""
+    },
+    {
+      "name": "datapoints_to_alarm",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The number of data points that must be breaching to trigger the alarm."
+    },
+    {
+      "name": "debug_botocore_endpoint_logs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use a botocore.endpoint logger to parse the unique (rather than total) \"resource:action\" API calls made during a task, outputing the set to the resource_actions key in the task results. Use the aws_resource_action callback to output to total list made during a playbook. The ANSIBLE_DEBUG_BOTOCORE_LOGS environment variable may also be used. Choices: false ← (default) true"
+    },
+    {
+      "name": "description",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A longer description of the alarm."
+    },
+    {
+      "name": "dimensions",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary describing which metric the alarm is applied to. For more information see the AWS documentation: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html#Dimension"
+    },
+    {
+      "name": "endpoint_url",
+      "aliases": [
+        "aws_endpoint_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "AWS",
+      "choices": [],
+      "description": "URL to connect to instead of the default AWS endpoints. While this can be used to connection to other AWS-compatible services the amazon.aws and community.aws collections are only tested against AWS. The AWS_URL environment variable may also be used."
+    },
+    {
+      "name": "evaluate_low_sample_count_percentile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ignore\"",
+        "\"evaluate\""
+      ],
+      "description": "Used only for alarms based on percentiles. If you specify ignore, the alarm state does not change during periods with too few data points to be statistically significant. If you specify evaluate or omit this parameter, alarm is evaluated and possibly changes state no matter how many data points are available. Choices: \"ignore\" \"evaluate\""
+    },
+    {
+      "name": "evaluation_periods",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The number of times in which the metric is evaluated before final calculation."
+    },
+    {
+      "name": "extended_statistic",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The percentile statistic for the metric specified in the metric name."
+    },
+    {
+      "name": "insufficient_data_actions",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "A list of the names of action(s) to take when the alarm is in the insufficient_data status. Default: []"
+    },
+    {
+      "name": "metric_name",
+      "aliases": [
+        "metric"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of the monitored metric (e.g. CPUUtilization). Metric must already exist."
+    },
+    {
+      "name": "metrics",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "An array of MetricDataQuery structures that enable you to create an alarm based on the result of a metric math expression. Default: []"
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Unique name for the alarm."
+    },
+    {
+      "name": "namespace",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of the appropriate namespace (AWS/EC2, System/Linux, etc.), which determines the category it will appear under in CloudWatch."
+    },
+    {
+      "name": "ok_actions",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "A list of the names of action(s) to take when the alarm is in the ok status, denoted as Amazon Resource Name(s). Default: []"
+    },
+    {
+      "name": "period",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The time (in seconds) between metric evaluations."
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "aws_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A named AWS profile to use for authentication. See the AWS documentation for more information about named profiles https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html. The AWS_PROFILE environment variable may also be used. The profile option is mutually exclusive with the aws_access_key, aws_secret_key and session_token options."
+    },
+    {
+      "name": "region",
+      "aliases": [
+        "aws_region"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The AWS region to use. For global services such as IAM, Route53 and CloudFront, region is ignored. The AWS_REGION environment variable may also be used. See the Amazon AWS documentation for more information http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region."
+    },
+    {
+      "name": "secret_key",
+      "aliases": [
+        "aws_secret_access_key",
+        "aws_secret_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS secret access key. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SECRET_ACCESS_KEY or AWS_SECRET_KEY environment variables may also be used in decreasing order of preference. The secret_key and profile options are mutually exclusive. The aws_secret_access_key alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "session_token",
+      "aliases": [
+        "aws_session_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS STS session token for use with temporary credentials. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SESSION_TOKEN environment variable may also be used. The session_token and profile options are mutually exclusive."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Register or deregister the alarm. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "statistic",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"SampleCount\"",
+        "\"Average\"",
+        "\"Sum\"",
+        "\"Minimum\"",
+        "\"Maximum\""
+      ],
+      "description": "Operation applied to the metric. Works in conjunction with period and evaluation_periods to determine the comparison value. Choices: \"SampleCount\" \"Average\" \"Sum\" \"Minimum\" \"Maximum\""
+    },
+    {
+      "name": "threshold",
+      "aliases": [],
+      "type": "float",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Sets the min/max bound for triggering the alarm."
+    },
+    {
+      "name": "treat_missing_data",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"breaching\"",
+        "\"notBreaching\"",
+        "\"ignore\"",
+        "\"missing\" ← (default)"
+      ],
+      "description": "Sets how the alarm handles missing data points. Choices: \"breaching\" \"notBreaching\" \"ignore\" \"missing\" ← (default)"
+    },
+    {
+      "name": "unit",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"Seconds\"",
+        "\"Microseconds\"",
+        "\"Milliseconds\"",
+        "\"Bytes\"",
+        "\"Kilobytes\"",
+        "\"Megabytes\"",
+        "\"Gigabytes\"",
+        "\"Terabytes\"",
+        "\"Bits\"",
+        "\"Kilobits\"",
+        "\"Megabits\"",
+        "\"Gigabits\"",
+        "\"Terabits\"",
+        "\"Percent\"",
+        "\"Count\"",
+        "\"Bytes/Second\"",
+        "\"Kilobytes/Second\"",
+        "\"Megabytes/Second\"",
+        "\"Gigabytes/Second\"",
+        "\"Terabytes/Second\"",
+        "\"Bits/Second\"",
+        "\"Kilobits/Second\"",
+        "\"Megabits/Second\"",
+        "\"Gigabits/Second\"",
+        "\"Terabits/Second\"",
+        "\"Count/Second\"",
+        "\"None\""
+      ],
+      "description": "The threshold’s unit of measurement. Choices: \"Seconds\" \"Microseconds\" \"Milliseconds\" \"Bytes\" \"Kilobytes\" \"Megabytes\" \"Gigabytes\" \"Terabytes\" \"Bits\" \"Kilobits\" \"Megabits\" \"Gigabits\" \"Terabits\" \"Percent\" \"Count\" \"Bytes/Second\" \"Kilobytes/Second\" \"Megabytes/Second\" \"Gigabytes/Second\" \"Terabytes/Second\" \"Bits/Second\" \"Kilobits/Second\" \"Megabits/Second\" \"Gigabits/Second\" \"Terabits/Second\" \"Count/Second\" \"None\""
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to false, SSL certificates will not be validated for communication with the AWS APIs. Setting validate_certs=false is strongly discouraged, as an alternative, consider setting aws_ca_bundle instead. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: create alarm\n  amazon.aws.cloudwatch_metric_alarm:\n    state: present\n    region: ap-southeast-2\n    name: \"cpu-low\"\n    metric_name: \"CPUUtilization\"\n    namespace: \"AWS/EC2\"\n    statistic: Average\n    comparison: \"LessThanOrEqualToThreshold\"\n    threshold: 5.0\n    period: 300\n    evaluate_low_sample_count_percentile: \"ignore\"\n    evaluation_periods: 3\n    unit: \"Percent\"\n    description: \"This will alarm when a instance's CPU usage average is lower than 5% for 15 minutes\"\n    dimensions: {'InstanceId': 'i-XXX'}\n    alarm_actions: [\"action1\", \"action2\"]\n\n- name: create alarm with metrics\n  amazon.aws.cloudwatch_metric_alarm:\n    state: present\n    region: ap-southeast-2\n    name: \"cpu-low\"\n    metrics:\n      - id: 'CPU'\n        metric_stat:\n          metric:\n            dimensions:\n              name: \"InstanceId\"\n              value: \"i-xx\"\n            metric_name: \"CPUUtilization\"\n            namespace: \"AWS/EC2\"\n          period: \"300\"\n          stat: \"Average\"\n          unit: \"Percent\"\n        return_data: false\n    alarm_actions: [\"action1\", \"action2\"]\n\n- name: Create an alarm to recover a failed instance\n  amazon.aws.cloudwatch_metric_alarm:\n    state: present\n    region: us-west-1\n    name: \"recover-instance\"\n    metric: \"StatusCheckFailed_System\"\n    namespace: \"AWS/EC2\"\n    statistic: \"Minimum\"\n    comparison: \"GreaterThanOrEqualToThreshold\"\n    threshold: 1.0\n    period: 60\n    evaluation_periods: 2\n    unit: \"Count\"\n    description: \"This will recover an instance when it fails\"\n    dimensions: {\"InstanceId\":'i-XXX'}\n    alarm_actions: [\"arn:aws:automate:us-west-1:ec2:recover\"]"
+  ],
+  "return_values": [
+    {
+      "name": "actions_enabled",
+      "type": "boolean",
+      "description": "Indicates whether actions should be executed during any changes to the alarm state. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "alarm_actions",
+      "type": "list",
+      "description": "The actions to execute when this alarm transitions to an ALARM state from any other state. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "alarm_arn",
+      "type": "string",
+      "description": "The Amazon Resource Name (ARN) of the alarm. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "comparison",
+      "type": "string",
+      "description": "The arithmetic operation to use when comparing the specified statistic and threshold. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "description": "The description of the alarm. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "dimensions",
+      "type": "list",
+      "description": "The dimensions for the metric. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "The name of the dimension. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "description": "The value of the dimension. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "evaluate_low_sample_count_percentile",
+      "type": "string",
+      "description": "Used only for alarms based on percentiles. If ignore, the alarm state does not change during periods with too few data points to be statistically significant. If evaluate or this parameter is not used, the alarm is always evaluated and possibly changes state. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "evaluation_periods",
+      "type": "integer",
+      "description": "The number of periods over which data is compared to the specified threshold. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "extended_statistic",
+      "type": "string",
+      "description": "The percentile statistic for the metric associated with the alarm. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "insufficient_data_actions",
+      "type": "list",
+      "description": "The actions to execute when this alarm transitions to an INSUFFICIENT_DATA state from any other state. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "last_updated",
+      "type": "string",
+      "description": "The time stamp of the last update to the alarm configuration. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "metric",
+      "type": "string",
+      "description": "Name of the monitored metric (e.g. CPUUtilization). Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "metric_name",
+      "type": "string",
+      "description": "Name of the monitored metric (e.g. CPUUtilization). Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "metrics",
+      "type": "list",
+      "description": "An array of MetricDataQuery structures, used in an alarm based on a metric math expression. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "namespace",
+      "type": "string",
+      "description": "Name of the appropriate namespace (AWS/EC2, System/Linux, etc.). Determines the category it will appear under in CloudWatch. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "ok_actions",
+      "type": "list",
+      "description": "The actions to execute when this alarm transitions to an OK state from any other state. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "period",
+      "type": "integer",
+      "description": "The length, in seconds, used each time the metric specified in MetricName is evaluated. Valid values are 10, 30, and any multiple of 60. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "state_reason",
+      "type": "string",
+      "description": "An explanation for the alarm state, in text format. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "state_value",
+      "type": "string",
+      "description": "The state value for the alarm. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "statistic",
+      "type": "string",
+      "description": "The statistic for the metric associated with the alarm, other than percentile. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "threshold",
+      "type": "float",
+      "description": "The value to compare with the specified statistic. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "treat_missing_data",
+      "type": "string",
+      "description": "Sets how alarm is to handle missing data points. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "unit",
+      "type": "string",
+      "description": "Unit used when storing the metric Returned: always",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/amazon/aws/cloudwatch_metric_alarm_module.html",
+  "parsed_at": "2026-04-13T16:29:19.328586"
+}

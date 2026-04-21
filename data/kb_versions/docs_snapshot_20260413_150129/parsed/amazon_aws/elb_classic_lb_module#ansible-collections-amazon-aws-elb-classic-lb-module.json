@@ -1,0 +1,997 @@
+{
+  "collection_ns": "amazon_aws",
+  "collection": "amazon.aws",
+  "module": "amazon.aws.elb_classic_lb",
+  "slug": "elb_classic_lb_module#ansible-collections-amazon-aws-elb-classic-lb-module",
+  "description": "Creates, updates or destroys an Amazon Elastic Load Balancer (ELB).",
+  "parameters": [
+    {
+      "name": "access_key",
+      "aliases": [
+        "aws_access_key_id",
+        "aws_access_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS access key ID. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY environment variables may also be used in decreasing order of preference. The aws_access_key and profile options are mutually exclusive. The aws_access_key_id alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "access_logs",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary of access logs configuration settings (see examples)."
+    },
+    {
+      "name": "enabled",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to true will configure delivery of access logs to an S3 bucket. When set to false will disable delivery of access logs. Choices: false true ← (default)"
+    },
+    {
+      "name": "interval",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [
+        "5",
+        "60 ← (default)"
+      ],
+      "description": "The interval for publishing the access logs to S3. Choices: 5 60 ← (default)"
+    },
+    {
+      "name": "s3_location",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The S3 bucket to deliver access logs to. See https://docs.aws.amazon.com/elasticloadbalancing/latest/classic/enable-access-logs.html for more information about the necessary S3 bucket policies. Required when access_logs.enabled=true."
+    },
+    {
+      "name": "s3_prefix",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Where in the S3 bucket to deliver the logs. If the prefix is not provided or set to \"\", the log is placed at the root level of the bucket. Default: \"\""
+    },
+    {
+      "name": "aws_ca_bundle",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The location of a CA Bundle to use when validating SSL certificates. The AWS_CA_BUNDLE environment variable may also be used."
+    },
+    {
+      "name": "aws_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary to modify the botocore configuration. Parameters can be found in the AWS documentation https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html#botocore.config.Config."
+    },
+    {
+      "name": "connection_draining_timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Wait a specified timeout allowing connections to drain before terminating an instance. Set to 0 to disable connection draining."
+    },
+    {
+      "name": "cross_az_load_balancing",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Distribute load across all configured Availability Zones. Defaults to false. Choices: false true"
+    },
+    {
+      "name": "debug_botocore_endpoint_logs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use a botocore.endpoint logger to parse the unique (rather than total) \"resource:action\" API calls made during a task, outputing the set to the resource_actions key in the task results. Use the aws_resource_action callback to output to total list made during a playbook. The ANSIBLE_DEBUG_BOTOCORE_LOGS environment variable may also be used. Choices: false ← (default) true"
+    },
+    {
+      "name": "endpoint_url",
+      "aliases": [
+        "aws_endpoint_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "AWS",
+      "choices": [],
+      "description": "URL to connect to instead of the default AWS endpoints. While this can be used to connection to other AWS-compatible services the amazon.aws and community.aws collections are only tested against AWS. The AWS_URL environment variable may also be used."
+    },
+    {
+      "name": "health_check",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary of health check configuration settings (see examples)."
+    },
+    {
+      "name": "healthy_threshold",
+      "aliases": [],
+      "type": "integer",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The number of consecutive health checks successes required before moving the instance to the Healthy state."
+    },
+    {
+      "name": "ping_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The URI path which the ELB health check will query when performing a health check. Required when health_check.ping_protocol=HTTP or health_check.ping_protocol=HTTPS."
+    },
+    {
+      "name": "ping_port",
+      "aliases": [],
+      "type": "integer",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The TCP port to which the ELB will connect when performing a health check."
+    },
+    {
+      "name": "ping_protocol",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The protocol which the ELB health check will use when performing a health check. Valid values are 'HTTP', 'HTTPS', 'TCP' and 'SSL'."
+    },
+    {
+      "name": "timeout",
+      "aliases": [
+        "response_timeout"
+      ],
+      "type": "integer",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The amount of time, in seconds, after which no response means a failed health check."
+    },
+    {
+      "name": "unhealthy_threshold",
+      "aliases": [],
+      "type": "integer",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The number of consecutive health check failures required before moving the instance to the Unhealthy state."
+    },
+    {
+      "name": "idle_timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "ELB connections from clients and to servers are timed out after this amount of time."
+    },
+    {
+      "name": "instance_ids",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of instance ids to attach to this ELB."
+    },
+    {
+      "name": "listeners",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of ports/protocols for this ELB to listen on (see examples). Required when state=present and the ELB doesn’t exist."
+    },
+    {
+      "name": "instance_port",
+      "aliases": [],
+      "type": "integer",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The port on which the instance is listening."
+    },
+    {
+      "name": "instance_protocol",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The protocol to use for routing traffic to instances. Valid values are HTTP, HTTPS, TCP, or SSL,"
+    },
+    {
+      "name": "load_balancer_port",
+      "aliases": [],
+      "type": "integer",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The port on which the load balancer will listen."
+    },
+    {
+      "name": "protocol",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The transport protocol to use for routing. Valid values are HTTP, HTTPS, TCP, or SSL."
+    },
+    {
+      "name": "proxy_protocol",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Enable proxy protocol for the listener. Beware, ELB controls for the proxy protocol are based on the listeners.instance_port. If you have multiple listeners talking to the same listeners.instance_port, this will affect all of them. Choices: false true"
+    },
+    {
+      "name": "ssl_certificate_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The Amazon Resource Name (ARN) of the SSL certificate."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the ELB. The name of an ELB must be less than 32 characters and unique per-region per-account."
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "aws_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A named AWS profile to use for authentication. See the AWS documentation for more information about named profiles https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html. The AWS_PROFILE environment variable may also be used. The profile option is mutually exclusive with the aws_access_key, aws_secret_key and session_token options."
+    },
+    {
+      "name": "purge_instance_ids",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Purge existing instance ids on ELB that are not found in instance_ids. Choices: false ← (default) true"
+    },
+    {
+      "name": "purge_listeners",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Purge existing listeners on ELB that are not found in listeners. Choices: false true ← (default)"
+    },
+    {
+      "name": "purge_subnets",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Purge existing subnets on the ELB that are not found in subnets. Because it is not permitted to add multiple subnets from the same availability zone, subnets to be purged will be removed before new subnets are added. This may cause a brief outage if you try to replace all subnets at once. Choices: false ← (default) true"
+    },
+    {
+      "name": "purge_tags",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If purge_tags=true and tags is set, existing tags will be purged from the resource to match exactly what is defined by tags parameter. If the tags parameter is not set then tags will not be modified, even if purge_tags=True. Tag keys beginning with aws: are reserved by Amazon and can not be modified. As such they will be ignored for the purposes of the purge_tags parameter. See the Amazon documentation for more information https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html#tag-conventions. Choices: false true ← (default)"
+    },
+    {
+      "name": "purge_zones",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Purge existing availability zones on ELB that are not found in zones. Choices: false ← (default) true"
+    },
+    {
+      "name": "region",
+      "aliases": [
+        "aws_region"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The AWS region to use. For global services such as IAM, Route53 and CloudFront, region is ignored. The AWS_REGION environment variable may also be used. See the Amazon AWS documentation for more information http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region."
+    },
+    {
+      "name": "scheme",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"internal\"",
+        "\"internet-facing\""
+      ],
+      "description": "The scheme to use when creating the ELB. For a private VPC-visible ELB use internal. If you choose to update your scheme with a different value the ELB will be destroyed and a new ELB created. Defaults to scheme=internet-facing. Choices: \"internal\" \"internet-facing\""
+    },
+    {
+      "name": "secret_key",
+      "aliases": [
+        "aws_secret_access_key",
+        "aws_secret_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS secret access key. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SECRET_ACCESS_KEY or AWS_SECRET_KEY environment variables may also be used in decreasing order of preference. The secret_key and profile options are mutually exclusive. The aws_secret_access_key alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "security_group_ids",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A list of security groups to apply to the ELB."
+    },
+    {
+      "name": "security_group_names",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A list of security group names to apply to the ELB."
+    },
+    {
+      "name": "session_token",
+      "aliases": [
+        "aws_session_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS STS session token for use with temporary credentials. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SESSION_TOKEN environment variable may also be used. The session_token and profile options are mutually exclusive."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\""
+      ],
+      "description": "Create or destroy the ELB. Choices: \"absent\" \"present\""
+    },
+    {
+      "name": "stickiness",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary of stickiness policy settings. Policy will be applied to all listeners (see examples)."
+    },
+    {
+      "name": "cookie",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The name of the application cookie used for stickiness. Required if stickiness.enabled=true and stickiness.type=application. Ignored if stickiness.enabled=false."
+    },
+    {
+      "name": "expiration",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The time period, in seconds, after which the cookie should be considered stale. If this parameter is not specified, the stickiness session lasts for the duration of the browser session. Ignored if stickiness.enabled=false."
+    },
+    {
+      "name": "type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"application\"",
+        "\"loadbalancer\""
+      ],
+      "description": "The type of stickiness policy to apply. Required if stickiness.enabled=true. Ignored if stickiness.enabled=false. Choices: \"application\" \"loadbalancer\""
+    },
+    {
+      "name": "subnets",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A list of VPC subnets to use when creating the ELB. Mutually exclusive with zones."
+    },
+    {
+      "name": "tags",
+      "aliases": [
+        "resource_tags"
+      ],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary representing the tags to be applied to the resource. If the tags parameter is not set then tags will not be modified."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to false, SSL certificates will not be validated for communication with the AWS APIs. Setting validate_certs=false is strongly discouraged, as an alternative, consider setting aws_ca_bundle instead. Choices: false true ← (default)"
+    },
+    {
+      "name": "wait",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "When creating, deleting, or adding instances to an ELB, if wait=true Ansible will wait for both the load balancer and related network interfaces to finish creating/deleting. Support for waiting when adding instances was added in release 2.1.0. Choices: false ← (default) true"
+    },
+    {
+      "name": "wait_timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "180",
+      "choices": [],
+      "description": "Used in conjunction with wait. Number of seconds to wait for the ELB to be terminated. A maximum of 600 seconds (10 minutes) is allowed. Default: 180"
+    },
+    {
+      "name": "zones",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of availability zones to enable on this ELB. Mutually exclusive with subnets."
+    }
+  ],
+  "examples": [
+    "# Note: None of these examples set aws_access_key, aws_secret_key, or region.\n# It is assumed that their matching environment variables are set.\n\n# Basic provisioning example (non-VPC)\n\n- amazon.aws.elb_classic_lb:\n    name: \"test-please-delete\"\n    state: present\n    zones:\n      - us-east-1a\n      - us-east-1d\n    listeners:\n      - protocol: http # options are http, https, ssl, tcp\n        load_balancer_port: 80\n        instance_port: 80\n        proxy_protocol: true\n      - protocol: https\n        load_balancer_port: 443\n        instance_protocol: http # optional, defaults to value of protocol setting\n        instance_port: 80\n        # ssl certificate required for https or ssl\n        ssl_certificate_id: \"arn:aws:iam::123456789012:server-certificate/company/servercerts/ProdServerCert\"\n\n# Internal ELB example\n\n- amazon.aws.elb_classic_lb:\n    name: \"test-vpc\"\n    scheme: internal\n    state: present\n    instance_ids:\n      - i-abcd1234\n    purge_instance_ids: true\n    subnets:\n      - subnet-abcd1234\n      - subnet-1a2b3c4d\n    listeners:\n      - protocol: http # options are http, https, ssl, tcp\n        load_balancer_port: 80\n        instance_port: 80\n\n# Configure a health check and the access logs\n- amazon.aws.elb_classic_lb:\n    name: \"test-please-delete\"\n    state: present\n    zones:\n      - us-east-1d\n    listeners:\n      - protocol: http\n        load_balancer_port: 80\n        instance_port: 80\n    health_check:\n      ping_protocol: http # options are http, https, ssl, tcp\n      ping_port: 80\n      ping_path: \"/index.html\" # not required for tcp or ssl\n      response_timeout: 5 # seconds\n      interval: 30 # seconds\n      unhealthy_threshold: 2\n      healthy_threshold: 10\n    access_logs:\n      interval: 5 # minutes (defaults to 60)\n      s3_location: \"my-bucket\" # This value is required if access_logs is set\n      s3_prefix: \"logs\"\n\n# Ensure ELB is gone\n- amazon.aws.elb_classic_lb:\n    name: \"test-please-delete\"\n    state: absent\n\n# Ensure ELB is gone and wait for check (for default timeout)\n- amazon.aws.elb_classic_lb:\n    name: \"test-please-delete\"\n    state: absent\n    wait: true\n\n# Ensure ELB is gone and wait for check with timeout value\n- amazon.aws.elb_classic_lb:\n    name: \"test-please-delete\"\n    state: absent\n    wait: true\n    wait_timeout: 600\n\n# Normally, this module will purge any listeners that exist on the ELB\n# but aren't specified in the listeners parameter. If purge_listeners is\n# false it leaves them alone\n- amazon.aws.elb_classic_lb:\n    name: \"test-please-delete\"\n    state: present\n    zones:\n      - us-east-1a\n      - us-east-1d\n    listeners:\n      - protocol: http\n        load_balancer_port: 80\n        instance_port: 80\n    purge_listeners: false\n\n# Normally, this module will leave availability zones that are enabled\n# on the ELB alone. If purge_zones is true, then any extraneous zones\n# will be removed\n- amazon.aws.elb_classic_lb:\n    name: \"test-please-delete\"\n    state: present\n    zones:\n      - us-east-1a\n      - us-east-1d\n    listeners:\n      - protocol: http\n        load_balancer_port: 80\n        instance_port: 80\n    purge_zones: true\n\n# Creates a ELB and assigns a list of subnets to it.\n- amazon.aws.elb_classic_lb:\n    state: present\n    name: 'New ELB'\n    security_group_ids: 'sg-123456, sg-67890'\n    subnets: 'subnet-123456,subnet-67890'\n    purge_subnets: true\n    listeners:\n      - protocol: http\n        load_balancer_port: 80\n        instance_port: 80\n\n# Create an ELB with connection draining, increased idle timeout and cross availability\n# zone load balancing\n- amazon.aws.elb_classic_lb:\n    name: \"New ELB\"\n    state: present\n    connection_draining_timeout: 60\n    idle_timeout: 300\n    cross_az_load_balancing: \"yes\"\n    zones:\n      - us-east-1a\n      - us-east-1d\n    listeners:\n      - protocol: http\n        load_balancer_port: 80\n        instance_port: 80\n\n# Create an ELB with load balancer stickiness enabled\n- amazon.aws.elb_classic_lb:\n    name: \"New ELB\"\n    state: present\n    zones:\n      - us-east-1a\n      - us-east-1d\n    listeners:\n      - protocol: http\n        load_balancer_port: 80\n        instance_port: 80\n    stickiness:\n      type: loadbalancer\n      enabled: true\n      expiration: 300\n\n# Create an ELB with application stickiness enabled\n- amazon.aws.elb_classic_lb:\n    name: \"New ELB\"\n    state: present\n    zones:\n      - us-east-1a\n      - us-east-1d\n    listeners:\n      - protocol: http\n        load_balancer_port: 80\n        instance_port: 80\n    stickiness:\n      type: application\n      enabled: true\n      cookie: SESSIONID\n\n# Create an ELB and add tags\n- amazon.aws.elb_classic_lb:\n    name: \"New ELB\"\n    state: present\n    zones:\n      - us-east-1a\n      - us-east-1d\n    listeners:\n      - protocol: http\n        load_balancer_port: 80\n        instance_port: 80\n    tags:\n      Name: \"New ELB\"\n      stack: \"production\"\n      client: \"Bob\"\n\n# Delete all tags from an ELB\n- amazon.aws.elb_classic_lb:\n    name: \"New ELB\"\n    state: present\n    zones:\n      - us-east-1a\n      - us-east-1d\n    listeners:\n      - protocol: http\n        load_balancer_port: 80\n        instance_port: 80\n    tags: {}"
+  ],
+  "return_values": [
+    {
+      "name": "elb",
+      "type": "dictionary",
+      "description": "Original boto-style Load Balancer attributes. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "app_cookie_policy",
+      "type": "string",
+      "description": "The name of the policy used to control if the ELB is using a application cookie stickiness policy. Returned: when state=present Sample: \"ec2-elb-lb-AppCookieStickinessPolicyType\"",
+      "returned": "when"
+    },
+    {
+      "name": "backends",
+      "type": "string",
+      "description": "A description of the backend policy applied to the ELB (instance-port:policy-name). Returned: when state=present Sample: \"8181:ProxyProtocol-policy\"",
+      "returned": "when"
+    },
+    {
+      "name": "connection_draining_timeout",
+      "type": "integer",
+      "description": "The maximum time, in seconds, to keep the existing connections open before deregistering the instances. Returned: when state=present Sample: 25",
+      "returned": "when"
+    },
+    {
+      "name": "cross_az_load_balancing",
+      "type": "string",
+      "description": "Either \"yes\" if cross-AZ load balancing is enabled, or \"no\" if cross-AZ load balancing is disabled. Returned: when state=present Sample: \"yes\"",
+      "returned": "when"
+    },
+    {
+      "name": "dns_name",
+      "type": "string",
+      "description": "The DNS name of the ELB. Returned: when state=present Sample: \"internal-ansible-test-935c585850ac-1516306744.us-east-1.elb.amazonaws.com\"",
+      "returned": "when"
+    },
+    {
+      "name": "health_check",
+      "type": "dictionary",
+      "description": "A dictionary describing the health check used for the ELB. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "healthy_threshold",
+      "type": "integer",
+      "description": "The number of consecutive successful health checks before marking an instance as healthy. Returned: success Sample: 2",
+      "returned": "success"
+    },
+    {
+      "name": "interval",
+      "type": "integer",
+      "description": "The time, in seconds, between each health check. Returned: success Sample: 10",
+      "returned": "success"
+    },
+    {
+      "name": "target",
+      "type": "string",
+      "description": "The Protocol, Port, and for HTTP(S) health checks the path tested by the health check. Returned: success Sample: \"TCP:22\"",
+      "returned": "success"
+    },
+    {
+      "name": "timeout",
+      "type": "integer",
+      "description": "The time, in seconds, after which an in progress health check is considered failed due to a timeout. Returned: success Sample: 5",
+      "returned": "success"
+    },
+    {
+      "name": "unhealthy_threshold",
+      "type": "integer",
+      "description": "The number of consecutive failed health checks before marking an instance as unhealthy. Returned: success Sample: 2",
+      "returned": "success"
+    },
+    {
+      "name": "hosted_zone_id",
+      "type": "string",
+      "description": "The ID of the Amazon Route 53 hosted zone for the load balancer. Returned: when state=present Sample: \"Z35SXDOTRQ7X7K\"",
+      "returned": "when"
+    },
+    {
+      "name": "hosted_zone_name",
+      "type": "string",
+      "description": "The DNS name of the load balancer when using a custom hostname. Returned: when state=present Sample: \"ansible-module.example\"",
+      "returned": "when"
+    },
+    {
+      "name": "idle_timeout",
+      "type": "integer",
+      "description": "The length of of time before an idle connection is dropped by the ELB. Returned: when state=present Sample: 50",
+      "returned": "when"
+    },
+    {
+      "name": "in_service_count",
+      "type": "integer",
+      "description": "The number of instances attached to the ELB in an in-service state. Returned: when state=present Sample: 1",
+      "returned": "when"
+    },
+    {
+      "name": "instance_health",
+      "type": "list",
+      "description": "A list of dictionaries describing the health of each instance attached to the ELB. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "description": "A human readable description of why the instance is not in service. Returned: when state=present Sample: \"N/A\"",
+      "returned": "when"
+    },
+    {
+      "name": "instance_id",
+      "type": "string",
+      "description": "The ID of the instance. Returned: when state=present Sample: \"i-03dcc8953a03d6435\"",
+      "returned": "when"
+    },
+    {
+      "name": "reason_code",
+      "type": "string",
+      "description": "A code describing why the instance is not in service. Returned: when state=present Sample: \"N/A\"",
+      "returned": "when"
+    },
+    {
+      "name": "state",
+      "type": "string",
+      "description": "The current service state of the instance. Returned: when state=present Sample: \"InService\"",
+      "returned": "when"
+    },
+    {
+      "name": "instances",
+      "type": "list",
+      "description": "A list of the IDs of instances attached to the ELB. Returned: when state=present Sample: [\"i-03dcc8953a03d6435\"]",
+      "returned": "when"
+    },
+    {
+      "name": "lb_cookie_policy",
+      "type": "string",
+      "description": "The name of the policy used to control if the ELB is using a cookie stickiness policy. Returned: when state=present Sample: \"ec2-elb-lb-LBCookieStickinessPolicyType\"",
+      "returned": "when"
+    },
+    {
+      "name": "listeners",
+      "type": "list",
+      "description": "A list of lists describing the listeners attached to the ELB. The nested list contains the listener port, the instance port, the listener protoco, the instance port, and where appropriate the ID of the SSL certificate for the port. Returned: when state=present Sample: [[22, 22, \"TCP\", \"TCP\"], [80, 8181, \"HTTP\", \"HTTP\"]]",
+      "returned": "when"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "The name of the ELB. This name is unique per-region, per-account. Returned: when state=present Sample: \"ansible-test-935c585850ac\"",
+      "returned": "when"
+    },
+    {
+      "name": "out_of_service_count",
+      "type": "integer",
+      "description": "The number of instances attached to the ELB in an out-of-service state. Returned: when state=present Sample: 0",
+      "returned": "when"
+    },
+    {
+      "name": "proxy_policy",
+      "type": "string",
+      "description": "The name of the policy used to control if the ELB operates using the Proxy protocol. Returned: when the proxy protocol policy exists. Sample: \"ProxyProtocol-policy\"",
+      "returned": "when"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "description": "The AWS region in which the ELB is running. Returned: always Sample: \"us-east-1\"",
+      "returned": "always"
+    },
+    {
+      "name": "scheme",
+      "type": "string",
+      "description": "Whether the ELB is an 'internal' or a 'internet-facing' load balancer. Returned: when state=present Sample: \"internal\"",
+      "returned": "when"
+    },
+    {
+      "name": "security_group_ids",
+      "type": "list",
+      "description": "A list of the IDs of the Security Groups attached to the ELB. Returned: when state=present Sample: [\"sg-0c12ebd82f2fb97dc\", \"sg-01ec7378d0c7342e6\"]",
+      "returned": "when"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "description": "A minimal description of the current state of the ELB. Valid values are 'exists', 'gone', 'deleted', 'created'. Returned: always Sample: \"exists\"",
+      "returned": "always"
+    },
+    {
+      "name": "subnets",
+      "type": "list",
+      "description": "A list of the subnet IDs attached to the ELB. Returned: when state=present Sample: [\"subnet-00d9d0f70c7e5f63c\", \"subnet-03fa5253586b2d2d5\"]",
+      "returned": "when"
+    },
+    {
+      "name": "tags",
+      "type": "dictionary",
+      "description": "A dictionary describing the tags attached to the ELB. Returned: when state=present Sample: {\"ExampleTag\": \"Example Value\", \"Name\": \"ansible-test-935c585850ac\"}",
+      "returned": "when"
+    },
+    {
+      "name": "unknown_instance_state_count",
+      "type": "integer",
+      "description": "The number of instances attached to the ELB in an unknown state. Returned: when state=present Sample: 0",
+      "returned": "when"
+    },
+    {
+      "name": "zones",
+      "type": "list",
+      "description": "A list of the AWS regions in which the ELB is running. Returned: when state=present Sample: [\"us-east-1b\", \"us-east-1a\"]",
+      "returned": "when"
+    },
+    {
+      "name": "load_balancer",
+      "type": "dictionary",
+      "description": "Boto3-style Load Balancer attributes. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "availability_zone",
+      "type": "list",
+      "description": "A list of the AWS regions in which the ELB is running. Returned: when state=present Sample: [\"us-east-1b\", \"us-east-1a\"]",
+      "returned": "when"
+    },
+    {
+      "name": "backend_server_descriptions",
+      "type": "list",
+      "description": "Information about your EC2 instances. Returned: when state=present Sample: []",
+      "returned": "when"
+    },
+    {
+      "name": "instance_port",
+      "type": "integer",
+      "description": "The port on which the EC2 instance is listening. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "policy_names",
+      "type": "list",
+      "description": "The names of the policies enabled for the EC2 instance. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "canonical_hosted_zone_id",
+      "type": "string",
+      "description": "The ID of the Amazon Route 53 hosted zone for the load balancer. Returned: when state=present Sample: \"Z35SXDOTRQ7X7K\"",
+      "returned": "when"
+    },
+    {
+      "name": "created_time",
+      "type": "string",
+      "description": "The date and time the load balancer was created. Returned: when state=present Sample: \"2024-06-27T10:18:48.390000+00:00\"",
+      "returned": "when"
+    },
+    {
+      "name": "listener_descriptions",
+      "type": "list",
+      "description": "The listeners for the load balancer. Returned: when state=present Sample: [{\"listener\": {\"instance_port\": 8080, \"instance_protocol\": \"HTTP\", \"load_balancer_port\": 8080, \"protocol\": \"HTTP\"}, \"policy_names\": []}]",
+      "returned": "when"
+    },
+    {
+      "name": "listener",
+      "type": "dictionary",
+      "description": "The listener. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "instance_protocol",
+      "type": "string",
+      "description": "The protocol to use for routing traffic to instances. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "load_balancer_port",
+      "type": "integer",
+      "description": "The port on which the load balancer is listening. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "protocol",
+      "type": "string",
+      "description": "The load balancer transport protocol to use for routing: HTTP, HTTPS, TCP, or SSL. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "load_balancer_attributes",
+      "type": "list",
+      "description": "The listeners for the load balancer. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "access_log",
+      "type": "dictionary",
+      "description": "If enabled, the load balancer captures detailed information of all requests and delivers the information to the Amazon S3 bucket that you specify. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "emit_interval",
+      "type": "integer",
+      "description": "The interval for publishing the access logs. Returned: success Sample: 60",
+      "returned": "success"
+    },
+    {
+      "name": "enabled",
+      "type": "boolean",
+      "description": "Specifies whether access logs are enabled for the load balancer. Returned: success Sample: false",
+      "returned": "success"
+    },
+    {
+      "name": "s3_bucket_name",
+      "type": "string",
+      "description": "The name of the Amazon S3 bucket where the access logs are stored. Returned: success Sample: \"\"",
+      "returned": "success"
+    },
+    {
+      "name": "s3_bucket_prefix",
+      "type": "string",
+      "description": "The logical hierarchy you created for your Amazon S3 bucket. Returned: success Sample: \"\"",
+      "returned": "success"
+    },
+    {
+      "name": "addtional_attributes",
+      "type": "list",
+      "description": "Any additional attributes. Returned: when state=present Sample: [{\"key\": \"elb.http.desyncmitigationmode\", \"value\": \"defensive\"}]",
+      "returned": "when"
+    },
+    {
+      "name": "connection_draining",
+      "type": "dictionary",
+      "description": "If enabled, the load balancer allows existing requests to complete before the load balancer shifts traffic away from a deregistered or unhealthy instance. Returned: when state=present Sample: {\"enabled\": false, \"timeout\": 300}",
+      "returned": "when"
+    },
+    {
+      "name": "connection_settings",
+      "type": "dictionary",
+      "description": "If enabled, the load balancer allows the connections to remain idle (no data is sent over the connection) for the specified duration Returned: when state=present Sample: {\"idle_timeout\": 60}",
+      "returned": "when"
+    },
+    {
+      "name": "cross_zone_load_balancing",
+      "type": "dictionary",
+      "description": "If enabled, the load balancer routes the request traffic evenly across all instances regardless of the Availability Zones. Returned: when state=present Sample: {\"enabled\": false}",
+      "returned": "when"
+    },
+    {
+      "name": "load_balancer_name",
+      "type": "string",
+      "description": "The name of the ELB. Returned: when state=present Sample: \"ansible-test-935c585850ac\"",
+      "returned": "when"
+    },
+    {
+      "name": "load_balancer_policies",
+      "type": "list",
+      "description": "Information about the policies. Returned: when state=present Sample: []",
+      "returned": "when"
+    },
+    {
+      "name": "policy_attributes_description",
+      "type": "dictionary",
+      "description": "Information about a policy attribute. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "attribute_name",
+      "type": "string",
+      "description": "The name of the attribute. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "attribute_value",
+      "type": "string",
+      "description": "The value of the attribute. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "policy_name",
+      "type": "string",
+      "description": "The name of the policy. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "policy_type_name",
+      "type": "string",
+      "description": "The name of the policy type. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "policies",
+      "type": "dictionary",
+      "description": "The policies defined for the load balancer. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "app_cookie_stickiness_policies",
+      "type": "list",
+      "description": "The stickiness policies created using CreateAppCookieStickinessPolicy. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "cookie_name",
+      "type": "string",
+      "description": "The name of the application cookie used for stickiness. Returned: when state=present Sample: \"\"",
+      "returned": "when"
+    },
+    {
+      "name": "lb_cookie_stickiness_policies",
+      "type": "list",
+      "description": "The stickiness policies created using CreateLBCookieStickinessPolicy. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "cookie_expiration_period",
+      "type": "string",
+      "description": "The time period, in seconds, after which the cookie should be considered stale. Returned: when state=present Sample: \"\"",
+      "returned": "when"
+    },
+    {
+      "name": "other_policies",
+      "type": "list",
+      "description": "The policies other than the stickiness policies. Returned: when state=present Sample: []",
+      "returned": "when"
+    },
+    {
+      "name": "security_groups",
+      "type": "list",
+      "description": "The security groups for the load balancer. Returned: when state=present Sample: [\"sg-0c12ebd82f2fb97dc\", \"sg-01ec7378d0c7342e6\"]",
+      "returned": "when"
+    },
+    {
+      "name": "source_security_groups",
+      "type": "dictionary",
+      "description": "The security group for the load balancer, which you can use as part of your inbound rules for your registered instances. Returned: when state=present Sample: {\"group_name\": \"default\", \"owner_alias\": \"721066863947\"}",
+      "returned": "when"
+    },
+    {
+      "name": "group_name",
+      "type": "string",
+      "description": "The name of the security group.. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "owner_alias",
+      "type": "string",
+      "description": "The owner of the security group. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "vpc_id",
+      "type": "string",
+      "description": "The ID of the VPC for the load balancer. Returned: when state=present Sample: \"vpc-0c112c24b41d89c34\"",
+      "returned": "when"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/amazon/aws/elb_classic_lb_module#ansible-collections-amazon-aws-elb-classic-lb-module.html",
+  "parsed_at": "2026-04-11T13:52:48.782945"
+}

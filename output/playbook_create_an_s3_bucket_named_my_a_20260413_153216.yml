@@ -1,0 +1,26 @@
+# ============================================================
+# AnsibleAI RAG Generator — LangChain + ChromaDB
+# Date        : 2026-04-13 15:32:16
+# Request     : create an S3 bucket named my-app-backups in us-west-2 with versioning enabled
+# Module      : amazon.aws.backup_plan
+# Collection  : amazon.aws
+# RAG score   : 0.683
+# Chunks used : 6
+# Source URL  : https://docs.ansible.com/ansible/latest/collections/amazon/aws/backup_plan_module#ansible-collections-amazon-aws-backup-plan-module.html
+# LLM model   : qwen2.5-coder:7b
+# ============================================================
+
+---
+- name: Create an S3 bucket named my-app-backups in us-west-2 with versioning enabled
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - amazon.aws
+  tasks:
+    - name: Ensure the S3 bucket exists
+      amazon.aws.s3_bucket:
+        name: my-app-backups
+        state: present
+        region: us-west-2
+        versioning: true

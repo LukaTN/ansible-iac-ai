@@ -1,0 +1,382 @@
+{
+  "collection_ns": "amazon_aws",
+  "collection": "amazon.aws",
+  "module": "amazon.aws.rds_instance_snapshot",
+  "slug": "rds_instance_snapshot_module#ansible-collections-amazon-aws-rds-instance-snapshot-module",
+  "description": "Creates or deletes RDS snapshots.",
+  "parameters": [
+    {
+      "name": "access_key",
+      "aliases": [
+        "aws_access_key_id",
+        "aws_access_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS access key ID. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY environment variables may also be used in decreasing order of preference. The aws_access_key and profile options are mutually exclusive. The aws_access_key_id alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "aws_ca_bundle",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The location of a CA Bundle to use when validating SSL certificates. The AWS_CA_BUNDLE environment variable may also be used."
+    },
+    {
+      "name": "aws_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary to modify the botocore configuration. Parameters can be found in the AWS documentation https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html#botocore.config.Config."
+    },
+    {
+      "name": "copy_tags",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Whether to copy all tags from source_db_snapshot_identifier to db_instance_identifier. Choices: false ← (default) true"
+    },
+    {
+      "name": "db_instance_identifier",
+      "aliases": [
+        "instance_id"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Database instance identifier. Required when creating a snapshot."
+    },
+    {
+      "name": "db_snapshot_identifier",
+      "aliases": [
+        "id",
+        "snapshot_id"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The snapshot to manage."
+    },
+    {
+      "name": "debug_botocore_endpoint_logs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use a botocore.endpoint logger to parse the unique (rather than total) \"resource:action\" API calls made during a task, outputing the set to the resource_actions key in the task results. Use the aws_resource_action callback to output to total list made during a playbook. The ANSIBLE_DEBUG_BOTOCORE_LOGS environment variable may also be used. Choices: false ← (default) true"
+    },
+    {
+      "name": "endpoint_url",
+      "aliases": [
+        "aws_endpoint_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "AWS",
+      "choices": [],
+      "description": "URL to connect to instead of the default AWS endpoints. While this can be used to connection to other AWS-compatible services the amazon.aws and community.aws collections are only tested against AWS. The AWS_URL environment variable may also be used."
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "aws_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A named AWS profile to use for authentication. See the AWS documentation for more information about named profiles https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html. The AWS_PROFILE environment variable may also be used. The profile option is mutually exclusive with the aws_access_key, aws_secret_key and session_token options."
+    },
+    {
+      "name": "purge_tags",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If purge_tags=true and tags is set, existing tags will be purged from the resource to match exactly what is defined by tags parameter. If the tags parameter is not set then tags will not be modified, even if purge_tags=True. Tag keys beginning with aws: are reserved by Amazon and can not be modified. As such they will be ignored for the purposes of the purge_tags parameter. See the Amazon documentation for more information https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html#tag-conventions. Choices: false true ← (default)"
+    },
+    {
+      "name": "region",
+      "aliases": [
+        "aws_region"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The AWS region to use. For global services such as IAM, Route53 and CloudFront, region is ignored. The AWS_REGION environment variable may also be used. See the Amazon AWS documentation for more information http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region."
+    },
+    {
+      "name": "secret_key",
+      "aliases": [
+        "aws_secret_access_key",
+        "aws_secret_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS secret access key. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SECRET_ACCESS_KEY or AWS_SECRET_KEY environment variables may also be used in decreasing order of preference. The secret_key and profile options are mutually exclusive. The aws_secret_access_key alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "session_token",
+      "aliases": [
+        "aws_session_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS STS session token for use with temporary credentials. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SESSION_TOKEN environment variable may also be used. The session_token and profile options are mutually exclusive."
+    },
+    {
+      "name": "source_db_snapshot_identifier",
+      "aliases": [
+        "source_id",
+        "source_snapshot_id"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The identifier of the source DB snapshot. Required when copying a snapshot. If the source snapshot is in the same AWS region as the copy, specify the snapshot’s identifier. If the source snapshot is in a different AWS region as the copy, specify the snapshot’s ARN."
+    },
+    {
+      "name": "source_region",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The region that contains the snapshot to be copied."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Specify the desired state of the snapshot. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "tags",
+      "aliases": [
+        "resource_tags"
+      ],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary representing the tags to be applied to the resource. If the tags parameter is not set then tags will not be modified."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to false, SSL certificates will not be validated for communication with the AWS APIs. Setting validate_certs=false is strongly discouraged, as an alternative, consider setting aws_ca_bundle instead. Choices: false true ← (default)"
+    },
+    {
+      "name": "wait",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Whether or not to wait for snapshot creation or deletion. Choices: false ← (default) true"
+    },
+    {
+      "name": "wait_timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "300",
+      "choices": [],
+      "description": "how long before wait gives up, in seconds. Default: 300"
+    }
+  ],
+  "examples": [
+    "- name: Create snapshot\n  amazon.aws.rds_instance_snapshot:\n    db_instance_identifier: new-database\n    db_snapshot_identifier: new-database-snapshot\n  register: snapshot\n\n- name: Copy snapshot from a different region and copy its tags\n  amazon.aws.rds_instance_snapshot:\n    id: new-database-snapshot-copy\n    region: us-east-1\n    source_id: \"{{ snapshot.db_snapshot_arn }}\"\n    source_region: us-east-2\n    copy_tags: true\n\n- name: Delete snapshot\n  amazon.aws.rds_instance_snapshot:\n    db_snapshot_identifier: new-database-snapshot\n    state: absent"
+  ],
+  "return_values": [
+    {
+      "name": "allocated_storage",
+      "type": "integer",
+      "description": "How much storage is allocated in GB. Returned: always Sample: 20",
+      "returned": "always"
+    },
+    {
+      "name": "availability_zone",
+      "type": "string",
+      "description": "Availability zone of the database from which the snapshot was created. Returned: always Sample: \"us-west-2a\"",
+      "returned": "always"
+    },
+    {
+      "name": "db_instance_identifier",
+      "type": "string",
+      "description": "Database from which the snapshot was created. Returned: always Sample: \"ansible-test-16638696\"",
+      "returned": "always"
+    },
+    {
+      "name": "db_snapshot_arn",
+      "type": "string",
+      "description": "Amazon Resource Name for the snapshot. Returned: always Sample: \"arn:aws:rds:us-west-2:123456789012:snapshot:ansible-test-16638696-test-snapshot\"",
+      "returned": "always"
+    },
+    {
+      "name": "db_snapshot_identifier",
+      "type": "string",
+      "description": "Name of the snapshot. Returned: always Sample: \"ansible-test-16638696-test-snapshot\"",
+      "returned": "always"
+    },
+    {
+      "name": "dbi_resource_id",
+      "type": "string",
+      "description": "The identifier for the source DB instance, which can’t be changed and which is unique to an AWS Region. Returned: always Sample: \"db-MM4P2U35RQRAMWD3QDOXWPZP4U\"",
+      "returned": "always"
+    },
+    {
+      "name": "encrypted",
+      "type": "boolean",
+      "description": "Whether the snapshot is encrypted. Returned: always Sample: false",
+      "returned": "always"
+    },
+    {
+      "name": "engine",
+      "type": "string",
+      "description": "Engine of the database from which the snapshot was created. Returned: always Sample: \"mariadb\"",
+      "returned": "always"
+    },
+    {
+      "name": "engine_version",
+      "type": "string",
+      "description": "Version of the database from which the snapshot was created. Returned: always Sample: \"10.2.21\"",
+      "returned": "always"
+    },
+    {
+      "name": "iam_database_authentication_enabled",
+      "type": "boolean",
+      "description": "Whether IAM database authentication is enabled. Returned: always Sample: false",
+      "returned": "always"
+    },
+    {
+      "name": "instance_create_time",
+      "type": "string",
+      "description": "Creation time of the instance from which the snapshot was created. Returned: always Sample: \"2019-06-15T10:15:56.221000+00:00\"",
+      "returned": "always"
+    },
+    {
+      "name": "license_model",
+      "type": "string",
+      "description": "License model of the database. Returned: always Sample: \"general-public-license\"",
+      "returned": "always"
+    },
+    {
+      "name": "master_username",
+      "type": "string",
+      "description": "Master username of the database. Returned: always Sample: \"test\"",
+      "returned": "always"
+    },
+    {
+      "name": "option_group_name",
+      "type": "string",
+      "description": "Option group of the database. Returned: always Sample: \"default:mariadb-10-2\"",
+      "returned": "always"
+    },
+    {
+      "name": "percent_progress",
+      "type": "integer",
+      "description": "How much progress has been made taking the snapshot. Will be 100 for an available snapshot. Returned: always Sample: 100",
+      "returned": "always"
+    },
+    {
+      "name": "port",
+      "type": "integer",
+      "description": "Port on which the database is listening. Returned: always Sample: 3306",
+      "returned": "always"
+    },
+    {
+      "name": "processor_features",
+      "type": "list",
+      "description": "List of processor features of the database. Returned: always Sample: []",
+      "returned": "always"
+    },
+    {
+      "name": "snapshot_create_time",
+      "type": "string",
+      "description": "Creation time of the snapshot. Returned: always Sample: \"2019-06-15T10:46:23.776000+00:00\"",
+      "returned": "always"
+    },
+    {
+      "name": "snapshot_type",
+      "type": "string",
+      "description": "How the snapshot was created (always manual for this module!). Returned: always Sample: \"manual\"",
+      "returned": "always"
+    },
+    {
+      "name": "source_db_snapshot_identifier",
+      "type": "string",
+      "description": "The DB snapshot ARN that the DB snapshot was copied from. Returned: when snapshot is a copy Sample: \"arn:aws:rds:us-west-2:123456789012:snapshot:ansible-test-16638696-test-snapshot-source\"",
+      "returned": "when"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "description": "Status of the snapshot. Returned: always Sample: \"available\"",
+      "returned": "always"
+    },
+    {
+      "name": "storage_type",
+      "type": "string",
+      "description": "Storage type of the database. Returned: always Sample: \"gp2\"",
+      "returned": "always"
+    },
+    {
+      "name": "tags",
+      "type": "complex",
+      "description": "Tags applied to the snapshot. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "vpc_id",
+      "type": "string",
+      "description": "ID of the VPC in which the DB lives. Returned: always Sample: \"vpc-09ff232e222710ae0\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/amazon/aws/rds_instance_snapshot_module.html",
+  "parsed_at": "2026-04-13T16:29:23.849037"
+}

@@ -1,0 +1,56 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.hponcfg",
+  "slug": "hponcfg_module#ansible-collections-community-general-hponcfg-module",
+  "description": "This modules configures the HP iLO interface using hponcfg.",
+  "parameters": [
+    {
+      "name": "executable",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "hponcfg",
+      "choices": [],
+      "description": "Path to the hponcfg executable (hponcfg which uses PATH). Default: \"hponcfg\""
+    },
+    {
+      "name": "minfw",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The minimum firmware level needed."
+    },
+    {
+      "name": "path",
+      "aliases": [
+        "src"
+      ],
+      "type": "path",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The XML file as accepted by hponcfg."
+    },
+    {
+      "name": "verbose",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Run hponcfg in verbose mode (-v). Choices: false ← (default) true"
+    }
+  ],
+  "examples": [
+    "- name: Example hponcfg configuration XML\n  ansible.builtin.copy:\n    content: |\n      <ribcl VERSION=\"2.0\">\n        <login USER_LOGIN=\"user\" PASSWORD=\"password\">\n          <rib_info MODE=\"WRITE\">\n            <mod_global_settings>\n              <session_timeout value=\"0\"/>\n              <ssh_status value=\"Y\"/>\n              <ssh_port value=\"22\"/>\n              <serial_cli_status value=\"3\"/>\n              <serial_cli_speed value=\"5\"/>\n            </mod_global_settings>\n          </rib_info>\n        </login>\n      </ribcl>\n    dest: /tmp/enable-ssh.xml\n\n- name: Configure HP iLO using enable-ssh.xml\n  community.general.hponcfg:\n    src: /tmp/enable-ssh.xml\n\n- name: Configure HP iLO on VMware ESXi hypervisor\n  community.general.hponcfg:\n    src: /tmp/enable-ssh.xml\n    executable: /opt/hp/tools/hponcfg"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/hponcfg_module#ansible-collections-community-general-hponcfg-module.html",
+  "parsed_at": "2026-04-11T13:53:14.736520"
+}

@@ -1,0 +1,76 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.lvm_pv_move_data",
+  "slug": "lvm_pv_move_data_module#ansible-collections-community-general-lvm-pv-move-data-module",
+  "description": "Moves data from one LVM Physical Volume (PV) to another.",
+  "parameters": [
+    {
+      "name": "atomic",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Makes the pvmove operation atomic, ensuring that all affected LVs are moved to the destination PV, or none are if the operation is aborted. Choices: false true ← (default)"
+    },
+    {
+      "name": "auto_answer",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Answer yes to all prompts automatically. Choices: false ← (default) true"
+    },
+    {
+      "name": "autobackup",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Automatically backup metadata before changes (strongly advised!). Choices: false true ← (default)"
+    },
+    {
+      "name": "destination",
+      "aliases": [],
+      "type": "path",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Path to the destination block device to move data to. Must be an existing PV with enough free space."
+    },
+    {
+      "name": "source",
+      "aliases": [],
+      "type": "path",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Path to the source block device to move data from. Must be an existing PV."
+    }
+  ],
+  "examples": [
+    "- name: Moving data from /dev/sdb to /dev/sdc\n  community.general.lvm_pv_move_data:\n    source: /dev/sdb\n    destination: /dev/sdc"
+  ],
+  "return_values": [
+    {
+      "name": "actions",
+      "type": "list",
+      "description": "List of actions performed during module execution. Returned: success Sample: [\"moved data from /dev/sdb to /dev/sdc\", \"no allocated extents to move\", \"would move data from /dev/sdb to /dev/sdc\"]",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/lvm_pv_move_data_module#ansible-collections-community-general-lvm-pv-move-data-module.html",
+  "parsed_at": "2026-04-11T13:53:19.523439"
+}

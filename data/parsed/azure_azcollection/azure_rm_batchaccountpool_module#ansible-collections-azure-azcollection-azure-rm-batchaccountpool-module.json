@@ -1,0 +1,428 @@
+{
+  "collection_ns": "azure_azcollection",
+  "collection": "azure.azcollection",
+  "module": "azure.azcollection.azure_rm_batchaccountpool",
+  "slug": "azure_rm_batchaccountpool_module#ansible-collections-azure-azcollection-azure-rm-batchaccountpool-module",
+  "description": "Create, update and delete instance of Azure Batch Account Pool.",
+  "parameters": [
+    {
+      "name": "ad_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory username. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "adfs_authority_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure AD authority url. Use when authenticating with Username/password, and has your own ADFS authority."
+    },
+    {
+      "name": "api_profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "Selects an API profile to use when communicating with Azure services. Default value of latest is appropriate for public clouds; future values will allow use with Azure Stack. Default: \"latest\""
+    },
+    {
+      "name": "application_licenses",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The list of application licenses must be a subset of available Batch service application licenses. If a license is requested which is not supported, pool creation will fail."
+    },
+    {
+      "name": "application_packages",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Changes to application package references affect all new compute nodes joining the pool. But do not affect compute nodes that are already in the pool until they are rebooted or reimaged. There is a maximum of 10 application package references on any given pool."
+    },
+    {
+      "name": "auth_source",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "az",
+      "choices": [
+        "\"auto\" ← (default)",
+        "\"cli\"",
+        "\"credential_file\"",
+        "\"env\"",
+        "\"msi\""
+      ],
+      "description": "Controls the source of the credentials to use for authentication. Can also be set via the ANSIBLE_AZURE_AUTH_SOURCE environment variable. When set to auto (the default) the precedence is module parameters -> env -> credential_file -> cli. When set to env, the credentials will be read from the environment variables When set to credential_file, it will read the profile from ~/.azure/credentials. When set to cli, the credentials will be sources from the Azure CLI profile. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if more than one is present otherwise the default az cli subscription is used. When set to msi, the host machine must be an azure resource with an enabled MSI extension. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if the resource is granted access to more than one subscription, otherwise the first subscription is chosen. The msi was added in Ansible 2.6. Choices: \"auto\" ← (default) \"cli\" \"credential_file\" \"env\" \"msi\""
+    },
+    {
+      "name": "batch_account_name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the Batch Account."
+    },
+    {
+      "name": "cert_validation_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ignore\"",
+        "\"validate\""
+      ],
+      "description": "Controls the certificate validation behavior for Azure endpoints. By default, all modules will validate the server certificate, but when an HTTPS proxy is in use, or against Azure Stack, it may be necessary to disable this behavior by passing ignore. Can also be set via credential file profile or the AZURE_CERT_VALIDATION environment variable. Choices: \"ignore\" \"validate\""
+    },
+    {
+      "name": "certificates",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "For Windows compute nodes, the Batch service installs the certificates to the specified certificate store and location. For Linux compute nodes, the certificates are stored in a directory inside the task working directory and an environment variable AZ_BATCH_CERTIFICATES_DIR is supplied to the task to query for this location. For certificates with visibility of ‘remoteUser’, a ‘certs’ directory is created in the user’s home directory and certificates are placed in that directory."
+    },
+    {
+      "name": "client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client ID. Use when authenticating with a Service Principal or Managed Identity (msi). Can also be set via the AZURE_CLIENT_ID environment variable."
+    },
+    {
+      "name": "cloud_environment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "AzureCloud",
+      "choices": [],
+      "description": "For cloud environments other than the US public cloud, the environment name (as defined by Azure Python SDK, eg, AzureChinaCloud, AzureUSGovernment), or a metadata discovery endpoint URL (required for Azure Stack). Can also be set via credential file profile or the AZURE_CLOUD_ENVIRONMENT environment variable. Default: \"AzureCloud\""
+    },
+    {
+      "name": "deployment_configuration",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Using CloudServiceConfiguration specifies that the nodes should be creating using Azure Cloud Services (PaaS). Using VirtualMachineConfiguration uses Azure Virtual Machines (IaaS)."
+    },
+    {
+      "name": "disable_instance_discovery",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Determines whether or not instance discovery is performed when attempting to authenticate. Setting this to true will completely disable both instance discovery and authority validation. This functionality is intended for use in scenarios where the metadata endpoint cannot be reached such as in private clouds or Azure Stack. The process of instance discovery entails retrieving authority metadata from https://login.microsoft.com/ to validate the authority. By setting this to **True**, the validation of the authority is disabled. As a result, it is crucial to ensure that the configured authority host is valid and trustworthy. Set via credential file profile or the AZURE_DISABLE_INSTANCE_DISCOVERY environment variable. Choices: false ← (default) true"
+    },
+    {
+      "name": "display_name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The display name for the pool."
+    },
+    {
+      "name": "identity",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The type of identity used for the Batch Pool. If the pool identity is updated during update an existing pool. Only the new vms which are created after the pool shrinks to 0 will have the updated identities."
+    },
+    {
+      "name": "inter_node_communication",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"Enabled\"",
+        "\"Disabled\""
+      ],
+      "description": "This imposes restrictions on which nodes can be assigned to the pool. Enabling this value can reduce the chance of the requested number of nodes to be allocated in the pool. If not specified, this value defaults to Disabled. Choices: \"Enabled\" \"Disabled\""
+    },
+    {
+      "name": "is_disable_auto_scale",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Whether disables automatic scaling for a pool. Choices: false ← (default) true"
+    },
+    {
+      "name": "is_stop_resize",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Whether stops an ongoing resize operation on the pool. Choices: false ← (default) true"
+    },
+    {
+      "name": "log_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "log_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "metadata",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The Batch service does not assign any meaning to this metadata; it is solely for the use of user code."
+    },
+    {
+      "name": "mount_configuration",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "This supports Azure Files, NFS, CIFS/SMB, and Blobfuse."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the Batch Account Pool."
+    },
+    {
+      "name": "network_configuration",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The network configuration for a pool."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory user password. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security profile found in ~/.azure/credentials file."
+    },
+    {
+      "name": "resource_group",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the resource group in which to create the Batch Account Pool."
+    },
+    {
+      "name": "resource_tags",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The user-defined tags to be associated with the Azure Batch Pool. When specified, these tags are propagated to the backing Azure resources associated with the pool. This property can only be specified when the Batch account was created with the poolAllocationMode property set to ‘UserSubscription’."
+    },
+    {
+      "name": "scale_settings",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Defines the desired size of the pool. This can either be ‘fixedScale’ where the requested targetDedicatedNodes is specified, or ‘autoScale’ which defines a formula which is periodically reevaluated. If this property is not specified, the pool will have a fixed scale with 0 targetDedicatedNodes."
+    },
+    {
+      "name": "secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client secret. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "start_task",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "In an PATCH (update) operation, this property can be set to an empty object to remove the start task from the pool."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Assert the state of the Batch Account Pool. Use present to create or update a Batch Account Pool and absent to delete it. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "subscription_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Your Azure subscription Id."
+    },
+    {
+      "name": "target_node_communication_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "choices": [
+        "\"Default\" ← (default)",
+        "\"Classic\"",
+        "\"Simplified\""
+      ],
+      "description": "If omitted, the default value is Default. Choices: \"Default\" ← (default) \"Classic\" \"Simplified\""
+    },
+    {
+      "name": "task_scheduling_policy",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies how tasks should be distributed across compute nodes."
+    },
+    {
+      "name": "task_slots_per_node",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "The default value is 1. The maximum value is the smaller of 4 times the number of cores of the vmSize of the pool or 256. Default: 1"
+    },
+    {
+      "name": "tenant",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure tenant ID. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "thumbprint",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The thumbprint of the private key specified in x509_certificate_path. Use when authenticating with a Service Principal. Required if x509_certificate_path is defined."
+    },
+    {
+      "name": "upgrade_policy",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Describes an upgrade policy."
+    },
+    {
+      "name": "user_accounts",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The list of user accounts to be created on each node in the pool."
+    },
+    {
+      "name": "vm_size",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "For information about available sizes of virtual machines for Cloud Services Pools. Batch supports all Cloud Services VM sizes except ExtraSmall, A1V2 and A2V2, Batch supports all Azure VM sizes except STANDARD_A0 and those with premium storage (STANDARD_GS, STANDARD_DS, and STANDARD_DSV2 series)."
+    },
+    {
+      "name": "x509_certificate_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the X509 certificate used to create the service principal in PEM format. The certificate must be appended to the private key. Use when authenticating with a Service Principal."
+    }
+  ],
+  "examples": [
+    "- name: Create a new batch account pool\n  azure_rm_batchaccountpool:\n    resource_group: \"{{ resource_group }}\"\n    batch_account_name: \"{{ batch_account_name }}\"\n    name: \"pool{{ batch_account_name }}--004\"\n    deployment_configuration:\n      virtual_machine_configuration:\n        image_reference:\n          offer: ubuntu-hpc\n          publisher: microsoft-dsvm\n          sku: 2204\n          version: latest\n        node_agent_sku_id: batch.node.ubuntu 22.04\n        node_placement_configuration:\n          policy: Regional\n        os_disk:\n          caching: None\n          managed_disk:\n            storage_account_type: Premium_LRS\n    display_name: \"fredtest01\"\n    identity:\n      type: UserAssigned\n      user_assigned_identities:\n        '/subscriptions/xxx-xxx/resourceGroups/testRG/providers/Microsoft.ManagedIdentity/userAssignedIdentities/AzSecPackAutoConfigUA-westus':\n          client_id: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\n          principal_id: yyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy\n        '/subscriptions/xxx-xxx/resourceGroups/yishitest/providers/Microsoft.ManagedIdentity/userAssignedIdentities/ystestidentity':\n          client_id: yyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy\n          principal_id: xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\n    inter_node_communication: Disabled\n    network_configuration:\n      dynamic_vnet_assignment_scope: none\n      subnet_id: \"/subscriptions/xxx-xxx/resourceGroups/testRG/providers/Microsoft.Network/virtualNetworks/vnet02/subnets/default\"\n      endpoint_configuration:\n        inbound_nat_pools:\n          - backend_port: 33\n            frontend_port_range_end: 49999\n            frontend_port_range_start: 1\n            name: nat02\n            protocol: UDP\n      public_ip_address_configuration:\n        provision: BatchManaged\n    scale_settings:\n      fixed_scale:\n        resize_timeout: PT15M\n        target_dedicated_nodes: 0\n        target_low_priority_nodes: 0\n    target_node_communication_mode: Default\n    task_scheduling_policy:\n      node_fill_type: Pack\n    task_slots_per_node: 1\n    vm_size: STANDARD_D2S_V3\n    upgrade_policy:\n      mode: manual\n      rolling_upgrade_policy:\n        max_batch_instance_percent: 20\n        max_unhealthy_instance_percent: 20\n        max_unhealthy_upgraded_instance_percent: 20\n        pause_time_between_batches: P0D\n        rollback_failed_instances_on_policy_breach: false\n      automatic_os_upgrade_policy:\n        disable_automatic_rollback: false\n        enable_automatic_os_upgrade: false\n        os_rolling_upgrade_deferral: false\n        use_rolling_upgrade_policy: false\n\n- name: Delete the Batch Account Pool\n  azure_rm_batchaccountpool:\n    resource_group: MyResGroup\n    name: pool01\n    batch_account_name: mybatchaccount\n    state: absent"
+  ],
+  "return_values": [
+    {
+      "name": "state",
+      "type": "dictionary",
+      "description": "Contains information about an pool in a Batch account. Returned: always Sample: {\"allocation_state\": \"Steady\", \"allocation_state_transition_time\": \"2024-11-05T08:58:16.803138Z\", \"batch_account_name\": \"fredbatch02\", \"creation_time\": \"2024-11-05T08:58:15.399345Z\", \"current_dedicated_nodes\": 0, \"current_low_priority_nodes\": 0, \"deployment_configuration\": {\"virtual_machine_configuration\": {\"image_reference\": {\"offer\": \"ubuntu-hpc\", \"publisher\": \"microsoft-dsvm\", \"sku\": \"2204\", \"version\": \"latest\"}, \"node_agent_sku_id\": \"batch.node.ubuntu 22.04\", \"node_placement_configuration\": {\"policy\": \"Regional\"}, \"os_disk\": {\"caching\": \"None\", \"managed_disk\": {\"storage_account_type\": \"Premium_LRS\"}}}}, \"etag\": \"0x8DCFD77FC345CFE\", \"id\": \"/subscriptions/xxx-xxx/resourceGroups/testRG/providers/Microsoft.Batch/batchAccounts/batch01/pools/pool01\", \"inter_node_communication\": \"Disabled\", \"last_modified\": \"2024-11-05T08:58:15.399347Z\", \"name\": \"poolfredbatch02--002\", \"network_configuration\": {\"dynamic_vnet_assignment_scope\": \"None\", \"enable_accelerated_networking\": false, \"endpoint_configuration\": {\"inbound_nat_pools\": [{\"backend_port\": 33, \"frontend_port_range_end\": 49999, \"frontend_port_range_start\": 1, \"name\": \"nat02\", \"protocol\": \"UDP\"}]}, \"public_ip_address_configuration\": {\"provision\": \"BatchManaged\"}, \"subnet_id\": \"/subscriptions/xxx-xxx/resourceGroups/testrg/providers/Microsoft.Network/virtualNetworks/vnet01/subnets/default\"}, \"provisioning_state\": \"Succeeded\", \"provisioning_state_transition_time\": \"2024-11-05T08:58:15.399345Z\", \"resize_operation_status\": {\"node_deallocation_option\": \"Requeue\", \"resize_timeout\": \"PT15M\", \"start_time\": \"2024-11-05T08:58:15.399317Z\", \"target_dedicated_nodes\": 0}, \"resource_group\": \"v-xisuRG06\", \"scale_settings\": {\"fixed_scale\": {\"resize_timeout\": \"PT15M\", \"target_dedicated_nodes\": 0, \"target_low_priority_nodes\": 0}}, \"target_node_communication_mode\": \"Default\", \"task_scheduling_policy\": {\"node_fill_type\": \"Pack\"}, \"task_slots_per_node\": 1, \"type\": \"Microsoft.Batch/batchAccounts/pools\", \"upgrade_policy\": {\"automatic_os_upgrade_policy\": {\"disable_automatic_rollback\": false, \"enable_automatic_os_upgrade\": false, \"os_rolling_upgrade_deferral\": false, \"use_rolling_upgrade_policy\": false}, \"mode\": \"Manual\", \"rolling_upgrade_policy\": {\"max_batch_instance_percent\": 20, \"max_unhealthy_instance_percent\": 20, \"max_unhealthy_upgraded_instance_percent\": 20, \"pause_time_between_batches\": \"P0D\", \"rollback_failed_instances_on_policy_breach\": false}}, \"vm_size\": \"STANDARD_D2S_V3\"}",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_batchaccountpool_module.html",
+  "parsed_at": "2026-04-13T16:29:29.772154"
+}

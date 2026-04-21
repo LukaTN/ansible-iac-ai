@@ -1,0 +1,879 @@
+{
+  "collection_ns": "amazon_aws",
+  "collection": "amazon.aws",
+  "module": "amazon.aws.elb_application_lb",
+  "slug": "elb_application_lb_module#ansible-collections-amazon-aws-elb-application-lb-module",
+  "description": "Manage an AWS Application Elastic Load Balancer. See https://aws.amazon.com/blogs/aws/new-aws-application-load-balancer/ for details.",
+  "parameters": [
+    {
+      "name": "access_key",
+      "aliases": [
+        "aws_access_key_id",
+        "aws_access_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS access key ID. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY environment variables may also be used in decreasing order of preference. The aws_access_key and profile options are mutually exclusive. The aws_access_key_id alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "access_logs_enabled",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Whether or not to enable access logs. When set, access_logs_s3_bucket must also be set. Choices: false true"
+    },
+    {
+      "name": "access_logs_s3_bucket",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The name of the S3 bucket for the access logs. The bucket must exist in the same region as the load balancer and have a bucket policy that grants Elastic Load Balancing permission to write to the bucket. Required if access logs in Amazon S3 are enabled. When set, access_logs_enabled must also be set."
+    },
+    {
+      "name": "access_logs_s3_prefix",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The prefix for the log location in the S3 bucket. If you don’t specify a prefix, the access logs are stored in the root of the bucket. Cannot begin or end with a slash."
+    },
+    {
+      "name": "aws_ca_bundle",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The location of a CA Bundle to use when validating SSL certificates. The AWS_CA_BUNDLE environment variable may also be used."
+    },
+    {
+      "name": "aws_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary to modify the botocore configuration. Parameters can be found in the AWS documentation https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html#botocore.config.Config."
+    },
+    {
+      "name": "debug_botocore_endpoint_logs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use a botocore.endpoint logger to parse the unique (rather than total) \"resource:action\" API calls made during a task, outputing the set to the resource_actions key in the task results. Use the aws_resource_action callback to output to total list made during a playbook. The ANSIBLE_DEBUG_BOTOCORE_LOGS environment variable may also be used. Choices: false ← (default) true"
+    },
+    {
+      "name": "deletion_protection",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Indicates whether deletion protection for the ALB is enabled. Defaults to false. Choices: false true"
+    },
+    {
+      "name": "endpoint_url",
+      "aliases": [
+        "aws_endpoint_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "AWS",
+      "choices": [],
+      "description": "URL to connect to instead of the default AWS endpoints. While this can be used to connection to other AWS-compatible services the amazon.aws and community.aws collections are only tested against AWS. The AWS_URL environment variable may also be used."
+    },
+    {
+      "name": "http2",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Indicates whether to enable HTTP2 routing. Defaults to True. Choices: false true"
+    },
+    {
+      "name": "http_desync_mitigation_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"monitor\"",
+        "\"defensive\"",
+        "\"strictest\""
+      ],
+      "description": "Determines how the load balancer handles requests that might pose a security risk to an application. Defaults to defensive. Choices: \"monitor\" \"defensive\" \"strictest\""
+    },
+    {
+      "name": "http_drop_invalid_header_fields",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Indicates whether HTTP headers with invalid header fields are removed by the load balancer true or routed to targets false. Defaults to false. Choices: false true"
+    },
+    {
+      "name": "http_x_amzn_tls_version_and_cipher_suite",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Indicates whether the two headers are added to the client request before sending it to the target. Defaults to false. Choices: false true"
+    },
+    {
+      "name": "http_xff_client_port",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Indicates whether the X-Forwarded-For header should preserve the source port that the client used to connect to the load balancer. Defaults to false. Choices: false true"
+    },
+    {
+      "name": "idle_timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The number of seconds to wait before an idle connection is closed."
+    },
+    {
+      "name": "ip_address_type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ipv4\"",
+        "\"dualstack\""
+      ],
+      "description": "Sets the type of IP addresses used by the subnets of the specified Application Load Balancer. Choices: \"ipv4\" \"dualstack\""
+    },
+    {
+      "name": "listeners",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A list of dicts containing listeners to attach to the ALB. See examples for detail of the dict required. Note that listener keys are CamelCased."
+    },
+    {
+      "name": "Certificates",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The SSL server certificate."
+    },
+    {
+      "name": "CertificateArn",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The Amazon Resource Name (ARN) of the certificate."
+    },
+    {
+      "name": "DefaultActions",
+      "aliases": [],
+      "type": "list",
+      "required": true,
+      "default": "actions",
+      "choices": [],
+      "description": "The default actions for the listener."
+    },
+    {
+      "name": "TargetGroupArn",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The Amazon Resource Name (ARN) of the target group. Mutually exclusive with listeners.DefaultActions.TargetGroupName."
+    },
+    {
+      "name": "TargetGroupName",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The name of the target group. Mutually exclusive with listeners.DefaultActions.TargetGroupArn."
+    },
+    {
+      "name": "Type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The type of action."
+    },
+    {
+      "name": "Port",
+      "aliases": [],
+      "type": "integer",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The port on which the load balancer is listening."
+    },
+    {
+      "name": "Protocol",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The protocol for connections from clients to the load balancer."
+    },
+    {
+      "name": "Rules",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "values",
+      "choices": [],
+      "description": "A list of ALB Listener Rules. For the complete documentation of possible Conditions and Actions please see the boto3 documentation: https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/elbv2.html#ElasticLoadBalancingv2.Client.create_rule Keep in mind that AWS uses default values for parameters that are not requested. For example for Scope and SessionTimeout when the action type is authenticate-oidc."
+    },
+    {
+      "name": "Actions",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Actions to apply if all of the rule’s conditions are met."
+    },
+    {
+      "name": "Conditions",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Conditions which must be met for the actions to be applied."
+    },
+    {
+      "name": "Priority",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The rule priority."
+    },
+    {
+      "name": "SslPolicy",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The security policy that defines which ciphers and protocols are supported."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the load balancer. This name must be unique within your AWS account, can have a maximum of 32 characters, must contain only alphanumeric characters or hyphens, and must not begin or end with a hyphen."
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "aws_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A named AWS profile to use for authentication. See the AWS documentation for more information about named profiles https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html. The AWS_PROFILE environment variable may also be used. The profile option is mutually exclusive with the aws_access_key, aws_secret_key and session_token options."
+    },
+    {
+      "name": "purge_listeners",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If true, existing listeners will be purged from the ALB to match exactly what is defined by listeners parameter. If the listeners parameter is not set then listeners will not be modified. Choices: false true ← (default)"
+    },
+    {
+      "name": "purge_rules",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to false, keep the existing load balancer rules in place. Will modify and add, but will not delete. Choices: false true ← (default)"
+    },
+    {
+      "name": "purge_tags",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If purge_tags=true and tags is set, existing tags will be purged from the resource to match exactly what is defined by tags parameter. If the tags parameter is not set then tags will not be modified, even if purge_tags=True. Tag keys beginning with aws: are reserved by Amazon and can not be modified. As such they will be ignored for the purposes of the purge_tags parameter. See the Amazon documentation for more information https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html#tag-conventions. Choices: false true ← (default)"
+    },
+    {
+      "name": "region",
+      "aliases": [
+        "aws_region"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The AWS region to use. For global services such as IAM, Route53 and CloudFront, region is ignored. The AWS_REGION environment variable may also be used. See the Amazon AWS documentation for more information http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region."
+    },
+    {
+      "name": "scheme",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"internet-facing\" ← (default)",
+        "\"internal\""
+      ],
+      "description": "Internet-facing or internal load balancer. An ALB scheme can not be modified after creation. Choices: \"internet-facing\" ← (default) \"internal\""
+    },
+    {
+      "name": "secret_key",
+      "aliases": [
+        "aws_secret_access_key",
+        "aws_secret_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS secret access key. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SECRET_ACCESS_KEY or AWS_SECRET_KEY environment variables may also be used in decreasing order of preference. The secret_key and profile options are mutually exclusive. The aws_secret_access_key alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "security_groups",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "security",
+      "choices": [],
+      "description": "A list of the names or IDs of the security groups to assign to the load balancer. Required if state=present. If [], the VPC’s default security group will be used."
+    },
+    {
+      "name": "session_token",
+      "aliases": [
+        "aws_session_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS STS session token for use with temporary credentials. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SESSION_TOKEN environment variable may also be used. The session_token and profile options are mutually exclusive."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Create or destroy the load balancer. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "subnets",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A list of the IDs of the subnets to attach to the load balancer. You can specify only one subnet per Availability Zone. You must specify subnets from at least two Availability Zones. Required if state=present."
+    },
+    {
+      "name": "tags",
+      "aliases": [
+        "resource_tags"
+      ],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary representing the tags to be applied to the resource. If the tags parameter is not set then tags will not be modified."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to false, SSL certificates will not be validated for communication with the AWS APIs. Setting validate_certs=false is strongly discouraged, as an alternative, consider setting aws_ca_bundle instead. Choices: false true ← (default)"
+    },
+    {
+      "name": "waf_fail_open",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Indicates whether to allow a AWS WAF-enabled load balancer to route requests to targets if it is unable to forward the request to AWS WAF. Defaults to false. Choices: false true"
+    },
+    {
+      "name": "wait",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Wait for the load balancer to have a state of ‘active’ before completing. A status check is performed every 15 seconds until a successful state is reached. An error is returned after 40 failed checks. Choices: false ← (default) true"
+    },
+    {
+      "name": "wait_timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The time in seconds to use in conjunction with wait."
+    }
+  ],
+  "examples": [
+    "# Note: These examples do not set authentication details, see the AWS Guide for details.\n\n# Create an ALB and attach a listener\n- amazon.aws.elb_application_lb:\n    name: myalb\n    security_groups:\n      - sg-12345678\n      - my-sec-group\n    subnets:\n      - subnet-012345678\n      - subnet-abcdef000\n    listeners:\n      - Protocol: HTTP # Required. The protocol for connections from clients to the load balancer (HTTP or HTTPS) (case-sensitive).\n        Port: 80 # Required. The port on which the load balancer is listening.\n        # The security policy that defines which ciphers and protocols are supported. The default is the current predefined security policy.\n        SslPolicy: ELBSecurityPolicy-2015-05\n        Certificates: # The ARN of the certificate\n          - CertificateArn: arn:aws:iam::123456789012:server-certificate/test.domain.com\n        DefaultActions:\n          - Type: forward # Required.\n            TargetGroupName: # Required. The name of the target group\n    state: present\n\n# Create an ALB and attach a listener with logging enabled\n- amazon.aws.elb_application_lb:\n    access_logs_enabled: true\n    access_logs_s3_bucket: mybucket\n    access_logs_s3_prefix: \"logs\"\n    name: myalb\n    security_groups:\n      - sg-12345678\n      - my-sec-group\n    subnets:\n      - subnet-012345678\n      - subnet-abcdef000\n    listeners:\n      - Protocol: HTTP # Required. The protocol for connections from clients to the load balancer (HTTP or HTTPS) (case-sensitive).\n        Port: 80 # Required. The port on which the load balancer is listening.\n        # The security policy that defines which ciphers and protocols are supported. The default is the current predefined security policy.\n        SslPolicy: ELBSecurityPolicy-2015-05\n        Certificates: # The ARN of the certificate\n          - CertificateArn: arn:aws:iam::123456789012:server-certificate/test.domain.com\n        DefaultActions:\n          - Type: forward # Required.\n            TargetGroupName: # Required. The name of the target group\n    state: present\n\n# Create an ALB with listeners and rules\n- amazon.aws.elb_application_lb:\n    name: test-alb\n    subnets:\n      - subnet-12345678\n      - subnet-87654321\n    security_groups:\n      - sg-12345678\n    scheme: internal\n    listeners:\n      - Protocol: HTTPS\n        Port: 443\n        DefaultActions:\n          - Type: forward\n            TargetGroupName: test-target-group\n        Certificates:\n          - CertificateArn: arn:aws:iam::123456789012:server-certificate/test.domain.com\n        SslPolicy: ELBSecurityPolicy-2015-05\n        Rules:\n          - Conditions:\n              - Field: path-pattern\n                Values:\n                  - '/test'\n            Priority: '1'\n            Actions:\n              - TargetGroupName: test-target-group\n                Type: forward\n          - Conditions:\n              - Field: path-pattern\n                Values:\n                  - \"/redirect-path/*\"\n            Priority: '2'\n            Actions:\n              - Type: redirect\n                RedirectConfig:\n                  Host: \"#{host}\"\n                  Path: \"/example/redir\" # or /#{path}\n                  Port: \"#{port}\"\n                  Protocol: \"#{protocol}\"\n                  Query: \"#{query}\"\n                  StatusCode: \"HTTP_302\" # or HTTP_301\n          - Conditions:\n              - Field: path-pattern\n                Values:\n                  - \"/fixed-response-path/\"\n            Priority: '3'\n            Actions:\n              - Type: fixed-response\n                FixedResponseConfig:\n                  ContentType: \"text/plain\"\n                  MessageBody: \"This is the page you're looking for\"\n                  StatusCode: \"200\"\n          - Conditions:\n              - Field: host-header\n                Values:\n                  - \"hostname.domain.com\"\n                  - \"alternate.domain.com\"\n            Priority: '4'\n            Actions:\n              - TargetGroupName: test-target-group\n                Type: forward\n    state: present\n\n# Create an ALB with a listener having multiple listener certificates\n- amazon.aws.elb_application_lb:\n    name: myalb\n    security_groups:\n      - sg-12345678\n      - my-sec-group\n    subnets:\n      - subnet-012345678\n      - subnet-abcdef000\n    listeners:\n      - Protocol: HTTP # Required. The protocol for connections from clients to the load balancer (HTTP or HTTPS) (case-sensitive).\n        Port: 80 # Required. The port on which the load balancer is listening.\n        # The security policy that defines which ciphers and protocols are supported. The default is the current predefined security policy.\n        SslPolicy: ELBSecurityPolicy-2015-05\n        Certificates: # The ARN of the certificate (first certificate in the list will be set as default certificate)\n          - CertificateArn: arn:aws:iam::123456789012:server-certificate/test.domain.com\n          - CertificateArn: arn:aws:iam::123456789012:server-certificate/secondtest.domain.com\n          - CertificateArn: arn:aws:iam::123456789012:server-certificate/thirdtest.domain.com\n        DefaultActions:\n          - Type: forward # Required.\n            TargetGroupName: # Required. The name of the target group\n    state: present\n\n# Remove an ALB\n- amazon.aws.elb_application_lb:\n    name: myalb\n    state: absent"
+  ],
+  "return_values": [
+    {
+      "name": "access_logs_s3_bucket",
+      "type": "string",
+      "description": "The name of the S3 bucket for the access logs. Returned: when state=present Sample: \"mys3bucket\"",
+      "returned": "when"
+    },
+    {
+      "name": "access_logs_s3_enabled",
+      "type": "string",
+      "description": "Indicates whether access logs stored in Amazon S3 are enabled. Returned: when state=present Sample: \"true\"",
+      "returned": "when"
+    },
+    {
+      "name": "access_logs_s3_prefix",
+      "type": "string",
+      "description": "The prefix for the location in the S3 bucket. Returned: when state=present Sample: \"my/logs\"",
+      "returned": "when"
+    },
+    {
+      "name": "availability_zones",
+      "type": "list",
+      "description": "The Availability Zones for the load balancer. Returned: when state=present Sample: [{\"load_balancer_addresses\": [], \"subnet_id\": \"subnet-aabbccddff\", \"zone_name\": \"ap-southeast-2a\"}]",
+      "returned": "when"
+    },
+    {
+      "name": "load_balancer_addresses",
+      "type": "list",
+      "description": "Information about static IP addresses for a load balancer. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "allocation_id",
+      "type": "string",
+      "description": "The allocation ID of the Elastic IP address for an internal-facing load balancer. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "ip_address",
+      "type": "string",
+      "description": "The static IP address. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "ipv6_address",
+      "type": "string",
+      "description": "The IPv6 address. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "private_ipv4_address",
+      "type": "string",
+      "description": "The private IPv4 address for an internal load balancer. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "subnet_id",
+      "type": "string",
+      "description": "The ID of the subnet. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "zone_name",
+      "type": "string",
+      "description": "The name of the Availability Zone. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "canonical_hosted_zone_id",
+      "type": "string",
+      "description": "The ID of the Amazon Route 53 hosted zone associated with the load balancer. Returned: when state=present Sample: \"ABCDEF12345678\"",
+      "returned": "when"
+    },
+    {
+      "name": "changed",
+      "type": "boolean",
+      "description": "Whether an ALB was created/updated/deleted. Returned: always Sample: true",
+      "returned": "always"
+    },
+    {
+      "name": "client_keep_alive_seconds",
+      "type": "string",
+      "description": "The client keep alive value, in seconds. Returned: when state=present Sample: \"3600\"",
+      "returned": "when"
+    },
+    {
+      "name": "connection_logs_s3_bucket",
+      "type": "string",
+      "description": "The name of the S3 bucket for the connection logs. Returned: when state=present Sample: \"\"",
+      "returned": "when"
+    },
+    {
+      "name": "connection_logs_s3_enabled",
+      "type": "string",
+      "description": "Indicates whether connection logs are enabled. Returned: when state=present Sample: \"false\"",
+      "returned": "when"
+    },
+    {
+      "name": "connection_logs_s3_prefix",
+      "type": "string",
+      "description": "The prefix for the location in the S3 bucket for the connection logs. Returned: when state=present Sample: \"\"",
+      "returned": "when"
+    },
+    {
+      "name": "created_time",
+      "type": "string",
+      "description": "The date and time the load balancer was created. Returned: when state=present Sample: \"2015-02-12T02:14:02+00:00\"",
+      "returned": "when"
+    },
+    {
+      "name": "deletion_protection_enabled",
+      "type": "string",
+      "description": "Indicates whether deletion protection is enabled. Returned: when state=present Sample: \"true\"",
+      "returned": "when"
+    },
+    {
+      "name": "dns_name",
+      "type": "string",
+      "description": "The public DNS name of the load balancer. Returned: when state=present Sample: \"internal-my-elb-123456789.ap-southeast-2.elb.amazonaws.com\"",
+      "returned": "when"
+    },
+    {
+      "name": "idle_timeout_timeout_seconds",
+      "type": "string",
+      "description": "The idle timeout value, in seconds. Returned: when state=present Sample: \"60\"",
+      "returned": "when"
+    },
+    {
+      "name": "ip_address_type",
+      "type": "string",
+      "description": "The type of IP addresses used by the subnets for the load balancer. Returned: when state=present Sample: \"ipv4\"",
+      "returned": "when"
+    },
+    {
+      "name": "ipv6_deny_all_igw_traffic",
+      "type": "string",
+      "description": "Locks internet gateway (IGW) access to the load balancer. Returned: when state=present Sample: \"false\"",
+      "returned": "when"
+    },
+    {
+      "name": "listeners",
+      "type": "list",
+      "description": "Information about the listeners. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "certificates",
+      "type": "list",
+      "description": "The SSL server certificate. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "certificate_arn",
+      "type": "string",
+      "description": "The Amazon Resource Name (ARN) of the certificate. Returned: when state=present Sample: \"arn:aws:acm:us-east-1:123456789012:certificate/28d2f3d9-cb2f-4033-a9aa-e75e704125a2\"",
+      "returned": "when"
+    },
+    {
+      "name": "default_actions",
+      "type": "string",
+      "description": "The default actions for the listener. Returned: when state=present Sample: \"[{'forward_config': {'target_group_stickiness_config': {'enabled': False}, 'target_groups': [{'target_group_arn': 'arn:aws:elasticloadbalancing:us-east-1:123456789012:targetgroup/alb-test-2-98b7f374/bf43c68602c51c02', 'weight': 1}]}, 'target_group_arn': 'arn:aws:elasticloadbalancing:us-east-1:123456789012:targetgroup/alb-test-2-98b7f374/bf43c68602c51c02', 'type': 'forward'}]\"",
+      "returned": "when"
+    },
+    {
+      "name": "forward_config",
+      "type": "dictionary",
+      "description": "Information for creating an action that distributes requests among one or more target groups. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "target_group_stickiness_config",
+      "type": "dictionary",
+      "description": "The target group stickiness for the rule. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "enabled",
+      "type": "boolean",
+      "description": "Indicates whether target group stickiness is enabled. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "target_groups",
+      "type": "dictionary",
+      "description": "The target groups. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "target_group_arn",
+      "type": "string",
+      "description": "The Amazon Resource Name (ARN) of the target group. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "weight",
+      "type": "integer",
+      "description": "The weight. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "description": "The type of action. Returned: when state=present Sample: \"forward\"",
+      "returned": "when"
+    },
+    {
+      "name": "listener_arn",
+      "type": "string",
+      "description": "The Amazon Resource Name (ARN) of the listener. Returned: when state=present Sample: \"arn:aws:elasticloadbalancing:us-east-1:123456789012:listener/app/alb-test-169eb5ba/1659336d4100d496/8367c4262cc1d0cc\"",
+      "returned": "when"
+    },
+    {
+      "name": "load_balancer_arn",
+      "type": "string",
+      "description": "The Amazon Resource Name (ARN) of the load balancer. Returned: when state=present Sample: \"arn:aws:elasticloadbalancing:us-east-1:123456789012:loadbalancer/app/alb-test-169eb5ba/1659336d4100d496\"",
+      "returned": "when"
+    },
+    {
+      "name": "port",
+      "type": "integer",
+      "description": "The port on which the load balancer is listening. Returned: when state=present Sample: 80",
+      "returned": "when"
+    },
+    {
+      "name": "protocol",
+      "type": "string",
+      "description": "The protocol for connections from clients to the load balancer. Returned: when state=present Sample: \"HTTPS\"",
+      "returned": "when"
+    },
+    {
+      "name": "rules",
+      "type": "list",
+      "description": "List of listener rules. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "actions",
+      "type": "list",
+      "description": "The actions. Returned: when state=present Sample: [{\"forward_config\": {\"target_group_stickiness_config\": {\"enabled\": false}, \"target_groups\": [{\"target_group_arn\": \"arn:aws:elasticloadbalancing:us-east-1:123456789012:targetgroup/alb-test-169eb/09ba111f8079fb83\", \"weight\": 1}]}, \"target_group_arn\": \"arn:aws:elasticloadbalancing:us-east-1:123456789012:targetgroup/alb-test-169eb/09ba111f8079fb83\", \"type\": \"forward\"}]",
+      "returned": "when"
+    },
+    {
+      "name": "conditions",
+      "type": "list",
+      "description": "The conditions. Returned: when state=present Sample: []",
+      "returned": "when"
+    },
+    {
+      "name": "is_default",
+      "type": "boolean",
+      "description": "Indicates whether this is the default rule. Returned: when state=present Sample: false",
+      "returned": "when"
+    },
+    {
+      "name": "priority",
+      "type": "string",
+      "description": "The priority. Returned: when state=present Sample: \"default\"",
+      "returned": "when"
+    },
+    {
+      "name": "rule_arn",
+      "type": "string",
+      "description": "The Amazon Resource Name (ARN) of the rule. Returned: when state=present Sample: \"\"",
+      "returned": "when"
+    },
+    {
+      "name": "ssl_policy",
+      "type": "string",
+      "description": "The security policy that defines which ciphers and protocols are supported. Returned: when state=present Sample: \"ELBSecurityPolicy-2016-08\"",
+      "returned": "when"
+    },
+    {
+      "name": "load_balancer_name",
+      "type": "string",
+      "description": "The name of the load balancer. Returned: when state=present Sample: \"my-alb\"",
+      "returned": "when"
+    },
+    {
+      "name": "load_balancing_cross_zone_enabled",
+      "type": "string",
+      "description": "Indicates whether cross-zone load balancing is enabled. Returned: when state=present Sample: \"true\"",
+      "returned": "when"
+    },
+    {
+      "name": "routing_http2_enabled",
+      "type": "string",
+      "description": "Indicates whether HTTP/2 is enabled. Returned: when state=present Sample: \"true\"",
+      "returned": "when"
+    },
+    {
+      "name": "routing_http_desync_mitigation_mode",
+      "type": "string",
+      "description": "Determines how the load balancer handles requests that might pose a security risk to an application. Returned: when state=present Sample: \"defensive\"",
+      "returned": "when"
+    },
+    {
+      "name": "routing_http_drop_invalid_header_fields_enabled",
+      "type": "string",
+      "description": "Indicates whether HTTP headers with invalid header fields are removed by the load balancer (true) or routed to targets (false). Returned: when state=present Sample: \"false\"",
+      "returned": "when"
+    },
+    {
+      "name": "routing_http_preserve_host_header_enabled",
+      "type": "string",
+      "description": "Indicates whether the Application Load Balancer should preserve the Host header in the HTTP request and send it to the target without any change. Returned: when state=present Sample: \"false\"",
+      "returned": "when"
+    },
+    {
+      "name": "routing_http_x_amzn_tls_version_and_cipher_suite_enabled",
+      "type": "string",
+      "description": "Indicates whether the two headers are added to the client request before sending it to the target. Returned: when state=present Sample: \"false\"",
+      "returned": "when"
+    },
+    {
+      "name": "routing_http_xff_client_port_enabled",
+      "type": "string",
+      "description": "Indicates whether the X-Forwarded-For header should preserve the source port that the client used to connect to the load balancer. Returned: when state=present Sample: \"false\"",
+      "returned": "when"
+    },
+    {
+      "name": "routing_http_xff_header_processing_mode",
+      "type": "string",
+      "description": "Enables you to modify, preserve, or remove the X-Forwarded-For header in the HTTP request before the Application Load Balancer sends the request to the target. Returned: when state=present Sample: \"append\"",
+      "returned": "when"
+    },
+    {
+      "name": "scheme",
+      "type": "string",
+      "description": "Internet-facing or internal load balancer. Returned: when state=present Sample: \"internal\"",
+      "returned": "when"
+    },
+    {
+      "name": "security_groups",
+      "type": "list",
+      "description": "The IDs of the security groups for the load balancer. Returned: when state=present Sample: [\"sg-0011223344\"]",
+      "returned": "when"
+    },
+    {
+      "name": "state",
+      "type": "dictionary",
+      "description": "The state of the load balancer. Returned: when state=present Sample: {\"code\": \"active\"}",
+      "returned": "when"
+    },
+    {
+      "name": "code",
+      "type": "string",
+      "description": "The state code. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "reason",
+      "type": "string",
+      "description": "A description of the state. Returned: when available",
+      "returned": "when"
+    },
+    {
+      "name": "tags",
+      "type": "dictionary",
+      "description": "The tags attached to the load balancer. Returned: when state=present Sample: {\"Tag\": \"Example\"}",
+      "returned": "when"
+    },
+    {
+      "name": "vpc_id",
+      "type": "string",
+      "description": "The ID of the VPC for the load balancer. Returned: when state=present Sample: \"vpc-0011223344\"",
+      "returned": "when"
+    },
+    {
+      "name": "waf_fail_open_enabled",
+      "type": "string",
+      "description": "Indicates whether to allow a AWS WAF-enabled load balancer to route requests to targets if it is unable to forward the request to AWS WAF. Returned: when state=present Sample: \"false\"",
+      "returned": "when"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/amazon/aws/elb_application_lb_module#ansible-collections-amazon-aws-elb-application-lb-module.html",
+  "parsed_at": "2026-04-11T13:52:48.590471"
+}

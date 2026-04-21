@@ -1,0 +1,82 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.lxca_nodes",
+  "slug": "lxca_nodes_module#ansible-collections-community-general-lxca-nodes-module",
+  "description": "This module returns/displays a inventory details of nodes.",
+  "parameters": [
+    {
+      "name": "auth_url",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Lxca HTTPS full web address."
+    },
+    {
+      "name": "chassis",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "UUID of chassis, this is string with length greater than 16."
+    },
+    {
+      "name": "command_options",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"nodes\" ← (default)",
+        "\"nodes_by_uuid\"",
+        "\"nodes_by_chassis_uuid\"",
+        "\"nodes_status_managed\"",
+        "\"nodes_status_unmanaged\""
+      ],
+      "description": "Options to filter nodes information. Choices: \"nodes\" ← (default) \"nodes_by_uuid\" \"nodes_by_chassis_uuid\" \"nodes_status_managed\" \"nodes_status_unmanaged\""
+    },
+    {
+      "name": "login_password",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The password for use in HTTP basic authentication."
+    },
+    {
+      "name": "login_user",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The username for use in HTTP basic authentication."
+    },
+    {
+      "name": "uuid",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "UUID of device, this is string with length greater than 16."
+    }
+  ],
+  "examples": [
+    "# get all nodes info\n- name: Get nodes data from LXCA\n  community.general.lxca_nodes:\n    login_user: USERID\n    login_password: Password\n    auth_url: \"https://10.243.15.168\"\n    command_options: nodes\n\n# get specific nodes info by uuid\n- name: Get nodes data from LXCA\n  community.general.lxca_nodes:\n    login_user: USERID\n    login_password: Password\n    auth_url: \"https://10.243.15.168\"\n    uuid: \"3C737AA5E31640CE949B10C129A8B01F\"\n    command_options: nodes_by_uuid\n\n# get specific nodes info by chassis uuid\n- name: Get nodes data from LXCA\n  community.general.lxca_nodes:\n    login_user: USERID\n    login_password: Password\n    auth_url: \"https://10.243.15.168\"\n    chassis: \"3C737AA5E31640CE949B10C129A8B01F\"\n    command_options: nodes_by_chassis_uuid\n\n# get managed nodes\n- name: Get nodes data from LXCA\n  community.general.lxca_nodes:\n    login_user: USERID\n    login_password: Password\n    auth_url: \"https://10.243.15.168\"\n    command_options: nodes_status_managed\n\n# get unmanaged nodes\n- name: Get nodes data from LXCA\n  community.general.lxca_nodes:\n    login_user: USERID\n    login_password: Password\n    auth_url: \"https://10.243.15.168\"\n    command_options: nodes_status_unmanaged"
+  ],
+  "return_values": [
+    {
+      "name": "result",
+      "type": "dictionary",
+      "description": "Nodes detail from lxca. Returned: always Sample: {\"nodeList\": [{\"machineType\": \"6241\", \"model\": \"AC1\", \"type\": \"Rack-TowerServer\", \"uuid\": \"118D2C88C8FD11E4947B6EAE8B4BDCDF\"}, {\"machineType\": \"8871\", \"model\": \"AC1\", \"type\": \"Rack-TowerServer\", \"uuid\": \"223D2C88C8FD11E4947B6EAE8B4BDCDF\"}]}",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/lxca_nodes_module#ansible-collections-community-general-lxca-nodes-module.html",
+  "parsed_at": "2026-04-11T13:53:19.711033"
+}

@@ -1,0 +1,243 @@
+{
+  "collection_ns": "amazon_aws",
+  "collection": "amazon.aws",
+  "module": "amazon.aws.rds_global_cluster_info",
+  "slug": "rds_global_cluster_info_module#ansible-collections-amazon-aws-rds-global-cluster-info-module",
+  "description": "Obtain information about Aurora global database clusters.",
+  "parameters": [
+    {
+      "name": "access_key",
+      "aliases": [
+        "aws_access_key_id",
+        "aws_access_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS access key ID. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY environment variables may also be used in decreasing order of preference. The aws_access_key and profile options are mutually exclusive. The aws_access_key_id alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "aws_ca_bundle",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The location of a CA Bundle to use when validating SSL certificates. The AWS_CA_BUNDLE environment variable may also be used."
+    },
+    {
+      "name": "aws_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary to modify the botocore configuration. Parameters can be found in the AWS documentation https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html#botocore.config.Config."
+    },
+    {
+      "name": "debug_botocore_endpoint_logs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use a botocore.endpoint logger to parse the unique (rather than total) \"resource:action\" API calls made during a task, outputing the set to the resource_actions key in the task results. Use the aws_resource_action callback to output to total list made during a playbook. The ANSIBLE_DEBUG_BOTOCORE_LOGS environment variable may also be used. Choices: false ← (default) true"
+    },
+    {
+      "name": "endpoint_url",
+      "aliases": [
+        "aws_endpoint_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "AWS",
+      "choices": [],
+      "description": "URL to connect to instead of the default AWS endpoints. While this can be used to connection to other AWS-compatible services the amazon.aws and community.aws collections are only tested against AWS. The AWS_URL environment variable may also be used."
+    },
+    {
+      "name": "global_cluster_identifier",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The user-supplied Global DB cluster identifier. If this parameter is specified, information from only the specific DB cluster is returned. This parameter is not case-sensitive. If supplied, must match an existing DBClusterIdentifier."
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "aws_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A named AWS profile to use for authentication. See the AWS documentation for more information about named profiles https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html. The AWS_PROFILE environment variable may also be used. The profile option is mutually exclusive with the aws_access_key, aws_secret_key and session_token options."
+    },
+    {
+      "name": "region",
+      "aliases": [
+        "aws_region"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The AWS region to use. For global services such as IAM, Route53 and CloudFront, region is ignored. The AWS_REGION environment variable may also be used. See the Amazon AWS documentation for more information http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region."
+    },
+    {
+      "name": "secret_key",
+      "aliases": [
+        "aws_secret_access_key",
+        "aws_secret_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS secret access key. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SECRET_ACCESS_KEY or AWS_SECRET_KEY environment variables may also be used in decreasing order of preference. The secret_key and profile options are mutually exclusive. The aws_secret_access_key alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "session_token",
+      "aliases": [
+        "aws_session_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS STS session token for use with temporary credentials. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SESSION_TOKEN environment variable may also be used. The session_token and profile options are mutually exclusive."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to false, SSL certificates will not be validated for communication with the AWS APIs. Setting validate_certs=false is strongly discouraged, as an alternative, consider setting aws_ca_bundle instead. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Get info of all existing DB clusters\n  amazon.aws.rds_global_cluster_info:\n  register: _result_cluster_info\n\n- name: Get info on a specific DB cluster\n  amazon.aws.rds_global_cluster_info:\n    global_cluster_identifier: \"{{ cluster_id }}\"\n  register: _result_global_cluster_info"
+  ],
+  "return_values": [
+    {
+      "name": "global_clusters",
+      "type": "list",
+      "description": "List of global clusters. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "deletion_protection",
+      "type": "boolean",
+      "description": "Indicates if the DB cluster has deletion protection enabled. The database can’t be deleted when deletion protection is enabled. Returned: always Sample: false",
+      "returned": "always"
+    },
+    {
+      "name": "engine",
+      "type": "string",
+      "description": "The database engine of the DB cluster. Returned: always Sample: \"aurora-postgresql\"",
+      "returned": "always"
+    },
+    {
+      "name": "engine_version",
+      "type": "string",
+      "description": "The database engine version. Returned: always Sample: \"14.8\"",
+      "returned": "always"
+    },
+    {
+      "name": "failover_state",
+      "type": "dictionary",
+      "description": "A data object containing all properties for the current state of an in-process or pending switchover or failover process for this global cluster (Aurora global database). This object is empty unless the SwitchoverGlobalCluster or FailoverGlobalCluster operation was called on this global cluster. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "from_db_cluster_arn",
+      "type": "string",
+      "description": "The Amazon Resource Name (ARN) of the Aurora DB cluster that is currently being demoted, and which is associated with this state. Returned: always Sample: \"arn:aws:rds:us-east-1:123456789012:cluster:ansible-test-primary\"",
+      "returned": "always"
+    },
+    {
+      "name": "is_data_loss_allowed",
+      "type": "boolean",
+      "description": "Indicates whether the operation is a global switchover or a global failover. If data loss is allowed, then the operation is a global failover. Otherwise, it is a switchover. Returned: always Sample: false",
+      "returned": "always"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "description": "The current status of the global cluster. Returned: always Sample: \"pending\"",
+      "returned": "always"
+    },
+    {
+      "name": "to_db_cluster_arn",
+      "type": "string",
+      "description": "The Amazon Resource Name (ARN) of the Aurora DB cluster that is currently being promoted, and which is associated with this state. Returned: always Sample: \"arn:aws:rds:us-east-2:123456789012:cluster:ansible-test-secondary\"",
+      "returned": "always"
+    },
+    {
+      "name": "gloabl_cluster_members",
+      "type": "list",
+      "description": "The list of primary and secondary clusters within the global database cluster. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "db_cluster_arn",
+      "type": "string",
+      "description": "The Amazon Resource Name (ARN) for each Aurora DB cluster in the global cluster. Returned: always Sample: \"arn:aws:rds:us-east-1:123456789012:cluster:ansible-test-primary\"",
+      "returned": "always"
+    },
+    {
+      "name": "global_write_forwarding_status",
+      "type": "string",
+      "description": "The status of write forwarding for a secondary cluster in the global cluster. Returned: always Sample: \"disabled\"",
+      "returned": "always"
+    },
+    {
+      "name": "is_writer",
+      "type": "boolean",
+      "description": "Indicates whether the Aurora DB cluster is the primary cluster for the global cluster with which it is associated. Returned: always Sample: false",
+      "returned": "always"
+    },
+    {
+      "name": "readers",
+      "type": "list",
+      "description": "The Amazon Resource Name (ARN) for each read-only secondary cluster associated with the global cluster. Returned: always Sample: [\"arn:aws:rds:us-east-2:123456789012:cluster:ansible-test-secondary\"]",
+      "returned": "always"
+    },
+    {
+      "name": "global_cluster_arn",
+      "type": "string",
+      "description": "The Amazon Resource Name (ARN) for the global database cluster. Returned: always Sample: \"arn:aws:rds::123456789012:global-cluster:ansible-test-global-cluster\"",
+      "returned": "always"
+    },
+    {
+      "name": "global_cluster_identifier",
+      "type": "string",
+      "description": "User-supplied global database cluster identifier. Returned: success Sample: \"ansible-test-global-cluster\"",
+      "returned": "success"
+    },
+    {
+      "name": "global_cluster_resource_id",
+      "type": "string",
+      "description": "The Amazon Web Services Region-unique, immutable identifier for the global database cluster. Returned: always Sample: \"cluster-123456789012\"",
+      "returned": "always"
+    },
+    {
+      "name": "storage_encrypted",
+      "type": "boolean",
+      "description": "Whether the DB cluster is storage encrypted. Returned: always Sample: false",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/amazon/aws/rds_global_cluster_info_module#ansible-collections-amazon-aws-rds-global-cluster-info-module.html",
+  "parsed_at": "2026-04-11T13:52:50.046902"
+}

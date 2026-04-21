@@ -1,0 +1,241 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.utm_proxy_frontend_info",
+  "slug": "utm_proxy_frontend_info_module#ansible-collections-community-general-utm-proxy-frontend-info-module",
+  "description": "Create, update or destroy a reverse_proxy frontend entry in SOPHOS UTM.",
+  "parameters": [
+    {
+      "name": "headers",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "A dictionary of additional headers to be sent to POST and PUT requests. Is needed for some modules. Default: {}"
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the object that identifies the entry."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)"
+      ],
+      "description": "The desired state of the object. present creates or updates an object. absent deletes an object if present. Choices: \"absent\" \"present\" ← (default)"
+    },
+    {
+      "name": "utm_host",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The REST Endpoint of the Sophos UTM."
+    },
+    {
+      "name": "utm_port",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "4444",
+      "choices": [],
+      "description": "The port of the REST interface. Default: 4444"
+    },
+    {
+      "name": "utm_protocol",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"http\"",
+        "\"https\" ← (default)"
+      ],
+      "description": "The protocol of the REST Endpoint. Choices: \"http\" \"https\" ← (default)"
+    },
+    {
+      "name": "utm_token",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The token used to identify at the REST-API. See https://www.sophos.com/en-us/medialibrary/PDFs/documentation/UTMonAWS/Sophos-UTM-RESTful-API.pdf?la=en, Chapter 2.4.2."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether the REST interface’s SSL certificate should be verified or not. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Get utm proxy_frontend\n  community.general.utm_proxy_frontend_info:\n    utm_host: sophos.host.name\n    utm_token: abcdefghijklmno1234\n    name: TestBackendEntry\n    host: REF_OBJECT_STRING"
+  ],
+  "return_values": [
+    {
+      "name": "result",
+      "type": "complex",
+      "description": "The utm object that was created. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "_locked",
+      "type": "boolean",
+      "description": "Whether or not the object is currently locked. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "_ref",
+      "type": "string",
+      "description": "The reference name of the object. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "_type",
+      "type": "string",
+      "description": "The type of the object. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "add_content_type_header",
+      "type": "boolean",
+      "description": "Whether to add the content type header. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "address",
+      "type": "string",
+      "description": "The reference name of the address. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "allowed_networks",
+      "type": "list",
+      "description": "List of reference names of networks associated. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "certificate",
+      "type": "string",
+      "description": "Reference name of certificate (ca/host_key_cert). Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "comment",
+      "type": "string",
+      "description": "The comment string. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "disable_compression",
+      "type": "boolean",
+      "description": "State of compression support. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "domain",
+      "type": "list",
+      "description": "List of hostnames. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "exceptions",
+      "type": "list",
+      "description": "List of associated proxy exceptions. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "htmlrewrite",
+      "type": "boolean",
+      "description": "State of HTML rewrite. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "htmlrewrite_cookies",
+      "type": "boolean",
+      "description": "Whether the HTML rewrite cookie is set. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "implicitredirect",
+      "type": "boolean",
+      "description": "Whether to use implicit redirection. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "lbmethod",
+      "type": "string",
+      "description": "The method of loadbalancer to use. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "locations",
+      "type": "list",
+      "description": "The reference names of reverse_proxy/locations associated with the object. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "The name of the object. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "port",
+      "type": "integer",
+      "description": "The port of the frontend connection. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "preservehost",
+      "type": "boolean",
+      "description": "Preserve host header. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "profile",
+      "type": "string",
+      "description": "The associated reverse_proxy/profile. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "status",
+      "type": "boolean",
+      "description": "Whether the frontend object is active or not. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "description": "The connection type. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "xheaders",
+      "type": "boolean",
+      "description": "The xheaders state. Returned: success",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/utm_proxy_frontend_info_module#ansible-collections-community-general-utm-proxy-frontend-info-module.html",
+  "parsed_at": "2026-04-11T13:53:28.136032"
+}

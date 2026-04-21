@@ -1,0 +1,72 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.grove",
+  "slug": "grove_module#ansible-collections-community-general-grove-module",
+  "description": "The grove module sends a message for a service to a Grove.io channel.",
+  "parameters": [
+    {
+      "name": "channel_token",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Token of the channel to post to."
+    },
+    {
+      "name": "icon_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Icon for the service."
+    },
+    {
+      "name": "message_content",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Message content. The alias message has been removed in community.general 4.0.0."
+    },
+    {
+      "name": "service",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "ansible",
+      "choices": [],
+      "description": "Name of the service (displayed as the “user” in the message). Default: \"ansible\""
+    },
+    {
+      "name": "url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Service URL for the web client."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If false, SSL certificates are not validated. This should only be used on personally controlled sites using self-signed certificates. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Sends a notification to a grove.io channel\n  community.general.grove:\n    channel_token: 6Ph62VBBJOccmtTPZbubiPzdrhipZXtg\n    service: my-app\n    message: 'deployed {{ target }}'"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/grove_module#ansible-collections-community-general-grove-module.html",
+  "parsed_at": "2026-04-11T13:53:14.399461"
+}

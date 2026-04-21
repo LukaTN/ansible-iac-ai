@@ -1,0 +1,67 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.dnf_config_manager",
+  "slug": "dnf_config_manager_module#ansible-collections-community-general-dnf-config-manager-module",
+  "description": "This module enables or disables repositories using the dnf config-manager sub-command.",
+  "parameters": [
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "Repository ID, for example crb. Default: []"
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"enabled\" ← (default)",
+        "\"disabled\""
+      ],
+      "description": "Whether the repositories should be enabled or disabled. Choices: \"enabled\" ← (default) \"disabled\""
+    }
+  ],
+  "examples": [
+    "- name: Ensure the crb repository is enabled\n  community.general.dnf_config_manager:\n    name: crb\n    state: enabled\n\n- name: Ensure the appstream and zfs repositories are disabled\n  community.general.dnf_config_manager:\n    name:\n      - appstream\n      - zfs\n    state: disabled"
+  ],
+  "return_values": [
+    {
+      "name": "changed_repos",
+      "type": "list",
+      "description": "Repositories changed. Returned: success Sample: [\"crb\"]",
+      "returned": "success"
+    },
+    {
+      "name": "repo_states_post",
+      "type": "dictionary",
+      "description": "Repository states after action taken. Returned: success Sample: {\"disabled\": [\"appstream-debuginfo\", \"appstream-source\", \"baseos-debuginfo\", \"baseos-source\", \"crb-debug\", \"crb-source\"], \"enabled\": [\"appstream\", \"baseos\", \"crb\"]}",
+      "returned": "success"
+    },
+    {
+      "name": "disabled",
+      "type": "list",
+      "description": "Disabled repository IDs. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "enabled",
+      "type": "list",
+      "description": "Enabled repository IDs. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "repo_states_pre",
+      "type": "dictionary",
+      "description": "Repo IDs before action taken. Returned: success Sample: {\"disabled\": [\"appstream-debuginfo\", \"appstream-source\", \"baseos-debuginfo\", \"baseos-source\", \"crb-debug\", \"crb-source\"], \"enabled\": [\"appstream\", \"baseos\", \"crb\"]}",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/dnf_config_manager_module.html",
+  "parsed_at": "2026-04-13T16:29:45.182055"
+}

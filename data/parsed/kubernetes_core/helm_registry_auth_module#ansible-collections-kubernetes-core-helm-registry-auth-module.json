@@ -1,0 +1,145 @@
+{
+  "collection_ns": "kubernetes_core",
+  "collection": "kubernetes.core",
+  "module": "kubernetes.core.helm_registry_auth",
+  "slug": "helm_registry_auth_module#ansible-collections-kubernetes-core-helm-registry-auth-module",
+  "description": "Helm registry authentication module allows you to login helm registry login and logout helm registry logout from a Helm registry.",
+  "parameters": [
+    {
+      "name": "binary_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The path of a helm binary to use."
+    },
+    {
+      "name": "ca_file",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the CA certificate SSL file for verify registry server certificate."
+    },
+    {
+      "name": "cert_file",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the client certificate SSL file for identify registry client using this certificate file."
+    },
+    {
+      "name": "host",
+      "aliases": [
+        "registry_url"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Provide a URL for accessing the registry."
+    },
+    {
+      "name": "insecure",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Allow connections to SSL sites without certs. Choices: false ← (default) true"
+    },
+    {
+      "name": "key_file",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the client key SSL file for identify registry client using this key file."
+    },
+    {
+      "name": "password",
+      "aliases": [
+        "repo_password"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Password for the registry."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Desired state of the registry. If set to present attempt to log in to the remote registry server using the URL specified in host. If set to absent attempt to log out from the remote registry server using the URL specified in host. As helm >= 3.18.0 reports successful logout even if the user is not logged in, this module will report a change regardless of the current state. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "username",
+      "aliases": [
+        "repo_username"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Username for the registry."
+    }
+  ],
+  "examples": [
+    "- name: Login to remote registry\n  kubernetes.core.helm_registry_auth:\n    username: admin\n    password: \"sample_password\"\n    host: localhost:5000\n\n- name: Logout from remote registry\n  kubernetes.core.helm_registry_auth:\n    state: absent\n    host: localhost:5000"
+  ],
+  "return_values": [
+    {
+      "name": "command",
+      "type": "string",
+      "description": "Full helm command executed Returned: always Sample: \"/usr/local/bin/helm registry login oci-registry.domain.example --username=admin --password-stdin --insecure\"",
+      "returned": "always"
+    },
+    {
+      "name": "failed",
+      "type": "boolean",
+      "description": "Indicate if the helm command failed Returned: always Sample: false",
+      "returned": "always"
+    },
+    {
+      "name": "stderr",
+      "type": "string",
+      "description": "Full helm command stderr, in case you want to display it or examine the event log. Please be note that helm binnary may print messages to stderr even if the command is successful. Returned: always Sample: \"Login Succeeded\\\\n\"",
+      "returned": "always"
+    },
+    {
+      "name": "stderr_lines",
+      "type": "list",
+      "description": "Full helm command stderr, in case you want to display it or examine the event log Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "stdout",
+      "type": "string",
+      "description": "Full helm command stdout, in case you want to display it or examine the event log Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "stout_lines",
+      "type": "list",
+      "description": "Full helm command stdout, in case you want to display it or examine the event log Returned: always",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/kubernetes/core/helm_registry_auth_module.html",
+  "parsed_at": "2026-04-13T16:30:01.482080"
+}

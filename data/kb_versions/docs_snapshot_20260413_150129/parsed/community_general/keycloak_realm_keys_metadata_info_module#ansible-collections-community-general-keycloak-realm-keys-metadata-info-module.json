@@ -1,0 +1,157 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.keycloak_realm_keys_metadata_info",
+  "slug": "keycloak_realm_keys_metadata_info_module#ansible-collections-community-general-keycloak-realm-keys-metadata-info-module",
+  "description": "This module allows you to get Keycloak realm keys metadata using the Keycloak REST API.",
+  "parameters": [
+    {
+      "name": "auth_client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "admin-cli",
+      "choices": [],
+      "description": "OpenID Connect client_id to authenticate to the API with. Default: \"admin-cli\""
+    },
+    {
+      "name": "auth_client_secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Client Secret to use in conjunction with auth_client_id (if required)."
+    },
+    {
+      "name": "auth_keycloak_url",
+      "aliases": [
+        "url"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "URL to the Keycloak instance."
+    },
+    {
+      "name": "auth_password",
+      "aliases": [
+        "password"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Password to authenticate for API access with."
+    },
+    {
+      "name": "auth_realm",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Keycloak realm name to authenticate to for API access."
+    },
+    {
+      "name": "auth_username",
+      "aliases": [
+        "username"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Username to authenticate for API access with."
+    },
+    {
+      "name": "connection_timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "10",
+      "choices": [],
+      "description": "Controls the HTTP connections timeout period (in seconds) to Keycloak API. Default: 10"
+    },
+    {
+      "name": "http_agent",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "Ansible",
+      "choices": [],
+      "description": "Configures the HTTP User-Agent header. Default: \"Ansible\""
+    },
+    {
+      "name": "realm",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "master",
+      "choices": [],
+      "description": "They Keycloak realm to fetch keys metadata. Default: \"master\""
+    },
+    {
+      "name": "refresh_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Authentication refresh token for Keycloak API."
+    },
+    {
+      "name": "token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Authentication token for Keycloak API."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Verify TLS certificates (do not disable this in production). Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Fetch Keys metadata\n  community.general.keycloak_realm_keys_metadata_info:\n    auth_keycloak_url: https://auth.example.com/auth\n    auth_realm: master\n    auth_username: USERNAME\n    auth_password: PASSWORD\n    realm: MyCustomRealm\n  delegate_to: localhost\n  register: keycloak_keys_metadata\n\n- name: Write the Keycloak keys certificate into a file\n  ansible.builtin.copy:\n    dest: /tmp/keycloak.cert\n    content: |\n      {{ keys_metadata['keycloak_keys_metadata']['keys']\n      | selectattr('algorithm', 'equalto', 'RS256')\n      | map(attribute='certificate')\n      | first\n      }}\n  delegate_to: localhost"
+  ],
+  "return_values": [
+    {
+      "name": "keys_metadata",
+      "type": "dictionary",
+      "description": "Representation of the realm keys metadata (see https://www.keycloak.org/docs-api/latest/rest-api/index.html#KeysMetadataRepresentation). Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "active",
+      "type": "dictionary",
+      "description": "A mapping (that is, a dict) from key algorithms to UUIDs. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "keys",
+      "type": "list",
+      "description": "A list of dicts providing detailed information on the keys. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "msg",
+      "type": "string",
+      "description": "Message as to what action was taken. Returned: always",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/keycloak_realm_keys_metadata_info_module#ansible-collections-community-general-keycloak-realm-keys-metadata-info-module.html",
+  "parsed_at": "2026-04-11T13:53:18.336866"
+}

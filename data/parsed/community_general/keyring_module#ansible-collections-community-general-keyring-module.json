@@ -1,0 +1,65 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.keyring",
+  "slug": "keyring_module#ansible-collections-community-general-keyring-module",
+  "description": "This module uses the keyring Python library to set or delete passphrases for a given service and username from the OS’ native keyring.",
+  "parameters": [
+    {
+      "name": "keyring_password",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Password to unlock keyring."
+    },
+    {
+      "name": "service",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the service."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Whether the password should exist. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "user_password",
+      "aliases": [
+        "password"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The password to set."
+    },
+    {
+      "name": "username",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The user belonging to the service."
+    }
+  ],
+  "examples": [
+    "- name: Set a password for test/test1\n  community.general.keyring:\n    service: test\n    username: test1\n    user_password: \"{{ user_password }}\"\n    keyring_password: \"{{ keyring_password }}\"\n\n- name: Delete the password for test/test1\n  community.general.keyring:\n    service: test\n    username: test1\n    user_password: \"{{ user_password }}\"\n    keyring_password: \"{{ keyring_password }}\"\n    state: absent"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/keyring_module.html",
+  "parsed_at": "2026-04-13T16:29:51.309107"
+}

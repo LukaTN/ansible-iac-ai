@@ -1,0 +1,76 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.packet_volume_attachment",
+  "slug": "packet_volume_attachment_module#ansible-collections-community-general-packet-volume-attachment-module",
+  "description": "Attach/detach a volume to a device in the Packet host.",
+  "parameters": [
+    {
+      "name": "auth_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Packet API token. You can also supply it in environment variable PACKET_API_TOKEN."
+    },
+    {
+      "name": "device",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Selector for the device. It can be a UUID of the device, or a hostname. Example values: 98a14f7a-3d27-4478-b7cf-35b5670523f3, “my device”."
+    },
+    {
+      "name": "project_id",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "UUID of the project to which the device and volume belong."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Indicate desired state of the attachment. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "volume",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Selector for the volume. It can be a UUID, an API-generated volume name, or user-defined description string. Example values: 4a347482-b546-4f67-8300-fb5018ef0c5, volume-4a347482, my volume."
+    }
+  ],
+  "examples": [
+    "# All the examples assume that you have your Packet API token in env var PACKET_API_TOKEN.\n# You can also pass the api token in module param auth_token.\n\n- hosts: localhost\n\n  vars:\n    volname: testvol\n    devname: testdev\n    project_id: 52000fb2-ee46-4673-93a8-de2c2bdba33b\n\n  tasks:\n    - name: Create volume\n      packet_volume:\n        description: \"{{ volname }}\"\n        project_id: \"{{ project_id }}\"\n        facility: ewr1\n        plan: storage_1\n        state: present\n        size: 10\n        snapshot_policy:\n          snapshot_count: 10\n          snapshot_frequency: 1day\n\n    - name: Create a device\n      packet_device:\n        project_id: \"{{ project_id }}\"\n        hostnames: \"{{ devname }}\"\n        operating_system: ubuntu_16_04\n        plan: baremetal_0\n        facility: ewr1\n        state: present\n\n    - name: Attach testvol to testdev\n      community.general.packet_volume_attachment:\n        project_id: \"{{ project_id }}\"\n        volume: \"{{ volname }}\"\n        device: \"{{ devname }}\"\n\n    - name: Detach testvol from testdev\n      community.general.packet_volume_attachment:\n        project_id: \"{{ project_id }}\"\n        volume: \"{{ volname }}\"\n        device: \"{{ devname }}\"\n        state: absent"
+  ],
+  "return_values": [
+    {
+      "name": "device_id",
+      "type": "string",
+      "description": "UUID of device addressed by the module call. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "volume_id",
+      "type": "string",
+      "description": "UUID of volume addressed by the module call. Returned: success",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/packet_volume_attachment_module.html",
+  "parsed_at": "2026-04-13T16:29:55.621036"
+}

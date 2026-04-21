@@ -1,0 +1,322 @@
+{
+  "collection_ns": "amazon_aws",
+  "collection": "amazon.aws",
+  "module": "amazon.aws.ec2_eip",
+  "slug": "ec2_eip_module#ansible-collections-amazon-aws-ec2-eip-module",
+  "description": "This module can allocate or release an EIP.",
+  "parameters": [
+    {
+      "name": "access_key",
+      "aliases": [
+        "aws_access_key_id",
+        "aws_access_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS access key ID. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY environment variables may also be used in decreasing order of preference. The aws_access_key and profile options are mutually exclusive. The aws_access_key_id alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "allow_reassociation",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Specify this option to allow an Elastic IP address that is already associated with another network interface or instance to be re-associated with the specified instance or interface. Choices: false ← (default) true"
+    },
+    {
+      "name": "aws_ca_bundle",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The location of a CA Bundle to use when validating SSL certificates. The AWS_CA_BUNDLE environment variable may also be used."
+    },
+    {
+      "name": "aws_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary to modify the botocore configuration. Parameters can be found in the AWS documentation https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html#botocore.config.Config."
+    },
+    {
+      "name": "debug_botocore_endpoint_logs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use a botocore.endpoint logger to parse the unique (rather than total) \"resource:action\" API calls made during a task, outputing the set to the resource_actions key in the task results. Use the aws_resource_action callback to output to total list made during a playbook. The ANSIBLE_DEBUG_BOTOCORE_LOGS environment variable may also be used. Choices: false ← (default) true"
+    },
+    {
+      "name": "device_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The id of the device for the EIP. Can be an EC2 Instance id or Elastic Network Interface (ENI) id. When specifying an ENI id, in_vpc must be true. The instance_id alias was removed in release 6.0.0."
+    },
+    {
+      "name": "domain_name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The domain name to attach to the IP address."
+    },
+    {
+      "name": "endpoint_url",
+      "aliases": [
+        "aws_endpoint_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "AWS",
+      "choices": [],
+      "description": "URL to connect to instead of the default AWS endpoints. While this can be used to connection to other AWS-compatible services the amazon.aws and community.aws collections are only tested against AWS. The AWS_URL environment variable may also be used."
+    },
+    {
+      "name": "in_vpc",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Allocate an EIP inside a VPC or not. Required if specifying an ENI with device_id. Choices: false ← (default) true"
+    },
+    {
+      "name": "private_ip_address",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The primary or secondary private IP address to associate with the Elastic IP address."
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "aws_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A named AWS profile to use for authentication. See the AWS documentation for more information about named profiles https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html. The AWS_PROFILE environment variable may also be used. The profile option is mutually exclusive with the aws_access_key, aws_secret_key and session_token options."
+    },
+    {
+      "name": "public_ip",
+      "aliases": [
+        "ip"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The IP address of a previously allocated EIP. When state=present and device is specified, the EIP is associated with the device. When state=absent and device is specified, the EIP is disassociated from the device."
+    },
+    {
+      "name": "public_ipv4_pool",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Allocates the new Elastic IP from the provided public IPv4 pool (BYOIP) only applies to newly allocated Elastic IPs, isn’t validated when reuse_existing_ip_allowed=true."
+    },
+    {
+      "name": "purge_tags",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If purge_tags=true and tags is set, existing tags will be purged from the resource to match exactly what is defined by tags parameter. If the tags parameter is not set then tags will not be modified, even if purge_tags=True. Tag keys beginning with aws: are reserved by Amazon and can not be modified. As such they will be ignored for the purposes of the purge_tags parameter. See the Amazon documentation for more information https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html#tag-conventions. Choices: false true ← (default)"
+    },
+    {
+      "name": "region",
+      "aliases": [
+        "aws_region"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The AWS region to use. For global services such as IAM, Route53 and CloudFront, region is ignored. The AWS_REGION environment variable may also be used. See the Amazon AWS documentation for more information http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region."
+    },
+    {
+      "name": "release_on_disassociation",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Whether or not to automatically release the EIP when it is disassociated. Choices: false ← (default) true"
+    },
+    {
+      "name": "reuse_existing_ip_allowed",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Reuse an EIP that is not associated to a device (when available), instead of allocating a new one. Choices: false ← (default) true"
+    },
+    {
+      "name": "secret_key",
+      "aliases": [
+        "aws_secret_access_key",
+        "aws_secret_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS secret access key. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SECRET_ACCESS_KEY or AWS_SECRET_KEY environment variables may also be used in decreasing order of preference. The secret_key and profile options are mutually exclusive. The aws_secret_access_key alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "session_token",
+      "aliases": [
+        "aws_session_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS STS session token for use with temporary credentials. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SESSION_TOKEN environment variable may also be used. The session_token and profile options are mutually exclusive."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "When state=present, allocate an EIP or associate an existing EIP with a device. When state=absent, disassociate the EIP from the device and optionally release it. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "tag_name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "When reuse_existing_ip_allowed=true, supplement with this option to only reuse an Elastic IP if it is tagged with tag_name."
+    },
+    {
+      "name": "tag_value",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Supplements tag_name but also checks that the value of the tag provided in tag_name matches tag_value."
+    },
+    {
+      "name": "tags",
+      "aliases": [
+        "resource_tags"
+      ],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary representing the tags to be applied to the resource. If the tags parameter is not set then tags will not be modified."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to false, SSL certificates will not be validated for communication with the AWS APIs. Setting validate_certs=false is strongly discouraged, as an alternative, consider setting aws_ca_bundle instead. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "# Note: These examples do not set authentication details, see the AWS Guide for details.\n\n- name: associate an elastic IP with an instance\n  amazon.aws.ec2_eip:\n    device_id: i-1212f003\n    ip: 93.184.216.119\n\n- name: associate an elastic IP with a device\n  amazon.aws.ec2_eip:\n    device_id: eni-c8ad70f3\n    ip: 93.184.216.119\n\n- name: associate an elastic IP with a device and allow reassociation\n  amazon.aws.ec2_eip:\n    device_id: eni-c8ad70f3\n    public_ip: 93.184.216.119\n    allow_reassociation: true\n\n- name: disassociate an elastic IP from an instance\n  amazon.aws.ec2_eip:\n    device_id: i-1212f003\n    ip: 93.184.216.119\n    state: absent\n\n- name: disassociate an elastic IP with a device\n  amazon.aws.ec2_eip:\n    device_id: eni-c8ad70f3\n    ip: 93.184.216.119\n    state: absent\n\n- name: allocate a new elastic IP and associate it with an instance\n  amazon.aws.ec2_eip:\n    device_id: i-1212f003\n\n- name: allocate a new elastic IP without associating it to anything\n  amazon.aws.ec2_eip:\n    state: present\n  register: eip\n\n- name: output the IP\n  ansible.builtin.debug:\n    msg: \"Allocated IP is {{ eip.public_ip }}\"\n\n- name: provision new instances with ec2\n  amazon.aws.ec2:\n    keypair: mykey\n    instance_type: c1.medium\n    image: ami-40603AD1\n    wait: true\n    group: webserver\n    count: 3\n  register: ec2\n\n- name: associate new elastic IPs with each of the instances\n  amazon.aws.ec2_eip:\n    device_id: \"{{ item }}\"\n  loop: \"{{ ec2.instance_ids }}\"\n\n- name: allocate a new elastic IP inside a VPC in us-west-2\n  amazon.aws.ec2_eip:\n    region: us-west-2\n    in_vpc: true\n  register: eip\n\n- name: output the IP\n  ansible.builtin.debug:\n    msg: \"Allocated IP inside a VPC is {{ eip.public_ip }}\"\n\n- name: allocate eip - reuse unallocated ips (if found) with FREE tag\n  amazon.aws.ec2_eip:\n    region: us-east-1\n    in_vpc: true\n    reuse_existing_ip_allowed: true\n    tag_name: FREE\n\n- name: allocate eip - reuse unallocated ips if tag reserved is nope\n  amazon.aws.ec2_eip:\n    region: us-east-1\n    in_vpc: true\n    reuse_existing_ip_allowed: true\n    tag_name: reserved\n    tag_value: nope\n\n- name: allocate new eip - from servers given ipv4 pool\n  amazon.aws.ec2_eip:\n    region: us-east-1\n    in_vpc: true\n    public_ipv4_pool: ipv4pool-ec2-0588c9b75a25d1a02\n\n- name: allocate eip - from a given pool (if no free addresses where dev-servers tag is dynamic)\n  amazon.aws.ec2_eip:\n    region: us-east-1\n    in_vpc: true\n    reuse_existing_ip_allowed: true\n    tag_name: dev-servers\n    public_ipv4_pool: ipv4pool-ec2-0588c9b75a25d1a02\n\n- name: allocate eip from pool - check if tag reserved_for exists and value is our hostname\n  amazon.aws.ec2_eip:\n    region: us-east-1\n    in_vpc: true\n    reuse_existing_ip_allowed: true\n    tag_name: reserved_for\n    tag_value: \"{{ inventory_hostname }}\"\n    public_ipv4_pool: ipv4pool-ec2-0588c9b75a25d1a02\n\n- name: create new IP and modify it's reverse DNS record\n  amazon.aws.ec2_eip:\n    state: present\n    domain_name: test-domain.xyz\n\n- name: Modify reverse DNS record of an existing EIP\n  amazon.aws.ec2_eip:\n    public_ip: 44.224.84.105\n    domain_name: test-domain.xyz\n    state: present\n\n- name: Remove reverse DNS record of an existing EIP\n  amazon.aws.ec2_eip:\n    public_ip: 44.224.84.105\n    domain_name: \"\"\n    state: present"
+  ],
+  "return_values": [
+    {
+      "name": "allocation_id",
+      "type": "string",
+      "description": "Allocation id of the elastic ip. Returned: on success Sample: \"eipalloc-51aa3a6c\"",
+      "returned": "on"
+    },
+    {
+      "name": "public_ip",
+      "type": "string",
+      "description": "An elastic ip address. Returned: on success Sample: \"52.88.159.209\"",
+      "returned": "on"
+    },
+    {
+      "name": "update_reverse_dns_record_result",
+      "type": "dictionary",
+      "description": "Information about result of update reverse dns record operation. Returned: When domain_name is specified.",
+      "returned": "When"
+    },
+    {
+      "name": "address",
+      "type": "dictionary",
+      "description": "Information about the Elastic IP address. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "ptr_record",
+      "type": "string",
+      "description": "The pointer (PTR) record for the IP address. Returned: always Sample: \"ec2-11-22-33-44.us-east-2.compute.amazonaws.com.\"",
+      "returned": "always"
+    },
+    {
+      "name": "ptr_record_update",
+      "type": "dictionary",
+      "description": "The updated PTR record for the IP address. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "description": "The status of the PTR record update. Returned: always Sample: \"PENDING\"",
+      "returned": "always"
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "description": "The value for the PTR record update. Returned: always Sample: \"example.com\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_eip_module#ansible-collections-amazon-aws-ec2-eip-module.html",
+  "parsed_at": "2026-04-11T13:52:45.967406"
+}

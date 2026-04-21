@@ -1,0 +1,149 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.django_check",
+  "slug": "django_check_module#ansible-collections-community-general-django-check-module",
+  "description": "This module is a wrapper for the execution of django-admin check.",
+  "parameters": [
+    {
+      "name": "apps",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "is",
+      "choices": [],
+      "description": "Restrict checks to specific applications. Default is to check all applications."
+    },
+    {
+      "name": "databases",
+      "aliases": [
+        "database"
+      ],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specify databases to run checks against. If not specified, Django does not run database tests. The parameter has been renamed to databases in community.general 11.3.0. The old name is still available as an alias."
+    },
+    {
+      "name": "deploy",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Include additional checks relevant in a deployment setting. Choices: false ← (default) true"
+    },
+    {
+      "name": "fail_level",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "is",
+      "choices": [
+        "\"CRITICAL\"",
+        "\"ERROR\"",
+        "\"WARNING\"",
+        "\"INFO\"",
+        "\"DEBUG\""
+      ],
+      "description": "Message level that triggers failure. Default is the Django default value. Check the documentation for the version being used. Choices: \"CRITICAL\" \"ERROR\" \"WARNING\" \"INFO\" \"DEBUG\""
+    },
+    {
+      "name": "pythonpath",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Adds the given filesystem path to the Python import search path. The value is passed as is to the --pythonpath argument in django-admin."
+    },
+    {
+      "name": "settings",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Specifies the settings module to use. The value is passed as is to the --settings argument in django-admin."
+    },
+    {
+      "name": "skip_checks",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Skips running system checks prior to running the command. Choices: false true"
+    },
+    {
+      "name": "tags",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Restrict checks to specific tags."
+    },
+    {
+      "name": "traceback",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Provides a full stack trace in the output when a CommandError is raised. Choices: false true"
+    },
+    {
+      "name": "venv",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Use the Python interpreter from this virtual environment. Pass the path to the root of the virtualenv, not the bin/ directory nor the python executable."
+    },
+    {
+      "name": "verbosity",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [
+        "0",
+        "1",
+        "2",
+        "3"
+      ],
+      "description": "Specifies the amount of notification and debug information in the output of django-admin. Choices: 0 1 2 3"
+    }
+  ],
+  "examples": [
+    "- name: Check the entire project\n  community.general.django_check:\n    settings: myproject.settings\n\n- name: Create the project using specific databases\n  community.general.django_check:\n    database:\n      - somedb\n      - myotherdb\n    settings: fancysite.settings\n    pythonpath: /home/joedoe/project/fancysite\n    venv: /home/joedoe/project/fancysite/venv"
+  ],
+  "return_values": [
+    {
+      "name": "run_info",
+      "type": "dictionary",
+      "description": "Command-line execution information. Returned: success and verbosity >= 3",
+      "returned": "success"
+    },
+    {
+      "name": "version",
+      "type": "string",
+      "description": "Version of Django. Returned: always Sample: \"5.1.2\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/django_check_module#ansible-collections-community-general-django-check-module.html",
+  "parsed_at": "2026-04-11T13:53:12.476686"
+}

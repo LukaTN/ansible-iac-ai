@@ -1,0 +1,19 @@
+---
+- name: Set metric filter on log group /fluentd/testcase
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - amazon.aws
+  tasks:
+    - name: set metric filter on log group /fluentd/testcase
+      amazon.aws.cloudwatchlogs_log_group_metric_filter:
+        log_group_name: /fluentd/testcase
+        filter_name: BoxFreeStorage
+        filter_pattern: '{($.value = *) && ($.hostname = "box")}'
+        state: present
+        metric_transformation:
+          metric_name: box_free_space
+          metric_namespace: fluentd_metrics
+          metric_value: "$.value"
+          unit: Bytes

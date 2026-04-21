@@ -1,0 +1,13 @@
+---
+- name: Retrieve CloudWatch Metric Alarm Information
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - amazon.aws
+  tasks:
+    - name: Describe metric alarm based on alarm names
+      amazon.aws.cloudwatch_metric_alarm_info:
+        region: eu-west-1
+        alarm_names:
+          - high_error_rate

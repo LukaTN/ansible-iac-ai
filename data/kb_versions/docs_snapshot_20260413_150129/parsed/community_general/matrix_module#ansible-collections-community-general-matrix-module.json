@@ -1,0 +1,78 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.matrix",
+  "slug": "matrix_module#ansible-collections-community-general-matrix-module",
+  "description": "This module sends HTML formatted notifications to matrix rooms.",
+  "parameters": [
+    {
+      "name": "hs_url",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "URL of the homeserver, where the CS-API is reachable."
+    },
+    {
+      "name": "msg_html",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "HTML form of the message to send to matrix."
+    },
+    {
+      "name": "msg_plain",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Plain text form of the message to send to matrix, usually markdown."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The password to log in with."
+    },
+    {
+      "name": "room_id",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "ID of the room to send the notification to."
+    },
+    {
+      "name": "token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Authentication token for the API call. If provided, user_id and password are not required."
+    },
+    {
+      "name": "user_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The user ID of the user."
+    }
+  ],
+  "examples": [
+    "- name: Send matrix notification with token\n  community.general.matrix:\n    msg_plain: \"**hello world**\"\n    msg_html: \"<b>hello world</b>\"\n    room_id: \"!12345678:server.tld\"\n    hs_url: \"https://matrix.org\"\n    token: \"{{ matrix_auth_token }}\"\n\n- name: Send matrix notification with user_id and password\n  community.general.matrix:\n    msg_plain: \"**hello world**\"\n    msg_html: \"<b>hello world</b>\"\n    room_id: \"!12345678:server.tld\"\n    hs_url: \"https://matrix.org\"\n    user_id: \"ansible_notification_bot\"\n    password: \"{{ matrix_auth_password }}\""
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/matrix_module#ansible-collections-community-general-matrix-module.html",
+  "parsed_at": "2026-04-11T13:53:20.343263"
+}

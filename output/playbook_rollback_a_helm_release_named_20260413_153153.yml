@@ -1,0 +1,25 @@
+# ============================================================
+# AnsibleAI RAG Generator — LangChain + ChromaDB
+# Date        : 2026-04-13 15:31:53
+# Request     : rollback a helm release named prometheus in the monitoring namespace
+# Module      : kubernetes.core.helm
+# Collection  : kubernetes.core
+# RAG score   : 0.68
+# Chunks used : 6
+# Source URL  : https://docs.ansible.com/ansible/latest/collections/kubernetes/core/helm_module#ansible-collections-kubernetes-core-helm-module.html
+# LLM model   : qwen2.5-coder:7b
+# ============================================================
+
+---
+- name: Rollback Helm release named prometheus in monitoring namespace
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - kubernetes.core
+  tasks:
+    - name: Rollback prometheus release
+      kubernetes.core.helm:
+        release_name: prometheus
+        release_namespace: monitoring
+        value: rollback=true

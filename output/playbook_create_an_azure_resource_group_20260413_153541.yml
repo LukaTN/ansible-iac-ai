@@ -1,0 +1,24 @@
+# ============================================================
+# AnsibleAI RAG Generator — LangChain + ChromaDB
+# Date        : 2026-04-13 15:35:41
+# Request     : create an Azure resource group named rg-production in East US
+# Module      : azure.azcollection.azure_rm_virtualnetworkgateway_info
+# Collection  : azure.azcollection
+# RAG score   : 0.728
+# Chunks used : 6
+# Source URL  : https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualnetworkgateway_info_module#ansible-collections-azure-azcollection-azure-rm-virtualnetworkgateway-info-module.html
+# LLM model   : qwen2.5-coder:7b
+# ============================================================
+
+---
+- name: Create Azure Resource Group
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - azure.azcollection
+  tasks:
+    - name: Create resource group rg-production in East US
+      azure.azcollection.azure_rm_resourcegroup:
+        name: rg-production
+        location: eastus

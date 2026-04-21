@@ -1,0 +1,88 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.urpmi",
+  "slug": "urpmi_module#ansible-collections-community-general-urpmi-module",
+  "description": "Manages packages with urpmi (such as for Mageia or Mandriva).",
+  "parameters": [
+    {
+      "name": "force",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Assume “yes” is the answer to any question urpmi has to ask. Corresponds to the --force option for urpmi. Choices: false true ← (default)"
+    },
+    {
+      "name": "name",
+      "aliases": [
+        "package",
+        "pkg"
+      ],
+      "type": "list",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "A list of package names to install, upgrade or remove."
+    },
+    {
+      "name": "no_recommends",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Corresponds to the --no-recommends option for urpmi. Choices: false true ← (default)"
+    },
+    {
+      "name": "root",
+      "aliases": [
+        "installroot"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies an alternative install root, relative to which all packages are installed. Corresponds to the --root option for urpmi."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)",
+        "\"installed\"",
+        "\"removed\""
+      ],
+      "description": "Indicates the desired package state. Choices: \"absent\" \"present\" ← (default) \"installed\" \"removed\""
+    },
+    {
+      "name": "update_cache",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Update the package database first urpmi.update -a. Choices: false ← (default) true"
+    }
+  ],
+  "examples": [
+    "- name: Install package foo\n  community.general.urpmi:\n    pkg: foo\n    state: present\n\n- name: Remove package foo\n  community.general.urpmi:\n    pkg: foo\n    state: absent\n\n- name: Remove packages foo and bar\n  community.general.urpmi:\n    pkg: foo,bar\n    state: absent\n\n- name: Update the package database (urpmi.update -a -q) and install bar (bar will be the updated if a newer version exists)\n- community.general.urpmi:\n    name: bar\n    state: present\n    update_cache: true"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/urpmi_module#ansible-collections-community-general-urpmi-module.html",
+  "parsed_at": "2026-04-11T13:53:27.818616"
+}

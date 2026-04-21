@@ -1,0 +1,543 @@
+{
+  "collection_ns": "amazon_aws",
+  "collection": "amazon.aws",
+  "module": "amazon.aws.lambda",
+  "slug": "lambda_module#ansible-collections-amazon-aws-lambda-module",
+  "description": "Allows for the management of Lambda functions.",
+  "parameters": [
+    {
+      "name": "access_key",
+      "aliases": [
+        "aws_access_key_id",
+        "aws_access_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS access key ID. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY environment variables may also be used in decreasing order of preference. The aws_access_key and profile options are mutually exclusive. The aws_access_key_id alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "architecture",
+      "aliases": [
+        "architectures"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"x86_64\"",
+        "\"arm64\""
+      ],
+      "description": "The instruction set architecture that the function supports. Requires one of s3_bucket or zip_file. Choices: \"x86_64\" \"arm64\""
+    },
+    {
+      "name": "aws_ca_bundle",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The location of a CA Bundle to use when validating SSL certificates. The AWS_CA_BUNDLE environment variable may also be used."
+    },
+    {
+      "name": "aws_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary to modify the botocore configuration. Parameters can be found in the AWS documentation https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html#botocore.config.Config."
+    },
+    {
+      "name": "dead_letter_arn",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The parent object that contains the target Amazon Resource Name (ARN) of an Amazon SQS queue or Amazon SNS topic."
+    },
+    {
+      "name": "debug_botocore_endpoint_logs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use a botocore.endpoint logger to parse the unique (rather than total) \"resource:action\" API calls made during a task, outputing the set to the resource_actions key in the task results. Use the aws_resource_action callback to output to total list made during a playbook. The ANSIBLE_DEBUG_BOTOCORE_LOGS environment variable may also be used. Choices: false ← (default) true"
+    },
+    {
+      "name": "description",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A short, user-defined function description. Lambda does not use this value. Assign a meaningful description as you see fit. Default: \"\""
+    },
+    {
+      "name": "endpoint_url",
+      "aliases": [
+        "aws_endpoint_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "AWS",
+      "choices": [],
+      "description": "URL to connect to instead of the default AWS endpoints. While this can be used to connection to other AWS-compatible services the amazon.aws and community.aws collections are only tested against AWS. The AWS_URL environment variable may also be used."
+    },
+    {
+      "name": "environment_variables",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary of environment variables the Lambda function is given."
+    },
+    {
+      "name": "handler",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The function within your code that Lambda calls to begin execution."
+    },
+    {
+      "name": "image_uri",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The Amazon ECR URI of the image to use. Required (alternative to runtime zip_file and s3_bucket) when creating a function. Required when state=present."
+    },
+    {
+      "name": "kms_key_arn",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The KMS key ARN used to encrypt the function’s environment variables."
+    },
+    {
+      "name": "layers",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A list of function layers to add to the function’s execution environment. Specify each layer by its ARN, including the version."
+    },
+    {
+      "name": "memory_size",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "128",
+      "choices": [],
+      "description": "The amount of memory, in MB, your Lambda function is given. Default: 128"
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name you want to assign to the function you are uploading. Cannot be changed."
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "aws_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A named AWS profile to use for authentication. See the AWS documentation for more information about named profiles https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html. The AWS_PROFILE environment variable may also be used. The profile option is mutually exclusive with the aws_access_key, aws_secret_key and session_token options."
+    },
+    {
+      "name": "purge_tags",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If purge_tags=true and tags is set, existing tags will be purged from the resource to match exactly what is defined by tags parameter. If the tags parameter is not set then tags will not be modified, even if purge_tags=True. Tag keys beginning with aws: are reserved by Amazon and can not be modified. As such they will be ignored for the purposes of the purge_tags parameter. See the Amazon documentation for more information https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html#tag-conventions. Choices: false true ← (default)"
+    },
+    {
+      "name": "region",
+      "aliases": [
+        "aws_region"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The AWS region to use. For global services such as IAM, Route53 and CloudFront, region is ignored. The AWS_REGION environment variable may also be used. See the Amazon AWS documentation for more information http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region."
+    },
+    {
+      "name": "role",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The Amazon Resource Name (ARN) of the IAM role that Lambda assumes when it executes your function to access any other Amazon Web Services (AWS) resources. You may use the bare ARN if the role belongs to the same AWS account. Required when state=present."
+    },
+    {
+      "name": "runtime",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The runtime environment for the Lambda function you are uploading. Required when creating a function. Uses parameters as described in boto3 docs. Required when state=present. For supported list of runtimes, see https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html."
+    },
+    {
+      "name": "s3_bucket",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Amazon S3 bucket name where the .zip file containing your deployment package is stored. If state=present then either zip_file or s3_bucket must be present. s3_bucket and s3_key are required together."
+    },
+    {
+      "name": "s3_key",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The Amazon S3 object (the deployment package) key name you want to upload. s3_bucket and s3_key are required together."
+    },
+    {
+      "name": "s3_object_version",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The Amazon S3 object (the deployment package) version you want to upload."
+    },
+    {
+      "name": "secret_key",
+      "aliases": [
+        "aws_secret_access_key",
+        "aws_secret_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS secret access key. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SECRET_ACCESS_KEY or AWS_SECRET_KEY environment variables may also be used in decreasing order of preference. The secret_key and profile options are mutually exclusive. The aws_secret_access_key alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "session_token",
+      "aliases": [
+        "aws_session_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS STS session token for use with temporary credentials. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SESSION_TOKEN environment variable may also be used. The session_token and profile options are mutually exclusive."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Create or delete Lambda function. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "tags",
+      "aliases": [
+        "resource_tags"
+      ],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary representing the tags to be applied to the resource. If the tags parameter is not set then tags will not be modified."
+    },
+    {
+      "name": "timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "3",
+      "choices": [],
+      "description": "The function maximum execution time in seconds after which Lambda should terminate the function. Default: 3"
+    },
+    {
+      "name": "tracing_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"Active\"",
+        "\"PassThrough\""
+      ],
+      "description": "Set mode to ‘Active’ to sample and trace incoming requests with AWS X-Ray. Turned off (set to ‘PassThrough’) by default. Choices: \"Active\" \"PassThrough\""
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to false, SSL certificates will not be validated for communication with the AWS APIs. Setting validate_certs=false is strongly discouraged, as an alternative, consider setting aws_ca_bundle instead. Choices: false true ← (default)"
+    },
+    {
+      "name": "vpc_security_group_ids",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of VPC security group IDs to associate with the Lambda function. Required when vpc_subnet_ids is used."
+    },
+    {
+      "name": "vpc_subnet_ids",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of subnet IDs to run Lambda function in. Use this option if you need to access resources in your VPC. Leave empty if you don’t want to run the function in a VPC. If set, vpc_security_group_ids must also be set."
+    },
+    {
+      "name": "zip_file",
+      "aliases": [
+        "src"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A .zip file containing your deployment package If state=present then either zip_file or s3_bucket must be present."
+    }
+  ],
+  "examples": [
+    "# Create Lambda functions\n- name: looped creation\n  amazon.aws.lambda:\n    name: '{{ item.name }}'\n    state: present\n    zip_file: '{{ item.zip_file }}'\n    runtime: 'python2.7'\n    role: 'arn:aws:iam::123456789012:role/lambda_basic_execution'\n    handler: 'hello_python.my_handler'\n    vpc_subnet_ids:\n      - subnet-123abcde\n      - subnet-edcba321\n    vpc_security_group_ids:\n      - sg-123abcde\n      - sg-edcba321\n    environment_variables: '{{ item.env_vars }}'\n    tags:\n      key1: 'value1'\n  loop:\n    - name: HelloWorld\n      zip_file: hello-code.zip\n      env_vars:\n        key1: \"first\"\n        key2: \"second\"\n    - name: ByeBye\n      zip_file: bye-code.zip\n      env_vars:\n        key1: \"1\"\n        key2: \"2\"\n\n# To remove previously added tags pass an empty dict\n- name: remove tags\n  amazon.aws.lambda:\n    name: 'Lambda function'\n    state: present\n    zip_file: 'code.zip'\n    runtime: 'python2.7'\n    role: 'arn:aws:iam::123456789012:role/lambda_basic_execution'\n    handler: 'hello_python.my_handler'\n    tags: {}\n\n# Basic Lambda function deletion\n- name: Delete Lambda functions HelloWorld and ByeBye\n  amazon.aws.lambda:\n    name: '{{ item }}'\n    state: absent\n  loop:\n    - HelloWorld\n    - ByeBye\n\n# Create Lambda functions with function layers\n- name: looped creation\n  amazon.aws.lambda:\n    name: 'HelloWorld'\n    state: present\n    zip_file: 'hello-code.zip'\n    runtime: 'python2.7'\n    role: 'arn:aws:iam::123456789012:role/lambda_basic_execution'\n    handler: 'hello_python.my_handler'\n    layers:\n      - layer_version_arn: 'arn:aws:lambda:us-east-1:123456789012:layer:python27-env:7'"
+  ],
+  "return_values": [
+    {
+      "name": "code",
+      "type": "dictionary",
+      "description": "The lambda function’s code returned by get_function in boto3. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "location",
+      "type": "string",
+      "description": "The presigned URL you can use to download the function’s .zip file that you previously uploaded. The URL is valid for up to 10 minutes. Returned: success Sample: \"https://prod-04-2014-tasks.s3.us-east-1.amazonaws.com/snapshots/sample\"",
+      "returned": "success"
+    },
+    {
+      "name": "repository_type",
+      "type": "string",
+      "description": "The repository from which you can download the function. Returned: success Sample: \"S3\"",
+      "returned": "success"
+    },
+    {
+      "name": "configuration",
+      "type": "dictionary",
+      "description": "The Lambda function’s configuration metadata returned by get_function in boto3. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "architectures",
+      "type": "list",
+      "description": "The architectures supported by the function. Returned: success Sample: [\"arm64\"]",
+      "returned": "success"
+    },
+    {
+      "name": "code_sha256",
+      "type": "string",
+      "description": "The SHA256 hash of the function’s deployment package. Returned: success Sample: \"zOAGfF5JLFuzZoSNirUtOrQp+S341IOA3BcoXXoaIaU=\"",
+      "returned": "success"
+    },
+    {
+      "name": "code_size",
+      "type": "integer",
+      "description": "The size of the function’s deployment package in bytes. Returned: success Sample: 123",
+      "returned": "success"
+    },
+    {
+      "name": "dead_letter_config",
+      "type": "dictionary",
+      "description": "The function’s dead letter queue. Returned: when the function has a dead letter queue configured Sample: {\"target_arn\": \"arn:aws:lambda:us-east-1:123456789012:function:myFunction:1\"}",
+      "returned": "when"
+    },
+    {
+      "name": "target_arn",
+      "type": "string",
+      "description": "The ARN of an SQS queue or SNS topic. Returned: when the function has a dead letter queue configured Sample: \"arn:aws:lambda:us-east-1:123456789012:function:myFunction:1\"",
+      "returned": "when"
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "description": "The function’s description. Returned: success Sample: \"My function\"",
+      "returned": "success"
+    },
+    {
+      "name": "environment",
+      "type": "dictionary",
+      "description": "The function’s environment variables. Returned: when environment variables exist",
+      "returned": "when"
+    },
+    {
+      "name": "error",
+      "type": "dictionary",
+      "description": "Error message for environment variables that could not be applied. Returned: when there is an error applying environment variables",
+      "returned": "when"
+    },
+    {
+      "name": "error_code",
+      "type": "string",
+      "description": "The error code. Returned: when there is an error applying environment variables",
+      "returned": "when"
+    },
+    {
+      "name": "message",
+      "type": "string",
+      "description": "The error message. Returned: when there is an error applying environment variables",
+      "returned": "when"
+    },
+    {
+      "name": "variables",
+      "type": "dictionary",
+      "description": "Environment variable key-value pairs. Returned: when environment variables exist Sample: {\"key\": \"value\"}",
+      "returned": "when"
+    },
+    {
+      "name": "function_arn",
+      "type": "string",
+      "description": "The function’s Amazon Resource Name (ARN). Returned: on success Sample: \"arn:aws:lambda:us-east-1:123456789012:function:myFunction:1\"",
+      "returned": "on"
+    },
+    {
+      "name": "function_name",
+      "type": "string",
+      "description": "The function’s name. Returned: on success Sample: \"myFunction\"",
+      "returned": "on"
+    },
+    {
+      "name": "handler",
+      "type": "string",
+      "description": "The function Lambda calls to begin executing your function. Returned: on success Sample: \"index.handler\"",
+      "returned": "on"
+    },
+    {
+      "name": "last_modified",
+      "type": "string",
+      "description": "The date and time that the function was last updated, in ISO-8601 format (YYYY-MM-DDThh:mm:ssTZD). Returned: on success Sample: \"2017-08-01T00:00:00.000+0000\"",
+      "returned": "on"
+    },
+    {
+      "name": "layers",
+      "type": "complex",
+      "description": "The function’s layers. Returned: on success",
+      "returned": "on"
+    },
+    {
+      "name": "arn",
+      "type": "string",
+      "description": "The Amazon Resource Name (ARN) of the function layer. Returned: always Sample: \"active\"",
+      "returned": "always"
+    },
+    {
+      "name": "signing_job_arn",
+      "type": "string",
+      "description": "The Amazon Resource Name (ARN) of a signing job. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "signing_profile_version_arn",
+      "type": "string",
+      "description": "The Amazon Resource Name (ARN) for a signing profile version. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "memory_size",
+      "type": "integer",
+      "description": "The memory allocated to the function. Returned: on success Sample: 128",
+      "returned": "on"
+    },
+    {
+      "name": "revision_id",
+      "type": "string",
+      "description": "The latest updated revision of the function or alias. Returned: on success Sample: \"a2x9886d-d48a-4a0c-ab64-82abc005x80c\"",
+      "returned": "on"
+    },
+    {
+      "name": "role",
+      "type": "string",
+      "description": "The function’s execution role. Returned: on success Sample: \"arn:aws:iam::123456789012:role/lambda_basic_execution\"",
+      "returned": "on"
+    },
+    {
+      "name": "runtime",
+      "type": "string",
+      "description": "The funtime environment for the Lambda function. Returned: on success Sample: \"nodejs6.10\"",
+      "returned": "on"
+    },
+    {
+      "name": "timeout",
+      "type": "integer",
+      "description": "The amount of time that Lambda allows a function to run before terminating it. Returned: on success Sample: 3",
+      "returned": "on"
+    },
+    {
+      "name": "tracing_config",
+      "type": "dictionary",
+      "description": "The function’s AWS X-Ray tracing configuration. Returned: on success Sample: {\"mode\": \"Active\"}",
+      "returned": "on"
+    },
+    {
+      "name": "mode",
+      "type": "string",
+      "description": "The tracing mode. Returned: on success Sample: \"Active\"",
+      "returned": "on"
+    },
+    {
+      "name": "version",
+      "type": "string",
+      "description": "The version of the Lambda function. Returned: on success Sample: \"1\"",
+      "returned": "on"
+    },
+    {
+      "name": "vpc_config",
+      "type": "dictionary",
+      "description": "The function’s networking configuration. Returned: on success Sample: {\"security_group_ids\": [], \"subnet_ids\": [], \"vpc_id\": \"123\"}",
+      "returned": "on"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/amazon/aws/lambda_module.html",
+  "parsed_at": "2026-04-13T16:29:23.243541"
+}

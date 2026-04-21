@@ -1,0 +1,59 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.selinux_permissive",
+  "slug": "selinux_permissive_module#ansible-collections-community-general-selinux-permissive-module",
+  "description": "Add and remove a domain from the list of permissive domains.",
+  "parameters": [
+    {
+      "name": "domain",
+      "aliases": [
+        "name"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The domain that is added or removed from the list of permissive domains."
+    },
+    {
+      "name": "no_reload",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "is",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Disable reloading of the SELinux policy after making change to a domain’s permissive setting. The default is false, which causes policy to be reloaded when a domain changes state. Reloading the policy does not work on older versions of the policycoreutils-python library, for example in EL 6.”. Choices: false ← (default) true"
+    },
+    {
+      "name": "permissive",
+      "aliases": [],
+      "type": "boolean",
+      "required": true,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Indicate if the domain should or should not be set as permissive. Choices: false true"
+    },
+    {
+      "name": "store",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of the SELinux policy store to use. Default: \"\""
+    }
+  ],
+  "examples": [
+    "- name: Change the httpd_t domain to permissive\n  community.general.selinux_permissive:\n    name: httpd_t\n    permissive: true"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/selinux_permissive_module#ansible-collections-community-general-selinux-permissive-module.html",
+  "parsed_at": "2026-04-11T13:53:26.140237"
+}

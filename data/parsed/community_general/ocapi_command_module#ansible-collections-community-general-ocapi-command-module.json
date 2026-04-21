@@ -1,0 +1,115 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.ocapi_command",
+  "slug": "ocapi_command_module#ansible-collections-community-general-ocapi-command-module",
+  "description": "Builds OCAPI URIs locally and sends them to remote OOB controllers to perform an action.",
+  "parameters": [
+    {
+      "name": "baseuri",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Base URI of OOB controller."
+    },
+    {
+      "name": "category",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Category to execute on OOB controller."
+    },
+    {
+      "name": "command",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Command to execute on OOB controller."
+    },
+    {
+      "name": "job_name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "For command=DeleteJob command, the name of the job to delete."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Password for authenticating to OOB controller."
+    },
+    {
+      "name": "proxy_slot_number",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "For proxied inband requests, the slot number of the IOM. Only applies if baseuri is a proxy server."
+    },
+    {
+      "name": "timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "10",
+      "choices": [],
+      "description": "Timeout in seconds for URL requests to OOB controller. Default: 10"
+    },
+    {
+      "name": "update_image_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "For command=FWUpload, the path on the local filesystem of the firmware update image."
+    },
+    {
+      "name": "username",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Username for authenticating to OOB controller."
+    }
+  ],
+  "examples": [
+    "- name: Set the power state to low\n  community.general.ocapi_command:\n    category: Chassis\n    command: PowerModeLow\n    baseuri: \"{{ baseuri }}\"\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n\n- name: Set the power state to normal\n  community.general.ocapi_command:\n    category: Chassis\n    command: PowerModeNormal\n    baseuri: \"{{ baseuri }}\"\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n- name: Set chassis indicator LED to on\n  community.general.ocapi_command:\n    category: Chassis\n    command: IndicatorLedOn\n    baseuri: \"{{ baseuri }}\"\n    proxy_slot_number: 2\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n- name: Set chassis indicator LED to off\n  community.general.ocapi_command:\n    category: Chassis\n    command: IndicatorLedOff\n    baseuri: \"{{ baseuri }}\"\n    proxy_slot_number: 2\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n- name: Reset Enclosure\n  community.general.ocapi_command:\n    category: Systems\n    command: PowerGracefulRestart\n    baseuri: \"{{ baseuri }}\"\n    proxy_slot_number: 2\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n- name: Firmware Upload\n  community.general.ocapi_command:\n    category: Update\n    command: FWUpload\n    baseuri: \"iom1.wdc.com\"\n    proxy_slot_number: 2\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n    update_image_path: \"/path/to/firmware.tar.gz\"\n- name: Firmware Update\n  community.general.ocapi_command:\n    category: Update\n    command: FWUpdate\n    baseuri: \"iom1.wdc.com\"\n    proxy_slot_number: 2\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n- name: Firmware Activate\n  community.general.ocapi_command:\n    category: Update\n    command: FWActivate\n    baseuri: \"iom1.wdc.com\"\n    proxy_slot_number: 2\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n- name: Delete Job\n  community.general.ocapi_command:\n    category: Jobs\n    command: DeleteJob\n    job_name: FirmwareUpdate\n    baseuri: \"{{ baseuri }}\"\n    proxy_slot_number: 2\n    username: \"{{ username }}\"\n    password: \"{{ password }}\""
+  ],
+  "return_values": [
+    {
+      "name": "jobUri",
+      "type": "string",
+      "description": "URI to use to monitor status of the operation. Returned for async commands such as Firmware Update, Firmware Activate. Returned: when supported Sample: \"https://ioma.wdc.com/Storage/Devices/openflex-data24-usalp03020qb0003/Jobs/FirmwareUpdate/\"",
+      "returned": "when"
+    },
+    {
+      "name": "msg",
+      "type": "string",
+      "description": "Message with action result or error description. Returned: always Sample: \"Action was successful\"",
+      "returned": "always"
+    },
+    {
+      "name": "operationStatusId",
+      "type": "integer",
+      "description": "OCAPI State ID (see OCAPI documentation for possible values). Returned: when supported Sample: 2",
+      "returned": "when"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/ocapi_command_module.html",
+  "parsed_at": "2026-04-13T16:29:53.971492"
+}

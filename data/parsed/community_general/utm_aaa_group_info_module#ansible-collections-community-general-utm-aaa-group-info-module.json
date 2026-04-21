@@ -1,0 +1,205 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.utm_aaa_group_info",
+  "slug": "utm_aaa_group_info_module#ansible-collections-community-general-utm-aaa-group-info-module",
+  "description": "Get info for a reverse_proxy frontend entry in SOPHOS UTM.",
+  "parameters": [
+    {
+      "name": "headers",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "A dictionary of additional headers to be sent to POST and PUT requests. Is needed for some modules. Default: {}"
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the object that identifies the entry."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)"
+      ],
+      "description": "The desired state of the object. present creates or updates an object. absent deletes an object if present. Choices: \"absent\" \"present\" ← (default)"
+    },
+    {
+      "name": "utm_host",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The REST Endpoint of the Sophos UTM."
+    },
+    {
+      "name": "utm_port",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "4444",
+      "choices": [],
+      "description": "The port of the REST interface. Default: 4444"
+    },
+    {
+      "name": "utm_protocol",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"http\"",
+        "\"https\" ← (default)"
+      ],
+      "description": "The protocol of the REST Endpoint. Choices: \"http\" \"https\" ← (default)"
+    },
+    {
+      "name": "utm_token",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The token used to identify at the REST-API. See https://www.sophos.com/en-us/medialibrary/PDFs/documentation/UTMonAWS/Sophos-UTM-RESTful-API.pdf?la=en, Chapter 2.4.2."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether the REST interface’s SSL certificate should be verified or not. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Remove UTM aaa_group\n  community.general.utm_aaa_group_info:\n    utm_host: sophos.host.name\n    utm_token: abcdefghijklmno1234\n    name: TestAAAGroupEntry"
+  ],
+  "return_values": [
+    {
+      "name": "result",
+      "type": "complex",
+      "description": "The utm object that was created. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "_locked",
+      "type": "boolean",
+      "description": "Whether or not the object is currently locked. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "_ref",
+      "type": "string",
+      "description": "The reference name of the object. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "_type",
+      "type": "string",
+      "description": "The type of the object. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "adirectory_groups",
+      "type": "string",
+      "description": "List of Active Directory Groups. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "adirectory_groups_sids",
+      "type": "list",
+      "description": "List of Active Directory Groups SIDS. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "backend_match",
+      "type": "string",
+      "description": "The backend to use. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "comment",
+      "type": "string",
+      "description": "The comment string. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "dynamic",
+      "type": "string",
+      "description": "Whether the group match is ipsec_dn or directory_group. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "edirectory_groups",
+      "type": "string",
+      "description": "List of eDirectory Groups. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "ipsec_dn",
+      "type": "string",
+      "description": "Ipsec_dn identifier to match. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "ldap_attribute",
+      "type": "string",
+      "description": "The LDAP Attribute to match against. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "ldap_attribute_value",
+      "type": "string",
+      "description": "The LDAP Attribute Value to match against. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "members",
+      "type": "list",
+      "description": "List of member identifiers of the group. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "The name of the object. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "network",
+      "type": "string",
+      "description": "The identifier of the network (network/aaa). Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "radius_group",
+      "type": "string",
+      "description": "The radius group identifier. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "tacacs_group",
+      "type": "string",
+      "description": "The tacacs group identifier. Returned: success",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/utm_aaa_group_info_module.html",
+  "parsed_at": "2026-04-13T16:29:59.905500"
+}

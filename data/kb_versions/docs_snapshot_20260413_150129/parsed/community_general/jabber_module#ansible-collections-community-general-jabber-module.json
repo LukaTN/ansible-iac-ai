@@ -1,0 +1,78 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.jabber",
+  "slug": "jabber_module#ansible-collections-community-general-jabber-module",
+  "description": "Send a message to jabber.",
+  "parameters": [
+    {
+      "name": "encoding",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Message encoding."
+    },
+    {
+      "name": "host",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Host to connect, overrides user info."
+    },
+    {
+      "name": "msg",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The message body."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Password for user to connect."
+    },
+    {
+      "name": "port",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "5222",
+      "choices": [],
+      "description": "Port to connect to, overrides default. Default: 5222"
+    },
+    {
+      "name": "to",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "User ID or name of the room, when using room use a slash to indicate your nick."
+    },
+    {
+      "name": "user",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "User as which to connect."
+    }
+  ],
+  "examples": [
+    "- name: Send a message to a user\n  community.general.jabber:\n    user: mybot@example.net\n    password: secret\n    to: friend@example.net\n    msg: Ansible task finished\n\n- name: Send a message to a room\n  community.general.jabber:\n    user: mybot@example.net\n    password: secret\n    to: mychaps@conference.example.net/ansiblebot\n    msg: Ansible task finished\n\n- name: Send a message, specifying the host and port\n  community.general.jabber:\n    user: mybot@example.net\n    host: talk.example.net\n    port: 5223\n    password: secret\n    to: mychaps@example.net\n    msg: Ansible task finished"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/jabber_module#ansible-collections-community-general-jabber-module.html",
+  "parsed_at": "2026-04-11T13:53:16.937346"
+}

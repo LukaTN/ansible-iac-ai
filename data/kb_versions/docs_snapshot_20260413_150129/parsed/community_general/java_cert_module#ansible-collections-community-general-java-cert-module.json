@@ -1,0 +1,252 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.java_cert",
+  "slug": "java_cert_module#ansible-collections-community-general-java-cert-module",
+  "description": "This is a wrapper module around keytool, which can be used to import certificates and optionally private keys to a given java keystore, or remove them from it.",
+  "parameters": [
+    {
+      "name": "attributes",
+      "aliases": [
+        "attr"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The attributes the resulting filesystem object should have. To get supported flags look at the man page for chattr on the target system. This string should contain the attributes in the same order as the one displayed by lsattr. The = operator is assumed as default, otherwise + or - operators need to be included in the string."
+    },
+    {
+      "name": "cert_alias",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Imported certificate alias. The alias is used when checking for the presence of a certificate in the keystore."
+    },
+    {
+      "name": "cert_content",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Content of the certificate used to create the keystore. Exactly one of cert_url, cert_path, cert_content, or pkcs12_path is required to load certificate."
+    },
+    {
+      "name": "cert_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Local path to load certificate from. Exactly one of cert_url, cert_path, cert_content, or pkcs12_path is required to load certificate."
+    },
+    {
+      "name": "cert_port",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "443",
+      "choices": [],
+      "description": "Port to connect to URL. This is used to create server URL:PORT. Default: 443"
+    },
+    {
+      "name": "cert_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Basic URL to fetch SSL certificate from. Exactly one of cert_url, cert_path, cert_content, or pkcs12_path is required to load certificate."
+    },
+    {
+      "name": "executable",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "keytool",
+      "choices": [],
+      "description": "Path to keytool binary if not used we search in PATH for it. Default: \"keytool\""
+    },
+    {
+      "name": "group",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of the group that should own the filesystem object, as would be fed to chown. When left unspecified, it uses the current group of the current user unless you are root, in which case it can preserve the previous ownership."
+    },
+    {
+      "name": "keystore_create",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Create keystore if it does not exist. Choices: false ← (default) true"
+    },
+    {
+      "name": "keystore_pass",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Keystore password."
+    },
+    {
+      "name": "keystore_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to keystore."
+    },
+    {
+      "name": "keystore_type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Keystore type (JCEKS, JKS)."
+    },
+    {
+      "name": "mode",
+      "aliases": [],
+      "type": "any",
+      "required": false,
+      "default": "umask",
+      "choices": [],
+      "description": "The permissions the resulting filesystem object should have. For those used to /usr/bin/chmod remember that modes are actually octal numbers. You must give Ansible enough information to parse them correctly. For consistent results, quote octal numbers (for example, '644' or '1777') so Ansible receives a string and can do its own conversion from string into number. Adding a leading zero (for example, 0755) works sometimes, but can fail in loops and some other circumstances. Giving Ansible a number without following either of these rules will end up with a decimal number which will have unexpected results. As of Ansible 1.8, the mode may be specified as a symbolic mode (for example, u+rwx or u=rw,g=r,o=r). If mode is not specified and the destination filesystem object does not exist, the default umask on the system will be used when setting the mode for the newly created filesystem object. If mode is not specified and the destination filesystem object does exist, the mode of the existing filesystem object will be used. Specifying mode is the best way to ensure filesystem objects are created with the correct permissions. See CVE-2020-1736 for further details."
+    },
+    {
+      "name": "owner",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of the user that should own the filesystem object, as would be fed to chown. When left unspecified, it uses the current user unless you are root, in which case it can preserve the previous ownership. Specifying a numeric username will be assumed to be a user ID and not a username. Avoid numeric usernames to avoid this confusion."
+    },
+    {
+      "name": "pkcs12_alias",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Alias in the PKCS12 keystore."
+    },
+    {
+      "name": "pkcs12_password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Password for importing from PKCS12 keystore."
+    },
+    {
+      "name": "pkcs12_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Local path to load PKCS12 keystore from. Unlike cert_url, cert_path and cert_content, the PKCS12 keystore embeds the private key matching the certificate, and is used to import both the certificate and its private key into the java keystore. Exactly one of cert_url, cert_path, cert_content, or pkcs12_path is required to load certificate."
+    },
+    {
+      "name": "selevel",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The level part of the SELinux filesystem object context. This is the MLS/MCS attribute, sometimes known as the range. When set to _default, it will use the level portion of the policy if available."
+    },
+    {
+      "name": "serole",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The role part of the SELinux filesystem object context. When set to _default, it will use the role portion of the policy if available."
+    },
+    {
+      "name": "setype",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The type part of the SELinux filesystem object context. When set to _default, it will use the type portion of the policy if available."
+    },
+    {
+      "name": "seuser",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "it",
+      "choices": [],
+      "description": "The user part of the SELinux filesystem object context. By default it uses the system policy, where applicable. When set to _default, it will use the user portion of the policy if available."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)"
+      ],
+      "description": "Defines action which can be either certificate import or removal. When state=present, the certificate is always inserted into the keystore, even if there already exists a cert alias that is different. Choices: \"absent\" \"present\" ← (default)"
+    },
+    {
+      "name": "trust_cacert",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Trust imported cert as CAcert. Choices: false ← (default) true"
+    },
+    {
+      "name": "unsafe_writes",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "this",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Influence when to use atomic operation to prevent data corruption or inconsistent reads from the target filesystem object. By default this module uses atomic operations to prevent data corruption or inconsistent reads from the target filesystem objects, but sometimes systems are configured or just broken in ways that prevent this. One example is docker mounted filesystem objects, which cannot be updated atomically from inside the container and can only be written in an unsafe manner. This option allows Ansible to fall back to unsafe methods of updating filesystem objects when atomic operations fail (however, it doesn’t force Ansible to perform unsafe writes). IMPORTANT! Unsafe writes are subject to race conditions and can lead to data corruption. Choices: false ← (default) true"
+    }
+  ],
+  "examples": [
+    "- name: Import SSL certificate from google.com to a given cacerts keystore\n  community.general.java_cert:\n    cert_url: google.com\n    cert_port: 443\n    keystore_path: /usr/lib/jvm/jre7/lib/security/cacerts\n    keystore_pass: changeit\n    state: present\n\n- name: Remove certificate with given alias from a keystore\n  community.general.java_cert:\n    cert_url: google.com\n    keystore_path: /usr/lib/jvm/jre7/lib/security/cacerts\n    keystore_pass: changeit\n    executable: /usr/lib/jvm/jre7/bin/keytool\n    state: absent\n\n- name: Import trusted CA from SSL certificate\n  community.general.java_cert:\n    cert_path: /opt/certs/rootca.crt\n    keystore_path: /tmp/cacerts\n    keystore_pass: changeit\n    keystore_create: true\n    state: present\n    cert_alias: LE_RootCA\n    trust_cacert: true\n\n- name: Import trusted CA from the SSL certificate stored in the cert_content variable\n  community.general.java_cert:\n    cert_content: |\n      -----BEGIN CERTIFICATE-----\n      ...\n      -----END CERTIFICATE-----\n    keystore_path: /tmp/cacerts\n    keystore_pass: changeit\n    keystore_create: true\n    state: present\n    cert_alias: LE_RootCA\n    trust_cacert: true\n\n- name: Import SSL certificate from google.com to a keystore, create it if it doesn't exist\n  community.general.java_cert:\n    cert_url: google.com\n    keystore_path: /tmp/cacerts\n    keystore_pass: changeit\n    keystore_create: true\n    state: present\n\n- name: Import a pkcs12 keystore with a specified alias, create it if it doesn't exist\n  community.general.java_cert:\n    pkcs12_path: \"/tmp/importkeystore.p12\"\n    cert_alias: default\n    keystore_path: /opt/wildfly/standalone/configuration/defaultkeystore.jks\n    keystore_pass: changeit\n    keystore_create: true\n    state: present\n\n- name: Import SSL certificate to JCEKS keystore\n  community.general.java_cert:\n    pkcs12_path: \"/tmp/importkeystore.p12\"\n    pkcs12_alias: default\n    pkcs12_password: somepass\n    cert_alias: default\n    keystore_path: /opt/someapp/security/keystore.jceks\n    keystore_type: \"JCEKS\"\n    keystore_pass: changeit\n    keystore_create: true\n    state: present"
+  ],
+  "return_values": [
+    {
+      "name": "cmd",
+      "type": "string",
+      "description": "Executed command to get action done. Returned: success Sample: \"keytool -importcert -noprompt -keystore\"",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/java_cert_module#ansible-collections-community-general-java-cert-module.html",
+  "parsed_at": "2026-04-11T13:53:16.973384"
+}

@@ -1,0 +1,33 @@
+---
+- name: Create an S3 bucket named my-app-backups in us-west-2 with versioning enabled
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - amazon.aws
+  tasks:
+    - name: Ensure the S3 bucket exists
+      amazon.aws.s3_bucket:
+        name: my-app-backups
+        state: present
+        region: us-west-2
+        versioning_configuration:
+          status: Enabled
+
+    - name: Create a backup plan for the S3 bucket
+      amazon.aws.backup_plan:
+        backup_plan_name: "MyAppBackupPlan"
+        destination_backup_vault_arn: "{{ backup_vault.arn }}"
+        rules:
+          - rule_name: "DailyBackupRule"
+            target_backup_vault_name: "default-vault"
+            schedule_expression: "cron(0 12 * * ? *)"
+            lifecycle:
+              move_to_cold_storage_after_days: 365
+              delete_after_days: 730
+
+    - name: Create a backup vault for the S3 bucket
+      amazon.aws.backup_vault:
+        state: present
+        backup_vault_name: "default-vault"
+        encryption_key_arn: arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab

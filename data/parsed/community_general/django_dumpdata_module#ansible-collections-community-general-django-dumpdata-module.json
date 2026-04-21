@@ -1,0 +1,201 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.django_dumpdata",
+  "slug": "django_dumpdata_module#ansible-collections-community-general-django-dumpdata-module",
+  "description": "This module is a wrapper for the execution of django-admin dumpdata.",
+  "parameters": [
+    {
+      "name": "all",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Dump all records, including those which might otherwise be filtered or modified by a custom manager. Choices: false true"
+    },
+    {
+      "name": "apps_models",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Dump only the applications and models listed in the dump. Format must be either app_label or app_label.ModelName. If not passed, all applications and models are to be dumped."
+    },
+    {
+      "name": "database",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "default",
+      "choices": [],
+      "description": "Specify the database to be used. Default: \"default\""
+    },
+    {
+      "name": "excludes",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Applications or models to be excluded. Format must be either app_label or app_label.ModelName."
+    },
+    {
+      "name": "fixture",
+      "aliases": [
+        "output"
+      ],
+      "type": "path",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Path to the output file. The fixture filename may end with .bz2, .gz, .lzma or .xz, in which case the corresponding compression format is used. This corresponds to the --output parameter for the django-admin dumpdata command."
+    },
+    {
+      "name": "format",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"xml\"",
+        "\"json\" ← (default)",
+        "\"jsonl\"",
+        "\"yaml\""
+      ],
+      "description": "Serialization format of the output data. Choices: \"xml\" \"json\" ← (default) \"jsonl\" \"yaml\""
+    },
+    {
+      "name": "indent",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "is",
+      "choices": [],
+      "description": "Indentation size for the output. Default is not to indent, so the output is generated in one single line."
+    },
+    {
+      "name": "natural_foreign",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Use natural keys when serializing for foreign keys. Choices: false true"
+    },
+    {
+      "name": "natural_primary",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Omit primary keys when serializing. Choices: false true"
+    },
+    {
+      "name": "primary_keys",
+      "aliases": [
+        "pks"
+      ],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of primary keys to include in the dump. Only available when dumping one single model."
+    },
+    {
+      "name": "pythonpath",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Adds the given filesystem path to the Python import search path. The value is passed as is to the --pythonpath argument in django-admin."
+    },
+    {
+      "name": "settings",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Specifies the settings module to use. The value is passed as is to the --settings argument in django-admin."
+    },
+    {
+      "name": "skip_checks",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Skips running system checks prior to running the command. Choices: false true"
+    },
+    {
+      "name": "traceback",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Provides a full stack trace in the output when a CommandError is raised. Choices: false true"
+    },
+    {
+      "name": "venv",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Use the Python interpreter from this virtual environment. Pass the path to the root of the virtualenv, not the bin/ directory nor the python executable."
+    },
+    {
+      "name": "verbosity",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [
+        "0",
+        "1",
+        "2",
+        "3"
+      ],
+      "description": "Specifies the amount of notification and debug information in the output of django-admin. Choices: 0 1 2 3"
+    }
+  ],
+  "examples": [
+    "- name: Dump all data\n  community.general.django_dumpdata:\n    settings: myproject.settings\n    fixture: /tmp/mydata.json\n\n- name: Dump data excluding certain apps, into a compressed JSON file\n  community.general.django_dumpdata:\n    settings: myproject.settings\n    database: myotherdb\n    excludes:\n      - auth\n      - contenttypes\n    fixture: /tmp/mydata.json.gz"
+  ],
+  "return_values": [
+    {
+      "name": "run_info",
+      "type": "dictionary",
+      "description": "Command-line execution information. Returned: success and verbosity >= 3",
+      "returned": "success"
+    },
+    {
+      "name": "version",
+      "type": "string",
+      "description": "Version of Django. Returned: always Sample: \"5.1.2\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/django_dumpdata_module.html",
+  "parsed_at": "2026-04-13T16:29:45.091847"
+}

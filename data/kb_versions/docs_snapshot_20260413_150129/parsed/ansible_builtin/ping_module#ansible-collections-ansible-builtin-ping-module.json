@@ -1,0 +1,31 @@
+{
+  "collection_ns": "ansible_builtin",
+  "collection": "ansible.builtin",
+  "module": "ansible.builtin.ping",
+  "slug": "ping_module#ansible-collections-ansible-builtin-ping-module",
+  "description": "A trivial test module, this module always returns pong on successful contact. It does not make sense in playbooks, but it is useful from /usr/bin/ansible to verify the ability to login and that a usable Python is configured.",
+  "parameters": [
+    {
+      "name": "data",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "pong",
+      "choices": [],
+      "description": "Data to return for the ping return value. If this parameter is set to crash, the module will cause an exception. Default: \"pong\""
+    }
+  ],
+  "examples": [
+    "# Test we can logon to 'webservers' and execute python with json lib.\n# ansible webservers -m ansible.builtin.ping\n\n- name: Example from an Ansible Playbook\n  ansible.builtin.ping:\n\n- name: Induce an exception to see what happens\n  ansible.builtin.ping:\n    data: crash"
+  ],
+  "return_values": [
+    {
+      "name": "data",
+      "type": "string",
+      "description": "Data to return for the ping return value. If this parameter is set to crash, the module will cause an exception. Default: \"pong\"",
+      "returned": ""
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/ping_module#ansible-collections-ansible-builtin-ping-module.html",
+  "parsed_at": "2026-04-11T13:52:52.401409"
+}

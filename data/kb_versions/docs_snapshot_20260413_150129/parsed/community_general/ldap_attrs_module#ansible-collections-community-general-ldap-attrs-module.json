@@ -1,0 +1,201 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.ldap_attrs",
+  "slug": "ldap_attrs_module#ansible-collections-community-general-ldap-attrs-module",
+  "description": "Add or remove multiple LDAP attribute values.",
+  "parameters": [
+    {
+      "name": "attributes",
+      "aliases": [],
+      "type": "dictionary",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The attribute(s) and value(s) to add or remove. Each attribute value can be a string for single-valued attributes or a list of strings for multi-valued attributes. If you specify values for this option in YAML, please note that you can improve readability for long string values by using YAML block modifiers as seen in the examples for this module. Note that when using values that YAML/ansible-core interprets as other types, like yes, no (booleans), or 2.10 (float), make sure to quote them if these are meant to be strings. Otherwise the wrong values may be sent to LDAP."
+    },
+    {
+      "name": "binary_attributes",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "If state=present, attributes whose values must be handled as raw sequences of bytes must be listed here. The values provided for the attributes will be converted from Base64. Default: []"
+    },
+    {
+      "name": "bind_dn",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "when",
+      "choices": [],
+      "description": "A DN to bind with. Try to use a SASL bind with the EXTERNAL mechanism as default when this parameter is omitted. Use an anonymous bind if the parameter is blank."
+    },
+    {
+      "name": "bind_pw",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The password to use with bind_dn. Default: \"\""
+    },
+    {
+      "name": "ca_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Set the path to PEM file with CA certs."
+    },
+    {
+      "name": "client_cert",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "PEM formatted certificate chain file to be used for SSL client authentication. Required if client_key is defined."
+    },
+    {
+      "name": "client_key",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "PEM formatted file that contains your private key to be used for SSL client authentication. Required if client_cert is defined."
+    },
+    {
+      "name": "dn",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The DN of the entry to add or remove."
+    },
+    {
+      "name": "honor_binary",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If state=present and this option is true, attributes whose name include the binary option will be treated as Base64-encoded byte sequences automatically, even if they are not listed in binary_attributes. Choices: false ← (default) true"
+    },
+    {
+      "name": "ordered",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If true, prepend list values with X-ORDERED index numbers in all attributes specified in the current task. This is useful mostly with olcAccess attribute to easily manage LDAP Access Control Lists. Choices: false ← (default) true"
+    },
+    {
+      "name": "referrals_chasing",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "behavior.",
+      "choices": [
+        "\"disabled\"",
+        "\"anonymous\" ← (default)"
+      ],
+      "description": "Set the referrals chasing behavior. anonymous follow referrals anonymously. This is the default behavior. disabled disable referrals chasing. This sets OPT_REFERRALS to off. Choices: \"disabled\" \"anonymous\" ← (default)"
+    },
+    {
+      "name": "sasl_class",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"external\" ← (default)",
+        "\"gssapi\""
+      ],
+      "description": "The class to use for SASL authentication. Choices: \"external\" ← (default) \"gssapi\""
+    },
+    {
+      "name": "server_uri",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "The server_uri parameter may be a comma- or whitespace-separated list of URIs containing only the schema, the host, and the port fields. The default value lets the underlying LDAP client library look for a UNIX domain socket in its default location. Note that when using multiple URIs you cannot determine to which URI your client gets connected. For URIs containing additional fields, particularly when using commas, behavior is undefined. Default: \"ldapi:///\""
+    },
+    {
+      "name": "start_tls",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use the START_TLS LDAP extension if set to true. Choices: false ← (default) true"
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\"",
+        "\"exact\""
+      ],
+      "description": "The state of the attribute values. If present, all given attribute values are added if they are missing. If absent, all given attribute values are removed if present. If exact, the set of attribute values is forced to exactly those provided and no others. If state=exact and the attribute value is empty, all values for this attribute are removed. Choices: \"present\" ← (default) \"absent\" \"exact\""
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If set to false, SSL certificates are not validated. This should only be used on sites using self-signed certificates. Choices: false true ← (default)"
+    },
+    {
+      "name": "xorder_discovery",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"enable\"",
+        "\"auto\" ← (default)",
+        "\"disable\""
+      ],
+      "description": "Set the behavior on how to process Xordered DNs. enable performs a ONELEVEL search below the superior RDN to find the matching DN. disable always uses the DN unmodified (as passed by the dn parameter). auto only performs a search if the first RDN does not contain an index number ({x}). Choices: \"enable\" \"auto\" ← (default) \"disable\""
+    }
+  ],
+  "examples": [
+    "- name: Configure directory number 1 for example.com\n  community.general.ldap_attrs:\n    dn: olcDatabase={1}hdb,cn=config\n    attributes:\n      olcSuffix: dc=example,dc=com\n    state: exact\n\n# The complex argument format is required here to pass a list of ACL strings.\n- name: Set up the ACL\n  community.general.ldap_attrs:\n    dn: olcDatabase={1}hdb,cn=config\n    attributes:\n      olcAccess:\n        - >-\n          {0}to attrs=userPassword,shadowLastChange\n          by self write\n          by anonymous auth\n          by dn=\"cn=admin,dc=example,dc=com\" write\n          by * none'\n        - >-\n          {1}to dn.base=\"dc=example,dc=com\"\n          by dn=\"cn=admin,dc=example,dc=com\" write\n          by * read\n    state: exact\n\n# An alternative approach with automatic X-ORDERED numbering\n- name: Set up the ACL\n  community.general.ldap_attrs:\n    dn: olcDatabase={1}hdb,cn=config\n    attributes:\n      olcAccess:\n        - >-\n          to attrs=userPassword,shadowLastChange\n          by self write\n          by anonymous auth\n          by dn=\"cn=admin,dc=example,dc=com\" write\n          by * none'\n        - >-\n          to dn.base=\"dc=example,dc=com\"\n          by dn=\"cn=admin,dc=example,dc=com\" write\n          by * read\n    ordered: true\n    state: exact\n\n- name: Declare some indexes\n  community.general.ldap_attrs:\n    dn: olcDatabase={1}hdb,cn=config\n    attributes:\n      olcDbIndex:\n        - objectClass eq\n        - uid eq\n\n- name: Set up a root user, which we can use later to bootstrap the directory\n  community.general.ldap_attrs:\n    dn: olcDatabase={1}hdb,cn=config\n    attributes:\n      olcRootDN: cn=root,dc=example,dc=com\n      olcRootPW: \"{SSHA}tabyipcHzhwESzRaGA7oQ/SDoBZQOGND\"\n    state: exact\n\n- name: Replace a CA certificate\n  community.general.ldap_attrs:\n    dn: cn=ISRG Root X1,ou=ca,ou=certificates,dc=example,dc=org\n    honor_binary: true\n    state: exact\n    attributes:\n      cACertificate;binary: >-\n        MIIFazCCA1OgAwIBAgIRAIIQz7DSQONZRGPgu2OCiwAwDQYJKoZIhvcNAQELBQAw\n        TzELMAkGA1UEBhMCVVMxKTAnBgNVBAoTIEludGVybmV0IFNlY3VyaXR5IFJlc2Vh\n        # ...\n\n- name: Remove an attribute with a specific value\n  community.general.ldap_attrs:\n    dn: uid=jdoe,ou=people,dc=example,dc=com\n    attributes:\n      description: \"An example user account\"\n    state: absent\n    server_uri: ldap://localhost/\n    bind_dn: cn=admin,dc=example,dc=com\n    bind_pw: password\n\n- name: Remove specified attribute(s) from an entry\n  community.general.ldap_attrs:\n    dn: uid=jdoe,ou=people,dc=example,dc=com\n    attributes:\n      description: []\n    state: exact\n    server_uri: ldap://localhost/\n    bind_dn: cn=admin,dc=example,dc=com\n    bind_pw: password"
+  ],
+  "return_values": [
+    {
+      "name": "modlist",
+      "type": "list",
+      "description": "List of modified parameters. Returned: success Sample: [[2, \"olcRootDN\", [\"cn=root,dc=example,dc=com\"]]]",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/ldap_attrs_module#ansible-collections-community-general-ldap-attrs-module.html",
+  "parsed_at": "2026-04-11T13:53:19.030398"
+}

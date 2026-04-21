@@ -18,12 +18,18 @@
 import os
 import json
 import re
+import sys
 import requests
 from datetime import datetime
 from dotenv import load_dotenv
+from kb_store import load_knowledge_base as load_kb_store
 
 # Always run from project root
 os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
 load_dotenv()
 
@@ -35,10 +41,33 @@ KNOWLEDGE_BASE = "data/knowledge_base.json"
 OUTPUT_DIR     = "output"
 
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
-OLLAMA_MODEL    = os.getenv("OLLAMA_MODEL", "qwen2.5-coder:14b")
+OLLAMA_MODEL    = os.getenv("OLLAMA_MODEL")
 
 # Max parameters to include in prompt (avoid token overflow)
 MAX_PARAMS_IN_PROMPT = 12
+TOKEN_STOPWORDS = {
+    "a", "an", "the", "to", "for", "of", "in", "on", "with", "and", "or",
+    "is", "are", "be", "as", "by", "from", "that", "this", "it", "at", "into",
+    "named", "name", "using", "use", "create", "get", "set", "add", "remove",
+}
+
+
+def _tokens(text: str) -> set[str]:
+    raw = re.findall(r"[a-z0-9_]+", (text or "").lower())
+    return {t for t in raw if len(t) > 2 and t not in TOKEN_STOPWORDS}
+
+
+def _infer_collection_hint(user_input: str) -> str:
+    text = (user_input or "").lower()
+    if any(k in text for k in ("kubernetes", "k8s", "pod", "namespace", "deployment", "service", "helm")):
+        return "kubernetes.core"
+    if any(k in text for k in ("aws", "iam", "s3", "ec2", "vpc", "lambda", "cloudwatch")):
+        return "amazon.aws"
+    if any(k in text for k in ("azure", "resource group", "vm", "virtual machine")):
+        return "azure.azcollection"
+    if any(k in text for k in ("linux", "file", "copy", "user", "package", "shell", "command")):
+        return "ansible.builtin"
+    return ""
 
 
 # ─────────────────────────────────────────────
@@ -46,13 +75,13 @@ MAX_PARAMS_IN_PROMPT = 12
 # ─────────────────────────────────────────────
 
 def load_knowledge_base():
-    if not os.path.exists(KNOWLEDGE_BASE):
+    kb = load_kb_store(prefer_parsed=True)
+    if not kb.get("modules"):
         raise FileNotFoundError(
-            f"'{KNOWLEDGE_BASE}' not found.\n"
-            "→ Run phase3_structurer.py first."
+            "No module data found.\n"
+            "→ Run phase2_parser.py then phase3_structurer.py first."
         )
-    with open(KNOWLEDGE_BASE, "r", encoding="utf-8") as f:
-        return json.load(f)
+    return kb
 
 
 # ─────────────────────────────────────────────
@@ -66,13 +95,51 @@ def score_module(user_input: str, module_entry: dict) -> int:
     """
     text = user_input.lower()
     score = 0
+    module_name = module_entry.get("module", "")
+    short_name = module_name.split(".")[-1] if module_name else ""
+    desc = module_entry.get("description", "")
+    required_params = module_entry.get("required_params", []) or []
+    user_tokens = _tokens(user_input)
+    module_tokens = _tokens(short_name.replace(".", " ").replace("_", " "))
+    desc_tokens = _tokens(desc)
     for kw in module_entry.get("task_keywords", []):
         if kw.lower() in text:
             score += 1
-    # Bonus: module name or short name in input
-    slug = module_entry["slug"].replace("_module", "").replace("_", " ")
-    if slug in text:
-        score += 2
+    # Bonus: lexical overlap with module name/description/required params
+    score += 3 * len(user_tokens & module_tokens)
+    score += min(4, len(user_tokens & desc_tokens))
+    for p in required_params:
+        if p.lower() in text:
+            score += 2
+
+    if short_name and short_name in text:
+        score += 4
+
+    # Collection-level bias (AWS/Azure/K8s/Builtin)
+    hint = _infer_collection_hint(user_input)
+    coll = module_entry.get("collection", "")
+    if hint and coll == hint:
+        score += 5
+    if hint == "kubernetes.core" and short_name.startswith("helm"):
+        score += 3
+
+    # Boost entity alignment (e.g. "user", "bucket", "instance", ...)
+    for ent in ("user", "group", "bucket", "instance", "vm", "pod", "deployment", "service", "secret", "configmap"):
+        if re.search(rf"\b{ent}\b", text) and ent in module_tokens:
+            score += 4
+    if "resource group" in text and "resourcegroup" in short_name:
+        score += 8
+    if "virtual machine" in text and ("virtualmachine" in short_name or "vm" in module_tokens):
+        score += 8
+
+    is_create_intent = any(k in text for k in ("create", "deploy", "provision", "add", "launch", "configure"))
+    is_read_intent = any(k in text for k in ("get", "list", "show", "describe", "read", "info"))
+    if short_name.endswith("_info"):
+        if is_create_intent:
+            score -= 5
+        if is_read_intent:
+            score += 3
+
     return score
 
 
@@ -90,7 +157,11 @@ def find_best_module(user_input: str, modules: dict) -> tuple:
     # (smaller keyword set = more specialized module)
     best_slug = max(
         scores,
-        key=lambda s: (scores[s], -len(modules[s].get("task_keywords", [])))
+        key=lambda s: (
+            scores[s],
+            0 if modules[s].get("module", "").endswith("_info") else 1,
+            -len(modules[s].get("task_keywords", [])),
+        )
     )
     best_score = scores[best_slug]
 
@@ -98,10 +169,43 @@ def find_best_module(user_input: str, modules: dict) -> tuple:
     top3 = sorted(scores.items(), key=lambda x: x[1], reverse=True)[:3]
     print("\n  [Intent Matcher] Top 3 module matches:")
     for slug, sc in top3:
-        bar = "█" * sc if sc > 0 else "·"
-        print(f"    {slug:<35} score={sc}  {bar}")
+        bar = "#" * sc if sc > 0 else "."
+        print(f"    {slug:<80} score={sc}  {bar}")
 
     return best_slug, modules[best_slug], best_score
+
+
+def pick_fallback_module(user_input: str, modules: dict) -> tuple:
+    """
+    Fallback chooser when all scores are weak.
+    Prefer a sane module from the inferred collection.
+    """
+    hint = _infer_collection_hint(user_input)
+    by_module = {e.get("module", ""): (slug, e) for slug, e in modules.items()}
+    preferred = {
+        "kubernetes.core": ["kubernetes.core.k8s", "kubernetes.core.helm"],
+        "amazon.aws": ["amazon.aws.iam_user", "amazon.aws.s3_bucket", "amazon.aws.ec2_instance"],
+        "azure.azcollection": ["azure.azcollection.azure_rm_resourcegroup", "azure.azcollection.azure_rm_virtualmachine"],
+        "ansible.builtin": ["ansible.builtin.user", "ansible.builtin.copy", "ansible.builtin.command"],
+    }
+
+    for mod in preferred.get(hint, []):
+        if mod in by_module:
+            slug, entry = by_module[mod]
+            return slug, entry
+
+    if hint:
+        coll_candidates = [(s, e) for s, e in modules.items() if e.get("collection") == hint]
+        if coll_candidates:
+            return coll_candidates[0]
+
+    for mod in ("kubernetes.core.k8s", "ansible.builtin.command"):
+        if mod in by_module:
+            slug, entry = by_module[mod]
+            return slug, entry
+
+    first_slug = next(iter(modules))
+    return first_slug, modules[first_slug]
 
 
 # ─────────────────────────────────────────────
@@ -169,84 +273,40 @@ def build_module_context(entry: dict) -> str:
 #  4. PROMPT BUILDER
 # ─────────────────────────────────────────────
 
-SYSTEM_PROMPT = """You are an expert Ansible engineer specializing in Kubernetes automation.
-Generate a valid Ansible playbook in YAML format. Follow every rule exactly.
+SYSTEM_PROMPT = """You are an expert Ansible engineer across Kubernetes, cloud, and system automation.
+Generate a valid Ansible playbook in YAML format from the selected module documentation.
 
 === MANDATORY PLAYBOOK STRUCTURE ===
-A playbook is a YAML list. hosts/connection/gather_facts go INSIDE the play dict (after the dash).
-ALWAYS follow this skeleton exactly:
-
+A playbook must be a YAML list:
 ---
 - name: <descriptive play name>
   hosts: localhost
   connection: local
   gather_facts: no
   collections:
-    - kubernetes.core
+    - <collection when module is not ansible.builtin>
   tasks:
     - name: <task name>
-      kubernetes.core.k8s:
-        api_version: <version>
-        kind: <Kind>
-        metadata:
-          name: <name>
-          namespace: <namespace-if-provided>
-        spec:
-          ...
-        state: present
+      <selected.module.name>:
+        <module parameters>
 
-=== CONTAINER envFrom RULE ===
-envFrom and env ALWAYS go INSIDE the container definition, not at pod spec level.
-CORRECT:
-  containers:
-    - name: myapp
-      image: myimage:tag
-      ports:
-        - containerPort: 8080
-      envFrom:
-        - configMapRef:
-            name: <exact-configmap-name-from-prompt>
-        - secretRef:
-            name: <exact-secret-name-from-prompt>
-      env:
-        - name: DB_HOST
-          value: <service-name>
-WRONG (never do this):
-  containers:
-    - name: myapp
-  envFrom:   ← WRONG, this is outside the container
-
-=== RESOURCE NAMING RULE ===
-Use the EXACT resource names given in the prompt. Do not invent or modify names.
-If the prompt says ConfigMap: analytics-config → use name: analytics-config exactly.
-If the prompt says Secret: analytics-db-secret → use name: analytics-db-secret exactly.
-
-=== SERVICE PORT RULE ===
-If the prompt specifies port AND targetPort separately, use both exactly as given.
-Example: port: 80, targetPort: 8080 → write port: 80 and targetPort: 8080.
-
-=== NAMESPACE RULE ===
-If a namespace is mentioned in the prompt, add it to EVERY resource metadata block.
-
-=== DATABASE CONNECTION RULE ===
-If the prompt says "connect to <service>", add this inside the container:
-  env:
-    - name: DB_HOST
-      value: <service-name>
-
-=== WHAT NOT TO ADD ===
-- Do NOT add imagePullSecrets unless the prompt explicitly mentions them.
-- Do NOT create ConfigMaps or Secrets that already exist (just reference them by name).
-- Do NOT use clusterIP: None with type: LoadBalancer together.
-- Do NOT invent Kubernetes fields (labelAffinity does not exist).
-- serviceAccountName belongs only inside PodSpec, never inside Service spec.
-
-=== OUTPUT ===
-Output ONLY valid YAML starting with ---. No markdown, no explanations."""
+=== STRICT RULES ===
+- Use the selected module exactly as provided in MODULE DOCUMENTATION.
+- Include all required parameters from docs.
+- Use exact user-provided resource names/regions/IDs.
+- Do not invent unsupported parameters or fields.
+- Keep output concise and executable.
+- Output ONLY valid YAML starting with ---.
+- No markdown fences, no extra explanations."""
 
 
-def build_prompt(user_input: str, module_context: str) -> str:
+def build_prompt(user_input: str, module_context: str, module_entry: dict) -> str:
+    collection = module_entry.get("collection", "")
+    module_name = module_entry.get("module", "")
     return f"""{SYSTEM_PROMPT}
+
+SELECTED MODULE: {module_name}
+SELECTED COLLECTION: {collection}
 
 ===== MODULE DOCUMENTATION =====
 {module_context}
@@ -396,10 +456,9 @@ def generate_playbook(user_input: str) -> str:
     print(f"\n        → Selected: {best_entry['module']} (score={score})")
 
     if score == 0:
-        print("\n  [WARNING] No keyword match found.")
-        print("  → Defaulting to kubernetes.core.k8s (general module)")
-        best_slug  = "k8s_module"
-        best_entry = modules["k8s_module"]
+        print("\n  [WARNING] No strong keyword match found.")
+        best_slug, best_entry = pick_fallback_module(user_input, modules)
+        print(f"  → Fallback module: {best_entry.get('module')} ({best_entry.get('collection')})")
 
     # 3. Build context
     print("\n  [3/6] Building module context...")
@@ -407,7 +466,7 @@ def generate_playbook(user_input: str) -> str:
 
     # 4. Build prompt
     print("  [4/6] Building prompt...")
-    prompt = build_prompt(user_input, context)
+    prompt = build_prompt(user_input, context, best_entry)
     print(f"        Prompt length: {len(prompt)} chars")
 
     # 5. Call Ollama

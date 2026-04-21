@@ -1,0 +1,201 @@
+{
+  "collection_ns": "amazon_aws",
+  "collection": "amazon.aws",
+  "module": "amazon.aws.ec2_eip_info",
+  "slug": "ec2_eip_info_module#ansible-collections-amazon-aws-ec2-eip-info-module",
+  "description": "List details of EC2 Elastic IP addresses.",
+  "parameters": [
+    {
+      "name": "access_key",
+      "aliases": [
+        "aws_access_key_id",
+        "aws_access_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS access key ID. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY environment variables may also be used in decreasing order of preference. The aws_access_key and profile options are mutually exclusive. The aws_access_key_id alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "aws_ca_bundle",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The location of a CA Bundle to use when validating SSL certificates. The AWS_CA_BUNDLE environment variable may also be used."
+    },
+    {
+      "name": "aws_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary to modify the botocore configuration. Parameters can be found in the AWS documentation https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html#botocore.config.Config."
+    },
+    {
+      "name": "debug_botocore_endpoint_logs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use a botocore.endpoint logger to parse the unique (rather than total) \"resource:action\" API calls made during a task, outputing the set to the resource_actions key in the task results. Use the aws_resource_action callback to output to total list made during a playbook. The ANSIBLE_DEBUG_BOTOCORE_LOGS environment variable may also be used. Choices: false ← (default) true"
+    },
+    {
+      "name": "endpoint_url",
+      "aliases": [
+        "aws_endpoint_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "AWS",
+      "choices": [],
+      "description": "URL to connect to instead of the default AWS endpoints. While this can be used to connection to other AWS-compatible services the amazon.aws and community.aws collections are only tested against AWS. The AWS_URL environment variable may also be used."
+    },
+    {
+      "name": "filters",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "A dict of filters to apply. Each dict item consists of a filter key and filter value. See https://docs.aws.amazon.com/cli/latest/reference/ec2/describe-addresses.html#options for possible filters. Filter names and values are case sensitive. Default: {}"
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "aws_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A named AWS profile to use for authentication. See the AWS documentation for more information about named profiles https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html. The AWS_PROFILE environment variable may also be used. The profile option is mutually exclusive with the aws_access_key, aws_secret_key and session_token options."
+    },
+    {
+      "name": "region",
+      "aliases": [
+        "aws_region"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The AWS region to use. For global services such as IAM, Route53 and CloudFront, region is ignored. The AWS_REGION environment variable may also be used. See the Amazon AWS documentation for more information http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region."
+    },
+    {
+      "name": "secret_key",
+      "aliases": [
+        "aws_secret_access_key",
+        "aws_secret_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS secret access key. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SECRET_ACCESS_KEY or AWS_SECRET_KEY environment variables may also be used in decreasing order of preference. The secret_key and profile options are mutually exclusive. The aws_secret_access_key alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "session_token",
+      "aliases": [
+        "aws_session_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS STS session token for use with temporary credentials. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SESSION_TOKEN environment variable may also be used. The session_token and profile options are mutually exclusive."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to false, SSL certificates will not be validated for communication with the AWS APIs. Setting validate_certs=false is strongly discouraged, as an alternative, consider setting aws_ca_bundle instead. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "# Note: These examples do not set authentication details or the AWS region,\n# see the AWS Guide for details.\n\n- name: List all EIP addresses in the current region.\n  amazon.aws.ec2_eip_info:\n  register: regional_eip_addresses\n\n- name: List all EIP addresses for a VM.\n  amazon.aws.ec2_eip_info:\n    filters:\n      instance-id: i-123456789\n  register: my_vm_eips\n\n- ansible.builtin.debug:\n    msg: \"{{ my_vm_eips.addresses | selectattr('private_ip_address', 'equalto', '10.0.0.5') }}\"\n\n- name: List all EIP addresses for several VMs.\n  amazon.aws.ec2_eip_info:\n    filters:\n      instance-id:\n        - i-123456789\n        - i-987654321\n  register: my_vms_eips\n\n- name: List all EIP addresses using the 'Name' tag as a filter.\n  amazon.aws.ec2_eip_info:\n    filters:\n      tag:Name: www.example.com\n  register: my_vms_eips\n\n- name: List all EIP addresses using the Allocation-id as a filter\n  amazon.aws.ec2_eip_info:\n    filters:\n      allocation-id: eipalloc-64de1b01\n  register: my_vms_eips\n\n# Set the variable eip_alloc to the value of the first allocation_id\n# and set the variable my_pub_ip to the value of the first public_ip\n- ansible.builtin.set_fact:\n    eip_alloc: my_vms_eips.addresses[0].allocation_id\n    my_pub_ip: my_vms_eips.addresses[0].public_ip"
+  ],
+  "return_values": [
+    {
+      "name": "addresses",
+      "type": "list",
+      "description": "Properties of all Elastic IP addresses matching the provided filters. Each element is a dict with all the information related to an EIP. Returned: on success",
+      "returned": "on"
+    },
+    {
+      "name": "allocation_id",
+      "type": "string",
+      "description": "The ID representing the allocation of the address. Returned: always Sample: \"eipalloc-64de1b01\"",
+      "returned": "always"
+    },
+    {
+      "name": "association_id",
+      "type": "string",
+      "description": "The ID representing the association of the address with an instance. Returned: success Sample: \"eipassoc-0fe9ce90d6e983e97\"",
+      "returned": "success"
+    },
+    {
+      "name": "domain",
+      "type": "string",
+      "description": "The network (vpc). Returned: always Sample: \"vpc\"",
+      "returned": "always"
+    },
+    {
+      "name": "instance_id",
+      "type": "string",
+      "description": "The ID of the instance that the address is associated with (if any). Returned: if any instance is associated Sample: \"i-01020cfeb25b0c84f\"",
+      "returned": "if"
+    },
+    {
+      "name": "network_border_group",
+      "type": "string",
+      "description": "The name of the unique set of Availability Zones, Local Zones, or Wavelength Zones from which Amazon Web Services advertises IP addresses. Returned: if any instance is associated Sample: \"us-east-1\"",
+      "returned": "if"
+    },
+    {
+      "name": "network_interface_id",
+      "type": "string",
+      "description": "The ID of the network interface. Returned: if any instance is associated Sample: \"eni-02fdeadfd4beef9323b\"",
+      "returned": "if"
+    },
+    {
+      "name": "network_interface_owner_id",
+      "type": "string",
+      "description": "The ID of the network interface. Returned: if any instance is associated Sample: \"0123456789\"",
+      "returned": "if"
+    },
+    {
+      "name": "private_ip_address",
+      "type": "string",
+      "description": "The private IP address associated with the Elastic IP address. Returned: always Sample: \"10.0.0.1\"",
+      "returned": "always"
+    },
+    {
+      "name": "public_ip",
+      "type": "string",
+      "description": "The Elastic IP address. Returned: if any instance is associated Sample: \"54.81.104.1\"",
+      "returned": "if"
+    },
+    {
+      "name": "tags",
+      "type": "dictionary",
+      "description": "Any tags assigned to the Elastic IP address. Returned: success Sample: {\"Name\": \"test-vm-54.81.104.1\"}",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_eip_info_module#ansible-collections-amazon-aws-ec2-eip-info-module.html",
+  "parsed_at": "2026-04-11T13:52:45.918802"
+}

@@ -1,0 +1,575 @@
+{
+  "collection_ns": "azure_azcollection",
+  "collection": "azure.azcollection",
+  "module": "azure.azcollection.azure_rm_loadbalancer",
+  "slug": "azure_rm_loadbalancer_module#ansible-collections-azure-azcollection-azure-rm-loadbalancer-module",
+  "description": "Create, update and delete Azure load balancers.",
+  "parameters": [
+    {
+      "name": "ad_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory username. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "adfs_authority_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure AD authority url. Use when authenticating with Username/password, and has your own ADFS authority."
+    },
+    {
+      "name": "api_profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "Selects an API profile to use when communicating with Azure services. Default value of latest is appropriate for public clouds; future values will allow use with Azure Stack. Default: \"latest\""
+    },
+    {
+      "name": "append_tags",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Use to control if tags field is canonical or just appends to existing tags. When canonical, any tags not found in the tags parameter will be removed from the object’s metadata. Choices: false true ← (default)"
+    },
+    {
+      "name": "auth_source",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "az",
+      "choices": [
+        "\"auto\" ← (default)",
+        "\"cli\"",
+        "\"credential_file\"",
+        "\"env\"",
+        "\"msi\""
+      ],
+      "description": "Controls the source of the credentials to use for authentication. Can also be set via the ANSIBLE_AZURE_AUTH_SOURCE environment variable. When set to auto (the default) the precedence is module parameters -> env -> credential_file -> cli. When set to env, the credentials will be read from the environment variables When set to credential_file, it will read the profile from ~/.azure/credentials. When set to cli, the credentials will be sources from the Azure CLI profile. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if more than one is present otherwise the default az cli subscription is used. When set to msi, the host machine must be an azure resource with an enabled MSI extension. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if the resource is granted access to more than one subscription, otherwise the first subscription is chosen. The msi was added in Ansible 2.6. Choices: \"auto\" ← (default) \"cli\" \"credential_file\" \"env\" \"msi\""
+    },
+    {
+      "name": "backend_address_pools",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of backend address pools."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the backend address pool."
+    },
+    {
+      "name": "cert_validation_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ignore\"",
+        "\"validate\""
+      ],
+      "description": "Controls the certificate validation behavior for Azure endpoints. By default, all modules will validate the server certificate, but when an HTTPS proxy is in use, or against Azure Stack, it may be necessary to disable this behavior by passing ignore. Can also be set via credential file profile or the AZURE_CERT_VALIDATION environment variable. Choices: \"ignore\" \"validate\""
+    },
+    {
+      "name": "client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client ID. Use when authenticating with a Service Principal or Managed Identity (msi). Can also be set via the AZURE_CLIENT_ID environment variable."
+    },
+    {
+      "name": "cloud_environment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "AzureCloud",
+      "choices": [],
+      "description": "For cloud environments other than the US public cloud, the environment name (as defined by Azure Python SDK, eg, AzureChinaCloud, AzureUSGovernment), or a metadata discovery endpoint URL (required for Azure Stack). Can also be set via credential file profile or the AZURE_CLOUD_ENVIRONMENT environment variable. Default: \"AzureCloud\""
+    },
+    {
+      "name": "disable_instance_discovery",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Determines whether or not instance discovery is performed when attempting to authenticate. Setting this to true will completely disable both instance discovery and authority validation. This functionality is intended for use in scenarios where the metadata endpoint cannot be reached such as in private clouds or Azure Stack. The process of instance discovery entails retrieving authority metadata from https://login.microsoft.com/ to validate the authority. By setting this to **True**, the validation of the authority is disabled. As a result, it is crucial to ensure that the configured authority host is valid and trustworthy. Set via credential file profile or the AZURE_DISABLE_INSTANCE_DISCOVERY environment variable. Choices: false ← (default) true"
+    },
+    {
+      "name": "frontend_ip_configurations",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of frontend IPs to be used."
+    },
+    {
+      "name": "private_ip_address",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The reference of the Public IP resource."
+    },
+    {
+      "name": "private_ip_allocation_method",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"Static\"",
+        "\"Dynamic\""
+      ],
+      "description": "The Private IP allocation method. Choices: \"Static\" \"Dynamic\""
+    },
+    {
+      "name": "public_ip_address",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of an existing public IP address object in the current resource group to associate with the security group."
+    },
+    {
+      "name": "subnet",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The reference of the subnet resource. Should be an existing subnet’s resource id."
+    },
+    {
+      "name": "zones",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "list of availability zones denoting the IP allocated for the resource needs to come from. This must be specified sku=Standard and subnet when setting zones."
+    },
+    {
+      "name": "inbound_nat_pools",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Defines an external port range for inbound NAT to a single backend port on NICs associated with a load balancer. Inbound NAT rules are created automatically for each NIC associated with the Load Balancer using an external port from this range. Defining an Inbound NAT pool on your Load Balancer is mutually exclusive with defining inbound Nat rules. Inbound NAT pools are referenced from virtual machine scale sets. NICs that are associated with individual virtual machines cannot reference an inbound NAT pool. They have to reference individual inbound NAT rules."
+    },
+    {
+      "name": "backend_port",
+      "aliases": [],
+      "type": "integer",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The port used for internal connections on the endpoint. Acceptable values are between 1 and 65535."
+    },
+    {
+      "name": "frontend_ip_configuration_name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "A reference to frontend IP addresses."
+    },
+    {
+      "name": "frontend_port_range_end",
+      "aliases": [],
+      "type": "integer",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The last port in the range of external ports that will be used to provide inbound NAT to NICs associated with the load balancer. Acceptable values range between 1 and 65535."
+    },
+    {
+      "name": "frontend_port_range_start",
+      "aliases": [],
+      "type": "integer",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The first port in the range of external ports that will be used to provide inbound NAT to NICs associated with the load balancer. Acceptable values range between 1 and 65534."
+    },
+    {
+      "name": "protocol",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"Tcp\"",
+        "\"Udp\"",
+        "\"All\""
+      ],
+      "description": "IP protocol for the NAT pool. Choices: \"Tcp\" \"Udp\" \"All\""
+    },
+    {
+      "name": "inbound_nat_rules",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Collection of inbound NAT Rules used by a load balancer. Defining inbound NAT rules on your load balancer is mutually exclusive with defining an inbound NAT pool. Inbound NAT pools are referenced from virtual machine scale sets. NICs that are associated with individual virtual machines cannot reference an Inbound NAT pool. They have to reference individual inbound NAT rules."
+    },
+    {
+      "name": "enable_floating_ip",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Configures a virtual machine’s endpoint for the floating IP capability required to configure a SQL AlwaysOn Availability Group. This setting is required when using the SQL AlwaysOn Availability Groups in SQL server. This setting can’t be changed after you create the endpoint. Choices: false true"
+    },
+    {
+      "name": "enable_tcp_reset",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Receive bidirectional TCP Reset on TCP flow idle timeout or unexpected connection termination. This element is only used when protocol=Tcp. Choices: false true"
+    },
+    {
+      "name": "frontend_ip_configuration",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "A reference to frontend IP addresses."
+    },
+    {
+      "name": "frontend_port",
+      "aliases": [],
+      "type": "integer",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The port for the external endpoint. Frontend port numbers must be unique across all rules within the load balancer. Acceptable values are between 0 and 65534. Note that value 0 enables “Any Port”."
+    },
+    {
+      "name": "idle_timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "The timeout for the TCP idle connection. The value can be set between 4 and 30 minutes. The default value is 4 minutes. This element is only used when protocol=Tcp."
+    },
+    {
+      "name": "load_balancing_rules",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Object collection representing the load balancing rules Gets the provisioning."
+    },
+    {
+      "name": "backend_address_pool",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "A reference to a pool of DIPs. Inbound traffic is randomly load balanced across IPs in the backend IPs."
+    },
+    {
+      "name": "disable_outbound_snat",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "behavior",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Configure outbound source network address translation (SNAT). The default behavior when omitted is equivalent to disable_outbound_snat=True. True is equivalent to “(Recommended) Use outbound rules to provide backend pool members access to the internet” in portal. False is equivalent to “Use default outbound access” in portal. Choices: false ← (default) true"
+    },
+    {
+      "name": "load_distribution",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "is",
+      "choices": [
+        "\"Default\" ← (default)",
+        "\"SourceIP\"",
+        "\"SourceIPProtocol\""
+      ],
+      "description": "The session persistence policy for this rule; Default is no persistence. Choices: \"Default\" ← (default) \"SourceIP\" \"SourceIPProtocol\""
+    },
+    {
+      "name": "probe",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the load balancer probe this rule should use for health checks."
+    },
+    {
+      "name": "location",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Valid Azure location. Defaults to location of the resource group."
+    },
+    {
+      "name": "log_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "log_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "outbound_rules",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The outbound rules."
+    },
+    {
+      "name": "allocated_outbound_ports",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The number of outbound ports to be used for NAT."
+    },
+    {
+      "name": "idle_timeout_in_minutes",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The timeout for the TCP idle connection."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory user password. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "probes",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of probe definitions used to check endpoint health."
+    },
+    {
+      "name": "fail_count",
+      "aliases": [
+        "number_of_probes"
+      ],
+      "type": "integer",
+      "required": false,
+      "default": "3",
+      "choices": [],
+      "description": "The number of probes where if no response, will result in stopping further traffic from being delivered to the endpoint. This values allows endpoints to be taken out of rotation faster or slower than the typical times used in Azure. Default: 3"
+    },
+    {
+      "name": "interval",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "The interval, in seconds, for how frequently to probe the endpoint for health status. Slightly less than half the allocated timeout period, which allows two full probes before taking the instance out of rotation. The default value is 15, the minimum value is 5. Default: 15"
+    },
+    {
+      "name": "port",
+      "aliases": [],
+      "type": "integer",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Probe port for communicating the probe. Possible values range from 1 to 65535, inclusive."
+    },
+    {
+      "name": "request_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The URI used for requesting health status from the VM. Path is required if protocol=Http or protocol=Https. Otherwise, it is not allowed."
+    },
+    {
+      "name": "profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security profile found in ~/.azure/credentials file."
+    },
+    {
+      "name": "resource_group",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of a resource group where the load balancer exists or will be created."
+    },
+    {
+      "name": "secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client secret. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "sku",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"Basic\"",
+        "\"Standard\""
+      ],
+      "description": "The load balancer SKU. Choices: \"Basic\" \"Standard\""
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)"
+      ],
+      "description": "Assert the state of the load balancer. Use present to create/update a load balancer, or absent to delete one. Choices: \"absent\" \"present\" ← (default)"
+    },
+    {
+      "name": "subscription_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Your Azure subscription Id."
+    },
+    {
+      "name": "tags",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Dictionary of string:string pairs to assign as metadata to the object. Metadata tags on the object will be updated with any provided values. To remove tags set append_tags option to false. Currently, Azure DNS zones and Traffic Manager services also don’t allow the use of spaces in the tag. Azure Front Door doesn’t support the use of Azure Automation and Azure CDN only support 15 tags on resources."
+    },
+    {
+      "name": "tenant",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure tenant ID. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "thumbprint",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The thumbprint of the private key specified in x509_certificate_path. Use when authenticating with a Service Principal. Required if x509_certificate_path is defined."
+    },
+    {
+      "name": "x509_certificate_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the X509 certificate used to create the service principal in PEM format. The certificate must be appended to the private key. Use when authenticating with a Service Principal."
+    }
+  ],
+  "examples": [
+    "- name: create load balancer\n  azure_rm_loadbalancer:\n    resource_group: myResourceGroup\n    name: testloadbalancer1\n    frontend_ip_configurations:\n      - name: frontendipconf0\n        public_ip_address: testpip\n      - name: frontendipconf1\n        public_ip_address: testpip1\n    backend_address_pools:\n      - name: backendaddrpool0\n      - name: backendaddrpool1\n    probes:\n      - name: prob0\n        port: 80\n    inbound_nat_pools:\n      - name: inboundnatpool0\n        frontend_ip_configuration_name: frontendipconf0\n        protocol: Tcp\n        frontend_port_range_start: 80\n        frontend_port_range_end: 81\n        backend_port: 8080\n    load_balancing_rules:\n      - name: lbrbalancingrule0\n        frontend_ip_configuration: frontendipconf0\n        backend_address_pool: backendaddrpool0\n        frontend_port: 80\n        backend_port: 80\n        probe: prob0\n    inbound_nat_rules:\n      - name: inboundnatrule0\n        backend_port: 8080\n        protocol: Tcp\n        frontend_port: 8080\n        frontend_ip_configuration: frontendipconf0\n    outbound_rules:\n      - name: outrule1\n        allocated_outbound_ports: 800\n        frontend_ip_configurations:\n          - frontendipconf1\n        backend_address_pool: backendaddrpool1\n        protocol: Tcp\n        enable_tcp_reset: true\n        idle_timeout_in_minutes: 4"
+  ],
+  "return_values": [
+    {
+      "name": "changed",
+      "type": "boolean",
+      "description": "Whether or not the resource has changed. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "state",
+      "type": "dictionary",
+      "description": "Current state of the load balancer. Returned: always",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_loadbalancer_module#ansible-collections-azure-azcollection-azure-rm-loadbalancer-module.html",
+  "parsed_at": "2026-04-11T13:53:00.493312"
+}

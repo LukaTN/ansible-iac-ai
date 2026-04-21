@@ -1,0 +1,323 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.oneandone_monitoring_policy",
+  "slug": "oneandone_monitoring_policy_module#ansible-collections-community-general-oneandone-monitoring-policy-module",
+  "description": "Create, remove, update monitoring policies (and add/remove ports, processes, and servers). This module has a dependency on 1and1 >= 1.0.",
+  "parameters": [
+    {
+      "name": "add_ports",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "Ports to add to the monitoring policy. Default: []"
+    },
+    {
+      "name": "add_processes",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "Processes to add to the monitoring policy. Default: []"
+    },
+    {
+      "name": "add_servers",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "Servers to add to the monitoring policy. Default: []"
+    },
+    {
+      "name": "agent",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Set true for using agent."
+    },
+    {
+      "name": "api_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Custom API URL. Overrides the ONEANDONE_API_URL environment variable."
+    },
+    {
+      "name": "auth_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Authenticating API token provided by 1&1."
+    },
+    {
+      "name": "description",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Monitoring policy description. maxLength=256."
+    },
+    {
+      "name": "email",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "User’s email. maxLength=128."
+    },
+    {
+      "name": "monitoring_policy",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The identifier (id or name) of the monitoring policy used with update state."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Monitoring policy name used with present state. Used as identifier (id or name) when used with absent state. maxLength=128."
+    },
+    {
+      "name": "ports",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "Array of ports that are to be monitored. Default: []"
+    },
+    {
+      "name": "alert_if",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [
+        "\"RESPONDING\"",
+        "\"NOT_RESPONDING\""
+      ],
+      "description": "Case of alert. Choices: \"RESPONDING\" \"NOT_RESPONDING\""
+    },
+    {
+      "name": "email_notification",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Set true for sending e-mail notifications."
+    },
+    {
+      "name": "port",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Port number. minimum=1, maximum=65535."
+    },
+    {
+      "name": "protocol",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [
+        "\"TCP\"",
+        "\"UDP\""
+      ],
+      "description": "Internet protocol. Choices: \"TCP\" \"UDP\""
+    },
+    {
+      "name": "processes",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "Array of processes that are to be monitored. Default: []"
+    },
+    {
+      "name": "process",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the process. maxLength=50."
+    },
+    {
+      "name": "remove_ports",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "Ports to remove from the monitoring policy. Default: []"
+    },
+    {
+      "name": "remove_processes",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "Processes to remove from the monitoring policy. Default: []"
+    },
+    {
+      "name": "remove_servers",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "Servers to remove from the monitoring policy. Default: []"
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\"",
+        "\"update\""
+      ],
+      "description": "Define a monitoring policy’s state to create, remove, update. Choices: \"present\" ← (default) \"absent\" \"update\""
+    },
+    {
+      "name": "thresholds",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "Monitoring policy thresholds. Each of the suboptions have warning and critical, which both have alert and value suboptions. Warning is used to set limits for warning alerts, critical is used to set critical alerts. alert enables alert, and value is used to advise when the value is exceeded. Default: []"
+    },
+    {
+      "name": "cpu",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Consumption limits of CPU."
+    },
+    {
+      "name": "disk",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Consumption limits of hard disk."
+    },
+    {
+      "name": "internal_ping",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Response limits of internal ping."
+    },
+    {
+      "name": "ram",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Consumption limits of RAM."
+    },
+    {
+      "name": "transfer",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Consumption limits for transfer."
+    },
+    {
+      "name": "update_ports",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "Ports to be updated on the monitoring policy. Default: []"
+    },
+    {
+      "name": "update_processes",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "Processes to be updated on the monitoring policy. Default: []"
+    },
+    {
+      "name": "wait",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Wait for the instance to be in state ‘running’ before returning. Choices: false true ← (default)"
+    },
+    {
+      "name": "wait_interval",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "5",
+      "choices": [],
+      "description": "Defines the number of seconds to wait when using the _wait_for methods. Default: 5"
+    },
+    {
+      "name": "wait_timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "600",
+      "choices": [],
+      "description": "How long before wait gives up, in seconds. Default: 600"
+    }
+  ],
+  "examples": [
+    "- name: Create a monitoring policy\n  community.general.oneandone_monitoring_policy:\n    auth_token: oneandone_private_api_key\n    name: ansible monitoring policy\n    description: Testing creation of a monitoring policy with ansible\n    email: your@emailaddress.com\n    agent: true\n    thresholds:\n      - cpu:\n          warning:\n            value: 80\n            alert: false\n          critical:\n            value: 92\n            alert: false\n      - ram:\n          warning:\n            value: 80\n            alert: false\n          critical:\n            value: 90\n            alert: false\n      - disk:\n          warning:\n            value: 80\n            alert: false\n          critical:\n            value: 90\n            alert: false\n      - internal_ping:\n          warning:\n            value: 50\n            alert: false\n          critical:\n            value: 100\n            alert: false\n      - transfer:\n          warning:\n            value: 1000\n            alert: false\n          critical:\n            value: 2000\n            alert: false\n    ports:\n      - protocol: TCP\n        port: 22\n        alert_if: RESPONDING\n        email_notification: false\n    processes:\n      - process: test\n        alert_if: NOT_RUNNING\n        email_notification: false\n    wait: true\n\n- name: Destroy a monitoring policy\n  community.general.oneandone_monitoring_policy:\n    auth_token: oneandone_private_api_key\n    state: absent\n    name: ansible monitoring policy\n\n- name: Update a monitoring policy\n  community.general.oneandone_monitoring_policy:\n    auth_token: oneandone_private_api_key\n    monitoring_policy: ansible monitoring policy\n    name: ansible monitoring policy updated\n    description: Testing creation of a monitoring policy with ansible updated\n    email: another@emailaddress.com\n    thresholds:\n      - cpu:\n          warning:\n            value: 70\n            alert: false\n          critical:\n            value: 90\n            alert: false\n      - ram:\n          warning:\n            value: 70\n            alert: false\n          critical:\n            value: 80\n            alert: false\n      - disk:\n          warning:\n            value: 70\n            alert: false\n          critical:\n            value: 80\n            alert: false\n      - internal_ping:\n          warning:\n            value: 60\n            alert: false\n          critical:\n            value: 90\n            alert: false\n      - transfer:\n          warning:\n            value: 900\n            alert: false\n          critical:\n            value: 1900\n            alert: false\n    wait: true\n    state: update\n\n- name: Add a port to a monitoring policy\n  community.general.oneandone_monitoring_policy:\n    auth_token: oneandone_private_api_key\n    monitoring_policy: ansible monitoring policy updated\n    add_ports:\n      - protocol: TCP\n        port: 33\n        alert_if: RESPONDING\n        email_notification: false\n    wait: true\n    state: update\n\n- name: Update existing ports of a monitoring policy\n  community.general.oneandone_monitoring_policy:\n    auth_token: oneandone_private_api_key\n    monitoring_policy: ansible monitoring policy updated\n    update_ports:\n      - id: existing_port_id\n        protocol: TCP\n        port: 34\n        alert_if: RESPONDING\n        email_notification: false\n      - id: existing_port_id\n        protocol: TCP\n        port: 23\n        alert_if: RESPONDING\n        email_notification: false\n    wait: true\n    state: update\n\n- name: Remove a port from a monitoring policy\n  community.general.oneandone_monitoring_policy:\n    auth_token: oneandone_private_api_key\n    monitoring_policy: ansible monitoring policy updated\n    remove_ports:\n      - port_id\n    state: update\n\n- name: Add a process to a monitoring policy\n  community.general.oneandone_monitoring_policy:\n    auth_token: oneandone_private_api_key\n    monitoring_policy: ansible monitoring policy updated\n    add_processes:\n      - process: test_2\n        alert_if: NOT_RUNNING\n        email_notification: false\n    wait: true\n    state: update\n\n- name: Update existing processes of a monitoring policy\n  community.general.oneandone_monitoring_policy:\n    auth_token: oneandone_private_api_key\n    monitoring_policy: ansible monitoring policy updated\n    update_processes:\n      - id: process_id\n        process: test_1\n        alert_if: NOT_RUNNING\n        email_notification: false\n      - id: process_id\n        process: test_3\n        alert_if: NOT_RUNNING\n        email_notification: false\n    wait: true\n    state: update\n\n- name: Remove a process from a monitoring policy\n  community.general.oneandone_monitoring_policy:\n    auth_token: oneandone_private_api_key\n    monitoring_policy: ansible monitoring policy updated\n    remove_processes:\n      - process_id\n    wait: true\n    state: update\n\n- name: Add server to a monitoring policy\n  community.general.oneandone_monitoring_policy:\n    auth_token: oneandone_private_api_key\n    monitoring_policy: ansible monitoring policy updated\n    add_servers:\n      - server id or name\n    wait: true\n    state: update\n\n- name: Remove server from a monitoring policy\n  community.general.oneandone_monitoring_policy:\n    auth_token: oneandone_private_api_key\n    monitoring_policy: ansible monitoring policy updated\n    remove_servers:\n      - server01\n    wait: true\n    state: update"
+  ],
+  "return_values": [
+    {
+      "name": "monitoring_policy",
+      "type": "dictionary",
+      "description": "Information about the monitoring policy that was processed. Returned: always Sample: {\"id\": \"92B74394A397ECC3359825C1656D67A6\", \"name\": \"Default Policy\"}",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/oneandone_monitoring_policy_module#ansible-collections-community-general-oneandone-monitoring-policy-module.html",
+  "parsed_at": "2026-04-11T13:53:22.186875"
+}

@@ -1,0 +1,118 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.systemd_info",
+  "slug": "systemd_info_module#ansible-collections-community-general-systemd-info-module",
+  "description": "This module gathers info about systemd units (services, targets, sockets, mounts, timers).",
+  "parameters": [
+    {
+      "name": "extra_properties",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "ones).",
+      "choices": [],
+      "description": "Additional properties to retrieve (appended to the default ones). Note that all property names are converted to lower-case. Default: []"
+    },
+    {
+      "name": "unitname",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "List of unit names to process. It supports .service, .target, .socket, .mount and .timer units type. .timer units are supported since community.general 10.5.0. Each name must correspond to the full name of the systemd unit or to a wildcard expression like 'ssh*' and '*.service'. Wildcard expressions in unitname are supported since community.general 10.5.0. Default: []"
+    }
+  ],
+  "examples": [
+    "---\n# Gather info for all systemd services, targets, sockets, mount and timer\n- name: Gather all systemd unit info\n  community.general.systemd_info:\n  register: results\n\n# Gather info for selected units with extra properties.\n- name: Gather info for selected unit(s)\n  community.general.systemd_info:\n    unitname:\n      - systemd-journald.service\n      - systemd-journald.socket\n      - sshd-keygen.target\n      - -.mount\n    extra_properties:\n      - Description\n    register: results\n\n# Gather info using wildcards/expression\n- name: Gather info of units that start with 'systemd-'\n  community.general.systemd_info:\n    unitname:\n      - 'systemd-*'\n  register: results\n\n# Gather info for systemd-tmpfiles-clean.timer with extra properties\n- name: Gather info of systemd-tmpfiles-clean.timer and extra AccuracyUSec\n  community.general.systemd_info:\n    unitname:\n      - systemd-tmpfiles-clean.timer\n    extra_properties:\n      - AccuracyUSec\n  register: results"
+  ],
+  "return_values": [
+    {
+      "name": "units",
+      "type": "dictionary",
+      "description": "Dictionary of systemd unit info keyed by unit name. Additional fields are returned depending on the value of extra_properties. Returned: success Sample: {\"-.mount\": {\"activestate\": \"active\", \"description\": \"Root Mount\", \"loadstate\": \"loaded\", \"name\": \"-.mount\", \"options\": \"rw,relatime,seclabel,attr2,inode64,logbufs=8,logbsize=32k,noquota\", \"substate\": \"mounted\", \"type\": \"xfs\", \"what\": \"/dev/mapper/cs-root\", \"where\": \"/\"}, \"sshd-keygen.target\": {\"activestate\": \"active\", \"description\": \"sshd-keygen.target\", \"fragmentpath\": \"/usr/lib/systemd/system/sshd-keygen.target\", \"loadstate\": \"loaded\", \"name\": \"sshd-keygen.target\", \"substate\": \"active\", \"unitfilepreset\": \"disabled\", \"unitfilestate\": \"static\"}, \"systemd-journald.service\": {\"activestate\": \"active\", \"description\": \"Journal Service\", \"execmainpid\": \"613\", \"fragmentpath\": \"/usr/lib/systemd/system/systemd-journald.service\", \"loadstate\": \"loaded\", \"mainpid\": \"613\", \"name\": \"systemd-journald.service\", \"substate\": \"running\", \"unitfilepreset\": \"disabled\", \"unitfilestate\": \"static\"}, \"systemd-journald.socket\": {\"activestate\": \"active\", \"description\": \"Journal Socket\", \"fragmentpath\": \"/usr/lib/systemd/system/systemd-journald.socket\", \"loadstate\": \"loaded\", \"name\": \"systemd-journald.socket\", \"substate\": \"running\", \"unitfilepreset\": \"disabled\", \"unitfilestate\": \"static\"}}",
+      "returned": "success"
+    },
+    {
+      "name": "activestate",
+      "type": "string",
+      "description": "The current active state of the unit. The most common values are active, inactive, and failed, but other values are possible as well. Returned: always Sample: \"active\"",
+      "returned": "always"
+    },
+    {
+      "name": "execmainpid",
+      "type": "string",
+      "description": "PID of the ExecStart process of the unit. Returned: only for .service units. Sample: \"799\"",
+      "returned": "only"
+    },
+    {
+      "name": "fragmentpath",
+      "type": "string",
+      "description": "Path to the unit’s fragment file. Returned: always except for .mount units. Sample: \"/usr/lib/systemd/system/systemd-journald.service\"",
+      "returned": "always"
+    },
+    {
+      "name": "loadstate",
+      "type": "string",
+      "description": "The state of the unit’s configuration load. The most common values are loaded, not-found, and masked, but other values are possible as well. Returned: always Sample: \"loaded\"",
+      "returned": "always"
+    },
+    {
+      "name": "mainpid",
+      "type": "string",
+      "description": "PID of the main process of the unit. Returned: only for .service units. Sample: \"798\"",
+      "returned": "only"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "Unit full name. Returned: always Sample: \"systemd-journald.service\"",
+      "returned": "always"
+    },
+    {
+      "name": "options",
+      "type": "string",
+      "description": "The mount options. Returned: only for .mount units. Sample: \"rw,relatime,noquota\"",
+      "returned": "only"
+    },
+    {
+      "name": "substate",
+      "type": "string",
+      "description": "The detailed sub state of the unit. The most common values are running, dead, exited, failed, listening, active, and mounted, but other values are possible as well. Returned: always Sample: \"running\"",
+      "returned": "always"
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "description": "The filesystem type of the mounted device. Returned: only for .mount units. Sample: \"ext4\"",
+      "returned": "only"
+    },
+    {
+      "name": "unitfilepreset",
+      "type": "string",
+      "description": "The preset configuration state for the unit file. The most common values are enabled, disabled, and static, but other values are possible as well. Returned: always except for .mount units. Sample: \"disabled\"",
+      "returned": "always"
+    },
+    {
+      "name": "unitfilestate",
+      "type": "string",
+      "description": "The actual configuration state for the unit file. The most common values are enabled, disabled, and static, but other values are possible as well. Returned: always except for .mount units. Sample: \"enabled\"",
+      "returned": "always"
+    },
+    {
+      "name": "what",
+      "type": "string",
+      "description": "The device that is mounted. Returned: only for .mount units. Sample: \"/dev/sda1\"",
+      "returned": "only"
+    },
+    {
+      "name": "where",
+      "type": "string",
+      "description": "The mount point where the device is mounted. Returned: only for .mount units. Sample: \"/\"",
+      "returned": "only"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/systemd_info_module#ansible-collections-community-general-systemd-info-module.html",
+  "parsed_at": "2026-04-11T13:53:27.358627"
+}

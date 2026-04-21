@@ -1,0 +1,224 @@
+{
+  "collection_ns": "amazon_aws",
+  "collection": "amazon.aws",
+  "module": "amazon.aws.autoscaling_instance_refresh_info",
+  "slug": "autoscaling_instance_refresh_info_module#ansible-collections-amazon-aws-autoscaling-instance-refresh-info-module",
+  "description": "Describes one or more instance refreshes.",
+  "parameters": [
+    {
+      "name": "access_key",
+      "aliases": [
+        "aws_access_key_id",
+        "aws_access_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS access key ID. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY environment variables may also be used in decreasing order of preference. The aws_access_key and profile options are mutually exclusive. The aws_access_key_id alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "aws_ca_bundle",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The location of a CA Bundle to use when validating SSL certificates. The AWS_CA_BUNDLE environment variable may also be used."
+    },
+    {
+      "name": "aws_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary to modify the botocore configuration. Parameters can be found in the AWS documentation https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html#botocore.config.Config."
+    },
+    {
+      "name": "debug_botocore_endpoint_logs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use a botocore.endpoint logger to parse the unique (rather than total) \"resource:action\" API calls made during a task, outputing the set to the resource_actions key in the task results. Use the aws_resource_action callback to output to total list made during a playbook. The ANSIBLE_DEBUG_BOTOCORE_LOGS environment variable may also be used. Choices: false ← (default) true"
+    },
+    {
+      "name": "endpoint_url",
+      "aliases": [
+        "aws_endpoint_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "AWS",
+      "choices": [],
+      "description": "URL to connect to instead of the default AWS endpoints. While this can be used to connection to other AWS-compatible services the amazon.aws and community.aws collections are only tested against AWS. The AWS_URL environment variable may also be used."
+    },
+    {
+      "name": "ids",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "One or more instance refresh IDs. Default: []"
+    },
+    {
+      "name": "max_records",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "The maximum number of items to return with this call. The default value is 50 and the maximum value is 100."
+    },
+    {
+      "name": "name",
+      "aliases": [
+        "group_name"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the Auto Scaling group."
+    },
+    {
+      "name": "next_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The token for the next set of items to return. (You received this token from a previous call.)"
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "aws_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A named AWS profile to use for authentication. See the AWS documentation for more information about named profiles https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html. The AWS_PROFILE environment variable may also be used. The profile option is mutually exclusive with the aws_access_key, aws_secret_key and session_token options."
+    },
+    {
+      "name": "region",
+      "aliases": [
+        "aws_region"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The AWS region to use. For global services such as IAM, Route53 and CloudFront, region is ignored. The AWS_REGION environment variable may also be used. See the Amazon AWS documentation for more information http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region."
+    },
+    {
+      "name": "secret_key",
+      "aliases": [
+        "aws_secret_access_key",
+        "aws_secret_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS secret access key. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SECRET_ACCESS_KEY or AWS_SECRET_KEY environment variables may also be used in decreasing order of preference. The secret_key and profile options are mutually exclusive. The aws_secret_access_key alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "session_token",
+      "aliases": [
+        "aws_session_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS STS session token for use with temporary credentials. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SESSION_TOKEN environment variable may also be used. The session_token and profile options are mutually exclusive."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to false, SSL certificates will not be validated for communication with the AWS APIs. Setting validate_certs=false is strongly discouraged, as an alternative, consider setting aws_ca_bundle instead. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "# Note: These examples do not set authentication details, see the AWS Guide for details.\n\n- name: Find an refresh by ASG name\n  amazon.aws.autoscaling_instance_refresh_info:\n    name: somename-asg\n\n- name: Find an refresh by ASG name and one or more refresh-IDs\n  amazon.aws.autoscaling_instance_refresh_info:\n    name: somename-asg\n    ids: ['some-id-123']\n  register: asgs\n\n- name: Find an refresh by ASG name and set max_records\n  amazon.aws.autoscaling_instance_refresh_info:\n    name: somename-asg\n    max_records: 4\n  register: asgs\n\n- name: Find an refresh by ASG name and NextToken, if received from a previous call\n  amazon.aws.autoscaling_instance_refresh_info:\n    name: somename-asg\n    next_token: 'some-token-123'\n  register: asgs"
+  ],
+  "return_values": [
+    {
+      "name": "instance_refreshes",
+      "type": "complex",
+      "description": "A list of instance refreshes. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "auto_scaling_group_name",
+      "type": "string",
+      "description": "Name of autoscaling group. Returned: success Sample: \"public-webapp-production-1\"",
+      "returned": "success"
+    },
+    {
+      "name": "end_time",
+      "type": "string",
+      "description": "The date and time this ASG was created, in ISO 8601 format. Returned: success Sample: \"2015-11-25T00:05:36.309Z\"",
+      "returned": "success"
+    },
+    {
+      "name": "instance_refresh_id",
+      "type": "string",
+      "description": "instance refresh id. Returned: success Sample: \"08b91cf7-8fa6-48af-b6a6-d227f40f1b9b\"",
+      "returned": "success"
+    },
+    {
+      "name": "instances_to_update",
+      "type": "integer",
+      "description": "number of instances to update. Returned: success Sample: 5",
+      "returned": "success"
+    },
+    {
+      "name": "percentage_complete",
+      "type": "integer",
+      "description": "the % of completeness Returned: success Sample: 100",
+      "returned": "success"
+    },
+    {
+      "name": "preferences",
+      "type": "dictionary",
+      "description": "The preferences for an instance refresh. Returned: always Sample: {\"AlarmSpecification\": {\"Alarms\": [\"my-alarm\"]}, \"AutoRollback\": true, \"InstanceWarmup\": 200, \"MinHealthyPercentage\": 90, \"ScaleInProtectedInstances\": \"Ignore\", \"SkipMatching\": false, \"StandbyInstances\": \"Ignore\"}",
+      "returned": "always"
+    },
+    {
+      "name": "start_time",
+      "type": "string",
+      "description": "The date and time this ASG was created, in ISO 8601 format. Returned: success Sample: \"2015-11-25T00:05:36.309Z\"",
+      "returned": "success"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "description": "The current state of the group when DeleteAutoScalingGroup is in progress. The following are the possible statuses Pending - The request was created, but the operation has not started. InProgress - The operation is in progress. Successful - The operation completed successfully. Failed - The operation failed to complete. You can troubleshoot using the status reason and the scaling activities. Cancelling - An ongoing operation is being cancelled. Cancellation does not roll back any replacements that have already been completed, but it prevents new replacements from being started. Cancelled - The operation is cancelled. Returned: success Sample: \"Pending\"",
+      "returned": "success"
+    },
+    {
+      "name": "next_token",
+      "type": "string",
+      "description": "A string that indicates that the response contains more items than can be returned in a single response. Returned: always",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/amazon/aws/autoscaling_instance_refresh_info_module.html",
+  "parsed_at": "2026-04-13T16:29:18.633705"
+}

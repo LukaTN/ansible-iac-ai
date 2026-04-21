@@ -1,0 +1,295 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.scaleway_container",
+  "slug": "scaleway_container_module#ansible-collections-community-general-scaleway-container-module",
+  "description": "This module manages container on Scaleway account.",
+  "parameters": [
+    {
+      "name": "api_timeout",
+      "aliases": [
+        "timeout"
+      ],
+      "type": "integer",
+      "required": false,
+      "default": "30",
+      "choices": [],
+      "description": "HTTP timeout to Scaleway API in seconds. Default: 30"
+    },
+    {
+      "name": "api_token",
+      "aliases": [
+        "oauth_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Scaleway OAuth token. This is required if profile is not specified."
+    },
+    {
+      "name": "api_url",
+      "aliases": [
+        "base_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "https://api.scaleway.com",
+      "choices": [],
+      "description": "Scaleway API URL. Default: \"https://api.scaleway.com\""
+    },
+    {
+      "name": "container_timeout",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The length of time your handler can spend processing a request before being stopped."
+    },
+    {
+      "name": "cpu_limit",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Resources define performance characteristics of your container. They are allocated to your container at runtime. Unit is 1/1000 of a VCPU."
+    },
+    {
+      "name": "description",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Description of the container namespace. Default: \"\""
+    },
+    {
+      "name": "environment_variables",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "Environment variables of the container namespace. Injected in container at runtime. Default: {}"
+    },
+    {
+      "name": "max_concurrency",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Maximum number of connections per container. This parameter is used to trigger autoscaling."
+    },
+    {
+      "name": "max_scale",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Maximum number of replicas for the container."
+    },
+    {
+      "name": "memory_limit",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Resources define performance characteristics of your container. They are allocated to your container at runtime. Unit is MB of memory."
+    },
+    {
+      "name": "min_scale",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Minimum number of replicas for the container."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the container namespace."
+    },
+    {
+      "name": "namespace_id",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Container namespace identifier."
+    },
+    {
+      "name": "port",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Listen port used to expose the container."
+    },
+    {
+      "name": "privacy",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"public\" ← (default)",
+        "\"private\""
+      ],
+      "description": "Privacy policies define whether a container can be executed anonymously. Choose public to enable anonymous execution, or private to protect your container with an authentication mechanism provided by the Scaleway API. Choices: \"public\" ← (default) \"private\""
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "scw_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The config profile in config file to load the Scaleway OAuth token from, use instead of api_token. It is also possible to set SCW_PROFILE to use a SCW CLI config profile."
+    },
+    {
+      "name": "protocol",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"http1\" ← (default)",
+        "\"h2c\""
+      ],
+      "description": "Communication protocol of the container. Choices: \"http1\" ← (default) \"h2c\""
+    },
+    {
+      "name": "query_parameters",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "List of parameters passed to the query string. Default: {}"
+    },
+    {
+      "name": "redeploy",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Redeploy the container if update is required. Choices: false ← (default) true"
+    },
+    {
+      "name": "region",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [
+        "\"fr-par\"",
+        "\"nl-ams\"",
+        "\"pl-waw\""
+      ],
+      "description": "Scaleway region to use (for example fr-par). Choices: \"fr-par\" \"nl-ams\" \"pl-waw\""
+    },
+    {
+      "name": "registry_image",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of image used for the container."
+    },
+    {
+      "name": "secret_environment_variables",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "Secret environment variables of the container namespace. Updating those values does not output a changed state in Ansible. Injected in container at runtime. Default: {}"
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Indicate desired state of the container. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Validate SSL certs of the Scaleway API. Choices: false true ← (default)"
+    },
+    {
+      "name": "wait",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Wait for the resource to reach its desired state before returning. Choices: false true ← (default)"
+    },
+    {
+      "name": "wait_sleep_time",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "3",
+      "choices": [],
+      "description": "Time to wait before every attempt to check the state of the resource. Default: 3"
+    },
+    {
+      "name": "wait_timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "300",
+      "choices": [],
+      "description": "Time to wait for the resource to reach the expected state. Default: 300"
+    }
+  ],
+  "examples": [
+    "- name: Create a container\n  community.general.scaleway_container:\n    namespace_id: '{{ scw_container_namespace }}'\n    state: present\n    region: fr-par\n    name: my-awesome-container\n    registry_image: rg.fr-par.scw.cloud/funcscwtestrgy2f9zw/nginx:latest\n    environment_variables:\n      MY_VAR: my_value\n    secret_environment_variables:\n      MY_SECRET_VAR: my_secret_value\n  register: container_creation_task\n\n- name: Make sure container is deleted\n  community.general.scaleway_container:\n    namespace_id: '{{ scw_container_namespace }}'\n    state: absent\n    region: fr-par\n    name: my-awesome-container"
+  ],
+  "return_values": [
+    {
+      "name": "container",
+      "type": "dictionary",
+      "description": "The container information. Returned: when state=present Sample: {\"cpu_limit\": 140, \"description\": \"Container used for testing scaleway_container ansible module\", \"domain_name\": \"cnansibletestgfogtjod-cn-ansible-test.functions.fnc.fr-par.scw.cloud\", \"environment_variables\": {\"MY_VAR\": \"my_value\"}, \"error_message\": null, \"http_option\": \"\", \"id\": \"c9070eb0-d7a4-48dd-9af3-4fb139890721\", \"max_concurrency\": 50, \"max_scale\": 5, \"memory_limit\": 256, \"min_scale\": 0, \"name\": \"cn-ansible-test\", \"namespace_id\": \"75e299f1-d1e5-4e6b-bc6e-4fb51cfe1e69\", \"port\": 80, \"privacy\": \"public\", \"protocol\": \"http1\", \"region\": \"fr-par\", \"registry_image\": \"rg.fr-par.scw.cloud/namespace-ansible-ci/nginx:latest\", \"secret_environment_variables\": [{\"key\": \"MY_SECRET_VAR\", \"value\": \"$argon2id$v=19$m=65536,t=1,p=2$tb6UwSPWx/rH5Vyxt9Ujfw$5ZlvaIjWwNDPxD9Rdght3NarJz4IETKjpvAU3mMSmFg\"}], \"status\": \"created\", \"timeout\": \"300s\"}",
+      "returned": "when"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/scaleway_container_module.html",
+  "parsed_at": "2026-04-13T16:29:57.558509"
+}

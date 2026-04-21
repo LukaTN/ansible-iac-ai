@@ -1,0 +1,123 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.snap",
+  "slug": "snap_module#ansible-collections-community-general-snap-module",
+  "description": "Manages snaps packages.",
+  "parameters": [
+    {
+      "name": "channel",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Define which release of a snap is installed and tracked for updates. This option can only be specified if there is a single snap in the task. If not passed, the snap command defaults to stable. If the value passed does not contain the track, it defaults to latest. For example, if edge is passed, the module assumes the channel to be latest/edge. See https://snapcraft.io/docs/channels for more details about snap channels."
+    },
+    {
+      "name": "classic",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Install a snap that has classic confinement. This option corresponds to the --classic argument of the snap install command. This level of confinement is permissive, granting full system access, similar to that of traditionally packaged applications that do not use sandboxing mechanisms. This option can only be specified when the task involves a single snap. See https://snapcraft.io/docs/snap-confinement for more details about classic confinement and confinement levels. Choices: false ← (default) true"
+    },
+    {
+      "name": "dangerous",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Install the snap in dangerous mode, without validating its assertions and signatures. This is useful when installing local snaps that are either unsigned or have signatures that have not been acknowledged. See https://snapcraft.io/docs/install-modes for more details about installation modes. Choices: false ← (default) true"
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "list",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the snaps to be installed. Any named snap accepted by the snap command is valid. dangerous=true may be necessary when installing .snap files. See dangerous for more details."
+    },
+    {
+      "name": "options",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Set options with pattern key=value or snap:key=value. If a snap name is given, the option is applied to that snap only. If the snap name is omitted, the options are applied to all snaps listed in name. Options are only applied to active snaps. Options are only applied when state is set to present. This is done after the necessary installation or refresh (upgrade/downgrade) of all the snaps listed in name. See https://snapcraft.io/docs/configuration-in-snaps for more details about snap configuration options."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)",
+        "\"enabled\"",
+        "\"disabled\""
+      ],
+      "description": "Desired state of the package. When state=present the module uses snap install if the snap is not installed, and snap refresh if it is installed but from a different channel. Choices: \"absent\" \"present\" ← (default) \"enabled\" \"disabled\""
+    }
+  ],
+  "examples": [
+    "# Install \"foo\" and \"bar\" snap\n- name: Install foo\n  community.general.snap:\n    name:\n      - foo\n      - bar\n\n# Install \"foo\" snap with options par1=A and par2=B\n- name: Install \"foo\" with options\n  community.general.snap:\n    name:\n      - foo\n    options:\n      - par1=A\n      - par2=B\n\n# Install \"foo\" and \"bar\" snaps with common option com=A and specific options fooPar=X and barPar=Y\n- name: Install \"foo\" and \"bar\" with options\n  community.general.snap:\n    name:\n      - foo\n      - bar\n    options:\n      - com=A\n      - foo:fooPar=X\n      - bar:barPar=Y\n\n# Remove \"foo\" snap\n- name: Remove foo\n  community.general.snap:\n    name: foo\n    state: absent\n\n# Install a snap with classic confinement\n- name: Install \"foo\" with option --classic\n  community.general.snap:\n    name: foo\n    classic: true\n\n# Install a snap with from a specific channel\n- name: Install \"foo\" with option --channel=latest/edge\n  community.general.snap:\n    name: foo\n    channel: latest/edge"
+  ],
+  "return_values": [
+    {
+      "name": "channel",
+      "type": "string",
+      "description": "The channel the snaps were installed from. Returned: When snaps are installed",
+      "returned": "When"
+    },
+    {
+      "name": "classic",
+      "type": "boolean",
+      "description": "Whether or not the snaps were installed with the classic confinement. Returned: When snaps are installed",
+      "returned": "When"
+    },
+    {
+      "name": "cmd",
+      "type": "string",
+      "description": "The command that was executed on the host. Returned: When changed is true",
+      "returned": "When"
+    },
+    {
+      "name": "options_changed",
+      "type": "list",
+      "description": "The list of options set/changed in format snap:key=value. Returned: When any options have been changed/set",
+      "returned": "When"
+    },
+    {
+      "name": "snaps_installed",
+      "type": "list",
+      "description": "The list of actually installed snaps. Returned: When any snaps have been installed",
+      "returned": "When"
+    },
+    {
+      "name": "snaps_removed",
+      "type": "list",
+      "description": "The list of actually removed snaps. Returned: When any snaps have been removed",
+      "returned": "When"
+    },
+    {
+      "name": "version",
+      "type": "dictionary",
+      "description": "Versions of snap components as reported by snap version. Returned: always",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/snap_module#ansible-collections-community-general-snap-module.html",
+  "parsed_at": "2026-04-11T13:53:26.714361"
+}

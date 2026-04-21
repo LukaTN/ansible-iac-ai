@@ -1,0 +1,42 @@
+{
+  "collection_ns": "ansible_builtin",
+  "collection": "ansible.builtin",
+  "module": "ansible.builtin.package",
+  "slug": "package_module#ansible-collections-ansible-builtin-package-module",
+  "description": "This modules manages packages on a target without specifying a package manager module (like ansible.builtin.dnf, ansible.builtin.apt, …). It is convenient to use in an heterogeneous environment of machines without having to create a specific task for each package manager. ansible.builtin.package calls behind the module for the package manager used by the operating system discovered by the module ansible.builtin.setup. If ansible.builtin.setup was not yet run, ansible.builtin.package will run it.",
+  "parameters": [
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Package name, or package specifier with version. Syntax varies with package manager. For example name-1.0 or name=1.0. Package names also vary with package manager; this module will not “translate” them per distribution. For example libyaml-dev, libyaml-devel. To operate on several packages this can accept a comma separated string of packages or a list of packages, depending on the underlying package manager."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Whether to install (present), or remove (absent) a package. You can use other states like latest ONLY if they are supported by the underlying package module(s) executed."
+    },
+    {
+      "name": "use",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "auto",
+      "choices": [],
+      "description": "The required package manager module to use (dnf, apt, and so on). The default auto will use existing facts or try to auto-detect it. You should only use this field if the automatic selection is not working for some reason. Since version 2.17 you can use the ansible_package_use variable to override the automatic detection, but this option still takes precedence. Default: \"auto\""
+    }
+  ],
+  "examples": [
+    "- name: Install ntpdate\n  ansible.builtin.package:\n    name: ntpdate\n    state: present\n\n# This uses a variable as this changes per distribution.\n- name: Remove the apache package\n  ansible.builtin.package:\n    name: \"{{ apache }}\"\n    state: absent\n\n- name: Install the latest version of Apache and MariaDB\n  ansible.builtin.package:\n    name:\n      - httpd\n      - mariadb-server\n    state: latest\n\n- name: Use the dnf package manager to install httpd\n  ansible.builtin.package:\n    name: httpd\n    state: present\n    use: dnf"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/package_module.html",
+  "parsed_at": "2026-04-13T16:29:25.789213"
+}

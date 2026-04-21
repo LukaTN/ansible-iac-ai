@@ -1,0 +1,86 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.flatpak",
+  "slug": "flatpak_module#ansible-collections-community-general-flatpak-module",
+  "description": "Allows users to add or remove flatpaks.",
+  "parameters": [
+    {
+      "name": "executable",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "flatpak",
+      "choices": [],
+      "description": "The path to the flatpak executable to use. By default, this module looks for the flatpak executable on the path. Default: \"flatpak\""
+    },
+    {
+      "name": "method",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"system\" ← (default)",
+        "\"user\""
+      ],
+      "description": "The installation method to use. Defines if the flatpak is supposed to be installed globally for the whole system or only for the current user. Choices: \"system\" ← (default) \"user\""
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "list",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the flatpak to manage. To operate on several packages this can accept a list of packages. When used with state=present, name can be specified as a URL to a flatpakref file or the unique reverse DNS name that identifies a flatpak. Both https:// and http:// URLs are supported. When supplying a reverse DNS name, you can use the remote option to specify on what remote to look for the flatpak. An example for a reverse DNS name is org.gnome.gedit. When used with state=absent or state=latest, it is recommended to specify the name in the reverse DNS format. When supplying a URL with state=absent or state=latest, the module tries to match the installed flatpak based on the name of the flatpakref to remove or update it. However, there is no guarantee that the names of the flatpakref file and the reverse DNS name of the installed flatpak do match."
+    },
+    {
+      "name": "no_dependencies",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If installing runtime dependencies should be omitted or not. This parameter is primarily implemented for integration testing this module. There might however be some use cases where you would want to have this, like when you are packaging your own flatpaks. Choices: false ← (default) true"
+    },
+    {
+      "name": "remote",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "flathub",
+      "choices": [],
+      "description": "The flatpak remote (repository) to install the flatpak from. By default, flathub is assumed, but you do need to add the flathub flatpak_remote before you can use this. See the community.general.flatpak_remote module for managing flatpak remotes. Default: \"flathub\""
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)",
+        "\"latest\""
+      ],
+      "description": "Indicates the desired package state. The value latest is supported since community.general 8.6.0. Choices: \"absent\" \"present\" ← (default) \"latest\""
+    }
+  ],
+  "examples": [
+    "- name: Install the spotify flatpak\n  community.general.flatpak:\n    name: https://s3.amazonaws.com/alexlarsson/spotify-repo/spotify.flatpakref\n    state: present\n\n- name: Install the gedit flatpak package without dependencies (not recommended)\n  community.general.flatpak:\n    name: https://git.gnome.org/browse/gnome-apps-nightly/plain/gedit.flatpakref\n    state: present\n    no_dependencies: true\n\n- name: Install the gedit package from flathub for current user\n  community.general.flatpak:\n    name: org.gnome.gedit\n    state: present\n    method: user\n\n- name: Install the Gnome Calendar flatpak from the gnome remote system-wide\n  community.general.flatpak:\n    name: org.gnome.Calendar\n    state: present\n    remote: gnome\n\n- name: Install GIMP using custom flatpak binary path\n  community.general.flatpak:\n    name: org.gimp.GIMP\n    state: present\n    executable: /usr/local/bin/flatpak-dev\n\n- name: Install multiple packages\n  community.general.flatpak:\n    name:\n      - org.gimp.GIMP\n      - org.inkscape.Inkscape\n      - org.mozilla.firefox\n\n- name: Update the spotify flatpak\n  community.general.flatpak:\n    name: https://s3.amazonaws.com/alexlarsson/spotify-repo/spotify.flatpakref\n    state: latest\n\n- name: Update the gedit flatpak package without dependencies (not recommended)\n  community.general.flatpak:\n    name: https://git.gnome.org/browse/gnome-apps-nightly/plain/gedit.flatpakref\n    state: latest\n    no_dependencies: true\n\n- name: Update the gedit package from flathub for current user\n  community.general.flatpak:\n    name: org.gnome.gedit\n    state: latest\n    method: user\n\n- name: Update the Gnome Calendar flatpak from the gnome remote system-wide\n  community.general.flatpak:\n    name: org.gnome.Calendar\n    state: latest\n    remote: gnome\n\n- name: Update multiple packages\n  community.general.flatpak:\n    name:\n      - org.gimp.GIMP\n      - org.inkscape.Inkscape\n      - org.mozilla.firefox\n    state: latest\n\n- name: Remove the gedit flatpak\n  community.general.flatpak:\n    name: org.gnome.gedit\n    state: absent\n\n- name: Remove multiple packages\n  community.general.flatpak:\n    name:\n      - org.gimp.GIMP\n      - org.inkscape.Inkscape\n      - org.mozilla.firefox\n    state: absent"
+  ],
+  "return_values": [
+    {
+      "name": "command",
+      "type": "string",
+      "description": "The exact flatpak command that was executed. Returned: When a flatpak command has been executed Sample: \"/usr/bin/flatpak install --user --nontinteractive flathub org.gnome.Calculator\"",
+      "returned": "When"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/flatpak_module#ansible-collections-community-general-flatpak-module.html",
+  "parsed_at": "2026-04-11T13:53:13.154813"
+}

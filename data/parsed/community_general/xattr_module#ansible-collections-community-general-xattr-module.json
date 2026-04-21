@@ -1,0 +1,80 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.xattr",
+  "slug": "xattr_module#ansible-collections-community-general-xattr-module",
+  "description": "Manages filesystem user defined extended attributes.",
+  "parameters": [
+    {
+      "name": "follow",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If true, dereferences symlinks and sets/gets attributes on symlink target, otherwise acts on symlink itself. Choices: false true ← (default)"
+    },
+    {
+      "name": "key",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The name of a specific Extended attribute key to set/retrieve."
+    },
+    {
+      "name": "namespace",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "user",
+      "choices": [],
+      "description": "Namespace of the named name/key. Default: \"user\""
+    },
+    {
+      "name": "path",
+      "aliases": [
+        "name"
+      ],
+      "type": "path",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The full path of the file/object to get the facts of."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "if",
+      "choices": [
+        "\"absent\"",
+        "\"all\"",
+        "\"keys\"",
+        "\"present\"",
+        "\"read\" ← (default)"
+      ],
+      "description": "Defines which state you want to do. read retrieves the current value for a key. present sets path to value, default if value is set. all dumps all data. keys retrieves all keys. absent deletes the key. Choices: \"absent\" \"all\" \"keys\" \"present\" \"read\" ← (default)"
+    },
+    {
+      "name": "value",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The value to set the named name/key to, it automatically sets the state to present."
+    }
+  ],
+  "examples": [
+    "- name: Obtain the extended attributes of /etc/foo.conf\n  community.general.xattr:\n    path: /etc/foo.conf\n\n- name: Set the key 'user.foo' to value 'bar'\n  community.general.xattr:\n    path: /etc/foo.conf\n    key: foo\n    value: bar\n\n- name: Set the key 'trusted.glusterfs.volume-id' to value '0x817b94343f164f199e5b573b4ea1f914'\n  community.general.xattr:\n    path: /mnt/bricks/brick1\n    namespace: trusted\n    key: glusterfs.volume-id\n    value: \"0x817b94343f164f199e5b573b4ea1f914\"\n\n- name: Remove the key 'user.foo'\n  community.general.xattr:\n    path: /etc/foo.conf\n    key: foo\n    state: absent\n\n- name: Remove the key 'trusted.glusterfs.volume-id'\n  community.general.xattr:\n    path: /mnt/bricks/brick1\n    namespace: trusted\n    key: glusterfs.volume-id\n    state: absent"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/xattr_module.html",
+  "parsed_at": "2026-04-13T16:30:00.646524"
+}

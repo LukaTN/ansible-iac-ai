@@ -1,0 +1,78 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.office_365_connector_card",
+  "slug": "office_365_connector_card_module#ansible-collections-community-general-office-365-connector-card-module",
+  "description": "Creates Connector Card messages through Office 365 Connectors.",
+  "parameters": [
+    {
+      "name": "actions",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "This array of objects is used to power the action links found at the bottom of the card."
+    },
+    {
+      "name": "color",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Accent color used for branding or indicating status in the card."
+    },
+    {
+      "name": "sections",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Contains a list of sections to display in the card. For more information see https://learn.microsoft.com/en-us/outlook/actionable-messages/message-card-reference#section-fields."
+    },
+    {
+      "name": "summary",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A string used for summarizing card content. This is the message subject. This is required if the text parameter is not populated."
+    },
+    {
+      "name": "text",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The main text of the card. This is rendered below the sender information and optional title, And above any sections or actions present."
+    },
+    {
+      "name": "title",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A title for the Connector message. Shown at the top of the message."
+    },
+    {
+      "name": "webhook",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The webhook URL is given to you when you create a new Connector."
+    }
+  ],
+  "examples": [
+    "- name: Create a simple Connector Card\n  community.general.office_365_connector_card:\n    webhook: https://outlook.office.com/webhook/GUID/IncomingWebhook/GUID/GUID\n    text: 'Hello, World!'\n\n- name: Create a Connector Card with the full format\n  community.general.office_365_connector_card:\n    webhook: https://outlook.office.com/webhook/GUID/IncomingWebhook/GUID/GUID\n    summary: This is the summary property\n    title: This is the **card's title** property\n    text: This is the **card's text** property. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod\n      tempor incididunt ut labore et dolore magna aliqua.\n    color: E81123\n    sections:\n      - title: This is the **section's title** property\n        activity_image: http://connectorsdemo.azurewebsites.net/images/MSC12_Oscar_002.jpg\n        activity_title: This is the section's **activityTitle** property\n        activity_subtitle: This is the section's **activitySubtitle** property\n        activity_text: This is the section's **activityText** property.\n        hero_image:\n          image: http://connectorsdemo.azurewebsites.net/images/WIN12_Scene_01.jpg\n          title: This is the image's alternate text\n        text: This is the section's text property. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod\n          tempor incididunt ut labore et dolore magna aliqua.\n        facts:\n          - name: This is a fact name\n            value: This is a fact value\n          - name: This is a fact name\n            value: This is a fact value\n          - name: This is a fact name\n            value: This is a fact value\n        images:\n          - image: http://connectorsdemo.azurewebsites.net/images/MicrosoftSurface_024_Cafe_OH-06315_VS_R1c.jpg\n            title: This is the image's alternate text\n          - image: http://connectorsdemo.azurewebsites.net/images/WIN12_Scene_01.jpg\n            title: This is the image's alternate text\n          - image: http://connectorsdemo.azurewebsites.net/images/WIN12_Anthony_02.jpg\n            title: This is the image's alternate text\n        actions:\n          - \"@type\": ActionCard\n            name: Comment\n            inputs:\n              - \"@type\": TextInput\n                id: comment\n                is_multiline: true\n                title: Input's title property\n            actions:\n              - \"@type\": HttpPOST\n                name: Save\n                target: http://...\n          - \"@type\": ActionCard\n            name: Due Date\n            inputs:\n              - \"@type\": DateInput\n                id: dueDate\n                title: Input's title property\n            actions:\n              - \"@type\": HttpPOST\n                name: Save\n                target: http://...\n          - \"@type\": HttpPOST\n            name: Action's name prop.\n            target: http://...\n          - \"@type\": OpenUri\n            name: Action's name prop\n            targets:\n              - os: default\n                uri: http://...\n      - start_group: true\n        title: This is the title of a **second section**\n        text: This second section is visually separated from the first one by setting its **startGroup** property to true."
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/office_365_connector_card_module#ansible-collections-community-general-office-365-connector-card-module.html",
+  "parsed_at": "2026-04-11T13:53:21.626873"
+}

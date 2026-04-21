@@ -1,0 +1,142 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.manageiq_alert_profiles",
+  "slug": "manageiq_alert_profiles_module#ansible-collections-community-general-manageiq-alert-profiles-module",
+  "description": "The manageiq_alert_profiles module supports adding, updating and deleting alert profiles in ManageIQ.",
+  "parameters": [
+    {
+      "name": "alerts",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of alert descriptions to assign to this profile. Required if state=present."
+    },
+    {
+      "name": "manageiq_connection",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "ManageIQ connection configuration information."
+    },
+    {
+      "name": "ca_cert",
+      "aliases": [
+        "ca_bundle_path"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The path to a CA bundle file or directory with certificates."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "ManageIQ password. MIQ_PASSWORD environment variable if set. Otherwise, required if no token is passed in."
+    },
+    {
+      "name": "token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "ManageIQ token. MIQ_TOKEN environment variable if set. Otherwise, required if no username or password is passed in."
+    },
+    {
+      "name": "url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "ManageIQ environment URL. MIQ_URL environment variable if set. Otherwise, it is required to pass it."
+    },
+    {
+      "name": "username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "ManageIQ username. MIQ_USERNAME environment variable if set. Otherwise, required if no token is passed in."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [
+        "verify_ssl"
+      ],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether SSL certificates should be verified for HTTPS requests. Choices: false true ← (default)"
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The unique alert profile name in ManageIQ."
+    },
+    {
+      "name": "notes",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Optional notes for this profile."
+    },
+    {
+      "name": "resource_type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"Vm\"",
+        "\"ContainerNode\"",
+        "\"MiqServer\"",
+        "\"Host\"",
+        "\"Storage\"",
+        "\"EmsCluster\"",
+        "\"ExtManagementSystem\"",
+        "\"MiddlewareServer\""
+      ],
+      "description": "The resource type for the alert profile in ManageIQ. Required when state=present. Choices: \"Vm\" \"ContainerNode\" \"MiqServer\" \"Host\" \"Storage\" \"EmsCluster\" \"ExtManagementSystem\" \"MiddlewareServer\""
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)"
+      ],
+      "description": "absent - alert profile should not exist, present - alert profile should exist. Choices: \"absent\" \"present\" ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Add an alert profile to ManageIQ\n  community.general.manageiq_alert_profiles:\n    state: present\n    name: Test profile\n    resource_type: ContainerNode\n    alerts:\n      - Test Alert 01\n      - Test Alert 02\n    manageiq_connection:\n      url: 'http://127.0.0.1:3000'\n      username: 'admin'\n      password: 'smartvm'\n      validate_certs: false # only do this when you trust the network!\n\n- name: Delete an alert profile from ManageIQ\n  community.general.manageiq_alert_profiles:\n    state: absent\n    name: Test profile\n    manageiq_connection:\n      url: 'http://127.0.0.1:3000'\n      username: 'admin'\n      password: 'smartvm'\n      validate_certs: false # only do this when you trust the network!"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/manageiq_alert_profiles_module#ansible-collections-community-general-manageiq-alert-profiles-module.html",
+  "parsed_at": "2026-04-11T13:53:19.970515"
+}

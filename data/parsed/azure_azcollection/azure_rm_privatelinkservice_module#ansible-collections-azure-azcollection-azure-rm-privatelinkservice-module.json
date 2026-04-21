@@ -1,0 +1,436 @@
+{
+  "collection_ns": "azure_azcollection",
+  "collection": "azure.azcollection",
+  "module": "azure.azcollection.azure_rm_privatelinkservice",
+  "slug": "azure_rm_privatelinkservice_module#ansible-collections-azure-azcollection-azure-rm-privatelinkservice-module",
+  "description": "Create, Update or Delete private link service resource.",
+  "parameters": [
+    {
+      "name": "ad_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory username. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "adfs_authority_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure AD authority url. Use when authenticating with Username/password, and has your own ADFS authority."
+    },
+    {
+      "name": "api_profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "Selects an API profile to use when communicating with Azure services. Default value of latest is appropriate for public clouds; future values will allow use with Azure Stack. Default: \"latest\""
+    },
+    {
+      "name": "append_tags",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Use to control if tags field is canonical or just appends to existing tags. When canonical, any tags not found in the tags parameter will be removed from the object’s metadata. Choices: false true ← (default)"
+    },
+    {
+      "name": "auth_source",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "az",
+      "choices": [
+        "\"auto\" ← (default)",
+        "\"cli\"",
+        "\"credential_file\"",
+        "\"env\"",
+        "\"msi\""
+      ],
+      "description": "Controls the source of the credentials to use for authentication. Can also be set via the ANSIBLE_AZURE_AUTH_SOURCE environment variable. When set to auto (the default) the precedence is module parameters -> env -> credential_file -> cli. When set to env, the credentials will be read from the environment variables When set to credential_file, it will read the profile from ~/.azure/credentials. When set to cli, the credentials will be sources from the Azure CLI profile. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if more than one is present otherwise the default az cli subscription is used. When set to msi, the host machine must be an azure resource with an enabled MSI extension. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if the resource is granted access to more than one subscription, otherwise the first subscription is chosen. The msi was added in Ansible 2.6. Choices: \"auto\" ← (default) \"cli\" \"credential_file\" \"env\" \"msi\""
+    },
+    {
+      "name": "auto_approval",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The auto-approval list of the private link service."
+    },
+    {
+      "name": "cert_validation_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ignore\"",
+        "\"validate\""
+      ],
+      "description": "Controls the certificate validation behavior for Azure endpoints. By default, all modules will validate the server certificate, but when an HTTPS proxy is in use, or against Azure Stack, it may be necessary to disable this behavior by passing ignore. Can also be set via credential file profile or the AZURE_CERT_VALIDATION environment variable. Choices: \"ignore\" \"validate\""
+    },
+    {
+      "name": "client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client ID. Use when authenticating with a Service Principal or Managed Identity (msi). Can also be set via the AZURE_CLIENT_ID environment variable."
+    },
+    {
+      "name": "cloud_environment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "AzureCloud",
+      "choices": [],
+      "description": "For cloud environments other than the US public cloud, the environment name (as defined by Azure Python SDK, eg, AzureChinaCloud, AzureUSGovernment), or a metadata discovery endpoint URL (required for Azure Stack). Can also be set via credential file profile or the AZURE_CLOUD_ENVIRONMENT environment variable. Default: \"AzureCloud\""
+    },
+    {
+      "name": "disable_instance_discovery",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Determines whether or not instance discovery is performed when attempting to authenticate. Setting this to true will completely disable both instance discovery and authority validation. This functionality is intended for use in scenarios where the metadata endpoint cannot be reached such as in private clouds or Azure Stack. The process of instance discovery entails retrieving authority metadata from https://login.microsoft.com/ to validate the authority. By setting this to **True**, the validation of the authority is disabled. As a result, it is crucial to ensure that the configured authority host is valid and trustworthy. Set via credential file profile or the AZURE_DISABLE_INSTANCE_DISCOVERY environment variable. Choices: false ← (default) true"
+    },
+    {
+      "name": "enable_proxy_protocol",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Whether the private link service is enabled for proxy protocol or not. Choices: false true"
+    },
+    {
+      "name": "fqdns",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The list of Fqdn."
+    },
+    {
+      "name": "ip_configurations",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "An array of private link service IP configurations."
+    },
+    {
+      "name": "load_balancer_frontend_ip_configurations",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "An array of references to the load balancer IP configurations Cannot have more than one load balancer frontend IP configuration on the private link service."
+    },
+    {
+      "name": "location",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The resource location."
+    },
+    {
+      "name": "log_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "log_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the private link service."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory user password. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security profile found in ~/.azure/credentials file."
+    },
+    {
+      "name": "resource_group",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the resource group."
+    },
+    {
+      "name": "secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client secret. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Assert the state of the pirvate link service. Use state=present to create or update the link service and state=absent to delete it. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "subscription_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Your Azure subscription Id."
+    },
+    {
+      "name": "tags",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Dictionary of string:string pairs to assign as metadata to the object. Metadata tags on the object will be updated with any provided values. To remove tags set append_tags option to false. Currently, Azure DNS zones and Traffic Manager services also don’t allow the use of spaces in the tag. Azure Front Door doesn’t support the use of Azure Automation and Azure CDN only support 15 tags on resources."
+    },
+    {
+      "name": "tenant",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure tenant ID. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "thumbprint",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The thumbprint of the private key specified in x509_certificate_path. Use when authenticating with a Service Principal. Required if x509_certificate_path is defined."
+    },
+    {
+      "name": "visibility",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The visibility list of the private link service."
+    },
+    {
+      "name": "x509_certificate_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the X509 certificate used to create the service principal in PEM format. The certificate must be appended to the private key. Use when authenticating with a Service Principal."
+    }
+  ],
+  "examples": [
+    "- name: Create the private link service\n  azure_rm_privatelinkservice:\n    name: linkservice-name\n    resource_group: myResourceGroup\n    enable_proxy_protocol: true\n    fqdns:\n      - 'dns01.com'\n      - 'dns02.com'\n    visibility:\n      subscriptions:\n        - xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\n        - yyyyyy-yyyyy-yyyy-yyyy-yyyyyyyyyyy\n    auto_approval:\n      subscriptions:\n        - xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\n        - yyyyyy-yyyyy-yyyy-yyyy-yyyyyyyyyyy\n    load_balancer_frontend_ip_configurations:\n      - id: load_balancer_frontend_ip_configurations_id\n    ip_configurations:\n      - name: testSubnet\n        properties:\n          primary: false\n          private_ip_allocation_method: 'Dynamic'\n          private_ip_address_version: 'IPv4'\n          subnet:\n            id: subnet_id\n      - name: subnetfredprivate-1\n        properties:\n          primary: true\n          private_ip_allocation_method: 'Static'\n          private_ip_address_version: 'IPv4'\n          subnet:\n            id: subnet_id\n    tags:\n      key1: value1\n      key2: value2\n\n- name: delete the private link service\n  azure_rm_privatelinkservice:\n    name: linkservice-name\n    resource_group: myResourceGroup\n    state: absent"
+  ],
+  "return_values": [
+    {
+      "name": "link_service",
+      "type": "complex",
+      "description": "List of private link service info. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "alias",
+      "type": "string",
+      "description": "The alias of the private link service. Returned: always Sample: \"linkservice.6a244dd8-8416-40cf-8c04-52b353bdd507.eastus.azure.privatelinkservice\"",
+      "returned": "always"
+    },
+    {
+      "name": "auto_approval",
+      "type": "dictionary",
+      "description": "The auto-approval list of the private link service. Returned: always Sample: {\"subscriptions\": [\"xxxx-xxxx\", \"yyyy-yyyyy\"]}",
+      "returned": "always"
+    },
+    {
+      "name": "enable_proxy_protocol",
+      "type": "boolean",
+      "description": "Whether the private link service is enabled for proxy protocol or not. Returned: always Sample: false",
+      "returned": "always"
+    },
+    {
+      "name": "etag",
+      "type": "string",
+      "description": "A unique read-only string that changes whenever the resource is updated. Returned: always Sample: \"f7d60f37-ea2b-4091-8546-1327f35468c4\"",
+      "returned": "always"
+    },
+    {
+      "name": "fqdns",
+      "type": "list",
+      "description": "The list of Fqdn. Returned: always Sample: [\"fqdns1.com\", \"fqdns2.com\"]",
+      "returned": "always"
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "description": "Resource ID of the private link service. Returned: always Sample: \"/subscriptions/xxx-xxx/resourceGroups/myResourceGroup/providers/Microsoft.Network/privateLinkServices/linkservice\"",
+      "returned": "always"
+    },
+    {
+      "name": "ip_configurations",
+      "type": "complex",
+      "description": "An array of private link service IP configurations. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "The name of the IP configurations Returned: always Sample: \"subnetfredprivate-1\"",
+      "returned": "always"
+    },
+    {
+      "name": "properties",
+      "type": "complex",
+      "description": "The IP configuration properties. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "primary",
+      "type": "boolean",
+      "description": "Whether the ip configuration is primary or not. Returned: always Sample: true",
+      "returned": "always"
+    },
+    {
+      "name": "private_ip_address_version",
+      "type": "string",
+      "description": "Whether the specific IP configuration is IPv4 or IPv6. Returned: always Sample: \"IPv4\"",
+      "returned": "always"
+    },
+    {
+      "name": "private_ip_allocation_method",
+      "type": "string",
+      "description": "The private IP address allocation method. Returned: always Sample: \"Dynamic\"",
+      "returned": "always"
+    },
+    {
+      "name": "subnet",
+      "type": "dictionary",
+      "description": "The reference to the subnet resource. Returned: always Sample: {\"id\": \"/subscriptions/xxx/resourceGroups/myRG/providers/Microsoft.Network/virtualNetworks/vnet/subnets/subnamee\"}",
+      "returned": "always"
+    },
+    {
+      "name": "load_balancer_frontend_ip_configurations",
+      "type": "list",
+      "description": "An array of references to the load balancer IP configurations. Returned: awalys Sample: [{\"id\": \"/subscriptions/xxx/resourceGroups/myRG/providers/Microsoft.Network/loadBalancers/testlb/frontendIPConfigurations/front01\"}]",
+      "returned": "awalys"
+    },
+    {
+      "name": "location",
+      "type": "string",
+      "description": "Resource location. Returned: always Sample: \"eastus\"",
+      "returned": "always"
+    },
+    {
+      "name": "network_interfaces",
+      "type": "list",
+      "description": "An array of references to the network interfaces created for this private link service. Returned: always Sample: [{\"id\": \"/subscriptions/xxx-xxx/resourceGroups/myResourceGroup/providers/Microsoft.Network/networkInterfaces/testlinkservice.nic.f5\"}]",
+      "returned": "always"
+    },
+    {
+      "name": "private_endpoint_connections",
+      "type": "complex",
+      "description": "An array of list about connections to the private endpoint. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "private_endpoint",
+      "type": "string",
+      "description": "The ID of the private endpoint. Returned: always Sample: \"/subscriptions/xxx-xxx/resourceGroups/myResourceGroup/providers/Microsoft.Network/privateEndpoints/test002\"",
+      "returned": "always"
+    },
+    {
+      "name": "provisioning_state",
+      "type": "string",
+      "description": "The provisioning state of the private link service resource. Returned: always Sample: \"Succeeded\"",
+      "returned": "always"
+    },
+    {
+      "name": "tags",
+      "type": "dictionary",
+      "description": "The resource tags. Returned: always Sample: {\"key1\": \"value1\"}",
+      "returned": "always"
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "description": "The resource type. Returned: always Sample: \"Microsoft.Network/privateLinkServices\"",
+      "returned": "always"
+    },
+    {
+      "name": "visibility",
+      "type": "dictionary",
+      "description": "The visibility list of the private link service. Returned: always Sample: {\"subscriptions\": [\"xxxx-xxxx\", \"yyyy-yyyyy\"]}",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_privatelinkservice_module.html",
+  "parsed_at": "2026-04-13T16:29:37.706183"
+}

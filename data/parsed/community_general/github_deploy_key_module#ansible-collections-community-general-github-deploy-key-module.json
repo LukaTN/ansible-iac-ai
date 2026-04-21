@@ -1,0 +1,165 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.github_deploy_key",
+  "slug": "github_deploy_key_module#ansible-collections-community-general-github-deploy-key-module",
+  "description": "Adds or removes deploy keys for GitHub repositories. Supports authentication using username and password, username and password and 2-factor authentication code (OTP), OAuth2 token, or personal access token. Admin rights on the repository are required.",
+  "parameters": [
+    {
+      "name": "force",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If true, forcefully adds the deploy key by deleting any existing deploy key with the same public key or title. Choices: false ← (default) true"
+    },
+    {
+      "name": "github_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "https://api.github.com",
+      "choices": [],
+      "description": "The base URL of the GitHub API. Default: \"https://api.github.com\""
+    },
+    {
+      "name": "key",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The SSH public key to add to the repository as a deploy key."
+    },
+    {
+      "name": "name",
+      "aliases": [
+        "title",
+        "label"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name for the deploy key."
+    },
+    {
+      "name": "otp",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The 6 digit One Time Password for 2-Factor Authentication. Required together with username and password."
+    },
+    {
+      "name": "owner",
+      "aliases": [
+        "account",
+        "organization"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the individual account or organization that owns the GitHub repository."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The password to authenticate with. Alternatively, a personal access token can be used instead of username and password combination."
+    },
+    {
+      "name": "read_only",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If true, the deploy key is only able to read repository contents. Otherwise, the deploy key is able to read and write. Choices: false true ← (default)"
+    },
+    {
+      "name": "repo",
+      "aliases": [
+        "repository"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the GitHub repository."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "The state of the deploy key. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The OAuth2 token or personal access token to authenticate with. Mutually exclusive with password."
+    },
+    {
+      "name": "username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The username to authenticate with. Should not be set when using personal access token."
+    }
+  ],
+  "examples": [
+    "- name: Add a new read-only deploy key to a GitHub repository using basic authentication\n  community.general.github_deploy_key:\n    owner: \"johndoe\"\n    repo: \"example\"\n    name: \"new-deploy-key\"\n    key: \"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAwXxn7kIMNWzcDfou...\"\n    read_only: true\n    username: \"johndoe\"\n    password: \"supersecretpassword\"\n\n- name: Remove an existing deploy key from a GitHub repository\n  community.general.github_deploy_key:\n    owner: \"johndoe\"\n    repository: \"example\"\n    name: \"new-deploy-key\"\n    key: \"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAwXxn7kIMNWzcDfou...\"\n    force: true\n    username: \"johndoe\"\n    password: \"supersecretpassword\"\n    state: absent\n\n- name: Add a new deploy key to a GitHub repository, replace an existing key, use an OAuth2 token to authenticate\n  community.general.github_deploy_key:\n    owner: \"johndoe\"\n    repository: \"example\"\n    name: \"new-deploy-key\"\n    key: \"{{ lookup('file', '~/.ssh/github.pub') }}\"\n    force: true\n    token: \"ABAQDAwXxn7kIMNWzcDfo...\"\n\n- name: Re-add a deploy key to a GitHub repository but with a different name\n  community.general.github_deploy_key:\n    owner: \"johndoe\"\n    repository: \"example\"\n    name: \"replace-deploy-key\"\n    key: \"{{ lookup('file', '~/.ssh/github.pub') }}\"\n    username: \"johndoe\"\n    password: \"supersecretpassword\"\n\n- name: Add a new deploy key to a GitHub repository using 2FA\n  community.general.github_deploy_key:\n    owner: \"johndoe\"\n    repo: \"example\"\n    name: \"new-deploy-key-2\"\n    key: \"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAwXxn7kIMNWzcDfou...\"\n    username: \"johndoe\"\n    password: \"supersecretpassword\"\n    otp: 123456\n\n- name: Add a read-only deploy key to a repository hosted on GitHub Enterprise\n  community.general.github_deploy_key:\n    github_url: \"https://api.example.com\"\n    owner: \"janedoe\"\n    repo: \"example\"\n    name: \"new-deploy-key\"\n    key: \"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAwXxn7kIMNWzcDfou...\"\n    read_only: true\n    username: \"janedoe\"\n    password: \"supersecretpassword\""
+  ],
+  "return_values": [
+    {
+      "name": "error",
+      "type": "string",
+      "description": "The error message returned by the GitHub API. Returned: failed Sample: \"key is already in use\"",
+      "returned": "failed"
+    },
+    {
+      "name": "http_status_code",
+      "type": "integer",
+      "description": "The HTTP status code returned by the GitHub API. Returned: failed Sample: 400",
+      "returned": "failed"
+    },
+    {
+      "name": "id",
+      "type": "integer",
+      "description": "The key identifier assigned by GitHub for the deploy key. Returned: changed Sample: 24381901",
+      "returned": "changed"
+    },
+    {
+      "name": "msg",
+      "type": "string",
+      "description": "The status message describing what occurred. Returned: always Sample: \"Deploy key added successfully\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/github_deploy_key_module.html",
+  "parsed_at": "2026-04-13T16:29:45.966434"
+}

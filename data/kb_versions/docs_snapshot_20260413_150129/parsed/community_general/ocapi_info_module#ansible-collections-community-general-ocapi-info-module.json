@@ -1,0 +1,136 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.ocapi_info",
+  "slug": "ocapi_info_module#ansible-collections-community-general-ocapi-info-module",
+  "description": "Builds OCAPI URIs locally and sends them to remote OOB controllers to get information back.",
+  "parameters": [
+    {
+      "name": "baseuri",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Base URI of OOB controller."
+    },
+    {
+      "name": "category",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Category to execute on OOB controller."
+    },
+    {
+      "name": "command",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Command to execute on OOB controller."
+    },
+    {
+      "name": "job_name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of job for fetching status."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Password for authenticating to OOB controller."
+    },
+    {
+      "name": "proxy_slot_number",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "For proxied inband requests, the slot number of the IOM. Only applies if baseuri is a proxy server."
+    },
+    {
+      "name": "timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "10",
+      "choices": [],
+      "description": "Timeout in seconds for URL requests to OOB controller. Default: 10"
+    },
+    {
+      "name": "username",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Username for authenticating to OOB controller."
+    }
+  ],
+  "examples": [
+    "- name: Get job status\n  community.general.ocapi_info:\n    category: Status\n    command: JobStatus\n    baseuri: \"http://iom1.wdc.com\"\n    jobName: FirmwareUpdate\n    username: \"{{ username }}\"\n    password: \"{{ password }}\""
+  ],
+  "return_values": [
+    {
+      "name": "details",
+      "type": "list",
+      "description": "Details of the relevant operation. Applies to command=JobStatus. Returned: when supported",
+      "returned": "when"
+    },
+    {
+      "name": "msg",
+      "type": "string",
+      "description": "Message with action result or error description. Returned: always Sample: \"Action was successful\"",
+      "returned": "always"
+    },
+    {
+      "name": "operationHealth",
+      "type": "string",
+      "description": "Health of the operation. Applies to command=JobStatus. See OCAPI documentation for details. Returned: when supported Sample: \"OK\"",
+      "returned": "when"
+    },
+    {
+      "name": "operationHealthId",
+      "type": "string",
+      "description": "Integer value for health of the operation (corresponds to operationHealth). Applies to command=JobStatus. See OCAPI documentation for details. Returned: when supported Sample: \"OK\"",
+      "returned": "when"
+    },
+    {
+      "name": "operationStatus",
+      "type": "string",
+      "description": "Status of the relevant operation. Applies to command=JobStatus. See OCAPI documentation for details. Returned: when supported Sample: \"Activate needed\"",
+      "returned": "when"
+    },
+    {
+      "name": "operationStatusId",
+      "type": "integer",
+      "description": "Integer value of status (corresponds to operationStatus). Applies to command=JobStatus. See OCAPI documentation for details. Returned: when supported Sample: 65540",
+      "returned": "when"
+    },
+    {
+      "name": "percentComplete",
+      "type": "integer",
+      "description": "Percent complete of the relevant operation. Applies to command=JobStatus. Returned: when supported Sample: 99",
+      "returned": "when"
+    },
+    {
+      "name": "status",
+      "type": "dictionary",
+      "description": "Dictionary containing status information. See OCAPI documentation for details. Returned: when supported Sample: {\"Details\": [\"None\"], \"Health\": [{\"ID\": 5, \"Name\": \"OK\"}], \"State\": {\"ID\": 16, \"Name\": \"In service\"}}",
+      "returned": "when"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/ocapi_info_module#ansible-collections-community-general-ocapi-info-module.html",
+  "parsed_at": "2026-04-11T13:53:21.516509"
+}

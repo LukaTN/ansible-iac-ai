@@ -1,0 +1,367 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.utm_proxy_exception",
+  "slug": "utm_proxy_exception_module#ansible-collections-community-general-utm-proxy-exception-module",
+  "description": "Create, update or destroy a reverse_proxy exception entry in SOPHOS UTM.",
+  "parameters": [
+    {
+      "name": "headers",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "A dictionary of additional headers to be sent to POST and PUT requests. Is needed for some modules. Default: {}"
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the object that identifies the entry."
+    },
+    {
+      "name": "op",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"AND\" ← (default)",
+        "\"OR\""
+      ],
+      "description": "The operand to be used with the entries of the path parameter. Choices: \"AND\" ← (default) \"OR\""
+    },
+    {
+      "name": "path",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "The paths the exception in the reverse proxy is defined for. Default: []"
+    },
+    {
+      "name": "skip_custom_threats_filters",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "A list of threats to be skipped. Default: []"
+    },
+    {
+      "name": "skip_threats_filter_categories",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "Define which categories of threats are skipped. Default: []"
+    },
+    {
+      "name": "skipav",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Skip the Antivirus Scanning. Choices: false ← (default) true"
+    },
+    {
+      "name": "skipbadclients",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Block clients with bad reputation. Choices: false ← (default) true"
+    },
+    {
+      "name": "skipcookie",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Skip the Cookie Signing check. Choices: false ← (default) true"
+    },
+    {
+      "name": "skipform",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Enable form hardening. Choices: false ← (default) true"
+    },
+    {
+      "name": "skipform_missingtoken",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Enable form hardening with missing tokens. Choices: false ← (default) true"
+    },
+    {
+      "name": "skiphtmlrewrite",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Protection against SQL. Choices: false ← (default) true"
+    },
+    {
+      "name": "skiptft",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Enable true file type control. Choices: false ← (default) true"
+    },
+    {
+      "name": "skipurl",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Enable static URL hardening. Choices: false ← (default) true"
+    },
+    {
+      "name": "source",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "Define which categories of threats are skipped. Default: []"
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)"
+      ],
+      "description": "The desired state of the object. present creates or updates an object. absent deletes an object if present. Choices: \"absent\" \"present\" ← (default)"
+    },
+    {
+      "name": "status",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Status of the exception rule set. Choices: false true ← (default)"
+    },
+    {
+      "name": "utm_host",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The REST Endpoint of the Sophos UTM."
+    },
+    {
+      "name": "utm_port",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "4444",
+      "choices": [],
+      "description": "The port of the REST interface. Default: 4444"
+    },
+    {
+      "name": "utm_protocol",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"http\"",
+        "\"https\" ← (default)"
+      ],
+      "description": "The protocol of the REST Endpoint. Choices: \"http\" \"https\" ← (default)"
+    },
+    {
+      "name": "utm_token",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The token used to identify at the REST-API. See https://www.sophos.com/en-us/medialibrary/PDFs/documentation/UTMonAWS/Sophos-UTM-RESTful-API.pdf?la=en, Chapter 2.4.2."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether the REST interface’s SSL certificate should be verified or not. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Create UTM proxy_exception\n  community.general.utm_proxy_exception:\n    utm_host: sophos.host.name\n    utm_token: abcdefghijklmno1234\n    name: TestExceptionEntry\n    backend: REF_OBJECT_STRING\n    state: present\n\n- name: Remove UTM proxy_exception\n  community.general.utm_proxy_exception:\n    utm_host: sophos.host.name\n    utm_token: abcdefghijklmno1234\n    name: TestExceptionEntry\n    state: absent"
+  ],
+  "return_values": [
+    {
+      "name": "result",
+      "type": "complex",
+      "description": "The utm object that was created. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "_locked",
+      "type": "boolean",
+      "description": "Whether or not the object is currently locked. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "_ref",
+      "type": "string",
+      "description": "The reference name of the object. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "_type",
+      "type": "string",
+      "description": "The type of the object. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "comment",
+      "type": "string",
+      "description": "The optional comment string. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "The name of the object. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "op",
+      "type": "string",
+      "description": "The operand to be used with the entries of the path parameter. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "path",
+      "type": "list",
+      "description": "The paths the exception in the reverse proxy is defined for. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "skip_custom_threats_filters",
+      "type": "list",
+      "description": "A list of threats to be skipped. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "skip_threats_filter_categories",
+      "type": "list",
+      "description": "Define which categories of threats are skipped. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "skipav",
+      "type": "boolean",
+      "description": "Skip the Antivirus Scanning. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "skipbadclients",
+      "type": "boolean",
+      "description": "Block clients with bad reputation. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "skipcookie",
+      "type": "boolean",
+      "description": "Skip the Cookie Signing check. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "skipform",
+      "type": "boolean",
+      "description": "Enable form hardening. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "skipform_missingtoken",
+      "type": "boolean",
+      "description": "Enable form hardening with missing tokens. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "skiphtmlrewrite",
+      "type": "boolean",
+      "description": "Protection against SQL. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "skiptft",
+      "type": "boolean",
+      "description": "Enable true file type control. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "skipurl",
+      "type": "boolean",
+      "description": "Enable static URL hardening. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "source",
+      "type": "list",
+      "description": "Define which categories of threats are skipped. Returned: success",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/utm_proxy_exception_module.html",
+  "parsed_at": "2026-04-13T16:30:00.144484"
+}

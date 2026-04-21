@@ -1,0 +1,219 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.archive",
+  "slug": "archive_module#ansible-collections-community-general-archive-module",
+  "description": "Creates or extends an archive.",
+  "parameters": [
+    {
+      "name": "attributes",
+      "aliases": [
+        "attr"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The attributes the resulting filesystem object should have. To get supported flags look at the man page for chattr on the target system. This string should contain the attributes in the same order as the one displayed by lsattr. The = operator is assumed as default, otherwise + or - operators need to be included in the string."
+    },
+    {
+      "name": "dest",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The file name of the destination archive. The parent directory must exists on the remote host. This is required when path refers to multiple files by either specifying a glob, a directory or multiple paths in a list. If the destination archive already exists, it is truncated and overwritten."
+    },
+    {
+      "name": "exclude_path",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "Remote absolute path, glob, or list of paths or globs for the file or files to exclude from path list and glob expansion. Use exclusion_patterns to instead exclude files or subdirectories below any of the paths from the path list. Default: []"
+    },
+    {
+      "name": "exclusion_patterns",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Glob style patterns to exclude files or directories from the resulting archive. This differs from exclude_path which applies only to the source paths from path."
+    },
+    {
+      "name": "force_archive",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "when",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Allows you to force the module to treat this as an archive even if only a single file is specified. By default when a single file is specified it is compressed only (not archived). Enable this if you want to use ansible.builtin.unarchive on an archive of a single file created with this module. Choices: false ← (default) true"
+    },
+    {
+      "name": "format",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"bz2\"",
+        "\"gz\" ← (default)",
+        "\"tar\"",
+        "\"xz\"",
+        "\"zip\""
+      ],
+      "description": "The type of compression to use. Choices: \"bz2\" \"gz\" ← (default) \"tar\" \"xz\" \"zip\""
+    },
+    {
+      "name": "group",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of the group that should own the filesystem object, as would be fed to chown. When left unspecified, it uses the current group of the current user unless you are root, in which case it can preserve the previous ownership."
+    },
+    {
+      "name": "mode",
+      "aliases": [],
+      "type": "any",
+      "required": false,
+      "default": "umask",
+      "choices": [],
+      "description": "The permissions the resulting filesystem object should have. For those used to /usr/bin/chmod remember that modes are actually octal numbers. You must give Ansible enough information to parse them correctly. For consistent results, quote octal numbers (for example, '644' or '1777') so Ansible receives a string and can do its own conversion from string into number. Adding a leading zero (for example, 0755) works sometimes, but can fail in loops and some other circumstances. Giving Ansible a number without following either of these rules will end up with a decimal number which will have unexpected results. As of Ansible 1.8, the mode may be specified as a symbolic mode (for example, u+rwx or u=rw,g=r,o=r). If mode is not specified and the destination filesystem object does not exist, the default umask on the system will be used when setting the mode for the newly created filesystem object. If mode is not specified and the destination filesystem object does exist, the mode of the existing filesystem object will be used. Specifying mode is the best way to ensure filesystem objects are created with the correct permissions. See CVE-2020-1736 for further details."
+    },
+    {
+      "name": "owner",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of the user that should own the filesystem object, as would be fed to chown. When left unspecified, it uses the current user unless you are root, in which case it can preserve the previous ownership. Specifying a numeric username will be assumed to be a user ID and not a username. Avoid numeric usernames to avoid this confusion."
+    },
+    {
+      "name": "path",
+      "aliases": [],
+      "type": "list",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Remote absolute path, glob, or list of paths or globs for the file or files to compress or archive."
+    },
+    {
+      "name": "remove",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Remove any added source files and trees after adding to archive. Choices: false ← (default) true"
+    },
+    {
+      "name": "selevel",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The level part of the SELinux filesystem object context. This is the MLS/MCS attribute, sometimes known as the range. When set to _default, it will use the level portion of the policy if available."
+    },
+    {
+      "name": "serole",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The role part of the SELinux filesystem object context. When set to _default, it will use the role portion of the policy if available."
+    },
+    {
+      "name": "setype",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The type part of the SELinux filesystem object context. When set to _default, it will use the type portion of the policy if available."
+    },
+    {
+      "name": "seuser",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "it",
+      "choices": [],
+      "description": "The user part of the SELinux filesystem object context. By default it uses the system policy, where applicable. When set to _default, it will use the user portion of the policy if available."
+    },
+    {
+      "name": "unsafe_writes",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "this",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Influence when to use atomic operation to prevent data corruption or inconsistent reads from the target filesystem object. By default this module uses atomic operations to prevent data corruption or inconsistent reads from the target filesystem objects, but sometimes systems are configured or just broken in ways that prevent this. One example is docker mounted filesystem objects, which cannot be updated atomically from inside the container and can only be written in an unsafe manner. This option allows Ansible to fall back to unsafe methods of updating filesystem objects when atomic operations fail (however, it doesn’t force Ansible to perform unsafe writes). IMPORTANT! Unsafe writes are subject to race conditions and can lead to data corruption. Choices: false ← (default) true"
+    }
+  ],
+  "examples": [
+    "- name: Compress directory /path/to/foo/ into /path/to/foo.tgz\n  community.general.archive:\n    path: /path/to/foo\n    dest: /path/to/foo.tgz\n\n- name: Compress regular file /path/to/foo into /path/to/foo.gz and remove it\n  community.general.archive:\n    path: /path/to/foo\n    remove: true\n\n- name: Create a zip archive of /path/to/foo\n  community.general.archive:\n    path: /path/to/foo\n    format: zip\n\n- name: Create a bz2 archive of multiple files, rooted at /path\n  community.general.archive:\n    path:\n      - /path/to/foo\n      - /path/wong/foo\n    dest: /path/file.tar.bz2\n    format: bz2\n\n- name: Create a bz2 archive of a globbed path, while excluding specific dirnames\n  community.general.archive:\n    path:\n      - /path/to/foo/*\n    dest: /path/file.tar.bz2\n    exclude_path:\n      - /path/to/foo/bar\n      - /path/to/foo/baz\n    format: bz2\n\n- name: Create a bz2 archive of a globbed path, while excluding a glob of dirnames\n  community.general.archive:\n    path:\n      - /path/to/foo/*\n    dest: /path/file.tar.bz2\n    exclude_path:\n      - /path/to/foo/ba*\n    format: bz2\n\n- name: Use gzip to compress a single archive (i.e don't archive it first with tar)\n  community.general.archive:\n    path: /path/to/foo/single.file\n    dest: /path/file.gz\n    format: gz\n\n- name: Create a tar.gz archive of a single file.\n  community.general.archive:\n    path: /path/to/foo/single.file\n    dest: /path/file.tar.gz\n    format: gz\n    force_archive: true"
+  ],
+  "return_values": [
+    {
+      "name": "archived",
+      "type": "list",
+      "description": "Any files that were compressed or added to the archive. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "arcroot",
+      "type": "string",
+      "description": "The archive root. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "dest_state",
+      "type": "string",
+      "description": "The state of the dest file. absent when the file does not exist. archive when the file is an archive. compress when the file is compressed, but not an archive. incomplete when the file is an archive, but some files under path were not found. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "expanded_exclude_paths",
+      "type": "list",
+      "description": "The list of matching exclude paths from the exclude_path argument. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "expanded_paths",
+      "type": "list",
+      "description": "The list of matching paths from paths argument. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "missing",
+      "type": "list",
+      "description": "Any files that were missing from the source. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "state",
+      "type": "string",
+      "description": "The state of the input path. Returned: always",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/archive_module#ansible-collections-community-general-archive-module.html",
+  "parsed_at": "2026-04-11T13:53:10.930321"
+}

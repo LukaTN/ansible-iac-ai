@@ -1,0 +1,39 @@
+{
+  "collection_ns": "ansible_builtin",
+  "collection": "ansible.builtin",
+  "module": "ansible.builtin.service_facts",
+  "slug": "service_facts_module#ansible-collections-ansible-builtin-service-facts-module",
+  "description": "Return service state information as fact data for various service management utilities.",
+  "parameters": [],
+  "examples": [
+    "- name: Populate service facts\n  ansible.builtin.service_facts:\n\n- name: Print service facts\n  ansible.builtin.debug:\n    var: ansible_facts.services\n\n- name: show names of existing systemd services, sometimes systemd knows about services that were never installed\n  debug: msg={{ existing_systemd_services | map(attribute='name') }}\n  vars:\n     known_systemd_services: \"{{ ansible_facts['services'].values() | selectattr('source', 'equalto', 'systemd') }}\"\n     existing_systemd_services: \"{{ known_systemd_services | rejectattr('status', 'equalto', 'not-found') }}\"\n\n- name: restart systemd service if it exists\n  service:\n    state: restarted\n    name: ntpd.service\n  when: ansible_facts['services']['ntpd.service']['status'] | default('not-found') != 'not-found'"
+  ],
+  "return_values": [
+    {
+      "name": "check_mode",
+      "type": "",
+      "description": "Support: full",
+      "returned": ""
+    },
+    {
+      "name": "diff_mode",
+      "type": "",
+      "description": "Support: none",
+      "returned": ""
+    },
+    {
+      "name": "facts",
+      "type": "",
+      "description": "Support: full",
+      "returned": ""
+    },
+    {
+      "name": "platform",
+      "type": "",
+      "description": "Platform: posix",
+      "returned": ""
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/service_facts_module.html",
+  "parsed_at": "2026-04-13T16:29:25.994691"
+}

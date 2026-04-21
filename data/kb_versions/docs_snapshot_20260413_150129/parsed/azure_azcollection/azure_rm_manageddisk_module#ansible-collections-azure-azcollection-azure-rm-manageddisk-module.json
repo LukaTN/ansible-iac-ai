@@ -1,0 +1,795 @@
+{
+  "collection_ns": "azure_azcollection",
+  "collection": "azure.azcollection",
+  "module": "azure.azcollection.azure_rm_manageddisk",
+  "slug": "azure_rm_manageddisk_module#ansible-collections-azure-azcollection-azure-rm-manageddisk-module",
+  "description": "Create, update and delete an Azure Managed Disk.",
+  "parameters": [
+    {
+      "name": "ad_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory username. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "adfs_authority_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure AD authority url. Use when authenticating with Username/password, and has your own ADFS authority."
+    },
+    {
+      "name": "api_profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "Selects an API profile to use when communicating with Azure services. Default value of latest is appropriate for public clouds; future values will allow use with Azure Stack. Default: \"latest\""
+    },
+    {
+      "name": "append_tags",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Use to control if tags field is canonical or just appends to existing tags. When canonical, any tags not found in the tags parameter will be removed from the object’s metadata. Choices: false true ← (default)"
+    },
+    {
+      "name": "attach_caching",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"\"",
+        "\"read_only\"",
+        "\"read_write\""
+      ],
+      "description": "Disk caching policy controlled by VM. Will be used when attached to the VM defined by managed_by. If this option is different from the current caching policy, the managed disk will be deattached and attached with current caching option again. Choices: \"\" \"read_only\" \"read_write\""
+    },
+    {
+      "name": "auth_source",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "az",
+      "choices": [
+        "\"auto\" ← (default)",
+        "\"cli\"",
+        "\"credential_file\"",
+        "\"env\"",
+        "\"msi\""
+      ],
+      "description": "Controls the source of the credentials to use for authentication. Can also be set via the ANSIBLE_AZURE_AUTH_SOURCE environment variable. When set to auto (the default) the precedence is module parameters -> env -> credential_file -> cli. When set to env, the credentials will be read from the environment variables When set to credential_file, it will read the profile from ~/.azure/credentials. When set to cli, the credentials will be sources from the Azure CLI profile. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if more than one is present otherwise the default az cli subscription is used. When set to msi, the host machine must be an azure resource with an enabled MSI extension. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if the resource is granted access to more than one subscription, otherwise the first subscription is chosen. The msi was added in Ansible 2.6. Choices: \"auto\" ← (default) \"cli\" \"credential_file\" \"env\" \"msi\""
+    },
+    {
+      "name": "cert_validation_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ignore\"",
+        "\"validate\""
+      ],
+      "description": "Controls the certificate validation behavior for Azure endpoints. By default, all modules will validate the server certificate, but when an HTTPS proxy is in use, or against Azure Stack, it may be necessary to disable this behavior by passing ignore. Can also be set via credential file profile or the AZURE_CERT_VALIDATION environment variable. Choices: \"ignore\" \"validate\""
+    },
+    {
+      "name": "client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client ID. Use when authenticating with a Service Principal or Managed Identity (msi). Can also be set via the AZURE_CLIENT_ID environment variable."
+    },
+    {
+      "name": "cloud_environment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "AzureCloud",
+      "choices": [],
+      "description": "For cloud environments other than the US public cloud, the environment name (as defined by Azure Python SDK, eg, AzureChinaCloud, AzureUSGovernment), or a metadata discovery endpoint URL (required for Azure Stack). Can also be set via credential file profile or the AZURE_CLOUD_ENVIRONMENT environment variable. Default: \"AzureCloud\""
+    },
+    {
+      "name": "create_option",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"empty\"",
+        "\"import\"",
+        "\"copy\"",
+        "\"upload\"",
+        "\"fromimage\"",
+        "\"restore\"",
+        "\"uploadpreparedsecure\""
+      ],
+      "description": "import from a VHD file in source_uri and copy from previous managed disk source_uri. Choices: \"empty\" \"import\" \"copy\" \"upload\" \"fromimage\" \"restore\" \"uploadpreparedsecure\""
+    },
+    {
+      "name": "disable_instance_discovery",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Determines whether or not instance discovery is performed when attempting to authenticate. Setting this to true will completely disable both instance discovery and authority validation. This functionality is intended for use in scenarios where the metadata endpoint cannot be reached such as in private clouds or Azure Stack. The process of instance discovery entails retrieving authority metadata from https://login.microsoft.com/ to validate the authority. By setting this to **True**, the validation of the authority is disabled. As a result, it is crucial to ensure that the configured authority host is valid and trustworthy. Set via credential file profile or the AZURE_DISABLE_INSTANCE_DISCOVERY environment variable. Choices: false ← (default) true"
+    },
+    {
+      "name": "disk_access_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "ARM ID of the DiskAccess resource for using private endpoints on disks."
+    },
+    {
+      "name": "disk_iops_read_only",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The total throughput (MBps) that will be allowed across all VMs mounting the shared disk as ReadOnly. One operation can transfer between 4k and 256k bytes."
+    },
+    {
+      "name": "disk_iops_read_write",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The number of IOPS allowed for this disk. Only settable for storage_account_type=UltraSSD_LRS disks. One operation can transfer between 4k and 256k bytes."
+    },
+    {
+      "name": "disk_m_bps_read_only",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The total throughput (MBps) that will be allowed across all VMs mounting the shared disk as ReadOnly. MBps means millions of bytes per second - MB here uses the ISO notation, of powers of 10."
+    },
+    {
+      "name": "disk_m_bps_read_write",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The bandwidth allowed for this disk. Only settable for storage_account_type=UltraSSD_LRS disks. One operation can transfer between 4k and 256k bytes."
+    },
+    {
+      "name": "disk_size_gb",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Size in GB of the managed disk to be created. If create_option=copy then the value must be greater than or equal to the source’s size."
+    },
+    {
+      "name": "gallery_image_reference",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Required if creating from a Gallery Image. The id/sharedGalleryImageId/communityGalleryImageId of the ImageDiskReference will be the ARM id of the shared galley image version from which to create a disk."
+    },
+    {
+      "name": "community_gallery_image_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A relative uri containing a community Azure Compute Gallery image reference."
+    },
+    {
+      "name": "id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A relative uri containing either a Platform Image Repository, user image, or Azure Compute Gallery image reference."
+    },
+    {
+      "name": "shared_gallery_image_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A relative uri containing a direct shared Azure Compute Gallery image reference."
+    },
+    {
+      "name": "image_reference",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Disk source information for PIR or user images or Gallery Image."
+    },
+    {
+      "name": "location",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Valid Azure location. Defaults to location of the resource group."
+    },
+    {
+      "name": "log_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "log_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "logical_sector_size",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Logical sector size in bytes for Ultra disks. Supported values are 512 ad 4096. 4096 is the default."
+    },
+    {
+      "name": "lun",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The logical unit number for data disk. This value is used to identify data disks within the VM and therefore must be unique for each data disk attached to a VM."
+    },
+    {
+      "name": "managed_by",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of an existing virtual machine with which the disk is or will be associated, this VM should be in the same resource group. To detach a disk from a vm, explicitly set to ‘’. If this option is unset, the value will not be changed."
+    },
+    {
+      "name": "managed_by_extended",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of name and resource group of the VMs that have the disk attached. max_shares should be set to a value greater than one for disks to allow attaching them to multiple VMs."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The name of the attache VM."
+    },
+    {
+      "name": "resource_group",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The resource group of the attache VM."
+    },
+    {
+      "name": "max_shares",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The maximum number of VMs that can attach to the disk at the same time. Value greater than one indicates a disk that can be mounted on multiple VMs at the same time."
+    },
+    {
+      "name": "network_access_policy",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"AllowAll\"",
+        "\"AllowPrivate\"",
+        "\"DenyAll\""
+      ],
+      "description": "Policy for accessing the disk via network. Choices: \"AllowAll\" \"AllowPrivate\" \"DenyAll\""
+    },
+    {
+      "name": "os_type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"linux\"",
+        "\"windows\"",
+        "\"Linux\"",
+        "\"Windows\""
+      ],
+      "description": "Type of Operating System. Used when create_option=copy or create_option=import and the source is an OS disk. If omitted during creation, no value is set. If omitted during an update, no change is made. Once set, this value cannot be cleared. Choices: \"linux\" \"windows\" \"Linux\" \"Windows\""
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory user password. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "performance_plus",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Set this flag to true to get a boost on the performance target of the disk deployed, see here on the respective performance target. This flag can only be set on disk creation time and cannot be disabled after enabled. Choices: false true"
+    },
+    {
+      "name": "profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security profile found in ~/.azure/credentials file."
+    },
+    {
+      "name": "public_network_access",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"Enabled\"",
+        "\"Disabled\""
+      ],
+      "description": "Policy for controlling export on the disk. Choices: \"Enabled\" \"Disabled\""
+    },
+    {
+      "name": "secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client secret. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "security_profile",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Contains the security related information for the resource."
+    },
+    {
+      "name": "secure_vm_disk_encryption_set_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "ResourceId of the disk encryption set associated to Confidential VM supported disk encrypted with customer managed key."
+    },
+    {
+      "name": "security_type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"TrustedLaunch\"",
+        "\"ConfidentialVM_VMGuestStateOnlyEncryptedWithPlatformKey\"",
+        "\"ConfidentialVM_DiskEncryptedWithPlatformKey\"",
+        "\"ConfidentialVM_DiskEncryptedWithCustomerKey\""
+      ],
+      "description": "Specifies the SecurityType of the VM. Applicable for OS disks only. Choices: \"TrustedLaunch\" \"ConfidentialVM_VMGuestStateOnlyEncryptedWithPlatformKey\" \"ConfidentialVM_DiskEncryptedWithPlatformKey\" \"ConfidentialVM_DiskEncryptedWithCustomerKey\""
+    },
+    {
+      "name": "source_resource_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "If create_option=copy, this is the ARM id of the source snapshot or disk."
+    },
+    {
+      "name": "source_uri",
+      "aliases": [
+        "source_resource_uri"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "URI to a valid VHD file to be used or the resource ID of the managed disk to copy."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)"
+      ],
+      "description": "Assert the state of the managed disk. Use present to create or update a managed disk and absent to delete a managed disk. Choices: \"absent\" \"present\" ← (default)"
+    },
+    {
+      "name": "storage_account_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The full path to the storage account the image is to be imported from. Required when create_option=import."
+    },
+    {
+      "name": "storage_account_type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"Standard_LRS\"",
+        "\"StandardSSD_LRS\"",
+        "\"StandardSSD_ZRS\"",
+        "\"Premium_LRS\"",
+        "\"PremiumV2_LRS\"",
+        "\"Premium_ZRS\"",
+        "\"UltraSSD_LRS\""
+      ],
+      "description": "Type of storage for the managed disk. If not specified, the disk is created as Standard_LRS. Standard_LRS is for Standard HDD. StandardSSD_LRS (added in 2.8) is for Standard SSD. StandardSSD_ZRS is for Standard SSD Zone-redundant. Premium_LRS is for Premium SSD. Premium_ZRS is for Premium SSD Zone-redundant. UltraSSD_LRS (added in 2.8) is for Ultra SSD, which is only available on select instance types. See https://docs.microsoft.com/en-us/azure/virtual-machines/windows/disks-types for more information about disk types. Choices: \"Standard_LRS\" \"StandardSSD_LRS\" \"StandardSSD_ZRS\" \"Premium_LRS\" \"PremiumV2_LRS\" \"Premium_ZRS\" \"UltraSSD_LRS\""
+    },
+    {
+      "name": "subscription_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Your Azure subscription Id."
+    },
+    {
+      "name": "tags",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Dictionary of string:string pairs to assign as metadata to the object. Metadata tags on the object will be updated with any provided values. To remove tags set append_tags option to false. Currently, Azure DNS zones and Traffic Manager services also don’t allow the use of spaces in the tag. Azure Front Door doesn’t support the use of Azure Automation and Azure CDN only support 15 tags on resources."
+    },
+    {
+      "name": "tenant",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure tenant ID. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "thumbprint",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The thumbprint of the private key specified in x509_certificate_path. Use when authenticating with a Service Principal. Required if x509_certificate_path is defined."
+    },
+    {
+      "name": "tier",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"P1\"",
+        "\"P2\"",
+        "\"P3\"",
+        "\"P4\"",
+        "\"P6\"",
+        "\"P10\"",
+        "\"P15\"",
+        "\"P20\"",
+        "\"P30\"",
+        "\"P40\"",
+        "\"P50\"",
+        "\"P60\"",
+        "\"P70\"",
+        "\"P80\""
+      ],
+      "description": "Performance tier assigned to this disk. Only settable for storage_account_type=Premium_LRS disks. Allowed values are P1, P2, P3, P4, P6, P10, P15, P20, P30, P40, P50, P60, P70, P80 See https://learn.microsoft.com/en-us/azure/virtual-machines/disks-change-performance for more information about disk performance tiers. Does not apply to Ultra disks. Choices: \"P1\" \"P2\" \"P3\" \"P4\" \"P6\" \"P10\" \"P15\" \"P20\" \"P30\" \"P40\" \"P50\" \"P60\" \"P70\" \"P80\""
+    },
+    {
+      "name": "upload_size_bytes",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "If create_option=upload, this is the size of the contents of the upload including the VHD footer. This value should be between 20972032 (20 MiB + 512 bytes for the VHD footer) and 35183298347520 bytes (32 TiB + 512 bytes for the VHD footer)."
+    },
+    {
+      "name": "write_accelerator_enabled",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Specifies whether writeAccelerator should be enabled or disabled on the disk. Choices: false true"
+    },
+    {
+      "name": "x509_certificate_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the X509 certificate used to create the service principal in PEM format. The certificate must be appended to the private key. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "zone",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"1\"",
+        "\"2\"",
+        "\"3\"",
+        "\"\""
+      ],
+      "description": "The Azure managed disk’s zone. Allowed values are 1, 2, 3 and ''. Choices: \"1\" \"2\" \"3\" \"\""
+    }
+  ],
+  "examples": [
+    "- name: Create managed disk\n  azure_rm_manageddisk:\n    name: mymanageddisk\n    location: eastus\n    resource_group: myResourceGroup\n    disk_size_gb: 4\n\n- name: Create managed operating system disk from page blob\n  azure_rm_manageddisk:\n    name: mymanageddisk\n    location: eastus2\n    resource_group: myResourceGroup\n    create_option: import\n    source_uri: https://storageaccountname.blob.core.windows.net/containername/blob-name.vhd\n    storage_account_id: /subscriptions/<uuid>/resourceGroups/myResourceGroup/providers/Microsoft.Storage/storageAccounts/storageaccountname\n    os_type: windows\n    storage_account_type: Premium_LRS\n\n- name: Create managed disk with I(create_option=upload)\n  azure_rm_manageddisk:\n    resource_group: myResourceGroup\n    name: mymanageddisk\n    storage_account_type: \"Standard_LRS\"\n    upload_size_bytes: 20972032\n    network_access_policy: DenyAll\n    public_network_access: Disabled\n    create_option: upload\n\n- name: Create managed disk with I(create_option=fromimage)\n  azure_rm_manageddisk:\n    resource_group: \"{{ resource_group }}\"\n    name: \"md{{ rpfx }}\"\n    storage_account_type: \"Standard_LRS\"\n    disk_size_gb: 1024\n    network_access_policy: DenyAll\n    public_network_access: Disabled\n    create_option: fromimage\n    os_type: windows\n    security_profile:\n      security_type: TrustedLaunch\n    gallery_image_reference:\n      id: \"/subscriptions/xxxx/resourceGroups/testRG/providers/Microsoft.Compute/galleries/Gallery01/images/windowsVMimage/versions/0.0.1\"\n\n- name: Create managed disk with I(create_option=restore)\n  azure_rm_manageddisk:\n    resource_group: \"{{ resource_group }}\"\n    name: \"md{{ rpfx }}\"\n    storage_account_type: \"Standard_LRS\"\n    disk_size_gb: 1024\n    network_access_policy: DenyAll\n    public_network_access: Disabled\n    performance_plus: true\n    source_resource_id: \"/subscriptions/xxxx/resourceGroups/testRG/providers/Microsoft.Compute/\n                         restorePointCollections/point01/restorePoints/restorepoint01/diskRestorePoints/testVM_OsDisk_1\"\n    create_option: restore\n\n- name: Create managed disk with I(create_option=uploadpreparedsecure)\n  azure_rm_manageddisk:\n    resource_group: \"{{ resource_group }}\"\n    name: \"md{{ rpfx }}\"\n    storage_account_type: \"Standard_LRS\"\n    upload_size_bytes: 20972032\n    network_access_policy: DenyAll\n    public_network_access: Disabled\n    create_option: uploadpreparedsecure\n    security_profile:\n      security_type: TrustedLaunch\n\n- name: Mount the managed disk to VM\n  azure_rm_manageddisk:\n    name: mymanageddisk\n    location: eastus\n    resource_group: myResourceGroup\n    disk_size_gb: 4\n    managed_by: testvm001\n    attach_caching: read_only\n\n- name: Mount the managed disk to multiple VMs\n  azure_rm_manageddisk:\n    resource_group: myResourceGroup\n    name: freddisk04\n    max_shares: 4\n    disk_size_gb: 1024\n    storage_account_type: Premium_LRS\n    managed_by_extended:\n      - resource_group: myResourceGroup01\n        name: testVM01\n      - resource_group: myResourceGroup02\n        name: testVM02\n    zone: 1\n\n- name: Unmount the managed disk to VM\n  azure_rm_manageddisk:\n    name: mymanageddisk\n    location: eastus\n    resource_group: myResourceGroup\n    managed_by: ''\n    disk_size_gb: 4\n\n- name: Delete managed disk\n  azure_rm_manageddisk:\n    name: mymanageddisk\n    location: eastus\n    resource_group: myResourceGroup\n    state: absent"
+  ],
+  "return_values": [
+    {
+      "name": "changed",
+      "type": "boolean",
+      "description": "Whether or not the resource has changed. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "state",
+      "type": "complex",
+      "description": "Current state of the managed disk. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "create_option",
+      "type": "string",
+      "description": "Create option of the disk. Returned: success Sample: \"copy\"",
+      "returned": "success"
+    },
+    {
+      "name": "disk_access_id",
+      "type": "string",
+      "description": "ARM ID of the DiskAccess resource for using private endpoints on disks. Returned: always Sample: \"/subscriptions/*********/resourceGroups/myRG/providers/Microsoft.Compute/diskAccesses/diskacc\"",
+      "returned": "always"
+    },
+    {
+      "name": "disk_iops_read_only",
+      "type": "integer",
+      "description": "The total throughput (MBps) that will be allowed across all VMs mounting the shared disk as ReadOnly. One operation can transfer between 4k and 256k bytes. Returned: always Sample: 200",
+      "returned": "always"
+    },
+    {
+      "name": "disk_iops_read_write",
+      "type": "integer",
+      "description": "The number of IOPS allowed for this disk. Only settable for storage_account_type=UltraSSD_LRS disks. One operation can transfer between 4k and 256k bytes. Returned: always Sample: 200",
+      "returned": "always"
+    },
+    {
+      "name": "disk_m_bps_read_only",
+      "type": "integer",
+      "description": "The total throughput (MBps) that will be allowed across all VMs mounting the shared disk as ReadOnly. MBps means millions of bytes per second - MB here uses the ISO notation, of powers of 10. Returned: always Sample: 30",
+      "returned": "always"
+    },
+    {
+      "name": "disk_m_bps_read_write",
+      "type": "integer",
+      "description": "The bandwidth allowed for this disk. Only settable for storage_account_type=UltraSSD_LRS disks. One operation can transfer between 4k and 256k bytes. Returned: always Sample: 30",
+      "returned": "always"
+    },
+    {
+      "name": "disk_size_gb",
+      "type": "string",
+      "description": "Size in GB of the managed disk to be created. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "gallery_image_reference",
+      "type": "dictionary",
+      "description": "The Gallery Image info. Returned: always Sample: \"None\"",
+      "returned": "always"
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "description": "Resource id. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "image_reference",
+      "type": "dictionary",
+      "description": "Disk source information for PIR or user images or Gallery Image. Returned: always Sample: \"None\"",
+      "returned": "always"
+    },
+    {
+      "name": "location",
+      "type": "string",
+      "description": "Valid Azure location. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "logical_sector_size",
+      "type": "integer",
+      "description": "Logical sector size in bytes for Ultra disks. Returned: always Sample: \"None\"",
+      "returned": "always"
+    },
+    {
+      "name": "managed_by",
+      "type": "string",
+      "description": "Name of an existing virtual machine with which the disk is or will be associated, this VM should be in the same resource group. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "managed_by_extended",
+      "type": "list",
+      "description": "List ID of an existing virtual machine with which the disk is or will be associated. Returned: success Sample: [\"/subscriptions/xxx-xxx/resourceGroups/myRG/providers/Microsoft.Compute/virtualMachines/testVM\"]",
+      "returned": "success"
+    },
+    {
+      "name": "max_shares",
+      "type": "integer",
+      "description": "The maximum number of VMs that can attach to the disk at the same time. Value greater than one indicates a disk that can be mounted on multiple VMs at the same time. Returned: success Sample: 3",
+      "returned": "success"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "Name of the managed disk. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "network_access_policy",
+      "type": "string",
+      "description": "Policy for accessing the disk via network. Returned: always Sample: \"AllowAll\"",
+      "returned": "always"
+    },
+    {
+      "name": "os_type",
+      "type": "string",
+      "description": "Type of Operating System. Returned: success Sample: \"linux\"",
+      "returned": "success"
+    },
+    {
+      "name": "performance_plus",
+      "type": "boolean",
+      "description": "The flag of the performance target of the disk deployed. Returned: always Sample: false",
+      "returned": "always"
+    },
+    {
+      "name": "public_network_access",
+      "type": "string",
+      "description": "Policy for controlling export on the disk. Returned: always Sample: \"Enabled\"",
+      "returned": "always"
+    },
+    {
+      "name": "security_profile",
+      "type": "complex",
+      "description": "The security related information for the resource. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "secure_vm_disk_encryption_set_id",
+      "type": "string",
+      "description": "ResourceId of the disk encryption set associated to Confidential VM supported disk encrypted with customer managed key. Returned: when-used Sample: \"None\"",
+      "returned": "when"
+    },
+    {
+      "name": "security_type",
+      "type": "string",
+      "description": "Specifies the SecurityType of the VM. Returned: when-used Sample: \"TrustedLaunch\"",
+      "returned": "when"
+    },
+    {
+      "name": "source_resource_id",
+      "type": "string",
+      "description": "This is the ARM id of the source snapshot or disk. Returned: always Sample: \"None\"",
+      "returned": "always"
+    },
+    {
+      "name": "source_uri",
+      "type": "string",
+      "description": "URI to a valid VHD file to be used or the resource ID of the managed disk to copy. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "storage_account_id",
+      "type": "string",
+      "description": "The full path to the storage account the image is to be imported from Returned: success Sample: \"/subscriptions/<uuid>/resourceGroups/<resource group name>/providers/Microsoft.Storage/storageAccounts/<storage account name>\"",
+      "returned": "success"
+    },
+    {
+      "name": "storage_account_type",
+      "type": "string",
+      "description": "Type of storage for the managed disk. See https://docs.microsoft.com/en-us/azure/virtual-machines/windows/disks-types for more information about this type. Returned: success Sample: \"Standard_LRS\"",
+      "returned": "success"
+    },
+    {
+      "name": "tags",
+      "type": "dictionary",
+      "description": "Tags to assign to the managed disk. Returned: success Sample: {\"tag\": \"value\"}",
+      "returned": "success"
+    },
+    {
+      "name": "tier",
+      "type": "string",
+      "description": "Performance tier assigned to the managed disk. Returned: success Sample: \"P30\"",
+      "returned": "success"
+    },
+    {
+      "name": "upload_size_bytes",
+      "type": "integer",
+      "description": "This is the size of the contents of the upload including the VHD footer. Returned: always Sample: \"None\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_manageddisk_module#ansible-collections-azure-azcollection-azure-rm-manageddisk-module.html",
+  "parsed_at": "2026-04-11T13:53:00.846430"
+}

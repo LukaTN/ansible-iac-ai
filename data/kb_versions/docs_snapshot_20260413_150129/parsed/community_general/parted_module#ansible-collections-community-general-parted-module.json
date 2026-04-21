@@ -1,0 +1,200 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.parted",
+  "slug": "parted_module#ansible-collections-community-general-parted-module",
+  "description": "This module allows configuring block device partition using the parted command line tool. For a full description of the fields and the options check the GNU parted manual.",
+  "parameters": [
+    {
+      "name": "align",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "alignment.",
+      "choices": [
+        "\"cylinder\"",
+        "\"minimal\"",
+        "\"none\"",
+        "\"optimal\" ← (default)",
+        "\"undefined\""
+      ],
+      "description": "Set alignment for newly created partitions. Use undefined for parted default alignment. Choices: \"cylinder\" \"minimal\" \"none\" \"optimal\" ← (default) \"undefined\""
+    },
+    {
+      "name": "device",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The block device (disk) where to operate. Regular files can also be partitioned, but it is recommended to create a loopback device using losetup to easily access its partitions."
+    },
+    {
+      "name": "flags",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A list of the flags that has to be set on the partition."
+    },
+    {
+      "name": "fs_type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "If specified and the partition does not exist, sets filesystem type to given partition. Parameter optional, but see notes below about negative part_start values."
+    },
+    {
+      "name": "label",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"aix\"",
+        "\"amiga\"",
+        "\"bsd\"",
+        "\"dvh\"",
+        "\"gpt\"",
+        "\"loop\"",
+        "\"mac\"",
+        "\"msdos\" ← (default)",
+        "\"pc98\"",
+        "\"sun\""
+      ],
+      "description": "Disk label type or partition table to use. If device already contains a different label, it is changed to label and any previous partitions are lost. A name must be specified for a gpt partition table. Choices: \"aix\" \"amiga\" \"bsd\" \"dvh\" \"gpt\" \"loop\" \"mac\" \"msdos\" ← (default) \"pc98\" \"sun\""
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Sets the name for the partition number (GPT, Mac, MIPS and PC98 only)."
+    },
+    {
+      "name": "number",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The partition number being affected. Required when performing any action on the disk, except fetching information."
+    },
+    {
+      "name": "part_end",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "100%",
+      "choices": [],
+      "description": "Where the partition ends as offset from the beginning of the disk, that is, the “distance” from the start of the disk. Negative numbers specify distance from the end of the disk. The distance can be specified with all the units supported by parted (except compat) and it is case sensitive, for example 10GiB, 15%. Default: \"100%\""
+    },
+    {
+      "name": "part_start",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "0%",
+      "choices": [],
+      "description": "Where the partition starts as offset from the beginning of the disk, that is, the “distance” from the start of the disk. Negative numbers specify distance from the end of the disk. The distance can be specified with all the units supported by parted (except compat) and it is case sensitive, for example 10GiB, 15%. Using negative values may require setting of fs_type (see notes). Default: \"0%\""
+    },
+    {
+      "name": "part_type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"extended\"",
+        "\"logical\"",
+        "\"primary\" ← (default)"
+      ],
+      "description": "May be specified only with label=msdos or label=dvh. Neither part_type nor name may be used with label=sun. Choices: \"extended\" \"logical\" \"primary\" ← (default)"
+    },
+    {
+      "name": "resize",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Call resizepart on existing partitions to match the size specified by part_end. Choices: false ← (default) true"
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\"",
+        "\"info\" ← (default)"
+      ],
+      "description": "Whether to create or delete a partition. If set to info the module only returns the device information. Choices: \"absent\" \"present\" \"info\" ← (default)"
+    },
+    {
+      "name": "unit",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "unit",
+      "choices": [
+        "\"s\"",
+        "\"B\"",
+        "\"KB\"",
+        "\"KiB\" ← (default)",
+        "\"MB\"",
+        "\"MiB\"",
+        "\"GB\"",
+        "\"GiB\"",
+        "\"TB\"",
+        "\"TiB\"",
+        "\"%\"",
+        "\"cyl\"",
+        "\"chs\"",
+        "\"compact\""
+      ],
+      "description": "Selects the current default unit that Parted uses to display locations and capacities on the disk and to interpret those given by the user if they are not suffixed by an unit. When fetching information about a disk, it is recommended to always specify a unit. Choices: \"s\" \"B\" \"KB\" \"KiB\" ← (default) \"MB\" \"MiB\" \"GB\" \"GiB\" \"TB\" \"TiB\" \"%\" \"cyl\" \"chs\" \"compact\""
+    }
+  ],
+  "examples": [
+    "- name: Create a new ext4 primary partition\n  community.general.parted:\n    device: /dev/sdb\n    number: 1\n    state: present\n    fs_type: ext4\n\n- name: Remove partition number 1\n  community.general.parted:\n    device: /dev/sdb\n    number: 1\n    state: absent\n\n- name: Create a new primary partition with a size of 1GiB\n  community.general.parted:\n    device: /dev/sdb\n    number: 1\n    state: present\n    part_end: 1GiB\n\n- name: Create a new primary partition for LVM\n  community.general.parted:\n    device: /dev/sdb\n    number: 2\n    flags: [lvm]\n    state: present\n    part_start: 1GiB\n\n- name: Create a new primary partition with a size of 1GiB at disk's end\n  community.general.parted:\n    device: /dev/sdb\n    number: 3\n    state: present\n    fs_type: ext3\n    part_start: -1GiB\n\n# Example on how to read info and reuse it in subsequent task\n- name: Read device information (always use unit when probing)\n  community.general.parted: device=/dev/sdb unit=MiB\n  register: sdb_info\n\n- name: Remove all partitions from disk\n  community.general.parted:\n    device: /dev/sdb\n    number: '{{ item.num }}'\n    state: absent\n  loop: '{{ sdb_info.partitions }}'\n\n- name: Extend an existing partition to fill all available space\n  community.general.parted:\n    device: /dev/sdb\n    number: \"{{ sdb_info.partitions | length }}\"\n    part_end: \"100%\"\n    resize: true\n    state: present"
+  ],
+  "return_values": [
+    {
+      "name": "partition_info",
+      "type": "complex",
+      "description": "Current partition information. Returned: success Sample: {\"disk\": {\"dev\": \"/dev/sdb\", \"logical_block\": 512, \"model\": \"VMware Virtual disk\", \"physical_block\": 512, \"size\": 5.0, \"table\": \"msdos\", \"unit\": \"gib\"}, \"partitions\": [{\"begin\": 0.0, \"end\": 1.0, \"flags\": [\"boot\", \"lvm\"], \"fstype\": \"\", \"name\": \"\", \"num\": 1, \"size\": 1.0}, {\"begin\": 1.0, \"end\": 5.0, \"flags\": [], \"fstype\": \"\", \"name\": \"\", \"num\": 2, \"size\": 4.0}], \"script\": \"unit KiB print \"}",
+      "returned": "success"
+    },
+    {
+      "name": "disk",
+      "type": "dictionary",
+      "description": "Generic device information. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "partitions",
+      "type": "list",
+      "description": "List of device partitions. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "script",
+      "type": "string",
+      "description": "Parted script executed by module. Returned: success",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/parted_module#ansible-collections-community-general-parted-module.html",
+  "parsed_at": "2026-04-11T13:53:23.558279"
+}

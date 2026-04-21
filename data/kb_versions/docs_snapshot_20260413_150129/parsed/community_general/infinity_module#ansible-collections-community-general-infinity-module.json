@@ -1,0 +1,159 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.infinity",
+  "slug": "infinity_module#ansible-collections-community-general-infinity-module",
+  "description": "Manage Infinity IPAM using REST API.",
+  "parameters": [
+    {
+      "name": "action",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [
+        "\"add_network\"",
+        "\"delete_network\"",
+        "\"get_network\"",
+        "\"get_network_id\"",
+        "\"release_ip\"",
+        "\"release_network\"",
+        "\"reserve_network\"",
+        "\"reserve_next_available_ip\""
+      ],
+      "description": "Action to perform. Choices: \"add_network\" \"delete_network\" \"get_network\" \"get_network_id\" \"release_ip\" \"release_network\" \"reserve_network\" \"reserve_next_available_ip\""
+    },
+    {
+      "name": "ip_address",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "IP Address for a reservation or a release."
+    },
+    {
+      "name": "network_address",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Network address with CIDR format (for example 192.168.310.0)."
+    },
+    {
+      "name": "network_family",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"4\" ← (default)",
+        "\"6\"",
+        "\"dual\""
+      ],
+      "description": "Network family defined by Infinity, for example IPv4, IPv6 and Dual stack. Choices: \"4\" ← (default) \"6\" \"dual\""
+    },
+    {
+      "name": "network_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Network ID."
+    },
+    {
+      "name": "network_location",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "-1",
+      "choices": [],
+      "description": "The parent network ID for a given network. Default: -1"
+    },
+    {
+      "name": "network_name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The name of a network."
+    },
+    {
+      "name": "network_size",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Network bitmask (for example 255.255.255.220 or CIDR format /26)."
+    },
+    {
+      "name": "network_type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"lan\" ← (default)",
+        "\"shared_lan\"",
+        "\"supernet\""
+      ],
+      "description": "Network type defined by Infinity. Choices: \"lan\" ← (default) \"shared_lan\" \"supernet\""
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Infinity password."
+    },
+    {
+      "name": "server_ip",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Infinity server_ip with IP address."
+    },
+    {
+      "name": "username",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Username to access Infinity. The user must have REST API privileges."
+    }
+  ],
+  "examples": [
+    "- hosts: localhost\n  connection: local\n  strategy: debug\n  tasks:\n    - name: Reserve network into Infinity IPAM\n      community.general.infinity:\n        server_ip: 80.75.107.12\n        username: username\n        password: password\n        action: reserve_network\n        network_name: reserve_new_ansible_network\n        network_family: 4\n        network_type: lan\n        network_id: 1201\n        network_size: /28\n      register: infinity"
+  ],
+  "return_values": [
+    {
+      "name": "ip_info",
+      "type": "string",
+      "description": "When reserve next available IP address from a network, the IP address info is returned. Please note that the value is a string containing JSON data. Returned: success Sample: \"{\\n \\\"address\\\": \\\"192.168.10.3\\\",\\n \\\"hostname\\\": \\\"\\\",\\n \\\"FQDN\\\": \\\"\\\",\\n \\\"domainname\\\": \\\"\\\",\\n \\\"id\\\": 3229\\n}\"",
+      "returned": "success"
+    },
+    {
+      "name": "network_id",
+      "type": "string",
+      "description": "ID for a given network. Returned: success Sample: \"1501\"",
+      "returned": "success"
+    },
+    {
+      "name": "network_info",
+      "type": "string",
+      "description": "When reserving a LAN network from a Infinity supernet by providing network_size, the information about the reserved network is returned. Please note that the value is a string containing JSON data. Returned: success Sample: \"{\\n \\\"network_address\\\": \\\"192.168.10.32/28\\\",\\n \\\"network_family\\\": \\\"4\\\",\\n \\\"network_id\\\": 3102,\\n \\\"network_size\\\": null,\\n \\\"description\\\": null,\\n \\\"network_location\\\": \\\"3085\\\",\\n \\\"ranges\\\": {\\\"id\\\": 0, \\\"name\\\": null, \\\"first_ip\\\": null, \\\"type\\\": null, \\\"last_ip\\\": null},\\n \\\"network_type\\\": \\\"lan\\\",\\n \\\"network_name\\\": \\\"'reserve_new_ansible_network'\\\"\\n}\"",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/infinity_module#ansible-collections-community-general-infinity-module.html",
+  "parsed_at": "2026-04-11T13:53:15.687423"
+}

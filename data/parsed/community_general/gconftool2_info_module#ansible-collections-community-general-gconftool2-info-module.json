@@ -1,0 +1,37 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.gconftool2_info",
+  "slug": "gconftool2_info_module#ansible-collections-community-general-gconftool2-info-module",
+  "description": "This module allows retrieving application preferences from the GConf database, with the help of gconftool-2.",
+  "parameters": [
+    {
+      "name": "key",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The key name for an element in the GConf database."
+    }
+  ],
+  "examples": [
+    "- name: Get value for a certain key in the database.\n  community.general.gconftool2_info:\n    key: /desktop/gnome/background/picture_filename\n  register: result"
+  ],
+  "return_values": [
+    {
+      "name": "value",
+      "type": "string",
+      "description": "The value of the property. Returned: success Sample: \"Monospace 10\"",
+      "returned": "success"
+    },
+    {
+      "name": "version",
+      "type": "string",
+      "description": "Version of gconftool-2. Returned: always Sample: \"3.2.6\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/gconftool2_info_module.html",
+  "parsed_at": "2026-04-13T16:29:45.714803"
+}

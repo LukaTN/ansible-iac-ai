@@ -1,0 +1,151 @@
+{
+  "collection_ns": "ansible_builtin",
+  "collection": "ansible.builtin",
+  "module": "ansible.builtin.shell",
+  "slug": "shell_module#ansible-collections-ansible-builtin-shell-module",
+  "description": "The ansible.builtin.shell module takes the command name followed by a list of space-delimited arguments.",
+  "parameters": [
+    {
+      "name": "chdir",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Change into this directory before running the command."
+    },
+    {
+      "name": "cmd",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The command to run followed by optional arguments."
+    },
+    {
+      "name": "creates",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A filename, when it already exists, this step will not be run."
+    },
+    {
+      "name": "executable",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Change the shell used to execute the command. This expects an absolute path to the executable."
+    },
+    {
+      "name": "free_form",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The shell module takes a free form command to run, as a string. There is no actual parameter named ‘free form’. See the examples on how to use this module."
+    },
+    {
+      "name": "removes",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A filename, when it does not exist, this step will not be run."
+    },
+    {
+      "name": "stdin",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Set the stdin of the command directly to the specified value."
+    },
+    {
+      "name": "stdin_add_newline",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether to append a newline to stdin data. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Execute the command in remote shell; stdout goes to the specified file on the remote\n  ansible.builtin.shell: somescript.sh >> somelog.txt\n\n- name: Change the working directory to somedir/ before executing the command\n  ansible.builtin.shell: somescript.sh >> somelog.txt\n  args:\n    chdir: somedir/\n\n# You can also use the 'args' form to provide the options.\n- name: This command will change the working directory to somedir/ and will only run when somedir/somelog.txt doesn't exist\n  ansible.builtin.shell: somescript.sh >> somelog.txt\n  args:\n    chdir: somedir/\n    creates: somelog.txt\n\n# You can also use the 'cmd' parameter instead of free form format.\n- name: This command will change the working directory to somedir/\n  ansible.builtin.shell:\n    cmd: ls -l | grep log\n    chdir: somedir/\n\n- name: Run a command that uses non-posix shell-isms (in this example /bin/sh doesn't handle redirection and wildcards together but bash does)\n  ansible.builtin.shell: cat < /tmp/*txt\n  args:\n    executable: /bin/bash\n\n- name: Run a command using a templated variable (always use quote filter to avoid injection)\n  ansible.builtin.shell: cat {{ myfile|quote }}\n\n# You can use shell to run other executables to perform actions inline\n- name: Run expect to wait for a successful PXE boot via out-of-band CIMC\n  ansible.builtin.shell: |\n    set timeout 300\n    spawn ssh admin@{{ cimc_host }}\n\n    expect \"password:\"\n    send \"{{ cimc_password }}\\n\"\n\n    expect \"\\n{{ cimc_name }}\"\n    send \"connect host\\n\"\n\n    expect \"pxeboot.n12\"\n    send \"\\n\"\n\n    exit 0\n  args:\n    executable: /usr/bin/expect\n  delegate_to: localhost"
+  ],
+  "return_values": [
+    {
+      "name": "cmd",
+      "type": "string",
+      "description": "The command executed by the task. Returned: always Sample: \"rabbitmqctl join_cluster rabbit@master\"",
+      "returned": "always"
+    },
+    {
+      "name": "delta",
+      "type": "string",
+      "description": "The command execution delta time. Returned: always Sample: \"0:00:00.325771\"",
+      "returned": "always"
+    },
+    {
+      "name": "end",
+      "type": "string",
+      "description": "The command execution end time. Returned: always Sample: \"2016-02-25 09:18:26.755339\"",
+      "returned": "always"
+    },
+    {
+      "name": "msg",
+      "type": "boolean",
+      "description": "changed Returned: always Sample: true",
+      "returned": "always"
+    },
+    {
+      "name": "rc",
+      "type": "integer",
+      "description": "The command return code (0 means success). Returned: always Sample: 0",
+      "returned": "always"
+    },
+    {
+      "name": "start",
+      "type": "string",
+      "description": "The command execution start time. Returned: always Sample: \"2016-02-25 09:18:26.429568\"",
+      "returned": "always"
+    },
+    {
+      "name": "stderr",
+      "type": "string",
+      "description": "The command standard error. Returned: always Sample: \"ls: cannot access foo: No such file or directory\"",
+      "returned": "always"
+    },
+    {
+      "name": "stderr_lines",
+      "type": "list",
+      "description": "The command standard error split in lines. Returned: always Sample: [{\"u'ls cannot access foo\": \"No such file or directory'\"}, \"u'ls \\u2026'\"]",
+      "returned": "always"
+    },
+    {
+      "name": "stdout",
+      "type": "string",
+      "description": "The command standard output. Returned: always Sample: \"Clustering node rabbit@slave1 with rabbit@master \\u2026\"",
+      "returned": "always"
+    },
+    {
+      "name": "stdout_lines",
+      "type": "list",
+      "description": "The command standard output split in lines. Returned: always Sample: [\"u'Clustering node rabbit@slave1 with rabbit@master \\u2026'\"]",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/shell_module.html",
+  "parsed_at": "2026-04-13T16:29:26.116748"
+}

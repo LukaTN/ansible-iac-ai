@@ -1,0 +1,316 @@
+{
+  "collection_ns": "azure_azcollection",
+  "collection": "azure.azcollection",
+  "module": "azure.azcollection.azure_rm_virtualhubconnection_info",
+  "slug": "azure_rm_virtualhubconnection_info_module#ansible-collections-azure-azcollection-azure-rm-virtualhubconnection-info-module",
+  "description": "Get info of VirtualHub.",
+  "parameters": [
+    {
+      "name": "ad_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory username. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "adfs_authority_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure AD authority url. Use when authenticating with Username/password, and has your own ADFS authority."
+    },
+    {
+      "name": "api_profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "Selects an API profile to use when communicating with Azure services. Default value of latest is appropriate for public clouds; future values will allow use with Azure Stack. Default: \"latest\""
+    },
+    {
+      "name": "auth_source",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "az",
+      "choices": [
+        "\"auto\" ← (default)",
+        "\"cli\"",
+        "\"credential_file\"",
+        "\"env\"",
+        "\"msi\""
+      ],
+      "description": "Controls the source of the credentials to use for authentication. Can also be set via the ANSIBLE_AZURE_AUTH_SOURCE environment variable. When set to auto (the default) the precedence is module parameters -> env -> credential_file -> cli. When set to env, the credentials will be read from the environment variables When set to credential_file, it will read the profile from ~/.azure/credentials. When set to cli, the credentials will be sources from the Azure CLI profile. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if more than one is present otherwise the default az cli subscription is used. When set to msi, the host machine must be an azure resource with an enabled MSI extension. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if the resource is granted access to more than one subscription, otherwise the first subscription is chosen. The msi was added in Ansible 2.6. Choices: \"auto\" ← (default) \"cli\" \"credential_file\" \"env\" \"msi\""
+    },
+    {
+      "name": "cert_validation_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ignore\"",
+        "\"validate\""
+      ],
+      "description": "Controls the certificate validation behavior for Azure endpoints. By default, all modules will validate the server certificate, but when an HTTPS proxy is in use, or against Azure Stack, it may be necessary to disable this behavior by passing ignore. Can also be set via credential file profile or the AZURE_CERT_VALIDATION environment variable. Choices: \"ignore\" \"validate\""
+    },
+    {
+      "name": "client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client ID. Use when authenticating with a Service Principal or Managed Identity (msi). Can also be set via the AZURE_CLIENT_ID environment variable."
+    },
+    {
+      "name": "cloud_environment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "AzureCloud",
+      "choices": [],
+      "description": "For cloud environments other than the US public cloud, the environment name (as defined by Azure Python SDK, eg, AzureChinaCloud, AzureUSGovernment), or a metadata discovery endpoint URL (required for Azure Stack). Can also be set via credential file profile or the AZURE_CLOUD_ENVIRONMENT environment variable. Default: \"AzureCloud\""
+    },
+    {
+      "name": "disable_instance_discovery",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Determines whether or not instance discovery is performed when attempting to authenticate. Setting this to true will completely disable both instance discovery and authority validation. This functionality is intended for use in scenarios where the metadata endpoint cannot be reached such as in private clouds or Azure Stack. The process of instance discovery entails retrieving authority metadata from https://login.microsoft.com/ to validate the authority. By setting this to **True**, the validation of the authority is disabled. As a result, it is crucial to ensure that the configured authority host is valid and trustworthy. Set via credential file profile or the AZURE_DISABLE_INSTANCE_DISCOVERY environment variable. Choices: false ← (default) true"
+    },
+    {
+      "name": "log_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "log_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The name of the VirtualHub connection."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory user password. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security profile found in ~/.azure/credentials file."
+    },
+    {
+      "name": "resource_group",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The resource group name of the VirtualHub."
+    },
+    {
+      "name": "secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client secret. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "subscription_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Your Azure subscription Id."
+    },
+    {
+      "name": "tenant",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure tenant ID. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "thumbprint",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The thumbprint of the private key specified in x509_certificate_path. Use when authenticating with a Service Principal. Required if x509_certificate_path is defined."
+    },
+    {
+      "name": "virtual_hub_name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The resource name of the VirtualHub."
+    },
+    {
+      "name": "x509_certificate_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the X509 certificate used to create the service principal in PEM format. The certificate must be appended to the private key. Use when authenticating with a Service Principal."
+    }
+  ],
+  "examples": [
+    "- name: Get virtual hub connection info by name\n  azure_rm_virtualhubconnection_info:\n    resource_group: myResourceGroup\n    virtual_hub_name: virtualHub\n    name: vhubname\n\n- name: Get virtual hub connection info by resource group\n  azure_rm_virtualhubconnection_info:\n    resource_group: myResourceGroup\n    virtual_hub_name: virtualHub"
+  ],
+  "return_values": [
+    {
+      "name": "virtual_hub_connection",
+      "type": "complex",
+      "description": "A list of dict results for the virtual hub connection info. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "allow_hub_to_remote_vnet_transit",
+      "type": "boolean",
+      "description": "Enable hub to remote VNet transit. Returned: always Sample: true",
+      "returned": "always"
+    },
+    {
+      "name": "allow_remote_vnet_to_use_hub_vnet_gateways",
+      "type": "boolean",
+      "description": "Allow remote VNet to use hub’s VNet gateways. Returned: always Sample: true",
+      "returned": "always"
+    },
+    {
+      "name": "enable_internet_security",
+      "type": "boolean",
+      "description": "Enable internet security and default is enabled. Returned: always Sample: true",
+      "returned": "always"
+    },
+    {
+      "name": "etag",
+      "type": "string",
+      "description": "A unique read-only string that changes whenever the resource is updated. Returned: always Sample: \"31102041-49e7-4cac-8573-aac1e1a16793\"",
+      "returned": "always"
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "description": "Resource ID. Returned: always Sample: \"/subscriptions/xxx-xxx/resourceGroups/myRG/providers/Microsoft.Network/virtualHubs/vhub/hubVirtualNetworkConnections/MyConnection\"",
+      "returned": "always"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "Resource name. Returned: always Sample: \"MyConnection\"",
+      "returned": "always"
+    },
+    {
+      "name": "provisioning_state",
+      "type": "string",
+      "description": "The provisioning state of the virtual hub connection resource. Returned: always Sample: \"Succeeded\"",
+      "returned": "always"
+    },
+    {
+      "name": "remote_virtual_network",
+      "type": "complex",
+      "description": "Name of ID of the remote VNet to connect to. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "routing_configuration",
+      "type": "complex",
+      "description": "The routing configuration information Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "associated_route_table",
+      "type": "complex",
+      "description": "The resource ID of route table associated with this routing configuration. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "propagated_route_tables",
+      "type": "complex",
+      "description": "Space-separated list of resource id of propagated route tables. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "ids",
+      "type": "list",
+      "description": "The list resource ID of propagated route tables. Returned: always Sample: [{\"id\": \"/subscriptions/xxx-xxx/resourceGroups/myRG/providers/Microsoft.Network/virtualHubs/testhub/hubRouteTables/rt_name\"}]",
+      "returned": "always"
+    },
+    {
+      "name": "labels",
+      "type": "list",
+      "description": "Space-separated list of labels for propagated route tables. Returned: always Sample: [\"labels1\", \"labels2\"]",
+      "returned": "always"
+    },
+    {
+      "name": "vnet_routes",
+      "type": "complex",
+      "description": "The name of the Static Route that is unique within a Vnet Route. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "static_routes",
+      "type": "list",
+      "description": "The name of the Static Route. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "address_prefixes",
+      "type": "list",
+      "description": "Space-separated list of all address prefixes. Returned: always Sample: [\"10.1.0.0/16\", \"10.2.0.0/16\"]",
+      "returned": "always"
+    },
+    {
+      "name": "next_hop_ip_address",
+      "type": "string",
+      "description": "The next hop ip address. Returned: always Sample: \"10.0.0.65\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualhubconnection_info_module#ansible-collections-azure-azcollection-azure-rm-virtualhubconnection-info-module.html",
+  "parsed_at": "2026-04-11T13:53:08.307407"
+}

@@ -1,0 +1,380 @@
+{
+  "collection_ns": "ansible_builtin",
+  "collection": "ansible.builtin",
+  "module": "ansible.builtin.dnf5",
+  "slug": "dnf5_module#ansible-collections-ansible-builtin-dnf5-module",
+  "description": "Installs, upgrade, removes, and lists packages and groups with the dnf5 package manager.",
+  "parameters": [
+    {
+      "name": "allow_downgrade",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Specify if the named package and version is allowed to downgrade a maybe already installed higher version of that package. Note that setting allow_downgrade=true can make this module behave in a non-idempotent way. The task could end up with a set of packages that does not match the complete list of specified packages to install (because dependencies between the downgraded package and others can cause changes to the packages which were in the earlier transaction). Since this feature is not provided by dnf5 itself but by ansible.builtin.dnf5 module, using this in combination with wildcard characters in name may result in an unexpected results. Choices: false ← (default) true"
+    },
+    {
+      "name": "allowerasing",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If true it allows erasing of installed packages to resolve dependencies. Choices: false ← (default) true"
+    },
+    {
+      "name": "auto_install_module_deps",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Automatically install dependencies required to run this module. Choices: false true ← (default)"
+    },
+    {
+      "name": "autoremove",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If true, removes all “leaf” packages from the system that were originally installed as dependencies of user-installed packages but which are no longer required by any such package. Should be used alone or when state=absent. Choices: false ← (default) true"
+    },
+    {
+      "name": "best",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "is",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "When set to true, either use a package with the highest version available or fail. When set to false, if the latest version cannot be installed go with the lower version. Default is set by the operating system distribution. Choices: false true"
+    },
+    {
+      "name": "bugfix",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If set to true, and state=latest then only installs updates that have been marked bugfix related. Note that, similar to dnf upgrade-minimal, this filter applies to dependencies as well. Choices: false ← (default) true"
+    },
+    {
+      "name": "cacheonly",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Tells dnf to run entirely from system cache; does not download or update metadata. Choices: false ← (default) true"
+    },
+    {
+      "name": "conf_file",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The remote dnf configuration file to use for the transaction."
+    },
+    {
+      "name": "disable_excludes",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Disable the excludes defined in DNF config files. If set to all, disables all excludes. If set to main, disable excludes defined in [main] in dnf.conf. If set to repoid, disable excludes defined for given repo id."
+    },
+    {
+      "name": "disable_gpg_check",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Whether to disable the GPG checking of signatures of packages being installed. Has an effect only if state is present or latest. This setting affects packages installed from a repository as well as “local” packages installed from the filesystem or a URL. Choices: false ← (default) true"
+    },
+    {
+      "name": "disable_plugin",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "Plugin name to disable for the install/update operation. The disabled plugins will not persist beyond the transaction. disable_plugin takes precedence in case a plugin is listed in both enable_plugin and disable_plugin. Requires python3-libdnf5 5.2.0.0+. Default: []"
+    },
+    {
+      "name": "disablerepo",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "Repoid of repositories to disable for the install/update operation. These repos will not persist beyond the transaction. When specifying multiple repos, separate them with a ,. Default: []"
+    },
+    {
+      "name": "download_dir",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies an alternate directory to store packages. Has an effect only if download_only is specified."
+    },
+    {
+      "name": "download_only",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Only download the packages, do not install them. Choices: false ← (default) true"
+    },
+    {
+      "name": "enable_plugin",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "Plugin name to enable for the install/update operation. The enabled plugin will not persist beyond the transaction. disable_plugin takes precedence in case a plugin is listed in both enable_plugin and disable_plugin. Requires python3-libdnf5 5.2.0.0+. Default: []"
+    },
+    {
+      "name": "enablerepo",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "Repoid of repositories to enable for the install/update operation. These repos will not persist beyond the transaction. When specifying multiple repos, separate them with a ,. Default: []"
+    },
+    {
+      "name": "exclude",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "Package name(s) to exclude when state=present or state=latest. This can be a list or a comma separated string. Default: []"
+    },
+    {
+      "name": "install_weak_deps",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Will also install all packages linked by a weak dependency relation. Choices: false true ← (default)"
+    },
+    {
+      "name": "installroot",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "/",
+      "choices": [],
+      "description": "Specifies an alternative installroot, relative to which all packages will be installed. Default: \"/\""
+    },
+    {
+      "name": "list",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Various (non-idempotent) commands for usage with /usr/bin/ansible and not playbooks. Use ansible.builtin.package_facts instead of the list argument as a best practice."
+    },
+    {
+      "name": "lock_timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "30",
+      "choices": [],
+      "description": "This is currently a no-op as dnf5 does not provide an option to configure it. Amount of time to wait for the dnf lockfile to be freed. Default: 30"
+    },
+    {
+      "name": "name",
+      "aliases": [
+        "pkg"
+      ],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "A package name or package specifier with version, like name-1.0. When using state=latest, this can be * which means run: dnf -y update. You can also pass a url or a local path to an rpm file. To operate on several packages this can accept a comma separated string of packages or a list of packages. Comparison operators for package version are valid here >, <, >=, <=. Example - name >= 1.0. Spaces around the operator are required. You can also pass an absolute path for a binary which is provided by the package to install. See examples for more information. Default: []"
+    },
+    {
+      "name": "nobest",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "value",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "This is the opposite of the best option kept for backwards compatibility. Since ansible-core 2.17 the default value is set by the operating system distribution. Choices: false true"
+    },
+    {
+      "name": "releasever",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies an alternative release from which all packages will be installed."
+    },
+    {
+      "name": "security",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If set to true, and state=latest then only installs updates that have been marked security related. Note that, similar to dnf upgrade-minimal, this filter applies to dependencies as well. Choices: false ← (default) true"
+    },
+    {
+      "name": "skip_broken",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Skip all unavailable packages or packages with broken dependencies without raising an error. Equivalent to passing the --skip-broken option. Choices: false ← (default) true"
+    },
+    {
+      "name": "sslverify",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Disables SSL validation of the repository server for this transaction. This should be set to false if one of the configured repositories is using an untrusted or self-signed certificate. Choices: false true ← (default)"
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "is",
+      "choices": [
+        "\"absent\"",
+        "\"present\"",
+        "\"installed\"",
+        "\"removed\"",
+        "\"latest\""
+      ],
+      "description": "Whether to install (present, latest), or remove (absent) a package. Default is None, however in effect the default action is present unless the autoremove=true, then absent is inferred. Choices: \"absent\" \"present\" \"installed\" \"removed\" \"latest\""
+    },
+    {
+      "name": "update_cache",
+      "aliases": [
+        "expire-cache"
+      ],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Force dnf to check if cache is out of date and redownload if needed. Has an effect only if state=present or state=latest. Choices: false ← (default) true"
+    },
+    {
+      "name": "update_only",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "When using latest, only update installed packages. Do not install packages. Has an effect only if state=present or state=latest. Choices: false ← (default) true"
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "This is effectively a no-op in the dnf5 module as dnf5 itself handles downloading a https url as the source of the rpm, but is an accepted parameter for feature parity/compatibility with the ansible.builtin.dnf module. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Install the latest version of Apache\n  ansible.builtin.dnf5:\n    name: httpd\n    state: latest\n\n- name: Install Apache >= 2.4\n  ansible.builtin.dnf5:\n    name: httpd >= 2.4\n    state: present\n\n- name: Install the latest version of Apache and MariaDB\n  ansible.builtin.dnf5:\n    name:\n      - httpd\n      - mariadb-server\n    state: latest\n\n- name: Remove the Apache package\n  ansible.builtin.dnf5:\n    name: httpd\n    state: absent\n\n- name: Install the latest version of Apache from the testing repo\n  ansible.builtin.dnf5:\n    name: httpd\n    enablerepo: testing\n    state: present\n\n- name: Upgrade all packages\n  ansible.builtin.dnf5:\n    name: \"*\"\n    state: latest\n\n- name: Update the webserver, depending on which is installed on the system. Do not install the other one\n  ansible.builtin.dnf5:\n    name:\n      - httpd\n      - nginx\n    state: latest\n    update_only: yes\n\n- name: Install the nginx rpm from a remote repo\n  ansible.builtin.dnf5:\n    name: 'http://nginx.org/packages/centos/6/noarch/RPMS/nginx-release-centos-6-0.el6.ngx.noarch.rpm'\n    state: present\n\n- name: Install nginx rpm from a local file\n  ansible.builtin.dnf5:\n    name: /usr/local/src/nginx-release-centos-6-0.el6.ngx.noarch.rpm\n    state: present\n\n- name: Install Package based upon the file it provides\n  ansible.builtin.dnf5:\n    name: /usr/bin/cowsay\n    state: present\n\n- name: Install the 'Development tools' package group\n  ansible.builtin.dnf5:\n    name: '@Development tools'\n    state: present\n\n- name: Autoremove unneeded packages installed as dependencies\n  ansible.builtin.dnf5:\n    autoremove: yes\n\n- name: Uninstall httpd but keep its dependencies\n  ansible.builtin.dnf5:\n    name: httpd\n    state: absent\n    autoremove: no"
+  ],
+  "return_values": [
+    {
+      "name": "failures",
+      "type": "list",
+      "description": "A list of the dnf transaction failures Returned: failure Sample: [\"Argument 'lsof' matches only excluded packages.\"]",
+      "returned": "failure"
+    },
+    {
+      "name": "msg",
+      "type": "string",
+      "description": "Additional information about the result Returned: always Sample: \"Nothing to do\"",
+      "returned": "always"
+    },
+    {
+      "name": "rc",
+      "type": "integer",
+      "description": "For compatibility, 0 for success, 1 for failure Returned: always Sample: 0",
+      "returned": "always"
+    },
+    {
+      "name": "results",
+      "type": "list",
+      "description": "A list of the dnf transaction results Returned: success Sample: [\"Installed: lsof-4.94.0-4.fc37.x86_64\"]",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/dnf5_module#ansible-collections-ansible-builtin-dnf5-module.html",
+  "parsed_at": "2026-04-11T13:52:51.569475"
+}

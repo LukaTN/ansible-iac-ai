@@ -1,0 +1,111 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.read_csv",
+  "slug": "read_csv_module#ansible-collections-community-general-read-csv-module",
+  "description": "Read a CSV file and return a list or a dictionary, containing one dictionary per row.",
+  "parameters": [
+    {
+      "name": "delimiter",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "A one-character string used to separate fields. When using this parameter, you change the default value used by dialect. The default value depends on the dialect used."
+    },
+    {
+      "name": "dialect",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "excel",
+      "choices": [],
+      "description": "The CSV dialect to use when parsing the CSV file. Possible values include excel, excel-tab or unix. Default: \"excel\""
+    },
+    {
+      "name": "fieldnames",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A list of field names for every column. This is needed if the CSV does not have a header."
+    },
+    {
+      "name": "key",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The column name used as a key for the resulting dictionary. If key is unset, the module returns a list of dictionaries, where each dictionary is a row in the CSV file."
+    },
+    {
+      "name": "path",
+      "aliases": [
+        "filename"
+      ],
+      "type": "path",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The CSV filename to read data from."
+    },
+    {
+      "name": "skipinitialspace",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "value",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Whether to ignore any whitespaces immediately following the delimiter. When using this parameter, you change the default value used by dialect. The default value depends on the dialect used. Choices: false true"
+    },
+    {
+      "name": "strict",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "value",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Whether to raise an exception on bad CSV input. When using this parameter, you change the default value used by dialect. The default value depends on the dialect used. Choices: false true"
+    },
+    {
+      "name": "unique",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether the key used is expected to be unique. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "# Example CSV file with header\n#\n#   name,uid,gid\n#   dag,500,500\n#   jeroen,501,500\n\n# Read a CSV file and access user 'dag'\n- name: Read users from CSV file and return a dictionary\n  community.general.read_csv:\n    path: users.csv\n    key: name\n  register: users\n  delegate_to: localhost\n\n- ansible.builtin.debug:\n    msg: 'User {{ users.dict.dag.name }} has UID {{ users.dict.dag.uid }} and GID {{ users.dict.dag.gid }}'\n\n# Read a CSV file and access the first item\n- name: Read users from CSV file and return a list\n  community.general.read_csv:\n    path: users.csv\n  register: users\n  delegate_to: localhost\n\n- ansible.builtin.debug:\n    msg: 'User {{ users.list.1.name }} has UID {{ users.list.1.uid }} and GID {{ users.list.1.gid }}'\n\n# Example CSV file without header and semi-colon delimiter\n#\n#   dag;500;500\n#   jeroen;501;500\n\n# Read a CSV file without headers\n- name: Read users from CSV file and return a list\n  community.general.read_csv:\n    path: users.csv\n    fieldnames: name,uid,gid\n    delimiter: ';'\n  register: users\n  delegate_to: localhost"
+  ],
+  "return_values": [
+    {
+      "name": "dict",
+      "type": "dictionary",
+      "description": "The CSV content as a dictionary. Returned: success Sample: {\"dag\": {\"gid\": 500, \"name\": \"dag\", \"uid\": 500}, \"jeroen\": {\"gid\": 500, \"name\": \"jeroen\", \"uid\": 501}}",
+      "returned": "success"
+    },
+    {
+      "name": "list",
+      "type": "list",
+      "description": "The CSV content as a list. Returned: success Sample: [{\"gid\": 500, \"name\": \"dag\", \"uid\": 500}, {\"gid\": 500, \"name\": \"jeroen\", \"uid\": 501}]",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/read_csv_module#ansible-collections-community-general-read-csv-module.html",
+  "parsed_at": "2026-04-11T13:53:24.346486"
+}

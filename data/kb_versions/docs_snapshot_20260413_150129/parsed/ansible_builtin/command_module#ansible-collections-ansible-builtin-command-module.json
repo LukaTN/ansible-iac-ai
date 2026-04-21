@@ -1,0 +1,175 @@
+{
+  "collection_ns": "ansible_builtin",
+  "collection": "ansible.builtin",
+  "module": "ansible.builtin.command",
+  "slug": "command_module#ansible-collections-ansible-builtin-command-module",
+  "description": "The ansible.builtin.command module takes the command name followed by a list of space-delimited arguments.",
+  "parameters": [
+    {
+      "name": "argv",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Passes the command as a list rather than a string. Use argv to avoid quoting values that would otherwise be interpreted incorrectly (for example “user name”). Only the string (free form) or the list (argv) form can be provided, not both. One or the other must be provided."
+    },
+    {
+      "name": "chdir",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Change into this directory before running the command."
+    },
+    {
+      "name": "cmd",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The command to run."
+    },
+    {
+      "name": "creates",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A filename or (since 2.0) glob pattern. If a matching file already exists, this step will not be run. This is checked before removes is checked."
+    },
+    {
+      "name": "expand_argument_vars",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Expands the arguments that are variables, for example $HOME will be expanded before being passed to the command to run. If a variable is not matched, it is left unchanged, unlike shell substitution which would remove it. Set to false to disable expansion and treat the value as a literal argument. Choices: false true ← (default)"
+    },
+    {
+      "name": "free_form",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The command module takes a free form string as a command to run. There is no actual parameter named free_form."
+    },
+    {
+      "name": "removes",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A filename or (since 2.0) glob pattern. If a matching file exists, this step will be run. This is checked after creates is checked."
+    },
+    {
+      "name": "stdin",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Set the stdin of the command directly to the specified value."
+    },
+    {
+      "name": "stdin_add_newline",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If set to true, append a newline to stdin data. Choices: false true ← (default)"
+    },
+    {
+      "name": "strip_empty_ends",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Strip empty lines from the end of stdout/stderr in result. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Return motd to registered var\n  ansible.builtin.command: cat /etc/motd\n  register: mymotd\n\n# free-form (string) arguments, all arguments on one line\n- name: Run command if /path/to/database does not exist (without 'args')\n  ansible.builtin.command: /usr/bin/make_database.sh db_user db_name creates=/path/to/database\n\n# free-form (string) arguments, some arguments on separate lines with the 'args' keyword\n# 'args' is a task keyword, passed at the same level as the module\n- name: Run command if /path/to/database does not exist (with 'args' keyword)\n  ansible.builtin.command: /usr/bin/make_database.sh db_user db_name\n  args:\n    creates: /path/to/database\n\n# 'cmd' is module parameter\n- name: Run command if /path/to/database does not exist (with 'cmd' parameter)\n  ansible.builtin.command:\n    cmd: /usr/bin/make_database.sh db_user db_name\n    creates: /path/to/database\n\n- name: Change the working directory to somedir/ and run the command as db_owner if /path/to/database does not exist\n  ansible.builtin.command: /usr/bin/make_database.sh db_user db_name\n  become: yes\n  become_user: db_owner\n  args:\n    chdir: somedir/\n    creates: /path/to/database\n\n# argv (list) arguments, each argument on a separate line, 'args' keyword not necessary\n# 'argv' is a parameter, indented one level from the module\n- name: Use 'argv' to send a command as a list - leave 'command' empty\n  ansible.builtin.command:\n    argv:\n      - /usr/bin/make_database.sh\n      - Username with whitespace\n      - dbname with whitespace\n    creates: /path/to/database\n\n- name: Run command using argv with mixed argument formats\n  ansible.builtin.command:\n    argv:\n      - /path/to/binary\n      - -v\n      - --debug\n      - --longopt\n      - value for longopt\n      - --other-longopt=value for other longopt\n      - positional\n\n- name: Safely use templated variable to run command. Always use the quote filter to avoid injection issues\n  ansible.builtin.command: cat {{ myfile|quote }}\n  register: myoutput"
+  ],
+  "return_values": [
+    {
+      "name": "cmd",
+      "type": "list",
+      "description": "The command executed by the task. Returned: always Sample: [\"echo\", \"hello\"]",
+      "returned": "always"
+    },
+    {
+      "name": "delta",
+      "type": "string",
+      "description": "The command execution delta time. Returned: always Sample: \"0:00:00.001529\"",
+      "returned": "always"
+    },
+    {
+      "name": "end",
+      "type": "string",
+      "description": "The command execution end time. Returned: always Sample: \"2017-09-29 22:03:48.084657\"",
+      "returned": "always"
+    },
+    {
+      "name": "msg",
+      "type": "boolean",
+      "description": "changed Returned: always Sample: true",
+      "returned": "always"
+    },
+    {
+      "name": "rc",
+      "type": "integer",
+      "description": "The command return code (0 means success). Returned: always Sample: 0",
+      "returned": "always"
+    },
+    {
+      "name": "start",
+      "type": "string",
+      "description": "The command execution start time. Returned: always Sample: \"2017-09-29 22:03:48.083128\"",
+      "returned": "always"
+    },
+    {
+      "name": "stderr",
+      "type": "string",
+      "description": "The command standard error. Returned: always Sample: \"ls cannot access foo: No such file or directory\"",
+      "returned": "always"
+    },
+    {
+      "name": "stderr_lines",
+      "type": "list",
+      "description": "The command standard error split in lines. Returned: always Sample: [{\"u'ls cannot access foo\": \"No such file or directory'\"}, \"u'ls \\u2026'\"]",
+      "returned": "always"
+    },
+    {
+      "name": "stdout",
+      "type": "string",
+      "description": "The command standard output. Returned: always Sample: \"Clustering node rabbit@slave1 with rabbit@master \\u2026\"",
+      "returned": "always"
+    },
+    {
+      "name": "stdout_lines",
+      "type": "list",
+      "description": "The command standard output split in lines. Returned: always Sample: [\"u'Clustering node rabbit@slave1 with rabbit@master \\u2026'\"]",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/command_module#ansible-collections-ansible-builtin-command-module.html",
+  "parsed_at": "2026-04-11T13:52:51.363489"
+}

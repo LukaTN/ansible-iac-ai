@@ -1,0 +1,99 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.ibm_sa_vol_map",
+  "slug": "ibm_sa_vol_map_module#ansible-collections-community-general-ibm-sa-vol-map-module",
+  "description": "This module maps volumes to or unmaps them from the hosts on IBM Spectrum Accelerate Family storage systems.",
+  "parameters": [
+    {
+      "name": "cluster",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Maps the volume to a cluster."
+    },
+    {
+      "name": "endpoints",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The hostname or management IP of Spectrum Accelerate storage system."
+    },
+    {
+      "name": "host",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Maps the volume to a host."
+    },
+    {
+      "name": "lun",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The LUN identifier."
+    },
+    {
+      "name": "override",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Overrides the existing volume mapping."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Password for username on the Spectrum Accelerate storage system."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "When the state is present the volume is mapped. When the state is absent, the volume is meant to be unmapped. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "username",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Management user on the Spectrum Accelerate storage system."
+    },
+    {
+      "name": "vol",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Volume name."
+    }
+  ],
+  "examples": [
+    "- name: Map volume to host.\n  community.general.ibm_sa_vol_map:\n    vol: volume_name\n    lun: 1\n    host: host_name\n    username: admin\n    password: secret\n    endpoints: hostdev-system\n    state: present\n\n- name: Map volume to cluster.\n  community.general.ibm_sa_vol_map:\n    vol: volume_name\n    lun: 1\n    cluster: cluster_name\n    username: admin\n    password: secret\n    endpoints: hostdev-system\n    state: present\n\n- name: Unmap volume.\n  community.general.ibm_sa_vol_map:\n    host: host_name\n    username: admin\n    password: secret\n    endpoints: hostdev-system\n    state: absent"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/ibm_sa_vol_map_module#ansible-collections-community-general-ibm-sa-vol-map-module.html",
+  "parsed_at": "2026-04-11T13:53:15.322040"
+}

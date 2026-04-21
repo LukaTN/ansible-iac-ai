@@ -1,0 +1,112 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.hpilo_info",
+  "slug": "hpilo_info_module#ansible-collections-community-general-hpilo-info-module",
+  "description": "This module gathers information on a specific system using its HP iLO interface. These information includes hardware and network related information useful for provisioning (for example macaddress, uuid).",
+  "parameters": [
+    {
+      "name": "host",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The HP iLO hostname/address that is linked to the physical system."
+    },
+    {
+      "name": "login",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "Administrator",
+      "choices": [],
+      "description": "The login name to authenticate to the HP iLO interface. Default: \"Administrator\""
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "admin",
+      "choices": [],
+      "description": "The password to authenticate to the HP iLO interface. Default: \"admin\""
+    },
+    {
+      "name": "ssl_version",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"SSLv3\"",
+        "\"SSLv23\"",
+        "\"TLSv1\" ← (default)",
+        "\"TLSv1_1\"",
+        "\"TLSv1_2\""
+      ],
+      "description": "Change the ssl_version used. Choices: \"SSLv3\" \"SSLv23\" \"TLSv1\" ← (default) \"TLSv1_1\" \"TLSv1_2\""
+    }
+  ],
+  "examples": [
+    "- name: Gather facts from a HP iLO interface only if the system is an HP server\n  community.general.hpilo_info:\n    host: YOUR_ILO_ADDRESS\n    login: YOUR_ILO_LOGIN\n    password: YOUR_ILO_PASSWORD\n  when: cmdb_hwmodel.startswith('HP ')\n  delegate_to: localhost\n  register: results\n\n- ansible.builtin.fail:\n    msg: 'CMDB serial ({{ cmdb_serialno }}) does not match hardware serial ({{ results.hw_system_serial }}) !'\n  when: cmdb_serialno != results.hw_system_serial"
+  ],
+  "return_values": [
+    {
+      "name": "host_power_status",
+      "type": "string",
+      "description": "Power status of host. It is one of ON, OFF and UNKNOWN. Returned: always Sample: \"ON\"",
+      "returned": "always"
+    },
+    {
+      "name": "hw_bios_date",
+      "type": "string",
+      "description": "BIOS date. Returned: always Sample: \"05/05/2011\"",
+      "returned": "always"
+    },
+    {
+      "name": "hw_bios_version",
+      "type": "string",
+      "description": "BIOS version. Returned: always Sample: \"P68\"",
+      "returned": "always"
+    },
+    {
+      "name": "hw_eth_ilo",
+      "type": "dictionary",
+      "description": "Interface information (for the iLO network interface). Returned: always Sample: [{\"macaddress\": \"00:11:22:33:44:BA\"}, {\"macaddress_dash\": \"00-11-22-33-44-BA\"}]",
+      "returned": "always"
+    },
+    {
+      "name": "hw_ethX",
+      "type": "dictionary",
+      "description": "Interface information (for each interface). Returned: always Sample: [{\"macaddress\": \"00:11:22:33:44:55\", \"macaddress_dash\": \"00-11-22-33-44-55\"}]",
+      "returned": "always"
+    },
+    {
+      "name": "hw_product_name",
+      "type": "string",
+      "description": "Product name. Returned: always Sample: \"ProLiant DL360 G7\"",
+      "returned": "always"
+    },
+    {
+      "name": "hw_product_uuid",
+      "type": "string",
+      "description": "Product UUID. Returned: always Sample: \"ef50bac8-2845-40ff-81d9-675315501dac\"",
+      "returned": "always"
+    },
+    {
+      "name": "hw_system_serial",
+      "type": "string",
+      "description": "System serial number. Returned: always Sample: \"ABC12345D6\"",
+      "returned": "always"
+    },
+    {
+      "name": "hw_uuid",
+      "type": "string",
+      "description": "Hardware UUID. Returned: always Sample: \"123456ABC78901D2\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/hpilo_info_module#ansible-collections-community-general-hpilo-info-module.html",
+  "parsed_at": "2026-04-11T13:53:14.718067"
+}

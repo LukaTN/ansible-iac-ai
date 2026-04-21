@@ -1,0 +1,10 @@
+{
+  "indexed_at": "2026-04-13T15:25:45.098462",
+  "embed_model": "nomic-embed-text",
+  "chunk_schema_version": "v2_section_overlap",
+  "index_schema_version": "v2",
+  "collection": "all",
+  "new_docs": 8676,
+  "total_in_db": 8676,
+  "chroma_dir": "data/chromadb"
+}

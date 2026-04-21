@@ -1,0 +1,75 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.easy_install",
+  "slug": "easy_install_module#ansible-collections-community-general-easy-install-module",
+  "description": "Installs Python libraries, optionally in a virtualenv.",
+  "parameters": [
+    {
+      "name": "executable",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "easy_install",
+      "choices": [],
+      "description": "The explicit executable or a pathname to the executable to be used to run easy_install for a specific version of Python installed in the system. For example easy_install-3.3, if there are both Python 2.7 and 3.3 installations in the system and you want to run easy_install for the Python 3.3 installation. Default: \"easy_install\""
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "A Python library name."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"latest\""
+      ],
+      "description": "The desired state of the library. latest ensures that the latest version is installed. Choices: \"present\" ← (default) \"latest\""
+    },
+    {
+      "name": "virtualenv",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "An optional virtualenv directory path to install into. If the virtualenv does not exist, it is created automatically."
+    },
+    {
+      "name": "virtualenv_command",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "virtualenv",
+      "choices": [],
+      "description": "The command to create the virtual environment with. For example pyvenv, virtualenv, virtualenv2. Default: \"virtualenv\""
+    },
+    {
+      "name": "virtualenv_site_packages",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Whether the virtual environment inherits packages from the global site-packages directory. Note that this setting has no effect on an already existing virtual environment, so if you want to change it, the environment must be deleted and newly created. Choices: false ← (default) true"
+    }
+  ],
+  "examples": [
+    "- name: Install or update pip\n  community.general.easy_install:\n    name: pip\n    state: latest\n\n- name: Install Bottle into the specified virtualenv\n  community.general.easy_install:\n    name: bottle\n    virtualenv: /webapps/myapp/venv\n\n- name: Install a python package using pyvenv as the virtualenv tool\n  community.general.easy_install:\n    name: package_name\n    virtualenv: /opt/myenv\n    virtualenv_command: pyvenv"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/easy_install_module#ansible-collections-community-general-easy-install-module.html",
+  "parsed_at": "2026-04-11T13:53:12.839438"
+}

@@ -1,0 +1,61 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.openwrt_init",
+  "slug": "openwrt_init_module#ansible-collections-community-general-openwrt-init-module",
+  "description": "Controls OpenWrt services on remote hosts.",
+  "parameters": [
+    {
+      "name": "enabled",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Whether the service should start on boot. At least one of state and enabled are required. Choices: false true"
+    },
+    {
+      "name": "name",
+      "aliases": [
+        "service"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the service."
+    },
+    {
+      "name": "pattern",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "If the service does not respond to the running command, name a substring to look for as would be found in the output of the ps command as a stand-in for a running result. If the string is found, the service is assumed to be running."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"started\"",
+        "\"stopped\"",
+        "\"restarted\"",
+        "\"reloaded\""
+      ],
+      "description": "started/stopped are idempotent actions that do not run commands unless necessary. restarted always bounces the service. reloaded always reloads. Choices: \"started\" \"stopped\" \"restarted\" \"reloaded\""
+    }
+  ],
+  "examples": [
+    "- name: Start service httpd, if not running\n  community.general.openwrt_init:\n    state: started\n    name: httpd\n\n- name: Stop service cron, if running\n  community.general.openwrt_init:\n    name: cron\n    state: stopped\n\n- name: Reload service httpd, in all cases\n  community.general.openwrt_init:\n    name: httpd\n    state: reloaded\n\n- name: Enable service httpd\n  community.general.openwrt_init:\n    name: httpd\n    enabled: true"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/openwrt_init_module.html",
+  "parsed_at": "2026-04-13T16:29:55.252783"
+}

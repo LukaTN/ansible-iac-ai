@@ -1,0 +1,148 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.mqtt",
+  "slug": "mqtt_module#ansible-collections-community-general-mqtt-module",
+  "description": "Publish a message on an MQTT topic.",
+  "parameters": [
+    {
+      "name": "ca_cert",
+      "aliases": [
+        "ca_certs"
+      ],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The path to the Certificate Authority certificate files that are to be treated as trusted by this client. If this is the only option given then the client operates in a similar manner to a web browser. That is to say it requires the broker to have a certificate signed by the Certificate Authorities in ca_certs and communicates using TLS v1, but does not attempt any form of authentication. This provides basic network encryption but may not be sufficient depending on how the broker is configured."
+    },
+    {
+      "name": "client_cert",
+      "aliases": [
+        "certfile"
+      ],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The path pointing to the PEM encoded client certificate. If this is set it is used as client information for TLS based authentication. Support for this feature is broker dependent."
+    },
+    {
+      "name": "client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "MQTT client identifier. If not specified, it uses a value hostname + pid."
+    },
+    {
+      "name": "client_key",
+      "aliases": [
+        "keyfile"
+      ],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The path pointing to the PEM encoded client private key. If this is set it is used as client information for TLS based authentication. Support for this feature is broker dependent."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Password for username to authenticate against the broker."
+    },
+    {
+      "name": "payload",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Payload. The special string \"None\" may be used to send a NULL (that is, empty) payload which is useful to simply notify with the topic or to clear previously retained messages."
+    },
+    {
+      "name": "port",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "1883",
+      "choices": [],
+      "description": "MQTT broker port number. Default: 1883"
+    },
+    {
+      "name": "qos",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"0\" ← (default)",
+        "\"1\"",
+        "\"2\""
+      ],
+      "description": "QoS (Quality of Service). Choices: \"0\" ← (default) \"1\" \"2\""
+    },
+    {
+      "name": "retain",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Setting this flag causes the broker to retain (in other words keep) the message so that applications that subsequently subscribe to the topic can received the last retained message immediately. Choices: false ← (default) true"
+    },
+    {
+      "name": "server",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "localhost",
+      "choices": [],
+      "description": "MQTT broker address/name. Default: \"localhost\""
+    },
+    {
+      "name": "tls_version",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "(if",
+      "choices": [
+        "\"tlsv1.1\"",
+        "\"tlsv1.2\""
+      ],
+      "description": "Specifies the version of the SSL/TLS protocol to be used. By default (if the python version supports it) the highest TLS version is detected. If unavailable, TLS v1 is used. Choices: \"tlsv1.1\" \"tlsv1.2\""
+    },
+    {
+      "name": "topic",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "MQTT topic name."
+    },
+    {
+      "name": "username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Username to authenticate against the broker."
+    }
+  ],
+  "examples": [
+    "- name: Publish a message on an MQTT topic\n  community.general.mqtt:\n    topic: 'service/ansible/{{ ansible_hostname }}'\n    payload: 'Hello at {{ ansible_date_time.iso8601 }}'\n    qos: 0\n    retain: false\n    client_id: ans001\n  delegate_to: localhost"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/mqtt_module.html",
+  "parsed_at": "2026-04-13T16:29:53.324858"
+}

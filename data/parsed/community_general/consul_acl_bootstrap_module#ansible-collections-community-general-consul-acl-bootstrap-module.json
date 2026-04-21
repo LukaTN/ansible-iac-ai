@@ -1,0 +1,91 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.consul_acl_bootstrap",
+  "slug": "consul_acl_bootstrap_module#ansible-collections-community-general-consul-acl-bootstrap-module",
+  "description": "Allows bootstrapping of ACLs in a Consul cluster, see https://developer.hashicorp.com/consul/api-docs/acl#bootstrap-acls for details.",
+  "parameters": [
+    {
+      "name": "bootstrap_secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The secret to be used as secret ID for the initial token. Needs to be an UUID."
+    },
+    {
+      "name": "ca_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The CA bundle to use for https connections."
+    },
+    {
+      "name": "host",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "localhost",
+      "choices": [],
+      "description": "Host of the Consul agent. Default: \"localhost\""
+    },
+    {
+      "name": "port",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "8500",
+      "choices": [],
+      "description": "The port on which the consul agent is running. Default: 8500"
+    },
+    {
+      "name": "scheme",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "http",
+      "choices": [],
+      "description": "The protocol scheme on which the Consul agent is running. Defaults to http and can be set to https for secure connections. Default: \"http\""
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"bootstrapped\""
+      ],
+      "description": "Whether the token should be present or absent. Choices: \"present\" ← (default) \"bootstrapped\""
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether to verify the TLS certificate of the Consul agent. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Bootstrap the ACL system\n  community.general.consul_acl_bootstrap:\n    bootstrap_secret: 22eaeed1-bdbd-4651-724e-42ae6c43e387"
+  ],
+  "return_values": [
+    {
+      "name": "result",
+      "type": "dictionary",
+      "description": "The bootstrap result as returned by the Consul HTTP API. Note: If bootstrap_secret has been specified the SecretID and ID do not contain the secret but VALUE_SPECIFIED_IN_NO_LOG_PARAMETER. If you pass bootstrap_secret, make sure your playbook/role does not depend on this return value! Returned: changed Sample: {\"AccessorID\": \"834a5881-10a9-a45b-f63c-490e28743557\", \"CreateIndex\": 25, \"CreateTime\": \"2024-01-21T20:26:27.114612038+01:00\", \"Description\": \"Bootstrap Token (Global Management)\", \"Hash\": \"X2AgaFhnQGRhSSF/h0m6qpX1wj/HJWbyXcxkEM/5GrY=\", \"ID\": \"VALUE_SPECIFIED_IN_NO_LOG_PARAMETER\", \"Local\": false, \"ModifyIndex\": 25, \"Policies\": [{\"ID\": \"00000000-0000-0000-0000-000000000001\", \"Name\": \"global-management\"}], \"SecretID\": \"VALUE_SPECIFIED_IN_NO_LOG_PARAMETER\"}",
+      "returned": "changed"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/consul_acl_bootstrap_module.html",
+  "parsed_at": "2026-04-13T16:29:44.193399"
+}

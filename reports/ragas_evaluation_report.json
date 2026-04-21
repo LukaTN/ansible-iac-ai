@@ -1,0 +1,16 @@
+{
+  "evaluated_at": "2026-04-16T13:41:58.380007",
+  "judge_model": "qwen2.5-coder:14b",
+  "embed_model": "nomic-embed-text",
+  "samples": 5,
+  "quick_mode": true,
+  "rag_metrics": {
+    "faithfulness": 0.0,
+    "answer_relevancy": 0.0,
+    "context_precision": 0.0,
+    "context_recall": 0.0,
+    "overall": 0.0
+  },
+  "classic_metrics": null,
+  "improvement": null
+}

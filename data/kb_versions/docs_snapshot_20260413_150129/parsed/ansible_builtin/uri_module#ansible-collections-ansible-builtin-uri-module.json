@@ -1,0 +1,469 @@
+{
+  "collection_ns": "ansible_builtin",
+  "collection": "ansible.builtin",
+  "module": "ansible.builtin.uri",
+  "slug": "uri_module#ansible-collections-ansible-builtin-uri-module",
+  "description": "Interacts with HTTP and HTTPS web services and supports Digest, Basic and WSSE HTTP authentication mechanisms.",
+  "parameters": [
+    {
+      "name": "attributes",
+      "aliases": [
+        "attr"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The attributes the resulting filesystem object should have. To get supported flags look at the man page for chattr on the target system. This string should contain the attributes in the same order as the one displayed by lsattr. The = operator is assumed as default, otherwise + or - operators need to be included in the string."
+    },
+    {
+      "name": "body",
+      "aliases": [],
+      "type": "any",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The body of the http request/response to the web service. If body_format is set to json it will take an already formatted JSON string or convert a data structure into JSON. If body_format is set to form-urlencoded it will convert a dictionary or list of tuples into an application/x-www-form-urlencoded string. (Added in v2.7) If body_format is set to form-multipart it will convert a dictionary into multipart/form-multipart body. (Added in v2.10) If body_format is set to form-multipart the option ‘multipart_encoding’ allows to change multipart file encoding. (Added in v2.19)"
+    },
+    {
+      "name": "body_format",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"form-urlencoded\"",
+        "\"json\"",
+        "\"raw\" ← (default)",
+        "\"form-multipart\""
+      ],
+      "description": "The serialization format of the body. When set to json, form-multipart, or form-urlencoded, encodes the body argument, if needed, and automatically sets the Content-Type header accordingly. As of v2.3 it is possible to override the Content-Type header, when set to json or form-urlencoded via the headers option. The Content-Type header cannot be overridden when using form-multipart. form-urlencoded was added in v2.7. form-multipart was added in v2.10. Choices: \"form-urlencoded\" \"json\" \"raw\" ← (default) \"form-multipart\""
+    },
+    {
+      "name": "ca_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "PEM formatted file that contains a CA certificate to be used for validation."
+    },
+    {
+      "name": "ciphers",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "SSL/TLS Ciphers to use for the request. When a list is provided, all ciphers are joined in order with : See the OpenSSL Cipher List Format for more details. The available ciphers is dependent on the Python and OpenSSL/LibreSSL versions."
+    },
+    {
+      "name": "client_cert",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "PEM formatted certificate chain file to be used for SSL client authentication. This file can also include the key as well, and if the key is included, client_key is not required."
+    },
+    {
+      "name": "client_key",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "PEM formatted file that contains your private key to be used for SSL client authentication. If client_cert contains both the certificate and key, this option is not required."
+    },
+    {
+      "name": "creates",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A filename, when it already exists, this step will not be run."
+    },
+    {
+      "name": "decompress",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether to attempt to decompress gzip content-encoded responses. Choices: false true ← (default)"
+    },
+    {
+      "name": "dest",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A path of where to download the file to (if desired). If dest is a directory, the basename of the file on the remote server will be used."
+    },
+    {
+      "name": "follow_redirects",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"all\": Will follow all redirects.",
+        "\"no\": (DEPRECATED, removed in 2.22) alias of none.",
+        "\"none\": Will not follow any redirects.",
+        "\"safe\" (default): Only redirects doing GET or HEAD requests will be followed.",
+        "\"urllib2\": Defer to urllib2 behavior (As of writing this follows HTTP redirects).",
+        "\"yes\": (DEPRECATED, removed in 2.22) alias of all."
+      ],
+      "description": "Whether or not the URI module should follow redirects. Choices: \"all\": Will follow all redirects. \"no\": (DEPRECATED, removed in 2.22) alias of none. \"none\": Will not follow any redirects. \"safe\" (default): Only redirects doing GET or HEAD requests will be followed. \"urllib2\": Defer to urllib2 behavior (As of writing this follows HTTP redirects). \"yes\": (DEPRECATED, removed in 2.22) alias of all."
+    },
+    {
+      "name": "force",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If true do not get a cached copy. Choices: false ← (default) true"
+    },
+    {
+      "name": "force_basic_auth",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Force the sending of the Basic authentication header upon initial request. When this setting is false, this module will first try an unauthenticated request, and when the server replies with an HTTP 401 error, it will submit the Basic authentication header. When this setting is true, this module will immediately send a Basic authentication header on the first request. Use this setting in any of the following scenarios: You know the webservice endpoint always requires HTTP Basic authentication, and you want to speed up your requests by eliminating the first roundtrip. The web service does not properly send an HTTP 401 error to your client, so Ansible’s HTTP library will not properly respond with HTTP credentials, and logins will fail. The webservice bans or rate-limits clients that cause any HTTP 401 errors. Choices: false ← (default) true"
+    },
+    {
+      "name": "group",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of the group that should own the filesystem object, as would be fed to chown. When left unspecified, it uses the current group of the current user unless you are root, in which case it can preserve the previous ownership."
+    },
+    {
+      "name": "headers",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "Add custom HTTP headers to a request in the format of a YAML hash. As of Ansible 2.3 supplying Content-Type here will override the header generated by supplying json or form-urlencoded for body_format. Default: {}"
+    },
+    {
+      "name": "http_agent",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "ansible-httpget",
+      "choices": [],
+      "description": "Header to identify as, generally appears in web server logs. Default: \"ansible-httpget\""
+    },
+    {
+      "name": "method",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "GET",
+      "choices": [],
+      "description": "The HTTP method of the request or response. In more recent versions we do not restrict the method at the module level anymore but it still must be a valid method accepted by the service handling the request. Default: \"GET\""
+    },
+    {
+      "name": "mode",
+      "aliases": [],
+      "type": "any",
+      "required": false,
+      "default": "umask",
+      "choices": [],
+      "description": "The permissions the resulting filesystem object should have. For those used to /usr/bin/chmod remember that modes are actually octal numbers. You must give Ansible enough information to parse them correctly. For consistent results, quote octal numbers (for example, '644' or '1777') so Ansible receives a string and can do its own conversion from string into number. Adding a leading zero (for example, 0755) works sometimes, but can fail in loops and some other circumstances. Giving Ansible a number without following either of these rules will end up with a decimal number which will have unexpected results. As of Ansible 1.8, the mode may be specified as a symbolic mode (for example, u+rwx or u=rw,g=r,o=r). If mode is not specified and the destination filesystem object does not exist, the default umask on the system will be used when setting the mode for the newly created filesystem object. If mode is not specified and the destination filesystem object does exist, the mode of the existing filesystem object will be used. Specifying mode is the best way to ensure filesystem objects are created with the correct permissions. See CVE-2020-1736 for further details."
+    },
+    {
+      "name": "owner",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of the user that should own the filesystem object, as would be fed to chown. When left unspecified, it uses the current user unless you are root, in which case it can preserve the previous ownership. Specifying a numeric username will be assumed to be a user ID and not a username. Avoid numeric usernames to avoid this confusion."
+    },
+    {
+      "name": "remote_src",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If false, the module will search for the src on the controller node. If true, the module will search for the src on the managed (remote) node. Choices: false ← (default) true"
+    },
+    {
+      "name": "removes",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A filename, when it does not exist, this step will not be run."
+    },
+    {
+      "name": "return_content",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Whether or not to return the body of the response as a “content” key in the dictionary result no matter it succeeded or failed. Independently of this option, if the reported Content-Type is application/json, then the JSON is always loaded into a key called json in the dictionary results. Choices: false ← (default) true"
+    },
+    {
+      "name": "selevel",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The level part of the SELinux filesystem object context. This is the MLS/MCS attribute, sometimes known as the range. When set to _default, it will use the level portion of the policy if available."
+    },
+    {
+      "name": "serole",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The role part of the SELinux filesystem object context. When set to _default, it will use the role portion of the policy if available."
+    },
+    {
+      "name": "setype",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The type part of the SELinux filesystem object context. When set to _default, it will use the type portion of the policy if available."
+    },
+    {
+      "name": "seuser",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "it",
+      "choices": [],
+      "description": "The user part of the SELinux filesystem object context. By default it uses the system policy, where applicable. When set to _default, it will use the user portion of the policy if available."
+    },
+    {
+      "name": "src",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to file to be submitted to the remote server. Cannot be used with body. Should be used with force_basic_auth to ensure success when the remote end sends a 401."
+    },
+    {
+      "name": "status_code",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[200]",
+      "choices": [],
+      "description": "A list of valid, numeric, HTTP status codes that signifies success of the request. Default: [200]"
+    },
+    {
+      "name": "timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "30",
+      "choices": [],
+      "description": "The socket level timeout in seconds Default: 30"
+    },
+    {
+      "name": "unix_socket",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to Unix domain socket to use for connection."
+    },
+    {
+      "name": "unredirected_headers",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "all",
+      "choices": [],
+      "description": "A list of header names that will not be sent on subsequent redirected requests. This list is case insensitive. By default all headers will be redirected. In some cases it may be beneficial to list headers such as Authorization here to avoid potential credential exposure. Default: []"
+    },
+    {
+      "name": "unsafe_writes",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "this",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Influence when to use atomic operation to prevent data corruption or inconsistent reads from the target filesystem object. By default this module uses atomic operations to prevent data corruption or inconsistent reads from the target filesystem objects, but sometimes systems are configured or just broken in ways that prevent this. One example is docker mounted filesystem objects, which cannot be updated atomically from inside the container and can only be written in an unsafe manner. This option allows Ansible to fall back to unsafe methods of updating filesystem objects when atomic operations fail (however, it doesn’t force Ansible to perform unsafe writes). IMPORTANT! Unsafe writes are subject to race conditions and can lead to data corruption. Choices: false ← (default) true"
+    },
+    {
+      "name": "url",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "HTTP or HTTPS URL in the form (http|https)://host.domain[:port]/path."
+    },
+    {
+      "name": "url_password",
+      "aliases": [
+        "password"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A password for the module to use for Digest, Basic or WSSE authentication."
+    },
+    {
+      "name": "url_username",
+      "aliases": [
+        "user"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A username for the module to use for Digest, Basic or WSSE authentication."
+    },
+    {
+      "name": "use_gssapi",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use GSSAPI to perform the authentication, typically this is for Kerberos or Kerberos through Negotiate authentication. Requires the Python library gssapi to be installed. Credentials for GSSAPI can be specified with url_username/url_password or with the GSSAPI env var KRB5CCNAME that specified a custom Kerberos credential cache. NTLM authentication is not supported even if the GSSAPI mech for NTLM has been installed. Choices: false ← (default) true"
+    },
+    {
+      "name": "use_netrc",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": ".netrc",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Determining whether to use credentials from ~/.netrc file. By default .netrc is used with Basic authentication headers. When false, .netrc credentials are ignored. Choices: false true ← (default)"
+    },
+    {
+      "name": "use_proxy",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If false, it will not use a proxy, even if one is defined in an environment variable on the target hosts. Choices: false true ← (default)"
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If false, SSL certificates will not be validated. This should only set to false used on personally controlled sites using self-signed certificates. Prior to 1.9.2 the code defaulted to false. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Check that you can connect (GET) to a page and it returns a status 200\n  ansible.builtin.uri:\n    url: http://www.example.com\n\n- name: Check that a page returns successfully but fail if the word AWESOME is not in the page contents\n  ansible.builtin.uri:\n    url: http://www.example.com\n    return_content: true\n  register: this\n  failed_when: \"this is failed or 'AWESOME' not in this.content\"\n\n- name: Create a JIRA issue\n  ansible.builtin.uri:\n    url: https://your.jira.example.com/rest/api/2/issue/\n    user: your_username\n    password: your_pass\n    method: POST\n    body: \"{{ lookup('ansible.builtin.file','issue.json') }}\"\n    force_basic_auth: true\n    status_code: 201\n    body_format: json\n\n- name: Login to a form based webpage, then use the returned cookie to access the app in later tasks\n  ansible.builtin.uri:\n    url: https://your.form.based.auth.example.com/index.php\n    method: POST\n    body_format: form-urlencoded\n    body:\n      name: your_username\n      password: your_password\n      enter: Sign in\n    status_code: 302\n  register: login\n\n- name: Login to a form based webpage using a list of tuples\n  ansible.builtin.uri:\n    url: https://your.form.based.auth.example.com/index.php\n    method: POST\n    body_format: form-urlencoded\n    body:\n    - [ name, your_username ]\n    - [ password, your_password ]\n    - [ enter, Sign in ]\n    status_code: 302\n  register: login\n\n- name: Upload a file via multipart/form-multipart\n  ansible.builtin.uri:\n    url: https://httpbin.org/post\n    method: POST\n    body_format: form-multipart\n    body:\n      file1:\n        filename: /bin/true\n        mime_type: application/octet-stream\n        multipart_encoding: base64\n      file2:\n        content: text based file content\n        filename: fake.txt\n        mime_type: text/plain\n        multipart_encoding: 7or8bit\n      text_form_field: value\n\n- name: Connect to website using a previously stored cookie\n  ansible.builtin.uri:\n    url: https://your.form.based.auth.example.com/dashboard.php\n    method: GET\n    return_content: true\n    headers:\n      Cookie: \"{{ login.cookies_string }}\"\n\n- name: Queue build of a project in Jenkins\n  ansible.builtin.uri:\n    url: http://{{ jenkins.host }}/job/{{ jenkins.job }}/build?token={{ jenkins.token }}\n    user: \"{{ jenkins.user }}\"\n    password: \"{{ jenkins.password }}\"\n    method: GET\n    force_basic_auth: true\n    status_code: 201\n\n- name: POST from contents of local file\n  ansible.builtin.uri:\n    url: https://httpbin.org/post\n    method: POST\n    src: file.json\n\n- name: POST from contents of remote file\n  ansible.builtin.uri:\n    url: https://httpbin.org/post\n    method: POST\n    src: /path/to/my/file.json\n    remote_src: true\n\n- name: Create workspaces in Log analytics Azure\n  ansible.builtin.uri:\n    url: https://www.mms.microsoft.com/Embedded/Api/ConfigDataSources/LogManagementData/Save\n    method: POST\n    body_format: json\n    status_code: [200, 202]\n    return_content: true\n    headers:\n      Content-Type: application/json\n      x-ms-client-workspace-path: /subscriptions/{{ sub_id }}/resourcegroups/{{ res_group }}/providers/microsoft.operationalinsights/workspaces/{{ w_spaces }}\n      x-ms-client-platform: ibiza\n      x-ms-client-auth-token: \"{{ token_az }}\"\n    body:\n\n- name: Pause play until a URL is reachable from this host\n  ansible.builtin.uri:\n    url: \"http://192.0.2.1/some/test\"\n    follow_redirects: none\n    method: GET\n  register: _result\n  until: _result.status == 200\n  retries: 720 # 720 * 5 seconds = 1hour (60*60/5)\n  delay: 5 # Every 5 seconds\n\n- name: Provide SSL/TLS ciphers as a list\n  uri:\n    url: https://example.org\n    ciphers:\n      - '@SECLEVEL=2'\n      - ECDH+AESGCM\n      - ECDH+CHACHA20\n      - ECDH+AES\n      - DHE+AES\n      - '!aNULL'\n      - '!eNULL'\n      - '!aDSS'\n      - '!SHA1'\n      - '!AESCCM'\n\n- name: Provide SSL/TLS ciphers as an OpenSSL formatted cipher list\n  uri:\n    url: https://example.org\n    ciphers: '@SECLEVEL=2:ECDH+AESGCM:ECDH+CHACHA20:ECDH+AES:DHE+AES:!aNULL:!eNULL:!aDSS:!SHA1:!AESCCM'"
+  ],
+  "return_values": [
+    {
+      "name": "content",
+      "type": "string",
+      "description": "The response body content. Returned: status not in status_code or return_content is true Sample: \"{}\"",
+      "returned": "status"
+    },
+    {
+      "name": "cookies",
+      "type": "dictionary",
+      "description": "The cookie values placed in cookie jar. Returned: on success Sample: {\"SESSIONID\": \"[SESSIONID]\"}",
+      "returned": "on"
+    },
+    {
+      "name": "cookies_string",
+      "type": "string",
+      "description": "The value for future request Cookie headers. Returned: on success Sample: \"SESSIONID=[SESSIONID]\"",
+      "returned": "on"
+    },
+    {
+      "name": "elapsed",
+      "type": "integer",
+      "description": "The number of seconds that elapsed while performing the download. Returned: on success Sample: 23",
+      "returned": "on"
+    },
+    {
+      "name": "msg",
+      "type": "string",
+      "description": "The HTTP message from the request. Returned: always Sample: \"OK (unknown bytes)\"",
+      "returned": "always"
+    },
+    {
+      "name": "path",
+      "type": "string",
+      "description": "destination file/path Returned: dest is defined Sample: \"/path/to/file.txt\"",
+      "returned": "dest"
+    },
+    {
+      "name": "redirected",
+      "type": "boolean",
+      "description": "Whether the request was redirected. Returned: on success Sample: false",
+      "returned": "on"
+    },
+    {
+      "name": "status",
+      "type": "integer",
+      "description": "The HTTP status code from the request. Returned: always Sample: 200",
+      "returned": "always"
+    },
+    {
+      "name": "url",
+      "type": "string",
+      "description": "The actual URL used for the request. Returned: always Sample: \"https://www.ansible.com/\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/uri_module#ansible-collections-ansible-builtin-uri-module.html",
+  "parsed_at": "2026-04-11T13:52:53.015707"
+}

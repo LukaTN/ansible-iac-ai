@@ -1,0 +1,439 @@
+{
+  "collection": "ansible.builtin",
+  "description": "Ansible built-in modules",
+  "index_url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/index.html",
+  "scraped_at": "2026-04-11T13:40:26.641238",
+  "total": 71,
+  "ok": 71,
+  "skipped": 0,
+  "errors": 0,
+  "output_dir": "data/raw_html\\ansible_builtin",
+  "results": [
+    {
+      "slug": "add_host_module#ansible-collections-ansible-builtin-add-host-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/add_host_module.html#ansible-collections-ansible-builtin-add-host-module",
+      "status": "ok",
+      "size": 56306
+    },
+    {
+      "slug": "apt_module#ansible-collections-ansible-builtin-apt-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html#ansible-collections-ansible-builtin-apt-module",
+      "status": "ok",
+      "size": 97707
+    },
+    {
+      "slug": "apt_key_module#ansible-collections-ansible-builtin-apt-key-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_key_module.html#ansible-collections-ansible-builtin-apt-key-module",
+      "status": "ok",
+      "size": 61276
+    },
+    {
+      "slug": "apt_repository_module#ansible-collections-ansible-builtin-apt-repository-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_repository_module.html#ansible-collections-ansible-builtin-apt-repository-module",
+      "status": "ok",
+      "size": 58927
+    },
+    {
+      "slug": "assemble_module#ansible-collections-ansible-builtin-assemble-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/assemble_module.html#ansible-collections-ansible-builtin-assemble-module",
+      "status": "ok",
+      "size": 64552
+    },
+    {
+      "slug": "assert_module#ansible-collections-ansible-builtin-assert-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/assert_module.html#ansible-collections-ansible-builtin-assert-module",
+      "status": "ok",
+      "size": 51903
+    },
+    {
+      "slug": "async_status_module#ansible-collections-ansible-builtin-async-status-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/async_status_module.html#ansible-collections-ansible-builtin-async-status-module",
+      "status": "ok",
+      "size": 51880
+    },
+    {
+      "slug": "blockinfile_module#ansible-collections-ansible-builtin-blockinfile-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/blockinfile_module.html#ansible-collections-ansible-builtin-blockinfile-module",
+      "status": "ok",
+      "size": 81985
+    },
+    {
+      "slug": "command_module#ansible-collections-ansible-builtin-command-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/command_module.html#ansible-collections-ansible-builtin-command-module",
+      "status": "ok",
+      "size": 73817
+    },
+    {
+      "slug": "copy_module#ansible-collections-ansible-builtin-copy-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/copy_module.html#ansible-collections-ansible-builtin-copy-module",
+      "status": "ok",
+      "size": 95207
+    },
+    {
+      "slug": "cron_module#ansible-collections-ansible-builtin-cron-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/cron_module.html#ansible-collections-ansible-builtin-cron-module",
+      "status": "ok",
+      "size": 70673
+    },
+    {
+      "slug": "deb822_repository_module#ansible-collections-ansible-builtin-deb822-repository-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/deb822_repository_module.html#ansible-collections-ansible-builtin-deb822-repository-module",
+      "status": "ok",
+      "size": 67196
+    },
+    {
+      "slug": "debconf_module#ansible-collections-ansible-builtin-debconf-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/debconf_module.html#ansible-collections-ansible-builtin-debconf-module",
+      "status": "ok",
+      "size": 52089
+    },
+    {
+      "slug": "debug_module#ansible-collections-ansible-builtin-debug-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/debug_module.html#ansible-collections-ansible-builtin-debug-module",
+      "status": "ok",
+      "size": 49812
+    },
+    {
+      "slug": "dnf_module#ansible-collections-ansible-builtin-dnf-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/dnf_module.html#ansible-collections-ansible-builtin-dnf-module",
+      "status": "ok",
+      "size": 95426
+    },
+    {
+      "slug": "dnf5_module#ansible-collections-ansible-builtin-dnf5-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/dnf5_module.html#ansible-collections-ansible-builtin-dnf5-module",
+      "status": "ok",
+      "size": 97093
+    },
+    {
+      "slug": "dpkg_selections_module#ansible-collections-ansible-builtin-dpkg-selections-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/dpkg_selections_module.html#ansible-collections-ansible-builtin-dpkg-selections-module",
+      "status": "ok",
+      "size": 40182
+    },
+    {
+      "slug": "expect_module#ansible-collections-ansible-builtin-expect-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/expect_module.html#ansible-collections-ansible-builtin-expect-module",
+      "status": "ok",
+      "size": 50893
+    },
+    {
+      "slug": "fail_module#ansible-collections-ansible-builtin-fail-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/fail_module.html#ansible-collections-ansible-builtin-fail-module",
+      "status": "ok",
+      "size": 43884
+    },
+    {
+      "slug": "fetch_module#ansible-collections-ansible-builtin-fetch-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/fetch_module.html#ansible-collections-ansible-builtin-fetch-module",
+      "status": "ok",
+      "size": 53625
+    },
+    {
+      "slug": "file_module#ansible-collections-ansible-builtin-file-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html#ansible-collections-ansible-builtin-file-module",
+      "status": "ok",
+      "size": 87904
+    },
+    {
+      "slug": "find_module#ansible-collections-ansible-builtin-find-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/find_module.html#ansible-collections-ansible-builtin-find-module",
+      "status": "ok",
+      "size": 79204
+    },
+    {
+      "slug": "gather_facts_module#ansible-collections-ansible-builtin-gather-facts-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/gather_facts_module.html#ansible-collections-ansible-builtin-gather-facts-module",
+      "status": "ok",
+      "size": 43977
+    },
+    {
+      "slug": "get_url_module#ansible-collections-ansible-builtin-get-url-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/get_url_module.html#ansible-collections-ansible-builtin-get-url-module",
+      "status": "ok",
+      "size": 103832
+    },
+    {
+      "slug": "getent_module#ansible-collections-ansible-builtin-getent-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/getent_module.html#ansible-collections-ansible-builtin-getent-module",
+      "status": "ok",
+      "size": 48035
+    },
+    {
+      "slug": "git_module#ansible-collections-ansible-builtin-git-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/git_module.html#ansible-collections-ansible-builtin-git-module",
+      "status": "ok",
+      "size": 81865
+    },
+    {
+      "slug": "group_module#ansible-collections-ansible-builtin-group-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/group_module.html#ansible-collections-ansible-builtin-group-module",
+      "status": "ok",
+      "size": 53635
+    },
+    {
+      "slug": "group_by_module#ansible-collections-ansible-builtin-group-by-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/group_by_module.html#ansible-collections-ansible-builtin-group-by-module",
+      "status": "ok",
+      "size": 50344
+    },
+    {
+      "slug": "hostname_module#ansible-collections-ansible-builtin-hostname-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/hostname_module.html#ansible-collections-ansible-builtin-hostname-module",
+      "status": "ok",
+      "size": 43909
+    },
+    {
+      "slug": "import_playbook_module#ansible-collections-ansible-builtin-import-playbook-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/import_playbook_module.html#ansible-collections-ansible-builtin-import-playbook-module",
+      "status": "ok",
+      "size": 51107
+    },
+    {
+      "slug": "import_role_module#ansible-collections-ansible-builtin-import-role-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/import_role_module.html#ansible-collections-ansible-builtin-import-role-module",
+      "status": "ok",
+      "size": 59203
+    },
+    {
+      "slug": "import_tasks_module#ansible-collections-ansible-builtin-import-tasks-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/import_tasks_module.html#ansible-collections-ansible-builtin-import-tasks-module",
+      "status": "ok",
+      "size": 51442
+    },
+    {
+      "slug": "include_role_module#ansible-collections-ansible-builtin-include-role-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/include_role_module.html#ansible-collections-ansible-builtin-include-role-module",
+      "status": "ok",
+      "size": 62392
+    },
+    {
+      "slug": "include_tasks_module#ansible-collections-ansible-builtin-include-tasks-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/include_tasks_module.html#ansible-collections-ansible-builtin-include-tasks-module",
+      "status": "ok",
+      "size": 54138
+    },
+    {
+      "slug": "include_vars_module#ansible-collections-ansible-builtin-include-vars-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/include_vars_module.html#ansible-collections-ansible-builtin-include-vars-module",
+      "status": "ok",
+      "size": 67925
+    },
+    {
+      "slug": "iptables_module#ansible-collections-ansible-builtin-iptables-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/iptables_module.html#ansible-collections-ansible-builtin-iptables-module",
+      "status": "ok",
+      "size": 114341
+    },
+    {
+      "slug": "known_hosts_module#ansible-collections-ansible-builtin-known-hosts-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/known_hosts_module.html#ansible-collections-ansible-builtin-known-hosts-module",
+      "status": "ok",
+      "size": 47275
+    },
+    {
+      "slug": "lineinfile_module#ansible-collections-ansible-builtin-lineinfile-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/lineinfile_module.html#ansible-collections-ansible-builtin-lineinfile-module",
+      "status": "ok",
+      "size": 93163
+    },
+    {
+      "slug": "meta_module#ansible-collections-ansible-builtin-meta-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/meta_module.html#ansible-collections-ansible-builtin-meta-module",
+      "status": "ok",
+      "size": 60635
+    },
+    {
+      "slug": "mount_facts_module#ansible-collections-ansible-builtin-mount-facts-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/mount_facts_module.html#ansible-collections-ansible-builtin-mount-facts-module",
+      "status": "ok",
+      "size": 52235
+    },
+    {
+      "slug": "package_module#ansible-collections-ansible-builtin-package-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/package_module.html#ansible-collections-ansible-builtin-package-module",
+      "status": "ok",
+      "size": 48862
+    },
+    {
+      "slug": "package_facts_module#ansible-collections-ansible-builtin-package-facts-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/package_facts_module.html#ansible-collections-ansible-builtin-package-facts-module",
+      "status": "ok",
+      "size": 63599
+    },
+    {
+      "slug": "pause_module#ansible-collections-ansible-builtin-pause-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/pause_module.html#ansible-collections-ansible-builtin-pause-module",
+      "status": "ok",
+      "size": 55375
+    },
+    {
+      "slug": "ping_module#ansible-collections-ansible-builtin-ping-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/ping_module.html#ansible-collections-ansible-builtin-ping-module",
+      "status": "ok",
+      "size": 42223
+    },
+    {
+      "slug": "pip_module#ansible-collections-ansible-builtin-pip-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/pip_module.html#ansible-collections-ansible-builtin-pip-module",
+      "status": "ok",
+      "size": 76685
+    },
+    {
+      "slug": "raw_module#ansible-collections-ansible-builtin-raw-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/raw_module.html#ansible-collections-ansible-builtin-raw-module",
+      "status": "ok",
+      "size": 45694
+    },
+    {
+      "slug": "reboot_module#ansible-collections-ansible-builtin-reboot-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/reboot_module.html#ansible-collections-ansible-builtin-reboot-module",
+      "status": "ok",
+      "size": 56501
+    },
+    {
+      "slug": "replace_module#ansible-collections-ansible-builtin-replace-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/replace_module.html#ansible-collections-ansible-builtin-replace-module",
+      "status": "ok",
+      "size": 73146
+    },
+    {
+      "slug": "rpm_key_module#ansible-collections-ansible-builtin-rpm-key-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/rpm_key_module.html#ansible-collections-ansible-builtin-rpm-key-module",
+      "status": "ok",
+      "size": 44175
+    },
+    {
+      "slug": "script_module#ansible-collections-ansible-builtin-script-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/script_module.html#ansible-collections-ansible-builtin-script-module",
+      "status": "ok",
+      "size": 51807
+    },
+    {
+      "slug": "service_module#ansible-collections-ansible-builtin-service-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/service_module.html#ansible-collections-ansible-builtin-service-module",
+      "status": "ok",
+      "size": 56861
+    },
+    {
+      "slug": "service_facts_module#ansible-collections-ansible-builtin-service-facts-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/service_facts_module.html#ansible-collections-ansible-builtin-service-facts-module",
+      "status": "ok",
+      "size": 49452
+    },
+    {
+      "slug": "set_fact_module#ansible-collections-ansible-builtin-set-fact-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/set_fact_module.html#ansible-collections-ansible-builtin-set-fact-module",
+      "status": "ok",
+      "size": 57973
+    },
+    {
+      "slug": "set_stats_module#ansible-collections-ansible-builtin-set-stats-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/set_stats_module.html#ansible-collections-ansible-builtin-set-stats-module",
+      "status": "ok",
+      "size": 52223
+    },
+    {
+      "slug": "setup_module#ansible-collections-ansible-builtin-setup-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/setup_module.html#ansible-collections-ansible-builtin-setup-module",
+      "status": "ok",
+      "size": 57832
+    },
+    {
+      "slug": "shell_module#ansible-collections-ansible-builtin-shell-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/shell_module.html#ansible-collections-ansible-builtin-shell-module",
+      "status": "ok",
+      "size": 64916
+    },
+    {
+      "slug": "slurp_module#ansible-collections-ansible-builtin-slurp-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/slurp_module.html#ansible-collections-ansible-builtin-slurp-module",
+      "status": "ok",
+      "size": 43799
+    },
+    {
+      "slug": "stat_module#ansible-collections-ansible-builtin-stat-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/stat_module.html#ansible-collections-ansible-builtin-stat-module",
+      "status": "ok",
+      "size": 104847
+    },
+    {
+      "slug": "subversion_module#ansible-collections-ansible-builtin-subversion-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/subversion_module.html#ansible-collections-ansible-builtin-subversion-module",
+      "status": "ok",
+      "size": 53986
+    },
+    {
+      "slug": "systemd_service_module#ansible-collections-ansible-builtin-systemd-service-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/systemd_service_module.html#ansible-collections-ansible-builtin-systemd-service-module",
+      "status": "ok",
+      "size": 75578
+    },
+    {
+      "slug": "sysvinit_module#ansible-collections-ansible-builtin-sysvinit-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/sysvinit_module.html#ansible-collections-ansible-builtin-sysvinit-module",
+      "status": "ok",
+      "size": 52830
+    },
+    {
+      "slug": "tempfile_module#ansible-collections-ansible-builtin-tempfile-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/tempfile_module.html#ansible-collections-ansible-builtin-tempfile-module",
+      "status": "ok",
+      "size": 45889
+    },
+    {
+      "slug": "template_module#ansible-collections-ansible-builtin-template-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/template_module.html#ansible-collections-ansible-builtin-template-module",
+      "status": "ok",
+      "size": 91530
+    },
+    {
+      "slug": "unarchive_module#ansible-collections-ansible-builtin-unarchive-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/unarchive_module.html#ansible-collections-ansible-builtin-unarchive-module",
+      "status": "ok",
+      "size": 87982
+    },
+    {
+      "slug": "uri_module#ansible-collections-ansible-builtin-uri-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/uri_module.html#ansible-collections-ansible-builtin-uri-module",
+      "status": "ok",
+      "size": 118112
+    },
+    {
+      "slug": "user_module#ansible-collections-ansible-builtin-user-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/user_module.html#ansible-collections-ansible-builtin-user-module",
+      "status": "ok",
+      "size": 116593
+    },
+    {
+      "slug": "validate_argument_spec_module#ansible-collections-ansible-builtin-validate-argument-spec-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/validate_argument_spec_module.html#ansible-collections-ansible-builtin-validate-argument-spec-module",
+      "status": "ok",
+      "size": 53864
+    },
+    {
+      "slug": "wait_for_module#ansible-collections-ansible-builtin-wait-for-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/wait_for_module.html#ansible-collections-ansible-builtin-wait-for-module",
+      "status": "ok",
+      "size": 69580
+    },
+    {
+      "slug": "wait_for_connection_module#ansible-collections-ansible-builtin-wait-for-connection-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/wait_for_connection_module.html#ansible-collections-ansible-builtin-wait-for-connection-module",
+      "status": "ok",
+      "size": 53221
+    },
+    {
+      "slug": "yum_repository_module#ansible-collections-ansible-builtin-yum-repository-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/yum_repository_module.html#ansible-collections-ansible-builtin-yum-repository-module",
+      "status": "ok",
+      "size": 113356
+    },
+    {
+      "slug": "add_host_module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/add_host_module.html",
+      "status": "ok",
+      "size": 56306
+    }
+  ]
+}

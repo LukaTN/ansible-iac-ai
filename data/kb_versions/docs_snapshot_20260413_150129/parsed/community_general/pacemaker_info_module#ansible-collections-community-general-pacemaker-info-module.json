@@ -1,0 +1,51 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.pacemaker_info",
+  "slug": "pacemaker_info_module#ansible-collections-community-general-pacemaker-info-module",
+  "description": "Gather information about a Pacemaker cluster.",
+  "parameters": [],
+  "examples": [
+    "- name: Gather Pacemaker cluster info\n  community.general.pacemaker_info:\n  register: result\n\n- name: Debug cluster info\n  ansible.builtin.debug:\n    msg: \"{{ result }}\""
+  ],
+  "return_values": [
+    {
+      "name": "cluster_info",
+      "type": "dictionary",
+      "description": "Cluster information such as the name, UUID, and nodes. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "constraint_info",
+      "type": "dictionary",
+      "description": "All cluster resource constraints on the cluster. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "property_info",
+      "type": "dictionary",
+      "description": "All properties present on the cluster. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "resource_info",
+      "type": "dictionary",
+      "description": "All resources available on the cluster and their status. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "stonith_info",
+      "type": "dictionary",
+      "description": "All STONITH information on the cluster. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "version",
+      "type": "string",
+      "description": "Pacemaker CLI version Returned: always",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/pacemaker_info_module#ansible-collections-community-general-pacemaker-info-module.html",
+  "parsed_at": "2026-04-11T13:53:23.016194"
+}

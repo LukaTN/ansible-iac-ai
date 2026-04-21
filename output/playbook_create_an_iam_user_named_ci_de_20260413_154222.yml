@@ -1,0 +1,25 @@
+# ============================================================
+# AnsibleAI RAG Generator — LangChain + ChromaDB
+# Date        : 2026-04-13 15:42:22
+# Request     : create an IAM user named ci-deployer with programmatic access
+# Module      : amazon.aws.iam_user
+# Collection  : amazon.aws
+# RAG score   : 0.591
+# Chunks used : 6
+# Source URL  : https://docs.ansible.com/ansible/latest/collections/amazon/aws/iam_user_module#ansible-collections-amazon-aws-iam-user-module.html
+# LLM model   : qwen2.5-coder:7b
+# ============================================================
+
+---
+- name: Create IAM user ci-deployer with programmatic access
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - amazon.aws
+  tasks:
+    - name: Create IAM user ci-deployer
+      amazon.aws.iam_user:
+        name: ci-deployer
+        state: present
+        create_login_profile: yes

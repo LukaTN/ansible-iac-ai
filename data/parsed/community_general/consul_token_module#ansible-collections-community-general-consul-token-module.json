@@ -1,0 +1,190 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.consul_token",
+  "slug": "consul_token_module#ansible-collections-community-general-consul-token-module",
+  "description": "Allows the addition, modification and deletion of tokens in a Consul cluster using the agent. For more details on using and configuring ACLs, see https://www.consul.io/docs/guides/acl.html.",
+  "parameters": [
+    {
+      "name": "accessor_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies a UUID to use as the token’s Accessor ID. If not specified a UUID is generated for this field."
+    },
+    {
+      "name": "ca_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The CA bundle to use for https connections."
+    },
+    {
+      "name": "description",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Free form human readable description of the token."
+    },
+    {
+      "name": "expiration_ttl",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "This is a convenience field and if set it initializes the expiration_time. Can be specified in the form of 60s or 5m (that is, 60 seconds or 5 minutes, respectively). Ingored when the token is updated!"
+    },
+    {
+      "name": "host",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "localhost",
+      "choices": [],
+      "description": "Host of the Consul agent. Default: \"localhost\""
+    },
+    {
+      "name": "local",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "If true, indicates that the token should not be replicated globally and instead be local to the current datacenter. Choices: false true"
+    },
+    {
+      "name": "node_identities",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of node identities to attach to the token. If not specified, any node identities currently assigned are not changed. If the parameter is an empty array ([]), any node identities assigned are unassigned."
+    },
+    {
+      "name": "policies",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of policies to attach to the token. Each policy is a dict. If the parameter is left blank, any policies currently assigned are not changed. Any empty array ([]) clears any policies previously set."
+    },
+    {
+      "name": "port",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "8500",
+      "choices": [],
+      "description": "The port on which the consul agent is running. Default: 8500"
+    },
+    {
+      "name": "roles",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of roles to attach to the token. Each role is a dict. If the parameter is left blank, any roles currently assigned are not changed. Any empty array ([]) clears any roles previously set."
+    },
+    {
+      "name": "scheme",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "http",
+      "choices": [],
+      "description": "The protocol scheme on which the Consul agent is running. Defaults to http and can be set to https for secure connections. Default: \"http\""
+    },
+    {
+      "name": "secret_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies a UUID to use as the token’s Secret ID. If not specified a UUID is generated for this field."
+    },
+    {
+      "name": "service_identities",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of service identities to attach to the token. If not specified, any service identities currently assigned are not changed. If the parameter is an empty array ([]), any node identities assigned are unassigned."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Whether the token should be present or absent. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "templated_policies",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The list of templated policies that should be applied to the role."
+    },
+    {
+      "name": "token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The token to use for authorization."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether to verify the TLS certificate of the Consul agent. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Create / Update a token by accessor_id\n  community.general.consul_token:\n    state: present\n    accessor_id: 07a7de84-c9c7-448a-99cc-beaf682efd21\n    token: 8adddd91-0bd6-d41d-ae1a-3b49cfa9a0e8\n    roles:\n      - name: role1\n      - name: role2\n    service_identities:\n      - service_name: service1\n        datacenters: [dc1, dc2]\n    node_identities:\n      - node_name: node1\n        datacenter: dc1\n    expiration_ttl: 50m\n\n- name: Delete a token\n  community.general.consul_token:\n    state: absent\n    accessor_id: 07a7de84-c9c7-448a-99cc-beaf682efd21\n    token: 8adddd91-0bd6-d41d-ae1a-3b49cfa9a0e8"
+  ],
+  "return_values": [
+    {
+      "name": "operation",
+      "type": "string",
+      "description": "The operation performed. Returned: changed Sample: \"update\"",
+      "returned": "changed"
+    },
+    {
+      "name": "token",
+      "type": "dictionary",
+      "description": "The token as returned by the Consul HTTP API. Returned: always Sample: {\"AccessorID\": \"07a7de84-c9c7-448a-99cc-beaf682efd21\", \"CreateIndex\": 632, \"CreateTime\": \"2024-01-14T21:53:01.402749174+01:00\", \"Description\": \"Testing\", \"Hash\": \"rj5PeDHddHslkpW7Ij4OD6N4bbSXiecXFmiw2SYXg2A=\", \"Local\": false, \"ModifyIndex\": 633, \"SecretID\": \"bd380fba-da17-7cee-8576-8d6427c6c930\", \"ServiceIdentities\": [{\"ServiceName\": \"test\"}]}",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/consul_token_module.html",
+  "parsed_at": "2026-04-13T16:29:44.473629"
+}

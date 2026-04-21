@@ -1,0 +1,60 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.apt_repo",
+  "slug": "apt_repo_module#ansible-collections-community-general-apt-repo-module",
+  "description": "Manages APT repositories using apt-repo tool.",
+  "parameters": [
+    {
+      "name": "remove_others",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Remove other then added repositories. Used if state=present. Choices: false ← (default) true"
+    },
+    {
+      "name": "repo",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the repository to add or remove."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)"
+      ],
+      "description": "Indicates the desired repository state. Choices: \"absent\" \"present\" ← (default)"
+    },
+    {
+      "name": "update",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Update the package database after changing repositories. Choices: false ← (default) true"
+    }
+  ],
+  "examples": [
+    "- name: Remove all repositories\n  community.general.apt_repo:\n    repo: all\n    state: absent\n\n- name: Add repository `Sisysphus` and remove other repositories\n  community.general.apt_repo:\n    repo: Sisysphus\n    state: present\n    remove_others: true\n\n- name: Add local repository `/space/ALT/Sisyphus` and update package cache\n  community.general.apt_repo:\n    repo: copy:///space/ALT/Sisyphus\n    state: present\n    update: true"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/apt_repo_module#ansible-collections-community-general-apt-repo-module.html",
+  "parsed_at": "2026-04-11T13:53:10.876924"
+}

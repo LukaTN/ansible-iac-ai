@@ -1,0 +1,117 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.pacman_key",
+  "slug": "pacman_key_module#ansible-collections-community-general-pacman-key-module",
+  "description": "Add or remove gpg keys from the pacman keyring.",
+  "parameters": [
+    {
+      "name": "data",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The keyfile contents to add to the keyring. Must be of PGP PUBLIC KEY BLOCK type."
+    },
+    {
+      "name": "ensure_trusted",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Ensure that the key is trusted (signed by the Pacman machine key and not expired). Choices: false ← (default) true"
+    },
+    {
+      "name": "file",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The path to a keyfile on the remote server to add to the keyring. Remote file must be of PGP PUBLIC KEY BLOCK type."
+    },
+    {
+      "name": "force_update",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "This forces the key to be updated if it already exists in the keyring. Choices: false ← (default) true"
+    },
+    {
+      "name": "id",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The 40 character identifier of the key. Including this allows check mode to correctly report the changed state. Do not specify a subkey ID, instead specify the primary key ID."
+    },
+    {
+      "name": "keyring",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "(/etc/pacman.d/gnupg).",
+      "choices": [],
+      "description": "The full path to the keyring folder on the remote server. If not specified, module uses pacman’s default (/etc/pacman.d/gnupg). Useful if the remote system requires an alternative gnupg directory. Default: \"/etc/pacman.d/gnupg\""
+    },
+    {
+      "name": "keyserver",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The keyserver used to retrieve key from."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)"
+      ],
+      "description": "Ensures that the key is present (added) or absent (revoked). Choices: \"absent\" \"present\" ← (default)"
+    },
+    {
+      "name": "url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The URL to retrieve keyfile from. Remote file must be of PGP PUBLIC KEY BLOCK type."
+    },
+    {
+      "name": "verify",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether or not to verify the keyfile’s key ID against specified key ID. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Import a key via local file\n  community.general.pacman_key:\n    id: 01234567890ABCDE01234567890ABCDE12345678\n    data: \"{{ lookup('file', 'keyfile.asc') }}\"\n    state: present\n\n- name: Import a key via remote file\n  community.general.pacman_key:\n    id: 01234567890ABCDE01234567890ABCDE12345678\n    file: /tmp/keyfile.asc\n    state: present\n\n- name: Import a key via url\n  community.general.pacman_key:\n    id: 01234567890ABCDE01234567890ABCDE12345678\n    url: https://domain.tld/keys/keyfile.asc\n    state: present\n\n- name: Import a key via keyserver\n  community.general.pacman_key:\n    id: 01234567890ABCDE01234567890ABCDE12345678\n    keyserver: keyserver.domain.tld\n\n- name: Import a key into an alternative keyring\n  community.general.pacman_key:\n    id: 01234567890ABCDE01234567890ABCDE12345678\n    file: /tmp/keyfile.asc\n    keyring: /etc/pacman.d/gnupg-alternative\n\n- name: Remove a key from the keyring\n  community.general.pacman_key:\n    id: 01234567890ABCDE01234567890ABCDE12345678\n    state: absent"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/pacman_key_module#ansible-collections-community-general-pacman-key-module.html",
+  "parsed_at": "2026-04-11T13:53:23.326506"
+}

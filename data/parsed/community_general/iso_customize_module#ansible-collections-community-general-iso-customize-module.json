@@ -1,0 +1,64 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.iso_customize",
+  "slug": "iso_customize_module#ansible-collections-community-general-iso-customize-module",
+  "description": "This module is used to add/remove/change files in ISO file.",
+  "parameters": [
+    {
+      "name": "add_files",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "Allows to add and replace files in the ISO file. It creates intermediate folders inside the ISO file when they do not exist. Default: []"
+    },
+    {
+      "name": "delete_files",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "Absolute paths for files inside the ISO file that should be removed. Default: []"
+    },
+    {
+      "name": "dest_iso",
+      "aliases": [],
+      "type": "path",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The path of the customized ISO file."
+    },
+    {
+      "name": "src_iso",
+      "aliases": [],
+      "type": "path",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "This is the path of source ISO file."
+    }
+  ],
+  "examples": [
+    "- name: \"Customize ISO file\"\n  community.general.iso_customize:\n    src_iso: \"/path/to/ubuntu-22.04-desktop-amd64.iso\"\n    dest_iso: \"/path/to/ubuntu-22.04-desktop-amd64-customized.iso\"\n    delete_files:\n      - \"/boot.catalog\"\n    add_files:\n      - src_file: \"/path/to/grub.cfg\"\n        dest_file: \"/boot/grub/grub.cfg\"\n      - src_file: \"/path/to/ubuntu.seed\"\n        dest_file: \"/preseed/ubuntu.seed\"\n  register: customize_iso_result"
+  ],
+  "return_values": [
+    {
+      "name": "dest_iso",
+      "type": "string",
+      "description": "Path of the customized ISO file. Returned: on success Sample: \"/path/to/customized.iso\"",
+      "returned": "on"
+    },
+    {
+      "name": "src_iso",
+      "type": "string",
+      "description": "Path of source ISO file. Returned: on success Sample: \"/path/to/file.iso\"",
+      "returned": "on"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/iso_customize_module.html",
+  "parsed_at": "2026-04-13T16:29:49.349803"
+}

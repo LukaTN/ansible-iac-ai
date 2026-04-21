@@ -1,0 +1,61 @@
+{
+  "collection_ns": "ansible_builtin",
+  "collection": "ansible.builtin",
+  "module": "ansible.builtin.tempfile",
+  "slug": "tempfile_module#ansible-collections-ansible-builtin-tempfile-module",
+  "description": "The ansible.builtin.tempfile module creates temporary files and directories. mktemp command takes different parameters on various systems, this module helps to avoid troubles related to that. Files/directories created by module are accessible only by creator. In case you need to make them world-accessible you need to use ansible.builtin.file module.",
+  "parameters": [
+    {
+      "name": "path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "system",
+      "choices": [],
+      "description": "Location where temporary file or directory should be created. If path is not specified, the default system temporary directory will be used."
+    },
+    {
+      "name": "prefix",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "ansible.",
+      "choices": [],
+      "description": "Prefix of file/directory name created by module. Default: \"ansible.\""
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"directory\"",
+        "\"file\" ← (default)"
+      ],
+      "description": "Whether to create file or directory. Choices: \"directory\" \"file\" ← (default)"
+    },
+    {
+      "name": "suffix",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Suffix of file/directory name created by module. Default: \"\""
+    }
+  ],
+  "examples": [
+    "- name: Create temporary build directory\n  ansible.builtin.tempfile:\n    state: directory\n    suffix: build\n\n- name: Create temporary file\n  ansible.builtin.tempfile:\n    state: file\n    suffix: temp\n  register: tempfile_1\n\n- name: Create a temporary file with a specific prefix\n  ansible.builtin.tempfile:\n     state: file\n     suffix: txt\n     prefix: myfile_\n\n- name: Use the registered var and the file module to remove the temporary file\n  ansible.builtin.file:\n    path: \"{{ tempfile_1.path }}\"\n    state: absent\n  when: tempfile_1.path is defined"
+  ],
+  "return_values": [
+    {
+      "name": "path",
+      "type": "string",
+      "description": "Path to created file or directory. Returned: success Sample: \"/tmp/ansible.bMlvdk\"",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/tempfile_module.html",
+  "parsed_at": "2026-04-13T16:29:26.281423"
+}

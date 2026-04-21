@@ -1,0 +1,110 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.scaleway_server_info",
+  "slug": "scaleway_server_info_module#ansible-collections-community-general-scaleway-server-info-module",
+  "description": "Gather information about the Scaleway servers available.",
+  "parameters": [
+    {
+      "name": "api_timeout",
+      "aliases": [
+        "timeout"
+      ],
+      "type": "integer",
+      "required": false,
+      "default": "30",
+      "choices": [],
+      "description": "HTTP timeout to Scaleway API in seconds. Default: 30"
+    },
+    {
+      "name": "api_token",
+      "aliases": [
+        "oauth_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Scaleway OAuth token. This is required if profile is not specified."
+    },
+    {
+      "name": "api_url",
+      "aliases": [
+        "base_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "https://api.scaleway.com",
+      "choices": [],
+      "description": "Scaleway API URL. Default: \"https://api.scaleway.com\""
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "scw_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The config profile in config file to load the Scaleway OAuth token from, use instead of api_token. It is also possible to set SCW_PROFILE to use a SCW CLI config profile."
+    },
+    {
+      "name": "query_parameters",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "List of parameters passed to the query string. Default: {}"
+    },
+    {
+      "name": "region",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [
+        "\"ams1\"",
+        "\"EMEA-NL-EVS\"",
+        "\"ams2\"",
+        "\"ams3\"",
+        "\"par1\"",
+        "\"EMEA-FR-PAR1\"",
+        "\"par2\"",
+        "\"EMEA-FR-PAR2\"",
+        "\"par3\"",
+        "\"waw1\"",
+        "\"EMEA-PL-WAW1\"",
+        "\"waw2\"",
+        "\"waw3\""
+      ],
+      "description": "Scaleway region to use (for example par1). Choices: \"ams1\" \"EMEA-NL-EVS\" \"ams2\" \"ams3\" \"par1\" \"EMEA-FR-PAR1\" \"par2\" \"EMEA-FR-PAR2\" \"par3\" \"waw1\" \"EMEA-PL-WAW1\" \"waw2\" \"waw3\""
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Validate SSL certs of the Scaleway API. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Gather Scaleway servers information\n  community.general.scaleway_server_info:\n    region: par1\n  register: result\n\n- ansible.builtin.debug:\n    msg: \"{{ result.scaleway_server_info }}\""
+  ],
+  "return_values": [
+    {
+      "name": "scaleway_server_info",
+      "type": "list",
+      "description": "Response from Scaleway API. For more details please refer to: https://developers.scaleway.com/en/products/instance/api/. Returned: success Sample: [{\"arch\": \"x86_64\", \"boot_type\": \"local\", \"bootscript\": {\"architecture\": \"x86_64\", \"bootcmdargs\": \"LINUX_COMMON scaleway boot=local nbd.max_part=16\", \"default\": true, \"dtb\": \"\", \"id\": \"b1e68c26-a19c-4eac-9222-498b22bd7ad9\", \"initrd\": \"http://169.254.42.24/initrd/initrd-Linux-x86_64-v3.14.5.gz\", \"kernel\": \"http://169.254.42.24/kernel/x86_64-mainline-lts-4.4-4.4.127-rev1/vmlinuz-4.4.127\", \"organization\": \"11111111-1111-4111-8111-111111111111\", \"public\": true, \"title\": \"x86_64 mainline 4.4.127 rev1\"}, \"commercial_type\": \"START1-XS\", \"creation_date\": \"2018-08-14T21:36:56.271545+00:00\", \"dynamic_ip_required\": false, \"enable_ipv6\": false, \"extra_networks\": [], \"hostname\": \"scw-e0d256\", \"id\": \"12f19bc7-108c-4517-954c-e6b3d0311363\", \"image\": {\"arch\": \"x86_64\", \"creation_date\": \"2018-04-26T12:42:21.619844+00:00\", \"default_bootscript\": {\"architecture\": \"x86_64\", \"bootcmdargs\": \"LINUX_COMMON scaleway boot=local nbd.max_part=16\", \"default\": true, \"dtb\": \"\", \"id\": \"b1e68c26-a19c-4eac-9222-498b22bd7ad9\", \"initrd\": \"http://169.254.42.24/initrd/initrd-Linux-x86_64-v3.14.5.gz\", \"kernel\": \"http://169.254.42.24/kernel/x86_64-mainline-lts-4.4-4.4.127-rev1/vmlinuz-4.4.127\", \"organization\": \"11111111-1111-4111-8111-111111111111\", \"public\": true, \"title\": \"x86_64 mainline 4.4.127 rev1\"}, \"extra_volumes\": [], \"from_server\": null, \"id\": \"67375eb1-f14d-4f02-bb42-6119cecbde51\", \"modification_date\": \"2018-04-26T12:49:07.573004+00:00\", \"name\": \"Ubuntu Xenial\", \"organization\": \"51b656e3-4865-41e8-adbc-0c45bdd780db\", \"public\": true, \"root_volume\": {\"id\": \"020b8d61-3867-4a0e-84a4-445c5393e05d\", \"name\": \"snapshot-87fc282d-f252-4262-adad-86979d9074cf-2018-04-26_12:42\", \"size\": 25000000000, \"volume_type\": \"l_ssd\"}, \"state\": \"available\"}, \"ipv6\": null, \"location\": {\"cluster_id\": \"5\", \"hypervisor_id\": \"412\", \"node_id\": \"2\", \"platform_id\": \"13\", \"zone_id\": \"par1\"}, \"maintenances\": [], \"modification_date\": \"2018-08-14T21:37:28.630882+00:00\", \"name\": \"scw-e0d256\", \"organization\": \"3f709602-5e6c-4619-b80c-e841c89734af\", \"private_ip\": \"10.14.222.131\", \"protected\": false, \"public_ip\": {\"address\": \"163.172.170.197\", \"dynamic\": false, \"id\": \"ea081794-a581-4495-8451-386ddaf0a451\"}, \"security_group\": {\"id\": \"a37379d2-d8b0-4668-9cfb-1233fc436f7e\", \"name\": \"Default security group\"}, \"state\": \"running\", \"state_detail\": \"booted\", \"tags\": [], \"volumes\": {\"0\": {\"creation_date\": \"2018-08-14T21:36:56.271545+00:00\", \"export_uri\": \"device://dev/vda\", \"id\": \"68386fae-4f55-4fbf-aabb-953036a85872\", \"modification_date\": \"2018-08-14T21:36:56.271545+00:00\", \"name\": \"snapshot-87fc282d-f252-4262-adad-86979d9074cf-2018-04-26_12:42\", \"organization\": \"3f709602-5e6c-4619-b80c-e841c89734af\", \"server\": {\"id\": \"12f19bc7-108c-4517-954c-e6b3d0311363\", \"name\": \"scw-e0d256\"}, \"size\": 25000000000, \"state\": \"available\", \"volume_type\": \"l_ssd\"}}}]",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/scaleway_server_info_module.html",
+  "parsed_at": "2026-04-13T16:29:58.124439"
+}

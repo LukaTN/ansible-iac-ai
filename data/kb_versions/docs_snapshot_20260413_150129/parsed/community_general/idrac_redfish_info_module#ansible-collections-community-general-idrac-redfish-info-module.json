@@ -1,0 +1,115 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.idrac_redfish_info",
+  "slug": "idrac_redfish_info_module#ansible-collections-community-general-idrac-redfish-info-module",
+  "description": "Builds Redfish URIs locally and sends them to remote iDRAC controllers to get information back.",
+  "parameters": [
+    {
+      "name": "auth_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security token for authenticating to iDRAC."
+    },
+    {
+      "name": "baseuri",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Base URI of iDRAC."
+    },
+    {
+      "name": "ca_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "PEM formatted file that contains a CA certificate to be used for validation. Only used if validate_certs=true."
+    },
+    {
+      "name": "category",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Category to execute on iDRAC."
+    },
+    {
+      "name": "ciphers",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "TLS/SSL Ciphers to use for the request. When a list is provided, all ciphers are joined in order with :. See the OpenSSL Cipher List Format for more details. The available ciphers is dependent on the Python and OpenSSL/LibreSSL versions."
+    },
+    {
+      "name": "command",
+      "aliases": [],
+      "type": "list",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "List of commands to execute on iDRAC. GetManagerAttributes returns the list of dicts containing iDRAC, LifecycleController and System attributes."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Password for authenticating to iDRAC."
+    },
+    {
+      "name": "timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "10",
+      "choices": [],
+      "description": "Timeout in seconds for HTTP requests to iDRAC. Default: 10"
+    },
+    {
+      "name": "username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Username for authenticating to iDRAC."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If false, TLS/SSL certificates are not validated. Set this to true to enable certificate checking. Should be used together with ca_path. Choices: false ← (default) true"
+    }
+  ],
+  "examples": [
+    "- name: Get Manager attributes with a default of 20 seconds\n  community.general.idrac_redfish_info:\n    category: Manager\n    command: GetManagerAttributes\n    baseuri: \"{{ baseuri }}\"\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n    timeout: 20\n  register: result\n\n# Examples to display the value of all or a single iDRAC attribute\n- name: Store iDRAC attributes as a fact variable\n  ansible.builtin.set_fact:\n    idrac_attributes: \"{{ result.redfish_facts.entries | selectattr('Id', 'defined') | selectattr('Id', 'equalto', 'iDRACAttributes')\n      | list | first }}\"\n\n- name: Display all iDRAC attributes\n  ansible.builtin.debug:\n    var: idrac_attributes\n\n- name: Display the value of 'Syslog.1.SysLogEnable' iDRAC attribute\n  ansible.builtin.debug:\n    var: idrac_attributes['Syslog.1.SysLogEnable']\n\n# Examples to display the value of all or a single LifecycleController attribute\n- name: Store LifecycleController attributes as a fact variable\n  ansible.builtin.set_fact:\n    lc_attributes: \"{{ result.redfish_facts.entries | selectattr('Id', 'defined') | selectattr('Id', 'equalto', 'LCAttributes')\n      | list | first }}\"\n\n- name: Display LifecycleController attributes\n  ansible.builtin.debug:\n    var: lc_attributes\n\n- name: Display the value of 'CollectSystemInventoryOnRestart' attribute\n  ansible.builtin.debug:\n    var: lc_attributes['LCAttributes.1.CollectSystemInventoryOnRestart']\n\n# Examples to display the value of all or a single System attribute\n- name: Store System attributes as a fact variable\n  ansible.builtin.set_fact:\n    system_attributes: \"{{ result.redfish_facts.entries | selectattr('Id', 'defined') | selectattr('Id', 'equalto', 'SystemAttributes')\n      | list | first }}\"\n\n- name: Display System attributes\n  ansible.builtin.debug:\n    var: system_attributes\n\n- name: Display the value of 'PSRedPolicy'\n  ansible.builtin.debug:\n    var: system_attributes['ServerPwr.1.PSRedPolicy']"
+  ],
+  "return_values": [
+    {
+      "name": "msg",
+      "type": "dictionary",
+      "description": "Different results depending on task. Returned: always Sample: \"List of Manager attributes\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/idrac_redfish_info_module#ansible-collections-community-general-idrac-redfish-info-module.html",
+  "parsed_at": "2026-04-11T13:53:15.526310"
+}

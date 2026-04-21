@@ -1,0 +1,79 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.launchd",
+  "slug": "launchd_module#ansible-collections-community-general-launchd-module",
+  "description": "Manage launchd services on target macOS hosts.",
+  "parameters": [
+    {
+      "name": "enabled",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Whether the service should start on boot. At least one of state and enabled are required. Choices: false true"
+    },
+    {
+      "name": "force_stop",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Whether the service should not be restarted automatically by launchd. Services might have the KeepAlive attribute set to true in a launchd configuration. In case this is set to true, stopping a service causes that launchd starts the service again. Set this option to true to let this module change the KeepAlive attribute to false. Choices: false ← (default) true"
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the service."
+    },
+    {
+      "name": "plist",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of the .plist file for the service. Defaults to {name}.plist."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"reloaded\"",
+        "\"restarted\"",
+        "\"started\"",
+        "\"stopped\"",
+        "\"unloaded\""
+      ],
+      "description": "started/stopped are idempotent actions that do not run commands unless necessary. launchd does not support restarted nor reloaded natively. These states trigger a stop/start (restarted) or an unload/load (reloaded). restarted unloads and loads the service before start to ensure that the latest job definition (plist) is used. reloaded unloads and loads the service to ensure that the latest job definition (plist) is used. Whether a service is started or stopped depends on the content of the definition file. Choices: \"reloaded\" \"restarted\" \"started\" \"stopped\" \"unloaded\""
+    }
+  ],
+  "examples": [
+    "- name: Make sure spotify webhelper is started\n  community.general.launchd:\n    name: com.spotify.webhelper\n    state: started\n\n- name: Deploy custom memcached job definition\n  template:\n    src: org.memcached.plist.j2\n    dest: /Library/LaunchDaemons/org.memcached.plist\n\n- name: Run memcached\n  community.general.launchd:\n    name: org.memcached\n    state: started\n\n- name: Stop memcached\n  community.general.launchd:\n    name: org.memcached\n    state: stopped\n\n- name: Stop memcached\n  community.general.launchd:\n    name: org.memcached\n    state: stopped\n    force_stop: true\n\n- name: Restart memcached\n  community.general.launchd:\n    name: org.memcached\n    state: restarted\n\n- name: Unload memcached\n  community.general.launchd:\n    name: org.memcached\n    state: unloaded\n\n- name: restart sshd\n  community.general.launchd:\n    name: com.openssh.sshd\n    plist: ssh.plist\n    state: restarted"
+  ],
+  "return_values": [
+    {
+      "name": "status",
+      "type": "dictionary",
+      "description": "Metadata about service status. Returned: always Sample: {\"current_pid\": \"-\", \"current_state\": \"stopped\", \"previous_pid\": \"82636\", \"previous_state\": \"running\"}",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/launchd_module#ansible-collections-community-general-launchd-module.html",
+  "parsed_at": "2026-04-11T13:53:18.953954"
+}

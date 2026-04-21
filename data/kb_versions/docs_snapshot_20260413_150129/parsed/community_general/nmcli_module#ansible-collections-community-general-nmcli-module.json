@@ -1,0 +1,1721 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.nmcli",
+  "slug": "nmcli_module#ansible-collections-community-general-nmcli-module",
+  "description": "Manage the network devices. Create, modify and manage various connection and device type, for example ethernet, team, bond, vlan and so on.",
+  "parameters": [
+    {
+      "name": "addr_gen_mode6",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "and",
+      "choices": [
+        "\"default\"",
+        "\"default-or-eui64\"",
+        "\"eui64\"",
+        "\"stable-privacy\""
+      ],
+      "description": "Configure method for creating the address for use with IPv6 Stateless Address Autoconfiguration. default and default-or-eui64 have been added in community.general 6.5.0. Choices: \"default\" \"default-or-eui64\" \"eui64\" \"stable-privacy\""
+    },
+    {
+      "name": "ageingtime",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "300",
+      "choices": [],
+      "description": "This is only used with bridge - [ageing-time <0-1000000>] the Ethernet MAC address aging time, in seconds. Default: 300"
+    },
+    {
+      "name": "arp_interval",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "This is only used with bond - ARP interval."
+    },
+    {
+      "name": "arp_ip_target",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "This is only used with bond - ARP IP target."
+    },
+    {
+      "name": "autoconnect",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether the connection should start on boot. Whether the connection profile can be automatically activated. Choices: false true ← (default)"
+    },
+    {
+      "name": "autoconnect_priority",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The priority of the connection profile for autoconnect. If set, connection profiles with higher priority are preferred."
+    },
+    {
+      "name": "autoconnect_retries",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The number of times to retry autoconnecting."
+    },
+    {
+      "name": "conn_name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name used to call the connection. Pattern is <type>[-<ifname>][-<num>]."
+    },
+    {
+      "name": "conn_reload",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Whether the connection should be reloaded if it was modified. Choices: false ← (default) true"
+    },
+    {
+      "name": "dhcp_client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "DHCP Client Identifier sent to the DHCP server."
+    },
+    {
+      "name": "dns4",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A list of up to 3 DNS servers. The entries must be IPv4 addresses, for example 192.0.2.53."
+    },
+    {
+      "name": "dns4_ignore_auto",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Ignore automatically configured IPv4 name servers. Choices: false ← (default) true"
+    },
+    {
+      "name": "dns4_options",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A list of DNS options."
+    },
+    {
+      "name": "dns4_search",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A list of DNS search domains."
+    },
+    {
+      "name": "dns6",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A list of up to 3 DNS servers. The entries must be IPv6 addresses, for example 2001:4860:4860::8888."
+    },
+    {
+      "name": "dns6_ignore_auto",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Ignore automatically configured IPv6 name servers. Choices: false ← (default) true"
+    },
+    {
+      "name": "dns6_options",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A list of DNS options."
+    },
+    {
+      "name": "dns6_search",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A list of DNS search domains."
+    },
+    {
+      "name": "downdelay",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "This is only used with bond - downdelay."
+    },
+    {
+      "name": "egress",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "This is only used with VLAN - VLAN egress priority mapping."
+    },
+    {
+      "name": "fail_over_mac",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"none\"",
+        "\"active\"",
+        "\"follow\""
+      ],
+      "description": "This is only used with bond - fail_over_mac. Choices: \"none\" \"active\" \"follow\""
+    },
+    {
+      "name": "flags",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "This is only used with VLAN - flags."
+    },
+    {
+      "name": "forwarddelay",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "15",
+      "choices": [],
+      "description": "This is only used with bridge - [forward-delay <2-30>] STP forwarding delay, in seconds. Default: 15"
+    },
+    {
+      "name": "gsm",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The configuration of the GSM connection. Note the list of suboption attributes may vary depending on which version of NetworkManager/nmcli is installed on the host. An up-to-date list of supported attributes can be found here: https://networkmanager.dev/docs/api/latest/settings-gsm.html. For instance to use apn, pin, username and password: {apn: provider.apn, pin: 1234, username: apn.username, password: apn.password}."
+    },
+    {
+      "name": "apn",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The GPRS Access Point Name specifying the APN used when establishing a data session with the GSM-based network. The APN often determines how the user is billed for their network usage and whether the user has access to the Internet or just a provider-specific walled-garden, so it is important to use the correct APN for the user’s mobile broadband plan. The APN may only be composed of the characters a-z, 0-9, ., and - per GSM 03.60 Section 14.9."
+    },
+    {
+      "name": "auto-config",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "to",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "When true, the settings such as gsm.apn, gsm.username, or gsm.password default to values that match the network the modem registers to in the Mobile Broadband Provider database. Choices: false ← (default) true"
+    },
+    {
+      "name": "device-id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The device unique identifier (as given by the WWAN management service) which this connection applies to. If given, the connection only applies to the specified device."
+    },
+    {
+      "name": "home-only",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "When true, only connections to the home network are allowed. Connections to roaming networks are not made. Choices: false ← (default) true"
+    },
+    {
+      "name": "mtu",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "0",
+      "choices": [],
+      "description": "If non-zero, only transmit packets of the specified size or smaller, breaking larger packets up into multiple Ethernet frames. Default: 0"
+    },
+    {
+      "name": "network-id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The Network ID (GSM LAI format, ie MCC-MNC) to force specific network registration. If the Network ID is specified, NetworkManager attempts to force the device to register only on the specified network. This can be used to ensure that the device does not roam when direct roaming control of the device is not otherwise possible."
+    },
+    {
+      "name": "number",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Legacy setting that used to help establishing PPP data sessions for GSM-based modems."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The password used to authenticate with the network, if required. Many providers do not require a password, or accept any password. But if a password is required, it is specified here."
+    },
+    {
+      "name": "password-flags",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [
+        "0 ← (default)",
+        "1",
+        "2",
+        "4"
+      ],
+      "description": "NMSettingSecretFlags indicating how to handle the gsm.password property. Following choices are allowed: 0 NONE: The system is responsible for providing and storing this secret (default), 1 AGENT_OWNED: A user secret agent is responsible for providing and storing this secret; when it is required agents are asked to retrieve it 2 NOT_SAVED: This secret should not be saved, but should be requested from the user each time it is needed 4 NOT_REQUIRED: In situations where it cannot be automatically determined that the secret is required (some VPNs and PPP providers do not require all secrets) this flag indicates that the specific secret is not required. Choices: 0 ← (default) 1 2 4"
+    },
+    {
+      "name": "pin",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "If the SIM is locked with a PIN it must be unlocked before any other operations are requested. Specify the PIN here to allow operation of the device."
+    },
+    {
+      "name": "pin-flags",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [
+        "0 ← (default)",
+        "1",
+        "2",
+        "4"
+      ],
+      "description": "NMSettingSecretFlags indicating how to handle the gsm.pin property. See gsm.password-flags for NMSettingSecretFlags choices. Choices: 0 ← (default) 1 2 4"
+    },
+    {
+      "name": "sim-id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The SIM card unique identifier (as given by the WWAN management service) which this connection applies to. If given, the connection applies to any device also allowed by gsm.device-id which contains a SIM card matching the given identifier."
+    },
+    {
+      "name": "sim-operator-id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A MCC/MNC string like 310260 or 21601I identifying the specific mobile network operator which this connection applies to. If given, the connection applies to any device also allowed by gsm.device-id and gsm.sim-id which contains a SIM card provisioned by the given operator."
+    },
+    {
+      "name": "username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The username used to authenticate with the network, if required. Many providers do not require a username, or accept any username. But if a username is required, it is specified here."
+    },
+    {
+      "name": "gw4",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The IPv4 gateway for this interface. Use the format 192.0.2.1. This parameter is mutually_exclusive with never_default4 parameter."
+    },
+    {
+      "name": "gw4_ignore_auto",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Ignore automatically configured IPv4 routes. Choices: false ← (default) true"
+    },
+    {
+      "name": "gw6",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The IPv6 gateway for this interface. Use the format 2001:db8::1."
+    },
+    {
+      "name": "gw6_ignore_auto",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Ignore automatically configured IPv6 routes. Choices: false ← (default) true"
+    },
+    {
+      "name": "hairpin",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "change",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "This is only used with ‘bridge-slave’ - ‘hairpin mode’ for the slave, which allows frames to be sent back out through the slave the frame was received on. The default change to false in community.general 7.0.0. It used to be true before. Choices: false ← (default) true"
+    },
+    {
+      "name": "hellotime",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "2",
+      "choices": [],
+      "description": "This is only used with bridge - [hello-time <1-10>] STP hello time, in seconds. Default: 2"
+    },
+    {
+      "name": "ifname",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The interface to bind the connection to. The connection is only applicable to this interface name. A special value of * can be used for interface-independent connections. The ifname argument is mandatory for all connection types except bond, team, bridge, vlan and vpn. This parameter defaults to conn_name when left unset for all connection types except vpn that removes it."
+    },
+    {
+      "name": "ignore_unsupported_suboptions",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Ignore suboptions which are invalid or unsupported by the version of NetworkManager/nmcli installed on the host. Only wifi and wifi_sec options are currently affected. Choices: false ← (default) true"
+    },
+    {
+      "name": "infiniband_mac",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "MAC address of the Infiniband IPoIB devices."
+    },
+    {
+      "name": "ingress",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "This is only used with VLAN - VLAN ingress priority mapping."
+    },
+    {
+      "name": "ip4",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of IPv4 addresses to this interface. Use the format 192.0.2.24/24 or 192.0.2.24. If defined and method4 is not specified, automatically set ipv4.method to manual."
+    },
+    {
+      "name": "ip6",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of IPv6 addresses to this interface. Use the format abbe::cafe/128 or abbe::cafe. If defined and method6 is not specified, automatically set ipv6.method to manual."
+    },
+    {
+      "name": "ip_privacy6",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"disabled\"",
+        "\"prefer-public-addr\"",
+        "\"prefer-temp-addr\"",
+        "\"unknown\""
+      ],
+      "description": "If enabled, it makes the kernel generate a temporary IPv6 address in addition to the public one. Choices: \"disabled\" \"prefer-public-addr\" \"prefer-temp-addr\" \"unknown\""
+    },
+    {
+      "name": "ip_tunnel_dev",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "This is used with GRE/IPIP/SIT - parent device this GRE/IPIP/SIT tunnel, can use ifname."
+    },
+    {
+      "name": "ip_tunnel_input_key",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The key used for tunnel input packets. Only used when type=gre."
+    },
+    {
+      "name": "ip_tunnel_local",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "This is used with GRE/IPIP/SIT - GRE/IPIP/SIT local IP address."
+    },
+    {
+      "name": "ip_tunnel_output_key",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The key used for tunnel output packets. Only used when type=gre."
+    },
+    {
+      "name": "ip_tunnel_remote",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "This is used with GRE/IPIP/SIT - GRE/IPIP/SIT destination IP address."
+    },
+    {
+      "name": "mac",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "MAC address of the connection. Note this requires a recent kernel feature, originally introduced in 3.15 upstream kernel."
+    },
+    {
+      "name": "macvlan",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The configuration of the MAC VLAN connection. Note the list of suboption attributes may vary depending on which version of NetworkManager/nmcli is installed on the host. An up-to-date list of supported attributes can be found here: https://networkmanager.dev/docs/api/latest/settings-macvlan.html."
+    },
+    {
+      "name": "mode",
+      "aliases": [],
+      "type": "integer",
+      "required": true,
+      "default": "",
+      "choices": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ],
+      "description": "The macvlan mode, which specifies the communication mechanism between multiple macvlans on the same lower device. Following choices are allowed: 1 vepa, 2 bridge, 3 private, 4 passthru and 5 source. Choices: 1 2 3 4 5"
+    },
+    {
+      "name": "parent",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "If given, specifies the parent interface name or parent connection UUID from which this MAC-VLAN interface should be created. If this property is not specified, the connection must contain an “802-3-ethernet” setting with a “mac-address” property."
+    },
+    {
+      "name": "promiscuous",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Whether the interface should be put in promiscuous mode. Choices: false true"
+    },
+    {
+      "name": "tap",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Whether the interface should be a MACVTAP. Choices: false true"
+    },
+    {
+      "name": "master",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Master <master (ifname, or connection UUID or conn_name) of bridge, team, bond, ovs-port master connection profile. Mandatory if slave_type is defined."
+    },
+    {
+      "name": "maxage",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "20",
+      "choices": [],
+      "description": "This is only used with bridge - [max-age <6-42>] STP maximum message age, in seconds. Default: 20"
+    },
+    {
+      "name": "may_fail4",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If you need ip4 configured before network-online.target is reached, set this option to false. This option applies when method4 is not disabled. Choices: false true ← (default)"
+    },
+    {
+      "name": "method4",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"auto\"",
+        "\"link-local\"",
+        "\"manual\"",
+        "\"shared\"",
+        "\"disabled\""
+      ],
+      "description": "Configuration method to be used for IPv4. If ip4 is set, ipv4.method is automatically set to manual and this parameter is not needed. Choices: \"auto\" \"link-local\" \"manual\" \"shared\" \"disabled\""
+    },
+    {
+      "name": "method6",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ignore\"",
+        "\"auto\"",
+        "\"dhcp\"",
+        "\"link-local\"",
+        "\"manual\"",
+        "\"shared\"",
+        "\"disabled\""
+      ],
+      "description": "Configuration method to be used for IPv6. If ip6 is set, ipv6.method is automatically set to manual and this parameter is not needed. disabled was added in community.general 3.3.0. Choices: \"ignore\" \"auto\" \"dhcp\" \"link-local\" \"manual\" \"shared\" \"disabled\""
+    },
+    {
+      "name": "miimon",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "This is only used with bond - miimon. This parameter defaults to 100 when unset."
+    },
+    {
+      "name": "never_default4",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "route.",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Set as default route. This parameter is mutually_exclusive with gw4 parameter. Choices: false ← (default) true"
+    },
+    {
+      "name": "path_cost",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "100",
+      "choices": [],
+      "description": "This is only used with ‘bridge-slave’ - [<1-65535>] - STP port cost for destinations using this slave. Default: 100"
+    },
+    {
+      "name": "primary",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "This is only used with bond and is the primary interface name (for “active-backup” mode), this is the usually the ‘ifname’."
+    },
+    {
+      "name": "priority",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "128",
+      "choices": [],
+      "description": "This is only used with ‘bridge’ - sets STP priority. Default: 128"
+    },
+    {
+      "name": "route_metric4",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Set metric level of ipv4 routes configured on interface."
+    },
+    {
+      "name": "route_metric6",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Set metric level of IPv6 routes configured on interface."
+    },
+    {
+      "name": "routes4",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The list of IPv4 routes. Use the format 192.0.3.0/24 192.0.2.1. To specify more complex routes, use the routes4_extended option."
+    },
+    {
+      "name": "routes4_extended",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The list of IPv4 routes."
+    },
+    {
+      "name": "cwnd",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The clamp for congestion window."
+    },
+    {
+      "name": "ip",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "IP or prefix of route. Use the format 192.0.3.0/24."
+    },
+    {
+      "name": "metric",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Route metric."
+    },
+    {
+      "name": "next_hop",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Use the format 192.0.2.1."
+    },
+    {
+      "name": "onlink",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Pretend that the nexthop is directly attached to this link, even if it does not match any interface prefix. Choices: false true"
+    },
+    {
+      "name": "table",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "depends",
+      "choices": [],
+      "description": "The table to add this route to. The default depends on ipv4.route-table."
+    },
+    {
+      "name": "tos",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The Type Of Service."
+    },
+    {
+      "name": "routes6",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The list of IPv6 routes. Use the format fd12:3456:789a:1::/64 2001:dead:beef::1. To specify more complex routes, use the routes6_extended option."
+    },
+    {
+      "name": "routes6_extended",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The list of IPv6 routes but with parameters."
+    },
+    {
+      "name": "routing_rules4",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Is the same as in an ip rule add command, except always requires specifying a priority."
+    },
+    {
+      "name": "routing_rules6",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Is the same as in an ip rule add command, except always requires specifying a priority."
+    },
+    {
+      "name": "runner",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"broadcast\"",
+        "\"roundrobin\" ← (default)",
+        "\"activebackup\"",
+        "\"loadbalance\"",
+        "\"lacp\""
+      ],
+      "description": "This is the type of device or network connection that you wish to create for a team. Choices: \"broadcast\" \"roundrobin\" ← (default) \"activebackup\" \"loadbalance\" \"lacp\""
+    },
+    {
+      "name": "runner_fast_rate",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Option specifies the rate at which our link partner is asked to transmit LACPDU packets. If this is true then packets are sent once per second. Otherwise they are sent every 30 seconds. Only allowed for runner=lacp. Choices: false true"
+    },
+    {
+      "name": "runner_hwaddr_policy",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"same_all\"",
+        "\"by_active\"",
+        "\"only_active\""
+      ],
+      "description": "This defines the policy of how hardware addresses of team device and port devices should be set during the team lifetime. Choices: \"same_all\" \"by_active\" \"only_active\""
+    },
+    {
+      "name": "slave_type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"bond\"",
+        "\"bridge\"",
+        "\"team\"",
+        "\"ovs-port\"",
+        "\"vrf\""
+      ],
+      "description": "Type of the device of this slave’s master connection (for example bond). Type ovs-port is added in community.general 8.6.0. Choices: \"bond\" \"bridge\" \"team\" \"ovs-port\" \"vrf\""
+    },
+    {
+      "name": "slavepriority",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "32",
+      "choices": [],
+      "description": "This is only used with ‘bridge-slave’ - [<0-63>] - STP priority of this slave. Default: 32"
+    },
+    {
+      "name": "sriov",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Allow to configure SR-IOV settings. An up-to-date list of supported attributes can be found here: https://networkmanager.pages.freedesktop.org/NetworkManager/NetworkManager/settings-sriov.html."
+    },
+    {
+      "name": "autoprobe-drivers",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Whether to autoprobe virtual functions by a compatible driver."
+    },
+    {
+      "name": "eswitch-encap-mode",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Select the eswitch encapsulation support."
+    },
+    {
+      "name": "eswitch-inline-mode",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Select the eswitch inline-mode of the device."
+    },
+    {
+      "name": "eswitch-mode",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Select the eswitch mode of the device."
+    },
+    {
+      "name": "total-vfs",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Number of virtual functions to create. Consult your NIC documentation for the maximum number of VFs supported."
+    },
+    {
+      "name": "vfs",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Virtual function descriptors in the form: INDEX [ATTR=VALUE[ ATTR=VALUE]...]. Multiple VFs can be specified using a comma as separator, for example 2 mac=00:11:22:33:44:55 spoof-check=true,3 vlans=100."
+    },
+    {
+      "name": "ssid",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of the Wireless router or the access point."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\"",
+        "\"up\"",
+        "\"down\""
+      ],
+      "description": "Whether the device should exist or not, taking action if the state is different from what is stated. Using state=present creates connection set to be brought up automatically. Using state=up and state=down does not modify connection with other parameters. These states have been added in community.general 9.5.0. Choices: \"absent\" \"present\" \"up\" \"down\""
+    },
+    {
+      "name": "stp",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "This is only used with bridge and controls whether Spanning Tree Protocol (STP) is enabled for this bridge. Choices: false true ← (default)"
+    },
+    {
+      "name": "transport_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"datagram\"",
+        "\"connected\""
+      ],
+      "description": "This option sets the connection type of Infiniband IPoIB devices. Choices: \"datagram\" \"connected\""
+    },
+    {
+      "name": "type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"bond\"",
+        "\"bond-slave\"",
+        "\"bridge\"",
+        "\"bridge-slave\"",
+        "\"dummy\"",
+        "\"ethernet\"",
+        "\"generic\"",
+        "\"gre\"",
+        "\"infiniband\"",
+        "\"ipip\"",
+        "\"macvlan\"",
+        "\"sit\"",
+        "\"team\"",
+        "\"team-slave\"",
+        "\"vlan\"",
+        "\"vxlan\"",
+        "\"wifi\"",
+        "\"gsm\"",
+        "\"wireguard\"",
+        "\"ovs-bridge\"",
+        "\"ovs-port\"",
+        "\"ovs-interface\"",
+        "\"vpn\"",
+        "\"vrf\"",
+        "\"loopback\""
+      ],
+      "description": "This is the type of device or network connection that you wish to create or modify. Type dummy is added in community.general 3.5.0. Type gsm is added in community.general 3.7.0. Type infiniband is added in community.general 2.0.0. Type loopback is added in community.general 8.1.0. Type macvlan is added in community.general 6.6.0. Type ovs-bridge is added in community.general 8.6.0. Type ovs-interface is added in community.general 8.6.0. Type ovs-port is added in community.general 8.6.0. Type wireguard is added in community.general 4.3.0. Type vpn is added in community.general 5.1.0. Type vrf is added in community.general 10.4.0. Using bond-slave, bridge-slave, or team-slave implies ethernet connection type with corresponding slave_type option. If you want to control non-ethernet connection attached to bond, bridge, or team consider using slave_type option. Choices: \"bond\" \"bond-slave\" \"bridge\" \"bridge-slave\" \"dummy\" \"ethernet\" \"generic\" \"gre\" \"infiniband\" \"ipip\" \"macvlan\" \"sit\" \"team\" \"team-slave\" \"vlan\" \"vxlan\" \"wifi\" \"gsm\" \"wireguard\" \"ovs-bridge\" \"ovs-port\" \"ovs-interface\" \"vpn\" \"vrf\" \"loopback\""
+    },
+    {
+      "name": "updelay",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "This is only used with bond - updelay."
+    },
+    {
+      "name": "vlandev",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "This is only used with VLAN - parent device this VLAN is on, can use ifname."
+    },
+    {
+      "name": "vlanid",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "This is only used with VLAN - VLAN ID in range <0-4095>."
+    },
+    {
+      "name": "vpn",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Configuration of a VPN connection (PPTP and L2TP). In order to use L2TP you need to be sure that network-manager-l2tp - and network-manager-l2tp-gnome if host has UI - are installed on the host."
+    },
+    {
+      "name": "gateway",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The gateway to connection. It can be an IP address (for example 192.0.2.1) or a FQDN address (for example vpn.example.com)."
+    },
+    {
+      "name": "ipsec-enabled",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Enable or disable IPSec tunnel to L2TP host. This option is need when vpn.service-type is org.freedesktop.NetworkManager.l2tp. Choices: false true"
+    },
+    {
+      "name": "ipsec-psk",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The pre-shared key in base64 encoding. You can encode using this Ansible Jinja2 expression: \"0s{{ '[YOUR PRE-SHARED KEY]' | ansible.builtin.b64encode }}\". This is only used when vpn.ipsec-enabled=true."
+    },
+    {
+      "name": "permissions",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "User that has permission to use the connection."
+    },
+    {
+      "name": "service-type",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "This defines the service type of connection."
+    },
+    {
+      "name": "user",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Username provided by VPN administrator."
+    },
+    {
+      "name": "vxlan_id",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "This is only used with VXLAN - VXLAN ID."
+    },
+    {
+      "name": "vxlan_local",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "This is only used with VXLAN - VXLAN local IP address."
+    },
+    {
+      "name": "vxlan_parent",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "This is only used with VXLAN - VXLAN parent device (required when using a multicast remote address)."
+    },
+    {
+      "name": "vxlan_remote",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "This is only used with VXLAN - VXLAN destination IP address."
+    },
+    {
+      "name": "wifi",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The configuration of the WiFi connection. Note the list of suboption attributes may vary depending on which version of NetworkManager/nmcli is installed on the host. An up-to-date list of supported attributes can be found here: https://networkmanager.dev/docs/api/latest/settings-802-11-wireless.html. For instance to create a hidden AP mode WiFi connection: {hidden: true, mode: ap}."
+    },
+    {
+      "name": "ap-isolation",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "is",
+      "choices": [
+        "-1 ← (default)",
+        "0",
+        "1"
+      ],
+      "description": "Configures AP isolation, which prevents communication between wireless devices connected to this AP. This property can be set to a value different from -1 only when the interface is configured in AP mode. If set to 1, devices are not able to communicate with each other. This increases security because it protects devices against attacks from other clients in the network. At the same time, it prevents devices to access resources on the same wireless networks as file shares, printers, and so on. If set to 0, devices can talk to each other. When set to -1, the global default is used; in case the global default is unspecified it is assumed to be 0. Choices: -1 ← (default) 0 1"
+    },
+    {
+      "name": "assigned-mac-address",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The new field for the cloned MAC address. It can be either a hardware address in ASCII representation, or one of the special values preserve, permanent, random or stable. This field replaces the deprecated wifi.cloned-mac-address on D-Bus, which can only contain explicit hardware addresses. Note that this property only exists in D-Bus API. libnm and nmcli continue to call this property cloned-mac-address."
+    },
+    {
+      "name": "band",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"a\"",
+        "\"bg\""
+      ],
+      "description": "802.11 frequency band of the network. One of a for 5GHz 802.11a or bg for 2.4GHz 802.11. This locks associations to the Wi-Fi network to the specific band, so for example, if a is specified, the device does not associate with the same network in the 2.4GHz band even if the network’s settings are compatible. This setting depends on specific driver capability and may not work with all drivers. Choices: \"a\" \"bg\""
+    },
+    {
+      "name": "bssid",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "If specified, directs the device to only associate with the given access point. This capability is highly driver dependent and not supported by all devices. Note this property does not control the BSSID used when creating an Ad-Hoc network and is unlikely to in the future."
+    },
+    {
+      "name": "channel",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "0",
+      "choices": [],
+      "description": "Wireless channel to use for the Wi-Fi connection. The device only joins (or creates for Ad-Hoc networks) a Wi-Fi network on the specified channel. Because channel numbers overlap between bands, this property also requires the wifi.band property to be set. Default: 0"
+    },
+    {
+      "name": "cloned-mac-address",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "This D-Bus field is deprecated in favor of wifi.assigned-mac-address which is more flexible and allows specifying special variants like random. For libnm and nmcli, this field is called cloned-mac-address."
+    },
+    {
+      "name": "generate-mac-address-mask",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "all",
+      "choices": [],
+      "description": "With wifi.cloned-mac-address setting random or stable, by default all bits of the MAC address are scrambled and a locally-administered, unicast MAC address is created. This property allows to specify that certain bits are fixed. Note that the least significant bit of the first MAC address is always unset to create a unicast MAC address. If the property is null, it is eligible to be overwritten by a default connection setting. If the value is still null or an empty string, the default is to create a locally-administered, unicast MAC address. If the value contains one MAC address, this address is used as mask. The set bits of the mask are to be filled with the current MAC address of the device, while the unset bits are subject to randomization. Setting FE:FF:FF:00:00:00 means to preserve the OUI of the current MAC address and only randomize the lower 3 bytes using the random or stable algorithm. If the value contains one additional MAC address after the mask, this address is used instead of the current MAC address to fill the bits that shall not be randomized. For example, a value of FE:FF:FF:00:00:00 68:F7:28:00:00:00 sets the OUI of the MAC address to 68:F7:28, while the lower bits are randomized. A value of 02:00:00:00:00:00 00:00:00:00:00:00 creates a fully scrambled globally-administered, burned-in MAC address. If the value contains more than one additional MAC addresses, one of them is chosen randomly. For example, 02:00:00:00:00:00 00:00:00:00:00:00 02:00:00:00:00:00 creates a fully scrambled MAC address, randomly locally or globally administered."
+    },
+    {
+      "name": "hidden",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If true, indicates that the network is a non-broadcasting network that hides its SSID. This works both in infrastructure and AP mode. In infrastructure mode, various workarounds are used for a more reliable discovery of hidden networks, such as probe-scanning the SSID. However, these workarounds expose inherent insecurities with hidden SSID networks, and thus hidden SSID networks should be used with caution. In AP mode, the created network does not broadcast its SSID. Note that marking the network as hidden may be a privacy issue for you (in infrastructure mode) or client stations (in AP mode), as the explicit probe-scans are distinctly recognizable on the air. Choices: false ← (default) true"
+    },
+    {
+      "name": "mac-address",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "If specified, this connection only applies to the Wi-Fi device whose permanent MAC address matches. This property does not change the MAC address of the device (for example for MAC spoofing)."
+    },
+    {
+      "name": "mac-address-blacklist",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A list of permanent MAC addresses of Wi-Fi devices to which this connection should never apply. Each MAC address should be given in the standard hex-digits-and-colons notation (for example, 00:11:22:33:44:55)."
+    },
+    {
+      "name": "mac-address-randomization",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "to",
+      "choices": [
+        "0 ← (default)",
+        "1",
+        "2"
+      ],
+      "description": "One of 0 (never randomize unless the user has set a global default to randomize and the supplicant supports randomization), 1 (never randomize the MAC address), or 2 (always randomize the MAC address). This property is deprecated for wifi.cloned-mac-address. Choices: 0 ← (default) 1 2"
+    },
+    {
+      "name": "powersave",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [
+        "0 ← (default)",
+        "1",
+        "2",
+        "3"
+      ],
+      "description": "One of 2 (disable Wi-Fi power saving), 3 (enable Wi-Fi power saving), 1 (do not touch currently configure setting) or 0 (use the globally configured value). All other values are reserved. Choices: 0 ← (default) 1 2 3"
+    },
+    {
+      "name": "rate",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "0",
+      "choices": [],
+      "description": "If non-zero, directs the device to only use the specified bitrate for communication with the access point. Units are in Kb/s, so for example 5500 = 5.5 Mbit/s. This property is highly driver dependent and not all devices support setting a static bitrate. Default: 0"
+    },
+    {
+      "name": "tx-power",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "0",
+      "choices": [],
+      "description": "If non-zero, directs the device to use the specified transmit power. Units are dBm. This property is highly driver dependent and not all devices support setting a static transmit power. Default: 0"
+    },
+    {
+      "name": "wake-on-wlan",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "1",
+      "choices": [],
+      "description": "The NMSettingWirelessWakeOnWLan options to enable. Not all devices support all options. May be any combination of NM_SETTING_WIRELESS_WAKE_ON_WLAN_ANY (0x2), NM_SETTING_WIRELESS_WAKE_ON_WLAN_DISCONNECT (0x4), NM_SETTING_WIRELESS_WAKE_ON_WLAN_MAGIC (0x8), NM_SETTING_WIRELESS_WAKE_ON_WLAN_GTK_REKEY_FAILURE (0x10), NM_SETTING_WIRELESS_WAKE_ON_WLAN_EAP_IDENTITY_REQUEST (0x20), NM_SETTING_WIRELESS_WAKE_ON_WLAN_4WAY_HANDSHAKE (0x40), NM_SETTING_WIRELESS_WAKE_ON_WLAN_RFKILL_RELEASE (0x80), NM_SETTING_WIRELESS_WAKE_ON_WLAN_TCP (0x100) or the special values 0x1 (to use global settings) and 0x8000 (to disable management of Wake-on-LAN in NetworkManager). Note the option values’ sum must be specified in order to combine multiple options. Default: 1"
+    },
+    {
+      "name": "wifi_sec",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The security configuration of the WiFi connection. Note the list of suboption attributes may vary depending on which version of NetworkManager/nmcli is installed on the host. An up-to-date list of supported attributes can be found here: https://networkmanager.dev/docs/api/latest/settings-802-11-wireless-security.html. For instance to use common WPA-PSK auth with a password: {key-mgmt: wpa-psk, psk: my_password}."
+    },
+    {
+      "name": "auth-alg",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"open\"",
+        "\"shared\"",
+        "\"leap\""
+      ],
+      "description": "When WEP is used (that is, if wifi_sec.key-mgmt is none or ieee8021x) indicate the 802.11 authentication algorithm required by the AP here. One of open for Open System, shared for Shared Key, or leap for Cisco LEAP. When using Cisco LEAP (that is, if wifi_sec.key-mgmt=ieee8021x and wifi_sec.auth-alg=leap) the wifi_sec.leap-username and wifi_sec.leap-password properties must be specified. Choices: \"open\" \"shared\" \"leap\""
+    },
+    {
+      "name": "fils",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "value),",
+      "choices": [
+        "0 ← (default)",
+        "1",
+        "2",
+        "3"
+      ],
+      "description": "Indicates whether Fast Initial Link Setup (802.11ai) must be enabled for the connection. One of 0 (use global default value), 1 (disable FILS), 2 (enable FILS if the supplicant and the access point support it) or 3 (enable FILS and fail if not supported). When set to 0 and no global default is set, FILS is optionally enabled. Choices: 0 ← (default) 1 2 3"
+    },
+    {
+      "name": "group",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"wep40\"",
+        "\"wep104\"",
+        "\"tkip\"",
+        "\"ccmp\""
+      ],
+      "description": "A list of group/broadcast encryption algorithms which prevents connections to Wi-Fi networks that do not utilize one of the algorithms in the list. For maximum compatibility leave this property empty. Choices: \"wep40\" \"wep104\" \"tkip\" \"ccmp\""
+    },
+    {
+      "name": "key-mgmt",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"none\"",
+        "\"ieee8021x\"",
+        "\"owe\"",
+        "\"wpa-psk\"",
+        "\"sae\"",
+        "\"wpa-eap\"",
+        "\"wpa-eap-suite-b-192\""
+      ],
+      "description": "Key management used for the connection. One of none (WEP or no password protection), ieee8021x (Dynamic WEP), owe (Opportunistic Wireless Encryption), wpa-psk (WPA2 + WPA3 personal), sae (WPA3 personal only), wpa-eap (WPA2 + WPA3 enterprise) or wpa-eap-suite-b-192 (WPA3 enterprise only). This property must be set for any Wi-Fi connection that uses security. Choices: \"none\" \"ieee8021x\" \"owe\" \"wpa-psk\" \"sae\" \"wpa-eap\" \"wpa-eap-suite-b-192\""
+    },
+    {
+      "name": "leap-password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The login password for legacy LEAP connections (that is, if wifi_sec.key-mgmt=ieee8021x and wifi_sec.auth-alg=leap)."
+    },
+    {
+      "name": "leap-password-flags",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Flags indicating how to handle the wifi_sec.leap-password property."
+    },
+    {
+      "name": "leap-username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The login username for legacy LEAP connections (that is, if wifi_sec.key-mgmt=ieee8021x and wifi_sec.auth-alg=leap)."
+    },
+    {
+      "name": "pairwise",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"tkip\"",
+        "\"ccmp\""
+      ],
+      "description": "A list of pairwise encryption algorithms which prevents connections to Wi-Fi networks that do not utilize one of the algorithms in the list. For maximum compatibility leave this property empty. Choices: \"tkip\" \"ccmp\""
+    },
+    {
+      "name": "pmf",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "value),",
+      "choices": [
+        "0 ← (default)",
+        "1",
+        "2",
+        "3"
+      ],
+      "description": "Indicates whether Protected Management Frames (802.11w) must be enabled for the connection. One of 0 (use global default value), 1 (disable PMF), 2 (enable PMF if the supplicant and the access point support it) or 3 (enable PMF and fail if not supported). When set to 0 and no global default is set, PMF is optionally enabled. Choices: 0 ← (default) 1 2 3"
+    },
+    {
+      "name": "proto",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"wpa\"",
+        "\"rsn\""
+      ],
+      "description": "List of strings specifying the allowed WPA protocol versions to use. Each element may be wpa (allow WPA) or rsn (allow WPA2/RSN). If not specified, both WPA and RSN connections are allowed. Choices: \"wpa\" \"rsn\""
+    },
+    {
+      "name": "psk",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Pre-Shared-Key for WPA networks. For WPA-PSK, it is either an ASCII passphrase of 8 to 63 characters that is (as specified in the 802.11i standard) hashed to derive the actual key, or the key in form of 64 hexadecimal character. The WPA3-Personal networks use a passphrase of any length for SAE authentication."
+    },
+    {
+      "name": "psk-flags",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Flags indicating how to handle the wifi_sec.psk property."
+    },
+    {
+      "name": "wep-key-flags",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Flags indicating how to handle the wifi_sec.wep-key0, wifi_sec.wep-key1, wifi_sec.wep-key2, and wifi_sec.wep-key3 properties."
+    },
+    {
+      "name": "wep-key-type",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [
+        "1",
+        "2"
+      ],
+      "description": "Controls the interpretation of WEP keys. Allowed values are 1, in which case the key is either a 10- or 26-character hexadecimal string, or a 5- or 13-character ASCII password; or 2, in which case the passphrase is provided as a string and it is hashed using the de-facto MD5 method to derive the actual WEP key. Choices: 1 2"
+    },
+    {
+      "name": "wep-key0",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Index 0 WEP key. This is the WEP key used in most networks. See the wifi_sec.wep-key-type property for a description of how this key is interpreted."
+    },
+    {
+      "name": "wep-key1",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Index 1 WEP key. This WEP index is not used by most networks. See the wifi_sec.wep-key-type property for a description of how this key is interpreted."
+    },
+    {
+      "name": "wep-key2",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Index 2 WEP key. This WEP index is not used by most networks. See the wifi_sec.wep-key-type property for a description of how this key is interpreted."
+    },
+    {
+      "name": "wep-key3",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Index 3 WEP key. This WEP index is not used by most networks. See the wifi_sec.wep-key-type property for a description of how this key is interpreted."
+    },
+    {
+      "name": "wep-tx-keyidx",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "WEP",
+      "choices": [
+        "0 ← (default)",
+        "1",
+        "2",
+        "3"
+      ],
+      "description": "When static WEP is used (that is, if wifi_sec.key-mgmt=none) and a non-default WEP key index is used by the AP, put that WEP key index here. Valid values are 0 (default key) through 3. Note that some consumer access points (like the Linksys WRT54G) number the keys 1 to 4. Choices: 0 ← (default) 1 2 3"
+    },
+    {
+      "name": "wps-method",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "setting",
+      "choices": [],
+      "description": "Flags indicating which mode of WPS is to be used if any. There is little point in changing the default setting as NetworkManager automatically determines whether it is feasible to start WPS enrollment from the Access Point capabilities. WPS can be disabled by setting this property to a value of 1. Default: 0"
+    },
+    {
+      "name": "wireguard",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The configuration of the Wireguard connection. Note the list of suboption attributes may vary depending on which version of NetworkManager/nmcli is installed on the host. An up-to-date list of supported attributes can be found here: https://networkmanager.dev/docs/api/latest/settings-wireguard.html. For instance to configure a listen port: {listen-port: 12345}."
+    },
+    {
+      "name": "fwmark",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "off.",
+      "choices": [],
+      "description": "The 32-bit fwmark for outgoing packets. The use of fwmark is optional and is by default off. Setting it to 0 disables it. Note that wireguard.ip4-auto-default-route or wireguard.ip6-auto-default-route enabled, implies to automatically choose a fwmark."
+    },
+    {
+      "name": "ip4-auto-default-route",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "route.",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Whether to enable special handling of the IPv4 default route. If enabled, the IPv4 default route from wireguard.peer-routes is placed to a dedicated routing-table and two policy routing rules are added. The fwmark number is also used as routing-table for the default-route, and if fwmark is zero, an unused fwmark/table is chosen automatically. This corresponds to what wg-quick does with Table=auto and what WireGuard calls “Improved Rule-based Routing”. Choices: false true"
+    },
+    {
+      "name": "ip6-auto-default-route",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "route.",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Like wireguard.ip4-auto-default-route, but for the IPv6 default route. Choices: false true"
+    },
+    {
+      "name": "listen-port",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The WireGuard connection listen-port. If not specified, the port is chosen randomly when the interface comes up."
+    },
+    {
+      "name": "peer-routes",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "or",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Whether to automatically add routes for the AllowedIPs ranges of the peers. If true (the default), NetworkManager automatically adds routes in the routing tables according to ipv4.route-table and ipv6.route-table. Usually you want this automatism enabled. If false, no such routes are added automatically. In this case, the user may want to configure static routes in ipv4.routes and ipv6.routes, respectively. Note that if the peer’s AllowedIPs is 0.0.0.0/0 or ::/0 and the profile’s ipv4.never-default or ipv6.never-default setting is enabled, the peer route for this peer is not added automatically. Choices: false true"
+    },
+    {
+      "name": "private-key",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The 256 bit private-key in base64 encoding."
+    },
+    {
+      "name": "private-key-flags",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [
+        "0",
+        "1",
+        "2"
+      ],
+      "description": "NMSettingSecretFlags indicating how to handle the wireguard.private-key property. Choices: 0 1 2"
+    },
+    {
+      "name": "xmit_hash_policy",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "This is only used with bond - xmit_hash_policy type."
+    },
+    {
+      "name": "zone",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The trust level of the connection. When updating this property on a currently activated connection, the change takes effect immediately."
+    }
+  ],
+  "examples": [
+    "# These examples are using the following inventory:\n#\n# ## Directory layout:\n#\n# |_/inventory/cloud-hosts\n# |           /group_vars/openstack-stage.yml\n# |           /host_vars/controller-01.openstack.host.com\n# |           /host_vars/controller-02.openstack.host.com\n# |_/playbook/library/nmcli.py\n# |          /playbook-add.yml\n# |          /playbook-del.yml\n# ```\n#\n# ## inventory examples\n# ### groups_vars\n# ```yml\n# ---\n# #devops_os_define_network\n# storage_gw: \"192.0.2.254\"\n# external_gw: \"198.51.100.254\"\n# tenant_gw: \"203.0.113.254\"\n#\n# #Team vars\n# nmcli_team:\n#   - conn_name: tenant\n#     ip4: '{{ tenant_ip }}'\n#     gw4: '{{ tenant_gw }}'\n#   - conn_name: external\n#     ip4: '{{ external_ip }}'\n#     gw4: '{{ external_gw }}'\n#   - conn_name: storage\n#     ip4: '{{ storage_ip }}'\n#     gw4: '{{ storage_gw }}'\n# nmcli_team_slave:\n#   - conn_name: em1\n#     ifname: em1\n#     master: tenant\n#   - conn_name: em2\n#     ifname: em2\n#     master: tenant\n#   - conn_name: p2p1\n#     ifname: p2p1\n#     master: storage\n#   - conn_name: p2p2\n#     ifname: p2p2\n#     master: external\n#\n# #bond vars\n# nmcli_bond:\n#   - conn_name: tenant\n#     ip4: '{{ tenant_ip }}'\n#     gw4: ''\n#     mode: balance-rr\n#   - conn_name: external\n#     ip4: '{{ external_ip }}'\n#     gw4: ''\n#     mode: balance-rr\n#   - conn_name: storage\n#     ip4: '{{ storage_ip }}'\n#     gw4: '{{ storage_gw }}'\n#     mode: balance-rr\n# nmcli_bond_slave:\n#   - conn_name: em1\n#     ifname: em1\n#     master: tenant\n#   - conn_name: em2\n#     ifname: em2\n#     master: tenant\n#   - conn_name: p2p1\n#     ifname: p2p1\n#     master: storage\n#   - conn_name: p2p2\n#     ifname: p2p2\n#     master: external\n#\n# #ethernet vars\n# nmcli_ethernet:\n#   - conn_name: em1\n#     ifname: em1\n#     ip4:\n#       - '{{ tenant_ip }}'\n#       - '{{ second_tenant_ip }}'\n#     gw4: '{{ tenant_gw }}'\n#   - conn_name: em2\n#     ifname: em2\n#     ip4: '{{ tenant_ip1 }}'\n#     gw4: '{{ tenant_gw }}'\n#   - conn_name: p2p1\n#     ifname: p2p1\n#     ip4: '{{ storage_ip }}'\n#     gw4: '{{ storage_gw }}'\n#   - conn_name: p2p2\n#     ifname: p2p2\n#     ip4: '{{ external_ip }}'\n#     gw4: '{{ external_gw }}'\n# ```\n#\n# ### host_vars\n# ```yml\n# ---\n# storage_ip: \"192.0.2.91/23\"\n# external_ip: \"198.51.100.23/21\"\n# tenant_ip: \"203.0.113.77/23\"\n# second_tenant_ip: \"204.0.113.77/23\"\n# ```\n\n\n## playbook-add.yml example\n\n- hosts: openstack-stage\n  remote_user: root\n  tasks:\n\n    - name: Install needed network manager libs\n      ansible.builtin.package:\n        name:\n          - NetworkManager-libnm\n          - nm-connection-editor\n          - libsemanage-python\n          - policycoreutils-python\n        state: present\n\n##### Working with all cloud nodes - Teaming\n    - name: Try nmcli add team - conn_name only & ip4 gw4\n      community.general.nmcli:\n        type: team\n        conn_name: '{{ item.conn_name }}'\n        ip4: '{{ item.ip4 }}'\n        gw4: '{{ item.gw4 }}'\n        state: present\n      with_items:\n        - '{{ nmcli_team }}'\n\n    - name: Try nmcli add teams-slave\n      community.general.nmcli:\n        type: team-slave\n        conn_name: '{{ item.conn_name }}'\n        ifname: '{{ item.ifname }}'\n        master: '{{ item.master }}'\n        state: present\n      with_items:\n        - '{{ nmcli_team_slave }}'\n\n##### Working with all cloud nodes - Bonding\n    - name: Try nmcli add bond - conn_name only & ip4 gw4 mode\n      community.general.nmcli:\n        type: bond\n        conn_name: '{{ item.conn_name }}'\n        ip4: '{{ item.ip4 }}'\n        gw4: '{{ item.gw4 }}'\n        mode: '{{ item.mode }}'\n        state: present\n      with_items:\n        - '{{ nmcli_bond }}'\n\n    - name: Try nmcli add bond-slave\n      community.general.nmcli:\n        type: bond-slave\n        conn_name: '{{ item.conn_name }}'\n        ifname: '{{ item.ifname }}'\n        master: '{{ item.master }}'\n        state: present\n      with_items:\n        - '{{ nmcli_bond_slave }}'\n\n##### Working with all cloud nodes - Ethernet\n    - name: Try nmcli add Ethernet - conn_name only & ip4 gw4\n      community.general.nmcli:\n        type: ethernet\n        conn_name: '{{ item.conn_name }}'\n        ip4: '{{ item.ip4 }}'\n        gw4: '{{ item.gw4 }}'\n        state: present\n      with_items:\n        - '{{ nmcli_ethernet }}'\n\n## playbook-del.yml example\n- hosts: openstack-stage\n  remote_user: root\n  tasks:\n\n    - name: Try nmcli del team - multiple\n      community.general.nmcli:\n        conn_name: '{{ item.conn_name }}'\n        state: absent\n      with_items:\n        - conn_name: em1\n        - conn_name: em2\n        - conn_name: p1p1\n        - conn_name: p1p2\n        - conn_name: p2p1\n        - conn_name: p2p2\n        - conn_name: tenant\n        - conn_name: storage\n        - conn_name: external\n        - conn_name: team-em1\n        - conn_name: team-em2\n        - conn_name: team-p1p1\n        - conn_name: team-p1p2\n        - conn_name: team-p2p1\n        - conn_name: team-p2p2\n\n    - name: Add an Ethernet connection with static IP configuration\n      community.general.nmcli:\n        conn_name: my-eth1\n        ifname: eth1\n        type: ethernet\n        ip4: 192.0.2.100/24\n        gw4: 192.0.2.1\n        state: present\n\n    - name: Add an Team connection with static IP configuration\n      community.general.nmcli:\n        conn_name: my-team1\n        ifname: my-team1\n        type: team\n        ip4: 192.0.2.100/24\n        gw4: 192.0.2.1\n        state: present\n        autoconnect: true\n\n    - name: Optionally, at the same time specify IPv6 addresses for the device\n      community.general.nmcli:\n        conn_name: my-eth1\n        ifname: eth1\n        type: ethernet\n        ip4: 192.0.2.100/24\n        gw4: 192.0.2.1\n        ip6: 2001:db8::cafe\n        gw6: 2001:db8::1\n        state: present\n\n    - name: Add two IPv4 DNS server addresses\n      community.general.nmcli:\n        conn_name: my-eth1\n        type: ethernet\n        dns4:\n          - 192.0.2.53\n          - 198.51.100.53\n        state: present\n\n    - name: Make a profile usable for all compatible Ethernet interfaces\n      community.general.nmcli:\n        ctype: ethernet\n        name: my-eth1\n        ifname: '*'\n        state: present\n\n    - name: Change the property of a setting e.g. MTU\n      community.general.nmcli:\n        conn_name: my-eth1\n        mtu: 9000\n        type: ethernet\n        state: present\n\n    - name: Change the property of a setting e.g. MTU and reload connection\n      community.general.nmcli:\n        conn_name: my-eth1\n        mtu: 1500\n        type: ethernet\n        state: present\n        conn_reload: true\n\n    - name: Disable connection\n      community.general.nmcli:\n        conn_name: my-eth1\n        state: down\n\n    - name: Reload and enable connection\n      community.general.nmcli:\n        conn_name: my-eth1\n        state: up\n        conn_reload: true\n\n    - name: Add second ip4 address\n      community.general.nmcli:\n        conn_name: my-eth1\n        ifname: eth1\n        type: ethernet\n        ip4:\n          - 192.0.2.100/24\n          - 192.0.3.100/24\n        state: present\n\n    - name: Add second ip6 address\n      community.general.nmcli:\n        conn_name: my-eth1\n        ifname: eth1\n        type: ethernet\n        ip6:\n          - 2001:db8::cafe\n          - 2002:db8::cafe\n        state: present\n\n    - name: Add VxLan\n      community.general.nmcli:\n        type: vxlan\n        conn_name: vxlan_test1\n        vxlan_id: 16\n        vxlan_local: 192.168.1.2\n        vxlan_remote: 192.168.1.5\n\n    - name: Add VxLan via multicast on a bridge\n      community.general.nmcli:\n        type: vxlan\n        conn_name: vxlan_test2\n        vxlan_id: 17\n        vxlan_parent: eth1\n        vxlan_local: 192.168.1.2\n        vxlan_remote: 239.192.0.17\n        slave_type: bridge\n        master: br0\n\n    - name: Add gre\n      community.general.nmcli:\n        type: gre\n        conn_name: gre_test1\n        ip_tunnel_dev: eth0\n        ip_tunnel_local: 192.168.1.2\n        ip_tunnel_remote: 192.168.1.5\n\n    - name: Add ipip\n      community.general.nmcli:\n        type: ipip\n        conn_name: ipip_test1\n        ip_tunnel_dev: eth0\n        ip_tunnel_local: 192.168.1.2\n        ip_tunnel_remote: 192.168.1.5\n\n    - name: Add sit\n      community.general.nmcli:\n        type: sit\n        conn_name: sit_test1\n        ip_tunnel_dev: eth0\n        ip_tunnel_local: 192.168.1.2\n        ip_tunnel_remote: 192.168.1.5\n\n    - name: Add zone\n      community.general.nmcli:\n        type: ethernet\n        conn_name: my-eth1\n        zone: external\n        state: present\n\n# nmcli exits with status 0 if it succeeds and exits with a status greater\n# than zero when there is a failure. The following list of status codes may be\n# returned:\n#\n#     - 0 Success - indicates the operation succeeded\n#     - 1 Unknown or unspecified error\n#     - 2 Invalid user input, wrong nmcli invocation\n#     - 3 Timeout expired (see --wait option)\n#     - 4 Connection activation failed\n#     - 5 Connection deactivation failed\n#     - 6 Disconnecting device failed\n#     - 7 Connection deletion failed\n#     - 8 NetworkManager is not running\n#     - 9 nmcli and NetworkManager versions mismatch\n#     - 10 Connection, device, or access point does not exist.\n\n- name: Create the wifi connection\n  community.general.nmcli:\n    type: wifi\n    conn_name: Brittany\n    ifname: wlp4s0\n    ssid: Brittany\n    wifi_sec:\n      key-mgmt: wpa-psk\n      psk: my_password\n    autoconnect: true\n    state: present\n\n- name: Create a hidden AP mode wifi connection\n  community.general.nmcli:\n    type: wifi\n    conn_name: ChocoMaster\n    ifname: wlo1\n    ssid: ChocoMaster\n    wifi:\n      hidden: true\n      mode: ap\n    autoconnect: true\n    state: present\n\n- name: Create a gsm connection\n  community.general.nmcli:\n    type: gsm\n    conn_name: my-gsm-provider\n    ifname: cdc-wdm0\n    gsm:\n      apn: my.provider.apn\n      username: my-provider-username\n      password: my-provider-password\n      pin: my-sim-pin\n    autoconnect: true\n    state: present\n\n- name: Create a macvlan connection\n  community.general.nmcli:\n    type: macvlan\n    conn_name: my-macvlan-connection\n    ifname: mymacvlan0\n    macvlan:\n      mode: 2\n      parent: eth1\n    autoconnect: true\n    state: present\n\n- name: Create a wireguard connection\n  community.general.nmcli:\n    type: wireguard\n    conn_name: my-wg-provider\n    ifname: mywg0\n    wireguard:\n      listen-port: 51820\n      private-key: my-private-key\n    autoconnect: true\n    state: present\n\n- name: >-\n    Create a VPN L2TP connection for ansible_user to connect on vpn.example.com\n    authenticating with user 'brittany' and pre-shared key as 'Brittany123'\n  community.general.nmcli:\n    type: vpn\n    conn_name: my-vpn-connection\n    vpn:\n      permissions: \"{{ ansible_user }}\"\n      service-type: org.freedesktop.NetworkManager.l2tp\n      gateway: vpn.example.com\n      password-flags: 2\n      user: brittany\n      ipsec-enabled: true\n      ipsec-psk: \"0s{{ 'Brittany123' | ansible.builtin.b64encode }}\"\n    autoconnect: false\n    state: present\n\n## Creating bond attached to bridge example\n- name: Create bond attached to bridge\n  community.general.nmcli:\n    type: bond\n    conn_name: bond0\n    slave_type: bridge\n    master: br0\n    state: present\n\n- name: Create master bridge\n  community.general.nmcli:\n    type: bridge\n    conn_name: br0\n    method4: disabled\n    method6: disabled\n    state: present\n\n## Creating vlan connection attached to bridge\n- name: Create master bridge\n  community.general.nmcli:\n    type: bridge\n    conn_name: br0\n    state: present\n\n- name: Create VLAN 5\n  community.general.nmcli:\n    type: vlan\n    conn_name: eth0.5\n    slave_type: bridge\n    master: br0\n    vlandev: eth0\n    vlanid: 5\n    state: present\n\n## Creating VRF and adding VLAN interface to it\n- name: Create VRF\n  community.general.nmcli:\n    type: vrf\n    ifname: vrf10\n    table: 10\n    state: present\n    conn_name: vrf10\n    method4: disabled\n    method6: disabled\n\n- name: Create VLAN interface inside VRF\n  community.general.nmcli:\n    conn_name: \"eth0.124\"\n    type: vlan\n    vlanid: \"124\"\n    vlandev: \"eth0\"\n    master: \"vrf10\"\n    slave_type: vrf\n    state: \"present\"\n    ip4: '192.168.124.50'\n    gw4: '192.168.124.1'\n\n## Defining ip rules while setting a static IP\n## table 'production' is set with id 200 in this example.\n- name: Set Static ips for interface with ip rules and routes\n  community.general.nmcli:\n    type: ethernet\n    conn_name: 'eth0'\n    ip4: '192.168.1.50'\n    gw4: '192.168.1.1'\n    state: present\n    routes4_extended:\n      - ip: \"0.0.0.0/0\"\n        next_hop: \"192.168.1.1\"\n        table: \"production\"\n    routing_rules4:\n      - \"priority 0 from 192.168.1.50 table 200\"\n\n## Creating an OVS bridge and attaching a port\n- name: Create OVS Bridge\n  community.general.nmcli:\n    conn_name: ovs-br-conn\n    ifname: ovs-br\n    type: ovs-bridge\n    state: present\n\n- name: Create OVS Port for OVS Bridge Interface\n  community.general.nmcli:\n    conn_name: ovs-br-interface-port-conn\n    ifname: ovs-br-interface-port\n    master: ovs-br\n    type: ovs-port\n    state: present\n\n## Adding an ethernet interface to an OVS bridge port\n- name: Add Ethernet Interface to OVS Port\n  community.general.nmcli:\n    conn_name: eno1\n    ifname: eno1\n    master: ovs-br-interface-port\n    slave_type: ovs-port\n    type: ethernet\n    state: present"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/nmcli_module#ansible-collections-community-general-nmcli-module.html",
+  "parsed_at": "2026-04-11T13:53:21.177701"
+}

@@ -1,0 +1,141 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.mssql_script",
+  "slug": "mssql_script_module#ansible-collections-community-general-mssql-script-module",
+  "description": "Execute SQL scripts on a MSSQL database.",
+  "parameters": [
+    {
+      "name": "login_host",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Host running the database."
+    },
+    {
+      "name": "login_password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The password used to authenticate with."
+    },
+    {
+      "name": "login_port",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "1433",
+      "choices": [],
+      "description": "Port of the MSSQL server. Requires login_host be defined as well. Default: 1433"
+    },
+    {
+      "name": "login_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The username used to authenticate with."
+    },
+    {
+      "name": "name",
+      "aliases": [
+        "db"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Database to run script against. Default: \"\""
+    },
+    {
+      "name": "output",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "each",
+      "choices": [
+        "\"dict\"",
+        "\"default\" ← (default)"
+      ],
+      "description": "With default each row is returned as a list of values. See query_results. Output format dict returns dictionary with the column names as keys. See query_results_dict. dict requires named columns to be returned by each query otherwise an error is thrown. Choices: \"dict\" \"default\" ← (default)"
+    },
+    {
+      "name": "params",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parameters passed to the script as SQL parameters. (Query 'SELECT %(name)s\"' with example: '{\"name\": \"John Doe\"}.)’."
+    },
+    {
+      "name": "script",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The SQL script to be executed. Script can contain multiple SQL statements. Multiple Batches can be separated by GO command. Each batch must return at least one result set."
+    },
+    {
+      "name": "transaction",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If transactional mode is requested, start a transaction and commit the change only if the script succeed. Otherwise, rollback the transaction. If transactional mode is not requested (default), automatically commit the change. Choices: false ← (default) true"
+    }
+  ],
+  "examples": [
+    "- name: Check DB connection\n  community.general.mssql_script:\n    login_user: \"{{ mssql_login_user }}\"\n    login_password: \"{{ mssql_login_password }}\"\n    login_host: \"{{ mssql_host }}\"\n    login_port: \"{{ mssql_port }}\"\n    db: master\n    script: \"SELECT 1\"\n\n- name: Query with parameter\n  community.general.mssql_script:\n    login_user: \"{{ mssql_login_user }}\"\n    login_password: \"{{ mssql_login_password }}\"\n    login_host: \"{{ mssql_host }}\"\n    login_port: \"{{ mssql_port }}\"\n    script: |\n      SELECT name, state_desc FROM sys.databases WHERE name = %(dbname)s\n    params:\n      dbname: msdb\n  register: result_params\n- assert:\n    that:\n      - result_params.query_results[0][0][0][0] == 'msdb'\n      - result_params.query_results[0][0][0][1] == 'ONLINE'\n\n- name: Query within a transaction\n  community.general.mssql_script:\n    login_user: \"{{ mssql_login_user }}\"\n    login_password: \"{{ mssql_login_password }}\"\n    login_host: \"{{ mssql_host }}\"\n    login_port: \"{{ mssql_port }}\"\n    script: |\n      UPDATE sys.SomeTable SET desc = 'some_table_desc' WHERE name = %(dbname)s\n      UPDATE sys.AnotherTable SET desc = 'another_table_desc' WHERE name = %(dbname)s\n    transaction: true\n    params:\n      dbname: msdb\n\n- name: two batches with default output\n  community.general.mssql_script:\n    login_user: \"{{ mssql_login_user }}\"\n    login_password: \"{{ mssql_login_password }}\"\n    login_host: \"{{ mssql_host }}\"\n    login_port: \"{{ mssql_port }}\"\n    script: |\n      SELECT 'Batch 0 - Select 0'\n      SELECT 'Batch 0 - Select 1'\n      GO\n      SELECT 'Batch 1 - Select 0'\n  register: result_batches\n- assert:\n    that:\n      - result_batches.query_results | length == 2 # two batch results\n      - result_batches.query_results[0] | length == 2 # two selects in first batch\n      - result_batches.query_results[0][0] | length == 1 # one row in first select\n      - result_batches.query_results[0][0][0] | length == 1 # one column in first row\n      - result_batches.query_results[0][0][0][0] == 'Batch 0 - Select 0' # each row contains a list of values.\n\n- name: two batches with dict output\n  community.general.mssql_script:\n    login_user: \"{{ mssql_login_user }}\"\n    login_password: \"{{ mssql_login_password }}\"\n    login_host: \"{{ mssql_host }}\"\n    login_port: \"{{ mssql_port }}\"\n    output: dict\n    script: |\n      SELECT 'Batch 0 - Select 0' as b0s0\n      SELECT 'Batch 0 - Select 1' as b0s1\n      GO\n      SELECT 'Batch 1 - Select 0' as b1s0\n  register: result_batches_dict\n- assert:\n    that:\n      - result_batches_dict.query_results_dict | length == 2 # two batch results\n      - result_batches_dict.query_results_dict[0] | length == 2 # two selects in first batch\n      - result_batches_dict.query_results_dict[0][0] | length == 1 # one row in first select\n      - result_batches_dict.query_results_dict[0][0][0]['b0s0'] == 'Batch 0 - Select 0' # column 'b0s0' of first row"
+  ],
+  "return_values": [
+    {
+      "name": "query_results",
+      "type": "list",
+      "description": "List of batches (queries separated by GO keyword). Returned: success and output=default Sample: [[[[\"Batch 0 - Select 0\"]], [[\"Batch 0 - Select 1\"]]], [[[\"Batch 1 - Select 0\"]]]]",
+      "returned": "success"
+    },
+    {
+      "name": "queries",
+      "type": "list",
+      "description": "List of result sets of each query. If a query returns no results, the results of this and all the following queries are not included in the output. Use the GO keyword in script to separate queries. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "rows",
+      "type": "list",
+      "description": "List of rows returned by query. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "column_value",
+      "type": "list",
+      "description": "List of column values. Any non-standard JSON type is converted to string. Returned: success, if output is default Sample: [\"Batch 0 - Select 0\"]",
+      "returned": "success"
+    },
+    {
+      "name": "query_results_dict",
+      "type": "list",
+      "description": "List of batches (queries separated by GO keyword). Returned: success and output=dict Sample: [[[[\"Batch 0 - Select 0\"]], [[\"Batch 0 - Select 1\"]]], [[[\"Batch 1 - Select 0\"]]]]",
+      "returned": "success"
+    },
+    {
+      "name": "column_dict",
+      "type": "dictionary",
+      "description": "Dictionary of column names and values. Any non-standard JSON type is converted to string. Returned: success, if output is dict Sample: {\"col_name\": \"Batch 0 - Select 0\"}",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/mssql_script_module.html",
+  "parsed_at": "2026-04-13T16:29:53.375312"
+}

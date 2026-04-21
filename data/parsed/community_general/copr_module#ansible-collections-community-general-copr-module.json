@@ -1,0 +1,95 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.copr",
+  "slug": "copr_module#ansible-collections-community-general-copr-module",
+  "description": "This module can enable, disable or remove the specified repository.",
+  "parameters": [
+    {
+      "name": "chroot",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "chroot",
+      "choices": [],
+      "description": "The name of the chroot that you want to enable/disable/remove in the project, for example epel-7-x86_64. Default chroot is determined by the operating system, version of the operating system, and architecture on which the module is run."
+    },
+    {
+      "name": "excludepkgs",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of packages in this repository to exclude from all operations. Matches a name or a glob."
+    },
+    {
+      "name": "host",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "copr.fedorainfracloud.org",
+      "choices": [],
+      "description": "The Copr host to work with. Default: \"copr.fedorainfracloud.org\""
+    },
+    {
+      "name": "includepkgs",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of packages to include in all operations. Inverse of excludepkgs, DNF will exclude any package in the repository that does not match this list. Matches a name or a glob."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Copr directory name, for example @copr/copr-dev."
+    },
+    {
+      "name": "protocol",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "https",
+      "choices": [],
+      "description": "This indicate which protocol to use with the host. Default: \"https\""
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"enabled\" ← (default)",
+        "\"disabled\""
+      ],
+      "description": "Whether to set this project as enabled, disabled, or absent. Choices: \"absent\" \"enabled\" ← (default) \"disabled\""
+    }
+  ],
+  "examples": [
+    "- name: Enable project Test of the user schlupov\n  community.general.copr:\n    host: copr.fedorainfracloud.org\n    state: enabled\n    name: schlupov/Test\n    chroot: fedora-31-x86_64\n\n- name: Remove project integration_tests of the group copr\n  community.general.copr:\n    state: absent\n    name: '@copr/integration_tests'\n\n- name: Install a repo where only packages starting with \"python\" that do not have i386 are seen by DNF\n  community.general.copr:\n    name: '@sample/repo'\n    chroot: fedora-rawhide-{{ ansible_facts.architecture }}\n    includepkgs:\n      - 'python*'\n    excludepkgs:\n      - '*.i386'"
+  ],
+  "return_values": [
+    {
+      "name": "repo",
+      "type": "string",
+      "description": "Path to the project on the host. Returned: success Sample: \"copr.fedorainfracloud.org/group_copr/integration_tests\"",
+      "returned": "success"
+    },
+    {
+      "name": "repo_filename",
+      "type": "string",
+      "description": "The name of the repo file in which the copr project information is stored. Returned: success Sample: \"_copr:copr.fedorainfracloud.org:group_copr:integration_tests.repo\"",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/copr_module.html",
+  "parsed_at": "2026-04-13T16:29:44.496458"
+}

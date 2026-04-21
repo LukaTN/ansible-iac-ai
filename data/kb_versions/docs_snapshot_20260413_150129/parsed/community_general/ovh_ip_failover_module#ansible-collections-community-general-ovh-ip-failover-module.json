@@ -1,0 +1,99 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.ovh_ip_failover",
+  "slug": "ovh_ip_failover_module#ansible-collections-community-general-ovh-ip-failover-module",
+  "description": "Manage OVH (French European hosting provider) IP Failover Address. For now, this module can only be used to move an IP failover (or failover block) between services.",
+  "parameters": [
+    {
+      "name": "application_key",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The applicationKey to use."
+    },
+    {
+      "name": "application_secret",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The application secret to use."
+    },
+    {
+      "name": "consumer_key",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The consumer key to use."
+    },
+    {
+      "name": "endpoint",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The endpoint to use (for instance ovh-eu)."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The IP address to manage (can be a single IP like 1.1.1.1 or a block like 1.1.1.1/28)."
+    },
+    {
+      "name": "service",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the OVH service this IP address should be routed."
+    },
+    {
+      "name": "timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "is",
+      "choices": [],
+      "description": "The timeout in seconds used to wait for a task to be completed. Default is 120 seconds. Default: 120"
+    },
+    {
+      "name": "wait_completion",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If true, the module waits for the IP address to be moved. If false, exit without waiting. The taskId is returned in module output. Choices: false true ← (default)"
+    },
+    {
+      "name": "wait_task_completion",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "0",
+      "choices": [],
+      "description": "If not 0, the module waits for this task ID to be completed. Use wait_task_completion if you want to wait for completion of a previously executed task with wait_completion=false. You can execute this module repeatedly on a list of failover IPs using wait_completion=false (see examples). Default: 0"
+    }
+  ],
+  "examples": [
+    "# Route an IP address 1.1.1.1 to the service ns666.ovh.net\n- community.general.ovh_ip_failover:\n    name: 1.1.1.1\n    service: ns666.ovh.net\n    endpoint: ovh-eu\n    application_key: yourkey\n    application_secret: yoursecret\n    consumer_key: yourconsumerkey\n- community.general.ovh_ip_failover:\n    name: 1.1.1.1\n    service: ns666.ovh.net\n    endpoint: ovh-eu\n    wait_completion: false\n    application_key: yourkey\n    application_secret: yoursecret\n    consumer_key: yourconsumerkey\n  register: moved\n- community.general.ovh_ip_failover:\n    name: 1.1.1.1\n    service: ns666.ovh.net\n    endpoint: ovh-eu\n    wait_task_completion: \"{{moved.taskId}}\"\n    application_key: yourkey\n    application_secret: yoursecret\n    consumer_key: yourconsumerkey"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/ovh_ip_failover_module#ansible-collections-community-general-ovh-ip-failover-module.html",
+  "parsed_at": "2026-04-11T13:53:22.935230"
+}

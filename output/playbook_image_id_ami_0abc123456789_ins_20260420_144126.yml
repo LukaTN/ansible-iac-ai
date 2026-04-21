@@ -1,0 +1,17 @@
+---
+- name: Create an EC2 Launch Template
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - amazon.aws
+  tasks:
+    - name: Create an ec2 launch template
+      amazon.aws.ec2_launch_template:
+        name: "my_template"
+        image_id: "ami-0abc123456789"
+        instance_type: t3.micro
+        region: us-east-1
+        key_name: my_ssh_key
+        iam_instance_profile: myTestProfile
+        disable_api_termination: true

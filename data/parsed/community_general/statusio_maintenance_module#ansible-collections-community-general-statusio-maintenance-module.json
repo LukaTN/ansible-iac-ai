@@ -1,0 +1,211 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.statusio_maintenance",
+  "slug": "statusio_maintenance_module#ansible-collections-community-general-statusio-maintenance-module",
+  "description": "Creates or deletes a maintenance window for status.io.",
+  "parameters": [
+    {
+      "name": "all_infrastructure_affected",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If it affects all components and containers. Choices: false ← (default) true"
+    },
+    {
+      "name": "api_id",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Your unique API ID from status.io."
+    },
+    {
+      "name": "api_key",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Your unique API Key from status.io."
+    },
+    {
+      "name": "automation",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Automatically start and end the maintenance window. Choices: false ← (default) true"
+    },
+    {
+      "name": "components",
+      "aliases": [
+        "component"
+      ],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The given name of your component (server name)."
+    },
+    {
+      "name": "containers",
+      "aliases": [
+        "container"
+      ],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The given name of your container (data center)."
+    },
+    {
+      "name": "desc",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "Created",
+      "choices": [],
+      "description": "Message describing the maintenance window. Default: \"Created by Ansible\""
+    },
+    {
+      "name": "maintenance_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The maintenance ID number when deleting a maintenance window."
+    },
+    {
+      "name": "maintenance_notify_1_hr",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Notify subscribers 1 hour before maintenance start time. Choices: false ← (default) true"
+    },
+    {
+      "name": "maintenance_notify_24_hr",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Notify subscribers 24 hours before maintenance start time. Choices: false ← (default) true"
+    },
+    {
+      "name": "maintenance_notify_72_hr",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Notify subscribers 72 hours before maintenance start time. Choices: false ← (default) true"
+    },
+    {
+      "name": "maintenance_notify_now",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Notify subscribers now. Choices: false ← (default) true"
+    },
+    {
+      "name": "minutes",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "10",
+      "choices": [],
+      "description": "The duration of the maintenance window (starting from playbook runtime). Default: 10"
+    },
+    {
+      "name": "start_date",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Date maintenance is expected to start (Month/Day/Year) (UTC). End Date is worked out from start_date + minutes."
+    },
+    {
+      "name": "start_time",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Time maintenance is expected to start (Hour:Minutes) (UTC). End Time is worked out from start_time + minutes."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Desired state of the package. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "statuspage",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Your unique StatusPage ID from status.io."
+    },
+    {
+      "name": "title",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "A",
+      "choices": [],
+      "description": "A descriptive title for the maintenance window. Default: \"A new maintenance window\""
+    },
+    {
+      "name": "url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "https://api.status.io",
+      "choices": [],
+      "description": "Status.io API URL. A private apiary can be used instead. Default: \"https://api.status.io\""
+    }
+  ],
+  "examples": [
+    "- name: Create a maintenance window for 10 minutes on server1, with automation to stop the maintenance\n  community.general.statusio_maintenance:\n    title: Router Upgrade from ansible\n    desc: Performing a Router Upgrade\n    components: server1.example.com\n    api_id: api_id\n    api_key: api_key\n    statuspage: statuspage_id\n    maintenance_notify_1_hr: true\n    automation: true\n\n- name: Create a maintenance window for 60 minutes on server1 and server2\n  community.general.statusio_maintenance:\n    title: Routine maintenance\n    desc: Some security updates\n    components:\n      - server1.example.com\n      - server2.example.com\n    minutes: 60\n    api_id: api_id\n    api_key: api_key\n    statuspage: statuspage_id\n    maintenance_notify_1_hr: true\n    automation: true\n  delegate_to: localhost\n\n- name: Create a future maintenance window for 24 hours to all hosts inside the Primary Data Center\n  community.general.statusio_maintenance:\n    title: Data center downtime\n    desc: Performing a Upgrade to our data center\n    components: Primary Data Center\n    api_id: api_id\n    api_key: api_key\n    statuspage: statuspage_id\n    start_date: 01/01/2016\n    start_time: 12:00\n    minutes: 1440\n\n- name: Delete a maintenance window\n  community.general.statusio_maintenance:\n    title: Remove a maintenance window\n    maintenance_id: 561f90faf74bc94a4700087b\n    statuspage: statuspage_id\n    api_id: api_id\n    api_key: api_key\n    state: absent"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/statusio_maintenance_module.html",
+  "parsed_at": "2026-04-13T16:29:59.177131"
+}

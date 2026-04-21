@@ -1,0 +1,19 @@
+---
+- name: Monitor inbound requests and end metrics for app running on localhost:8000
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - amazon.aws
+  tasks:
+    - name: Create CloudWatch Metric Alarm for Inbound Requests
+      amazon.aws.cloudwatch_metric_alarm_info:
+        metric_name: HTTP_Inbound_Requests
+        namespace: AppMetrics
+        dimensions:
+          ServiceName: "MyApp"
+        period: 60
+        evaluation_periods: 1
+        statistic: Sum
+        comparison_operator: GreaterThanThreshold
+        threshold: 50

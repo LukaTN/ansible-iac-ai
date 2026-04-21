@@ -1,0 +1,69 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.github_webhook_info",
+  "slug": "github_webhook_info_module#ansible-collections-community-general-github-webhook-info-module",
+  "description": "Query information about GitHub webhooks.",
+  "parameters": [
+    {
+      "name": "github_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "https://api.github.com",
+      "choices": [],
+      "description": "Base URL of the GitHub API. Default: \"https://api.github.com\""
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Password to authenticate to GitHub with."
+    },
+    {
+      "name": "repository",
+      "aliases": [
+        "repo"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Full name of the repository to configure a hook for."
+    },
+    {
+      "name": "token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Token to authenticate to GitHub with."
+    },
+    {
+      "name": "user",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "User to authenticate to GitHub as."
+    }
+  ],
+  "examples": [
+    "- name: List hooks for a repository (password auth)\n  community.general.github_webhook_info:\n    repository: ansible/ansible\n    user: \"{{ github_user }}\"\n    password: \"{{ github_password }}\"\n  register: ansible_webhooks\n\n- name: List hooks for a repository on GitHub Enterprise (token auth)\n  community.general.github_webhook_info:\n    repository: myorg/myrepo\n    user: \"{{ github_user }}\"\n    token: \"{{ github_user_api_token }}\"\n    github_url: https://github.example.com/api/v3/\n  register: myrepo_webhooks"
+  ],
+  "return_values": [
+    {
+      "name": "hooks",
+      "type": "list",
+      "description": "A list of hooks that exist for the repo. Returned: always Sample: [{\"active\": true, \"content_type\": \"json\", \"events\": [\"issue_comment\", \"pull_request\"], \"has_shared_secret\": true, \"id\": 6206, \"insecure_ssl\": \"1\", \"last_response\": {\"code\": 200, \"message\": \"OK\", \"status\": \"active\"}, \"url\": \"https://jenkins.example.com/ghprbhook/\"}]",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/github_webhook_info_module#ansible-collections-community-general-github-webhook-info-module.html",
+  "parsed_at": "2026-04-11T13:53:13.529054"
+}

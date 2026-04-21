@@ -1,0 +1,166 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.keycloak_component_info",
+  "slug": "keycloak_component_info_module#ansible-collections-community-general-keycloak-component-info-module",
+  "description": "This module retrieve information on component from Keycloak.",
+  "parameters": [
+    {
+      "name": "auth_client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "admin-cli",
+      "choices": [],
+      "description": "OpenID Connect client_id to authenticate to the API with. Default: \"admin-cli\""
+    },
+    {
+      "name": "auth_client_secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Client Secret to use in conjunction with auth_client_id (if required)."
+    },
+    {
+      "name": "auth_keycloak_url",
+      "aliases": [
+        "url"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "URL to the Keycloak instance."
+    },
+    {
+      "name": "auth_password",
+      "aliases": [
+        "password"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Password to authenticate for API access with."
+    },
+    {
+      "name": "auth_realm",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Keycloak realm name to authenticate to for API access."
+    },
+    {
+      "name": "auth_username",
+      "aliases": [
+        "username"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Username to authenticate for API access with."
+    },
+    {
+      "name": "connection_timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "10",
+      "choices": [],
+      "description": "Controls the HTTP connections timeout period (in seconds) to Keycloak API. Default: 10"
+    },
+    {
+      "name": "http_agent",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "Ansible",
+      "choices": [],
+      "description": "Configures the HTTP User-Agent header. Default: \"Ansible\""
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of the Component."
+    },
+    {
+      "name": "parent_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Container ID of the components."
+    },
+    {
+      "name": "provider_type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Provider type of components. Examples: org.keycloak.storage.UserStorageProvider, org.keycloak.services.clientregistration.policy.ClientRegistrationPolicy, org.keycloak.keys.KeyProvider, org.keycloak.userprofile.UserProfileProvider, org.keycloak.storage.ldap.mappers.LDAPStorageMapper."
+    },
+    {
+      "name": "realm",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the realm."
+    },
+    {
+      "name": "refresh_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Authentication refresh token for Keycloak API."
+    },
+    {
+      "name": "token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Authentication token for Keycloak API."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Verify TLS certificates (do not disable this in production). Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Retrive info of a UserStorageProvider named myldap\n  community.general.keycloak_component_info:\n    auth_keycloak_url: http://localhost:8080/auth\n    auth_username: admin\n    auth_password: password\n    auth_realm: master\n    realm: myrealm\n    name: myldap\n    provider_type: org.keycloak.storage.UserStorageProvider\n\n- name: Retrive key info component\n  community.general.keycloak_component_info:\n    auth_keycloak_url: http://localhost:8080/auth\n    auth_username: admin\n    auth_password: password\n    auth_realm: master\n    realm: myrealm\n    name: rsa-enc-generated\n    provider_type: org.keycloak.keys.KeyProvider\n\n- name: Retrive all component from realm master\n  community.general.keycloak_component_info:\n    auth_keycloak_url: http://localhost:8080/auth\n    auth_username: admin\n    auth_password: password\n    auth_realm: master\n    realm: myrealm\n\n- name: Retrive all sub components of parent component filter by type\n  community.general.keycloak_component_info:\n    auth_keycloak_url: http://localhost:8080/auth\n    auth_username: admin\n    auth_password: password\n    auth_realm: master\n    realm: myrealm\n    parent_id: \"075ef2fa-19fc-4a6d-bf4c-249f57365fd2\"\n    provider_type: \"org.keycloak.storage.ldap.mappers.LDAPStorageMapper\""
+  ],
+  "return_values": [
+    {
+      "name": "components",
+      "type": "list",
+      "description": "JSON representation of components. Returned: always",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/keycloak_component_info_module#ansible-collections-community-general-keycloak-component-info-module.html",
+  "parsed_at": "2026-04-11T13:53:18.092411"
+}

@@ -1,0 +1,60 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.snap_alias",
+  "slug": "snap_alias_module#ansible-collections-community-general-snap-alias-module",
+  "description": "Manages snaps aliases.",
+  "parameters": [
+    {
+      "name": "alias",
+      "aliases": [
+        "aliases"
+      ],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Aliases to be created or removed."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of the snap."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)"
+      ],
+      "description": "Desired state of the alias. Choices: \"absent\" \"present\" ← (default)"
+    }
+  ],
+  "examples": [
+    "# Install \"foo\" and \"bar\" snap\n- name: Create snap alias\n  community.general.snap_alias:\n    name: hello-world\n    alias: hw\n\n- name: Create multiple aliases\n  community.general.snap_alias:\n    name: hello-world\n    aliases:\n      - hw\n      - hw2\n      - hw3\n    state: present # optional\n\n- name: Remove one specific aliases\n  community.general.snap_alias:\n    name: hw\n    state: absent\n\n- name: Remove all aliases for snap\n  community.general.snap_alias:\n    name: hello-world\n    state: absent"
+  ],
+  "return_values": [
+    {
+      "name": "snap_aliases",
+      "type": "list",
+      "description": "The snap aliases after execution. If called in check mode, then the list represents the state before execution. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "version",
+      "type": "dictionary",
+      "description": "Versions of snap components as reported by snap version. Returned: always",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/snap_alias_module#ansible-collections-community-general-snap-alias-module.html",
+  "parsed_at": "2026-04-11T13:53:26.630524"
+}

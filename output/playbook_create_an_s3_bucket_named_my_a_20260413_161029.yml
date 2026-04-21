@@ -1,0 +1,14 @@
+---
+- name: Create an S3 bucket named my-app-backups in us-west-2 with versioning enabled
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - amazon.aws
+  tasks:
+    - name: Ensure the S3 bucket exists
+      amazon.aws.s3_bucket:
+        name: my-app-backups
+        state: present
+        region: us-west-2
+        versioning: true

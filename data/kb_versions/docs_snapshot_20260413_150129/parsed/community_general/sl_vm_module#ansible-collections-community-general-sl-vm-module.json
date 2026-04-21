@@ -1,0 +1,305 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.sl_vm",
+  "slug": "sl_vm_module#ansible-collections-community-general-sl-vm-module",
+  "description": "Creates or cancels SoftLayer instances.",
+  "parameters": [
+    {
+      "name": "cpus",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [
+        "1",
+        "2",
+        "4",
+        "8",
+        "16",
+        "32",
+        "56"
+      ],
+      "description": "Count of cpus to be assigned to new virtual instance. Choices: 1 2 4 8 16 32 56"
+    },
+    {
+      "name": "datacenter",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ams01\"",
+        "\"ams03\"",
+        "\"che01\"",
+        "\"dal01\"",
+        "\"dal05\"",
+        "\"dal06\"",
+        "\"dal09\"",
+        "\"dal10\"",
+        "\"dal12\"",
+        "\"dal13\"",
+        "\"fra02\"",
+        "\"fra04\"",
+        "\"fra05\"",
+        "\"hkg02\"",
+        "\"hou02\"",
+        "\"lon02\"",
+        "\"lon04\"",
+        "\"lon06\"",
+        "\"mel01\"",
+        "\"mex01\"",
+        "\"mil01\"",
+        "\"mon01\"",
+        "\"osl01\"",
+        "\"par01\"",
+        "\"sao01\"",
+        "\"sea01\"",
+        "\"seo01\"",
+        "\"sjc01\"",
+        "\"sjc03\"",
+        "\"sjc04\"",
+        "\"sng01\"",
+        "\"syd01\"",
+        "\"syd04\"",
+        "\"tok02\"",
+        "\"tor01\"",
+        "\"wdc01\"",
+        "\"wdc04\"",
+        "\"wdc06\"",
+        "\"wdc07\""
+      ],
+      "description": "Datacenter for the virtual instance to be deployed. Choices: \"ams01\" \"ams03\" \"che01\" \"dal01\" \"dal05\" \"dal06\" \"dal09\" \"dal10\" \"dal12\" \"dal13\" \"fra02\" \"fra04\" \"fra05\" \"hkg02\" \"hou02\" \"lon02\" \"lon04\" \"lon06\" \"mel01\" \"mex01\" \"mil01\" \"mon01\" \"osl01\" \"par01\" \"sao01\" \"sea01\" \"seo01\" \"sjc01\" \"sjc03\" \"sjc04\" \"sng01\" \"syd01\" \"syd04\" \"tok02\" \"tor01\" \"wdc01\" \"wdc04\" \"wdc06\" \"wdc07\""
+    },
+    {
+      "name": "dedicated",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Flag to determine if the instance should be deployed in dedicated space. Choices: false ← (default) true"
+    },
+    {
+      "name": "disks",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[25]",
+      "choices": [],
+      "description": "List of disk sizes to be assigned to new virtual instance. Default: [25]"
+    },
+    {
+      "name": "domain",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Domain name to be provided to a virtual instance."
+    },
+    {
+      "name": "flavor",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specify which SoftLayer flavor template to use instead of cpus and memory."
+    },
+    {
+      "name": "hostname",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Hostname to be provided to a virtual instance."
+    },
+    {
+      "name": "hourly",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Flag to determine if the instance should be hourly billed. Choices: false true ← (default)"
+    },
+    {
+      "name": "image_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Image Template to be used for new virtual instance."
+    },
+    {
+      "name": "instance_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Instance ID of the virtual instance to perform action option."
+    },
+    {
+      "name": "local_disk",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Flag to determine if local disk should be used for the new instance. Choices: false true ← (default)"
+    },
+    {
+      "name": "memory",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [
+        "1024",
+        "2048",
+        "4096",
+        "6144",
+        "8192",
+        "12288",
+        "16384",
+        "32768",
+        "49152",
+        "65536",
+        "131072",
+        "247808"
+      ],
+      "description": "Amount of memory to be assigned to new virtual instance. Choices: 1024 2048 4096 6144 8192 12288 16384 32768 49152 65536 131072 247808"
+    },
+    {
+      "name": "nic_speed",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [
+        "10",
+        "100",
+        "1000"
+      ],
+      "description": "NIC Speed to be assigned to new virtual instance. Choices: 10 100 1000"
+    },
+    {
+      "name": "os_code",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "OS Code to be used for new virtual instance."
+    },
+    {
+      "name": "post_uri",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "URL of a post provisioning script to be loaded and executed on virtual instance."
+    },
+    {
+      "name": "private",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Flag to determine if the instance should be private only. Choices: false ← (default) true"
+    },
+    {
+      "name": "private_vlan",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "VLAN by its ID to be assigned to the private NIC."
+    },
+    {
+      "name": "public_vlan",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "VLAN by its ID to be assigned to the public NIC."
+    },
+    {
+      "name": "ssh_keys",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "List of ssh keys by their ID to be assigned to a virtual instance. Default: []"
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)"
+      ],
+      "description": "Create, or cancel a virtual instance. Specify present for create, absent to cancel. Choices: \"absent\" \"present\" ← (default)"
+    },
+    {
+      "name": "tags",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Tag or list of tags to be provided to a virtual instance."
+    },
+    {
+      "name": "wait",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Flag used to wait for active status before returning. Choices: false true ← (default)"
+    },
+    {
+      "name": "wait_time",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "600",
+      "choices": [],
+      "description": "Time in seconds before wait returns. Default: 600"
+    }
+  ],
+  "examples": [
+    "- name: Build instance\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    - name: Build instance request\n      community.general.sl_vm:\n        hostname: instance-1\n        domain: anydomain.com\n        datacenter: dal09\n        tags: ansible-module-test\n        hourly: true\n        private: false\n        dedicated: false\n        local_disk: true\n        cpus: 1\n        memory: 1024\n        disks: [25]\n        os_code: UBUNTU_LATEST\n        wait: false\n\n- name: Build additional instances\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    - name: Build instances request\n      community.general.sl_vm:\n        hostname: \"{{ item.hostname }}\"\n        domain: \"{{ item.domain }}\"\n        datacenter: \"{{ item.datacenter }}\"\n        tags: \"{{ item.tags }}\"\n        hourly: \"{{ item.hourly }}\"\n        private: \"{{ item.private }}\"\n        dedicated: \"{{ item.dedicated }}\"\n        local_disk: \"{{ item.local_disk }}\"\n        cpus: \"{{ item.cpus }}\"\n        memory: \"{{ item.memory }}\"\n        disks: \"{{ item.disks }}\"\n        os_code: \"{{ item.os_code }}\"\n        ssh_keys: \"{{ item.ssh_keys }}\"\n        wait: \"{{ item.wait }}\"\n      with_items:\n        - hostname: instance-2\n          domain: anydomain.com\n          datacenter: dal09\n          tags:\n            - ansible-module-test\n            - ansible-module-test-replicas\n          hourly: true\n          private: false\n          dedicated: false\n          local_disk: true\n          cpus: 1\n          memory: 1024\n          disks:\n            - 25\n            - 100\n          os_code: UBUNTU_LATEST\n          ssh_keys: []\n          wait: true\n        - hostname: instance-3\n          domain: anydomain.com\n          datacenter: dal09\n          tags:\n            - ansible-module-test\n            - ansible-module-test-replicas\n          hourly: true\n          private: false\n          dedicated: false\n          local_disk: true\n          cpus: 1\n          memory: 1024\n          disks:\n            - 25\n            - 100\n          os_code: UBUNTU_LATEST\n          ssh_keys: []\n          wait: true\n\n- name: Cancel instances\n  hosts: localhost\n  gather_facts: false\n  tasks:\n    - name: Cancel by tag\n      community.general.sl_vm:\n        state: absent\n        tags: ansible-module-test"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/sl_vm_module#ansible-collections-community-general-sl-vm-module.html",
+  "parsed_at": "2026-04-11T13:53:26.521107"
+}

@@ -1,0 +1,334 @@
+{
+  "collection_ns": "ansible_builtin",
+  "collection": "ansible.builtin",
+  "module": "ansible.builtin.apt",
+  "slug": "apt_module#ansible-collections-ansible-builtin-apt-module",
+  "description": "Manages apt packages (such as for Debian/Ubuntu).",
+  "parameters": [
+    {
+      "name": "allow_change_held_packages",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Allows changing the version of a package which is on the apt hold list. Choices: false ← (default) true"
+    },
+    {
+      "name": "allow_downgrade",
+      "aliases": [
+        "allow-downgrade",
+        "allow_downgrades",
+        "allow-downgrades"
+      ],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Corresponds to the --allow-downgrades option for apt. This option enables the named package and version to replace an already installed higher version of that package. Note that setting allow_downgrade=true can make this module behave in a non-idempotent way. (The task could end up with a set of packages that does not match the complete list of specified packages to install). allow_downgrade is only supported by apt and will be ignored if aptitude is detected or specified. Choices: false ← (default) true"
+    },
+    {
+      "name": "allow_unauthenticated",
+      "aliases": [
+        "allow-unauthenticated"
+      ],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Ignore if packages cannot be authenticated. This is useful for bootstrapping environments that manage their own apt-key setup. allow_unauthenticated is only supported with state: install/present. Choices: false ← (default) true"
+    },
+    {
+      "name": "auto_install_module_deps",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Automatically install dependencies required to run this module. Choices: false true ← (default)"
+    },
+    {
+      "name": "autoclean",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If true, cleans the local repository of retrieved package files that can no longer be downloaded. Choices: false ← (default) true"
+    },
+    {
+      "name": "autoremove",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If true, remove unused dependency packages for all module states except build-dep. It can also be used as the only option. Previous to version 2.4, autoclean was also an alias for autoremove, now it is its own separate command. See documentation for further information. Choices: false ← (default) true"
+    },
+    {
+      "name": "cache_valid_time",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "0",
+      "choices": [],
+      "description": "Update the apt cache if it is older than the cache_valid_time. This option is set in seconds. As of Ansible 2.4, if explicitly set, this sets update_cache=yes. Default: 0"
+    },
+    {
+      "name": "clean",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Run the equivalent of apt-get clean to clear out the local repository of retrieved package files. It removes everything but the lock file from /var/cache/apt/archives/ and /var/cache/apt/archives/partial/. Can be run as part of the package installation (clean runs before install) or as a separate step. Choices: false ← (default) true"
+    },
+    {
+      "name": "deb",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to a .deb package on the remote machine. If :// in the path, ansible will attempt to download deb before installing. (Version added 2.1) Requires the xz-utils package to extract the control file of the deb package to install."
+    },
+    {
+      "name": "default_release",
+      "aliases": [
+        "default-release"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Corresponds to the -t option for apt and sets pin priorities."
+    },
+    {
+      "name": "dpkg_options",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "force-confdef,force-confold",
+      "choices": [],
+      "description": "Add dpkg options to apt command. Defaults to -o \"Dpkg::Options::=--force-confdef\" -o \"Dpkg::Options::=--force-confold\". Options should be supplied as comma separated list. Default: \"force-confdef,force-confold\""
+    },
+    {
+      "name": "fail_on_autoremove",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Corresponds to the --no-remove option for apt. If true, it is ensured that no packages will be removed or the task will fail. fail_on_autoremove is only supported with state except absent. fail_on_autoremove is only supported by apt and will be ignored if aptitude is detected or specified. Choices: false ← (default) true"
+    },
+    {
+      "name": "force",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Corresponds to the --force-yes to apt-get and implies allow_unauthenticated=yes and allow_downgrade=yes. This option will disable checking both the packages’ signatures and the certificates of the web servers they are downloaded from. This option *is not* the equivalent of passing the -f flag to apt-get on the command line. **This is a destructive operation with the potential to destroy your system, and it should almost never be used.** Please also see man apt-get for more information. Choices: false ← (default) true"
+    },
+    {
+      "name": "force_apt_get",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Force usage of apt-get instead of aptitude. Choices: false ← (default) true"
+    },
+    {
+      "name": "install_recommends",
+      "aliases": [
+        "install-recommends"
+      ],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Corresponds to the --no-install-recommends option for apt. true installs recommended packages. false does not install recommended packages. By default, Ansible will use the same defaults as the operating system. Suggested packages are never installed. Choices: false true"
+    },
+    {
+      "name": "lock_timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "60",
+      "choices": [],
+      "description": "How many seconds will this action wait to acquire a lock on the apt db. Sometimes there is a transitory lock and this will retry at least until timeout is hit. Default: 60"
+    },
+    {
+      "name": "name",
+      "aliases": [
+        "package",
+        "pkg"
+      ],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A list of package names, like foo, or package specifier with version, like foo=1.0 or foo>=1.0. Name wildcards (fnmatch) like apt* and version wildcards like foo=1.0* are also supported. Do not use single or double quotes around the version when referring to the package name with a specific version, such as foo=1.0 or foo>=1.0."
+    },
+    {
+      "name": "only_upgrade",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Only upgrade a package if it is already installed. Choices: false ← (default) true"
+    },
+    {
+      "name": "policy_rc_d",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Force the exit code of /usr/sbin/policy-rc.d. For example, if policy_rc_d=101 the installed package will not trigger a service start. If /usr/sbin/policy-rc.d already exists, it is backed up and restored after the package installation. If null, the /usr/sbin/policy-rc.d is not created/changed."
+    },
+    {
+      "name": "purge",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Will force purging of configuration files if state=absent or autoremove=yes. Choices: false ← (default) true"
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"build-dep\"",
+        "\"latest\"",
+        "\"present\" ← (default)",
+        "\"fixed\""
+      ],
+      "description": "Indicates the desired package state. latest ensures that the latest version is installed. build-dep ensures the package build dependencies are installed. fixed attempt to correct a system with broken dependencies in place. Choices: \"absent\" \"build-dep\" \"latest\" \"present\" ← (default) \"fixed\""
+    },
+    {
+      "name": "update_cache",
+      "aliases": [
+        "update-cache"
+      ],
+      "type": "boolean",
+      "required": false,
+      "default": "is",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Run the equivalent of apt-get update before the operation. Can be run as part of the package installation or as a separate step. Default is not to update the cache. Choices: false true"
+    },
+    {
+      "name": "update_cache_retries",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "5",
+      "choices": [],
+      "description": "Amount of retries if the cache update fails. Also see update_cache_retry_max_delay. Default: 5"
+    },
+    {
+      "name": "update_cache_retry_max_delay",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "12",
+      "choices": [],
+      "description": "Use an exponential backoff delay for each retry (see update_cache_retries) up to this max delay in seconds. Default: 12"
+    },
+    {
+      "name": "upgrade",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"dist\"",
+        "\"full\"",
+        "\"no\" ← (default)",
+        "\"safe\"",
+        "\"yes\""
+      ],
+      "description": "If yes or safe, performs an aptitude safe-upgrade. If full, performs an aptitude full-upgrade. If dist, performs an apt-get dist-upgrade. Note: This does not upgrade a specific package, use state=latest for that. Note: Since 2.4, apt-get is used as a fall-back if aptitude is not present. Choices: \"dist\" \"full\" \"no\" ← (default) \"safe\" \"yes\""
+    }
+  ],
+  "examples": [
+    "- name: Install apache httpd (state=present is optional)\n  ansible.builtin.apt:\n    name: apache2\n    state: present\n\n- name: Update repositories cache and install \"foo\" package\n  ansible.builtin.apt:\n    name: foo\n    update_cache: yes\n\n- name: Remove \"foo\" package\n  ansible.builtin.apt:\n    name: foo\n    state: absent\n\n- name: Install the package \"foo\"\n  ansible.builtin.apt:\n    name: foo\n\n- name: Install a list of packages\n  ansible.builtin.apt:\n    pkg:\n    - foo\n    - foo-tools\n\n- name: Install the version '1.00' of package \"foo\"\n  ansible.builtin.apt:\n    name: foo=1.00\n\n- name: Update the repository cache and update package \"nginx\" to latest version using default release squeeze-backport\n  ansible.builtin.apt:\n    name: nginx\n    state: latest\n    default_release: squeeze-backports\n    update_cache: yes\n\n- name: Install the version '1.18.0' of package \"nginx\" and allow potential downgrades\n  ansible.builtin.apt:\n    name: nginx=1.18.0\n    state: present\n    allow_downgrade: yes\n\n- name: Install zfsutils-linux with ensuring conflicted packages (e.g. zfs-fuse) will not be removed.\n  ansible.builtin.apt:\n    name: zfsutils-linux\n    state: latest\n    fail_on_autoremove: yes\n\n- name: Install latest version of \"openjdk-6-jdk\" ignoring \"install-recommends\"\n  ansible.builtin.apt:\n    name: openjdk-6-jdk\n    state: latest\n    install_recommends: no\n\n- name: Update all packages to their latest version\n  ansible.builtin.apt:\n    name: \"*\"\n    state: latest\n\n- name: Upgrade the OS (apt-get dist-upgrade)\n  ansible.builtin.apt:\n    upgrade: dist\n\n- name: Run the equivalent of \"apt-get update\" as a separate step\n  ansible.builtin.apt:\n    update_cache: yes\n\n- name: Only run \"update_cache=yes\" if the last one is more than 3600 seconds ago\n  ansible.builtin.apt:\n    update_cache: yes\n    cache_valid_time: 3600\n\n- name: Pass options to dpkg on run\n  ansible.builtin.apt:\n    upgrade: dist\n    update_cache: yes\n    dpkg_options: 'force-confold,force-confdef'\n\n- name: Install a .deb package\n  ansible.builtin.apt:\n    deb: /tmp/mypackage.deb\n\n- name: Install the build dependencies for package \"foo\"\n  ansible.builtin.apt:\n    pkg: foo\n    state: build-dep\n\n- name: Install a .deb package from the internet\n  ansible.builtin.apt:\n    deb: https://example.com/python-ppq_0.1-1_all.deb\n\n- name: Remove useless packages from the cache\n  ansible.builtin.apt:\n    autoclean: yes\n\n- name: Remove dependencies that are no longer required\n  ansible.builtin.apt:\n    autoremove: yes\n\n- name: Remove dependencies that are no longer required and purge their configuration files\n  ansible.builtin.apt:\n    autoremove: yes\n    purge: true\n\n- name: Run the equivalent of \"apt-get clean\" as a separate step\n  ansible.builtin.apt:\n    clean: yes"
+  ],
+  "return_values": [
+    {
+      "name": "cache_update_time",
+      "type": "integer",
+      "description": "time of the last cache update (0 if unknown) Returned: success, in some cases Sample: 1425828348000",
+      "returned": "success"
+    },
+    {
+      "name": "cache_updated",
+      "type": "boolean",
+      "description": "if the cache was updated or not Returned: success, in some cases Sample: true",
+      "returned": "success"
+    },
+    {
+      "name": "stderr",
+      "type": "string",
+      "description": "error output from apt Returned: success, when needed Sample: \"AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 127.0.1.1. Set the 'ServerName' directive globally to ...\"",
+      "returned": "success"
+    },
+    {
+      "name": "stdout",
+      "type": "string",
+      "description": "output from apt Returned: success, when needed Sample: \"Reading package lists...\\nBuilding dependency tree...\\nReading state information...\\nThe following extra packages will be installed:\\n apache2-bin ...\"",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html",
+  "parsed_at": "2026-04-13T16:29:24.718677"
+}

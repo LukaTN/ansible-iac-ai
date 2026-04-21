@@ -1,0 +1,118 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.scaleway_container_info",
+  "slug": "scaleway_container_info_module#ansible-collections-community-general-scaleway-container-info-module",
+  "description": "This module return information about a container on Scaleway account.",
+  "parameters": [
+    {
+      "name": "api_timeout",
+      "aliases": [
+        "timeout"
+      ],
+      "type": "integer",
+      "required": false,
+      "default": "30",
+      "choices": [],
+      "description": "HTTP timeout to Scaleway API in seconds. Default: 30"
+    },
+    {
+      "name": "api_token",
+      "aliases": [
+        "oauth_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Scaleway OAuth token. This is required if profile is not specified."
+    },
+    {
+      "name": "api_url",
+      "aliases": [
+        "base_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "https://api.scaleway.com",
+      "choices": [],
+      "description": "Scaleway API URL. Default: \"https://api.scaleway.com\""
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the container."
+    },
+    {
+      "name": "namespace_id",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Container namespace identifier."
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "scw_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The config profile in config file to load the Scaleway OAuth token from, use instead of api_token. It is also possible to set SCW_PROFILE to use a SCW CLI config profile."
+    },
+    {
+      "name": "query_parameters",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "List of parameters passed to the query string. Default: {}"
+    },
+    {
+      "name": "region",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [
+        "\"fr-par\"",
+        "\"nl-ams\"",
+        "\"pl-waw\""
+      ],
+      "description": "Scaleway region to use (for example fr-par). Choices: \"fr-par\" \"nl-ams\" \"pl-waw\""
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Validate SSL certs of the Scaleway API. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Get a container info\n  community.general.scaleway_container_info:\n    namespace_id: '{{ scw_container_namespace }}'\n    region: fr-par\n    name: my-awesome-container\n  register: container_info_task"
+  ],
+  "return_values": [
+    {
+      "name": "container",
+      "type": "dictionary",
+      "description": "The container information. Returned: always Sample: {\"cpu_limit\": 140, \"description\": \"Container used for testing scaleway_container ansible module\", \"domain_name\": \"cnansibletestgfogtjod-cn-ansible-test.functions.fnc.fr-par.scw.cloud\", \"environment_variables\": {\"MY_VAR\": \"my_value\"}, \"error_message\": null, \"http_option\": \"\", \"id\": \"c9070eb0-d7a4-48dd-9af3-4fb139890721\", \"max_concurrency\": 50, \"max_scale\": 5, \"memory_limit\": 256, \"min_scale\": 0, \"name\": \"cn-ansible-test\", \"namespace_id\": \"75e299f1-d1e5-4e6b-bc6e-4fb51cfe1e69\", \"port\": 80, \"privacy\": \"public\", \"protocol\": \"http1\", \"region\": \"fr-par\", \"registry_image\": \"rg.fr-par.scw.cloud/namespace-ansible-ci/nginx:latest\", \"secret_environment_variables\": [{\"key\": \"MY_SECRET_VAR\", \"value\": \"$argon2id$v=19$m=65536,t=1,p=2$tb6UwSPWx/rH5Vyxt9Ujfw$5ZlvaIjWwNDPxD9Rdght3NarJz4IETKjpvAU3mMSmFg\"}], \"status\": \"created\", \"timeout\": \"300s\"}",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/scaleway_container_info_module#ansible-collections-community-general-scaleway-container-info-module.html",
+  "parsed_at": "2026-04-11T13:53:25.270412"
+}

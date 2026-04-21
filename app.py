@@ -15,22 +15,49 @@ import threading
 import queue
 from datetime import datetime
 import requests
+from dotenv import load_dotenv
 from flask import Flask, render_template, request, jsonify, Response, stream_with_context
-from models import db, Generation, ScrapeSession, ModuleVersion
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "pipeline"))
 
-from phase4_generator import generate_playbook, load_knowledge_base, find_best_module
-from validator import validate_playbook, load_knowledge_base as load_kb_val, K8S_CORE_MODULES
+# Windows default console is cp1252, which crashes on non-ASCII prints
+# (arrows, box-drawing chars, model names with em-dashes, etc.). Force
+# UTF-8 output and replace anything that can't be encoded so a stray
+# unicode char in a log line never takes down the request.
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+except Exception:
+    pass
+
+# Load .env before importing anything that reads env vars at import time.
+load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env"))
+
+from models import db, Generation, ScrapeSession, ModuleVersion, ChatThread, ChatMessage
+
+from kb_store import load_knowledge_base as load_kb_store, write_manifest
+
+# RAG pipeline — requires: python rag/pipeline.py --build
+try:
+    from rag.indexer import load_vectorstore  # noqa: F401  (agent tools use it lazily)
+    RAG_AVAILABLE = True
+except ImportError:
+    RAG_AVAILABLE = False
+from validator import validate_playbook, load_knowledge_base as load_kb_val
 from phase2_parser import parse_module_html
 from phase3_structurer import clean_parameter, clean_description, get_required_params, get_category, TASK_KEYWORDS
 
 app = Flask(__name__)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = (
-    os.getenv("DATABASE_URL")
-)
+_db_url = os.getenv("DATABASE_URL")
+if not _db_url:
+    raise RuntimeError(
+        "DATABASE_URL is not set. Define it in the .env file at the project root "
+        "(e.g. DATABASE_URL=mysql+pymysql://root@localhost:3306/ansibleai) "
+        "or export it in your shell before running."
+    )
+app.config["SQLALCHEMY_DATABASE_URI"] = _db_url
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
     "pool_pre_ping": True,
@@ -59,14 +86,23 @@ def build_module_reference(module_name: str, kb_modules: dict) -> dict:
     short  = module_name.split(".")[-1]
     slug   = short + "_module"
     entry  = kb_modules.get(slug, {})
+    if not entry:
+        for key, candidate in kb_modules.items():
+            if key.endswith(f"::{slug}") or candidate.get("module") == module_name:
+                entry = candidate
+                break
 
     if not entry:
         return {"module": module_name, "found": False}
 
-    # Build the official docs URL
-    # Pattern: https://docs.ansible.com/ansible/latest/collections/kubernetes/core/<slug>.html
+    # Build the official docs URL for the module collection
+    collection = entry.get("collection", "") or entry.get("collection_ns", "").replace("_", ".", 1)
+    module_short = module_name.split(".")[-1] if module_name else ""
+    module_doc_slug = f"{module_short}_module" if module_short else slug
     doc_url = entry.get("source_url") or (
-        f"https://docs.ansible.com/ansible/latest/collections/kubernetes/core/{slug}.html"
+        f"https://docs.ansible.com/ansible/latest/collections/{collection.replace('.', '/')}/{module_doc_slug}.html"
+        if collection
+        else ""
     )
 
     # Required params with types
@@ -109,11 +145,10 @@ def build_module_reference(module_name: str, kb_modules: dict) -> dict:
 #  DOCS MANAGEMENT — config + helpers
 # ─────────────────────────────────────────────
 
-KB_PATH = os.path.join("data", "knowledge_base.json")
 RAW_HTML_DIR = os.path.join("data", "raw_html")
 PARSED_DIR = os.path.join("data", "parsed")
+KB_MANIFEST_PATH = os.path.join("data", "kb_manifest.json")
 KB_VERSIONS_DIR = os.path.join("data", "kb_versions")
-ANSIBLE_DOCS_BASE = "https://docs.ansible.com/ansible/latest/collections/kubernetes/core/"
 
 # session_id -> Queue[str] for SSE logs
 _DOC_LOG_QUEUES: dict[int, "queue.Queue[str]"] = {}
@@ -129,6 +164,18 @@ def _sha256_file(path: str) -> str:
         for chunk in iter(lambda: f.read(1024 * 1024), b""):
             h.update(chunk)
     return h.hexdigest()
+
+
+def _path_size(path: str) -> int:
+    if os.path.isfile(path):
+        return os.path.getsize(path)
+    total = 0
+    for root, _, files in os.walk(path):
+        for name in files:
+            fp = os.path.join(root, name)
+            if os.path.isfile(fp):
+                total += os.path.getsize(fp)
+    return total
 
 
 def _ensure_dirs():
@@ -164,10 +211,14 @@ def _compute_health_score(module_entry: dict) -> int:
 def _build_kb_module_entry(parsed: dict) -> dict:
     cleaned_params = [clean_parameter(p) for p in parsed.get("parameters", [])]
     slug = parsed.get("slug", "")
+    collection_ns = parsed.get("collection_ns", "")
+    collection = parsed.get("collection", "")
     entry = {
         "module": parsed.get("module", ""),
         "slug": slug,
-        "category": get_category(slug),
+        "collection_ns": collection_ns,
+        "collection": collection,
+        "category": get_category(slug, collection, parsed.get("module", "")),
         "description": clean_description(parsed.get("description", "")),
         "required_params": get_required_params(cleaned_params),
         "parameters": cleaned_params,
@@ -207,15 +258,83 @@ def _diff_summary(old: dict | None, new: dict) -> str:
     return ", ".join(parts) if parts else "No structural change detected."
 
 
+def _module_token(collection_ns: str, slug: str) -> str:
+    return f"{collection_ns}::{slug}"
+
+
+def _split_module_token(token: str) -> tuple[str, str]:
+    """
+    Parse '<collection_ns>::<slug>' token.
+    Backward compatibility: plain slug means kubernetes_core::<slug>.
+    """
+    if "::" in token:
+        collection_ns, slug = token.split("::", 1)
+        return collection_ns.strip(), slug.strip()
+    return "kubernetes_core", token.strip()
+
+
+def _raw_html_path(collection_ns: str, slug: str) -> str:
+    return os.path.join(RAW_HTML_DIR, collection_ns, f"{slug}.html")
+
+
+def _parsed_json_path(collection_ns: str, slug: str) -> str:
+    return os.path.join(PARSED_DIR, collection_ns, f"{slug}.json")
+
+
+def _source_url_for_entry(entry: dict, collection_ns: str, slug: str) -> str:
+    src = (entry or {}).get("source_url")
+    if src:
+        return src
+    collection = (entry or {}).get("collection") or collection_ns.replace("_", ".", 1)
+    module_name = (entry or {}).get("module", "")
+    if module_name and "." in module_name:
+        module_slug = f"{module_name.split('.')[-1]}_module"
+    else:
+        module_slug = slug.split("#", 1)[0]
+    return f"https://docs.ansible.com/ansible/latest/collections/{collection.replace('.', '/')}/{module_slug}.html"
+
+
+def _load_docs_modules() -> dict:
+    """
+    Load all modules from parsed-backed knowledge source.
+    Returns dict keyed by '<collection_ns>::<slug>'.
+    """
+    kb = load_kb_store(prefer_parsed=True)
+    modules = {}
+    for key, entry in (kb.get("modules") or {}).items():
+        collection_ns = entry.get("collection_ns")
+        slug = entry.get("slug")
+        if not collection_ns or not slug:
+            if "::" in key:
+                collection_ns, slug = key.split("::", 1)
+        if not collection_ns or not slug:
+            continue
+        modules[_module_token(collection_ns, slug)] = entry
+    return modules
+
+
+def _refresh_manifest():
+    kb = load_kb_store(prefer_parsed=True)
+    write_manifest(kb, KB_MANIFEST_PATH)
+
+
 def _backup_kb() -> str:
+    """
+    Create rollback snapshot for docs-managed sources.
+    Snapshot includes parsed docs tree + manifest.
+    """
     _ensure_dirs()
-    if not os.path.exists(KB_PATH):
-        return ""
     ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-    fname = f"knowledge_base_{ts}.json"
-    dst = os.path.join(KB_VERSIONS_DIR, fname)
-    shutil.copy2(KB_PATH, dst)
-    return fname
+    snap_name = f"docs_snapshot_{ts}"
+    snap_dir = os.path.join(KB_VERSIONS_DIR, snap_name)
+    os.makedirs(snap_dir, exist_ok=True)
+
+    if os.path.exists(PARSED_DIR):
+        shutil.copytree(PARSED_DIR, os.path.join(snap_dir, "parsed"), dirs_exist_ok=True)
+    if os.path.exists(KB_MANIFEST_PATH):
+        shutil.copy2(KB_MANIFEST_PATH, os.path.join(snap_dir, "kb_manifest.json"))
+
+    return snap_name
 
 
 def _load_kb_file(path: str) -> dict:
@@ -223,12 +342,14 @@ def _load_kb_file(path: str) -> dict:
         return json.load(f)
 
 
-def _save_kb(kb: dict):
-    kb.setdefault("metadata", {})
-    kb["metadata"]["generated_at"] = datetime.utcnow().isoformat()
-    kb["metadata"]["total_modules"] = len(kb.get("modules") or {})
-    with open(KB_PATH, "w", encoding="utf-8") as f:
-        json.dump(kb, f, indent=2, ensure_ascii=False)
+def _save_parsed_module(collection_ns: str, slug: str, parsed: dict):
+    out_dir = os.path.join(PARSED_DIR, collection_ns)
+    os.makedirs(out_dir, exist_ok=True)
+    parsed.setdefault("slug", slug)
+    parsed.setdefault("collection_ns", collection_ns)
+    parsed.setdefault("collection", collection_ns.replace("_", ".", 1))
+    with open(os.path.join(out_dir, f"{slug}.json"), "w", encoding="utf-8") as f:
+        json.dump(parsed, f, indent=2, ensure_ascii=False)
 
 
 # ─────────────────────────────────────────────
@@ -244,98 +365,126 @@ def index():
 #  ROUTES — API
 # ─────────────────────────────────────────────
 
-@app.route("/generate", methods=["POST"])
-def api_generate():
-    data = request.get_json()
-    user_request = (data or {}).get("request", "").strip()
+# ─────────────────────────────────────────────
+#  ROUTES — AGENT CHAT
+# ─────────────────────────────────────────────
 
-    if not user_request:
-        return jsonify({"error": "Empty request"}), 400
+def _make_thread_title(message: str) -> str:
+    clean = " ".join((message or "").split()).strip()
+    if not clean:
+        return "New chat"
+    return clean[:50] + ("…" if len(clean) > 50 else "")
+
+
+@app.route("/api/chat", methods=["POST"])
+def api_chat():
+    """
+    Send a user message to the agent.
+    Body: { thread_id?: int, message: str }
+    Returns: { thread, user_message, assistant_message }
+    """
+    from agent.orchestrator import handle_message
+
+    data = request.get_json() or {}
+    message   = (data.get("message") or "").strip()
+    thread_id = data.get("thread_id")
+
+    if not message:
+        return jsonify({"error": "Empty message"}), 400
 
     try:
-        # 1. Generate playbook
-        output_path = generate_playbook(user_request)
+        if thread_id:
+            thread = ChatThread.query.get(thread_id)
+            if not thread:
+                return jsonify({"error": "Thread not found"}), 404
+        else:
+            thread = ChatThread(title=_make_thread_title(message))
+            db.session.add(thread)
+            db.session.flush()
 
-        # 2. Read raw output
-        with open(output_path, "r", encoding="utf-8") as f:
-            raw = f.read()
-
-        # 3. Strip header comments + everything before first '---'
-        lines = [l for l in raw.splitlines() if not l.startswith("#")]
-        start = next((i for i, l in enumerate(lines) if l.strip() == "---"), None)
-        if start is not None:
-            lines = lines[start:]
-        playbook_clean = "\n".join(lines).strip()
-
-        # 4. Write cleaned YAML back
-        with open(output_path, "w", encoding="utf-8") as f:
-            f.write(playbook_clean)
-
-        # 5. Validate
-        kb     = load_kb_val()
-        result = validate_playbook(output_path, kb["modules"])
-
-        # 6. Detect module
-        matches  = [m for m in K8S_CORE_MODULES if m in playbook_clean]
-        detected = max(matches, key=len) if matches else "unknown"
-
-        # 7. Build module reference (intent matching details + doc link)
-        kb_full   = load_knowledge_base()
-        module_ref = build_module_reference(detected, kb_full["modules"])
-
-        # 8. Save to MySQL
-        entry = Generation(
-            request    = user_request,
-            module     = detected,
-            filename   = os.path.basename(output_path),
-            playbook   = playbook_clean,
-            is_valid   = result.is_valid,
-            warnings   = len(result.warnings),
-            errors     = len(result.errors),
-            module_ref = module_ref,
+        # Persist user message.
+        user_msg = ChatMessage(
+            thread_id=thread.id,
+            role="user",
+            content=message,
         )
-        db.session.add(entry)
+        db.session.add(user_msg)
+        db.session.flush()
+
+        # Build conversation history for the agent (before this turn's assistant reply).
+        history = [m.to_dict() for m in thread.messages if m.id != user_msg.id]
+        history.append(user_msg.to_dict())
+
+        response = handle_message(
+            thread_id    = thread.id,
+            user_message = message,
+            history      = history,
+            db_session   = db.session,
+        )
+
+        assistant_msg = ChatMessage(
+            thread_id=thread.id,
+            **response.to_message_kwargs(),
+        )
+        db.session.add(assistant_msg)
+
+        # Bump thread timestamp + auto-title if still default.
+        thread.updated_at = datetime.utcnow()
+        if (thread.title or "").strip().lower() in ("", "new chat"):
+            thread.title = _make_thread_title(message)
+
         db.session.commit()
 
         return jsonify({
-            "playbook"  : playbook_clean,
-            "module"    : detected,
-            "file"      : os.path.basename(output_path),
-            "id"        : entry.id,
-            "module_ref": module_ref,
-            "validation": {
-                "is_valid"   : result.is_valid,
-                "passed"     : len(result.passed),
-                "passed_msgs": result.passed,
-                "warnings"   : result.warnings,
-                "errors"     : result.errors,
-            }
+            "thread"           : thread.to_dict(),
+            "user_message"     : user_msg.to_dict(),
+            "assistant_message": assistant_msg.to_dict(),
         })
 
     except ConnectionError as e:
+        db.session.rollback()
         return jsonify({"error": f"Cannot connect to Ollama: {e}"}), 503
     except Exception as e:
         db.session.rollback()
         return jsonify({"error": str(e)}), 500
 
 
-@app.route("/history", methods=["GET"])
-def api_history():
-    entries = Generation.query.order_by(Generation.created_at.desc()).limit(100).all()
-    return jsonify([e.to_dict() for e in entries])
+@app.route("/api/threads", methods=["GET"])
+def api_threads_list():
+    threads = ChatThread.query.order_by(ChatThread.updated_at.desc()).limit(200).all()
+    return jsonify([t.to_dict() for t in threads])
 
 
-@app.route("/history/<int:entry_id>", methods=["DELETE"])
-def api_delete(entry_id):
-    entry = Generation.query.get_or_404(entry_id)
-    db.session.delete(entry)
+@app.route("/api/threads/<int:thread_id>", methods=["GET"])
+def api_thread_detail(thread_id: int):
+    thread = ChatThread.query.get_or_404(thread_id)
+    return jsonify(thread.to_dict(include_messages=True))
+
+
+@app.route("/api/threads/<int:thread_id>", methods=["DELETE"])
+def api_thread_delete(thread_id: int):
+    thread = ChatThread.query.get_or_404(thread_id)
+    db.session.delete(thread)
     db.session.commit()
-    return jsonify({"deleted": entry_id})
+    return jsonify({"deleted": thread_id})
 
 
-@app.route("/history", methods=["DELETE"])
-def api_clear_history():
-    Generation.query.delete()
+@app.route("/api/threads/<int:thread_id>", methods=["PATCH"])
+def api_thread_rename(thread_id: int):
+    thread = ChatThread.query.get_or_404(thread_id)
+    data = request.get_json() or {}
+    title = (data.get("title") or "").strip()
+    if not title:
+        return jsonify({"error": "Title is required"}), 400
+    thread.title = title[:255]
+    thread.updated_at = datetime.utcnow()
+    db.session.commit()
+    return jsonify(thread.to_dict())
+
+
+@app.route("/api/threads", methods=["DELETE"])
+def api_threads_clear():
+    ChatThread.query.delete()
     db.session.commit()
     return jsonify({"cleared": True})
 
@@ -364,9 +513,16 @@ def api_stats():
 
 @app.route("/module/<slug>", methods=["GET"])
 def api_module_info(slug):
-    """Return full reference info for a module slug."""
-    kb  = load_knowledge_base()
-    ref = build_module_reference(f"kubernetes.core.{slug.replace('_module','')}", kb["modules"])
+    """Return full reference info for a module slug/token/module-name."""
+    kb = load_kb_store(prefer_parsed=True)
+    if "." in slug and "::" not in slug:
+        module_name = slug
+    elif "::" in slug:
+        collection_ns, raw_slug = _split_module_token(slug)
+        module_name = f"{collection_ns.replace('_', '.', 1)}.{raw_slug.replace('_module', '')}"
+    else:
+        module_name = f"kubernetes.core.{slug.replace('_module','')}"
+    ref = build_module_reference(module_name, kb["modules"])
     return jsonify(ref)
 
 
@@ -377,26 +533,25 @@ def api_module_info(slug):
 @app.route("/docs/status", methods=["GET"])
 def api_docs_status():
     _ensure_dirs()
-    kb_exists = os.path.exists(KB_PATH)
-    kb = _load_kb_file(KB_PATH) if kb_exists else None
+    kb = load_kb_store(prefer_parsed=True)
+    modules = _load_docs_modules()
     last = ScrapeSession.query.order_by(ScrapeSession.triggered_at.desc()).first()
 
-    # module health snapshot from current KB
+    # Module health snapshot from parsed docs data
     health = []
-    if kb:
-        for slug, entry in (kb.get("modules") or {}).items():
-            score = _compute_health_score(entry)
-            health.append({
-                "slug": slug,
-                "health_score": score,
-                "param_count": len(entry.get("parameters") or []),
-                "example_count": len(entry.get("examples") or []),
-                "required_count": len(entry.get("required_params") or []),
-            })
-        health.sort(key=lambda x: x["health_score"])
+    for slug, entry in modules.items():
+        score = _compute_health_score(entry)
+        health.append({
+            "slug": slug,
+            "health_score": score,
+            "param_count": len(entry.get("parameters") or []),
+            "example_count": len(entry.get("examples") or []),
+            "required_count": len(entry.get("required_params") or []),
+        })
+    health.sort(key=lambda x: x["health_score"])
 
     return jsonify({
-        "kb_exists": kb_exists,
+        "kb_exists": bool(modules),
         "kb_metadata": (kb.get("metadata") if kb else {}),
         "module_health": health,
         "last_session": last.to_dict() if last else None,
@@ -408,13 +563,13 @@ def api_docs_rollback_list():
     _ensure_dirs()
     versions = []
     for name in sorted(os.listdir(KB_VERSIONS_DIR), reverse=True):
-        if not name.endswith(".json"):
-            continue
         path = os.path.join(KB_VERSIONS_DIR, name)
+        if not (os.path.isdir(path) or name.endswith(".json")):
+            continue
         versions.append({
             "filename": name,
-            "size": os.path.getsize(path),
-            "modified_at": datetime.fromtimestamp(os.path.getmtime(path)).isoformat(),
+            "size": _path_size(path),
+            "modified_at": datetime.utcfromtimestamp(os.path.getmtime(path)).isoformat(timespec="seconds") + "Z",
         })
     return jsonify({"versions": versions})
 
@@ -428,7 +583,22 @@ def api_docs_rollback_restore():
     src = os.path.join(KB_VERSIONS_DIR, filename)
     if not os.path.exists(src):
         return jsonify({"error": "Backup not found"}), 404
-    shutil.copy2(src, KB_PATH)
+
+    if os.path.isdir(src):
+        snap_parsed = os.path.join(src, "parsed")
+        snap_manifest = os.path.join(src, "kb_manifest.json")
+        if os.path.exists(snap_parsed):
+            shutil.copytree(snap_parsed, PARSED_DIR, dirs_exist_ok=True)
+        if os.path.exists(snap_manifest):
+            shutil.copy2(snap_manifest, KB_MANIFEST_PATH)
+        else:
+            _refresh_manifest()
+    else:
+        # Legacy JSON backup compatibility: keep old behavior by restoring
+        # into legacy file location.
+        legacy_path = os.path.join("data", "knowledge_base.json")
+        shutil.copy2(src, legacy_path)
+
     return jsonify({"restored": filename})
 
 
@@ -477,38 +647,48 @@ def _check_updates_worker(session_id: int):
         _ensure_dirs()
         _log(session_id, "Fetching index modules list...")
         try:
-            kb = _load_kb_file(KB_PATH) if os.path.exists(KB_PATH) else {"modules": {}}
-            slugs = sorted((kb.get("modules") or {}).keys())
-            if not slugs:
-                _log(session_id, "No modules found in current knowledge base.")
+            modules = _load_docs_modules()
+            module_tokens = sorted(modules.keys())
+            if not module_tokens:
+                _log(session_id, "No modules found in parsed docs source.")
                 row = ScrapeSession.query.get(session_id)
                 row.status = "failed"
-                row.summary = {"error": "knowledge_base.json has no modules"}
+                row.summary = {"error": "No modules found in data/parsed"}
                 db.session.commit()
                 return
 
             changed, unchanged, failed = [], [], []
-            for slug in slugs:
-                url = f"{ANSIBLE_DOCS_BASE}{slug}.html"
-                local_html = os.path.join(RAW_HTML_DIR, f"{slug}.html")
+            for token in module_tokens:
+                collection_ns, slug = _split_module_token(token)
+                entry = modules.get(token, {})
+                url = _source_url_for_entry(entry, collection_ns, slug)
+                local_html = _raw_html_path(collection_ns, slug)
                 local_hash = _sha256_file(local_html) if os.path.exists(local_html) else ""
                 try:
-                    _log(session_id, f"Checking {slug} ...")
+                    _log(session_id, f"Checking {token} ...")
                     r = requests.get(url, timeout=20, headers={"User-Agent": "AnsibleAI-DocsManager/1.0"})
                     r.raise_for_status()
                     remote_hash = _sha256_text(r.text)
                     if not local_hash or local_hash != remote_hash:
-                        changed.append({"slug": slug, "local_hash": local_hash, "remote_hash": remote_hash})
+                        changed.append({
+                            "module_slug": token,
+                            "slug": token,
+                            "collection_ns": collection_ns,
+                            "module_name": entry.get("module", ""),
+                            "source_url": url,
+                            "local_hash": local_hash,
+                            "remote_hash": remote_hash,
+                        })
                         _log(session_id, f"  -> changed (remote != local)")
                     else:
-                        unchanged.append(slug)
+                        unchanged.append(token)
                 except Exception as e:
-                    failed.append({"slug": slug, "error": str(e)})
+                    failed.append({"module_slug": token, "slug": token, "error": str(e)})
                     _log(session_id, f"  -> failed: {e}")
 
             row = ScrapeSession.query.get(session_id)
             row.status = "success" if not failed else ("partial" if changed or unchanged else "failed")
-            row.modules_updated = [c["slug"] for c in changed]
+            row.modules_updated = [c["module_slug"] for c in changed]
             row.modules_failed = failed
             row.summary = {
                 "changed": changed,
@@ -533,52 +713,49 @@ def api_docs_check_updates():
     return jsonify({"session_id": row.id})
 
 
-def _rescrape_worker(session_id: int, slugs: list[str]):
+def _rescrape_worker(session_id: int, modules_to_rescrape: list[str]):
     with app.app_context():
         _ensure_dirs()
         row = ScrapeSession.query.get(session_id)
         row.status = "running"
         db.session.commit()
 
-        _log(session_id, f"Starting re-scrape for {len(slugs)} module(s)...")
+        _log(session_id, f"Starting re-scrape for {len(modules_to_rescrape)} module(s)...")
         backup_name = _backup_kb()
         if backup_name:
             _log(session_id, f"Rollback backup created: {backup_name}")
         row.kb_version = backup_name or None
         db.session.commit()
 
-        kb = _load_kb_file(KB_PATH) if os.path.exists(KB_PATH) else {"metadata": {}, "modules": {}}
-        kb.setdefault("metadata", {})
-        kb.setdefault("modules", {})
+        current_modules = _load_docs_modules()
 
         updated, failed, diffs = [], [], []
-        for slug in slugs:
-            url = f"{ANSIBLE_DOCS_BASE}{slug}.html"
+        for token in modules_to_rescrape:
+            collection_ns, slug = _split_module_token(token)
+            old_entry = current_modules.get(token, {})
+            url = _source_url_for_entry(old_entry, collection_ns, slug)
             try:
-                _log(session_id, f"Downloading {slug} ...")
+                _log(session_id, f"Downloading {token} ...")
                 r = requests.get(url, timeout=25, headers={"User-Agent": "AnsibleAI-DocsManager/1.0"})
                 r.raise_for_status()
 
-                html_path = os.path.join(RAW_HTML_DIR, f"{slug}.html")
+                html_path = _raw_html_path(collection_ns, slug)
+                os.makedirs(os.path.dirname(html_path), exist_ok=True)
                 with open(html_path, "w", encoding="utf-8") as f:
                     f.write(r.text)
                 remote_hash = _sha256_text(r.text)
 
-                _log(session_id, f"Parsing {slug} ...")
-                parsed = parse_module_html(html_path, slug)
-                parsed_path = os.path.join(PARSED_DIR, f"{slug}.json")
-                with open(parsed_path, "w", encoding="utf-8") as f:
-                    json.dump(parsed, f, indent=2, ensure_ascii=False)
+                _log(session_id, f"Parsing {token} ...")
+                parsed = parse_module_html(html_path, slug, collection_ns)
+                _save_parsed_module(collection_ns, slug, parsed)
 
                 new_entry = _build_kb_module_entry(parsed)
-                old_entry = kb["modules"].get(slug)
                 diff = _diff_summary(old_entry, new_entry)
-                kb["modules"][slug] = new_entry
 
                 health = _compute_health_score(new_entry)
                 mv = ModuleVersion(
                     scrape_session_id=session_id,
-                    module_slug=slug,
+                    module_slug=token,
                     param_count=len(new_entry.get("parameters") or []),
                     example_count=len(new_entry.get("examples") or []),
                     required_count=len(new_entry.get("required_params") or []),
@@ -588,15 +765,15 @@ def _rescrape_worker(session_id: int, slugs: list[str]):
                 )
                 db.session.add(mv)
 
-                updated.append(slug)
-                diffs.append({"module_slug": slug, "diff_summary": diff, "health_score": health})
-                _log(session_id, f"Updated {slug} (health={health}%) — {diff}")
+                updated.append(token)
+                diffs.append({"module_slug": token, "diff_summary": diff, "health_score": health})
+                _log(session_id, f"Updated {token} (health={health}%) — {diff}")
             except Exception as e:
-                failed.append({"slug": slug, "error": str(e)})
-                _log(session_id, f"FAILED {slug}: {e}")
+                failed.append({"module_slug": token, "slug": token, "error": str(e)})
+                _log(session_id, f"FAILED {token}: {e}")
 
-        # Save KB + finalize session
-        _save_kb(kb)
+        # Refresh lightweight manifest from parsed source
+        _refresh_manifest()
         row.modules_updated = updated
         row.modules_failed = failed
         row.summary = {
@@ -622,17 +799,17 @@ def _rescrape_worker(session_id: int, slugs: list[str]):
 @app.route("/docs/rescrape", methods=["POST"])
 def api_docs_rescrape():
     data = request.get_json() or {}
-    slugs = data.get("modules") or []
-    if not isinstance(slugs, list) or not all(isinstance(s, str) and s.strip() for s in slugs):
-        return jsonify({"error": "modules must be a list of slugs"}), 400
-    slugs = [s.strip() for s in slugs]
+    modules_to_rescrape = data.get("modules") or []
+    if not isinstance(modules_to_rescrape, list) or not all(isinstance(s, str) and s.strip() for s in modules_to_rescrape):
+        return jsonify({"error": "modules must be a list of module identifiers"}), 400
+    modules_to_rescrape = [s.strip() for s in modules_to_rescrape]
 
-    row = ScrapeSession(triggered_by="ui", status="running", summary={"type": "rescrape", "requested": slugs})
+    row = ScrapeSession(triggered_by="ui", status="running", summary={"type": "rescrape", "requested": modules_to_rescrape})
     db.session.add(row)
     db.session.commit()
 
     _DOC_LOG_QUEUES[row.id] = queue.Queue()
-    t = threading.Thread(target=_rescrape_worker, args=(row.id, slugs), daemon=True)
+    t = threading.Thread(target=_rescrape_worker, args=(row.id, modules_to_rescrape), daemon=True)
     t.start()
     return jsonify({"session_id": row.id})
 
@@ -640,6 +817,27 @@ def api_docs_rescrape():
 # ─────────────────────────────────────────────
 #  ENTRY POINT
 # ─────────────────────────────────────────────
+
+@app.route("/rag/status", methods=["GET"])
+def api_rag_status():
+    """Return RAG system availability and ChromaDB chunk count."""
+    status = {"available": RAG_AVAILABLE}
+    if RAG_AVAILABLE:
+        try:
+            import chromadb
+            from chromadb.config import Settings
+            client = chromadb.PersistentClient(
+                path="data/chromadb",
+                #settings=Settings(anonymized_telemetry=False)
+            )
+            col = client.get_collection("ansible_docs")
+            status["chunks"]      = col.count()
+            status["embed_model"] = "nomic-embed-text"
+        except Exception as e:
+            status["error"]  = str(e)
+            status["chunks"] = 0
+    return jsonify(status)
+
 
 if __name__ == "__main__":
     print("=" * 50)

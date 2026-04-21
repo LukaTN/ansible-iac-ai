@@ -1,0 +1,117 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.pagerduty_change",
+  "slug": "pagerduty_change_module#ansible-collections-community-general-pagerduty-change-module",
+  "description": "This module lets you create a PagerDuty change event each time the module is run.",
+  "parameters": [
+    {
+      "name": "environment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The environment name, typically production, staging, and so on."
+    },
+    {
+      "name": "integration_key",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The integration key that identifies the service the change was made to. This can be found by adding an integration to a service in PagerDuty."
+    },
+    {
+      "name": "link_text",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Descriptive text for a URL where more information about the deployment can be obtained."
+    },
+    {
+      "name": "link_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A URL where more information about the deployment can be obtained."
+    },
+    {
+      "name": "repo",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The URL of the project repository."
+    },
+    {
+      "name": "revision",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "An identifier of the revision being deployed, typically a number or SHA from a version control system."
+    },
+    {
+      "name": "source",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "Ansible",
+      "choices": [],
+      "description": "The source of the change event. Default: \"Ansible\""
+    },
+    {
+      "name": "summary",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "A short description of the change that occurred."
+    },
+    {
+      "name": "url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "https://events.pagerduty.com/v2/change/enqueue",
+      "choices": [],
+      "description": "URL to submit the change event to. Default: \"https://events.pagerduty.com/v2/change/enqueue\""
+    },
+    {
+      "name": "user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The name of the user or process that triggered this deployment."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If false, SSL certificates for the target URL are not validated. This should only be used on personally controlled sites using self-signed certificates. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Track the deployment as a PagerDuty change event\n  community.general.pagerduty_change:\n    integration_key: abc123abc123abc123abc123abc123ab\n    summary: The application was deployed\n\n- name: Track the deployment as a PagerDuty change event with more details\n  community.general.pagerduty_change:\n    integration_key: abc123abc123abc123abc123abc123ab\n    summary: The application was deployed\n    source: Ansible Deploy\n    user: ansible\n    repo: github.com/ansible/ansible\n    revision: '4.2'\n    environment: production\n    link_url: https://github.com/ansible-collections/community.general/pull/1269\n    link_text: View changes on GitHub"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/pagerduty_change_module.html",
+  "parsed_at": "2026-04-13T16:29:55.759666"
+}

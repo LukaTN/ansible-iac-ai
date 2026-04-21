@@ -1,0 +1,135 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.ilo_redfish_command",
+  "slug": "ilo_redfish_command_module#ansible-collections-community-general-ilo-redfish-command-module",
+  "description": "Builds Redfish URIs locally and sends them to remote OOB controllers to perform an action.",
+  "parameters": [
+    {
+      "name": "auth_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security token for authenticating to iLO."
+    },
+    {
+      "name": "baseuri",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Base URI of OOB controller."
+    },
+    {
+      "name": "ca_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "PEM formatted file that contains a CA certificate to be used for validation. Only used if validate_certs=true."
+    },
+    {
+      "name": "category",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [
+        "\"Systems\""
+      ],
+      "description": "Category to execute on OOB controller. Choices: \"Systems\""
+    },
+    {
+      "name": "ciphers",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "TLS/SSL Ciphers to use for the request. When a list is provided, all ciphers are joined in order with :. See the OpenSSL Cipher List Format for more details. The available ciphers is dependent on the Python and OpenSSL/LibreSSL versions."
+    },
+    {
+      "name": "command",
+      "aliases": [],
+      "type": "list",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "List of commands to execute on OOB controller."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Password for authenticating to iLO."
+    },
+    {
+      "name": "timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "60",
+      "choices": [],
+      "description": "Timeout in seconds for HTTP requests to iLO. Default: 60"
+    },
+    {
+      "name": "username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Username for authenticating to iLO."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If false, TLS/SSL certificates are not validated. Set this to true to enable certificate checking. Should be used together with ca_path. Choices: false ← (default) true"
+    }
+  ],
+  "examples": [
+    "- name: Wait for iLO Reboot Completion\n  community.general.ilo_redfish_command:\n    category: Systems\n    command: WaitforiLORebootCompletion\n    baseuri: \"{{ baseuri }}\"\n    username: \"{{ username }}\"\n    password: \"{{ password }}\""
+  ],
+  "return_values": [
+    {
+      "name": "ilo_redfish_command",
+      "type": "dictionary",
+      "description": "Returns the status of the operation performed on the iLO. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "WaitforiLORebootCompletion",
+      "type": "dictionary",
+      "description": "Returns the output msg and whether the function executed successfully. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "msg",
+      "type": "string",
+      "description": "Status of the operation performed on the iLO. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "ret",
+      "type": "boolean",
+      "description": "Return true/false based on whether the operation was performed successfully. Returned: success",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/ilo_redfish_command_module#ansible-collections-community-general-ilo-redfish-command-module.html",
+  "parsed_at": "2026-04-11T13:53:15.550061"
+}

@@ -1,0 +1,226 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.keycloak_role",
+  "slug": "keycloak_role_module#ansible-collections-community-general-keycloak-role-module",
+  "description": "This module allows you to add, remove or modify Keycloak roles using the Keycloak REST API. It requires access to the REST API using OpenID Connect; the user connecting and the client being used must have the requisite access rights. In a default Keycloak installation, admin-cli and an admin user would work, as would a separate client definition with the scope tailored to your needs and a user having the expected roles.",
+  "parameters": [
+    {
+      "name": "attributes",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dict of key/value pairs to set as custom attributes for the role. Values may be single values (for example a string) or a list of strings."
+    },
+    {
+      "name": "auth_client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "admin-cli",
+      "choices": [],
+      "description": "OpenID Connect client_id to authenticate to the API with. Default: \"admin-cli\""
+    },
+    {
+      "name": "auth_client_secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Client Secret to use in conjunction with auth_client_id (if required)."
+    },
+    {
+      "name": "auth_keycloak_url",
+      "aliases": [
+        "url"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "URL to the Keycloak instance."
+    },
+    {
+      "name": "auth_password",
+      "aliases": [
+        "password"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Password to authenticate for API access with."
+    },
+    {
+      "name": "auth_realm",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Keycloak realm name to authenticate to for API access."
+    },
+    {
+      "name": "auth_username",
+      "aliases": [
+        "username"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Username to authenticate for API access with."
+    },
+    {
+      "name": "client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "If the role is a client role, the client ID under which it resides. If this parameter is absent, the role is considered a realm role."
+    },
+    {
+      "name": "composite",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If true, the role is a composition of other realm and/or client role. Choices: false ← (default) true"
+    },
+    {
+      "name": "composites",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "List of roles to include to the composite realm role. If the composite role is a client role, the clientId (not ID of the client) must be specified. Default: []"
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the role. This can be the name of a REALM role or a client role."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Create the composite if present, remove it if absent. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "connection_timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "10",
+      "choices": [],
+      "description": "Controls the HTTP connections timeout period (in seconds) to Keycloak API. Default: 10"
+    },
+    {
+      "name": "description",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The role description."
+    },
+    {
+      "name": "http_agent",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "Ansible",
+      "choices": [],
+      "description": "Configures the HTTP User-Agent header. Default: \"Ansible\""
+    },
+    {
+      "name": "realm",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "master",
+      "choices": [],
+      "description": "The Keycloak realm under which this role resides. Default: \"master\""
+    },
+    {
+      "name": "refresh_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Authentication refresh token for Keycloak API."
+    },
+    {
+      "name": "token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Authentication token for Keycloak API."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Verify TLS certificates (do not disable this in production). Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Create a Keycloak realm role, authentication with credentials\n  community.general.keycloak_role:\n    name: my-new-kc-role\n    realm: MyCustomRealm\n    state: present\n    auth_client_id: admin-cli\n    auth_keycloak_url: https://auth.example.com/auth\n    auth_realm: master\n    auth_username: USERNAME\n    auth_password: PASSWORD\n  delegate_to: localhost\n\n- name: Create a Keycloak realm role, authentication with token\n  community.general.keycloak_role:\n    name: my-new-kc-role\n    realm: MyCustomRealm\n    state: present\n    auth_client_id: admin-cli\n    auth_keycloak_url: https://auth.example.com/auth\n    token: TOKEN\n  delegate_to: localhost\n\n- name: Create a Keycloak client role\n  community.general.keycloak_role:\n    name: my-new-kc-role\n    realm: MyCustomRealm\n    client_id: MyClient\n    state: present\n    auth_client_id: admin-cli\n    auth_keycloak_url: https://auth.example.com/auth\n    auth_realm: master\n    auth_username: USERNAME\n    auth_password: PASSWORD\n  delegate_to: localhost\n\n- name: Delete a Keycloak role\n  community.general.keycloak_role:\n    name: my-role-for-deletion\n    state: absent\n    auth_client_id: admin-cli\n    auth_keycloak_url: https://auth.example.com/auth\n    auth_realm: master\n    auth_username: USERNAME\n    auth_password: PASSWORD\n  delegate_to: localhost\n\n- name: Create a keycloak role with some custom attributes\n  community.general.keycloak_role:\n    auth_client_id: admin-cli\n    auth_keycloak_url: https://auth.example.com/auth\n    auth_realm: master\n    auth_username: USERNAME\n    auth_password: PASSWORD\n    name: my-new-role\n    attributes:\n      attrib1: value1\n      attrib2: value2\n      attrib3:\n        - with\n        - numerous\n        - individual\n        - list\n        - items\n  delegate_to: localhost"
+  ],
+  "return_values": [
+    {
+      "name": "end_state",
+      "type": "dictionary",
+      "description": "Representation of role after module execution (sample is truncated). Returned: on success Sample: {\"attributes\": {}, \"clientRole\": true, \"composite\": false, \"containerId\": \"9f03eb61-a826-4771-a9fd-930e06d2d36a\", \"description\": \"My updated client test role\", \"id\": \"561703dd-0f38-45ff-9a5a-0c978f794547\", \"name\": \"myrole\"}",
+      "returned": "on"
+    },
+    {
+      "name": "existing",
+      "type": "dictionary",
+      "description": "Representation of existing role. Returned: always Sample: {\"attributes\": {}, \"clientRole\": true, \"composite\": false, \"containerId\": \"9f03eb61-a826-4771-a9fd-930e06d2d36a\", \"description\": \"My client test role\", \"id\": \"561703dd-0f38-45ff-9a5a-0c978f794547\", \"name\": \"myrole\"}",
+      "returned": "always"
+    },
+    {
+      "name": "msg",
+      "type": "string",
+      "description": "Message as to what action was taken. Returned: always Sample: \"Role myrole has been updated\"",
+      "returned": "always"
+    },
+    {
+      "name": "proposed",
+      "type": "dictionary",
+      "description": "Representation of proposed role. Returned: always Sample: {\"description\": \"My updated test description\"}",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/keycloak_role_module#ansible-collections-community-general-keycloak-role-module.html",
+  "parsed_at": "2026-04-11T13:53:18.597054"
+}

@@ -1,0 +1,88 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.bower",
+  "slug": "bower_module#ansible-collections-community-general-bower-module",
+  "description": "Manage bower packages with bower.",
+  "parameters": [
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The name of a bower package to install."
+    },
+    {
+      "name": "offline",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Install packages from local cache, if the packages were installed before. Choices: false ← (default) true"
+    },
+    {
+      "name": "path",
+      "aliases": [],
+      "type": "path",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The base path where to install the bower packages."
+    },
+    {
+      "name": "production",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Install with --production flag. Choices: false ← (default) true"
+    },
+    {
+      "name": "relative_execpath",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Relative path to bower executable from install path."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\"",
+        "\"latest\""
+      ],
+      "description": "The state of the bower package. Choices: \"present\" ← (default) \"absent\" \"latest\""
+    },
+    {
+      "name": "version",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The version to be installed."
+    }
+  ],
+  "examples": [
+    "- name: Install \"bootstrap\" bower package.\n  community.general.bower:\n    name: bootstrap\n\n- name: Install \"bootstrap\" bower package on version 3.1.1.\n  community.general.bower:\n    name: bootstrap\n    version: '3.1.1'\n\n- name: Remove the \"bootstrap\" bower package.\n  community.general.bower:\n    name: bootstrap\n    state: absent\n\n- name: Install packages based on bower.json.\n  community.general.bower:\n    path: /app/location\n\n- name: Update packages based on bower.json to their latest version.\n  community.general.bower:\n    path: /app/location\n    state: latest\n\n# install bower locally and run from there\n- npm:\n    path: /app/location\n    name: bower\n    global: false\n- community.general.bower:\n    path: /app/location\n    relative_execpath: node_modules/.bin"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/bower_module.html",
+  "parsed_at": "2026-04-13T16:29:43.760504"
+}

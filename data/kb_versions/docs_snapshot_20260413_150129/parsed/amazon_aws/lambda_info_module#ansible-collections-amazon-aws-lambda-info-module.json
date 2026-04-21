@@ -1,0 +1,428 @@
+{
+  "collection_ns": "amazon_aws",
+  "collection": "amazon.aws",
+  "module": "amazon.aws.lambda_info",
+  "slug": "lambda_info_module#ansible-collections-amazon-aws-lambda-info-module",
+  "description": "Gathers various details related to Lambda functions, including aliases, versions and event source mappings.",
+  "parameters": [
+    {
+      "name": "access_key",
+      "aliases": [
+        "aws_access_key_id",
+        "aws_access_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS access key ID. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY environment variables may also be used in decreasing order of preference. The aws_access_key and profile options are mutually exclusive. The aws_access_key_id alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "aws_ca_bundle",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The location of a CA Bundle to use when validating SSL certificates. The AWS_CA_BUNDLE environment variable may also be used."
+    },
+    {
+      "name": "aws_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary to modify the botocore configuration. Parameters can be found in the AWS documentation https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html#botocore.config.Config."
+    },
+    {
+      "name": "debug_botocore_endpoint_logs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use a botocore.endpoint logger to parse the unique (rather than total) \"resource:action\" API calls made during a task, outputing the set to the resource_actions key in the task results. Use the aws_resource_action callback to output to total list made during a playbook. The ANSIBLE_DEBUG_BOTOCORE_LOGS environment variable may also be used. Choices: false ← (default) true"
+    },
+    {
+      "name": "endpoint_url",
+      "aliases": [
+        "aws_endpoint_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "AWS",
+      "choices": [],
+      "description": "URL to connect to instead of the default AWS endpoints. While this can be used to connection to other AWS-compatible services the amazon.aws and community.aws collections are only tested against AWS. The AWS_URL environment variable may also be used."
+    },
+    {
+      "name": "event_source_arn",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "When query=mappings, this is the Amazon Resource Name (ARN) of the Amazon Kinesis or DynamoDB stream."
+    },
+    {
+      "name": "function_name",
+      "aliases": [
+        "function",
+        "name"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The name of the lambda function for which information is requested."
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "aws_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A named AWS profile to use for authentication. See the AWS documentation for more information about named profiles https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html. The AWS_PROFILE environment variable may also be used. The profile option is mutually exclusive with the aws_access_key, aws_secret_key and session_token options."
+    },
+    {
+      "name": "query",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"aliases\"",
+        "\"all\"",
+        "\"config\"",
+        "\"mappings\"",
+        "\"policy\"",
+        "\"versions\"",
+        "\"tags\""
+      ],
+      "description": "Specifies the resource type for which to gather information. Defaults to all when function_name is specified. Defaults to config when function_name is NOT specified. Choices: \"aliases\" \"all\" \"config\" \"mappings\" \"policy\" \"versions\" \"tags\""
+    },
+    {
+      "name": "region",
+      "aliases": [
+        "aws_region"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The AWS region to use. For global services such as IAM, Route53 and CloudFront, region is ignored. The AWS_REGION environment variable may also be used. See the Amazon AWS documentation for more information http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region."
+    },
+    {
+      "name": "secret_key",
+      "aliases": [
+        "aws_secret_access_key",
+        "aws_secret_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS secret access key. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SECRET_ACCESS_KEY or AWS_SECRET_KEY environment variables may also be used in decreasing order of preference. The secret_key and profile options are mutually exclusive. The aws_secret_access_key alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "session_token",
+      "aliases": [
+        "aws_session_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS STS session token for use with temporary credentials. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SESSION_TOKEN environment variable may also be used. The session_token and profile options are mutually exclusive."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to false, SSL certificates will not be validated for communication with the AWS APIs. Setting validate_certs=false is strongly discouraged, as an alternative, consider setting aws_ca_bundle instead. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "---\n# Simple example of listing all info for a function\n- name: List all for a specific function\n  amazon.aws.lambda_info:\n    query: all\n    function_name: myFunction\n  register: my_function_details\n\n# Get basic information about AWS Lambda Functions in the current region\n- name: List Lambda Functions\n  amazon.aws.lambda_info:\n  register: lambda_functions\n\n# List all versions of a function\n- name: List function versions\n  amazon.aws.lambda_info:\n    query: versions\n    function_name: myFunction\n  register: my_function_versions\n\n# List all info for all functions\n- name: List all functions\n  amazon.aws.lambda_info:\n    query: all\n  register: output\n\n- name: show Lambda information\n  ansible.builtin.debug:\n    msg: \"{{ output['function'] }}\""
+  ],
+  "return_values": [
+    {
+      "name": "function",
+      "type": "dictionary",
+      "description": "Lambda function list, keyed by function name. Each key is a function name with a value containing the function information, including event, mapping, and version information. function has been deprecated and will be removed in a release after 2025-01-01. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "functions",
+      "type": "list",
+      "description": "List of information for each lambda function matching the query. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "aliases",
+      "type": "list",
+      "description": "The aliases associated with the function. Returned: when query=aliases or query=all",
+      "returned": "when"
+    },
+    {
+      "name": "architectures",
+      "type": "list",
+      "description": "The architectures supported by the function. Returned: success Sample: [\"arm64\"]",
+      "returned": "success"
+    },
+    {
+      "name": "code_sha256",
+      "type": "string",
+      "description": "The SHA256 hash of the function’s deployment package. Returned: success Sample: \"zOAGfF5JLFuzZoSNirUtOrQp+S341IOA3BcoXXoaIaU=\"",
+      "returned": "success"
+    },
+    {
+      "name": "code_size",
+      "type": "integer",
+      "description": "The size of the function’s deployment package in bytes. Returned: success Sample: 123",
+      "returned": "success"
+    },
+    {
+      "name": "dead_letter_config",
+      "type": "dictionary",
+      "description": "The function’s dead letter queue. Returned: when the function has a dead letter queue configured Sample: {\"target_arn\": \"arn:aws:lambda:us-east-1:123456789012:function:myFunction:1\"}",
+      "returned": "when"
+    },
+    {
+      "name": "target_arn",
+      "type": "string",
+      "description": "The ARN of an SQS queue or SNS topic. Returned: when the function has a dead letter queue configured Sample: \"arn:aws:lambda:us-east-1:123456789012:function:myFunction:1\"",
+      "returned": "when"
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "description": "The function’s description. Returned: success Sample: \"My function\"",
+      "returned": "success"
+    },
+    {
+      "name": "environment",
+      "type": "dictionary",
+      "description": "The function’s environment variables. Returned: when environment variables exist",
+      "returned": "when"
+    },
+    {
+      "name": "error",
+      "type": "dictionary",
+      "description": "Error message for environment variables that could not be applied. Returned: when there is an error applying environment variables",
+      "returned": "when"
+    },
+    {
+      "name": "error_code",
+      "type": "string",
+      "description": "The error code. Returned: when there is an error applying environment variables",
+      "returned": "when"
+    },
+    {
+      "name": "message",
+      "type": "string",
+      "description": "The error message. Returned: when there is an error applying environment variables",
+      "returned": "when"
+    },
+    {
+      "name": "variables",
+      "type": "dictionary",
+      "description": "Environment variable key-value pairs. Returned: when environment variables exist Sample: {\"key\": \"value\"}",
+      "returned": "when"
+    },
+    {
+      "name": "ephermal_storage",
+      "type": "dictionary",
+      "description": "The size of the function /tmp directory in MB. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "size",
+      "type": "integer",
+      "description": "The size of the function /tmp directory. Returned: always Sample: 512",
+      "returned": "always"
+    },
+    {
+      "name": "function_arn",
+      "type": "string",
+      "description": "The function’s Amazon Resource Name (ARN). Returned: on success Sample: \"arn:aws:lambda:us-east-1:123456789012:function:myFunction:1\"",
+      "returned": "on"
+    },
+    {
+      "name": "function_name",
+      "type": "string",
+      "description": "The function’s name. Returned: on success Sample: \"myFunction\"",
+      "returned": "on"
+    },
+    {
+      "name": "handler",
+      "type": "string",
+      "description": "The function Lambda calls to begin executing your function. Returned: on success Sample: \"index.handler\"",
+      "returned": "on"
+    },
+    {
+      "name": "last_modified",
+      "type": "string",
+      "description": "The date and time that the function was last updated, in ISO-8601 format (YYYY-MM-DDThh:mm:ssTZD). Returned: on success Sample: \"2017-08-01T00:00:00.000+0000\"",
+      "returned": "on"
+    },
+    {
+      "name": "mappings",
+      "type": "list",
+      "description": "List of configuration information for each event source mapping. Returned: when query=all or query=mappings",
+      "returned": "when"
+    },
+    {
+      "name": "batch_size",
+      "type": "integer",
+      "description": "The largest number of records that AWS Lambda will retrieve from the event source at the time of invoking the function. Returned: on success",
+      "returned": "on"
+    },
+    {
+      "name": "event_source_arn",
+      "type": "string",
+      "description": "The ARN of the Amazon Kinesis or DyanmoDB stream that is the source of events. Returned: on success",
+      "returned": "on"
+    },
+    {
+      "name": "last_processing_result",
+      "type": "string",
+      "description": "The result of the last AWS Lambda invocation of your Lambda function. Returned: on success",
+      "returned": "on"
+    },
+    {
+      "name": "state",
+      "type": "string",
+      "description": "The state of the event source mapping. Returned: on success",
+      "returned": "on"
+    },
+    {
+      "name": "state_transition_reason",
+      "type": "string",
+      "description": "The reason the event source mapping is in its current state. Returned: on success",
+      "returned": "on"
+    },
+    {
+      "name": "uuid",
+      "type": "string",
+      "description": "The AWS Lambda assigned opaque identifier for the mapping. Returned: on success",
+      "returned": "on"
+    },
+    {
+      "name": "memory_size",
+      "type": "integer",
+      "description": "The memory allocated to the function. Returned: on success Sample: 128",
+      "returned": "on"
+    },
+    {
+      "name": "package_type",
+      "type": "string",
+      "description": "The type of deployment package. Returned: always Sample: \"Zip\"",
+      "returned": "always"
+    },
+    {
+      "name": "policy",
+      "type": "dictionary",
+      "description": "The policy associated with the function. Returned: when query=all or query=policy",
+      "returned": "when"
+    },
+    {
+      "name": "revision_id",
+      "type": "string",
+      "description": "The latest updated revision of the function or alias. Returned: on success Sample: \"a2x9886d-d48a-4a0c-ab64-82abc005x80c\"",
+      "returned": "on"
+    },
+    {
+      "name": "role",
+      "type": "string",
+      "description": "The function’s execution role. Returned: on success Sample: \"arn:aws:iam::123456789012:role/lambda_basic_execution\"",
+      "returned": "on"
+    },
+    {
+      "name": "runtime",
+      "type": "string",
+      "description": "The funtime environment for the Lambda function. Returned: on success Sample: \"nodejs6.10\"",
+      "returned": "on"
+    },
+    {
+      "name": "runtime_version_config",
+      "type": "dictionary",
+      "description": "The ARN of the runtime and any errors that occured. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "runtime_version_arn",
+      "type": "string",
+      "description": "The ARN of the runtime version you want the function to use. Returned: always Sample: \"arn:aws:lambda:us-west-2::runtime:123456789012\"",
+      "returned": "always"
+    },
+    {
+      "name": "snap_start",
+      "type": "dictionary",
+      "description": "Snapshot of the initialized execution environment when you publish a function version. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "apply_on",
+      "type": "string",
+      "description": "When set to PublishedVersions, Lambda creates a snapshot of the execution environment when you publish a function version. Returned: always Sample: \"None\"",
+      "returned": "always"
+    },
+    {
+      "name": "optimization_status",
+      "type": "string",
+      "description": "This element indicates whether SnapStart is activated for the specified function version. Returned: always Sample: \"Off\"",
+      "returned": "always"
+    },
+    {
+      "name": "timeout",
+      "type": "integer",
+      "description": "The amount of time that Lambda allows a function to run before terminating it. Returned: on success Sample: 3",
+      "returned": "on"
+    },
+    {
+      "name": "tracing_config",
+      "type": "dictionary",
+      "description": "The function’s AWS X-Ray tracing configuration. Returned: on success Sample: {\"mode\": \"Active\"}",
+      "returned": "on"
+    },
+    {
+      "name": "mode",
+      "type": "string",
+      "description": "The tracing mode. Returned: on success Sample: \"Active\"",
+      "returned": "on"
+    },
+    {
+      "name": "version",
+      "type": "string",
+      "description": "The version of the Lambda function. Returned: on success Sample: \"1\"",
+      "returned": "on"
+    },
+    {
+      "name": "versions",
+      "type": "list",
+      "description": "List of Lambda function versions. Returned: when query=all or query=versions",
+      "returned": "when"
+    },
+    {
+      "name": "vpc_config",
+      "type": "dictionary",
+      "description": "The function’s networking configuration. Returned: on success Sample: {\"security_group_ids\": [], \"subnet_ids\": [], \"vpc_id\": \"123\"}",
+      "returned": "on"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/amazon/aws/lambda_info_module#ansible-collections-amazon-aws-lambda-info-module.html",
+  "parsed_at": "2026-04-11T13:52:49.514996"
+}

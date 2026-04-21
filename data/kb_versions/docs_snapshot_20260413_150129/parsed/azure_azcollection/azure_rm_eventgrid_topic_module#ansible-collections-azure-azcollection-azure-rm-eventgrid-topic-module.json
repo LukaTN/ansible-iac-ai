@@ -1,0 +1,520 @@
+{
+  "collection_ns": "azure_azcollection",
+  "collection": "azure.azcollection",
+  "module": "azure.azcollection.azure_rm_eventgrid_topic",
+  "slug": "azure_rm_eventgrid_topic_module#ansible-collections-azure-azcollection-azure-rm-eventgrid-topic-module",
+  "description": "Create, update ,delete and replace Eventgrid Topics.",
+  "parameters": [
+    {
+      "name": "ad_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory username. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "adfs_authority_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure AD authority url. Use when authenticating with Username/password, and has your own ADFS authority."
+    },
+    {
+      "name": "api_profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "Selects an API profile to use when communicating with Azure services. Default value of latest is appropriate for public clouds; future values will allow use with Azure Stack. Default: \"latest\""
+    },
+    {
+      "name": "append_tags",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Use to control if tags field is canonical or just appends to existing tags. When canonical, any tags not found in the tags parameter will be removed from the object’s metadata. Choices: false true ← (default)"
+    },
+    {
+      "name": "auth_source",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "az",
+      "choices": [
+        "\"auto\" ← (default)",
+        "\"cli\"",
+        "\"credential_file\"",
+        "\"env\"",
+        "\"msi\""
+      ],
+      "description": "Controls the source of the credentials to use for authentication. Can also be set via the ANSIBLE_AZURE_AUTH_SOURCE environment variable. When set to auto (the default) the precedence is module parameters -> env -> credential_file -> cli. When set to env, the credentials will be read from the environment variables When set to credential_file, it will read the profile from ~/.azure/credentials. When set to cli, the credentials will be sources from the Azure CLI profile. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if more than one is present otherwise the default az cli subscription is used. When set to msi, the host machine must be an azure resource with an enabled MSI extension. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if the resource is granted access to more than one subscription, otherwise the first subscription is chosen. The msi was added in Ansible 2.6. Choices: \"auto\" ← (default) \"cli\" \"credential_file\" \"env\" \"msi\""
+    },
+    {
+      "name": "cert_validation_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ignore\"",
+        "\"validate\""
+      ],
+      "description": "Controls the certificate validation behavior for Azure endpoints. By default, all modules will validate the server certificate, but when an HTTPS proxy is in use, or against Azure Stack, it may be necessary to disable this behavior by passing ignore. Can also be set via credential file profile or the AZURE_CERT_VALIDATION environment variable. Choices: \"ignore\" \"validate\""
+    },
+    {
+      "name": "client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client ID. Use when authenticating with a Service Principal or Managed Identity (msi). Can also be set via the AZURE_CLIENT_ID environment variable."
+    },
+    {
+      "name": "cloud_environment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "AzureCloud",
+      "choices": [],
+      "description": "For cloud environments other than the US public cloud, the environment name (as defined by Azure Python SDK, eg, AzureChinaCloud, AzureUSGovernment), or a metadata discovery endpoint URL (required for Azure Stack). Can also be set via credential file profile or the AZURE_CLOUD_ENVIRONMENT environment variable. Default: \"AzureCloud\""
+    },
+    {
+      "name": "disable_instance_discovery",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Determines whether or not instance discovery is performed when attempting to authenticate. Setting this to true will completely disable both instance discovery and authority validation. This functionality is intended for use in scenarios where the metadata endpoint cannot be reached such as in private clouds or Azure Stack. The process of instance discovery entails retrieving authority metadata from https://login.microsoft.com/ to validate the authority. By setting this to **True**, the validation of the authority is disabled. As a result, it is crucial to ensure that the configured authority host is valid and trustworthy. Set via credential file profile or the AZURE_DISABLE_INSTANCE_DISCOVERY environment variable. Choices: false ← (default) true"
+    },
+    {
+      "name": "extended_location_name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The extended location name. Required if kind=AzureArc."
+    },
+    {
+      "name": "extended_location_type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"customlocation\""
+      ],
+      "description": "The extended location type. Required if kind=AzureArc. Choices: \"customlocation\""
+    },
+    {
+      "name": "identity",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Identity for the Server."
+    },
+    {
+      "name": "type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"UserAssigned\"",
+        "\"SystemAssigned\" ← (default)",
+        "\"SystemAssigned UserAssigned\"",
+        "\"None\""
+      ],
+      "description": "Type of the managed identity Choices: \"UserAssigned\" \"SystemAssigned\" ← (default) \"SystemAssigned UserAssigned\" \"None\""
+    },
+    {
+      "name": "user_assigned_identities",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "User Assigned Managed Identity"
+    },
+    {
+      "name": "inbound_ip_rules",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "List of inbound IP rules Default: []"
+    },
+    {
+      "name": "action",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"Allow\"",
+        "\"Deny\""
+      ],
+      "description": "Action to perform based ont the match or no match of the IpMask. Choices: \"Allow\" \"Deny\""
+    },
+    {
+      "name": "ipmask",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "IP Address in CIDR notation e.g., 10.0.0.0/8"
+    },
+    {
+      "name": "input_mapping_default_values",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "values.",
+      "choices": [],
+      "description": "When input_schema is specified as CustomEventSchema, this parameter can be used to specify input mappings based on default values. You can use this parameter when your custom schema does not include a field that corresponds to one of the three fields supported by this parameter."
+    },
+    {
+      "name": "mapping_key",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"subject\"",
+        "\"eventtype\"",
+        "\"dataversion\""
+      ],
+      "description": "Parameter name Choices: \"subject\" \"eventtype\" \"dataversion\""
+    },
+    {
+      "name": "mapping_value",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "Default value to use for Parameter when not in publish event."
+    },
+    {
+      "name": "input_mapping_fields",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "When input_schema is specified as CustomEventSchema, this parameter is used to specify input mappings based on field names."
+    },
+    {
+      "name": "input_schema",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"CloudEventSchemaV1_0\"",
+        "\"CustomEventSchema\"",
+        "\"EventGridSchema\" ← (default)"
+      ],
+      "description": "Schema in which incoming events will be published to this topic/domain. If you specify CustomEventSchema as the value for this parameter, you must also provide values for at least one of input_mapping_default_values / input_mapping_fields. Choices: \"CloudEventSchemaV1_0\" \"CustomEventSchema\" \"EventGridSchema\" ← (default)"
+    },
+    {
+      "name": "kind",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"Azure\" ← (default)",
+        "\"AzureArc\""
+      ],
+      "description": "The kind of topic resource. Choices: \"Azure\" ← (default) \"AzureArc\""
+    },
+    {
+      "name": "location",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Valid azure location. Defaults to location of the resource group."
+    },
+    {
+      "name": "log_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "log_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the topic."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory user password. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security profile found in ~/.azure/credentials file."
+    },
+    {
+      "name": "public_network_access",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"enabled\" ← (default)",
+        "\"disabled\""
+      ],
+      "description": "This determines if traffic is allowed over public network. Choices: \"enabled\" ← (default) \"disabled\""
+    },
+    {
+      "name": "regenerate_keys",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"key1\"",
+        "\"key2\""
+      ],
+      "description": "if present and topic exsists (ie update action) this will force the listed key to be regeneratd. This cannot be idempotent. Everytime this is called it will regenerate the key(s). Choices: \"key1\" \"key2\""
+    },
+    {
+      "name": "resource_group",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of a resource group where the topic exists or will be created."
+    },
+    {
+      "name": "secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client secret. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)"
+      ],
+      "description": "State of the Eventgrid Topic. Use present to create or update and absent to delete. Choices: \"absent\" \"present\" ← (default)"
+    },
+    {
+      "name": "subscription_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Your Azure subscription Id."
+    },
+    {
+      "name": "tags",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Dictionary of string:string pairs to assign as metadata to the object. Metadata tags on the object will be updated with any provided values. To remove tags set append_tags option to false. Currently, Azure DNS zones and Traffic Manager services also don’t allow the use of spaces in the tag. Azure Front Door doesn’t support the use of Azure Automation and Azure CDN only support 15 tags on resources."
+    },
+    {
+      "name": "tenant",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure tenant ID. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "thumbprint",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The thumbprint of the private key specified in x509_certificate_path. Use when authenticating with a Service Principal. Required if x509_certificate_path is defined."
+    },
+    {
+      "name": "x509_certificate_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the X509 certificate used to create the service principal in PEM format. The certificate must be appended to the private key. Use when authenticating with a Service Principal."
+    }
+  ],
+  "examples": [
+    "- name: Create a new Topic\n  azure.azcollection.azure_rm_eventgrid_topic:\n    resource_group: rg1\n    name: topic1\n    location: westus2\n\n- name: Create a new Topic with custom input mappings\n  azure.azcollection.azure_rm_eventgrid_topic:\n    resource_group: rg1\n    name: topic1\n    location: westus2\n    input_schema: CustomEventSchema\n    input_mapping_fields:\n      - mapping_key: topic\n        mapping_value: myTopicField\n      - mapping_key: eventtype\n        mapping_value: myEventTypeField\n    input_mapping_default_values:\n      - mapping_key: subject\n        mapping_value: DefaultSubject\n      - mapping_key: dataversion\n        mapping_value: 1.0\n\n- name: Create a new Topic that accepts events published in CloudEvents V1.0 schema\n  azure.azcollection.azure_rm_eventgrid_topic:\n    resource_group: rg1\n    name: topic1\n    location: westus2\n    input_schema: CloudEventSchemaV1_0\n\n- name: Create a new Topic which allows specific inbound ip rules with Basic Sku and system assigned\n  azure.azcollection.azure_rm_eventgrid_topic:\n    resource_group: rg1\n    name: topic1\n    location: westus2\n    public_network_access: enabled\n    inbound_ip_rules:\n      - ipmask: 10.0.0.0/8\n        action: Allow\n      - ipmask: 10.2.0.0/8\n        action: Allow\n    identity:\n      type: SystemAssigned\n\n- name: Create a new topic in AzureArc targeting a custom location\n  azure.azcollection.azure_rm_eventgrid_topic:\n    resource_group: rg1\n    name: topic1\n    location: eastus2euap\n    kind: azurearc\n    extended_location_name: /subscriptions/<subid>/resourcegroups/<rgname>/providers/microsoft.extendedlocation/customlocations/<cust-loc-name>\n    extended_location_type: customlocation\n    input_schema: CloudEventSchemaV1_0\n\n- name: Delete the topic\n  azure.azcollection.azure_rm_eventgrid_topic:\n    resource_group: rg1\n    name: topic1\n    state: absent"
+  ],
+  "return_values": [
+    {
+      "name": "changed",
+      "type": "boolean",
+      "description": "Whether the resource is changed. Returned: always Sample: true",
+      "returned": "always"
+    },
+    {
+      "name": "eventgrid_topic",
+      "type": "complex",
+      "description": "Eventgrid Topic. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "data_residency_boundary",
+      "type": "string",
+      "description": "Residncy boundary Returned: always Sample: \"WithinGeopair\"",
+      "returned": "always"
+    },
+    {
+      "name": "disable_local_auth",
+      "type": "boolean",
+      "description": "Whether local auth is disabled Returned: always Sample: false",
+      "returned": "always"
+    },
+    {
+      "name": "endpoint",
+      "type": "string",
+      "description": "Rest API endpoint to use to post events Returned: always Sample: \"https://myTopic-20070.westus3-1.eventgrid.azure.net/api/events\"",
+      "returned": "always"
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "description": "Resource ID. Returned: always Sample: \"/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/myResourceGroup/providers/Microsoft.EventGrid/topics/myTopic\"",
+      "returned": "always"
+    },
+    {
+      "name": "inbound_ip_rules",
+      "type": "complex",
+      "description": "Rules for network access Returned: when-enabled",
+      "returned": "when"
+    },
+    {
+      "name": "action",
+      "type": "string",
+      "description": "What action will be taken, Allow or Disallow Returned: always Sample: \"Allow\"",
+      "returned": "always"
+    },
+    {
+      "name": "ip_mask",
+      "type": "string",
+      "description": "CIDR notation of the network to act on. Returned: always Sample: \"10.0.0.0/8\"",
+      "returned": "always"
+    },
+    {
+      "name": "input_schema",
+      "type": "string",
+      "description": "The input schema assigned to this Topic Returned: always Sample: \"EventGridSchema\"",
+      "returned": "always"
+    },
+    {
+      "name": "input_schema_mapping",
+      "type": "string",
+      "description": "Custom input schema mapping Returned: when-enabled Sample: \"\\\"data_version\\\": {\\n \\\"default_value\\\": \\\"1.0\\\"\\n},\\n\\\"event_time\\\": {},\\n\\\"event_type\\\": {\\n \\\"source_field\\\": \\\"myEventTypeField\\\"\\n},\\n\\\"id\\\": {},\\n\\\"input_schema_mapping_type\\\": \\\"Json\\\",\\n\\\"subject\\\": {\\n \\\"default_value\\\": \\\"DefaultSubject\\\"\\n},\\n\\\"topic\\\": {\\n \\\"source_field\\\": \\\"myTopicField\\\"\\n}\\n\"",
+      "returned": "when"
+    },
+    {
+      "name": "location",
+      "type": "string",
+      "description": "Resource location. Returned: always Sample: \"westus3\"",
+      "returned": "always"
+    },
+    {
+      "name": "metric_resource_id",
+      "type": "string",
+      "description": "Metric Resource ID. Returned: always Sample: \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\"",
+      "returned": "always"
+    },
+    {
+      "name": "minimum_tls_version_allowed",
+      "type": "string",
+      "description": "The minimum TLS version allowed Returned: always Sample: \"1.0\"",
+      "returned": "always"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "Resource name. Returned: always Sample: \"myTopic\"",
+      "returned": "always"
+    },
+    {
+      "name": "provisioning_state",
+      "type": "string",
+      "description": "The provisioning state. Returned: always Sample: \"Succeeded\"",
+      "returned": "always"
+    },
+    {
+      "name": "public_network_access",
+      "type": "string",
+      "description": "Indicates if boot diagnostics are enabled. Returned: always Sample: \"Enabled\"",
+      "returned": "always"
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "description": "Type of Eventgrid Returned: always Sample: \"Microsoft.EventGrid/topics\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_eventgrid_topic_module#ansible-collections-azure-azcollection-azure-rm-eventgrid-topic-module.html",
+  "parsed_at": "2026-04-11T13:52:58.691285"
+}

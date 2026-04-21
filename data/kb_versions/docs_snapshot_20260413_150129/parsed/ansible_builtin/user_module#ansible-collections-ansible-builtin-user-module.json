@@ -1,0 +1,533 @@
+{
+  "collection_ns": "ansible_builtin",
+  "collection": "ansible.builtin",
+  "module": "ansible.builtin.user",
+  "slug": "user_module#ansible-collections-ansible-builtin-user-module",
+  "description": "Manage user accounts and user attributes.",
+  "parameters": [
+    {
+      "name": "append",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If true, add the user to the groups specified in groups. If false, user will only be added to the groups specified in groups, removing them from all other groups. Choices: false ← (default) true"
+    },
+    {
+      "name": "authorization",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Sets the authorization of the user. Can set multiple authorizations using comma separation. To delete all authorizations, use authorization=''. Currently supported on Illumos/Solaris. Does nothing when used with other platforms."
+    },
+    {
+      "name": "comment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Optionally sets the description (aka GECOS) of user account. On macOS, this defaults to the name option."
+    },
+    {
+      "name": "create_home",
+      "aliases": [
+        "createhome"
+      ],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Unless set to false, a home directory will be made for the user when the account is created or if the home directory does not exist. Changed from createhome to create_home in Ansible 2.5. Choices: false true ← (default)"
+    },
+    {
+      "name": "expires",
+      "aliases": [],
+      "type": "float",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "An expiry time for the user in epoch, it will be ignored on platforms that do not support this. Currently supported on GNU/Linux, FreeBSD, and DragonFlyBSD. Since Ansible 2.6 you can remove the expiry time by specifying a negative value. Currently supported on GNU/Linux and FreeBSD."
+    },
+    {
+      "name": "force",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "This only affects state=absent, it forces removal of the user and associated directories on supported platforms. The behavior is the same as userdel --force, check the man page for userdel on your system for details and support. When used with generate_ssh_key=yes this forces an existing key to be overwritten. Choices: false ← (default) true"
+    },
+    {
+      "name": "generate_ssh_key",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Whether to generate a SSH key for the user in question. This will not overwrite an existing SSH key unless used with force=yes. Choices: false ← (default) true"
+    },
+    {
+      "name": "group",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Optionally sets the user’s primary group (takes a group name). On macOS, this defaults to staff."
+    },
+    {
+      "name": "groups",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A list of supplementary groups which the user is also a member of. By default, the user is removed from all other groups. Configure append to modify this. When set to an empty string '', the user is removed from all groups except the primary group. Before Ansible 2.3, the only input format allowed was a comma separated string."
+    },
+    {
+      "name": "hidden",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "will",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "macOS only, optionally hide the user from the login window and system preferences. The default will be true if the system option is used. Choices: false true"
+    },
+    {
+      "name": "home",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Optionally set the user’s home directory."
+    },
+    {
+      "name": "local",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Forces the use of “local” command alternatives on platforms that implement it. This is useful in environments that use centralized authentication when you want to manipulate the local users (in other words, it uses luseradd instead of useradd). This will check /etc/passwd for an existing account before invoking commands. If the local account database exists somewhere other than /etc/passwd, this setting will not work properly. This requires that the above commands as well as /etc/passwd must exist on the target host, otherwise it will be a fatal error. Choices: false ← (default) true"
+    },
+    {
+      "name": "login_class",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Optionally sets the user’s login class, a feature of most BSD OSs."
+    },
+    {
+      "name": "move_home",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If set to true when used with home, attempt to move the user’s old home directory to the specified directory if it isn’t there already and the old home exists. Choices: false ← (default) true"
+    },
+    {
+      "name": "name",
+      "aliases": [
+        "user"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the user to create, remove or modify."
+    },
+    {
+      "name": "non_unique",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Optionally when used with the -u option, this option allows to change the user ID to a non-unique value. Choices: false ← (default) true"
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "If provided, set the user’s password to the provided encrypted hash (Linux) or plain text password (macOS). Linux/Unix/POSIX: Enter the hashed password as the value. See FAQ entry for details on various ways to generate the hash of a password. To create an account with a locked/disabled password on Linux systems, set this to '!' or '*'. To create an account with a locked/disabled password on OpenBSD, set this to '*************'. OS X/macOS: Enter the cleartext password as the value. Be sure to take relevant security precautions. On macOS, the password specified in the password option will always be set, regardless of whether the user account already exists or not. When the password is passed as an argument, the ansible.builtin.user module will always return changed to true for macOS systems. Since macOS no longer provides access to the hashed passwords directly."
+    },
+    {
+      "name": "password_expire_account_disable",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Number of days after a password expires until the account is disabled. Currently supported on AIX, Linux, NetBSD, OpenBSD."
+    },
+    {
+      "name": "password_expire_max",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Maximum number of days between password change. Supported on Linux only."
+    },
+    {
+      "name": "password_expire_min",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Minimum number of days between password change. Supported on Linux only."
+    },
+    {
+      "name": "password_expire_warn",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Number of days of warning before password expires. Supported on Linux only."
+    },
+    {
+      "name": "password_lock",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Lock the password (usermod -L, usermod -U, pw lock). Implementation differs by platform. This option does not always mean the user cannot login using other methods. This option does not disable the user, only lock the password. This must be set to false in order to unlock a currently locked password. The absence of this parameter will not unlock a password. Currently supported on Linux, FreeBSD, DragonFlyBSD, NetBSD, OpenBSD. Choices: false true"
+    },
+    {
+      "name": "profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Sets the profile of the user. Can set multiple profiles using comma separation. To delete all the profiles, use profile=''. Currently supported on Illumos/Solaris. Does nothing when used with other platforms."
+    },
+    {
+      "name": "remove",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "This only affects state=absent, it attempts to remove directories associated with the user. The behavior is the same as userdel --remove, check the man page for details and support. Choices: false ← (default) true"
+    },
+    {
+      "name": "role",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Sets the role of the user. Can set multiple roles using comma separation. To delete all roles, use role=''. Currently supported on Illumos/Solaris. Does nothing when used with other platforms."
+    },
+    {
+      "name": "seuser",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Optionally sets the seuser type user_u on SELinux enabled systems."
+    },
+    {
+      "name": "shell",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "shell",
+      "choices": [],
+      "description": "Optionally set the user’s shell. On macOS, before Ansible 2.5, the default shell for non-system users was /usr/bin/false. Since Ansible 2.5, the default shell for non-system users on macOS is /bin/bash. On other operating systems, the default shell is determined by the underlying tool invoked by this module. See Notes for a per platform list of invoked tools. From Ansible 2.18, the type is changed to path from str."
+    },
+    {
+      "name": "skeleton",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Optionally set a home skeleton directory. Requires create_home option!"
+    },
+    {
+      "name": "ssh_key_bits",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "Optionally specify number of bits in SSH key to create. The default value depends on ssh-keygen."
+    },
+    {
+      "name": "ssh_key_comment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "ansible-generated",
+      "choices": [],
+      "description": "Optionally define the comment for the SSH key. Default: \"ansible-generated on $HOSTNAME\""
+    },
+    {
+      "name": "ssh_key_file",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Optionally specify the SSH key filename. If this is a relative filename then it will be relative to the user’s home directory. This parameter defaults to .ssh/id_rsa."
+    },
+    {
+      "name": "ssh_key_passphrase",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "to",
+      "choices": [],
+      "description": "Set a passphrase for the SSH key. If no passphrase is provided, the SSH key will default to having no passphrase."
+    },
+    {
+      "name": "ssh_key_type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "rsa",
+      "choices": [],
+      "description": "Optionally specify the type of SSH key to generate. Available SSH key types will depend on implementation present on target host. Default: \"rsa\""
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)"
+      ],
+      "description": "Whether the account should exist or not, taking action if the state is different from what is stated. See this FAQ entry for additional requirements when removing users on macOS systems. Choices: \"absent\" \"present\" ← (default)"
+    },
+    {
+      "name": "system",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "When creating an account state=present, setting this to true makes the user a system account. This setting cannot be changed on existing users. Choices: false ← (default) true"
+    },
+    {
+      "name": "uid",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Optionally sets the UID of the user."
+    },
+    {
+      "name": "uid_max",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "value.",
+      "choices": [],
+      "description": "Sets the UID_MAX value for user creation. Overwrites /etc/login.defs default value. Currently supported on Linux. Does nothing when used with other platforms. Requires local is omitted or False."
+    },
+    {
+      "name": "uid_min",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "value.",
+      "choices": [],
+      "description": "Sets the UID_MIN value for user creation. Overwrites /etc/login.defs default value. Currently supported on Linux. Does nothing when used with other platforms. Requires local is omitted or False."
+    },
+    {
+      "name": "umask",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Sets the umask of the user. Currently supported on Linux. Does nothing when used with other platforms. Requires local is omitted or false."
+    },
+    {
+      "name": "update_password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"always\" ← (default)",
+        "\"on_create\""
+      ],
+      "description": "always will update passwords if they differ. on_create will only set the password for newly created users. Choices: \"always\" ← (default) \"on_create\""
+    }
+  ],
+  "examples": [
+    "- name: Add the user 'johnd' with a specific uid and a primary group of 'admin'\n  ansible.builtin.user:\n    name: johnd\n    comment: John Doe\n    uid: 1040\n    group: admin\n\n- name: Create a user 'johnd' with a home directory\n  ansible.builtin.user:\n    name: johnd\n    create_home: yes\n\n- name: Add the user 'james' with a bash shell, appending the group 'admins' and 'developers' to the user's groups\n  ansible.builtin.user:\n    name: james\n    shell: /bin/bash\n    groups: admins,developers\n    append: yes\n\n- name: Remove the user 'johnd'\n  ansible.builtin.user:\n    name: johnd\n    state: absent\n    remove: yes\n\n- name: Create a 2048-bit SSH key for user jsmith in ~jsmith/.ssh/id_rsa\n  ansible.builtin.user:\n    name: jsmith\n    generate_ssh_key: yes\n    ssh_key_bits: 2048\n    ssh_key_file: .ssh/id_rsa\n\n- name: Added a consultant whose account you want to expire\n  ansible.builtin.user:\n    name: james18\n    shell: /bin/zsh\n    groups: developers\n    expires: 1422403387\n\n- name: Starting at Ansible 2.6, modify user, remove expiry time\n  ansible.builtin.user:\n    name: james18\n    expires: -1\n\n- name: Set maximum expiration date for password\n  ansible.builtin.user:\n    name: ram19\n    password_expire_max: 10\n\n- name: Set minimum expiration date for password\n  ansible.builtin.user:\n    name: pushkar15\n    password_expire_min: 5\n\n- name: Set number of warning days for password expiration\n  ansible.builtin.user:\n    name: jane157\n    password_expire_warn: 30\n\n- name: Set number of days after password expires until account is disabled\n  ansible.builtin.user:\n    name: jimholden2016\n    password_expire_account_disable: 15"
+  ],
+  "return_values": [
+    {
+      "name": "append",
+      "type": "boolean",
+      "description": "Whether or not to append the user to groups. Returned: When state is present and the user exists Sample: true",
+      "returned": "When"
+    },
+    {
+      "name": "comment",
+      "type": "string",
+      "description": "Comment section from passwd file, usually the user name. Returned: When user exists Sample: \"Agent Smith\"",
+      "returned": "When"
+    },
+    {
+      "name": "create_home",
+      "type": "boolean",
+      "description": "Whether or not to create the home directory. Returned: When user does not exist and not check mode Sample: true",
+      "returned": "When"
+    },
+    {
+      "name": "force",
+      "type": "boolean",
+      "description": "Whether or not a user account was forcibly deleted. Returned: When state is absent and user exists Sample: false",
+      "returned": "When"
+    },
+    {
+      "name": "group",
+      "type": "integer",
+      "description": "Primary user group ID Returned: When user exists Sample: 1001",
+      "returned": "When"
+    },
+    {
+      "name": "groups",
+      "type": "string",
+      "description": "List of groups of which the user is a member. Returned: When groups is not empty and state is present Sample: \"chrony,apache\"",
+      "returned": "When"
+    },
+    {
+      "name": "home",
+      "type": "string",
+      "description": "Path to user’s home directory. Returned: When state is present Sample: \"/home/asmith\"",
+      "returned": "When"
+    },
+    {
+      "name": "move_home",
+      "type": "boolean",
+      "description": "Whether or not to move an existing home directory. Returned: When state is present and user exists Sample: false",
+      "returned": "When"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "User account name. Returned: always Sample: \"asmith\"",
+      "returned": "always"
+    },
+    {
+      "name": "password",
+      "type": "string",
+      "description": "Masked value of the password. Returned: When state is present and password is not empty Sample: \"NOT_LOGGING_PASSWORD\"",
+      "returned": "When"
+    },
+    {
+      "name": "remove",
+      "type": "boolean",
+      "description": "Whether or not to remove the user account. Returned: When state is absent and user exists Sample: true",
+      "returned": "When"
+    },
+    {
+      "name": "shell",
+      "type": "string",
+      "description": "User login shell. Returned: When state is present Sample: \"/bin/bash\"",
+      "returned": "When"
+    },
+    {
+      "name": "ssh_fingerprint",
+      "type": "string",
+      "description": "Fingerprint of generated SSH key. Returned: When generate_ssh_key is True Sample: \"2048 SHA256:aYNHYcyVm87Igh0IMEDMbvW0QDlRQfE0aJugp684ko8 ansible-generated on host (RSA)\"",
+      "returned": "When"
+    },
+    {
+      "name": "ssh_key_file",
+      "type": "string",
+      "description": "Path to generated SSH private key file. Returned: When generate_ssh_key is True Sample: \"/home/asmith/.ssh/id_rsa\"",
+      "returned": "When"
+    },
+    {
+      "name": "ssh_public_key",
+      "type": "string",
+      "description": "Generated SSH public key file. Returned: When generate_ssh_key is True Sample: \"'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC95opt4SPEC06tOYsJQJIuN23BbLMGmYo8ysVZQc4h2DZE9ugbjWWGS1/pweUGjVstgzMkBEeBCByaEf/RJKNecKRPeGd2Bw9DCj/bn5Z6rGfNENKBmo 618mUJBvdlEgea96QGjOwSB7/gmonduC7gsWDMNcOdSE3wJMTim4lddiBx4RgC9yXsJ6Tkz9BHD73MXPpT5ETnse+A3fw3IGVSjaueVnlUyUmOBf7fzmZbhlFVXf2Zi2rFTXqvbdGHKkzpw1U8eB8xFPP7y d5u1u0e6Acju/8aZ/l17IDFiLke5IzlqIMRTEbDwLNeO84YQKWTm9fODHzhYe0yvxqLiK07 ansible-generated on host'\\n\"",
+      "returned": "When"
+    },
+    {
+      "name": "stderr",
+      "type": "string",
+      "description": "Standard error from running commands. Returned: When stderr is returned by a command that is run Sample: \"Group wheels does not exist\"",
+      "returned": "When"
+    },
+    {
+      "name": "stdout",
+      "type": "string",
+      "description": "Standard output from running commands. Returned: When standard output is returned by the command that is run",
+      "returned": "When"
+    },
+    {
+      "name": "system",
+      "type": "boolean",
+      "description": "Whether or not the account is a system account. Returned: When system is passed to the module and the account does not exist Sample: true",
+      "returned": "When"
+    },
+    {
+      "name": "uid",
+      "type": "integer",
+      "description": "User ID of the user account. Returned: When uid is passed to the module Sample: 1044",
+      "returned": "When"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/user_module#ansible-collections-ansible-builtin-user-module.html",
+  "parsed_at": "2026-04-11T13:52:53.074542"
+}

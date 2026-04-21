@@ -1,0 +1,54 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.jboss",
+  "slug": "jboss_module#ansible-collections-community-general-jboss-module",
+  "description": "Deploy applications to JBoss standalone using the filesystem.",
+  "parameters": [
+    {
+      "name": "deploy_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "/var/lib/jbossas/standalone/deployments",
+      "choices": [],
+      "description": "The location in the filesystem where the deployment scanner listens. Default: \"/var/lib/jbossas/standalone/deployments\""
+    },
+    {
+      "name": "deployment",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the deployment."
+    },
+    {
+      "name": "src",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The remote path of the application ear or war to deploy. Required when state=present. Ignored when state=absent."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Whether the application should be deployed or undeployed. Choices: \"present\" ← (default) \"absent\""
+    }
+  ],
+  "examples": [
+    "- name: Deploy a hello world application to the default deploy_path\n  community.general.jboss:\n    src: /tmp/hello-1.0-SNAPSHOT.war\n    deployment: hello.war\n    state: present\n\n- name: Update the hello world application to the non-default deploy_path\n  community.general.jboss:\n    src: /tmp/hello-1.1-SNAPSHOT.war\n    deploy_path: /opt/wildfly/deployment\n    deployment: hello.war\n    state: present\n\n- name: Undeploy the hello world application from the default deploy_path\n  community.general.jboss:\n    deployment: hello.war\n    state: absent"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/jboss_module.html",
+  "parsed_at": "2026-04-13T16:29:49.479769"
+}

@@ -1,0 +1,160 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.ibm_sa_domain",
+  "slug": "ibm_sa_domain_module#ansible-collections-community-general-ibm-sa-domain-module",
+  "description": "This module can be used to add domains to or removes them from IBM Spectrum Accelerate Family storage systems.",
+  "parameters": [
+    {
+      "name": "domain",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the domain to be managed."
+    },
+    {
+      "name": "endpoints",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The hostname or management IP of Spectrum Accelerate storage system."
+    },
+    {
+      "name": "hard_capacity",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Hard capacity of the domain."
+    },
+    {
+      "name": "ldap_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "LDAP ID to add to the domain."
+    },
+    {
+      "name": "max_cgs",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Number of max cgs."
+    },
+    {
+      "name": "max_dms",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Number of max dms."
+    },
+    {
+      "name": "max_mirrors",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Number of max_mirrors."
+    },
+    {
+      "name": "max_pools",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Number of max_pools."
+    },
+    {
+      "name": "max_volumes",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Number of max_volumes."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Password for username on the Spectrum Accelerate storage system."
+    },
+    {
+      "name": "perf_class",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Add the domain to a performance class."
+    },
+    {
+      "name": "size",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Size of the domain."
+    },
+    {
+      "name": "soft_capacity",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Soft capacity of the domain."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "The desired state of the domain. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "username",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Management user on the Spectrum Accelerate storage system."
+    }
+  ],
+  "examples": [
+    "- name: Define new domain.\n  community.general.ibm_sa_domain:\n    domain: domain_name\n    size: domain_size\n    state: present\n    username: admin\n    password: secret\n    endpoints: hostdev-system\n\n- name: Delete domain.\n  community.general.ibm_sa_domain:\n    domain: domain_name\n    state: absent\n    username: admin\n    password: secret\n    endpoints: hostdev-system"
+  ],
+  "return_values": [
+    {
+      "name": "msg",
+      "type": "string",
+      "description": "Module return status. Returned: as needed Sample: \"domain 'domain_name' created successfully.\"",
+      "returned": "as"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/ibm_sa_domain_module#ansible-collections-community-general-ibm-sa-domain-module.html",
+  "parsed_at": "2026-04-11T13:53:15.206326"
+}

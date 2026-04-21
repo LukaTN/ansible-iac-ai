@@ -1,0 +1,135 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.ilo_redfish_config",
+  "slug": "ilo_redfish_config_module#ansible-collections-community-general-ilo-redfish-config-module",
+  "description": "Builds Redfish URIs locally and sends them to iLO to set or update a configuration attribute.",
+  "parameters": [
+    {
+      "name": "attribute_name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the attribute to be configured."
+    },
+    {
+      "name": "attribute_value",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Value of the attribute to be configured."
+    },
+    {
+      "name": "auth_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security token for authenticating to iLO."
+    },
+    {
+      "name": "baseuri",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Base URI of iLO."
+    },
+    {
+      "name": "ca_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "PEM formatted file that contains a CA certificate to be used for validation. Only used if validate_certs=true."
+    },
+    {
+      "name": "category",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [
+        "\"Manager\""
+      ],
+      "description": "Command category to execute on iLO. Choices: \"Manager\""
+    },
+    {
+      "name": "ciphers",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "TLS/SSL Ciphers to use for the request. When a list is provided, all ciphers are joined in order with :. See the OpenSSL Cipher List Format for more details. The available ciphers is dependent on the Python and OpenSSL/LibreSSL versions."
+    },
+    {
+      "name": "command",
+      "aliases": [],
+      "type": "list",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "List of commands to execute on iLO."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Password for authenticating to iLO."
+    },
+    {
+      "name": "timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "10",
+      "choices": [],
+      "description": "Timeout in seconds for HTTP requests to iLO. Default: 10"
+    },
+    {
+      "name": "username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Username for authenticating to iLO."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If false, TLS/SSL certificates are not validated. Set this to true to enable certificate checking. Should be used together with ca_path. Choices: false ← (default) true"
+    }
+  ],
+  "examples": [
+    "- name: Disable WINS Registration\n  community.general.ilo_redfish_config:\n    category: Manager\n    command: SetWINSReg\n    baseuri: 15.X.X.X\n    username: Admin\n    password: Testpass123\n    attribute_name: WINSRegistration\n\n- name: Set Time Zone\n  community.general.ilo_redfish_config:\n    category: Manager\n    command: SetTimeZone\n    baseuri: 15.X.X.X\n    username: Admin\n    password: Testpass123\n    attribute_name: TimeZone\n    attribute_value: Chennai\n\n- name: Set NTP Servers\n  community.general.ilo_redfish_config:\n    category: Manager\n    command: SetNTPServers\n    baseuri: 15.X.X.X\n    username: Admin\n    password: Testpass123\n    attribute_name: StaticNTPServers\n    attribute_value: X.X.X.X"
+  ],
+  "return_values": [
+    {
+      "name": "msg",
+      "type": "string",
+      "description": "Message with action result or error description. Returned: always Sample: \"Action was successful\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/ilo_redfish_config_module.html",
+  "parsed_at": "2026-04-13T16:29:48.018726"
+}

@@ -1,0 +1,225 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.rundeck_job_executions_info",
+  "slug": "rundeck_job_executions_info_module#ansible-collections-community-general-rundeck-job-executions-info-module",
+  "description": "This module gets the list of executions for a specified Rundeck job.",
+  "parameters": [
+    {
+      "name": "api_token",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Rundeck User API Token."
+    },
+    {
+      "name": "api_version",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "39",
+      "choices": [],
+      "description": "Rundeck API version to be used. API version must be at least 14. Default: 39"
+    },
+    {
+      "name": "client_cert",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "PEM formatted certificate chain file to be used for SSL client authentication. This file can also include the key as well, and if the key is included, client_key is not required."
+    },
+    {
+      "name": "client_key",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "PEM formatted file that contains your private key to be used for SSL client authentication. If client_cert contains both the certificate and key, this option is not required."
+    },
+    {
+      "name": "force",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If yes do not get a cached copy. Choices: false ← (default) true"
+    },
+    {
+      "name": "force_basic_auth",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Credentials specified with url_username and url_password should be passed in HTTP Header. Choices: false ← (default) true"
+    },
+    {
+      "name": "http_agent",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "ansible-httpget",
+      "choices": [],
+      "description": "Header to identify as, generally appears in web server logs. Default: \"ansible-httpget\""
+    },
+    {
+      "name": "job_id",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The job unique ID."
+    },
+    {
+      "name": "max",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "20",
+      "choices": [],
+      "description": "Max results to return. Default: 20"
+    },
+    {
+      "name": "offset",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "0",
+      "choices": [],
+      "description": "The start point to return the results. Default: 0"
+    },
+    {
+      "name": "status",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"succeeded\"",
+        "\"failed\"",
+        "\"aborted\"",
+        "\"running\""
+      ],
+      "description": "The job status to filter. Choices: \"succeeded\" \"failed\" \"aborted\" \"running\""
+    },
+    {
+      "name": "url",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Rundeck instance URL."
+    },
+    {
+      "name": "url_password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The password for use in HTTP basic authentication. If the url_username parameter is not specified, the url_password parameter will not be used."
+    },
+    {
+      "name": "url_username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The username for use in HTTP basic authentication. This parameter can be used without url_password for sites that allow empty passwords."
+    },
+    {
+      "name": "use_gssapi",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use GSSAPI to perform the authentication, typically this is for Kerberos or Kerberos through Negotiate authentication. Requires the Python library gssapi to be installed. Credentials for GSSAPI can be specified with url_username/url_password or with the GSSAPI env var KRB5CCNAME that specified a custom Kerberos credential cache. NTLM authentication is not supported even if the GSSAPI mech for NTLM has been installed. Choices: false ← (default) true"
+    },
+    {
+      "name": "use_proxy",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If no, it will not use a proxy, even if one is defined in an environment variable on the target hosts. Choices: false true ← (default)"
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If no, SSL certificates will not be validated. This should only be used on personally controlled sites using self-signed certificates. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Get Rundeck job executions info\n  community.general.rundeck_job_executions_info:\n    url: \"https://rundeck.example.org\"\n    api_version: 39\n    api_token: \"mytoken\"\n    job_id: \"xxxxxxxxxxxxxxxxx\"\n  register: rundeck_job_executions_info\n\n- name: Show Rundeck job executions info\n  ansible.builtin.debug:\n    var: rundeck_job_executions_info.executions"
+  ],
+  "return_values": [
+    {
+      "name": "executions",
+      "type": "list",
+      "description": "Job executions list. Returned: always Sample: [{\"argstring\": \"-exit_code 0\", \"date-ended\": {\"date\": \"2021-10-06T13:05:18Z\", \"unixtime\": 1633525518386}, \"date-started\": {\"date\": \"2021-10-06T13:05:15Z\", \"unixtime\": 1633525515026}, \"description\": \"Plugin[com.batix.rundeck.plugins.AnsiblePlaybookInlineWorkflowStep, nodeStep: false]\", \"executionType\": \"user\", \"href\": \"https://rundeck.example.org/api/39/execution/1\", \"id\": 1, \"job\": {\"averageDuration\": 6381, \"description\": \"\", \"group\": \"\", \"href\": \"https://rundeck.example.org/api/39/job/697af0c4-72d3-4c15-86a3-b5bfe3c6cb6a\", \"id\": \"697af0c4-72d3-4c15-86a3-b5bfe3c6cb6a\", \"name\": \"Test\", \"options\": {\"exit_code\": \"0\"}, \"permalink\": \"https://rundeck.example.org/project/myproject/job/show/697af0c4-72d3-4c15-86a3-b5bfe3c6cb6a\", \"project\": \"myproject\"}, \"permalink\": \"https://rundeck.example.org/project/myproject/execution/show/1\", \"project\": \"myproject\", \"serverUUID\": \"5b9a1438-fa3a-457e-b254-8f3d70338068\", \"status\": \"succeeded\", \"user\": \"admin\"}]",
+      "returned": "always"
+    },
+    {
+      "name": "paging",
+      "type": "dictionary",
+      "description": "Results pagination info. Returned: success Sample: {\"count\": 20, \"max\": 20, \"offset\": 0, \"total\": 100}",
+      "returned": "success"
+    },
+    {
+      "name": "count",
+      "type": "integer",
+      "description": "Number of results in the response. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "max",
+      "type": "integer",
+      "description": "Maximum number of results per page. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "offset",
+      "type": "integer",
+      "description": "Offset from first of all results. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "total",
+      "type": "integer",
+      "description": "Total number of results. Returned: success",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/rundeck_job_executions_info_module.html",
+  "parsed_at": "2026-04-13T16:29:57.330828"
+}

@@ -1,0 +1,28 @@
+# ============================================================
+# AnsibleAI RAG Generator — LangChain + ChromaDB
+# Date        : 2026-04-13 15:35:51
+# Request     : create an Azure virtual machine named vm-api in the rg-production resource group
+# Module      : azure.azcollection.azure_rm_virtualmachine
+# Collection  : azure.azcollection
+# RAG score   : 0.732
+# Chunks used : 6
+# Source URL  : https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualmachine_module#ansible-collections-azure-azcollection-azure-rm-virtualmachine-module.html
+# LLM model   : qwen2.5-coder:7b
+# ============================================================
+
+---
+- name: Create Azure Virtual Machine
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - azure.azcollection
+  tasks:
+    - name: Create virtual machine vm-api in rg-production resource group
+      azure.azcollection.azure_rm_virtualmachine:
+        resource_group: rg-production
+        name: vm-api
+        image: UbuntuLTS
+        admin_username: azureuser
+        admin_password: "{{ lookup('env', 'ADMIN_PASSWORD') }}"
+        size: Standard_DS1_v2

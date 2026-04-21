@@ -1,0 +1,67 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.online_server_info",
+  "slug": "online_server_info_module#ansible-collections-community-general-online-server-info-module",
+  "description": "Gather information about the servers.",
+  "parameters": [
+    {
+      "name": "api_timeout",
+      "aliases": [
+        "timeout"
+      ],
+      "type": "integer",
+      "required": false,
+      "default": "30",
+      "choices": [],
+      "description": "HTTP timeout to Online API in seconds. Default: 30"
+    },
+    {
+      "name": "api_token",
+      "aliases": [
+        "oauth_token"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Online OAuth token."
+    },
+    {
+      "name": "api_url",
+      "aliases": [
+        "base_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "https://api.online.net",
+      "choices": [],
+      "description": "Online API URL. Default: \"https://api.online.net\""
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Validate SSL certs of the Online API. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Gather Online server information\n  community.general.online_server_info:\n    api_token: '0d1627e8-bbf0-44c5-a46f-5c4d3aef033f'\n  register: result\n\n- ansible.builtin.debug:\n    msg: \"{{ result.online_server_info }}\""
+  ],
+  "return_values": [
+    {
+      "name": "online_server_info",
+      "type": "list",
+      "description": "Response from Online API. For more details please refer to: https://console.online.net/en/api/. Returned: success Sample: [{\"abuse\": \"abuse@example.com\", \"anti_ddos\": false, \"bmc\": {\"session_key\": null}, \"boot_mode\": \"normal\", \"contacts\": {\"owner\": \"foobar\", \"tech\": \"foobar\"}, \"disks\": [{\"$ref\": \"/api/v1/server/hardware/disk/68452\"}, {\"$ref\": \"/api/v1/server/hardware/disk/68453\"}], \"drive_arrays\": [{\"disks\": [{\"$ref\": \"/api/v1/server/hardware/disk/68452\"}, {\"$ref\": \"/api/v1/server/hardware/disk/68453\"}], \"raid_controller\": {\"$ref\": \"/api/v1/server/hardware/raidController/9910\"}, \"raid_level\": \"RAID1\"}], \"hardware_watch\": true, \"hostname\": \"sd-42\", \"id\": 42, \"ip\": [{\"address\": \"195.154.172.149\", \"mac\": \"28:92:4a:33:5e:c6\", \"reverse\": \"195-154-172-149.rev.poneytelecom.eu.\", \"switch_port_state\": \"up\", \"type\": \"public\"}, {\"address\": \"10.90.53.212\", \"mac\": \"28:92:4a:33:5e:c7\", \"reverse\": null, \"switch_port_state\": \"up\", \"type\": \"private\"}], \"last_reboot\": \"2018-08-23T08:32:03.000Z\", \"location\": {\"block\": \"A\", \"datacenter\": \"DC3\", \"position\": 19, \"rack\": \"A23\", \"room\": \"4 4-4\"}, \"network\": {\"ip\": [\"195.154.172.149\"], \"ipfo\": [], \"private\": [\"10.90.53.212\"]}, \"offer\": \"Pro-1-S-SATA\", \"os\": {\"name\": \"FreeBSD\", \"version\": \"11.1-RELEASE\"}, \"power\": \"ON\", \"proactive_monitoring\": false, \"raid_controllers\": [{\"$ref\": \"/api/v1/server/hardware/raidController/9910\"}], \"support\": \"Basic service level\"}]",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/online_server_info_module#ansible-collections-community-general-online-server-info-module.html",
+  "parsed_at": "2026-04-11T13:53:22.732065"
+}

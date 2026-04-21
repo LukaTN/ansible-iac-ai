@@ -1,0 +1,365 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.jenkins_plugin",
+  "slug": "jenkins_plugin_module#ansible-collections-community-general-jenkins-plugin-module",
+  "description": "Ansible module which helps to manage Jenkins plugins.",
+  "parameters": [
+    {
+      "name": "attributes",
+      "aliases": [
+        "attr"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The attributes the resulting filesystem object should have. To get supported flags look at the man page for chattr on the target system. This string should contain the attributes in the same order as the one displayed by lsattr. The = operator is assumed as default, otherwise + or - operators need to be included in the string."
+    },
+    {
+      "name": "client_cert",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "PEM formatted certificate chain file to be used for SSL client authentication. This file can also include the key as well, and if the key is included, client_key is not required."
+    },
+    {
+      "name": "client_key",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "PEM formatted file that contains your private key to be used for SSL client authentication. If client_cert contains both the certificate and key, this option is not required."
+    },
+    {
+      "name": "force",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If yes do not get a cached copy. Choices: false ← (default) true"
+    },
+    {
+      "name": "force_basic_auth",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Credentials specified with url_username and url_password should be passed in HTTP Header. Choices: false ← (default) true"
+    },
+    {
+      "name": "group",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "jenkins",
+      "choices": [],
+      "description": "GID or name of the Jenkins group on the OS. Default: \"jenkins\""
+    },
+    {
+      "name": "http_agent",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "ansible-httpget",
+      "choices": [],
+      "description": "Header to identify as, generally appears in web server logs. Default: \"ansible-httpget\""
+    },
+    {
+      "name": "jenkins_home",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "/var/lib/jenkins",
+      "choices": [],
+      "description": "Home directory of the Jenkins user. Default: \"/var/lib/jenkins\""
+    },
+    {
+      "name": "latest_plugins_url_segments",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[",
+      "choices": [],
+      "description": "Path inside the updates_url to get latest plugins from. Default: [\"latest\"]"
+    },
+    {
+      "name": "mode",
+      "aliases": [],
+      "type": "any",
+      "required": false,
+      "default": "0644",
+      "choices": [],
+      "description": "File mode applied on versioned plugins. Default: \"0644\""
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Plugin name."
+    },
+    {
+      "name": "owner",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "jenkins",
+      "choices": [],
+      "description": "UID or name of the Jenkins user on the OS. Default: \"jenkins\""
+    },
+    {
+      "name": "plugin_versions_url_segment",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[",
+      "choices": [],
+      "description": "A list of URL segment(s) to retrieve the plugin versions JSON file from. Default: [\"plugin-versions.json\", \"current/plugin-versions.json\"]"
+    },
+    {
+      "name": "selevel",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The level part of the SELinux filesystem object context. This is the MLS/MCS attribute, sometimes known as the range. When set to _default, it will use the level portion of the policy if available."
+    },
+    {
+      "name": "serole",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The role part of the SELinux filesystem object context. When set to _default, it will use the role portion of the policy if available."
+    },
+    {
+      "name": "setype",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The type part of the SELinux filesystem object context. When set to _default, it will use the type portion of the policy if available."
+    },
+    {
+      "name": "seuser",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "it",
+      "choices": [],
+      "description": "The user part of the SELinux filesystem object context. By default it uses the system policy, where applicable. When set to _default, it will use the user portion of the policy if available."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)",
+        "\"pinned\"",
+        "\"unpinned\"",
+        "\"enabled\"",
+        "\"disabled\"",
+        "\"latest\""
+      ],
+      "description": "Desired plugin state. If set to latest, the check for new version is performed every time. This is suitable to keep the plugin up-to-date. Choices: \"absent\" \"present\" ← (default) \"pinned\" \"unpinned\" \"enabled\" \"disabled\" \"latest\""
+    },
+    {
+      "name": "timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "30",
+      "choices": [],
+      "description": "Server connection timeout in secs. Default: 30"
+    },
+    {
+      "name": "unsafe_writes",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "this",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Influence when to use atomic operation to prevent data corruption or inconsistent reads from the target filesystem object. By default this module uses atomic operations to prevent data corruption or inconsistent reads from the target filesystem objects, but sometimes systems are configured or just broken in ways that prevent this. One example is docker mounted filesystem objects, which cannot be updated atomically from inside the container and can only be written in an unsafe manner. This option allows Ansible to fall back to unsafe methods of updating filesystem objects when atomic operations fail (however, it doesn’t force Ansible to perform unsafe writes). IMPORTANT! Unsafe writes are subject to race conditions and can lead to data corruption. Choices: false ← (default) true"
+    },
+    {
+      "name": "update_json_url_segment",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[",
+      "choices": [],
+      "description": "A list of URL segment(s) to retrieve the update center JSON file from. Default: [\"update-center.json\", \"updates/update-center.json\"]"
+    },
+    {
+      "name": "updates_expiration",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "86400",
+      "choices": [],
+      "description": "Number of seconds after which a new copy of the update-center.json file is downloaded. This is used to avoid the need to download the plugin to calculate its checksum when state=latest is specified. Set it to 0 if no cache file should be used. In that case, the plugin file is always downloaded to calculate its checksum when state=latest is specified. Default: 86400"
+    },
+    {
+      "name": "updates_url",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[",
+      "choices": [],
+      "description": "A list of base URL(s) to retrieve update-center.json, and direct plugin files from. This can be a list since community.general 3.3.0. Default: [\"https://updates.jenkins.io\", \"http://mirrors.jenkins.io\"]"
+    },
+    {
+      "name": "updates_url_password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "If using a custom updates_url, set this as the password of the user with access to the URL. If the custom updates_url does not require authentication, this can be left empty."
+    },
+    {
+      "name": "updates_url_username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "If using a custom updates_url, set this as the username of the user with access to the URL. If the custom updates_url does not require authentication, this can be left empty."
+    },
+    {
+      "name": "url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "http://localhost:8080",
+      "choices": [],
+      "description": "URL of the Jenkins server. Default: \"http://localhost:8080\""
+    },
+    {
+      "name": "url_password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The password for use in HTTP basic authentication. If the url_username parameter is not specified, the url_password parameter will not be used."
+    },
+    {
+      "name": "url_username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The username for use in HTTP basic authentication. This parameter can be used without url_password for sites that allow empty passwords."
+    },
+    {
+      "name": "use_gssapi",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use GSSAPI to perform the authentication, typically this is for Kerberos or Kerberos through Negotiate authentication. Requires the Python library gssapi to be installed. Credentials for GSSAPI can be specified with url_username/url_password or with the GSSAPI env var KRB5CCNAME that specified a custom Kerberos credential cache. NTLM authentication is not supported even if the GSSAPI mech for NTLM has been installed. Choices: false ← (default) true"
+    },
+    {
+      "name": "use_proxy",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If no, it will not use a proxy, even if one is defined in an environment variable on the target hosts. Choices: false true ← (default)"
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If no, SSL certificates will not be validated. This should only be used on personally controlled sites using self-signed certificates. Choices: false true ← (default)"
+    },
+    {
+      "name": "version",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Plugin version number. If this option is specified, all plugin dependencies must be installed manually. It might take longer to verify that the correct version is installed. This is especially true if a specific version number is specified. Quote the version to prevent the value to be interpreted as float. For example if 1.20 would be unquoted, it would become 1.2."
+    },
+    {
+      "name": "versioned_plugins_url_segments",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[",
+      "choices": [],
+      "description": "Path inside the updates_url to get specific version of plugins from. Default: [\"download/plugins\", \"plugins\"]"
+    },
+    {
+      "name": "with_dependencies",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Defines whether to install plugin dependencies. In earlier versions, this option had no effect when a specific version was set. Since community.general 11.2.0, dependencies are also installed for versioned plugins. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Install plugin\n  community.general.jenkins_plugin:\n    name: build-pipeline-plugin\n\n- name: Install plugin without its dependencies\n  community.general.jenkins_plugin:\n    name: build-pipeline-plugin\n    with_dependencies: false\n\n- name: Make sure the plugin is always up-to-date\n  community.general.jenkins_plugin:\n    name: token-macro\n    state: latest\n\n- name: Install specific version of the plugin\n  community.general.jenkins_plugin:\n    name: token-macro\n    version: \"1.15\"\n\n- name: Pin the plugin\n  community.general.jenkins_plugin:\n    name: token-macro\n    state: pinned\n\n- name: Unpin the plugin\n  community.general.jenkins_plugin:\n    name: token-macro\n    state: unpinned\n\n- name: Enable the plugin\n  community.general.jenkins_plugin:\n    name: token-macro\n    state: enabled\n\n- name: Disable the plugin\n  community.general.jenkins_plugin:\n    name: token-macro\n    state: disabled\n\n- name: Uninstall plugin\n  community.general.jenkins_plugin:\n    name: build-pipeline-plugin\n    state: absent\n\n#\n# Example of how to authenticate\n#\n- name: Install plugin\n  community.general.jenkins_plugin:\n    name: build-pipeline-plugin\n    url_username: admin\n    url_password: p4ssw0rd\n    url: http://localhost:8888\n\n#\n# Example of how to authenticate with serverless deployment\n#\n- name: Update plugins on ECS Fargate Jenkins instance\n  community.general.jenkins_plugin:\n    # plugin name and version\n    name: ws-cleanup\n    version: '0.45'\n    # Jenkins home path mounted on ec2-helper VM (example)\n    jenkins_home: \"/mnt/{{ jenkins_instance }}\"\n    # matching the UID/GID to one in official Jenkins image\n    owner: 1000\n    group: 1000\n    # Jenkins instance URL and admin credentials\n    url: \"https://{{ jenkins_instance }}.com/\"\n    url_username: admin\n    url_password: p4ssw0rd\n  # make module work from EC2 which has local access\n  # to EFS mount as well as Jenkins URL\n  delegate_to: ec2-helper\n  vars:\n    jenkins_instance: foobar\n\n#\n# Example of a Play which handles Jenkins restarts during the state changes\n#\n- name: Jenkins Master play\n  hosts: jenkins-master\n  vars:\n    my_jenkins_plugins:\n      token-macro:\n        enabled: true\n      build-pipeline-plugin:\n        version: \"1.4.9\"\n        pinned: false\n        enabled: true\n  tasks:\n    - name: Install plugins without a specific version\n      community.general.jenkins_plugin:\n        name: \"{{ item.key }}\"\n      register: my_jenkins_plugin_unversioned\n      when: >\n        'version' not in item.value\n      with_dict: \"{{ my_jenkins_plugins }}\"\n\n    - name: Install plugins with a specific version\n      community.general.jenkins_plugin:\n        name: \"{{ item.key }}\"\n        version: \"{{ item.value['version'] }}\"\n      register: my_jenkins_plugin_versioned\n      when: >\n        'version' in item.value\n      with_dict: \"{{ my_jenkins_plugins }}\"\n\n    - name: Initiate the fact\n      ansible.builtin.set_fact:\n        jenkins_restart_required: false\n\n    - name: Check if restart is required by any of the versioned plugins\n      ansible.builtin.set_fact:\n        jenkins_restart_required: true\n      when: item.changed\n      with_items: \"{{ my_jenkins_plugin_versioned.results }}\"\n\n    - name: Check if restart is required by any of the unversioned plugins\n      ansible.builtin.set_fact:\n        jenkins_restart_required: true\n      when: item.changed\n      with_items: \"{{ my_jenkins_plugin_unversioned.results }}\"\n\n    - name: Restart Jenkins if required\n      ansible.builtin.service:\n        name: jenkins\n        state: restarted\n      when: jenkins_restart_required\n\n    - name: Wait for Jenkins to start up\n      ansible.builtin.uri:\n        url: http://localhost:8080\n        status_code: 200\n        timeout: 5\n      register: jenkins_service_status\n      # Keep trying for 5 mins in 5 sec intervals\n      retries: 60\n      delay: 5\n      until: >\n        'status' in jenkins_service_status and\n        jenkins_service_status['status'] == 200\n      when: jenkins_restart_required\n\n    - name: Reset the fact\n      ansible.builtin.set_fact:\n        jenkins_restart_required: false\n      when: jenkins_restart_required\n\n    - name: Plugin pinning\n      community.general.jenkins_plugin:\n        name: \"{{ item.key }}\"\n        state: \"{{ 'pinned' if item.value['pinned'] else 'unpinned'}}\"\n      when: >\n        'pinned' in item.value\n      with_dict: \"{{ my_jenkins_plugins }}\"\n\n    - name: Plugin enabling\n      community.general.jenkins_plugin:\n        name: \"{{ item.key }}\"\n        state: \"{{ 'enabled' if item.value['enabled'] else 'disabled'}}\"\n      when: >\n        'enabled' in item.value\n      with_dict: \"{{ my_jenkins_plugins }}\""
+  ],
+  "return_values": [
+    {
+      "name": "plugin",
+      "type": "string",
+      "description": "Plugin name. Returned: success Sample: \"build-pipeline-plugin\"",
+      "returned": "success"
+    },
+    {
+      "name": "state",
+      "type": "string",
+      "description": "State of the target, after execution. Returned: success Sample: \"present\"",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/jenkins_plugin_module#ansible-collections-community-general-jenkins-plugin-module.html",
+  "parsed_at": "2026-04-11T13:53:17.258608"
+}

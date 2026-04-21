@@ -1,0 +1,42 @@
+{
+  "collection_ns": "ansible_builtin",
+  "collection": "ansible.builtin",
+  "module": "ansible.builtin.debug",
+  "slug": "debug_module#ansible-collections-ansible-builtin-debug-module",
+  "description": "This module prints statements during execution and can be useful for debugging variables or expressions without necessarily halting the playbook.",
+  "parameters": [
+    {
+      "name": "msg",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "Hello",
+      "choices": [],
+      "description": "The customized message that is printed. If omitted, prints a generic message. Default: \"Hello world!\""
+    },
+    {
+      "name": "var",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A variable name to debug. Mutually exclusive with the msg option. Be aware that this option already runs in Jinja2 context and has an implicit {{ }} wrapping, so you should not be using Jinja2 delimiters unless you are looking for double interpolation."
+    },
+    {
+      "name": "verbosity",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "0",
+      "choices": [],
+      "description": "A number that controls when the debug is run, if you set to 3 it will only run debug when -vvv or above. Default: 0"
+    }
+  ],
+  "examples": [
+    "- name: Print the gateway for each host when defined\n  ansible.builtin.debug:\n    msg: System {{ inventory_hostname }} has gateway {{ ansible_default_ipv4.gateway }}\n  when: ansible_default_ipv4.gateway is defined\n\n- name: Get uptime information\n  ansible.builtin.shell: /usr/bin/uptime\n  register: result\n\n- name: Print return information from the previous task\n  ansible.builtin.debug:\n    var: result\n    verbosity: 2\n\n- name: Display all variables/facts known for a host\n  ansible.builtin.debug:\n    var: hostvars[inventory_hostname]\n    verbosity: 4\n\n- name: Prints two lines of messages, but only if there is an environment value set\n  ansible.builtin.debug:\n    msg:\n    - \"Provisioning based on YOUR_KEY which is: {{ lookup('ansible.builtin.env', 'YOUR_KEY') }}\"\n    - \"These servers were built using the password of '{{ password_used }}'. Please retain this for later use.\""
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/debug_module#ansible-collections-ansible-builtin-debug-module.html",
+  "parsed_at": "2026-04-11T13:52:51.512684"
+}

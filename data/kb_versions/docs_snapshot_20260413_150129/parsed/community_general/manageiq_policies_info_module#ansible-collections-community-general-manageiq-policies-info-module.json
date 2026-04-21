@@ -1,0 +1,134 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.manageiq_policies_info",
+  "slug": "manageiq_policies_info_module#ansible-collections-community-general-manageiq-policies-info-module",
+  "description": "The manageiq_policies module supports listing policy_profiles in ManageIQ.",
+  "parameters": [
+    {
+      "name": "manageiq_connection",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "ManageIQ connection configuration information."
+    },
+    {
+      "name": "ca_cert",
+      "aliases": [
+        "ca_bundle_path"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The path to a CA bundle file or directory with certificates."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "ManageIQ password. MIQ_PASSWORD environment variable if set. Otherwise, required if no token is passed in."
+    },
+    {
+      "name": "token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "ManageIQ token. MIQ_TOKEN environment variable if set. Otherwise, required if no username or password is passed in."
+    },
+    {
+      "name": "url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "ManageIQ environment URL. MIQ_URL environment variable if set. Otherwise, it is required to pass it."
+    },
+    {
+      "name": "username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "ManageIQ username. MIQ_USERNAME environment variable if set. Otherwise, required if no token is passed in."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [
+        "verify_ssl"
+      ],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether SSL certificates should be verified for HTTPS requests. Choices: false true ← (default)"
+    },
+    {
+      "name": "resource_id",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The ID of the resource to obtain the profile for. Must be specified if resource_name is not set. Both options are mutually exclusive."
+    },
+    {
+      "name": "resource_name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The name of the resource to obtain the profile for. Must be specified if resource_id is not set. Both options are mutually exclusive."
+    },
+    {
+      "name": "resource_type",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [
+        "\"provider\"",
+        "\"host\"",
+        "\"vm\"",
+        "\"blueprint\"",
+        "\"category\"",
+        "\"cluster\"",
+        "\"data store\"",
+        "\"group\"",
+        "\"resource pool\"",
+        "\"service\"",
+        "\"service template\"",
+        "\"template\"",
+        "\"tenant\"",
+        "\"user\""
+      ],
+      "description": "The type of the resource to obtain the profile for. Choices: \"provider\" \"host\" \"vm\" \"blueprint\" \"category\" \"cluster\" \"data store\" \"group\" \"resource pool\" \"service\" \"service template\" \"template\" \"tenant\" \"user\""
+    }
+  ],
+  "examples": [
+    "- name: List current policy_profile and policies for a provider in ManageIQ\n  community.general.manageiq_policies_info:\n    resource_name: 'EngLab'\n    resource_type: 'provider'\n    manageiq_connection:\n      url: 'http://127.0.0.1:3000'\n      username: 'admin'\n      password: 'smartvm'\n  register: result"
+  ],
+  "return_values": [
+    {
+      "name": "profiles",
+      "type": "list",
+      "description": "List current policy_profile and policies for a provider in ManageIQ. Returned: always Sample: [{\"policies\": [{\"active\": true, \"description\": \"OpenSCAP\", \"name\": \"openscap policy\"}, {\"active\": \"true,\", \"description\": \"Analyse incoming container images\", \"name\": \"analyse incoming container images\"}, {\"active\": true, \"description\": \"Schedule compliance after smart state analysis\", \"name\": \"schedule compliance after smart state analysis\"}], \"profile_description\": \"OpenSCAP profile\", \"profile_name\": \"openscap profile\"}]",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/manageiq_policies_info_module#ansible-collections-community-general-manageiq-policies-info-module.html",
+  "parsed_at": "2026-04-11T13:53:20.085033"
+}

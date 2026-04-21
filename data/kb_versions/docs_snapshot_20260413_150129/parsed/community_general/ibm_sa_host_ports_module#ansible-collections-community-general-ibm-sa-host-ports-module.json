@@ -1,0 +1,90 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.ibm_sa_host_ports",
+  "slug": "ibm_sa_host_ports_module#ansible-collections-community-general-ibm-sa-host-ports-module",
+  "description": "This module adds ports to or removes them from the hosts on IBM Spectrum Accelerate Family storage systems.",
+  "parameters": [
+    {
+      "name": "endpoints",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The hostname or management IP of Spectrum Accelerate storage system."
+    },
+    {
+      "name": "fcaddress",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Fiber channel address."
+    },
+    {
+      "name": "host",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Host name."
+    },
+    {
+      "name": "iscsi_name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The iSCSI initiator name."
+    },
+    {
+      "name": "num_of_visible_targets",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Number of visible targets."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Password for username on the Spectrum Accelerate storage system."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Host ports state. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "username",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Management user on the Spectrum Accelerate storage system."
+    }
+  ],
+  "examples": [
+    "- name: Add ports for host.\n  community.general.ibm_sa_host_ports:\n    host: test_host\n    iscsi_name: iqn.1994-05.com***\n    username: admin\n    password: secret\n    endpoints: hostdev-system\n    state: present\n\n- name: Remove ports for host.\n  community.general.ibm_sa_host_ports:\n    host: test_host\n    iscsi_name: iqn.1994-05.com***\n    username: admin\n    password: secret\n    endpoints: hostdev-system\n    state: absent"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/ibm_sa_host_ports_module#ansible-collections-community-general-ibm-sa-host-ports-module.html",
+  "parsed_at": "2026-04-11T13:53:15.282948"
+}

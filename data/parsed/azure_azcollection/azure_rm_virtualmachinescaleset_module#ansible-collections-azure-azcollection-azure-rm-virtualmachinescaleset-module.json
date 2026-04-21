@@ -1,0 +1,697 @@
+{
+  "collection_ns": "azure_azcollection",
+  "collection": "azure.azcollection",
+  "module": "azure.azcollection.azure_rm_virtualmachinescaleset",
+  "slug": "azure_rm_virtualmachinescaleset_module#ansible-collections-azure-azcollection-azure-rm-virtualmachinescaleset-module",
+  "description": "Create and update a virtual machine scale set.",
+  "parameters": [
+    {
+      "name": "ad_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory username. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "adfs_authority_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure AD authority url. Use when authenticating with Username/password, and has your own ADFS authority."
+    },
+    {
+      "name": "admin_password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Password for the admin username. Not required if the os_type is Linux and SSH password authentication is disabled by setting ssh_password_enabled=false."
+    },
+    {
+      "name": "admin_username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Admin username used to access the host after it is created. Required when creating a VM."
+    },
+    {
+      "name": "api_profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "Selects an API profile to use when communicating with Azure services. Default value of latest is appropriate for public clouds; future values will allow use with Azure Stack. Default: \"latest\""
+    },
+    {
+      "name": "append_tags",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Use to control if tags field is canonical or just appends to existing tags. When canonical, any tags not found in the tags parameter will be removed from the object’s metadata. Choices: false true ← (default)"
+    },
+    {
+      "name": "application_gateway",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Application gateway name."
+    },
+    {
+      "name": "application_security_groups",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies an array of references to application security group. Resource ID of the application security group."
+    },
+    {
+      "name": "auth_source",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "az",
+      "choices": [
+        "\"auto\" ← (default)",
+        "\"cli\"",
+        "\"credential_file\"",
+        "\"env\"",
+        "\"msi\""
+      ],
+      "description": "Controls the source of the credentials to use for authentication. Can also be set via the ANSIBLE_AZURE_AUTH_SOURCE environment variable. When set to auto (the default) the precedence is module parameters -> env -> credential_file -> cli. When set to env, the credentials will be read from the environment variables When set to credential_file, it will read the profile from ~/.azure/credentials. When set to cli, the credentials will be sources from the Azure CLI profile. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if more than one is present otherwise the default az cli subscription is used. When set to msi, the host machine must be an azure resource with an enabled MSI extension. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if the resource is granted access to more than one subscription, otherwise the first subscription is chosen. The msi was added in Ansible 2.6. Choices: \"auto\" ← (default) \"cli\" \"credential_file\" \"env\" \"msi\""
+    },
+    {
+      "name": "capacity",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "1",
+      "choices": [],
+      "description": "Capacity of VMSS. Default: 1"
+    },
+    {
+      "name": "cert_validation_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ignore\"",
+        "\"validate\""
+      ],
+      "description": "Controls the certificate validation behavior for Azure endpoints. By default, all modules will validate the server certificate, but when an HTTPS proxy is in use, or against Azure Stack, it may be necessary to disable this behavior by passing ignore. Can also be set via credential file profile or the AZURE_CERT_VALIDATION environment variable. Choices: \"ignore\" \"validate\""
+    },
+    {
+      "name": "client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client ID. Use when authenticating with a Service Principal or Managed Identity (msi). Can also be set via the AZURE_CLIENT_ID environment variable."
+    },
+    {
+      "name": "cloud_environment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "AzureCloud",
+      "choices": [],
+      "description": "For cloud environments other than the US public cloud, the environment name (as defined by Azure Python SDK, eg, AzureChinaCloud, AzureUSGovernment), or a metadata discovery endpoint URL (required for Azure Stack). Can also be set via credential file profile or the AZURE_CLOUD_ENVIRONMENT environment variable. Default: \"AzureCloud\""
+    },
+    {
+      "name": "custom_data",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Data which is made available to the virtual machine and used by e.g., cloud-init. Many images in the marketplace are not cloud-init ready. Thus, data sent to custom_data would be ignored. If the image you are attempting to use is not listed in https://docs.microsoft.com/en-us/azure/virtual-machines/linux/using-cloud-init#cloud-init-overview, follow these steps https://docs.microsoft.com/en-us/azure/virtual-machines/linux/cloudinit-prepare-custom-image."
+    },
+    {
+      "name": "data_disks",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Describes list of data disks."
+    },
+    {
+      "name": "disable_instance_discovery",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Determines whether or not instance discovery is performed when attempting to authenticate. Setting this to true will completely disable both instance discovery and authority validation. This functionality is intended for use in scenarios where the metadata endpoint cannot be reached such as in private clouds or Azure Stack. The process of instance discovery entails retrieving authority metadata from https://login.microsoft.com/ to validate the authority. By setting this to **True**, the validation of the authority is disabled. As a result, it is crucial to ensure that the configured authority host is valid and trustworthy. Set via credential file profile or the AZURE_DISABLE_INSTANCE_DISCOVERY environment variable. Choices: false ← (default) true"
+    },
+    {
+      "name": "enable_accelerated_networking",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Indicates whether user wants to allow accelerated networking for virtual machines in scaleset being created. Choices: false true"
+    },
+    {
+      "name": "ephemeral_os_disk",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Parameters of ephemeral disk settings that can be specified for operating system disk. Ephemeral OS disk is only supported for VMS Instances using Managed Disk. Choices: false true"
+    },
+    {
+      "name": "eviction_policy",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"Deallocate\"",
+        "\"Delete\""
+      ],
+      "description": "Specifies the eviction policy for the Azure Spot virtual machine. Requires priority to be set to Spot. Choices: \"Deallocate\" \"Delete\""
+    },
+    {
+      "name": "identity",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Identity for the Object"
+    },
+    {
+      "name": "image",
+      "aliases": [],
+      "type": "any",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies the image used to build the VM. If a string, the image is sourced from a custom image based on the name. If a dict with the keys publisher, offer, sku, and version, the image is sourced from a Marketplace image. Note that set version=latest to get the most recent version of a given image. If a dict with the keys name and resource_group, the image is sourced from a custom image based on the name and resource_group set. Note that the key resource_group is optional and if omitted, all images in the subscription will be searched for by name. Custom image support was added in Ansible 2.5. For community images, a dict with the keys community_gallery_image_id. Specified the community gallery image unique id for vm demployment. The community_gallery_image_id can be fetched from shared gallery image GET call. Required when creating."
+    },
+    {
+      "name": "load_balancer",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Load balancer name."
+    },
+    {
+      "name": "location",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Valid Azure location. Defaults to location of the resource group."
+    },
+    {
+      "name": "log_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "log_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "managed_disk_type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"Standard_LRS\"",
+        "\"Premium_LRS\"",
+        "\"StandardSSD_LRS\"",
+        "\"UltraSSD_LRS\"",
+        "\"Premium_ZRS\"",
+        "\"StandardSSD_ZRS\""
+      ],
+      "description": "Managed disk type. Choices: \"Standard_LRS\" \"Premium_LRS\" \"StandardSSD_LRS\" \"UltraSSD_LRS\" \"Premium_ZRS\" \"StandardSSD_ZRS\""
+    },
+    {
+      "name": "max_price",
+      "aliases": [],
+      "type": "float",
+      "required": false,
+      "default": "price",
+      "choices": [],
+      "description": "Specifies the maximum price you are willing to pay for a Azure Spot VM/VMSS. This price is in US Dollars. -1 indicates default price to be up-to on-demand. Requires priority to be set to Spot. Default: -1.0"
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the virtual machine."
+    },
+    {
+      "name": "orchestration_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"Flexible\" ← (default)",
+        "\"Uniform\""
+      ],
+      "description": "Specifies the orchestration mode for the virtual machine scale set. When orchestration_mode=Flexible, public_ip_per_vm=True must be set. When orchestration_mode=Flexible, platform_fault_domain_count must be set. When orchestration_mode=Flexible, single_placement_group=False must be set. When orchestration_mode=Flexible, it cannot be configured overprovision. When orchestration_mode=Flexible, it cannot be configured upgrade_policy and configured when orchestration_mode=Uniform. Choices: \"Flexible\" ← (default) \"Uniform\""
+    },
+    {
+      "name": "os_disk_caching",
+      "aliases": [
+        "disk_caching"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ReadOnly\" ← (default)",
+        "\"ReadWrite\""
+      ],
+      "description": "Type of OS disk caching. Choices: \"ReadOnly\" ← (default) \"ReadWrite\""
+    },
+    {
+      "name": "os_disk_encryption_set",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The resource ID of the disk encryption set for the OS disk."
+    },
+    {
+      "name": "os_disk_size_gb",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies the size of the operating system disk in gigabytes. This can be used to overwrite the size of the disk in a virtual machine image."
+    },
+    {
+      "name": "os_type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"Windows\"",
+        "\"Linux\" ← (default)",
+        "\"windows\"",
+        "\"linux\""
+      ],
+      "description": "Base type of operating system. Choices: \"Windows\" \"Linux\" ← (default) \"windows\" \"linux\""
+    },
+    {
+      "name": "overprovision",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Specifies whether the Virtual Machine Scale Set should be overprovisioned. Choices: false true"
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory user password. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "plan",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Third-party billing plan for the VM."
+    },
+    {
+      "name": "platform_fault_domain_count",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "1",
+      "choices": [],
+      "description": "Fault Domain count for each placement group. Default: 1"
+    },
+    {
+      "name": "priority",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"None\"",
+        "\"Spot\"",
+        "\"Regular\""
+      ],
+      "description": "Priority of the VMSS. None is the equivalent of Regular VM. Choices: \"None\" \"Spot\" \"Regular\""
+    },
+    {
+      "name": "private_ip_address_version",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "is",
+      "choices": [
+        "\"IPv4\"",
+        "\"IPv6\""
+      ],
+      "description": "Available from Api-Version 2017-03-30 onwards, it represents whether the specific ipconfiguration is IPv4 or IPv6. Default is taken as IPv4. Choices: \"IPv4\" \"IPv6\""
+    },
+    {
+      "name": "profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security profile found in ~/.azure/credentials file."
+    },
+    {
+      "name": "public_ip_per_vm",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Assign a public IP to each virtual machine of the scale set Choices: false ← (default) true"
+    },
+    {
+      "name": "remove_on_absent",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[",
+      "choices": [],
+      "description": "When removing a VM using state=absent, also remove associated resources. It can be all or a list with any of the following [‘network_interfaces’, ‘virtual_storage’, ‘public_ips’]. Any other input will be ignored. Default: [\"all\"]"
+    },
+    {
+      "name": "resource_group",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the resource group containing the virtual machine scale set."
+    },
+    {
+      "name": "scale_in_policy",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"Default\"",
+        "\"NewestVM\"",
+        "\"OldestVM\""
+      ],
+      "description": "define the order in which vmss instances are scaled-in Choices: \"Default\" \"NewestVM\" \"OldestVM\""
+    },
+    {
+      "name": "secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client secret. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "security_group",
+      "aliases": [
+        "security_group_name"
+      ],
+      "type": "any",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Existing security group with which to associate the subnet. It can be the security group name which is in the same resource group. It can be the resource ID. It can be a dict which contains name and resource_group of the security group."
+    },
+    {
+      "name": "security_profile",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies the Security related profile settings for the virtual machine sclaset."
+    },
+    {
+      "name": "short_hostname",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Short host name."
+    },
+    {
+      "name": "single_placement_group",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "When true this limits the scale set to a single placement group, of max size 100 virtual machines. Choices: false ← (default) true"
+    },
+    {
+      "name": "ssh_password_enabled",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When the os_type is Linux, setting ssh_password_enabled=false will disable SSH password authentication and require use of SSH keys. Choices: false true ← (default)"
+    },
+    {
+      "name": "ssh_public_keys",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "location",
+      "choices": [],
+      "description": "For os_type=Linux provide a list of SSH keys. Each item in the list should be a dictionary where the dictionary contains two keys, path and key_data. Set the path to the default location of the authorized_keys files. On an Enterprise Linux host, for example, the path=/home/<admin username>/.ssh/authorized_keys. Set key_data to the actual value of the public key."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)"
+      ],
+      "description": "Assert the state of the virtual machine scale set. State present will check that the machine exists with the requested configuration. If the configuration of the existing machine does not match, the machine will be updated. State absent will remove the virtual machine scale set. Choices: \"absent\" \"present\" ← (default)"
+    },
+    {
+      "name": "subnet_name",
+      "aliases": [
+        "subnet"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Subnet name."
+    },
+    {
+      "name": "subscription_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Your Azure subscription Id."
+    },
+    {
+      "name": "tags",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Dictionary of string:string pairs to assign as metadata to the object. Metadata tags on the object will be updated with any provided values. To remove tags set append_tags option to false. Currently, Azure DNS zones and Traffic Manager services also don’t allow the use of spaces in the tag. Azure Front Door doesn’t support the use of Azure Automation and Azure CDN only support 15 tags on resources."
+    },
+    {
+      "name": "tenant",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure tenant ID. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "terminate_event_timeout_minutes",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "timeout time for termination notification event in range between 5 and 15"
+    },
+    {
+      "name": "thumbprint",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The thumbprint of the private key specified in x509_certificate_path. Use when authenticating with a Service Principal. Required if x509_certificate_path is defined."
+    },
+    {
+      "name": "tier",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"Basic\"",
+        "\"Standard\""
+      ],
+      "description": "SKU Tier. Choices: \"Basic\" \"Standard\""
+    },
+    {
+      "name": "upgrade_policy",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"Manual\"",
+        "\"Automatic\""
+      ],
+      "description": "Upgrade policy. Required when creating the Azure virtual machine scale sets. Choices: \"Manual\" \"Automatic\""
+    },
+    {
+      "name": "virtual_network_name",
+      "aliases": [
+        "virtual_network"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Virtual Network name."
+    },
+    {
+      "name": "virtual_network_resource_group",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "When creating a virtual machine, if a specific virtual network from another resource group should be used. Use this parameter to specify the resource group to use."
+    },
+    {
+      "name": "vm_size",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "varies",
+        "depending",
+        "on",
+        "the",
+        "subscription",
+        "and",
+        "location"
+      ],
+      "description": "A valid Azure VM size value. For example, Standard_D4. The list of choices varies depending on the subscription and location. Check your subscription for available choices."
+    },
+    {
+      "name": "x509_certificate_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the X509 certificate used to create the service principal in PEM format. The certificate must be appended to the private key. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "zones",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A list of Availability Zones for your virtual machine scale set."
+    }
+  ],
+  "examples": [
+    "- name: Create VMSS\n  azure_rm_virtualmachinescaleset:\n    resource_group: myResourceGroup\n    name: testvmss\n    vm_size: Standard_DS1_v2\n    capacity: 2\n    virtual_network_name: testvnet\n    upgrade_policy: Manual\n    subnet_name: testsubnet\n    terminate_event_timeout_minutes: 10\n    scale_in_policy: NewestVM\n    admin_username: \"{{ username }}\"\n    ssh_password_enabled: false\n    ssh_public_keys:\n      - path: /home/adminUser/.ssh/authorized_keys\n        key_data: < insert your ssh public key here... >\n    managed_disk_type: Standard_LRS\n    image:\n      offer: 0001-com-ubuntu-server-focal\n      publisher: canonical\n      sku: 20_04-lts-gen2\n      version: latest\n    data_disks:\n      - lun: 0\n        disk_size_gb: 64\n        caching: ReadWrite\n        managed_disk_type: Standard_LRS\n\n- name: Create VMSS with an image that requires plan information\n  azure_rm_virtualmachinescaleset:\n    resource_group: myResourceGroup\n    name: testvmss\n    vm_size: Standard_DS1_v2\n    capacity: 3\n    virtual_network_name: testvnet\n    upgrade_policy: Manual\n    subnet_name: testsubnet\n    admin_username: \"{{ username }}\"\n    ssh_password_enabled: false\n    ssh_public_keys:\n      - path: /home/adminUser/.ssh/authorized_keys\n        key_data: < insert your ssh public key here... >\n    managed_disk_type: Standard_LRS\n    image:\n      offer: cis-ubuntu-linux-1804-l1\n      publisher: center-for-internet-security-inc\n      sku: Stable\n      version: latest\n    plan:\n      name: cis-ubuntu-linux-1804-l1\n      product: cis-ubuntu-linux-1804-l1\n      publisher: center-for-internet-security-inc\n    data_disks:\n      - lun: 0\n        disk_size_gb: 64\n        caching: ReadWrite\n        managed_disk_type: Standard_LRS\n\n- name: Create a VMSS with a custom image\n  azure_rm_virtualmachinescaleset:\n    resource_group: myResourceGroup\n    name: testvmss\n    vm_size: Standard_DS1_v2\n    capacity: 2\n    virtual_network_name: testvnet\n    upgrade_policy: Manual\n    subnet_name: testsubnet\n    admin_username: \"{{ username }}\"\n    admin_password: \"{{ password }}\"\n    managed_disk_type: Standard_LRS\n    image: customimage001\n\n- name: Create a VMSS with a community gallery image ID\n  azure_rm_virtualmachinescaleset:\n    resource_group: myResourceGroup\n    name: testvmss\n    vm_size: Standard_D8_v4\n    admin_username: testuser\n    single_placement_group: false\n    platform_fault_domain_count: 1\n    public_ip_per_vm: true\n    ssh_password_enabled: false\n    ssh_public_keys:\n      - path: /home/testuser/.ssh/authorized_keys\n        key_data: \"ssh-rsa ********* xiuxi.sun@qq.com\"\n    virtual_network_name: VMSStestVnet\n    subnet_name: VMSStestSubnet\n    managed_disk_type: Standard_LRS\n    orchestration_mode: Flexible\n    os_disk_caching: ReadWrite\n    image:\n      community_gallery_image_id: \"/CommunityGalleries/yellowbrick-fc7e81f1-87dd-4989-9ca8-03743762e873/Images/Ubuntu-5.15.0-1035-azure_22.04\"\n    data_disks:\n      - lun: 0\n        disk_size_gb: 64\n        caching: ReadWrite\n        managed_disk_type: Standard_LRS\n\n- name: Create a VMSS with over 100 instances\n  azure_rm_virtualmachinescaleset:\n    resource_group: myResourceGroup\n    name: testvmss\n    vm_size: Standard_DS1_v2\n    capacity: 120\n    single_placement_group: false\n    virtual_network_name: testvnet\n    upgrade_policy: Manual\n    subnet_name: testsubnet\n    admin_username: \"{{ username }}\"\n    admin_password: \"{{ password }}\"\n    managed_disk_type: Standard_LRS\n    image: customimage001\n\n- name: Create a VMSS with a custom image from a particular resource group\n  azure_rm_virtualmachinescaleset:\n    resource_group: myResourceGroup\n    name: testvmss\n    vm_size: Standard_DS1_v2\n    capacity: 2\n    virtual_network_name: testvnet\n    upgrade_policy: Manual\n    subnet_name: testsubnet\n    admin_username: \"{{ username }}\"\n    admin_password: \"{{ password }}\"\n    managed_disk_type: Standard_LRS\n    image:\n      name: customimage001\n      resource_group: myResourceGroup\n\n- name: Create a VMSS with Spot Instance\n  azure_rm_virtualmachinescaleset:\n    resource_group: myResourceGroup\n    name: testvmss\n    vm_size: Standard_DS1_v2\n    capacity: 5\n    priority: Spot\n    eviction_policy: Deallocate\n    virtual_network_name: testvnet\n    upgrade_policy: Manual\n    subnet_name: testsubnet\n    admin_username: \"{{ username }}\"\n    admin_password: \"{{ password }}\"\n    managed_disk_type: Standard_LRS\n    image: customimage001\n\n- name: Create VMSS with security group\n  azure_rm_virtualmachinescaleset:\n    resource_group: \"{{ resource_group }}\"\n    name: testVMSS{{ rpfx }}\n    vm_size: Standard_D4s_v3\n    admin_username: testuser\n    single_placement_group: false\n    platform_fault_domain_count: 1\n    public_ip_per_vm: true\n    ssh_password_enabled: false\n    ssh_public_keys:\n      - path: /home/testuser/.ssh/authorized_keys\n        key_data: \"ssh-rsa ****\"\n    virtual_network_name: VMSStestVnet\n    subnet_name: VMSStestSubnet\n    managed_disk_type: Standard_LRS\n    orchestration_mode: Flexible\n    os_disk_caching: ReadWrite\n    security_profile:\n      uefi_settings:\n        secure_boot_enabled: true\n        v_tpm_enabled: false\n      encryption_at_host: false\n      security_type: TrustedLaunch\n    image:\n      offer: 0001-com-ubuntu-server-jammy\n      publisher: Canonical\n      sku: 22_04-lts-gen2\n      version: latest\n    data_disks:\n      - lun: 0\n        disk_size_gb: 64\n        caching: ReadWrite\n        managed_disk_type: Standard_LRS"
+  ],
+  "return_values": [
+    {
+      "name": "azure_vmss",
+      "type": "dictionary",
+      "description": "Facts about the current state of the object. Note that facts are not part of the registered output but available directly. Returned: always Sample: {\"constrained_maximum_capacity\": false, \"etag\": \"3\", \"id\": \"/subscriptions/xxx-xxx/resourceGroups/v-xisuRG02/providers/Microsoft.Compute/virtualMachineScaleSets/testVMSStestvmss\", \"location\": \"eastus\", \"name\": \"testVMSStestvmss\", \"orchestration_mode\": \"Flexible\", \"platform_fault_domain_count\": 1, \"provisioning_state\": \"Succeeded\", \"single_placement_group\": false, \"sku\": {\"capacity\": 1, \"name\": \"Standard_A1_v2\", \"tier\": \"Standard\"}, \"tags\": {\"key2\": \"value2\", \"key3\": \"value3\"}, \"time_created\": \"2025-04-22T08:03:29.427822Z\", \"type\": \"Microsoft.Compute/virtualMachineScaleSets\", \"unique_id\": \"da4393f5-6060-4a0e-8ae5-7616316402b8\", \"upgrade_policy\": {\"mode\": \"Manual\"}, \"virtual_machine_profile\": {\"network_profile\": {\"network_api_version\": \"2020-11-01\", \"network_interface_configurations\": [{\"auxiliary_mode\": \"None\", \"auxiliary_sku\": \"None\", \"delete_option\": \"Delete\", \"disable_tcp_state_tracking\": false, \"dns_settings\": {\"dns_servers\": []}, \"enable_ip_forwarding\": false, \"ip_configurations\": [{\"application_gateway_backend_address_pools\": [], \"application_security_groups\": [{\"id\": \"/subscriptions/xxx-xxx/resourceGroups/v-xisuRG02/providers/Microsoft.Network/applicationSecurityGroups/apptestvmss02\"}, {\"id\": \"/subscriptions/xxx-xxx/resourceGroups/v-xisuRG02/providers/Microsoft.Network/applicationSecurityGroups/apptestvmss\"}], \"load_balancer_backend_address_pools\": [], \"name\": \"default\", \"primary\": true, \"private_ip_address_version\": \"IPv4\", \"public_ip_address_configuration\": {\"idle_timeout_in_minutes\": 4, \"ip_tags\": [], \"name\": \"instancepublicip\", \"public_ip_address_version\": \"IPv4\"}, \"subnet\": {\"id\": \"/subscriptions/xxx-xxx/resourceGroups/v-xisuRG02/providers/Microsoft.Network/virtualNetworks/VMSStestVnet/subnets/VMSStestSubnet\"}}], \"name\": \"testVMSStestvmss\", \"primary\": true}]}, \"os_profile\": {\"admin_username\": \"testuser\", \"allow_extension_operations\": true, \"computer_name_prefix\": \"testVMSStestvmss\", \"linux_configuration\": {\"disable_password_authentication\": true, \"patch_settings\": {\"assessment_mode\": \"ImageDefault\", \"patch_mode\": \"ImageDefault\"}, \"provision_vm_agent\": true, \"ssh\": {\"public_keys\": [{\"key_data\": \"ssh-rsa xxxxxxxxxx xx.yy@qq.com\", \"path\": \"/home/testuser/.ssh/authorized_keys\"}]}}, \"require_guest_provision_signal\": true, \"secrets\": []}, \"storage_profile\": {\"data_disks\": [{\"caching\": \"ReadWrite\", \"create_option\": \"Empty\", \"delete_option\": \"Delete\", \"disk_size_gb\": 64, \"lun\": 0, \"managed_disk\": {\"storage_account_type\": \"Standard_LRS\"}}], \"image_reference\": {\"offer\": \"0001-com-ubuntu-server-focal\", \"publisher\": \"Canonical\", \"sku\": \"20_04-lts\", \"version\": \"20.04.202504030\"}, \"os_disk\": {\"caching\": \"ReadWrite\", \"create_option\": \"FromImage\", \"delete_option\": \"Delete\", \"disk_size_gb\": 30, \"managed_disk\": {\"storage_account_type\": \"Standard_LRS\"}, \"os_type\": \"Linux\"}}, \"time_created\": \"2025-04-22T08:53:17.201851Z\"}}",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualmachinescaleset_module.html",
+  "parsed_at": "2026-04-13T16:29:41.601811"
+}

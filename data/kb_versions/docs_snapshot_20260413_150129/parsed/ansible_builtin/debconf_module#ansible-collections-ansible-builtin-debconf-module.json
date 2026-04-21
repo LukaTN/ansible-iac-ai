@@ -1,0 +1,81 @@
+{
+  "collection_ns": "ansible_builtin",
+  "collection": "ansible.builtin",
+  "module": "ansible.builtin.debconf",
+  "slug": "debconf_module#ansible-collections-ansible-builtin-debconf-module",
+  "description": "Configure a .deb package using debconf-set-selections.",
+  "parameters": [
+    {
+      "name": "name",
+      "aliases": [
+        "pkg"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of package to configure."
+    },
+    {
+      "name": "question",
+      "aliases": [
+        "selection",
+        "setting"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A debconf configuration setting."
+    },
+    {
+      "name": "unseen",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Do not set seen flag when pre-seeding. Choices: false ← (default) true"
+    },
+    {
+      "name": "value",
+      "aliases": [
+        "answer"
+      ],
+      "type": "any",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Value to set the configuration to. After Ansible 2.17, value is of type raw."
+    },
+    {
+      "name": "vtype",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"boolean\"",
+        "\"error\"",
+        "\"multiselect\"",
+        "\"note\"",
+        "\"password\"",
+        "\"seen\"",
+        "\"select\"",
+        "\"string\"",
+        "\"text\"",
+        "\"title\""
+      ],
+      "description": "The type of the value supplied. It is highly recommended to add no_log=True to task while specifying vtype=password. seen was added in Ansible 2.2. After Ansible 2.17, user can specify value as a list, if vtype is set as multiselect. Choices: \"boolean\" \"error\" \"multiselect\" \"note\" \"password\" \"seen\" \"select\" \"string\" \"text\" \"title\""
+    }
+  ],
+  "examples": [
+    "- name: Set default locale to fr_FR.UTF-8\n  ansible.builtin.debconf:\n    name: locales\n    question: locales/default_environment_locale\n    value: fr_FR.UTF-8\n    vtype: select\n\n- name: Set to generate locales\n  ansible.builtin.debconf:\n    name: locales\n    question: locales/locales_to_be_generated\n    value: en_US.UTF-8 UTF-8, fr_FR.UTF-8 UTF-8\n    vtype: multiselect\n\n- name: Accept oracle license\n  ansible.builtin.debconf:\n    name: oracle-java7-installer\n    question: shared/accepted-oracle-license-v1-1\n    value: 'true'\n    vtype: select\n\n- name: Specifying package you can register/return the list of questions and current values\n  ansible.builtin.debconf:\n    name: tzdata\n\n- name: Pre-configure tripwire site passphrase\n  ansible.builtin.debconf:\n    name: tripwire\n    question: tripwire/site-passphrase\n    value: \"{{ site_passphrase }}\"\n    vtype: password\n  no_log: True"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/debconf_module#ansible-collections-ansible-builtin-debconf-module.html",
+  "parsed_at": "2026-04-11T13:52:51.493746"
+}

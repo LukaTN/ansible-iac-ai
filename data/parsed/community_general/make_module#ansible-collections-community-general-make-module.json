@@ -1,0 +1,121 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.make",
+  "slug": "make_module#ansible-collections-community-general-make-module",
+  "description": "Run targets in a Makefile.",
+  "parameters": [
+    {
+      "name": "chdir",
+      "aliases": [],
+      "type": "path",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Change to this directory before running make."
+    },
+    {
+      "name": "file",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Use a custom Makefile."
+    },
+    {
+      "name": "jobs",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Set the number of make jobs to run concurrently. Typically if set, this would be the number of processors and/or threads available to the machine. This is not supported by all make implementations."
+    },
+    {
+      "name": "make",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Use a specific make binary."
+    },
+    {
+      "name": "params",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Any extra parameters to pass to make. If the value is empty, only the key is used. For example, FOO: produces FOO, not FOO=."
+    },
+    {
+      "name": "target",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The target to run. Typically this would be something like install, test, or all. target and targets are mutually exclusive."
+    },
+    {
+      "name": "targets",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The list of targets to run. Typically this would be something like install, test, or all. target and targets are mutually exclusive."
+    }
+  ],
+  "examples": [
+    "- name: Build the default target\n  community.general.make:\n    chdir: /home/ubuntu/cool-project\n\n- name: Run 'install' target as root\n  community.general.make:\n    chdir: /home/ubuntu/cool-project\n    target: install\n  become: true\n\n- name: Build 'all' target with extra arguments\n  community.general.make:\n    chdir: /home/ubuntu/cool-project\n    target: all\n    params:\n      NUM_THREADS: 4\n      BACKEND: lapack\n\n- name: Build 'all' target with a custom Makefile\n  community.general.make:\n    chdir: /home/ubuntu/cool-project\n    target: all\n    file: /some-project/Makefile\n\n- name: build arm64 kernel on FreeBSD, with 16 parallel jobs\n  community.general.make:\n    chdir: /usr/src\n    jobs: 16\n    target: buildkernel\n    params:\n      # This adds -DWITH_FDT to the command line:\n      -DWITH_FDT:\n      # The following adds TARGET=arm64 TARGET_ARCH=aarch64 to the command line:\n      TARGET: arm64\n      TARGET_ARCH: aarch64"
+  ],
+  "return_values": [
+    {
+      "name": "chdir",
+      "type": "string",
+      "description": "The value of the module parameter chdir. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "command",
+      "type": "string",
+      "description": "The command built and executed by the module. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "file",
+      "type": "string",
+      "description": "The value of the module parameter file. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "jobs",
+      "type": "integer",
+      "description": "The value of the module parameter jobs. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "params",
+      "type": "dictionary",
+      "description": "The value of the module parameter params. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "target",
+      "type": "string",
+      "description": "The value of the module parameter target. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "targets",
+      "type": "string",
+      "description": "The value of the module parameter targets. Returned: success",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/make_module.html",
+  "parsed_at": "2026-04-13T16:29:52.585930"
+}

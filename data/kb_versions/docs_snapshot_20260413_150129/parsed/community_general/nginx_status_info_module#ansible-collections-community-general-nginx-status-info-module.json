@@ -1,0 +1,82 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.nginx_status_info",
+  "slug": "nginx_status_info_module#ansible-collections-community-general-nginx-status-info-module",
+  "description": "Gathers information from nginx from an URL having stub_status enabled.",
+  "parameters": [
+    {
+      "name": "timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "10",
+      "choices": [],
+      "description": "HTTP connection timeout in seconds. Default: 10"
+    },
+    {
+      "name": "url",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "URL of the nginx status."
+    }
+  ],
+  "examples": [
+    "# Gather status info from nginx on localhost\n- name: Get current http stats\n  community.general.nginx_status_info:\n    url: http://localhost/nginx_status\n  register: result\n\n# Gather status info from nginx on localhost with a custom timeout of 20 seconds\n- name: Get current http stats\n  community.general.nginx_status_info:\n    url: http://localhost/nginx_status\n    timeout: 20\n  register: result"
+  ],
+  "return_values": [
+    {
+      "name": "accepts",
+      "type": "integer",
+      "description": "The total number of accepted client connections. Returned: success Sample: 81769947",
+      "returned": "success"
+    },
+    {
+      "name": "active_connections",
+      "type": "integer",
+      "description": "Active connections. Returned: success Sample: 2340",
+      "returned": "success"
+    },
+    {
+      "name": "data",
+      "type": "string",
+      "description": "HTTP response as is. Returned: success Sample: \"Active connections: 2340 \\nserver accepts handled requests\\n 81769947 81769947 144332345 \\nReading: 0 Writing: 241 Waiting: 2092 \\n\"",
+      "returned": "success"
+    },
+    {
+      "name": "handled",
+      "type": "integer",
+      "description": "The total number of handled connections. Generally, the parameter value is the same as accepts unless some resource limits have been reached. Returned: success Sample: 81769947",
+      "returned": "success"
+    },
+    {
+      "name": "reading",
+      "type": "integer",
+      "description": "The current number of connections where nginx is reading the request header. Returned: success Sample: 0",
+      "returned": "success"
+    },
+    {
+      "name": "requests",
+      "type": "integer",
+      "description": "The total number of client requests. Returned: success Sample: 144332345",
+      "returned": "success"
+    },
+    {
+      "name": "waiting",
+      "type": "integer",
+      "description": "The current number of idle client connections waiting for a request. Returned: success Sample: 2092",
+      "returned": "success"
+    },
+    {
+      "name": "writing",
+      "type": "integer",
+      "description": "The current number of connections where nginx is writing the response back to the client. Returned: success Sample: 241",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/nginx_status_info_module#ansible-collections-community-general-nginx-status-info-module.html",
+  "parsed_at": "2026-04-11T13:53:20.971667"
+}
