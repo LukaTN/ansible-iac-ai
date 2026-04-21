@@ -1,0 +1,130 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.github_release",
+  "slug": "github_release_module#ansible-collections-community-general-github-release-module",
+  "description": "Fetch metadata about GitHub Releases.",
+  "parameters": [
+    {
+      "name": "action",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [
+        "\"latest_release\"",
+        "\"create_release\""
+      ],
+      "description": "Action to perform. Choices: \"latest_release\" \"create_release\""
+    },
+    {
+      "name": "body",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Description of the release when creating a release."
+    },
+    {
+      "name": "draft",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Sets if the release is a draft or not. (boolean). Choices: false ← (default) true"
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of release when creating a release."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The GitHub account password for the user. Mutually exclusive with token."
+    },
+    {
+      "name": "prerelease",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Sets if the release is a prerelease or not. (boolean). Choices: false ← (default) true"
+    },
+    {
+      "name": "repo",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Repository name."
+    },
+    {
+      "name": "tag",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Tag name when creating a release. Required when using action=create_release."
+    },
+    {
+      "name": "target",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Target of release when creating a release."
+    },
+    {
+      "name": "token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "GitHub Personal Access Token for authenticating. Mutually exclusive with password."
+    },
+    {
+      "name": "user",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The GitHub account that owns the repository."
+    }
+  ],
+  "examples": [
+    "- name: Get latest release of a public repository\n  community.general.github_release:\n    user: ansible\n    repo: ansible\n    action: latest_release\n\n- name: Get latest release of testuseer/testrepo\n  community.general.github_release:\n    token: tokenabc1234567890\n    user: testuser\n    repo: testrepo\n    action: latest_release\n\n- name: Get latest release of test repo using username and password\n  community.general.github_release:\n    user: testuser\n    password: secret123\n    repo: testrepo\n    action: latest_release\n\n- name: Create a new release\n  community.general.github_release:\n    token: tokenabc1234567890\n    user: testuser\n    repo: testrepo\n    action: create_release\n    tag: test\n    target: master\n    name: My Release\n    body: Some description"
+  ],
+  "return_values": [
+    {
+      "name": "tag",
+      "type": "string",
+      "description": "Version of the created/latest release. Returned: success Sample: \"1.1.0\"",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/github_release_module#ansible-collections-community-general-github-release-module.html",
+  "parsed_at": "2026-04-11T13:53:13.426579"
+}

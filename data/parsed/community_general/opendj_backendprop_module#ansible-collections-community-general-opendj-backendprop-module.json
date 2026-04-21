@@ -1,0 +1,105 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.opendj_backendprop",
+  "slug": "opendj_backendprop_module#ansible-collections-community-general-opendj-backendprop-module",
+  "description": "This module updates settings for OpenDJ with the command set-backend-prop.",
+  "parameters": [
+    {
+      "name": "backend",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the backend on which the property needs to be updated."
+    },
+    {
+      "name": "hostname",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The hostname of the OpenDJ server."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The configuration setting to update."
+    },
+    {
+      "name": "opendj_bindir",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "/opt/opendj/bin",
+      "choices": [],
+      "description": "The path to the bin directory of OpenDJ. Default: \"/opt/opendj/bin\""
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The password for username. Either password or passwordfile is needed."
+    },
+    {
+      "name": "passwordfile",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Location to the password file which holds the password for username. Either password or passwordfile is needed."
+    },
+    {
+      "name": "port",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The Admin port on which the OpenDJ instance is available."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "present",
+      "choices": [],
+      "description": "If configuration needs to be added/updated. Default: \"present\""
+    },
+    {
+      "name": "username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "cn=Directory",
+      "choices": [],
+      "description": "The username to connect with. Default: \"cn=Directory Manager\""
+    },
+    {
+      "name": "value",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The value for the configuration item."
+    }
+  ],
+  "examples": [
+    "- name: Add or update OpenDJ backend properties\n  opendj_backendprop:\n    hostname: localhost\n    port: 4444\n    username: \"cn=Directory Manager\"\n    password: password\n    backend: userRoot\n    name: index-entry-limit\n    value: 5000"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/opendj_backendprop_module.html",
+  "parsed_at": "2026-04-13T16:29:55.234562"
+}

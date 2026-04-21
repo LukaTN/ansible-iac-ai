@@ -1,0 +1,285 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.keycloak_realm_key",
+  "slug": "keycloak_realm_key_module#ansible-collections-community-general-keycloak-realm-key-module",
+  "description": "This module allows the administration of Keycloak realm keys using the Keycloak REST API. It requires access to the REST API using OpenID Connect; the user connecting and the realm being used must have the requisite access rights. In a default Keycloak installation, admin-cli and an admin user would work, as would a separate realm definition with the scope tailored to your needs and a user having the expected roles.",
+  "parameters": [
+    {
+      "name": "auth_client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "admin-cli",
+      "choices": [],
+      "description": "OpenID Connect client_id to authenticate to the API with. Default: \"admin-cli\""
+    },
+    {
+      "name": "auth_client_secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Client Secret to use in conjunction with auth_client_id (if required)."
+    },
+    {
+      "name": "auth_keycloak_url",
+      "aliases": [
+        "url"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "URL to the Keycloak instance."
+    },
+    {
+      "name": "auth_password",
+      "aliases": [
+        "password"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Password to authenticate for API access with."
+    },
+    {
+      "name": "auth_realm",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Keycloak realm name to authenticate to for API access."
+    },
+    {
+      "name": "auth_username",
+      "aliases": [
+        "username"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Username to authenticate for API access with."
+    },
+    {
+      "name": "config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Dict specifying the key and its properties."
+    },
+    {
+      "name": "connection_timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "10",
+      "choices": [],
+      "description": "Controls the HTTP connections timeout period (in seconds) to Keycloak API. Default: 10"
+    },
+    {
+      "name": "force",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Enforce the state of the private key and certificate. This is not automatically the case as this module is unable to determine the current state of the private key and thus cannot trigger an update based on an actual divergence. That said, a private key update may happen even if force is false as a side-effect of other changes. Choices: false ← (default) true"
+    },
+    {
+      "name": "http_agent",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "Ansible",
+      "choices": [],
+      "description": "Configures the HTTP User-Agent header. Default: \"Ansible\""
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the realm key to create."
+    },
+    {
+      "name": "parent_id",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The parent_id of the realm key. In practice the name of the realm."
+    },
+    {
+      "name": "provider_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"rsa\" ← (default)",
+        "\"rsa-enc\"",
+        "\"java-keystore\"",
+        "\"rsa-generated\"",
+        "\"rsa-enc-generated\"",
+        "\"hmac-generated\"",
+        "\"aes-generated\"",
+        "\"ecdsa-generated\"",
+        "\"ecdh-generated\"",
+        "\"eddsa-generated\""
+      ],
+      "description": "The name of the “provider ID” for the key. The value rsa-enc has been added in community.general 8.2.0. The value java-keystore has been added in community.general 12.4.0. This provider imports keys from a Java Keystore (JKS or PKCS12) file located on the Keycloak server filesystem. The values rsa-generated, hmac-generated, aes-generated, and ecdsa-generated have been added in community.general 12.4.0. These are auto-generated key providers where Keycloak manages the key material. The values rsa-enc-generated, ecdh-generated, and eddsa-generated have been added in community.general 12.4.0. These correspond to the auto-generated key providers available in Keycloak 26. Choices: \"rsa\" ← (default) \"rsa-enc\" \"java-keystore\" \"rsa-generated\" \"rsa-enc-generated\" \"hmac-generated\" \"aes-generated\" \"ecdsa-generated\" \"ecdh-generated\" \"eddsa-generated\""
+    },
+    {
+      "name": "refresh_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Authentication refresh token for Keycloak API."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "State of the keycloak realm key. On present, the realm key is created (or updated if it exists already). On absent, the realm key is removed if it exists. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Authentication token for Keycloak API."
+    },
+    {
+      "name": "update_password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"always\" ← (default)",
+        "\"on_create\""
+      ],
+      "description": "Controls when passwords are sent to Keycloak for java-keystore provider. always - Always send passwords. Keycloak will update the component even if passwords have not changed. Use when you need to ensure passwords are updated. on_create - Only send passwords when creating a new component. When updating an existing component, send the masked value to preserve existing passwords. This makes the module idempotent for password fields. This is necessary because Keycloak masks passwords in API responses (returns **********), making comparison impossible. Has no effect for providers other than java-keystore. Choices: \"always\" ← (default) \"on_create\""
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Verify TLS certificates (do not disable this in production). Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Manage Keycloak realm key (certificate autogenerated by Keycloak)\n  community.general.keycloak_realm_key:\n    name: custom\n    state: present\n    parent_id: master\n    provider_id: rsa\n    auth_keycloak_url: http://localhost:8080/auth\n    auth_username: keycloak\n    auth_password: keycloak\n    auth_realm: master\n    config:\n      private_key: \"{{ private_key }}\"\n      certificate: \"\"\n      enabled: true\n      active: true\n      priority: 120\n      algorithm: RS256\n\n- name: Manage Keycloak realm key and certificate\n  community.general.keycloak_realm_key:\n    name: custom\n    state: present\n    parent_id: master\n    provider_id: rsa\n    auth_keycloak_url: http://localhost:8080/auth\n    auth_username: keycloak\n    auth_password: keycloak\n    auth_realm: master\n    config:\n      private_key: \"{{ private_key }}\"\n      certificate: \"{{ certificate }}\"\n      enabled: true\n      active: true\n      priority: 120\n      algorithm: RS256\n\n- name: Create HMAC signing key (auto-generated)\n  community.general.keycloak_realm_key:\n    name: hmac-custom\n    state: present\n    parent_id: master\n    provider_id: hmac-generated\n    auth_keycloak_url: http://localhost:8080/auth\n    auth_username: keycloak\n    auth_password: keycloak\n    auth_realm: master\n    config:\n      enabled: true\n      active: true\n      priority: 100\n      algorithm: HS256\n      secret_size: 64\n\n- name: Create AES encryption key (auto-generated)\n  community.general.keycloak_realm_key:\n    name: aes-custom\n    state: present\n    parent_id: master\n    provider_id: aes-generated\n    auth_keycloak_url: http://localhost:8080/auth\n    auth_username: keycloak\n    auth_password: keycloak\n    auth_realm: master\n    config:\n      enabled: true\n      active: true\n      priority: 100\n      secret_size: 16\n\n- name: Create ECDSA signing key (auto-generated)\n  community.general.keycloak_realm_key:\n    name: ecdsa-custom\n    state: present\n    parent_id: master\n    provider_id: ecdsa-generated\n    auth_keycloak_url: http://localhost:8080/auth\n    auth_username: keycloak\n    auth_password: keycloak\n    auth_realm: master\n    config:\n      enabled: true\n      active: true\n      priority: 100\n      algorithm: ES256\n      elliptic_curve: P-256\n\n- name: Create RSA signing key (auto-generated)\n  community.general.keycloak_realm_key:\n    name: rsa-auto\n    state: present\n    parent_id: master\n    provider_id: rsa-generated\n    auth_keycloak_url: http://localhost:8080/auth\n    auth_username: keycloak\n    auth_password: keycloak\n    auth_realm: master\n    config:\n      enabled: true\n      active: true\n      priority: 100\n      algorithm: RS256\n      key_size: 2048\n\n- name: Remove default HMAC key\n  community.general.keycloak_realm_key:\n    name: hmac-generated\n    state: absent\n    parent_id: myrealm\n    provider_id: hmac-generated\n    auth_keycloak_url: http://localhost:8080/auth\n    auth_username: keycloak\n    auth_password: keycloak\n    auth_realm: master\n    config:\n      priority: 100\n\n- name: Create RSA encryption key (auto-generated)\n  community.general.keycloak_realm_key:\n    name: rsa-enc-auto\n    state: present\n    parent_id: master\n    provider_id: rsa-enc-generated\n    auth_keycloak_url: http://localhost:8080/auth\n    auth_username: keycloak\n    auth_password: keycloak\n    auth_realm: master\n    config:\n      enabled: true\n      active: true\n      priority: 100\n      algorithm: RSA-OAEP\n      key_size: 2048\n\n- name: Create ECDH key exchange key (auto-generated)\n  community.general.keycloak_realm_key:\n    name: ecdh-custom\n    state: present\n    parent_id: master\n    provider_id: ecdh-generated\n    auth_keycloak_url: http://localhost:8080/auth\n    auth_username: keycloak\n    auth_password: keycloak\n    auth_realm: master\n    config:\n      enabled: true\n      active: true\n      priority: 100\n      algorithm: ECDH_ES\n      elliptic_curve: P-256\n\n- name: Create EdDSA signing key (auto-generated)\n  community.general.keycloak_realm_key:\n    name: eddsa-custom\n    state: present\n    parent_id: master\n    provider_id: eddsa-generated\n    auth_keycloak_url: http://localhost:8080/auth\n    auth_username: keycloak\n    auth_password: keycloak\n    auth_realm: master\n    config:\n      enabled: true\n      active: true\n      priority: 100\n      elliptic_curve: Ed25519\n\n- name: Import key from Java Keystore (always update passwords)\n  community.general.keycloak_realm_key:\n    name: jks-imported\n    state: present\n    parent_id: master\n    provider_id: java-keystore\n    auth_keycloak_url: http://localhost:8080/auth\n    auth_username: keycloak\n    auth_password: keycloak\n    auth_realm: master\n    # update_password: always is the default - passwords are always sent to Keycloak\n    config:\n      enabled: true\n      active: true\n      priority: 100\n      algorithm: RS256\n      keystore: /opt/keycloak/conf/keystore.jks\n      keystore_password: \"{{ keystore_password }}\"\n      key_alias: mykey\n      key_password: \"{{ key_password }}\"\n\n- name: Import key from Java Keystore (idempotent - only set password on create)\n  community.general.keycloak_realm_key:\n    name: jks-idempotent\n    state: present\n    parent_id: master\n    provider_id: java-keystore\n    auth_keycloak_url: http://localhost:8080/auth\n    auth_username: keycloak\n    auth_password: keycloak\n    auth_realm: master\n    update_password: on_create  # Only send passwords when creating, preserve existing on update\n    config:\n      enabled: true\n      active: true\n      priority: 100\n      algorithm: RS256\n      keystore: /opt/keycloak/conf/keystore.jks\n      keystore_password: \"{{ keystore_password }}\"\n      key_alias: mykey\n      key_password: \"{{ key_password }}\""
+  ],
+  "return_values": [
+    {
+      "name": "end_state",
+      "type": "dictionary",
+      "description": "Representation of the keycloak_realm_key after module execution. Returned: on success",
+      "returned": "on"
+    },
+    {
+      "name": "config",
+      "type": "dictionary",
+      "description": "Realm key configuration. Returned: when state=present Sample: {\"active\": [\"true\"], \"algorithm\": [\"RS256\"], \"enabled\": [\"true\"], \"priority\": [\"140\"]}",
+      "returned": "when"
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "description": "ID of the realm key. Returned: when state=present Sample: \"5b7ec13f-99da-46ad-8326-ab4c73cf4ce4\"",
+      "returned": "when"
+    },
+    {
+      "name": "key_info",
+      "type": "dictionary",
+      "description": "Cryptographic key metadata fetched from the realm keys endpoint. Only returned for java-keystore provider when state=present and not in check mode. This includes the key ID (kid) and certificate fingerprint, which can be used to detect if the actual cryptographic key changed. Returned: when provider_id=java-keystore and state=present",
+      "returned": "when"
+    },
+    {
+      "name": "certificate_fingerprint",
+      "type": "string",
+      "description": "SHA256 fingerprint of the certificate in colon-separated hex format. Returned: success Sample: \"A1:B2:C3:D4:E5:F6:...\"",
+      "returned": "success"
+    },
+    {
+      "name": "kid",
+      "type": "string",
+      "description": "The key ID (kid) - unique identifier for the cryptographic key. Returned: success Sample: \"bN7p5Nc_V2M7N_-mb5vVSRVPKq5qD_OuARInB9ofsJ0\"",
+      "returned": "success"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "description": "The key status (ACTIVE, PASSIVE, DISABLED). Returned: success Sample: \"ACTIVE\"",
+      "returned": "success"
+    },
+    {
+      "name": "valid_to",
+      "type": "integer",
+      "description": "Certificate expiration timestamp in milliseconds since epoch. Returned: success Sample: 1801789047000",
+      "returned": "success"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "Name of the realm key. Returned: when state=present Sample: \"mykey\"",
+      "returned": "when"
+    },
+    {
+      "name": "parentId",
+      "type": "string",
+      "description": "ID of the realm this key belongs to. Returned: when state=present Sample: \"myrealm\"",
+      "returned": "when"
+    },
+    {
+      "name": "providerId",
+      "type": "string",
+      "description": "The ID of the key provider. Returned: when state=present Sample: \"rsa\"",
+      "returned": "when"
+    },
+    {
+      "name": "providerType",
+      "type": "string",
+      "description": "The type of provider. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "msg",
+      "type": "string",
+      "description": "Message as to what action was taken. Returned: always",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/keycloak_realm_key_module.html",
+  "parsed_at": "2026-04-13T16:29:50.750449"
+}

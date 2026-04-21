@@ -1,0 +1,136 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.gitlab_project_badge",
+  "slug": "gitlab_project_badge_module#ansible-collections-community-general-gitlab-project-badge-module",
+  "description": "This module allows to add and remove badges to/from a project.",
+  "parameters": [
+    {
+      "name": "api_job_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "GitLab CI job token for logging in."
+    },
+    {
+      "name": "api_oauth_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "GitLab OAuth token for logging in."
+    },
+    {
+      "name": "api_password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The password to use for authentication against the API."
+    },
+    {
+      "name": "api_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "GitLab access token with API permissions."
+    },
+    {
+      "name": "api_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The resolvable endpoint for the API."
+    },
+    {
+      "name": "api_username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The username to use for authentication against the API."
+    },
+    {
+      "name": "ca_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The CA certificates bundle to use to verify GitLab server certificate."
+    },
+    {
+      "name": "image_url",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The image URL of the badge. A badge is identified by this URL."
+    },
+    {
+      "name": "link_url",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The URL associated with the badge."
+    },
+    {
+      "name": "project",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name (or full path) of the GitLab project the badge is added to/removed from."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "State of the badge in the project. On present, it adds a badge to a GitLab project. On absent, it removes a badge from a GitLab project. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether or not to validate SSL certs when supplying a HTTPS endpoint. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Add a badge to a GitLab Project\n  community.general.gitlab_project_badge:\n    api_url: 'https://example.gitlab.com'\n    api_token: 'Your-Private-Token'\n    project: projectname\n    state: present\n    link_url: 'https://example.gitlab.com/%{project_path}'\n    image_url: 'https://example.gitlab.com/%{project_path}/badges/%{default_branch}/pipeline.svg'\n\n- name: Remove a badge from a GitLab Project\n  community.general.gitlab_project_badge:\n    api_url: 'https://example.gitlab.com'\n    api_token: 'Your-Private-Token'\n    project: projectname\n    state: absent\n    link_url: 'https://example.gitlab.com/%{project_path}'\n    image_url: 'https://example.gitlab.com/%{project_path}/badges/%{default_branch}/pipeline.svg'"
+  ],
+  "return_values": [
+    {
+      "name": "badge",
+      "type": "dictionary",
+      "description": "The badge information. Returned: when state=present Sample: {\"id\": 1, \"image_url\": \"https://shields.io/my/badge\", \"kind\": \"project\", \"link_url\": \"http://example.com/ci_status.svg?project=%{project_path}&ref=%{default_branch}\", \"rendered_image_url\": \"https://shields.io/my/badge\", \"rendered_link_url\": \"http://example.com/ci_status.svg?project=example-org/example-project&ref=master\"}",
+      "returned": "when"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/gitlab_project_badge_module.html",
+  "parsed_at": "2026-04-13T16:29:46.624021"
+}

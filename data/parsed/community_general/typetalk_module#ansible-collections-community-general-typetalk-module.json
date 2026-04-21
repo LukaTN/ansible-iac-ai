@@ -1,0 +1,51 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.typetalk",
+  "slug": "typetalk_module#ansible-collections-community-general-typetalk-module",
+  "description": "Send a message to typetalk using typetalk API.",
+  "parameters": [
+    {
+      "name": "client_id",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "OAuth2 client ID."
+    },
+    {
+      "name": "client_secret",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "OAuth2 client secret."
+    },
+    {
+      "name": "msg",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Message body."
+    },
+    {
+      "name": "topic",
+      "aliases": [],
+      "type": "integer",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Topic ID to post message."
+    }
+  ],
+  "examples": [
+    "- name: Send a message to typetalk\n  community.general.typetalk:\n    client_id: 12345\n    client_secret: 12345\n    topic: 1\n    msg: install completed"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/typetalk_module.html",
+  "parsed_at": "2026-04-13T16:29:59.622387"
+}

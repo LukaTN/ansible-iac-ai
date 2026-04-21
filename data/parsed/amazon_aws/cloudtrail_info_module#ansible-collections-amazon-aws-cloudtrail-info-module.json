@@ -1,0 +1,339 @@
+{
+  "collection_ns": "amazon_aws",
+  "collection": "amazon.aws",
+  "module": "amazon.aws.cloudtrail_info",
+  "slug": "cloudtrail_info_module#ansible-collections-amazon-aws-cloudtrail-info-module",
+  "description": "Gather information about trails in AWS CloudTrail.",
+  "parameters": [
+    {
+      "name": "access_key",
+      "aliases": [
+        "aws_access_key_id",
+        "aws_access_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS access key ID. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY environment variables may also be used in decreasing order of preference. The aws_access_key and profile options are mutually exclusive. The aws_access_key_id alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "aws_ca_bundle",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The location of a CA Bundle to use when validating SSL certificates. The AWS_CA_BUNDLE environment variable may also be used."
+    },
+    {
+      "name": "aws_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary to modify the botocore configuration. Parameters can be found in the AWS documentation https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html#botocore.config.Config."
+    },
+    {
+      "name": "debug_botocore_endpoint_logs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use a botocore.endpoint logger to parse the unique (rather than total) \"resource:action\" API calls made during a task, outputing the set to the resource_actions key in the task results. Use the aws_resource_action callback to output to total list made during a playbook. The ANSIBLE_DEBUG_BOTOCORE_LOGS environment variable may also be used. Choices: false ← (default) true"
+    },
+    {
+      "name": "endpoint_url",
+      "aliases": [
+        "aws_endpoint_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "AWS",
+      "choices": [],
+      "description": "URL to connect to instead of the default AWS endpoints. While this can be used to connection to other AWS-compatible services the amazon.aws and community.aws collections are only tested against AWS. The AWS_URL environment variable may also be used."
+    },
+    {
+      "name": "include_shadow_trails",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Specifies whether to include shadow trails in the response. Choices: false true ← (default)"
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "aws_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A named AWS profile to use for authentication. See the AWS documentation for more information about named profiles https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html. The AWS_PROFILE environment variable may also be used. The profile option is mutually exclusive with the aws_access_key, aws_secret_key and session_token options."
+    },
+    {
+      "name": "region",
+      "aliases": [
+        "aws_region"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The AWS region to use. For global services such as IAM, Route53 and CloudFront, region is ignored. The AWS_REGION environment variable may also be used. See the Amazon AWS documentation for more information http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region."
+    },
+    {
+      "name": "secret_key",
+      "aliases": [
+        "aws_secret_access_key",
+        "aws_secret_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS secret access key. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SECRET_ACCESS_KEY or AWS_SECRET_KEY environment variables may also be used in decreasing order of preference. The secret_key and profile options are mutually exclusive. The aws_secret_access_key alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "session_token",
+      "aliases": [
+        "aws_session_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS STS session token for use with temporary credentials. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SESSION_TOKEN environment variable may also be used. The session_token and profile options are mutually exclusive."
+    },
+    {
+      "name": "trail_names",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "Specifies a list of trail names, trail ARNs, or both, of the trails to describe. If an empty list is specified, information for the trail in the current region is returned. Default: []"
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to false, SSL certificates will not be validated for communication with the AWS APIs. Setting validate_certs=false is strongly discouraged, as an alternative, consider setting aws_ca_bundle instead. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "# Note: These examples do not set authentication details, see the AWS Guide for details.\n\n# Gather information about all trails\n- amazon.aws.cloudtrail_info:\n\n# Gather information about a particular trail\n- amazon.aws.cloudtrail_info:\n    trail_names:\n      - arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail"
+  ],
+  "return_values": [
+    {
+      "name": "trail_list",
+      "type": "list",
+      "description": "List of trail objects. Each element consists of a dict with all the information related to that cloudtrail. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "cloud_watch_logs_log_group_arn",
+      "type": "string",
+      "description": "Specifies an ARN, that represents the log group to which CloudTrail logs will be delivered. Returned: success Sample: \"arn:aws:sns:us-east-2:123456789012:Mylog\"",
+      "returned": "success"
+    },
+    {
+      "name": "cloud_watch_logs_role_arn",
+      "type": "string",
+      "description": "Specifies the role for the CloudWatch Logs endpoint to assume to write to a user’s log group. Returned: success Sample: \"arn:aws:sns:us-east-2:123456789012:Mylog\"",
+      "returned": "success"
+    },
+    {
+      "name": "has_custom_event_selectors",
+      "type": "boolean",
+      "description": "Specifies if the trail has custom event selectors. Returned: success Sample: true",
+      "returned": "success"
+    },
+    {
+      "name": "has_insight_selectors",
+      "type": "boolean",
+      "description": "Specifies whether a trail has insight types specified in an InsightSelector list. Returned: success Sample: true",
+      "returned": "success"
+    },
+    {
+      "name": "home_region",
+      "type": "string",
+      "description": "The region in which the trail was created. Returned: success Sample: \"us-east-1\"",
+      "returned": "success"
+    },
+    {
+      "name": "include_global_service_events",
+      "type": "boolean",
+      "description": "If True, AWS API calls from AWS global services such as IAM are included. Returned: success Sample: true",
+      "returned": "success"
+    },
+    {
+      "name": "is_logging",
+      "type": "boolean",
+      "description": "Whether the CloudTrail is currently logging AWS API calls. Returned: success Sample: true",
+      "returned": "success"
+    },
+    {
+      "name": "is_multi_region_trail",
+      "type": "boolean",
+      "description": "Specifies whether the trail exists only in one region or exists in all regions. Returned: success Sample: true",
+      "returned": "success"
+    },
+    {
+      "name": "is_organization_trail",
+      "type": "boolean",
+      "description": "Specifies whether the trail is an organization trail. Returned: success Sample: true",
+      "returned": "success"
+    },
+    {
+      "name": "kms_key_id",
+      "type": "string",
+      "description": "Specifies the KMS key ID that encrypts the logs delivered by CloudTrail. Returned: success Sample: \"arn:aws:kms:us-east-2:123456789012:key/12345678-1234-1234-1234-123456789012\"",
+      "returned": "success"
+    },
+    {
+      "name": "latest_cloud_watch_logs_delivery_error",
+      "type": "string",
+      "description": "Displays any CloudWatch Logs error that CloudTrail encountered when attempting to deliver logs to CloudWatch Logs. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "latest_cloud_watch_logs_delivery_time",
+      "type": "string",
+      "description": "Displays the most recent date and time when CloudTrail delivered logs to CloudWatch Logs. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "latest_delivery_attempt_succeeded",
+      "type": "string",
+      "description": "Specifies the date and time that CloudTrail last successful attempt to deliver log files to an account’s Amazon S3 bucket. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "latest_delivery_attempt_time",
+      "type": "string",
+      "description": "Specifies the date and time that CloudTrail last attempt to deliver log files to an account’s Amazon S3 bucket. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "latest_delivery_error",
+      "type": "string",
+      "description": "Displays any Amazon S3 error that CloudTrail encountered when attempting to deliver log files to the designated bucket. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "latest_delivery_time",
+      "type": "string",
+      "description": "Specifies the date and time that CloudTrail last delivered log files to an account’s Amazon S3 bucket. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "latest_digest_delivery_error",
+      "type": "string",
+      "description": "Displays any Amazon S3 error that CloudTrail encountered when attempting to deliver a digest file to the designated bucket. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "latest_digest_delivery_time",
+      "type": "string",
+      "description": "Specifies the date and time that CloudTrail last delivered a digest file to an account’s Amazon S3 bucket. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "latest_notification_attempt_succeeded",
+      "type": "string",
+      "description": "Specifies the date and time that CloudTrail last successful attempt to deliver a notification. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "latest_notification_attempt_time",
+      "type": "string",
+      "description": "Specifies the date and time that CloudTrail last attempt to deliver a notification. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "latest_notification_error",
+      "type": "string",
+      "description": "Displays any Amazon SNS error that CloudTrail encountered when attempting to send a notification. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "log_file_validation_enabled",
+      "type": "boolean",
+      "description": "Specifies whether log file validation is enabled. Returned: success Sample: true",
+      "returned": "success"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "Name of the trail. Returned: success Sample: \"MyTrail\"",
+      "returned": "success"
+    },
+    {
+      "name": "resource_id",
+      "type": "string",
+      "description": "Specifies the ARN of the resource. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "s3_bucket_name",
+      "type": "string",
+      "description": "Name of the Amazon S3 bucket into which CloudTrail delivers the trail files. Returned: success Sample: \"aws-cloudtrail-logs-xxxx\"",
+      "returned": "success"
+    },
+    {
+      "name": "s3_key_prefix",
+      "type": "string",
+      "description": "Amazon S3 key prefix that comes after the name of the bucket that is designated for log file delivery. Returned: success Sample: \"xxxx\"",
+      "returned": "success"
+    },
+    {
+      "name": "sns_topic_arn",
+      "type": "string",
+      "description": "ARN of the Amazon SNS topic that CloudTrail uses to send notifications when log files are delivered. Returned: success Sample: \"arn:aws:sns:us-east-2:123456789012:MyTopic\"",
+      "returned": "success"
+    },
+    {
+      "name": "start_logging_time",
+      "type": "string",
+      "description": "Specifies the most recent date and time when CloudTrail started recording API calls for an AWS account. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "stop_logging_time",
+      "type": "string",
+      "description": "Specifies the most recent date and time when CloudTrail stopped recording API calls for an AWS account. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "tags",
+      "type": "dictionary",
+      "description": "Any tags assigned to the cloudtrail. Returned: always Sample: {\"my_tag_key\": \"my_tag_value\"}",
+      "returned": "always"
+    },
+    {
+      "name": "trail_arn",
+      "type": "string",
+      "description": "Specifies the ARN of the trail. Returned: success Sample: \"arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail\"",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/amazon/aws/cloudtrail_info_module.html",
+  "parsed_at": "2026-04-13T16:29:19.189957"
+}

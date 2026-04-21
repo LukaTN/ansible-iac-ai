@@ -1,0 +1,293 @@
+{
+  "collection_ns": "amazon_aws",
+  "collection": "amazon.aws",
+  "module": "amazon.aws.lambda_layer",
+  "slug": "lambda_layer_module#ansible-collections-amazon-aws-lambda-layer-module",
+  "description": "This module allows the management of AWS Lambda functions aliases via the Ansible",
+  "parameters": [
+    {
+      "name": "access_key",
+      "aliases": [
+        "aws_access_key_id",
+        "aws_access_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS access key ID. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY environment variables may also be used in decreasing order of preference. The aws_access_key and profile options are mutually exclusive. The aws_access_key_id alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "aws_ca_bundle",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The location of a CA Bundle to use when validating SSL certificates. The AWS_CA_BUNDLE environment variable may also be used."
+    },
+    {
+      "name": "aws_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary to modify the botocore configuration. Parameters can be found in the AWS documentation https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html#botocore.config.Config."
+    },
+    {
+      "name": "compatible_architectures",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A list of compatible instruction set architectures. For example, x86_64. Mutually exclusive with version."
+    },
+    {
+      "name": "compatible_runtimes",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A list of compatible function runtimes. Ignored when state=absent. Mutually exclusive with version."
+    },
+    {
+      "name": "content",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The function layer archive. Required when state=present. Ignored when state=absent. Mutually exclusive with o(version)."
+    },
+    {
+      "name": "debug_botocore_endpoint_logs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use a botocore.endpoint logger to parse the unique (rather than total) \"resource:action\" API calls made during a task, outputing the set to the resource_actions key in the task results. Use the aws_resource_action callback to output to total list made during a playbook. The ANSIBLE_DEBUG_BOTOCORE_LOGS environment variable may also be used. Choices: false ← (default) true"
+    },
+    {
+      "name": "description",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The description of the version. Ignored when state=absent. Mutually exclusive with version."
+    },
+    {
+      "name": "endpoint_url",
+      "aliases": [
+        "aws_endpoint_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "AWS",
+      "choices": [],
+      "description": "URL to connect to instead of the default AWS endpoints. While this can be used to connection to other AWS-compatible services the amazon.aws and community.aws collections are only tested against AWS. The AWS_URL environment variable may also be used."
+    },
+    {
+      "name": "license_info",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The layer’s software license. It can be any of an SPDX license identifier, the URL of a license hosted on the internet or the full text of the license. Ignored when state=absent. Mutually exclusive with version."
+    },
+    {
+      "name": "name",
+      "aliases": [
+        "layer_name"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name or Amazon Resource Name (ARN) of the Lambda layer."
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "aws_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A named AWS profile to use for authentication. See the AWS documentation for more information about named profiles https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html. The AWS_PROFILE environment variable may also be used. The profile option is mutually exclusive with the aws_access_key, aws_secret_key and session_token options."
+    },
+    {
+      "name": "region",
+      "aliases": [
+        "aws_region"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The AWS region to use. For global services such as IAM, Route53 and CloudFront, region is ignored. The AWS_REGION environment variable may also be used. See the Amazon AWS documentation for more information http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region."
+    },
+    {
+      "name": "secret_key",
+      "aliases": [
+        "aws_secret_access_key",
+        "aws_secret_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS secret access key. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SECRET_ACCESS_KEY or AWS_SECRET_KEY environment variables may also be used in decreasing order of preference. The secret_key and profile options are mutually exclusive. The aws_secret_access_key alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "session_token",
+      "aliases": [
+        "aws_session_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS STS session token for use with temporary credentials. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SESSION_TOKEN environment variable may also be used. The session_token and profile options are mutually exclusive."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)"
+      ],
+      "description": "Determines if an Lambda layer should be created, or deleted. When set to present, an Lambda layer version will be created. If set to absent, an existing Lambda layer version will be deleted. Choices: \"absent\" \"present\" ← (default)"
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to false, SSL certificates will not be validated for communication with the AWS APIs. Setting validate_certs=false is strongly discouraged, as an alternative, consider setting aws_ca_bundle instead. Choices: false true ← (default)"
+    },
+    {
+      "name": "version",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The version number of the layer to delete. Set to -1 to delete all versions for the specified layer name. Required when state=absent. Ignored when state=present. Mutually exclusive with description, content, compatible_runtimes, license_info, compatible_architectures."
+    }
+  ],
+  "examples": [
+    "---\n# Create a new Python library layer version from a zip archive located into a S3 bucket\n- name: Create a new python library layer\n  amazon.aws.lambda_layer:\n    state: present\n    name: sample-layer\n    description: 'My Python layer'\n    content:\n      s3_bucket: 'lambda-layers-us-west-2-123456789012'\n      s3_key: 'python_layer.zip'\n    compatible_runtimes:\n      - python3.6\n      - python3.7\n    license_info: MIT\n    compatible_architectures:\n      - x86_64\n\n# Create a layer version from a zip in the local filesystem\n- name: Create a new layer from a zip in the local filesystem\n  amazon.aws.lambda_layer:\n    state: present\n    name: sample-layer\n    description: 'My Python layer'\n    content:\n      zip_file: 'python_layer.zip'\n    compatible_runtimes:\n      - python3.6\n      - python3.7\n    license_info: MIT\n    compatible_architectures:\n      - x86_64\n\n# Delete a layer version\n- name: Delete a layer version\n  amazon.aws.lambda_layer:\n    state: absent\n    name: sample-layer\n    version: 2\n\n# Delete all versions of test-layer\n- name: Delete all versions\n  amazon.aws.lambda_layer:\n    state: absent\n    name: test-layer\n    version: -1"
+  ],
+  "return_values": [
+    {
+      "name": "layer_version",
+      "type": "list",
+      "description": "Info about the layer version that was created or deleted. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "compatible_architectures",
+      "type": "list",
+      "description": "A list of compatible instruction set architectures. Returned: if it was defined for the layer version.",
+      "returned": "if"
+    },
+    {
+      "name": "compatible_runtimes",
+      "type": "list",
+      "description": "A list of compatible runtimes. Returned: if it was defined for the layer version. Sample: [\"python3.7\"]",
+      "returned": "if"
+    },
+    {
+      "name": "content",
+      "type": "complex",
+      "description": "Details about the layer version. Returned: state=present",
+      "returned": "state"
+    },
+    {
+      "name": "code_sha256",
+      "type": "string",
+      "description": "The SHA-256 hash of the layer archive. Returned: state=present Sample: \"VLluleJZ3HTwDrdYolSMrS+8iPwEkcoXXaegjXf+dmc=\"",
+      "returned": "state"
+    },
+    {
+      "name": "code_size",
+      "type": "integer",
+      "description": "The size of the layer archive in bytes. Returned: state=present Sample: 9473675",
+      "returned": "state"
+    },
+    {
+      "name": "location",
+      "type": "string",
+      "description": "A link to the layer archive in Amazon S3 that is valid for 10 minutes. Returned: state=present Sample: \"https://awslambda-us-east-1-layers.s3.us-east-1.amazonaws.com/snapshots/123456789012/pylayer-9da91deffd3b4941b8baeeae5daeffe4\"",
+      "returned": "state"
+    },
+    {
+      "name": "signing_job_arn",
+      "type": "string",
+      "description": "The Amazon Resource Name (ARN) of a signing job. Returned: When a signing profile is defined",
+      "returned": "When"
+    },
+    {
+      "name": "signing_profile_version_arn",
+      "type": "string",
+      "description": "The Amazon Resource Name (ARN) for a signing profile version. Returned: When a signing profile is defined",
+      "returned": "When"
+    },
+    {
+      "name": "created_date",
+      "type": "string",
+      "description": "The date that the layer version was created, in ISO-8601 format (YYYY-MM-DDThh:mm:ss.sTZD). Returned: if the layer version exists or has been created Sample: \"2022-09-28T14:27:35.866+0000\"",
+      "returned": "if"
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "description": "The description of the version. Returned: state=present",
+      "returned": "state"
+    },
+    {
+      "name": "layer_arn",
+      "type": "string",
+      "description": "The ARN of the layer. Returned: if the layer version exists or has been created Sample: \"arn:aws:lambda:eu-west-2:123456789012:layer:pylayer\"",
+      "returned": "if"
+    },
+    {
+      "name": "layer_version_arn",
+      "type": "string",
+      "description": "The ARN of the layer version. Returned: if the layer version exists or has been created Sample: \"arn:aws:lambda:eu-west-2:123456789012:layer:pylayer:2\"",
+      "returned": "if"
+    },
+    {
+      "name": "license_info",
+      "type": "string",
+      "description": "The layer’s software license. Returned: if it was defined for the layer version. Sample: \"GPL-3.0-only\"",
+      "returned": "if"
+    },
+    {
+      "name": "version",
+      "type": "integer",
+      "description": "The version number. Returned: if the layer version exists or has been created Sample: 1",
+      "returned": "if"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/amazon/aws/lambda_layer_module.html",
+  "parsed_at": "2026-04-13T16:29:23.189145"
+}

@@ -1,0 +1,1056 @@
+{
+  "collection_ns": "amazon_aws",
+  "collection": "amazon.aws",
+  "module": "amazon.aws.ec2_launch_template",
+  "slug": "ec2_launch_template_module#ansible-collections-amazon-aws-ec2-launch-template-module",
+  "description": "Create, modify, and delete EC2 Launch Templates, which can be used to create individual instances or with Autoscaling Groups.",
+  "parameters": [
+    {
+      "name": "access_key",
+      "aliases": [
+        "aws_access_key_id",
+        "aws_access_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS access key ID. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY environment variables may also be used in decreasing order of preference. The aws_access_key and profile options are mutually exclusive. The aws_access_key_id alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "aws_ca_bundle",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The location of a CA Bundle to use when validating SSL certificates. The AWS_CA_BUNDLE environment variable may also be used."
+    },
+    {
+      "name": "aws_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary to modify the botocore configuration. Parameters can be found in the AWS documentation https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html#botocore.config.Config."
+    },
+    {
+      "name": "block_device_mappings",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The block device mapping. Supplying both a snapshot ID and an encryption value as arguments for block-device mapping results in an error. This is because only blank volumes can be encrypted on start, and these are not created from a snapshot. If a snapshot is the basis for the volume, it contains data by definition and its encryption status cannot be changed using this action."
+    },
+    {
+      "name": "cpu_options",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Choose CPU settings for the EC2 instances that will be created with this template. For more information, see http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-optimize-cpu.html"
+    },
+    {
+      "name": "credit_specification",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The credit option for CPU usage of the instance. Valid for T2 or T3 instances only."
+    },
+    {
+      "name": "debug_botocore_endpoint_logs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use a botocore.endpoint logger to parse the unique (rather than total) \"resource:action\" API calls made during a task, outputing the set to the resource_actions key in the task results. Use the aws_resource_action callback to output to total list made during a playbook. The ANSIBLE_DEBUG_BOTOCORE_LOGS environment variable may also be used. Choices: false ← (default) true"
+    },
+    {
+      "name": "default_version",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "when",
+      "choices": [],
+      "description": "Which version should be the default when users spin up new instances based on this template? By default, the latest version will be made the default. Default: \"latest\""
+    },
+    {
+      "name": "disable_api_termination",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "This helps protect instances from accidental termination. If set to true, you can’t terminate the instance using the Amazon EC2 console, CLI, or API. Choices: false true"
+    },
+    {
+      "name": "ebs_optimized",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Indicates whether the instance is optimized for Amazon EBS I/O. This optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal Amazon EBS I/O performance. This optimization isn’t available with all instance types. Additional usage charges apply when using an EBS-optimized instance. Choices: false true"
+    },
+    {
+      "name": "elastic_gpu_specifications",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Settings for Elastic GPU attachments. See https://aws.amazon.com/ec2/elastic-gpus/ for details."
+    },
+    {
+      "name": "endpoint_url",
+      "aliases": [
+        "aws_endpoint_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "AWS",
+      "choices": [],
+      "description": "URL to connect to instead of the default AWS endpoints. While this can be used to connection to other AWS-compatible services the amazon.aws and community.aws collections are only tested against AWS. The AWS_URL environment variable may also be used."
+    },
+    {
+      "name": "iam_instance_profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The name or ARN of an IAM instance profile. Requires permissions to describe existing instance roles to confirm ARN is properly formed."
+    },
+    {
+      "name": "image_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The AMI ID to use for new instances launched with this template. This value is region-dependent since AMIs are not global resources."
+    },
+    {
+      "name": "instance_initiated_shutdown_behavior",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"stop\"",
+        "\"terminate\""
+      ],
+      "description": "Indicates whether an instance stops or terminates when you initiate shutdown from the instance using the operating system shutdown command. Choices: \"stop\" \"terminate\""
+    },
+    {
+      "name": "instance_market_options",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Options for alternative instance markets, currently only the spot market is supported."
+    },
+    {
+      "name": "instance_type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The instance type, such as c5.2xlarge. For a full list of instance types, see http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html."
+    },
+    {
+      "name": "kernel_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The ID of the kernel. We recommend that you use PV-GRUB instead of kernels and RAM disks. For more information, see http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/UserProvidedkernels.html"
+    },
+    {
+      "name": "key_name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The name of the key pair. You can create a key pair using amazon.aws.ec2_key. If you do not specify a key pair, you can’t connect to the instance unless you choose an AMI that is configured to allow users another way to log in."
+    },
+    {
+      "name": "metadata_options",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Configure EC2 Metadata options. For more information see the IMDS documentation https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-instance-metadata-service.html."
+    },
+    {
+      "name": "monitoring",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Settings for instance monitoring."
+    },
+    {
+      "name": "network_interfaces",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "One or more network interfaces."
+    },
+    {
+      "name": "placement",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The placement group settings for the instance."
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "aws_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A named AWS profile to use for authentication. See the AWS documentation for more information about named profiles https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html. The AWS_PROFILE environment variable may also be used. The profile option is mutually exclusive with the aws_access_key, aws_secret_key and session_token options."
+    },
+    {
+      "name": "purge_tags",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If purge_tags=true and tags is set, existing tags will be purged from the resource to match exactly what is defined by tags parameter. If the tags parameter is not set then tags will not be modified, even if purge_tags=True. Tag keys beginning with aws: are reserved by Amazon and can not be modified. As such they will be ignored for the purposes of the purge_tags parameter. See the Amazon documentation for more information https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html#tag-conventions. Choices: false true ← (default)"
+    },
+    {
+      "name": "ram_disk_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The ID of the RAM disk to launch the instance with. We recommend that you use PV-GRUB instead of kernels and RAM disks. For more information, see http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/UserProvidedkernels.html"
+    },
+    {
+      "name": "region",
+      "aliases": [
+        "aws_region"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The AWS region to use. For global services such as IAM, Route53 and CloudFront, region is ignored. The AWS_REGION environment variable may also be used. See the Amazon AWS documentation for more information http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region."
+    },
+    {
+      "name": "secret_key",
+      "aliases": [
+        "aws_secret_access_key",
+        "aws_secret_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS secret access key. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SECRET_ACCESS_KEY or AWS_SECRET_KEY environment variables may also be used in decreasing order of preference. The secret_key and profile options are mutually exclusive. The aws_secret_access_key alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "security_group_ids",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A list of security group IDs (VPC or EC2-Classic) that the new instances will be added to."
+    },
+    {
+      "name": "security_groups",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "VPC",
+      "choices": [],
+      "description": "A list of security group names (Default VPC or EC2-Classic) that the new instances will be added to. For any VPC other than Default, you must use security_group_ids."
+    },
+    {
+      "name": "session_token",
+      "aliases": [
+        "aws_session_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS STS session token for use with temporary credentials. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SESSION_TOKEN environment variable may also be used. The session_token and profile options are mutually exclusive."
+    },
+    {
+      "name": "source_version",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "latest",
+      "choices": [],
+      "description": "The version number of the launch template version on which to base the new version. The new version inherits the same launch parameters as the source version, except for parameters that you explicity specify. Snapshots applied to the block_device_mappings are ignored when creating a new version unless they are explicitly included. Default: \"latest\""
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Whether the launch template should exist or not. Deleting specific versions of a launch template is not supported at this time. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "tag_specifications",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The tags to apply to the resources when this Launch template is used."
+    },
+    {
+      "name": "tags",
+      "aliases": [
+        "resource_tags"
+      ],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary representing the tags to be applied to the resource. If the tags parameter is not set then tags will not be modified."
+    },
+    {
+      "name": "template_id",
+      "aliases": [
+        "id"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The ID for the launch template, can be used for all cases except creating a new Launch Template. At least one of template_id and template_name must be specified."
+    },
+    {
+      "name": "template_name",
+      "aliases": [
+        "name"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The template name. This must be unique in the region-account combination you are using. If no launch template exists with the specified name, a new launch template is created. If a launch template with the specified name already exists and the configuration has not changed, nothing happens. If a launch template with the specified name already exists and the configuration has changed, a new version of the launch template is created. At least one of template_id and template_name must be specified."
+    },
+    {
+      "name": "user_data",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The Base64-encoded user data to make available to the instance. For more information, see the Linux http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html and Windows http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ec2-instance-metadata.html#instancedata-add-user-data documentation on user-data."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to false, SSL certificates will not be validated for communication with the AWS APIs. Setting validate_certs=false is strongly discouraged, as an alternative, consider setting aws_ca_bundle instead. Choices: false true ← (default)"
+    },
+    {
+      "name": "version_description",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The description of a launch template version. Default: \"\""
+    },
+    {
+      "name": "versions_to_delete",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "version",
+      "choices": [],
+      "description": "The version numbers of a launch template versions to delete. Use default_version to specify a new default version when deleting the current default version. By default, the latest version will be made the default. Ignored when state=present."
+    }
+  ],
+  "examples": [
+    "- name: Create an ec2 launch template\n  amazon.aws.ec2_launch_template:\n    name: \"my_template\"\n    image_id: \"ami-04b762b4289fba92b\"\n    key_name: my_ssh_key\n    instance_type: t2.micro\n    iam_instance_profile: myTestProfile\n    disable_api_termination: true\n\n- name: >\n    Create a new version of an existing ec2 launch template with a different instance type,\n    while leaving an older version as the default version\n  amazon.aws.ec2_launch_template:\n    name: \"my_template\"\n    default_version: 1\n    instance_type: c5.4xlarge\n\n- name: Delete an ec2 launch template\n  amazon.aws.ec2_launch_template:\n    name: \"my_template\"\n    state: absent\n\n- name: Delete a specific version of an ec2 launch template\n  amazon.aws.ec2_launch_template:\n    name: \"my_template\"\n    versions_to_delete:\n      - 2\n    state: absent\n\n- name: Delete a specific version of an ec2 launch template and change the default version\n  amazon.aws.ec2_launch_template:\n    name: \"my_template\"\n    versions_to_delete:\n      - 1\n    default_version: 2\n    state: absent\n\n- name: Create an ec2 launch template with specific tags\n  amazon.aws.ec2_launch_template:\n    name: \"my_template\"\n    image_id: \"ami-04b762b4289fba92b\"\n    instance_type: t2.micro\n    disable_api_termination: true\n    tags:\n      Some: tag\n      Another: tag\n\n- name: Create an ec2 launch template with different tag for volume and instance\n  amazon.aws.ec2_launch_template:\n    name: \"my_template\"\n    image_id: \"ami-04b762b4289fba92b\"\n    instance_type: t2.micro\n    block_device_mappings:\n      - device_name: /dev/sdb\n        ebs:\n          volume_size: 20\n          delete_on_termination: true\n          volume_type: standard\n    tag_specifications:\n      - resource_type: instance\n        tags:\n          OsType: Linux\n      - resource_type: volume\n        tags:\n          foo: bar"
+  ],
+  "return_values": [
+    {
+      "name": "default_template",
+      "type": "complex",
+      "description": "The launch template version that will be used if only the template name is specified. Often this is the same as the latest version, but not always. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "create_time",
+      "type": "string",
+      "description": "The time launch template was created. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "created_by",
+      "type": "string",
+      "description": "The principal that created the launch template. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "default_version_number",
+      "type": "integer",
+      "description": "The version number of the default version of the launch template. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "latest_version_number",
+      "type": "integer",
+      "description": "The version number of the latest version of the launch template. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "launch_template_id",
+      "type": "string",
+      "description": "The ID of the launch template. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "launch_template_name",
+      "type": "string",
+      "description": "The name of the launch template. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "tags",
+      "type": "dictionary",
+      "description": "A dictionary of tags assigned to image. Returned: when AMI is created or already exists Sample: {\"Env\": \"devel\", \"Name\": \"nat-server\"}",
+      "returned": "when"
+    },
+    {
+      "name": "default_version",
+      "type": "integer",
+      "description": "The version that will be used if only the template name is specified. Often this is the same as the latest version, but not always. Returned: when default_template has a version number.",
+      "returned": "when"
+    },
+    {
+      "name": "deleted_template",
+      "type": "complex",
+      "description": "information about a launch template deleted. Returned: when state=absent",
+      "returned": "when"
+    },
+    {
+      "name": "deleted_versions",
+      "type": "list",
+      "description": "Information about deleted launch template versions. Returned: when state=absent",
+      "returned": "when"
+    },
+    {
+      "name": "version_number",
+      "type": "integer",
+      "description": "The version number of the launch template. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "latest_template",
+      "type": "complex",
+      "description": "The latest available version of the launch template. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "latest_version",
+      "type": "integer",
+      "description": "The latest available version number of the launch template. Returned: when latest_template has a version number.",
+      "returned": "when"
+    },
+    {
+      "name": "template",
+      "type": "complex",
+      "description": "Latest available version of the launch template. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "versions",
+      "type": "list",
+      "description": "All available versions of the launch template. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "launch_template_data",
+      "type": "dictionary",
+      "description": "Information about the launch template. Returned: always Sample: {\"block_device_mappings\": [{\"device_name\": \"/dev/sdb\", \"ebs\": {\"delete_on_termination\": true, \"encrypted\": true, \"volumeSize\": 5}}], \"ebs_optimized\": false, \"image_id\": \"ami-0231217be14a6f3ba\", \"instance_type\": \"t2.micro\", \"network_interfaces\": [{\"associate_public_ip_address\": false, \"device_index\": 0, \"ipv6_addresses\": [{\"ipv6_address\": \"2001:0:130F:0:0:9C0:876A:130B\"}]}]}",
+      "returned": "always"
+    },
+    {
+      "name": "block_device_mappings",
+      "type": "list",
+      "description": "The block device mappings. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "device_name",
+      "type": "string",
+      "description": "The device name. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "ebs",
+      "type": "string",
+      "description": "Information about the block device for an EBS volume. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "delete_on_termination",
+      "type": "boolean",
+      "description": "Indicates whether the EBS volume is deleted on instance termination. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "encrypted",
+      "type": "boolean",
+      "description": "Indicates whether the EBS volume is encrypted. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "iops",
+      "type": "integer",
+      "description": "The number of I/O operations per second (IOPS) that the volume supports. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "kms_key_id",
+      "type": "integer",
+      "description": "The ARN of the Key Management Service (KMS) CMK used for encryption. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "snapshot_id",
+      "type": "string",
+      "description": "The ID of the snapshot. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "throughput",
+      "type": "integer",
+      "description": "The throughput that the volume supports, in MiB/s. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "volume_size",
+      "type": "integer",
+      "description": "The size of the volume, in GiB. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "volume_type",
+      "type": "string",
+      "description": "The volume type. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "no_device",
+      "type": "string",
+      "description": "To omit the device from the block device mapping, specify an empty string. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "virtual_name",
+      "type": "string",
+      "description": "The virtual device name. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "cpu_options",
+      "type": "dictionary",
+      "description": "The CPU options for the instance. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "amd_sev_snp",
+      "type": "integer",
+      "description": "Indicates whether the instance is enabled for AMD SEV-SNP. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "core_count",
+      "type": "integer",
+      "description": "The number of CPU cores for the instance. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "threads_per_core",
+      "type": "integer",
+      "description": "The number of threads per CPU core. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "disable_api_termination",
+      "type": "boolean",
+      "description": "If set to true, indicates that the instance cannot be terminated using the Amazon EC2 console, command line tool, or API. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "ebs_optimized",
+      "type": "boolean",
+      "description": "Indicates whether the instance is optimized for Amazon EBS I/O. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "enclave_options",
+      "type": "dictionary",
+      "description": "Indicates whether the instance is enabled for Amazon Web Services Nitro Enclaves. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "enabled",
+      "type": "boolean",
+      "description": "If this parameter is set to true, the instance is enabled for Amazon Web Services Nitro Enclaves. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "iam_instance_profile",
+      "type": "dictionary",
+      "description": "The IAM instance profile. Returned: if application",
+      "returned": "if"
+    },
+    {
+      "name": "arn",
+      "type": "string",
+      "description": "The Amazon Resource Name (ARN) of the instance profile. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "The name of the instance profile. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "image_id",
+      "type": "string",
+      "description": "The ID of the AMI or a Systems Manager parameter. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "instance_initiated_shutdown_behavior",
+      "type": "string",
+      "description": "Indicates whether an instance stops or terminates when you initiate shutdown from the instance. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "instance_type",
+      "type": "string",
+      "description": "The instance type. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "kernel_id",
+      "type": "string",
+      "description": "The ID of the kernel. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "key_name",
+      "type": "string",
+      "description": "The name of the key pair. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "metadata_options",
+      "type": "dictionary",
+      "description": "The metadata options for the instance. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "http_endpoint",
+      "type": "string",
+      "description": "Enables or disables the HTTP metadata endpoint on your instances. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "http_protocol_ipv6",
+      "type": "string",
+      "description": "Enables or disables the IPv6 endpoint for the instance metadata service. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "http_put_response_hop_limit",
+      "type": "integer",
+      "description": "The desired HTTP PUT response hop limit for instance metadata requests. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "http_tokens",
+      "type": "string",
+      "description": "Indicates whether IMDSv2 is required. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "instance_metadata_tags",
+      "type": "string",
+      "description": "Set to enabled to allow access to instance tags from the instance metadata. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "state",
+      "type": "string",
+      "description": "The state of the metadata option changes. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "monitoring",
+      "type": "dictionary",
+      "description": "The monitoring for the instance. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "network_interfaces",
+      "type": "list",
+      "description": "The network interfaces. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "associate_carrier_ip_address",
+      "type": "boolean",
+      "description": "Indicates whether to associate a Carrier IP address with eth0 for a new network interface. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "associate_public_ip_address",
+      "type": "boolean",
+      "description": "Indicates whether to associate a public IPv4 address with eth0 for a new network interface. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "connection_tracking_specification",
+      "type": "dictionary",
+      "description": "A security group connection tracking specification that enables you to set the timeout for connection tracking on an Elastic network interface. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "tcp_established_timeout",
+      "type": "integer",
+      "description": "Timeout (in seconds) for idle TCP connections in an established state. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "udp_stream_timeout",
+      "type": "integer",
+      "description": "Timeout (in seconds) for idle UDP flows classified as streams which have seen more than one request-response transaction. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "udp_timeout",
+      "type": "integer",
+      "description": "Timeout (in seconds) for idle UDP flows that have seen traffic only in a single direction or a single request-response transaction. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "description": "A description for the network interface. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "device_index",
+      "type": "integer",
+      "description": "The device index for the network interface attachment. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "ena_srd_specification",
+      "type": "dictionary",
+      "description": "Contains the ENA Express settings for instances launched from your launch template. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "ena_srd_enabled",
+      "type": "boolean",
+      "description": "Indicates whether ENA Express is enabled for the network interface. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "ena_srd_udp_specification",
+      "type": "dictionary",
+      "description": "Configures ENA Express for UDP network traffic. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "ena_srd_udp_enabled",
+      "type": "boolean",
+      "description": "Indicates whether UDP traffic to and from the instance uses ENA Express. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "groups",
+      "type": "list",
+      "description": "The IDs of one or more security groups. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "interface_type",
+      "type": "string",
+      "description": "The type of network interface. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "ipv4_prefix_count",
+      "type": "integer",
+      "description": "The number of IPv4 prefixes that Amazon Web Services automatically assigned to the network interface. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "ipv4_prefixes",
+      "type": "list",
+      "description": "A list of IPv4 prefixes assigned to the network interface. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "ipv4_prefix",
+      "type": "string",
+      "description": "The IPv4 delegated prefixes assigned to the network interface. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "ipv6_address_count",
+      "type": "integer",
+      "description": "The number of IPv6 addresses for the network interface. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "ipv6_addresses",
+      "type": "list",
+      "description": "The IPv6 addresses for the network interface. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "ipv6_address",
+      "type": "string",
+      "description": "The IPv6 address. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "is_primary_ipv6",
+      "type": "boolean",
+      "description": "Determines if an IPv6 address associated with a network interface is the primary IPv6 address. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "ipv6_prefix_count",
+      "type": "integer",
+      "description": "The number of IPv6 prefixes that Amazon Web Services automatically assigned to the network interface. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "ipv6_prefixes",
+      "type": "list",
+      "description": "A list of IPv6 prefixes assigned to the network interface. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "ipv6_prefix",
+      "type": "string",
+      "description": "The IPv6 delegated prefixes assigned to the network interface. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "network_card_index",
+      "type": "integer",
+      "description": "The index of the network card. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "network_interface_id",
+      "type": "string",
+      "description": "The ID of the network interface. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "primary_ipv6",
+      "type": "string",
+      "description": "The primary IPv6 address of the network interface. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "private_ip_address",
+      "type": "string",
+      "description": "The primary private IPv4 address of the network interface. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "private_ip_addresses",
+      "type": "list",
+      "description": "A list of private IPv4 addresses. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "primary",
+      "type": "boolean",
+      "description": "Indicates whether the private IPv4 address is the primary private IPv4 address. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "secondary_private_ip_address_count",
+      "type": "integer",
+      "description": "The number of secondary private IPv4 addresses for the network interface. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "subnet_id",
+      "type": "string",
+      "description": "The ID of the subnet for the network interface. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "placement",
+      "type": "dictionary",
+      "description": "The placement of the instance. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "affinity",
+      "type": "string",
+      "description": "The affinity setting for the instance on the Dedicated Host. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "availability_zone",
+      "type": "string",
+      "description": "The Availability Zone of the instance. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "group_id",
+      "type": "string",
+      "description": "The Group ID of the placement group. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "group_name",
+      "type": "string",
+      "description": "The name of the placement group for the instance. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "host_id",
+      "type": "string",
+      "description": "The ID of the Dedicated Host for the instance. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "host_resource_group_arn",
+      "type": "string",
+      "description": "The ARN of the host resource group in which to launch the instances. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "partition_number",
+      "type": "integer",
+      "description": "The number of the partition the instance should launch in. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "tenancy",
+      "type": "string",
+      "description": "The tenancy of the instance. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "ram_disk_id",
+      "type": "string",
+      "description": "The ID of the RAM disk, if applicable. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "security_group_ids",
+      "type": "list",
+      "description": "The security group IDs. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "security_groups",
+      "type": "list",
+      "description": "The security group names. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "tag_specifications",
+      "type": "list",
+      "description": "The tags that are applied to the resources that are created during instance launch. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "resource_type",
+      "type": "string",
+      "description": "The type of resource to tag. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "key",
+      "type": "string",
+      "description": "The key of the tag. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "description": "The value of the tag. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "user_data",
+      "type": "string",
+      "description": "The user data for the instance. Returned: if applicable",
+      "returned": "if"
+    },
+    {
+      "name": "version_description",
+      "type": "string",
+      "description": "The description for the version. Returned: always",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_launch_template_module.html",
+  "parsed_at": "2026-04-13T16:29:20.438113"
+}

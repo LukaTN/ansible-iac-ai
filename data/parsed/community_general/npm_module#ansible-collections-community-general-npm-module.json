@@ -1,0 +1,169 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.npm",
+  "slug": "npm_module#ansible-collections-community-general-npm-module",
+  "description": "Manage node.js packages with Node Package Manager (npm).",
+  "parameters": [
+    {
+      "name": "ci",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Install packages based on package-lock file, same as running npm ci. Choices: false ← (default) true"
+    },
+    {
+      "name": "executable",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The executable location for npm. This is useful if you are using a version manager, such as nvm."
+    },
+    {
+      "name": "force",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use the --force flag when installing. Choices: false ← (default) true"
+    },
+    {
+      "name": "global",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Install the node.js library globally. When global=true, then path is not used to install the packages. Choices: false ← (default) true"
+    },
+    {
+      "name": "ignore_scripts",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use the --ignore-scripts flag when installing. Choices: false ← (default) true"
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The name of a node.js library to install."
+    },
+    {
+      "name": "no_bin_links",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use the --no-bin-links flag when installing. Choices: false ← (default) true"
+    },
+    {
+      "name": "no_optional",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use the --no-optional flag when installing. Choices: false ← (default) true"
+    },
+    {
+      "name": "path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The base path where to install the node.js libraries. When global=true, then path is not used to install the packages."
+    },
+    {
+      "name": "production",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Install dependencies in production mode, excluding devDependencies. Choices: false ← (default) true"
+    },
+    {
+      "name": "registry",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The registry to install modules from."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\"",
+        "\"latest\""
+      ],
+      "description": "The state of the node.js library. Choices: \"present\" ← (default) \"absent\" \"latest\""
+    },
+    {
+      "name": "unsafe_perm",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use the --unsafe-perm flag when installing. Choices: false ← (default) true"
+    },
+    {
+      "name": "version",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The version to be installed."
+    }
+  ],
+  "examples": [
+    "- name: Install \"coffee-script\" node.js package.\n  community.general.npm:\n    name: coffee-script\n    path: /app/location\n\n- name: Install \"coffee-script\" node.js package on version 1.6.1.\n  community.general.npm:\n    name: coffee-script\n    version: '1.6.1'\n    path: /app/location\n\n- name: Install \"coffee-script\" node.js package globally.\n  community.general.npm:\n    name: coffee-script\n    global: true\n\n- name: Force Install \"coffee-script\" node.js package.\n  community.general.npm:\n    name: coffee-script\n    force: true\n\n- name: Remove the globally package \"coffee-script\".\n  community.general.npm:\n    name: coffee-script\n    global: true\n    state: absent\n\n- name: Install \"coffee-script\" node.js package from custom registry.\n  community.general.npm:\n    name: coffee-script\n    registry: 'http://registry.mysite.com'\n\n- name: Install packages based on package.json.\n  community.general.npm:\n    path: /app/location\n\n- name: Update packages based on package.json to their latest version.\n  community.general.npm:\n    path: /app/location\n    state: latest\n\n- name: Install packages based on package.json using the npm installed with nvm v0.10.1.\n  community.general.npm:\n    path: /app/location\n    executable: /opt/nvm/v0.10.1/bin/npm\n    state: present"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/npm_module.html",
+  "parsed_at": "2026-04-13T16:29:53.909943"
+}

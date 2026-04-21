@@ -1,0 +1,188 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.gitlab_project_access_token",
+  "slug": "gitlab_project_access_token_module#ansible-collections-community-general-gitlab-project-access-token-module",
+  "description": "Creates and revokes project access tokens.",
+  "parameters": [
+    {
+      "name": "access_level",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"guest\"",
+        "\"planner\"",
+        "\"reporter\"",
+        "\"developer\"",
+        "\"maintainer\" ← (default)",
+        "\"owner\""
+      ],
+      "description": "Access level of the access token. The value planner was added in community.general 11.3.0. Choices: \"guest\" \"planner\" \"reporter\" \"developer\" \"maintainer\" ← (default) \"owner\""
+    },
+    {
+      "name": "api_job_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "GitLab CI job token for logging in."
+    },
+    {
+      "name": "api_oauth_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "GitLab OAuth token for logging in."
+    },
+    {
+      "name": "api_password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The password to use for authentication against the API."
+    },
+    {
+      "name": "api_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "GitLab access token with API permissions."
+    },
+    {
+      "name": "api_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The resolvable endpoint for the API."
+    },
+    {
+      "name": "api_username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The username to use for authentication against the API."
+    },
+    {
+      "name": "ca_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The CA certificates bundle to use to verify GitLab server certificate."
+    },
+    {
+      "name": "expires_at",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Expiration date of the access token in YYYY-MM-DD format. Make sure to quote this value in YAML to ensure it is kept as a string and not interpreted as a YAML date."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Access token’s name."
+    },
+    {
+      "name": "project",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "ID or full path of project in the form of group/name."
+    },
+    {
+      "name": "recreate",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"never\" ← (default)",
+        "\"always\"",
+        "\"state_change\""
+      ],
+      "description": "Whether the access token is recreated if it already exists. When never the token is never recreated. When always the token is always recreated. When state_change the token is recreated if there is a difference between desired state and actual state. Choices: \"never\" ← (default) \"always\" \"state_change\""
+    },
+    {
+      "name": "scopes",
+      "aliases": [
+        "scope"
+      ],
+      "type": "list",
+      "required": true,
+      "default": "",
+      "choices": [
+        "\"api\"",
+        "\"read_api\"",
+        "\"read_registry\"",
+        "\"write_registry\"",
+        "\"read_repository\"",
+        "\"write_repository\"",
+        "\"create_runner\"",
+        "\"manage_runner\"",
+        "\"ai_features\"",
+        "\"k8s_proxy\"",
+        "\"self_rotate\""
+      ],
+      "description": "Scope of the access token. The values manage_runner and self_rotate were added in community.general 11.3.0. Choices: \"api\" \"read_api\" \"read_registry\" \"write_registry\" \"read_repository\" \"write_repository\" \"create_runner\" \"manage_runner\" \"ai_features\" \"k8s_proxy\" \"self_rotate\""
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "When present the access token is added to the project if it does not exist. When absent it is removed from the project if it exists. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether or not to validate SSL certs when supplying a HTTPS endpoint. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: \"Creating a project access token\"\n  community.general.gitlab_project_access_token:\n    api_url: https://gitlab.example.com/\n    api_token: \"somegitlabapitoken\"\n    project: \"my_group/my_project\"\n    name: \"project_token\"\n    expires_at: \"2024-12-31\"\n    access_level: developer\n    scopes:\n      - api\n      - read_api\n      - read_repository\n      - write_repository\n    state: present\n\n- name: \"Revoking a project access token\"\n  community.general.gitlab_project_access_token:\n    api_url: https://gitlab.example.com/\n    api_token: \"somegitlabapitoken\"\n    project: \"my_group/my_project\"\n    name: \"project_token\"\n    expires_at: \"2024-12-31\"\n    scopes:\n      - api\n      - read_api\n      - read_repository\n      - write_repository\n    state: absent\n\n- name: \"Change (recreate) existing token if its actual state is different than desired state\"\n  community.general.gitlab_project_access_token:\n    api_url: https://gitlab.example.com/\n    api_token: \"somegitlabapitoken\"\n    project: \"my_group/my_project\"\n    name: \"project_token\"\n    expires_at: \"2024-12-31\"\n    scopes:\n      - api\n      - read_api\n      - read_repository\n      - write_repository\n    recreate: state_change\n    state: present"
+  ],
+  "return_values": [
+    {
+      "name": "access_token",
+      "type": "dictionary",
+      "description": "API object. Only contains the value of the token if the token was created or recreated. Returned: success and state=present",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/gitlab_project_access_token_module.html",
+  "parsed_at": "2026-04-13T16:29:46.592273"
+}

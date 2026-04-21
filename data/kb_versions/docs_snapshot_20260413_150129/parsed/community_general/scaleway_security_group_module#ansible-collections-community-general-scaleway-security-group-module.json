@@ -1,0 +1,206 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.scaleway_security_group",
+  "slug": "scaleway_security_group_module#ansible-collections-community-general-scaleway-security-group-module",
+  "description": "This module manages Security Group on Scaleway account https://developer.scaleway.com.",
+  "parameters": [
+    {
+      "name": "api_timeout",
+      "aliases": [
+        "timeout"
+      ],
+      "type": "integer",
+      "required": false,
+      "default": "30",
+      "choices": [],
+      "description": "HTTP timeout to Scaleway API in seconds. Default: 30"
+    },
+    {
+      "name": "api_token",
+      "aliases": [
+        "oauth_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Scaleway OAuth token. This is required if profile is not specified."
+    },
+    {
+      "name": "api_url",
+      "aliases": [
+        "base_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "https://api.scaleway.com",
+      "choices": [],
+      "description": "Scaleway API URL. Default: \"https://api.scaleway.com\""
+    },
+    {
+      "name": "description",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Description of the Security Group."
+    },
+    {
+      "name": "inbound_default_policy",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "policy",
+      "choices": [
+        "\"accept\"",
+        "\"drop\""
+      ],
+      "description": "Default policy for incoming traffic. Choices: \"accept\" \"drop\""
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the Security Group."
+    },
+    {
+      "name": "organization",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Organization identifier. Exactly one of project and organization must be specified."
+    },
+    {
+      "name": "organization_default",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "one.",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Create security group to be the default one. Choices: false true"
+    },
+    {
+      "name": "outbound_default_policy",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "policy",
+      "choices": [
+        "\"accept\"",
+        "\"drop\""
+      ],
+      "description": "Default policy for outcoming traffic. Choices: \"accept\" \"drop\""
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "scw_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The config profile in config file to load the Scaleway OAuth token from, use instead of api_token. It is also possible to set SCW_PROFILE to use a SCW CLI config profile."
+    },
+    {
+      "name": "project",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Project identifier. Exactly one of project and organization must be specified."
+    },
+    {
+      "name": "query_parameters",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "List of parameters passed to the query string. Default: {}"
+    },
+    {
+      "name": "region",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [
+        "\"ams1\"",
+        "\"EMEA-NL-EVS\"",
+        "\"ams2\"",
+        "\"ams3\"",
+        "\"par1\"",
+        "\"EMEA-FR-PAR1\"",
+        "\"par2\"",
+        "\"EMEA-FR-PAR2\"",
+        "\"par3\"",
+        "\"waw1\"",
+        "\"EMEA-PL-WAW1\"",
+        "\"waw2\"",
+        "\"waw3\""
+      ],
+      "description": "Scaleway region to use (for example par1). Choices: \"ams1\" \"EMEA-NL-EVS\" \"ams2\" \"ams3\" \"par1\" \"EMEA-FR-PAR1\" \"par2\" \"EMEA-FR-PAR2\" \"par3\" \"waw1\" \"EMEA-PL-WAW1\" \"waw2\" \"waw3\""
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)"
+      ],
+      "description": "Indicate desired state of the Security Group. Choices: \"absent\" \"present\" ← (default)"
+    },
+    {
+      "name": "stateful",
+      "aliases": [],
+      "type": "boolean",
+      "required": true,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Create a stateful security group which allows established connections in and out. Choices: false true"
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Validate SSL certs of the Scaleway API. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Create a Security Group using a project ID\n  community.general.scaleway_security_group:\n    state: present\n    region: par1\n    name: security_group\n    description: \"my security group description\"\n    stateful: false\n    inbound_default_policy: accept\n    outbound_default_policy: accept\n    organization_default: false\n    project: 951df375-e094-4d26-97c1-ba548eeb9c42\n  register: security_group_creation_task\n\n- name: Create a Security Group in the default project using an organization ID (deprecated)\n  community.general.scaleway_security_group:\n    state: present\n    region: par1\n    name: security_group\n    description: \"my security group description\"\n    organization: 43a3b6c8-916f-477b-b7ec-ff1898f5fdd9\n    stateful: false\n    inbound_default_policy: accept\n    outbound_default_policy: accept\n    organization_default: false\n  register: security_group_creation_task"
+  ],
+  "return_values": [
+    {
+      "name": "data",
+      "type": "dictionary",
+      "description": "This is only present when state=present. Returned: when state=present Sample: {\"scaleway_security_group\": {\"description\": \"my security group description\", \"enable_default_security\": true, \"id\": \"0168fb1f-cc46-4f69-b4be-c95d2a19bcae\", \"inbound_default_policy\": \"accept\", \"name\": \"security_group\", \"organization\": \"43a3b6c8-916f-477b-b7ec-ff1898f5fdd9\", \"organization_default\": false, \"outbound_default_policy\": \"accept\", \"servers\": [], \"stateful\": false}}",
+      "returned": "when"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/scaleway_security_group_module#ansible-collections-community-general-scaleway-security-group-module.html",
+  "parsed_at": "2026-04-11T13:53:25.886782"
+}

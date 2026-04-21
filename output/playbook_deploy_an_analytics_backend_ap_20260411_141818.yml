@@ -1,0 +1,73 @@
+---
+- name: Deploy analytics backend application
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - kubernetes.core
+  tasks:
+    - name: Create ConfigMap for configuration values
+      kubernetes.core.k8s_resource:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: analytics-config
+            namespace: default
+          data:
+            config.yaml: |
+              # Configuration values here
+
+    - name: Create Secret for database credentials
+      kubernetes.core.k8s_resource:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: analytics-secret
+            namespace: default
+          type: Opaque
+          stringData:
+            DB_HOST: postgres-service
+            DB_USER: user
+            DB_PASSWORD: password
+
+    - name: Deploy analytics backend application
+      kubernetes.core.k8s_resource:
+        state: present
+        definition:
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: analytics-backend
+            namespace: default
+          spec:
+            replicas: 3
+            selector:
+              matchLabels:
+                app: analytics-backend
+            template:
+              metadata:
+                labels:
+                  app: analytics-backend
+              spec:
+                containers:
+                  - name: analytics-api
+                    image: myregistry/analytics-api:latest
+                    ports:
+                      - containerPort: 8080
+                    envFrom:
+                      - configMapRef:
+                          name: analytics-config
+                      - secretRef:
+                          name: analytics-secret
+
+    - name: Scale deployment to 3 replicas
+      kubernetes.core.k8s_scale:
+        api_version: apps/v1
+        kind: Deployment
+        name: analytics-backend
+        namespace: default
+        replicas: 3

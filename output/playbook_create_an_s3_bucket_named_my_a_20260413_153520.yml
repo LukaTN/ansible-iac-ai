@@ -1,0 +1,43 @@
+# ============================================================
+# AnsibleAI RAG Generator — LangChain + ChromaDB
+# Date        : 2026-04-13 15:35:20
+# Request     : create an S3 bucket named my-app-backups in us-west-2 with versioning enabled
+# Module      : amazon.aws.backup_plan
+# Collection  : amazon.aws
+# RAG score   : 0.683
+# Chunks used : 6
+# Source URL  : https://docs.ansible.com/ansible/latest/collections/amazon/aws/backup_plan_module#ansible-collections-amazon-aws-backup-plan-module.html
+# LLM model   : qwen2.5-coder:7b
+# ============================================================
+
+---
+- name: Create an S3 bucket named my-app-backups in us-west-2 with versioning enabled
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - amazon.aws
+  tasks:
+    - name: Ensure the backup vault exists
+      amazon.aws.backup_vault:
+        state: present
+        backup_vault_name: my-app-backups-vault
+        encryption_key_arn: arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
+        tags:
+          environment: dev
+          Name: my-app-backups-vault
+
+    - name: Create a backup plan for the S3 bucket
+      amazon.aws.backup_plan:
+        state: present
+        backup_plan_name: my-app-backup-plan
+        destination_backup_vault_arn: arn:aws:backup::111122223333:backup-vault/my-app-backups-vault
+        rules:
+          - rule_name: daily-backup
+            target_backup_vault_name: my-app-backups-vault
+            schedule_expression: cron(0 0 * * ? *)
+            start_window_minutes: 60
+            completion_window_minutes: 120
+            lifecycle:
+              move_to_cold_storage_after_days: 30
+              delete_after_days: 90

@@ -1,0 +1,56 @@
+{
+  "collection_ns": "ansible_builtin",
+  "collection": "ansible.builtin",
+  "module": "ansible.builtin.assert",
+  "slug": "assert_module#ansible-collections-ansible-builtin-assert-module",
+  "description": "This module asserts that given expressions are true with an optional custom message.",
+  "parameters": [
+    {
+      "name": "fail_msg",
+      "aliases": [
+        "msg"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The customized message used for a failing assertion. This argument was called msg before Ansible 2.7, now it is renamed to fail_msg with alias msg."
+    },
+    {
+      "name": "quiet",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Set this to true to avoid verbose output. Choices: false ← (default) true"
+    },
+    {
+      "name": "success_msg",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The customized message used for a successful assertion."
+    },
+    {
+      "name": "that",
+      "aliases": [],
+      "type": "list",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "A list of string expressions of the same form that can be passed to the when statement."
+    }
+  ],
+  "examples": [
+    "- name: A single condition can be supplied as string instead of list\n  ansible.builtin.assert:\n    that: \"ansible_os_family != 'RedHat'\"\n\n- name: Use yaml multiline strings to ease escaping\n  ansible.builtin.assert:\n    that:\n      - \"'foo' in some_command_result.stdout\"\n      - number_of_the_counting == 3\n      - >\n        \"reject\" not in some_command_result.stderr\n\n- name: After version 2.7 both O(msg) and O(fail_msg) can customize failing assertion message\n  ansible.builtin.assert:\n    that:\n      - my_param <= 100\n      - my_param >= 0\n    fail_msg: \"'my_param' must be between 0 and 100\"\n    success_msg: \"'my_param' is between 0 and 100\"\n\n- name: Please use O(msg) when ansible version is smaller than 2.7\n  ansible.builtin.assert:\n    that:\n      - my_param <= 100\n      - my_param >= 0\n    msg: \"'my_param' must be between 0 and 100\"\n\n- name: Use quiet to avoid verbose output\n  ansible.builtin.assert:\n    that:\n      - my_param <= 100\n      - my_param >= 0\n    quiet: true"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/assert_module#ansible-collections-ansible-builtin-assert-module.html",
+  "parsed_at": "2026-04-11T13:52:51.276859"
+}

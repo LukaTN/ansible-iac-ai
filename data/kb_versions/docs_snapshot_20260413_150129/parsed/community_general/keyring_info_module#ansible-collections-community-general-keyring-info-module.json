@@ -1,0 +1,49 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.keyring_info",
+  "slug": "keyring_info_module#ansible-collections-community-general-keyring-info-module",
+  "description": "This module uses the keyring Python library to retrieve passphrases for a given service and username from the OS’ native keyring.",
+  "parameters": [
+    {
+      "name": "keyring_password",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Password to unlock keyring."
+    },
+    {
+      "name": "service",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the service."
+    },
+    {
+      "name": "username",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The user belonging to the service."
+    }
+  ],
+  "examples": [
+    "- name: Retrieve password for service_name/user_name\n  community.general.keyring_info:\n    service: test\n    username: test1\n    keyring_password: \"{{ keyring_password }}\"\n  register: test_password\n\n- name: Display password\n  ansible.builtin.debug:\n    msg: \"{{ test_password.passphrase }}\""
+  ],
+  "return_values": [
+    {
+      "name": "passphrase",
+      "type": "string",
+      "description": "A string containing the password. Returned: success and the password exists Sample: \"Password123\"",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/keyring_info_module#ansible-collections-community-general-keyring-info-module.html",
+  "parsed_at": "2026-04-11T13:53:18.860748"
+}

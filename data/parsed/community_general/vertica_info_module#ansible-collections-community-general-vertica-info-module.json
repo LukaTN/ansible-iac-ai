@@ -1,0 +1,60 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.vertica_info",
+  "slug": "vertica_info_module#ansible-collections-community-general-vertica-info-module",
+  "description": "Gathers Vertica database information.",
+  "parameters": [
+    {
+      "name": "cluster",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "localhost",
+      "choices": [],
+      "description": "Name of the cluster running the schema. Default: \"localhost\""
+    },
+    {
+      "name": "db",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of the database running the schema."
+    },
+    {
+      "name": "login_password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The password used to authenticate with."
+    },
+    {
+      "name": "login_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "dbadmin",
+      "choices": [],
+      "description": "The username used to authenticate with. Default: \"dbadmin\""
+    },
+    {
+      "name": "port",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "5433",
+      "choices": [],
+      "description": "Database port to connect to. Default: \"5433\""
+    }
+  ],
+  "examples": [
+    "- name: Gathering vertica facts\n  community.general.vertica_info: db=db_name\n  register: result\n\n- name: Print schemas\n  ansible.builtin.debug:\n    msg: \"{{ result.vertica_schemas }}\""
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/vertica_info_module.html",
+  "parsed_at": "2026-04-13T16:30:00.392812"
+}

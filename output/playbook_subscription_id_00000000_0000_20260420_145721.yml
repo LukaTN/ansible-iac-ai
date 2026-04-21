@@ -1,0 +1,13 @@
+---
+- name: Create Azure Resource Group
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - azure.azcollection
+  tasks:
+    - name: Create resource group
+      azure.azcollection.azure_rm_resourcegroup:
+        name: my-resource-group
+        location: westeurope
+        subscription_id: "00000000-0000-0000-0000-000000000000"

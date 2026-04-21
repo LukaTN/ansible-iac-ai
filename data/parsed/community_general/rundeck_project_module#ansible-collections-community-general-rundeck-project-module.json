@@ -1,0 +1,189 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.rundeck_project",
+  "slug": "rundeck_project_module#ansible-collections-community-general-rundeck-project-module",
+  "description": "Create and remove Rundeck projects through HTTP API.",
+  "parameters": [
+    {
+      "name": "api_token",
+      "aliases": [
+        "token"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Sets the token to authenticate against Rundeck API."
+    },
+    {
+      "name": "api_version",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "39",
+      "choices": [],
+      "description": "Rundeck API version to be used. API version must be at least 14. Default: 39"
+    },
+    {
+      "name": "client_cert",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "PEM formatted certificate chain file to be used for SSL client authentication. This file can also include the key as well, and if the key is included, client_key is not required."
+    },
+    {
+      "name": "client_key",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "PEM formatted file that contains your private key to be used for SSL client authentication. If client_cert contains both the certificate and key, this option is not required."
+    },
+    {
+      "name": "force",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If yes do not get a cached copy. Choices: false ← (default) true"
+    },
+    {
+      "name": "force_basic_auth",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Credentials specified with url_username and url_password should be passed in HTTP Header. Choices: false ← (default) true"
+    },
+    {
+      "name": "http_agent",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "ansible-httpget",
+      "choices": [],
+      "description": "Header to identify as, generally appears in web server logs. Default: \"ansible-httpget\""
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Sets the project name."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Create or remove Rundeck project. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "url",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "HTTP, HTTPS, or FTP URL in the form (http|https|ftp)://[user[:pass]]@host.domain[:port]/path"
+    },
+    {
+      "name": "url_password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The password for use in HTTP basic authentication. If the url_username parameter is not specified, the url_password parameter will not be used."
+    },
+    {
+      "name": "url_username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The username for use in HTTP basic authentication. This parameter can be used without url_password for sites that allow empty passwords."
+    },
+    {
+      "name": "use_gssapi",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use GSSAPI to perform the authentication, typically this is for Kerberos or Kerberos through Negotiate authentication. Requires the Python library gssapi to be installed. Credentials for GSSAPI can be specified with url_username/url_password or with the GSSAPI env var KRB5CCNAME that specified a custom Kerberos credential cache. NTLM authentication is not supported even if the GSSAPI mech for NTLM has been installed. Choices: false ← (default) true"
+    },
+    {
+      "name": "use_proxy",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If no, it will not use a proxy, even if one is defined in an environment variable on the target hosts. Choices: false true ← (default)"
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If no, SSL certificates will not be validated. This should only be used on personally controlled sites using self-signed certificates. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Create a rundeck project\n  community.general.rundeck_project:\n    name: \"Project_01\"\n    label: \"Project 01\"\n    description: \"My Project 01\"\n    url: \"https://rundeck.example.org\"\n    api_version: 39\n    api_token: \"mytoken\"\n    state: present\n\n- name: Remove a rundeck project\n  community.general.rundeck_project:\n    name: \"Project_01\"\n    url: \"https://rundeck.example.org\"\n    api_token: \"mytoken\"\n    state: absent"
+  ],
+  "return_values": [
+    {
+      "name": "after",
+      "type": "dictionary",
+      "description": "Dictionary containing project information after modification. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "before",
+      "type": "dictionary",
+      "description": "Dictionary containing project information before modification. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "rundeck_response",
+      "type": "string",
+      "description": "Rundeck response when a failure occurs. Returned: failed",
+      "returned": "failed"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/rundeck_project_module.html",
+  "parsed_at": "2026-04-13T16:29:57.400847"
+}

@@ -1,0 +1,145 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.pnpm",
+  "slug": "pnpm_module#ansible-collections-community-general-pnpm-module",
+  "description": "Manage Node.js packages with the pnpm package manager.",
+  "parameters": [
+    {
+      "name": "alias",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Alias of the Node.js library."
+    },
+    {
+      "name": "dev",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Install dependencies in development mode. Pnpm ignores any regular dependencies in package.json. Choices: false ← (default) true"
+    },
+    {
+      "name": "executable",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "location",
+      "choices": [],
+      "description": "The executable location for pnpm. The default location it searches for is PATH, fails if not set."
+    },
+    {
+      "name": "global",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Install the Node.js library globally. Choices: false ← (default) true"
+    },
+    {
+      "name": "ignore_scripts",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use the --ignore-scripts flag when installing. Choices: false ← (default) true"
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The name of a Node.js library to install. All packages in package.json are installed if not provided."
+    },
+    {
+      "name": "no_optional",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Do not install optional packages, equivalent to --no-optional. Choices: false ← (default) true"
+    },
+    {
+      "name": "optional",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Install dependencies in optional mode. Choices: false ← (default) true"
+    },
+    {
+      "name": "path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The base path to install the Node.js libraries."
+    },
+    {
+      "name": "production",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Install dependencies in production mode. Pnpm ignores any dependencies under devDependencies in package.json. Choices: false ← (default) true"
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\"",
+        "\"latest\""
+      ],
+      "description": "Installation state of the named Node.js library. If absent is selected, a name option must be provided. Choices: \"present\" ← (default) \"absent\" \"latest\""
+    },
+    {
+      "name": "version",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The version of the library to be installed, in semver format."
+    }
+  ],
+  "examples": [
+    "- name: Install \"tailwindcss\" Node.js package.\n  community.general.pnpm:\n    name: tailwindcss\n    path: /app/location\n\n- name: Install \"tailwindcss\" Node.js package on version 3.3.2\n  community.general.pnpm:\n    name: tailwindcss\n    version: 3.3.2\n    path: /app/location\n\n- name: Install \"tailwindcss\" Node.js package globally.\n  community.general.pnpm:\n    name: tailwindcss\n    global: true\n\n- name: Install \"tailwindcss\" Node.js package as dev dependency.\n  community.general.pnpm:\n    name: tailwindcss\n    path: /app/location\n    dev: true\n\n- name: Install \"tailwindcss\" Node.js package as optional dependency.\n  community.general.pnpm:\n    name: tailwindcss\n    path: /app/location\n    optional: true\n\n- name: Install \"tailwindcss\" Node.js package version 0.1.3 as tailwind-1\n  community.general.pnpm:\n    name: tailwindcss\n    alias: tailwind-1\n    version: 0.1.3\n    path: /app/location\n\n- name: Remove the globally-installed package \"tailwindcss\".\n  community.general.pnpm:\n    name: tailwindcss\n    global: true\n    state: absent\n\n- name: Install packages based on package.json.\n  community.general.pnpm:\n    path: /app/location\n\n- name: Update all packages in package.json to their latest version.\n  community.general.pnpm:\n    path: /app/location\n    state: latest"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/pnpm_module#ansible-collections-community-general-pnpm-module.html",
+  "parsed_at": "2026-04-11T13:53:23.909374"
+}

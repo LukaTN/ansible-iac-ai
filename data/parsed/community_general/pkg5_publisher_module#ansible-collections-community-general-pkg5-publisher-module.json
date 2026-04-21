@@ -1,0 +1,80 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.pkg5_publisher",
+  "slug": "pkg5_publisher_module#ansible-collections-community-general-pkg5-publisher-module",
+  "description": "IPS packages are the native packages in Solaris 11 and higher.",
+  "parameters": [
+    {
+      "name": "enabled",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Is the repository enabled or disabled? Choices: false true"
+    },
+    {
+      "name": "mirror",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A path or URL to the repository mirror. Multiple values may be provided."
+    },
+    {
+      "name": "name",
+      "aliases": [
+        "publisher"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The publisher’s name."
+    },
+    {
+      "name": "origin",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A path or URL to the repository. Multiple values may be provided."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Whether to ensure that a publisher is present or absent. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "sticky",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Packages installed from a sticky repository can only receive updates from that repository. Choices: false true"
+    }
+  ],
+  "examples": [
+    "- name: Fetch packages for the solaris publisher direct from Oracle\n  community.general.pkg5_publisher:\n    name: solaris\n    sticky: true\n    origin: https://pkg.oracle.com/solaris/support/\n\n- name: Configure a publisher for locally-produced packages\n  community.general.pkg5_publisher:\n    name: site\n    origin: 'https://pkg.example.com/site/'"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/pkg5_publisher_module.html",
+  "parsed_at": "2026-04-13T16:29:56.136391"
+}

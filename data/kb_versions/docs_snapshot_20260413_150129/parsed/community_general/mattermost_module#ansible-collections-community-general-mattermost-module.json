@@ -1,0 +1,115 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.mattermost",
+  "slug": "mattermost_module#ansible-collections-community-general-mattermost-module",
+  "description": "Sends notifications to http://your.mattermost.url using the Incoming WebHook integration.",
+  "parameters": [
+    {
+      "name": "api_key",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Mattermost webhook API key. Log into your Mattermost site, go to Menu -> Integration -> Incoming Webhook -> Add Incoming Webhook. This gives you a full URL. api_key is the last part. http://mattermost.example.com/hooks/API_KEY."
+    },
+    {
+      "name": "attachments",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Define a list of attachments. For more information, see https://developers.mattermost.com/integrate/admin-guide/admin-message-attachments/. Required when text is not set."
+    },
+    {
+      "name": "channel",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Channel to send the message to. If absent, the message goes to the channel selected for the api_key."
+    },
+    {
+      "name": "icon_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "https://docs.ansible.com/favicon.ico",
+      "choices": [],
+      "description": "URL for the message sender’s icon. Default: \"https://docs.ansible.com/favicon.ico\""
+    },
+    {
+      "name": "priority",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"important\"",
+        "\"urgent\""
+      ],
+      "description": "Set a priority for the message. Choices: \"important\" \"urgent\""
+    },
+    {
+      "name": "text",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Text to send. Note that the module does not handle escaping characters. Required when attachments is not set."
+    },
+    {
+      "name": "url",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Mattermost URL (for example http://mattermost.yourcompany.com)."
+    },
+    {
+      "name": "username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "Ansible",
+      "choices": [],
+      "description": "This is the sender of the message (Username Override need to be enabled by mattermost admin, see mattermost doc). Default: \"Ansible\""
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If false, SSL certificates are not validated. This should only be used on personally controlled sites using self-signed certificates. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Send notification message via Mattermost\n  community.general.mattermost:\n    url: http://mattermost.example.com\n    api_key: my_api_key\n    text: '{{ inventory_hostname }} completed'\n\n- name: Send notification message via Mattermost all options\n  community.general.mattermost:\n    url: http://mattermost.example.com\n    api_key: my_api_key\n    text: '{{ inventory_hostname }} completed'\n    channel: notifications\n    username: 'Ansible on {{ inventory_hostname }}'\n    icon_url: http://www.example.com/some-image-file.png\n    priority: important\n\n- name: Send attachments message via Mattermost\n  community.general.mattermost:\n    url: http://mattermost.example.com\n    api_key: my_api_key\n    attachments:\n      - text: Display my system load on host A and B\n        color: '#ff00dd'\n        title: System load\n        fields:\n          - title: System A\n            value: \"load average: 0,74, 0,66, 0,63\"\n            short: true\n          - title: System B\n            value: 'load average: 5,16, 4,64, 2,43'\n            short: true"
+  ],
+  "return_values": [
+    {
+      "name": "payload",
+      "type": "string",
+      "description": "Mattermost payload. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "webhook_url",
+      "type": "string",
+      "description": "URL the webhook is sent to. Returned: success",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/mattermost_module#ansible-collections-community-general-mattermost-module.html",
+  "parsed_at": "2026-04-11T13:53:20.370401"
+}

@@ -1,0 +1,129 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.pam_limits",
+  "slug": "pam_limits_module#ansible-collections-community-general-pam-limits-module",
+  "description": "The community.general.pam_limits module modifies PAM limits.",
+  "parameters": [
+    {
+      "name": "backup",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Create a backup file including the timestamp information so you can get the original file back if you somehow clobbered it incorrectly. Choices: false ← (default) true"
+    },
+    {
+      "name": "comment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Comment associated with the limit. Default: \"\""
+    },
+    {
+      "name": "dest",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "/etc/security/limits.conf",
+      "choices": [],
+      "description": "Modify the limits.conf path. Default: \"/etc/security/limits.conf\""
+    },
+    {
+      "name": "domain",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "A username, @groupname, wildcard, UID/GID range."
+    },
+    {
+      "name": "limit_item",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [
+        "\"core\"",
+        "\"data\"",
+        "\"fsize\"",
+        "\"memlock\"",
+        "\"nofile\"",
+        "\"rss\"",
+        "\"stack\"",
+        "\"cpu\"",
+        "\"nproc\"",
+        "\"as\"",
+        "\"maxlogins\"",
+        "\"maxsyslogins\"",
+        "\"priority\"",
+        "\"locks\"",
+        "\"sigpending\"",
+        "\"msgqueue\"",
+        "\"nice\"",
+        "\"rtprio\"",
+        "\"chroot\""
+      ],
+      "description": "The limit to be set. Choices: \"core\" \"data\" \"fsize\" \"memlock\" \"nofile\" \"rss\" \"stack\" \"cpu\" \"nproc\" \"as\" \"maxlogins\" \"maxsyslogins\" \"priority\" \"locks\" \"sigpending\" \"msgqueue\" \"nice\" \"rtprio\" \"chroot\""
+    },
+    {
+      "name": "limit_type",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [
+        "\"hard\"",
+        "\"soft\"",
+        "\"-\""
+      ],
+      "description": "Limit type, see man 5 limits.conf for an explanation. Choices: \"hard\" \"soft\" \"-\""
+    },
+    {
+      "name": "use_max",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If set to true, the maximal value is used or conserved. If the specified value is superior to the value in the file, file content is replaced with the new value, else content is not modified. Choices: false ← (default) true"
+    },
+    {
+      "name": "use_min",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If set to true, the minimal value is used or conserved. If the specified value is inferior to the value in the file, file content is replaced with the new value, else content is not modified. Choices: false ← (default) true"
+    },
+    {
+      "name": "value",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The value of the limit. Value must either be unlimited, infinity or -1, all of which indicate no limit, or a limit of 0 or larger. Value must be a number in the range -20 to 19 inclusive, if limit_item is set to nice or priority. Refer to the man 5 limits.conf manual pages for more details."
+    }
+  ],
+  "examples": [
+    "- name: Add or modify nofile soft limit for the user joe\n  community.general.pam_limits:\n    domain: joe\n    limit_type: soft\n    limit_item: nofile\n    value: 64000\n\n- name: Add or modify fsize hard limit for the user smith. Keep or set the maximal value\n  community.general.pam_limits:\n    domain: smith\n    limit_type: hard\n    limit_item: fsize\n    value: 1000000\n    use_max: true\n\n- name: Add or modify memlock, both soft and hard, limit for the user james with a comment\n  community.general.pam_limits:\n    domain: james\n    limit_type: '-'\n    limit_item: memlock\n    value: unlimited\n    comment: unlimited memory lock for james\n\n- name: Add or modify hard nofile limits for wildcard domain\n  community.general.pam_limits:\n    domain: '*'\n    limit_type: hard\n    limit_item: nofile\n    value: 39693561"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/pam_limits_module#ansible-collections-community-general-pam-limits-module.html",
+  "parsed_at": "2026-04-11T13:53:23.484455"
+}

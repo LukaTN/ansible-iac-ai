@@ -1,0 +1,127 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.oneandone_public_ip",
+  "slug": "oneandone_public_ip_module#ansible-collections-community-general-oneandone-public-ip-module",
+  "description": "Create, update, and remove public IPs. This module has a dependency on 1and1 >= 1.0.",
+  "parameters": [
+    {
+      "name": "api_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Custom API URL. Overrides the ONEANDONE_API_URL environment variable."
+    },
+    {
+      "name": "auth_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Authenticating API token provided by 1&1."
+    },
+    {
+      "name": "datacenter",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"US\" ← (default)",
+        "\"ES\"",
+        "\"DE\"",
+        "\"GB\""
+      ],
+      "description": "ID of the datacenter where the IP is created (only for unassigned IPs). Choices: \"US\" ← (default) \"ES\" \"DE\" \"GB\""
+    },
+    {
+      "name": "public_ip_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The ID of the public IP used with update and delete states."
+    },
+    {
+      "name": "reverse_dns",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Reverse DNS name. maxLength=256."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\"",
+        "\"update\""
+      ],
+      "description": "Define a public IP state to create, remove, or update. Choices: \"present\" ← (default) \"absent\" \"update\""
+    },
+    {
+      "name": "type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"IPV4\" ← (default)",
+        "\"IPV6\""
+      ],
+      "description": "Type of IP. Currently, only IPV4 is available. Choices: \"IPV4\" ← (default) \"IPV6\""
+    },
+    {
+      "name": "wait",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Wait for the instance to be in state ‘running’ before returning. Choices: false true ← (default)"
+    },
+    {
+      "name": "wait_interval",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "5",
+      "choices": [],
+      "description": "Defines the number of seconds to wait when using the _wait_for methods. Default: 5"
+    },
+    {
+      "name": "wait_timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "600",
+      "choices": [],
+      "description": "How long before wait gives up, in seconds. Default: 600"
+    }
+  ],
+  "examples": [
+    "- name: Create a public IP\n  community.general.oneandone_public_ip:\n    auth_token: oneandone_private_api_key\n    reverse_dns: example.com\n    datacenter: US\n    type: IPV4\n\n- name: Update a public IP\n  community.general.oneandone_public_ip:\n    auth_token: oneandone_private_api_key\n    public_ip_id: public ip id\n    reverse_dns: secondexample.com\n    state: update\n\n- name: Delete a public IP\n  community.general.oneandone_public_ip:\n    auth_token: oneandone_private_api_key\n    public_ip_id: public ip id\n    state: absent"
+  ],
+  "return_values": [
+    {
+      "name": "public_ip",
+      "type": "dictionary",
+      "description": "Information about the public IP that was processed. Returned: always Sample: {\"id\": \"F77CC589EBC120905B4F4719217BFF6D\", \"ip\": \"10.5.132.106\"}",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/oneandone_public_ip_module.html",
+  "parsed_at": "2026-04-13T16:29:54.629461"
+}

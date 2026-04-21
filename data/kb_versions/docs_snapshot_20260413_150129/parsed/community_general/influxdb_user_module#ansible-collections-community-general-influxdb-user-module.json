@@ -1,0 +1,187 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.influxdb_user",
+  "slug": "influxdb_user_module#ansible-collections-community-general-influxdb-user-module",
+  "description": "Manage InfluxDB users.",
+  "parameters": [
+    {
+      "name": "admin",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Whether the user should be in the admin role or not. Since version 2.8, the role is also updated. Choices: false ← (default) true"
+    },
+    {
+      "name": "grants",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Privileges to grant to this user. Takes a list of dicts containing the “database” and “privilege” keys. If this argument is not provided, the current grants are left alone. If an empty list is provided, all grants for the user are removed."
+    },
+    {
+      "name": "hostname",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "localhost",
+      "choices": [],
+      "description": "The hostname or IP address on which InfluxDB server is listening. Default: \"localhost\""
+    },
+    {
+      "name": "password",
+      "aliases": [
+        "login_password"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "root",
+      "choices": [],
+      "description": "Password that is used to authenticate against InfluxDB server. Default: \"root\""
+    },
+    {
+      "name": "path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The path on which InfluxDB server is accessible. Only available when using python-influxdb >= 5.1.0. Default: \"\""
+    },
+    {
+      "name": "port",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "8086",
+      "choices": [],
+      "description": "The port on which InfluxDB server is listening. Default: 8086"
+    },
+    {
+      "name": "proxies",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "HTTP(S) proxy to use for Requests to connect to InfluxDB server. Default: {}"
+    },
+    {
+      "name": "retries",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "3",
+      "choices": [],
+      "description": "Number of retries client performs before aborting. 0 indicates try until success. Only available when using python-influxdb >= 4.1.0. Default: 3"
+    },
+    {
+      "name": "ssl",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use https instead of http to connect to InfluxDB server. Choices: false ← (default) true"
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)"
+      ],
+      "description": "State of the user. Choices: \"absent\" \"present\" ← (default)"
+    },
+    {
+      "name": "timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Number of seconds Requests waits for client to establish a connection."
+    },
+    {
+      "name": "udp_port",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "4444",
+      "choices": [],
+      "description": "UDP port to connect to InfluxDB server. Default: 4444"
+    },
+    {
+      "name": "use_udp",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use UDP to connect to InfluxDB server. Choices: false ← (default) true"
+    },
+    {
+      "name": "user_name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the user."
+    },
+    {
+      "name": "user_password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Password to be set for the user."
+    },
+    {
+      "name": "username",
+      "aliases": [
+        "login_username"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "root",
+      "choices": [],
+      "description": "Username that is used to authenticate against InfluxDB server. Default: \"root\""
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If set to false, the SSL certificates are not validated. This should only set to false used on personally controlled sites using self-signed certificates. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Create a user on localhost using default login credentials\n  community.general.influxdb_user:\n    user_name: john\n    user_password: s3cr3t\n\n- name: Create a user on localhost using custom login credentials\n  community.general.influxdb_user:\n    user_name: john\n    user_password: s3cr3t\n    login_username: \"{{ influxdb_username }}\"\n    login_password: \"{{ influxdb_password }}\"\n\n- name: Create an admin user on a remote host using custom login credentials\n  community.general.influxdb_user:\n    user_name: john\n    user_password: s3cr3t\n    admin: true\n    hostname: \"{{ influxdb_hostname }}\"\n    login_username: \"{{ influxdb_username }}\"\n    login_password: \"{{ influxdb_password }}\"\n\n- name: Create a user on localhost with privileges\n  community.general.influxdb_user:\n    user_name: john\n    user_password: s3cr3t\n    login_username: \"{{ influxdb_username }}\"\n    login_password: \"{{ influxdb_password }}\"\n    grants:\n      - database: 'collectd'\n        privilege: 'WRITE'\n      - database: 'graphite'\n        privilege: 'READ'\n\n- name: Destroy a user using custom login credentials\n  community.general.influxdb_user:\n    user_name: john\n    login_username: \"{{ influxdb_username }}\"\n    login_password: \"{{ influxdb_password }}\"\n    state: absent"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/influxdb_user_module#ansible-collections-community-general-influxdb-user-module.html",
+  "parsed_at": "2026-04-11T13:53:15.822388"
+}

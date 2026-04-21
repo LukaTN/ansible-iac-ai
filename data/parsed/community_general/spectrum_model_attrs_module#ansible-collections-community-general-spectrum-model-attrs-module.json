@@ -1,0 +1,110 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.spectrum_model_attrs",
+  "slug": "spectrum_model_attrs_module#ansible-collections-community-general-spectrum-model-attrs-module",
+  "description": "This module can be used to enforce a model’s attributes in CA Spectrum.",
+  "parameters": [
+    {
+      "name": "attributes",
+      "aliases": [],
+      "type": "list",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "A list of attribute names and values to enforce. All values and parameters are case sensitive and must be provided as strings only."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Model name."
+    },
+    {
+      "name": "type",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Model type."
+    },
+    {
+      "name": "url",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "URL of OneClick server."
+    },
+    {
+      "name": "url_password",
+      "aliases": [
+        "password"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "OneClick password."
+    },
+    {
+      "name": "url_username",
+      "aliases": [
+        "username"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "OneClick username."
+    },
+    {
+      "name": "use_proxy",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If false, it does not use a proxy, even if one is defined in an environment variable on the target hosts. Choices: false true ← (default)"
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Validate SSL certificates. Only change this to false if you can guarantee that you are talking to the correct endpoint and there is no man-in-the-middle attack happening. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Enforce maintenance mode for modelxyz01 with a note about why\n  community.general.spectrum_model_attrs:\n    url: \"http://oneclick.url.com\"\n    username: \"{{ oneclick_username }}\"\n    password: \"{{ oneclick_password }}\"\n    name: \"modelxyz01\"\n    type: \"Host_Device\"\n    validate_certs: true\n    attributes:\n      - name: \"isManaged\"\n        value: \"false\"\n      - name: \"Notes\"\n        value: >-\n          MM set on {{ ansible_date_time.iso8601 }} via CO {{ CO }}\n          by {{ tower_user_name | default(ansible_user_id) }}\n  delegate_to: localhost\n  register: spectrum_model_attrs_status"
+  ],
+  "return_values": [
+    {
+      "name": "changed_attrs",
+      "type": "dictionary",
+      "description": "Dictionary of changed name or hex IDs (whichever was specified) to their new corresponding values. Returned: always Sample: {\"Notes\": \"MM set on 2021-02-03T22:04:02Z via CO CO9999 by tgates\", \"isManaged\": \"true\"}",
+      "returned": "always"
+    },
+    {
+      "name": "msg",
+      "type": "string",
+      "description": "Informational message on the job result. Returned: always Sample: \"Success\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/spectrum_model_attrs_module.html",
+  "parsed_at": "2026-04-13T16:29:58.888162"
+}

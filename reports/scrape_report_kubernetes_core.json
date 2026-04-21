@@ -1,0 +1,133 @@
+{
+  "collection": "kubernetes.core",
+  "description": "Kubernetes orchestration modules",
+  "index_url": "https://docs.ansible.com/ansible/latest/collections/kubernetes/core/index.html",
+  "scraped_at": "2026-04-11T12:24:37.370092",
+  "total": 20,
+  "ok": 19,
+  "skipped": 0,
+  "errors": 1,
+  "output_dir": "data/raw_html\\kubernetes_core",
+  "results": [
+    {
+      "slug": "helm_module#ansible-collections-kubernetes-core-helm-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/kubernetes/core/helm_module.html#ansible-collections-kubernetes-core-helm-module",
+      "status": "ok",
+      "size": 107304
+    },
+    {
+      "slug": "helm_info_module#ansible-collections-kubernetes-core-helm-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/kubernetes/core/helm_info_module.html#ansible-collections-kubernetes-core-helm-info-module",
+      "status": "ok",
+      "size": 59346
+    },
+    {
+      "slug": "helm_plugin_module#ansible-collections-kubernetes-core-helm-plugin-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/kubernetes/core/helm_plugin_module.html#ansible-collections-kubernetes-core-helm-plugin-module",
+      "status": "ok",
+      "size": 53766
+    },
+    {
+      "slug": "helm_plugin_info_module#ansible-collections-kubernetes-core-helm-plugin-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/kubernetes/core/helm_plugin_info_module.html#ansible-collections-kubernetes-core-helm-plugin-info-module",
+      "status": "ok",
+      "size": 48265
+    },
+    {
+      "slug": "helm_pull_module#ansible-collections-kubernetes-core-helm-pull-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/kubernetes/core/helm_pull_module.html#ansible-collections-kubernetes-core-helm-pull-module",
+      "status": "ok",
+      "size": 64601
+    },
+    {
+      "slug": "helm_registry_auth_module#ansible-collections-kubernetes-core-helm-registry-auth-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/kubernetes/core/helm_registry_auth_module.html#ansible-collections-kubernetes-core-helm-registry-auth-module",
+      "status": "ok",
+      "size": 50215
+    },
+    {
+      "slug": "helm_repository_module#ansible-collections-kubernetes-core-helm-repository-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/kubernetes/core/helm_repository_module.html#ansible-collections-kubernetes-core-helm-repository-module",
+      "status": "ok",
+      "size": 58561
+    },
+    {
+      "slug": "helm_template_module#ansible-collections-kubernetes-core-helm-template-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/kubernetes/core/helm_template_module.html#ansible-collections-kubernetes-core-helm-template-module",
+      "status": "ok",
+      "size": 60013
+    },
+    {
+      "slug": "k8s_module#ansible-collections-kubernetes-core-k8s-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/kubernetes/core/k8s_module.html#ansible-collections-kubernetes-core-k8s-module",
+      "status": "ok",
+      "size": 143043
+    },
+    {
+      "slug": "k8s_cluster_info_module#ansible-collections-kubernetes-core-k8s-cluster-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/kubernetes/core/k8s_cluster_info_module.html#ansible-collections-kubernetes-core-k8s-cluster-info-module",
+      "status": "ok",
+      "size": 69081
+    },
+    {
+      "slug": "k8s_cp_module#ansible-collections-kubernetes-core-k8s-cp-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/kubernetes/core/k8s_cp_module.html#ansible-collections-kubernetes-core-k8s-cp-module",
+      "status": "error",
+      "error": "('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))"
+    },
+    {
+      "slug": "k8s_drain_module#ansible-collections-kubernetes-core-k8s-drain-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/kubernetes/core/k8s_drain_module.html#ansible-collections-kubernetes-core-k8s-drain-module",
+      "status": "ok",
+      "size": 69499
+    },
+    {
+      "slug": "k8s_exec_module#ansible-collections-kubernetes-core-k8s-exec-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/kubernetes/core/k8s_exec_module.html#ansible-collections-kubernetes-core-k8s-exec-module",
+      "status": "ok",
+      "size": 64810
+    },
+    {
+      "slug": "k8s_info_module#ansible-collections-kubernetes-core-k8s-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/kubernetes/core/k8s_info_module.html#ansible-collections-kubernetes-core-k8s-info-module",
+      "status": "ok",
+      "size": 81887
+    },
+    {
+      "slug": "k8s_json_patch_module#ansible-collections-kubernetes-core-k8s-json-patch-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/kubernetes/core/k8s_json_patch_module.html#ansible-collections-kubernetes-core-k8s-json-patch-module",
+      "status": "ok",
+      "size": 76159
+    },
+    {
+      "slug": "k8s_log_module#ansible-collections-kubernetes-core-k8s-log-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/kubernetes/core/k8s_log_module.html#ansible-collections-kubernetes-core-k8s-log-module",
+      "status": "ok",
+      "size": 69636
+    },
+    {
+      "slug": "k8s_rollback_module#ansible-collections-kubernetes-core-k8s-rollback-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/kubernetes/core/k8s_rollback_module.html#ansible-collections-kubernetes-core-k8s-rollback-module",
+      "status": "ok",
+      "size": 64955
+    },
+    {
+      "slug": "k8s_scale_module#ansible-collections-kubernetes-core-k8s-scale-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/kubernetes/core/k8s_scale_module.html#ansible-collections-kubernetes-core-k8s-scale-module",
+      "status": "ok",
+      "size": 81298
+    },
+    {
+      "slug": "k8s_service_module#ansible-collections-kubernetes-core-k8s-service-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/kubernetes/core/k8s_service_module.html#ansible-collections-kubernetes-core-k8s-service-module",
+      "status": "ok",
+      "size": 74178
+    },
+    {
+      "slug": "k8s_taint_module#ansible-collections-kubernetes-core-k8s-taint-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/kubernetes/core/k8s_taint_module.html#ansible-collections-kubernetes-core-k8s-taint-module",
+      "status": "ok",
+      "size": 67311
+    }
+  ]
+}

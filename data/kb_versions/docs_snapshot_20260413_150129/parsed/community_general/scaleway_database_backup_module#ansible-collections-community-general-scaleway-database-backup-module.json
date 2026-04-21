@@ -1,0 +1,189 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.scaleway_database_backup",
+  "slug": "scaleway_database_backup_module#ansible-collections-community-general-scaleway-database-backup-module",
+  "description": "This module manages database backups on Scaleway account https://developer.scaleway.com.",
+  "parameters": [
+    {
+      "name": "api_timeout",
+      "aliases": [
+        "timeout"
+      ],
+      "type": "integer",
+      "required": false,
+      "default": "30",
+      "choices": [],
+      "description": "HTTP timeout to Scaleway API in seconds. Default: 30"
+    },
+    {
+      "name": "api_token",
+      "aliases": [
+        "oauth_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Scaleway OAuth token. This is required if profile is not specified."
+    },
+    {
+      "name": "api_url",
+      "aliases": [
+        "base_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "https://api.scaleway.com",
+      "choices": [],
+      "description": "Scaleway API URL. Default: \"https://api.scaleway.com\""
+    },
+    {
+      "name": "database_name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name used to identify the database. Required for present and restored states. Ignored when state=absent or state=exported."
+    },
+    {
+      "name": "expires_at",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Expiration datetime of the database backup (ISO 8601 format). Ignored when state=absent, state=exported or state=restored."
+    },
+    {
+      "name": "id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "UUID used to identify the database backup. Required for absent, exported and restored states."
+    },
+    {
+      "name": "instance_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "UUID of the instance associated to the database backup. Required for present and restored states. Ignored when state=absent or state=exported."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name used to identify the database backup. Required for present state. Ignored when state=absent, state=exported or state=restored."
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "scw_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The config profile in config file to load the Scaleway OAuth token from, use instead of api_token. It is also possible to set SCW_PROFILE to use a SCW CLI config profile."
+    },
+    {
+      "name": "query_parameters",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "List of parameters passed to the query string. Default: {}"
+    },
+    {
+      "name": "region",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [
+        "\"fr-par\"",
+        "\"nl-ams\"",
+        "\"pl-waw\""
+      ],
+      "description": "Scaleway region to use (for example fr-par). Choices: \"fr-par\" \"nl-ams\" \"pl-waw\""
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\"",
+        "\"exported\"",
+        "\"restored\""
+      ],
+      "description": "Indicate desired state of the database backup. present creates a backup. absent deletes the backup. exported creates a download link for the backup. restored restores the backup to a new database. Choices: \"present\" ← (default) \"absent\" \"exported\" \"restored\""
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Validate SSL certs of the Scaleway API. Choices: false true ← (default)"
+    },
+    {
+      "name": "wait",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Wait for the instance to reach its desired state before returning. Choices: false ← (default) true"
+    },
+    {
+      "name": "wait_sleep_time",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "3",
+      "choices": [],
+      "description": "Time to wait before every attempt to check the state of the backup. Default: 3"
+    },
+    {
+      "name": "wait_timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "300",
+      "choices": [],
+      "description": "Time to wait for the backup to reach the expected state. Default: 300"
+    }
+  ],
+  "examples": [
+    "- name: Create a backup\n  community.general.scaleway_database_backup:\n    name: 'my_backup'\n    state: present\n    region: 'fr-par'\n    database_name: 'my-database'\n    instance_id: '50968a80-2909-4e5c-b1af-a2e19860dddb'\n\n- name: Export a backup\n  community.general.scaleway_database_backup:\n    id: '6ef1125a-037e-494f-a911-6d9c49a51691'\n    state: exported\n    region: 'fr-par'\n\n- name: Restore a backup\n  community.general.scaleway_database_backup:\n    id: '6ef1125a-037e-494f-a911-6d9c49a51691'\n    state: restored\n    region: 'fr-par'\n    database_name: 'my-new-database'\n    instance_id: '50968a80-2909-4e5c-b1af-a2e19860dddb'\n\n- name: Remove a backup\n  community.general.scaleway_database_backup:\n    id: '6ef1125a-037e-494f-a911-6d9c49a51691'\n    state: absent\n    region: 'fr-par'"
+  ],
+  "return_values": [
+    {
+      "name": "metadata",
+      "type": "dictionary",
+      "description": "Backup metadata. Returned: when state=present, state=exported, or state=restored Sample: {\"metadata\": {\"created_at\": \"2020-08-06T12:42:05.631049Z\", \"database_name\": \"my-database\", \"download_url\": null, \"download_url_expires_at\": null, \"expires_at\": null, \"id\": \"a15297bd-0c4a-4b4f-8fbb-b36a35b7eb07\", \"instance_id\": \"617be32e-6497-4ed7-b4c7-0ee5a81edf49\", \"instance_name\": \"my-instance\", \"name\": \"backup_name\", \"region\": \"fr-par\", \"size\": 600000, \"status\": \"ready\", \"updated_at\": \"2020-08-06T12:42:10.581649Z\"}}",
+      "returned": "when"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/scaleway_database_backup_module#ansible-collections-community-general-scaleway-database-backup-module.html",
+  "parsed_at": "2026-04-11T13:53:25.519715"
+}

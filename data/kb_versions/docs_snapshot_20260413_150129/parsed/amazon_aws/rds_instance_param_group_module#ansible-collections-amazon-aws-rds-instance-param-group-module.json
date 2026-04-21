@@ -1,0 +1,249 @@
+{
+  "collection_ns": "amazon_aws",
+  "collection": "amazon.aws",
+  "module": "amazon.aws.rds_instance_param_group",
+  "slug": "rds_instance_param_group_module#ansible-collections-amazon-aws-rds-instance-param-group-module",
+  "description": "Creates, modifies, and deletes RDS parameter groups.",
+  "parameters": [
+    {
+      "name": "access_key",
+      "aliases": [
+        "aws_access_key_id",
+        "aws_access_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS access key ID. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY environment variables may also be used in decreasing order of preference. The aws_access_key and profile options are mutually exclusive. The aws_access_key_id alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "aws_ca_bundle",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The location of a CA Bundle to use when validating SSL certificates. The AWS_CA_BUNDLE environment variable may also be used."
+    },
+    {
+      "name": "aws_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary to modify the botocore configuration. Parameters can be found in the AWS documentation https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html#botocore.config.Config."
+    },
+    {
+      "name": "debug_botocore_endpoint_logs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use a botocore.endpoint logger to parse the unique (rather than total) \"resource:action\" API calls made during a task, outputing the set to the resource_actions key in the task results. Use the aws_resource_action callback to output to total list made during a playbook. The ANSIBLE_DEBUG_BOTOCORE_LOGS environment variable may also be used. Choices: false ← (default) true"
+    },
+    {
+      "name": "description",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Database parameter group description. Only set when a new group is added."
+    },
+    {
+      "name": "endpoint_url",
+      "aliases": [
+        "aws_endpoint_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "AWS",
+      "choices": [],
+      "description": "URL to connect to instead of the default AWS endpoints. While this can be used to connection to other AWS-compatible services the amazon.aws and community.aws collections are only tested against AWS. The AWS_URL environment variable may also be used."
+    },
+    {
+      "name": "engine",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The type of database for this group. Please use amazon.aws.rds_engine_versions_info to get list of all supported db engines and their respective versions. The DB parameter group family is immutable and can’t be changed when updating a DB parameter group. See https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbparametergroup.html Required for state=present."
+    },
+    {
+      "name": "immediate",
+      "aliases": [
+        "apply_immediately"
+      ],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Whether to apply the changes immediately, or after the next reboot of any associated instances. Choices: false true"
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Database parameter group identifier."
+    },
+    {
+      "name": "params",
+      "aliases": [
+        "parameters"
+      ],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Map of parameter names and values. Numeric values may be represented as K for kilo (1024), M for mega (1024^2), G for giga (1024^3), or T for tera (1024^4), and these values will be expanded into the appropriate number before being set in the parameter group."
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "aws_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A named AWS profile to use for authentication. See the AWS documentation for more information about named profiles https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html. The AWS_PROFILE environment variable may also be used. The profile option is mutually exclusive with the aws_access_key, aws_secret_key and session_token options."
+    },
+    {
+      "name": "purge_tags",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If purge_tags=true and tags is set, existing tags will be purged from the resource to match exactly what is defined by tags parameter. If the tags parameter is not set then tags will not be modified, even if purge_tags=True. Tag keys beginning with aws: are reserved by Amazon and can not be modified. As such they will be ignored for the purposes of the purge_tags parameter. See the Amazon documentation for more information https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html#tag-conventions. Choices: false true ← (default)"
+    },
+    {
+      "name": "region",
+      "aliases": [
+        "aws_region"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The AWS region to use. For global services such as IAM, Route53 and CloudFront, region is ignored. The AWS_REGION environment variable may also be used. See the Amazon AWS documentation for more information http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region."
+    },
+    {
+      "name": "secret_key",
+      "aliases": [
+        "aws_secret_access_key",
+        "aws_secret_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS secret access key. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SECRET_ACCESS_KEY or AWS_SECRET_KEY environment variables may also be used in decreasing order of preference. The secret_key and profile options are mutually exclusive. The aws_secret_access_key alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "session_token",
+      "aliases": [
+        "aws_session_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS STS session token for use with temporary credentials. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SESSION_TOKEN environment variable may also be used. The session_token and profile options are mutually exclusive."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [
+        "\"present\"",
+        "\"absent\""
+      ],
+      "description": "Specifies whether the group should be present or absent. Choices: \"present\" \"absent\""
+    },
+    {
+      "name": "tags",
+      "aliases": [
+        "resource_tags"
+      ],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary representing the tags to be applied to the resource. If the tags parameter is not set then tags will not be modified."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to false, SSL certificates will not be validated for communication with the AWS APIs. Setting validate_certs=false is strongly discouraged, as an alternative, consider setting aws_ca_bundle instead. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Add or change a parameter group, in this case setting auto_increment_increment to 42 * 1024\n  amazon.aws.rds_instance_param_group:\n      state: present\n      name: norwegian-blue\n      description: 'My Fancy Ex Parrot Group'\n      engine: 'mysql5.6'\n      params:\n          auto_increment_increment: \"42K\"\n      tags:\n          Environment: production\n          Application: parrot\n\n- name: Remove a parameter group\n  amazon.aws.rds_instance_param_group:\n      state: absent\n      name: norwegian-blue"
+  ],
+  "return_values": [
+    {
+      "name": "db_parameter_group_arn",
+      "type": "string",
+      "description": "ARN of the DB parameter group. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "db_parameter_group_family",
+      "type": "string",
+      "description": "DB parameter group family that this DB parameter group is compatible with. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "db_parameter_group_name",
+      "type": "string",
+      "description": "Name of DB parameter group. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "description": "description of the DB parameter group. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "errors",
+      "type": "list",
+      "description": "List of errors from attempting to modify parameters that are not modifiable. Returned: when state=present",
+      "returned": "when"
+    },
+    {
+      "name": "tags",
+      "type": "dictionary",
+      "description": "A dictionary of tags. Returned: when state=present",
+      "returned": "when"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/amazon/aws/rds_instance_param_group_module#ansible-collections-amazon-aws-rds-instance-param-group-module.html",
+  "parsed_at": "2026-04-11T13:52:50.255392"
+}

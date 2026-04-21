@@ -1,0 +1,337 @@
+{
+  "collection_ns": "azure_azcollection",
+  "collection": "azure.azcollection",
+  "module": "azure.azcollection.azure_rm_storageshare",
+  "slug": "azure_rm_storageshare_module#ansible-collections-azure-azcollection-azure-rm-storageshare-module",
+  "description": "Create, update or delete a storage file share in existing storage account.",
+  "parameters": [
+    {
+      "name": "access_tier",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"TransactionOptimized\"",
+        "\"Hot\"",
+        "\"Cool\"",
+        "\"Premium\""
+      ],
+      "description": "The access tier determines the price and in some cases also the performance of a file share. TransactionOptimized if not set. Choices: \"TransactionOptimized\" \"Hot\" \"Cool\" \"Premium\""
+    },
+    {
+      "name": "account_name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the parent storage account for the storage file share."
+    },
+    {
+      "name": "ad_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory username. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "adfs_authority_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure AD authority url. Use when authenticating with Username/password, and has your own ADFS authority."
+    },
+    {
+      "name": "api_profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "Selects an API profile to use when communicating with Azure services. Default value of latest is appropriate for public clouds; future values will allow use with Azure Stack. Default: \"latest\""
+    },
+    {
+      "name": "auth_source",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "az",
+      "choices": [
+        "\"auto\" ← (default)",
+        "\"cli\"",
+        "\"credential_file\"",
+        "\"env\"",
+        "\"msi\""
+      ],
+      "description": "Controls the source of the credentials to use for authentication. Can also be set via the ANSIBLE_AZURE_AUTH_SOURCE environment variable. When set to auto (the default) the precedence is module parameters -> env -> credential_file -> cli. When set to env, the credentials will be read from the environment variables When set to credential_file, it will read the profile from ~/.azure/credentials. When set to cli, the credentials will be sources from the Azure CLI profile. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if more than one is present otherwise the default az cli subscription is used. When set to msi, the host machine must be an azure resource with an enabled MSI extension. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if the resource is granted access to more than one subscription, otherwise the first subscription is chosen. The msi was added in Ansible 2.6. Choices: \"auto\" ← (default) \"cli\" \"credential_file\" \"env\" \"msi\""
+    },
+    {
+      "name": "cert_validation_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ignore\"",
+        "\"validate\""
+      ],
+      "description": "Controls the certificate validation behavior for Azure endpoints. By default, all modules will validate the server certificate, but when an HTTPS proxy is in use, or against Azure Stack, it may be necessary to disable this behavior by passing ignore. Can also be set via credential file profile or the AZURE_CERT_VALIDATION environment variable. Choices: \"ignore\" \"validate\""
+    },
+    {
+      "name": "client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client ID. Use when authenticating with a Service Principal or Managed Identity (msi). Can also be set via the AZURE_CLIENT_ID environment variable."
+    },
+    {
+      "name": "cloud_environment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "AzureCloud",
+      "choices": [],
+      "description": "For cloud environments other than the US public cloud, the environment name (as defined by Azure Python SDK, eg, AzureChinaCloud, AzureUSGovernment), or a metadata discovery endpoint URL (required for Azure Stack). Can also be set via credential file profile or the AZURE_CLOUD_ENVIRONMENT environment variable. Default: \"AzureCloud\""
+    },
+    {
+      "name": "disable_instance_discovery",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Determines whether or not instance discovery is performed when attempting to authenticate. Setting this to true will completely disable both instance discovery and authority validation. This functionality is intended for use in scenarios where the metadata endpoint cannot be reached such as in private clouds or Azure Stack. The process of instance discovery entails retrieving authority metadata from https://login.microsoft.com/ to validate the authority. By setting this to **True**, the validation of the authority is disabled. As a result, it is crucial to ensure that the configured authority host is valid and trustworthy. Set via credential file profile or the AZURE_DISABLE_INSTANCE_DISCOVERY environment variable. Choices: false ← (default) true"
+    },
+    {
+      "name": "enabled_protocols",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"SMB\"",
+        "\"NFS\""
+      ],
+      "description": "The authentication protocol that is used for the file share. Can only be specified when creating a share. Choices: \"SMB\" \"NFS\""
+    },
+    {
+      "name": "log_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "log_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "metadata",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A name-value pair to associate with the container as metadata."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the storage file share to delete or create."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory user password. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security profile found in ~/.azure/credentials file."
+    },
+    {
+      "name": "quota",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "102400",
+      "choices": [],
+      "description": "The maximum size of the file share, in gigabytes. Must be greater than 0, and less than or equal to 5TB (5120). For large file shares, the maximum size is 102400. By default 102400"
+    },
+    {
+      "name": "resource_group",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the resource group to use."
+    },
+    {
+      "name": "root_squash",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "is",
+      "choices": [
+        "\"NoRootSquash\"",
+        "\"RootSquash\"",
+        "\"AllSquash\""
+      ],
+      "description": "The property is for NFS share only. The default is NoRootSquash. Choices: \"NoRootSquash\" \"RootSquash\" \"AllSquash\""
+    },
+    {
+      "name": "secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client secret. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)"
+      ],
+      "description": "State of the storage file share. Use ‘present’ to create or update a storage file share and use ‘absent’ to delete a file share. Choices: \"absent\" \"present\" ← (default)"
+    },
+    {
+      "name": "subscription_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Your Azure subscription Id."
+    },
+    {
+      "name": "tenant",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure tenant ID. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "thumbprint",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The thumbprint of the private key specified in x509_certificate_path. Use when authenticating with a Service Principal. Required if x509_certificate_path is defined."
+    },
+    {
+      "name": "x509_certificate_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the X509 certificate used to create the service principal in PEM format. The certificate must be appended to the private key. Use when authenticating with a Service Principal."
+    }
+  ],
+  "examples": [
+    "---\n- name: Create storage share\n  azure_rm_storageshare:\n    name: testShare\n    resource_group: myResourceGroup\n    account_name: testStorageAccount\n    state: present\n    access_tier: Cool\n    quota: 2048\n    metadata:\n      key1: value1\n      key2: value2\n\n- name: Create share with enalbed protocols\n  azure_rm_storageshare:\n    name: \"{{ share_name }}\"\n    resource_group: \"{{ resource_group }}\"\n    account_name: \"{{ storage_account }}\"\n    access_tier: \"{{ access_tier }}\"\n    root_squash: RootSquash\n    enabled_protocols: NFS\n\n- name: Delete storage share\n  azure_rm_storageshare:\n    name: testShare\n    resource_group: myResourceGroup\n    account_name: testStorageAccount\n    state: absent"
+  ],
+  "return_values": [
+    {
+      "name": "state",
+      "type": "complex",
+      "description": "Facts about the current state of the storage file file share. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "access_tier",
+      "type": "string",
+      "description": "Access tier for specific file share Returned: always Sample: \"TransactionOptimized\"",
+      "returned": "always"
+    },
+    {
+      "name": "access_tier_change_time",
+      "type": "string",
+      "description": "Indicates the last modification time for file share access tier Returned: always Sample: \"2021-08-23T08:17:35+00:00\"",
+      "returned": "always"
+    },
+    {
+      "name": "etag",
+      "type": "string",
+      "description": "Resource Etag Returned: always Sample: \"0x8D75E4BA3E275F1\"",
+      "returned": "always"
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "description": "Resource ID of the storage file share Returned: always Sample: \"/subscriptions/9e700857-1631-4d8a-aed5-908520ede375/resourceGroups/myResourceGroup/providers/Microsoft.Storage/ storageAccounts/mystorageaccount/fileServices/default/shares/myshare\"",
+      "returned": "always"
+    },
+    {
+      "name": "last_modified_time",
+      "type": "string",
+      "description": "Returns the date and time the file share was last modified Returned: always Sample: \"2021-08-23T08:17:35+00:00\"",
+      "returned": "always"
+    },
+    {
+      "name": "metadata",
+      "type": "dictionary",
+      "description": "A name-value pair to associate with the file share as metadata Returned: always Sample: {\"key1\": \"value1\"}",
+      "returned": "always"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "Name of the file share Returned: always Sample: \"myshare\"",
+      "returned": "always"
+    },
+    {
+      "name": "share_quota",
+      "type": "integer",
+      "description": "The maximum size of the file share, in gigabytes Returned: always Sample: 102400",
+      "returned": "always"
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "description": "The type of the resource Returned: always Sample: \"Microsoft.Storage/storageAccounts/fileServices/shares\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_storageshare_module.html",
+  "parsed_at": "2026-04-13T16:29:40.570199"
+}

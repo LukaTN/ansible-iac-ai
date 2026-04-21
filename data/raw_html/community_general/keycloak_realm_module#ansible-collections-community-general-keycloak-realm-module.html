@@ -1,0 +1,1842 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+<meta content="2.23.0" name="antsibull-docs" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>community.general.keycloak_realm module – Allows administration of Keycloak realm using Keycloak API &mdash; Ansible Community Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=41de9001" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/ansible.css?v=b54c304f" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/antsibull-minimal.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/rtd-ethical-ads.css?v=289b023e" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/images/Ansible-Mark-RGB_Black.png"/>
+    <link rel="canonical" href="https://docs.ansible.com/projects/ansible/latest/collections/community/general/keycloak_realm_module.html"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=466ea2d0"></script>
+      <script src="../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="community.general.keycloak_realm_info module – Allows obtaining Keycloak realm public information using Keycloak API" href="keycloak_realm_info_module.html" />
+    <link rel="prev" title="community.general.keycloak_identity_provider module – Allows administration of Keycloak identity providers using Keycloak API" href="keycloak_identity_provider_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+<script src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+<script async type="text/javascript" src="/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="package-doc-builds" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/collections/community/general/keycloak_realm_module.html" /><meta name="readthedocs-http-status" content="200" /></head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+    <li><a href="https://forum.ansible.com/" target="_blank">Ansible community forum</a></li>
+    <li><a href="https://docs.ansible.com/" target="_blank">Documentation</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../../../_static/images/Ansible-Mark-RGB_White.png"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Ansible Community Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Ansible
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <label class="sr-only" for="q">Search docs:</label>
+    <input type="text" class="st-default-search-input" id="q" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption" role="heading"><span class="caption-text">Ansible getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started/index.html">Getting started with Ansible</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started_ee/index.html">Getting started with Execution Environments</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../inventory_guide/index.html">Building Ansible inventories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../command_guide/index.html">Using Ansible command line tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../playbook_guide/index.html">Using Ansible playbooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../vault_guide/index.html">Protecting sensitive data with Ansible vault</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_plugin_guide/index.html">Using Ansible modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../collections_guide/index.html">Using Ansible collections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../os_guide/index.html">Using Ansible on Windows, BSD, and z/OS UNIX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tips_tricks/index.html">Ansible tips and tricks</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../community/index.html">Ansible Community Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../community/contributions_collections.html">Ansible Collections Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../community/contributions.html">ansible-core Contributors Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../community/advanced_index.html">Advanced Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_guide/style_guide/index.html">Ansible documentation style guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Collection Index</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../amazon/index.html">Collections in the Amazon Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ansible/index.html">Collections in the Ansible Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../arista/index.html">Collections in the Arista Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../awx/index.html">Collections in the Awx Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../azure/index.html">Collections in the Azure Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../check_point/index.html">Collections in the Check_point Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../chocolatey/index.html">Collections in the Chocolatey Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cisco/index.html">Collections in the Cisco Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cloud/index.html">Collections in the Cloud Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cloudscale_ch/index.html">Collections in the Cloudscale_ch Namespace</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">Collections in the Community Namespace</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../aws/index.html">Community.Aws</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ciscosmb/index.html">Community.Ciscosmb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../clickhouse/index.html">Community.Clickhouse</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../crypto/index.html">Community.Crypto</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dns/index.html">Community.Dns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docker/index.html">Community.Docker</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">Community.General</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="index.html#description">Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="index.html#communication">Communication</a></li>
+<li class="toctree-l4"><a class="reference internal" href="index.html#changelog">Changelog</a></li>
+<li class="toctree-l4"><a class="reference internal" href="index.html#guides">Guides</a></li>
+<li class="toctree-l4"><a class="reference internal" href="index.html#technology-guides">Technology Guides</a></li>
+<li class="toctree-l4"><a class="reference internal" href="index.html#developer-guides">Developer Guides</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="index.html#plugin-index">Plugin Index</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../grafana/index.html">Community.Grafana</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../hashi_vault/index.html">Community.Hashi_Vault</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../hrobot/index.html">Community.Hrobot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../library_inventory_filtering_v1/index.html">Community.Library_Inventory_Filtering_V1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../libvirt/index.html">Community.Libvirt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../mongodb/index.html">Community.Mongodb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../mysql/index.html">Community.Mysql</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../okd/index.html">Community.Okd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../postgresql/index.html">Community.Postgresql</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../proxmox/index.html">Community.Proxmox</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../proxysql/index.html">Community.Proxysql</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../rabbitmq/index.html">Community.Rabbitmq</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../routeros/index.html">Community.Routeros</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sap_libs/index.html">Community.Sap_Libs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sops/index.html">Community.Sops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vmware/index.html">Community.Vmware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../windows/index.html">Community.Windows</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../zabbix/index.html">Community.Zabbix</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../containers/index.html">Collections in the Containers Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cyberark/index.html">Collections in the Cyberark Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dellemc/index.html">Collections in the Dellemc Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../f5networks/index.html">Collections in the F5networks Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../fortinet/index.html">Collections in the Fortinet Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../frr/index.html">Collections in the Frr Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../gluster/index.html">Collections in the Gluster Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../google/index.html">Collections in the Google Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../grafana/index.html">Collections in the Grafana Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../graphiant/index.html">Collections in the Graphiant Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hetzner/index.html">Collections in the Hetzner Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hitachivantara/index.html">Collections in the Hitachivantara Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hpe/index.html">Collections in the Hpe Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ibm/index.html">Collections in the Ibm Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ieisystem/index.html">Collections in the Ieisystem Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../infinidat/index.html">Collections in the Infinidat Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../infoblox/index.html">Collections in the Infoblox Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../inspur/index.html">Collections in the Inspur Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../junipernetworks/index.html">Collections in the Junipernetworks Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../kaytus/index.html">Collections in the Kaytus Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../kubernetes/index.html">Collections in the Kubernetes Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../kubevirt/index.html">Collections in the Kubevirt Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lowlydba/index.html">Collections in the Lowlydba Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../mellanox/index.html">Collections in the Mellanox Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../microsoft/index.html">Collections in the Microsoft Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../netapp/index.html">Collections in the Netapp Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../netapp_eseries/index.html">Collections in the Netapp_eseries Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../netbox/index.html">Collections in the Netbox Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ngine_io/index.html">Collections in the Ngine_io Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../openstack/index.html">Collections in the Openstack Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../openvswitch/index.html">Collections in the Openvswitch Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ovirt/index.html">Collections in the Ovirt Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pcg/index.html">Collections in the Pcg Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../purestorage/index.html">Collections in the Purestorage Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ravendb/index.html">Collections in the Ravendb Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../sensu/index.html">Collections in the Sensu Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../servicenow/index.html">Collections in the Servicenow Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../splunk/index.html">Collections in the Splunk Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../t_systems_mms/index.html">Collections in the T_systems_mms Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../telekom_mms/index.html">Collections in the Telekom_mms Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../theforeman/index.html">Collections in the Theforeman Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../vmware/index.html">Collections in the Vmware Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../vultr/index.html">Collections in the Vultr Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../vyos/index.html">Collections in the Vyos Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../wti/index.html">Collections in the Wti Namespace</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
+</ul>
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Collection Index</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Collections in the Community Namespace</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Community.General</a></li>
+      <li class="breadcrumb-item active">community.general.keycloak_realm module – Allows administration of Keycloak realm using Keycloak API</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- User defined GitHub URL -->
+          <a href="https://github.com/ansible-collections/community.general/edit/main/plugins/modules/keycloak_realm.py?description=%23%23%23%23%23%20SUMMARY%0A%3C!—%20Your%20description%20here%20–%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      /*use extra_banner for when we want something extra, like a survey or Community Day notice */
+      var extra_banner = '';
+    
+      var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Join us at <a href="https://www.redhat.com/en/summit?sc_id=RHCTE0250000464461" target="_blank">Red Hat Summit in Atlanta</a> to learn about Ansible Automation Platform | May 11-14, 2026' +
+        '</p>' +
+      '</div>';
+    
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/projects/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/projects/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="https://docs.ansible.com/projects/ansible/latest/">the latest documentation</a>.';
+        /* temp - add extra warning about core-2.19. Included in core 2.19 and later releases */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else if (startsWithOneOf(current_url_path, ["/projects/ansible/latest/", "/projects/ansible/13/"])) {
+        /* temp extra banner to advertise something */
+        banner += extra_banner;
+
+        msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
+        /* temp - add extra warning about core-2.19. Included in latest package release docs */
+ 
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+
+      } else if (startsWith(current_url_path, "/projects/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/projects/ansible/devel/")) {
+        /* temp extra banner to advertise something */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp - add extra warning about core-2.19.Added to latest and devel docs */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp extra banner to advertise something - this is for testing*/
+        banner += extra_banner;
+
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <span class="target" id="ansible-collections-community-general-keycloak-realm-module"></span><section id="community-general-keycloak-realm-module-allows-administration-of-keycloak-realm-using-keycloak-api">
+<h1>community.general.keycloak_realm module – Allows administration of Keycloak realm using Keycloak API<a class="headerlink" href="#community-general-keycloak-realm-module-allows-administration-of-keycloak-realm-using-keycloak-api" title="Link to this heading"></a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 12.5.0).</p>
+<p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
+It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
+To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
+<p>To install it, use: <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">install</span> <span class="pre">community.general</span></code>.</p>
+<p>To use it in a playbook, specify: <code class="code docutils literal notranslate"><span class="pre">community.general.keycloak_realm</span></code>.</p>
+</div>
+<p class="ansible-version-added">New in community.general 3.0.0</p>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></p></li>
+<li><p><a class="reference internal" href="#parameters" id="id2">Parameters</a></p></li>
+<li><p><a class="reference internal" href="#attributes" id="id3">Attributes</a></p></li>
+<li><p><a class="reference internal" href="#examples" id="id4">Examples</a></p></li>
+<li><p><a class="reference internal" href="#return-values" id="id5">Return Values</a></p></li>
+</ul>
+</nav>
+<section id="synopsis">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Synopsis</a><a class="headerlink" href="#synopsis" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>This module allows the administration of Keycloak realm using the Keycloak REST API. It requires access to the REST API using OpenID Connect; the user connecting and the realm being used must have the requisite access rights. In a default Keycloak installation, admin-cli and an admin user would work, as would a separate realm definition with the scope tailored to your needs and a user having the expected roles.</p></li>
+<li><p>The names of module options are snake_cased versions of the camelCase ones found in the Keycloak API and its documentation at <a class="reference external" href="https://www.keycloak.org/docs-api/8.0/rest-api/index.html">https://www.keycloak.org/docs-api/8.0/rest-api/index.html</a>. Aliases are provided so camelCased versions can be used as well.</p></li>
+<li><p>The Keycloak API does not always sanity check inputs, for example you can set SAML-specific settings on an OpenID Connect client for instance and also the other way around. <strong>Be careful</strong>. If you do not specify a setting, usually a sensible default is chosen.</p></li>
+</ul>
+</section>
+<section id="parameters">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Parameters</a><a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
+<table class="longtable ansible-option-table docutils align-default" style="width: 100%">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-access_code_lifespan"></div>
+<div class="ansibleOptionAnchor" id="parameter-accessCodeLifespan"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-accesscodelifespan"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-access-code-lifespan"></span><strong>access_code_lifespan</strong></p>
+<a class="ansibleOptionLink" href="#parameter-access_code_lifespan" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: accessCodeLifespan</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm access code lifespan.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-access_code_lifespan_login"></div>
+<div class="ansibleOptionAnchor" id="parameter-accessCodeLifespanLogin"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-accesscodelifespanlogin"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-access-code-lifespan-login"></span><strong>access_code_lifespan_login</strong></p>
+<a class="ansibleOptionLink" href="#parameter-access_code_lifespan_login" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: accessCodeLifespanLogin</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm access code lifespan login.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-access_code_lifespan_user_action"></div>
+<div class="ansibleOptionAnchor" id="parameter-accessCodeLifespanUserAction"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-accesscodelifespanuseraction"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-access-code-lifespan-user-action"></span><strong>access_code_lifespan_user_action</strong></p>
+<a class="ansibleOptionLink" href="#parameter-access_code_lifespan_user_action" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: accessCodeLifespanUserAction</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm access code lifespan user action.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-access_token_lifespan"></div>
+<div class="ansibleOptionAnchor" id="parameter-accessTokenLifespan"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-accesstokenlifespan"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-access-token-lifespan"></span><strong>access_token_lifespan</strong></p>
+<a class="ansibleOptionLink" href="#parameter-access_token_lifespan" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: accessTokenLifespan</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm access token lifespan.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-access_token_lifespan_for_implicit_flow"></div>
+<div class="ansibleOptionAnchor" id="parameter-accessTokenLifespanForImplicitFlow"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-accesstokenlifespanforimplicitflow"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-access-token-lifespan-for-implicit-flow"></span><strong>access_token_lifespan_for_implicit_flow</strong></p>
+<a class="ansibleOptionLink" href="#parameter-access_token_lifespan_for_implicit_flow" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: accessTokenLifespanForImplicitFlow</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm access token lifespan for implicit flow.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-account_theme"></div>
+<div class="ansibleOptionAnchor" id="parameter-accountTheme"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-accounttheme"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-account-theme"></span><strong>account_theme</strong></p>
+<a class="ansibleOptionLink" href="#parameter-account_theme" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: accountTheme</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm account theme.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-action_token_generated_by_admin_lifespan"></div>
+<div class="ansibleOptionAnchor" id="parameter-actionTokenGeneratedByAdminLifespan"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-actiontokengeneratedbyadminlifespan"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-action-token-generated-by-admin-lifespan"></span><strong>action_token_generated_by_admin_lifespan</strong></p>
+<a class="ansibleOptionLink" href="#parameter-action_token_generated_by_admin_lifespan" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: actionTokenGeneratedByAdminLifespan</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm action token generated by admin lifespan.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-action_token_generated_by_user_lifespan"></div>
+<div class="ansibleOptionAnchor" id="parameter-actionTokenGeneratedByUserLifespan"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-actiontokengeneratedbyuserlifespan"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-action-token-generated-by-user-lifespan"></span><strong>action_token_generated_by_user_lifespan</strong></p>
+<a class="ansibleOptionLink" href="#parameter-action_token_generated_by_user_lifespan" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: actionTokenGeneratedByUserLifespan</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm action token generated by user lifespan.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-admin_events_details_enabled"></div>
+<div class="ansibleOptionAnchor" id="parameter-adminEventsDetailsEnabled"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-admineventsdetailsenabled"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-admin-events-details-enabled"></span><strong>admin_events_details_enabled</strong></p>
+<a class="ansibleOptionLink" href="#parameter-admin_events_details_enabled" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: adminEventsDetailsEnabled</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm admin events details enabled.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-admin_events_enabled"></div>
+<div class="ansibleOptionAnchor" id="parameter-adminEventsEnabled"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-admineventsenabled"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-admin-events-enabled"></span><strong>admin_events_enabled</strong></p>
+<a class="ansibleOptionLink" href="#parameter-admin_events_enabled" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: adminEventsEnabled</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm admin events enabled.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-admin_permissions_enabled"></div>
+<div class="ansibleOptionAnchor" id="parameter-adminPermissionsEnabled"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-adminpermissionsenabled"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-admin-permissions-enabled"></span><strong>admin_permissions_enabled</strong></p>
+<a class="ansibleOptionLink" href="#parameter-admin_permissions_enabled" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: adminPermissionsEnabled</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 12.0.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm admin permissions enabled.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-admin_theme"></div>
+<div class="ansibleOptionAnchor" id="parameter-adminTheme"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-admintheme"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-admin-theme"></span><strong>admin_theme</strong></p>
+<a class="ansibleOptionLink" href="#parameter-admin_theme" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: adminTheme</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm admin theme.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-attributes"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-attributes"><strong>attributes</strong></p>
+<a class="ansibleOptionLink" href="#parameter-attributes" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm attributes.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-auth_client_id"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-auth-client-id"><strong>auth_client_id</strong></p>
+<a class="ansibleOptionLink" href="#parameter-auth_client_id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>OpenID Connect <code class="docutils literal notranslate"><span class="pre">client_id</span></code> to authenticate to the API with.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;admin-cli&quot;</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-auth_client_secret"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-auth-client-secret"><strong>auth_client_secret</strong></p>
+<a class="ansibleOptionLink" href="#parameter-auth_client_secret" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Client Secret to use in conjunction with <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-keycloak-realm-module-parameter-auth-client-id"><span class="std std-ref"><span class="pre">auth_client_id</span></span></a></strong></code> (if required).</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-auth_keycloak_url"></div>
+<div class="ansibleOptionAnchor" id="parameter-url"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-url"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-auth-keycloak-url"></span><strong>auth_keycloak_url</strong></p>
+<a class="ansibleOptionLink" href="#parameter-auth_keycloak_url" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: url</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>URL to the Keycloak instance.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-auth_password"></div>
+<div class="ansibleOptionAnchor" id="parameter-password"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-password"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-auth-password"></span><strong>auth_password</strong></p>
+<a class="ansibleOptionLink" href="#parameter-auth_password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: password</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Password to authenticate for API access with.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-auth_realm"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-auth-realm"><strong>auth_realm</strong></p>
+<a class="ansibleOptionLink" href="#parameter-auth_realm" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Keycloak realm name to authenticate to for API access.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-auth_username"></div>
+<div class="ansibleOptionAnchor" id="parameter-username"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-username"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-auth-username"></span><strong>auth_username</strong></p>
+<a class="ansibleOptionLink" href="#parameter-auth_username" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: username</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Username to authenticate for API access with.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-browser_flow"></div>
+<div class="ansibleOptionAnchor" id="parameter-browserFlow"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-browserflow"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-browser-flow"></span><strong>browser_flow</strong></p>
+<a class="ansibleOptionLink" href="#parameter-browser_flow" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: browserFlow</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm browser flow.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-browser_security_headers"></div>
+<div class="ansibleOptionAnchor" id="parameter-browserSecurityHeaders"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-browsersecurityheaders"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-browser-security-headers"></span><strong>browser_security_headers</strong></p>
+<a class="ansibleOptionLink" href="#parameter-browser_security_headers" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: browserSecurityHeaders</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm browser security headers.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-brute_force_protected"></div>
+<div class="ansibleOptionAnchor" id="parameter-bruteForceProtected"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-bruteforceprotected"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-brute-force-protected"></span><strong>brute_force_protected</strong></p>
+<a class="ansibleOptionLink" href="#parameter-brute_force_protected" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: bruteForceProtected</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm brute force protected.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-brute_force_strategy"></div>
+<div class="ansibleOptionAnchor" id="parameter-bruteForceStrategy"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-bruteforcestrategy"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-brute-force-strategy"></span><strong>brute_force_strategy</strong></p>
+<a class="ansibleOptionLink" href="#parameter-brute_force_strategy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: bruteForceStrategy</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 11.2.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm brute force strategy.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;LINEAR&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;MULTIPLE&quot;</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-client_authentication_flow"></div>
+<div class="ansibleOptionAnchor" id="parameter-clientAuthenticationFlow"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-clientauthenticationflow"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-client-authentication-flow"></span><strong>client_authentication_flow</strong></p>
+<a class="ansibleOptionLink" href="#parameter-client_authentication_flow" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: clientAuthenticationFlow</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm client authentication flow.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-client_offline_session_idle_timeout"></div>
+<div class="ansibleOptionAnchor" id="parameter-clientOfflineSessionIdleTimeout"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-clientofflinesessionidletimeout"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-client-offline-session-idle-timeout"></span><strong>client_offline_session_idle_timeout</strong></p>
+<a class="ansibleOptionLink" href="#parameter-client_offline_session_idle_timeout" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: clientOfflineSessionIdleTimeout</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 11.2.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>All Clients inherit from this setting, time an offline session is allowed to be idle before it expires.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-client_offline_session_max_lifespan"></div>
+<div class="ansibleOptionAnchor" id="parameter-clientOfflineSessionMaxLifespan"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-clientofflinesessionmaxlifespan"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-client-offline-session-max-lifespan"></span><strong>client_offline_session_max_lifespan</strong></p>
+<a class="ansibleOptionLink" href="#parameter-client_offline_session_max_lifespan" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: clientOfflineSessionMaxLifespan</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 11.2.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>All Clients inherit from this setting, max time before an offline session is expired regardless of activity.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-client_scope_mappings"></div>
+<div class="ansibleOptionAnchor" id="parameter-clientScopeMappings"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-clientscopemappings"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-client-scope-mappings"></span><strong>client_scope_mappings</strong></p>
+<a class="ansibleOptionLink" href="#parameter-client_scope_mappings" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: clientScopeMappings</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm client scope mappings.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-client_session_idle_timeout"></div>
+<div class="ansibleOptionAnchor" id="parameter-clientSessionIdleTimeout"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-clientsessionidletimeout"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-client-session-idle-timeout"></span><strong>client_session_idle_timeout</strong></p>
+<a class="ansibleOptionLink" href="#parameter-client_session_idle_timeout" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: clientSessionIdleTimeout</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 11.2.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>All Clients inherit from this setting, time a session is allowed to be idle before it expires.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-client_session_max_lifespan"></div>
+<div class="ansibleOptionAnchor" id="parameter-clientSessionMaxLifespan"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-clientsessionmaxlifespan"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-client-session-max-lifespan"></span><strong>client_session_max_lifespan</strong></p>
+<a class="ansibleOptionLink" href="#parameter-client_session_max_lifespan" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: clientSessionMaxLifespan</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 11.2.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>All Clients inherit from this setting, max time before a session is expired.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-connection_timeout"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-connection-timeout"><strong>connection_timeout</strong></p>
+<a class="ansibleOptionLink" href="#parameter-connection_timeout" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 4.5.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Controls the HTTP connections timeout period (in seconds) to Keycloak API.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">10</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-default_default_client_scopes"></div>
+<div class="ansibleOptionAnchor" id="parameter-defaultDefaultClientScopes"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-defaultdefaultclientscopes"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-default-default-client-scopes"></span><strong>default_default_client_scopes</strong></p>
+<a class="ansibleOptionLink" href="#parameter-default_default_client_scopes" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: defaultDefaultClientScopes</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm default default client scopes.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-default_groups"></div>
+<div class="ansibleOptionAnchor" id="parameter-defaultGroups"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-defaultgroups"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-default-groups"></span><strong>default_groups</strong></p>
+<a class="ansibleOptionLink" href="#parameter-default_groups" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: defaultGroups</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm default groups.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-default_locale"></div>
+<div class="ansibleOptionAnchor" id="parameter-defaultLocale"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-defaultlocale"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-default-locale"></span><strong>default_locale</strong></p>
+<a class="ansibleOptionLink" href="#parameter-default_locale" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: defaultLocale</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm default locale.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-default_optional_client_scopes"></div>
+<div class="ansibleOptionAnchor" id="parameter-defaultOptionalClientScopes"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-defaultoptionalclientscopes"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-default-optional-client-scopes"></span><strong>default_optional_client_scopes</strong></p>
+<a class="ansibleOptionLink" href="#parameter-default_optional_client_scopes" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: defaultOptionalClientScopes</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm default optional client scopes.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-default_roles"></div>
+<div class="ansibleOptionAnchor" id="parameter-defaultRoles"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-defaultroles"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-default-roles"></span><strong>default_roles</strong></p>
+<a class="ansibleOptionLink" href="#parameter-default_roles" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: defaultRoles</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm default roles.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-default_signature_algorithm"></div>
+<div class="ansibleOptionAnchor" id="parameter-defaultSignatureAlgorithm"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-defaultsignaturealgorithm"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-default-signature-algorithm"></span><strong>default_signature_algorithm</strong></p>
+<a class="ansibleOptionLink" href="#parameter-default_signature_algorithm" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: defaultSignatureAlgorithm</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm default signature algorithm.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-direct_grant_flow"></div>
+<div class="ansibleOptionAnchor" id="parameter-directGrantFlow"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-directgrantflow"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-direct-grant-flow"></span><strong>direct_grant_flow</strong></p>
+<a class="ansibleOptionLink" href="#parameter-direct_grant_flow" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: directGrantFlow</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm direct grant flow.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-display_name"></div>
+<div class="ansibleOptionAnchor" id="parameter-displayName"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-displayname"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-display-name"></span><strong>display_name</strong></p>
+<a class="ansibleOptionLink" href="#parameter-display_name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: displayName</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm display name.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-display_name_html"></div>
+<div class="ansibleOptionAnchor" id="parameter-displayNameHtml"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-displaynamehtml"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-display-name-html"></span><strong>display_name_html</strong></p>
+<a class="ansibleOptionLink" href="#parameter-display_name_html" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: displayNameHtml</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm display name HTML.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-docker_authentication_flow"></div>
+<div class="ansibleOptionAnchor" id="parameter-dockerAuthenticationFlow"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-dockerauthenticationflow"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-docker-authentication-flow"></span><strong>docker_authentication_flow</strong></p>
+<a class="ansibleOptionLink" href="#parameter-docker_authentication_flow" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: dockerAuthenticationFlow</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm docker authentication flow.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-duplicate_emails_allowed"></div>
+<div class="ansibleOptionAnchor" id="parameter-duplicateEmailsAllowed"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-duplicateemailsallowed"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-duplicate-emails-allowed"></span><strong>duplicate_emails_allowed</strong></p>
+<a class="ansibleOptionLink" href="#parameter-duplicate_emails_allowed" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: duplicateEmailsAllowed</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm duplicate emails allowed option.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-edit_username_allowed"></div>
+<div class="ansibleOptionAnchor" id="parameter-editUsernameAllowed"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-editusernameallowed"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-edit-username-allowed"></span><strong>edit_username_allowed</strong></p>
+<a class="ansibleOptionLink" href="#parameter-edit_username_allowed" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: editUsernameAllowed</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm edit username allowed option.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-email_theme"></div>
+<div class="ansibleOptionAnchor" id="parameter-emailTheme"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-emailtheme"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-email-theme"></span><strong>email_theme</strong></p>
+<a class="ansibleOptionLink" href="#parameter-email_theme" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: emailTheme</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm email theme.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-enabled"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-enabled"><strong>enabled</strong></p>
+<a class="ansibleOptionLink" href="#parameter-enabled" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm enabled option.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-enabled_event_types"></div>
+<div class="ansibleOptionAnchor" id="parameter-enabledEventTypes"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-enabledeventtypes"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-enabled-event-types"></span><strong>enabled_event_types</strong></p>
+<a class="ansibleOptionLink" href="#parameter-enabled_event_types" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: enabledEventTypes</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm enabled event types.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-events_enabled"></div>
+<div class="ansibleOptionAnchor" id="parameter-eventsEnabled"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-eventsenabled"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-events-enabled"></span><strong>events_enabled</strong></p>
+<a class="ansibleOptionLink" href="#parameter-events_enabled" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: eventsEnabled</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 3.6.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Enables or disables login events for this realm.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-events_expiration"></div>
+<div class="ansibleOptionAnchor" id="parameter-eventsExpiration"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-eventsexpiration"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-events-expiration"></span><strong>events_expiration</strong></p>
+<a class="ansibleOptionLink" href="#parameter-events_expiration" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: eventsExpiration</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm events expiration.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-events_listeners"></div>
+<div class="ansibleOptionAnchor" id="parameter-eventsListeners"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-eventslisteners"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-events-listeners"></span><strong>events_listeners</strong></p>
+<a class="ansibleOptionLink" href="#parameter-events_listeners" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: eventsListeners</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm events listeners.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-failure_factor"></div>
+<div class="ansibleOptionAnchor" id="parameter-failureFactor"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-failurefactor"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-failure-factor"></span><strong>failure_factor</strong></p>
+<a class="ansibleOptionLink" href="#parameter-failure_factor" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: failureFactor</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm failure factor.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-first_broker_login_flow"></div>
+<div class="ansibleOptionAnchor" id="parameter-firstBrokerLoginFlow"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-firstbrokerloginflow"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-first-broker-login-flow"></span><strong>first_broker_login_flow</strong></p>
+<a class="ansibleOptionLink" href="#parameter-first_broker_login_flow" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: firstBrokerLoginFlow</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 12.5.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm first broker login flow.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-http_agent"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-http-agent"><strong>http_agent</strong></p>
+<a class="ansibleOptionLink" href="#parameter-http_agent" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 5.4.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Configures the HTTP User-Agent header.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;Ansible&quot;</span></code></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-id"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-id"><strong>id</strong></p>
+<a class="ansibleOptionLink" href="#parameter-id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm to create.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-internationalization_enabled"></div>
+<div class="ansibleOptionAnchor" id="parameter-internationalizationEnabled"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-internationalizationenabled"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-internationalization-enabled"></span><strong>internationalization_enabled</strong></p>
+<a class="ansibleOptionLink" href="#parameter-internationalization_enabled" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: internationalizationEnabled</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm internationalization enabled option.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-localization_texts"></div>
+<div class="ansibleOptionAnchor" id="parameter-localizationTexts"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-localizationtexts"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-localization-texts"></span><strong>localization_texts</strong></p>
+<a class="ansibleOptionLink" href="#parameter-localization_texts" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: localizationTexts</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 12.4.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The custom localization texts for a realm.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-login_theme"></div>
+<div class="ansibleOptionAnchor" id="parameter-loginTheme"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-logintheme"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-login-theme"></span><strong>login_theme</strong></p>
+<a class="ansibleOptionLink" href="#parameter-login_theme" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: loginTheme</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm login theme.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-login_with_email_allowed"></div>
+<div class="ansibleOptionAnchor" id="parameter-loginWithEmailAllowed"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-loginwithemailallowed"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-login-with-email-allowed"></span><strong>login_with_email_allowed</strong></p>
+<a class="ansibleOptionLink" href="#parameter-login_with_email_allowed" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: loginWithEmailAllowed</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm login with email allowed option.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-max_delta_time_seconds"></div>
+<div class="ansibleOptionAnchor" id="parameter-maxDeltaTimeSeconds"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-maxdeltatimeseconds"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-max-delta-time-seconds"></span><strong>max_delta_time_seconds</strong></p>
+<a class="ansibleOptionLink" href="#parameter-max_delta_time_seconds" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: maxDeltaTimeSeconds</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm max delta time in seconds.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-max_failure_wait_seconds"></div>
+<div class="ansibleOptionAnchor" id="parameter-maxFailureWaitSeconds"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-maxfailurewaitseconds"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-max-failure-wait-seconds"></span><strong>max_failure_wait_seconds</strong></p>
+<a class="ansibleOptionLink" href="#parameter-max_failure_wait_seconds" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: maxFailureWaitSeconds</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm max failure wait in seconds.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-max_temporary_lockouts"></div>
+<div class="ansibleOptionAnchor" id="parameter-maxTemporaryLockouts"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-maxtemporarylockouts"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-max-temporary-lockouts"></span><strong>max_temporary_lockouts</strong></p>
+<a class="ansibleOptionLink" href="#parameter-max_temporary_lockouts" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: maxTemporaryLockouts</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 11.2.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm max temporary lockouts.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-minimum_quick_login_wait_seconds"></div>
+<div class="ansibleOptionAnchor" id="parameter-minimumQuickLoginWaitSeconds"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-minimumquickloginwaitseconds"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-minimum-quick-login-wait-seconds"></span><strong>minimum_quick_login_wait_seconds</strong></p>
+<a class="ansibleOptionLink" href="#parameter-minimum_quick_login_wait_seconds" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: minimumQuickLoginWaitSeconds</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm minimum quick login wait in seconds.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-not_before"></div>
+<div class="ansibleOptionAnchor" id="parameter-notBefore"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-notbefore"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-not-before"></span><strong>not_before</strong></p>
+<a class="ansibleOptionLink" href="#parameter-not_before" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: notBefore</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm not before.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-oauth2_device_code_lifespan"></div>
+<div class="ansibleOptionAnchor" id="parameter-oauth2DeviceCodeLifespan"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-oauth2devicecodelifespan"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-oauth2-device-code-lifespan"></span><strong>oauth2_device_code_lifespan</strong></p>
+<a class="ansibleOptionLink" href="#parameter-oauth2_device_code_lifespan" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: oauth2DeviceCodeLifespan</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 11.2.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Max time before the device code and user code are expired.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-oauth2_device_polling_interval"></div>
+<div class="ansibleOptionAnchor" id="parameter-oauth2DevicePollingInterval"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-oauth2devicepollinginterval"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-oauth2-device-polling-interval"></span><strong>oauth2_device_polling_interval</strong></p>
+<a class="ansibleOptionLink" href="#parameter-oauth2_device_polling_interval" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: oauth2DevicePollingInterval</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 11.2.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The minimum amount of time in seconds that the client should wait between polling requests to the token endpoint.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-offline_session_idle_timeout"></div>
+<div class="ansibleOptionAnchor" id="parameter-offlineSessionIdleTimeout"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-offlinesessionidletimeout"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-offline-session-idle-timeout"></span><strong>offline_session_idle_timeout</strong></p>
+<a class="ansibleOptionLink" href="#parameter-offline_session_idle_timeout" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: offlineSessionIdleTimeout</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm offline session idle timeout.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-offline_session_max_lifespan"></div>
+<div class="ansibleOptionAnchor" id="parameter-offlineSessionMaxLifespan"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-offlinesessionmaxlifespan"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-offline-session-max-lifespan"></span><strong>offline_session_max_lifespan</strong></p>
+<a class="ansibleOptionLink" href="#parameter-offline_session_max_lifespan" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: offlineSessionMaxLifespan</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm offline session max lifespan.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-offline_session_max_lifespan_enabled"></div>
+<div class="ansibleOptionAnchor" id="parameter-offlineSessionMaxLifespanEnabled"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-offlinesessionmaxlifespanenabled"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-offline-session-max-lifespan-enabled"></span><strong>offline_session_max_lifespan_enabled</strong></p>
+<a class="ansibleOptionLink" href="#parameter-offline_session_max_lifespan_enabled" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: offlineSessionMaxLifespanEnabled</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm offline session max lifespan enabled option.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-organizations_enabled"></div>
+<div class="ansibleOptionAnchor" id="parameter-organizationsEnabled"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-organizationsenabled"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-organizations-enabled"></span><strong>organizations_enabled</strong></p>
+<a class="ansibleOptionLink" href="#parameter-organizations_enabled" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: organizationsEnabled</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 10.0.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Enables support for experimental organization feature.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-otp_policy_algorithm"></div>
+<div class="ansibleOptionAnchor" id="parameter-otpPolicyAlgorithm"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-otppolicyalgorithm"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-otp-policy-algorithm"></span><strong>otp_policy_algorithm</strong></p>
+<a class="ansibleOptionLink" href="#parameter-otp_policy_algorithm" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: otpPolicyAlgorithm</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm otp policy algorithm.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-otp_policy_digits"></div>
+<div class="ansibleOptionAnchor" id="parameter-otpPolicyDigits"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-otppolicydigits"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-otp-policy-digits"></span><strong>otp_policy_digits</strong></p>
+<a class="ansibleOptionLink" href="#parameter-otp_policy_digits" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: otpPolicyDigits</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm otp policy digits.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-otp_policy_initial_counter"></div>
+<div class="ansibleOptionAnchor" id="parameter-otpPolicyInitialCounter"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-otppolicyinitialcounter"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-otp-policy-initial-counter"></span><strong>otp_policy_initial_counter</strong></p>
+<a class="ansibleOptionLink" href="#parameter-otp_policy_initial_counter" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: otpPolicyInitialCounter</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm otp policy initial counter.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-otp_policy_look_ahead_window"></div>
+<div class="ansibleOptionAnchor" id="parameter-otpPolicyLookAheadWindow"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-otppolicylookaheadwindow"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-otp-policy-look-ahead-window"></span><strong>otp_policy_look_ahead_window</strong></p>
+<a class="ansibleOptionLink" href="#parameter-otp_policy_look_ahead_window" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: otpPolicyLookAheadWindow</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm otp policy look ahead window.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-otp_policy_period"></div>
+<div class="ansibleOptionAnchor" id="parameter-otpPolicyPeriod"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-otppolicyperiod"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-otp-policy-period"></span><strong>otp_policy_period</strong></p>
+<a class="ansibleOptionLink" href="#parameter-otp_policy_period" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: otpPolicyPeriod</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm otp policy period.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-otp_policy_type"></div>
+<div class="ansibleOptionAnchor" id="parameter-otpPolicyType"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-otppolicytype"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-otp-policy-type"></span><strong>otp_policy_type</strong></p>
+<a class="ansibleOptionLink" href="#parameter-otp_policy_type" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: otpPolicyType</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm otp policy type.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-otp_supported_applications"></div>
+<div class="ansibleOptionAnchor" id="parameter-otpSupportedApplications"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-otpsupportedapplications"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-otp-supported-applications"></span><strong>otp_supported_applications</strong></p>
+<a class="ansibleOptionLink" href="#parameter-otp_supported_applications" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: otpSupportedApplications</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm otp supported applications.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-password_policy"></div>
+<div class="ansibleOptionAnchor" id="parameter-passwordPolicy"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-passwordpolicy"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-password-policy"></span><strong>password_policy</strong></p>
+<a class="ansibleOptionLink" href="#parameter-password_policy" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: passwordPolicy</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm password policy.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-permanent_lockout"></div>
+<div class="ansibleOptionAnchor" id="parameter-permanentLockout"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-permanentlockout"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-permanent-lockout"></span><strong>permanent_lockout</strong></p>
+<a class="ansibleOptionLink" href="#parameter-permanent_lockout" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: permanentLockout</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm permanent lockout.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-quick_login_check_milli_seconds"></div>
+<div class="ansibleOptionAnchor" id="parameter-quickLoginCheckMilliSeconds"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-quicklogincheckmilliseconds"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-quick-login-check-milli-seconds"></span><strong>quick_login_check_milli_seconds</strong></p>
+<a class="ansibleOptionLink" href="#parameter-quick_login_check_milli_seconds" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: quickLoginCheckMilliSeconds</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm quick login check in milliseconds.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-realm"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-realm"><strong>realm</strong></p>
+<a class="ansibleOptionLink" href="#parameter-realm" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm name.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-refresh_token"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-refresh-token"><strong>refresh_token</strong></p>
+<a class="ansibleOptionLink" href="#parameter-refresh_token" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 10.3.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Authentication refresh token for Keycloak API.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-refresh_token_max_reuse"></div>
+<div class="ansibleOptionAnchor" id="parameter-refreshTokenMaxReuse"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-refreshtokenmaxreuse"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-refresh-token-max-reuse"></span><strong>refresh_token_max_reuse</strong></p>
+<a class="ansibleOptionLink" href="#parameter-refresh_token_max_reuse" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: refreshTokenMaxReuse</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm refresh token max reuse.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-registration_allowed"></div>
+<div class="ansibleOptionAnchor" id="parameter-registrationAllowed"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-registrationallowed"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-registration-allowed"></span><strong>registration_allowed</strong></p>
+<a class="ansibleOptionLink" href="#parameter-registration_allowed" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: registrationAllowed</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm registration allowed option.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-registration_email_as_username"></div>
+<div class="ansibleOptionAnchor" id="parameter-registrationEmailAsUsername"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-registrationemailasusername"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-registration-email-as-username"></span><strong>registration_email_as_username</strong></p>
+<a class="ansibleOptionLink" href="#parameter-registration_email_as_username" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: registrationEmailAsUsername</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm registration email as username option.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-registration_flow"></div>
+<div class="ansibleOptionAnchor" id="parameter-registrationFlow"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-registrationflow"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-registration-flow"></span><strong>registration_flow</strong></p>
+<a class="ansibleOptionLink" href="#parameter-registration_flow" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: registrationFlow</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm registration flow.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-remember_me"></div>
+<div class="ansibleOptionAnchor" id="parameter-rememberMe"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-rememberme"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-remember-me"></span><strong>remember_me</strong></p>
+<a class="ansibleOptionLink" href="#parameter-remember_me" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: rememberMe</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm remember me option.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-reset_credentials_flow"></div>
+<div class="ansibleOptionAnchor" id="parameter-resetCredentialsFlow"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-resetcredentialsflow"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-reset-credentials-flow"></span><strong>reset_credentials_flow</strong></p>
+<a class="ansibleOptionLink" href="#parameter-reset_credentials_flow" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: resetCredentialsFlow</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm reset credentials flow.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-reset_password_allowed"></div>
+<div class="ansibleOptionAnchor" id="parameter-resetPasswordAllowed"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-resetpasswordallowed"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-reset-password-allowed"></span><strong>reset_password_allowed</strong></p>
+<a class="ansibleOptionLink" href="#parameter-reset_password_allowed" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: resetPasswordAllowed</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm reset password allowed option.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-revoke_refresh_token"></div>
+<div class="ansibleOptionAnchor" id="parameter-revokeRefreshToken"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-revokerefreshtoken"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-revoke-refresh-token"></span><strong>revoke_refresh_token</strong></p>
+<a class="ansibleOptionLink" href="#parameter-revoke_refresh_token" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: revokeRefreshToken</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm revoke refresh token option.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-smtp_server"></div>
+<div class="ansibleOptionAnchor" id="parameter-smtpServer"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-smtpserver"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-smtp-server"></span><strong>smtp_server</strong></p>
+<a class="ansibleOptionLink" href="#parameter-smtp_server" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: smtpServer</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm smtp server.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-ssl_required"></div>
+<div class="ansibleOptionAnchor" id="parameter-sslRequired"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-sslrequired"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-ssl-required"></span><strong>ssl_required</strong></p>
+<a class="ansibleOptionLink" href="#parameter-ssl_required" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: sslRequired</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm ssl required option.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;all&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;external&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;none&quot;</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-sso_session_idle_timeout"></div>
+<div class="ansibleOptionAnchor" id="parameter-ssoSessionIdleTimeout"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-ssosessionidletimeout"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-sso-session-idle-timeout"></span><strong>sso_session_idle_timeout</strong></p>
+<a class="ansibleOptionLink" href="#parameter-sso_session_idle_timeout" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: ssoSessionIdleTimeout</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm sso session idle timeout.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-sso_session_idle_timeout_remember_me"></div>
+<div class="ansibleOptionAnchor" id="parameter-ssoSessionIdleTimeoutRememberMe"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-ssosessionidletimeoutrememberme"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-sso-session-idle-timeout-remember-me"></span><strong>sso_session_idle_timeout_remember_me</strong></p>
+<a class="ansibleOptionLink" href="#parameter-sso_session_idle_timeout_remember_me" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: ssoSessionIdleTimeoutRememberMe</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm sso session idle timeout remember me.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-sso_session_max_lifespan"></div>
+<div class="ansibleOptionAnchor" id="parameter-ssoSessionMaxLifespan"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-ssosessionmaxlifespan"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-sso-session-max-lifespan"></span><strong>sso_session_max_lifespan</strong></p>
+<a class="ansibleOptionLink" href="#parameter-sso_session_max_lifespan" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: ssoSessionMaxLifespan</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm sso session max lifespan.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-sso_session_max_lifespan_remember_me"></div>
+<div class="ansibleOptionAnchor" id="parameter-ssoSessionMaxLifespanRememberMe"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-ssosessionmaxlifespanrememberme"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-sso-session-max-lifespan-remember-me"></span><strong>sso_session_max_lifespan_remember_me</strong></p>
+<a class="ansibleOptionLink" href="#parameter-sso_session_max_lifespan_remember_me" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: ssoSessionMaxLifespanRememberMe</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm sso session max lifespan remember me.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-state"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-state"><strong>state</strong></p>
+<a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>State of the realm.</p>
+<p>On <code class="ansible-value docutils literal notranslate"><span class="pre">present</span></code>, the realm is created (or updated if it exists already).</p>
+<p>On <code class="ansible-value docutils literal notranslate"><span class="pre">absent</span></code>, the realm is removed if it exists.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">&quot;present&quot;</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;absent&quot;</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-supported_locales"></div>
+<div class="ansibleOptionAnchor" id="parameter-supportedLocales"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-supportedlocales"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-supported-locales"></span><strong>supported_locales</strong></p>
+<a class="ansibleOptionLink" href="#parameter-supported_locales" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: supportedLocales</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm supported locales.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-token"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-token"><strong>token</strong></p>
+<a class="ansibleOptionLink" href="#parameter-token" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 3.0.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Authentication token for Keycloak API.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-user_managed_access_allowed"></div>
+<div class="ansibleOptionAnchor" id="parameter-userManagedAccessAllowed"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-usermanagedaccessallowed"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-user-managed-access-allowed"></span><strong>user_managed_access_allowed</strong></p>
+<a class="ansibleOptionLink" href="#parameter-user_managed_access_allowed" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: userManagedAccessAllowed</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm user managed access allowed option.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-validate_certs"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-validate-certs"><strong>validate_certs</strong></p>
+<a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Verify TLS certificates (do not disable this in production).</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">true</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-verify_email"></div>
+<div class="ansibleOptionAnchor" id="parameter-verifyEmail"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-verifyemail"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-verify-email"></span><strong>verify_email</strong></p>
+<a class="ansibleOptionLink" href="#parameter-verify_email" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: verifyEmail</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm verify email option.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-wait_increment_seconds"></div>
+<div class="ansibleOptionAnchor" id="parameter-waitIncrementSeconds"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-waitincrementseconds"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-wait-increment-seconds"></span><strong>wait_increment_seconds</strong></p>
+<a class="ansibleOptionLink" href="#parameter-wait_increment_seconds" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: waitIncrementSeconds</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The realm wait increment in seconds.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-web_authn_policy_acceptable_aaguids"></div>
+<div class="ansibleOptionAnchor" id="parameter-webAuthnPolicyAcceptableAaguids"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-webauthnpolicyacceptableaaguids"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-web-authn-policy-acceptable-aaguids"></span><strong>web_authn_policy_acceptable_aaguids</strong></p>
+<a class="ansibleOptionLink" href="#parameter-web_authn_policy_acceptable_aaguids" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: webAuthnPolicyAcceptableAaguids</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 11.3.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>List of acceptable AAGUIDs for WebAuthn authenticators.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-web_authn_policy_attestation_conveyance_preference"></div>
+<div class="ansibleOptionAnchor" id="parameter-webAuthnPolicyAttestationConveyancePreference"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-webauthnpolicyattestationconveyancepreference"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-web-authn-policy-attestation-conveyance-preference"></span><strong>web_authn_policy_attestation_conveyance_preference</strong></p>
+<a class="ansibleOptionLink" href="#parameter-web_authn_policy_attestation_conveyance_preference" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: webAuthnPolicyAttestationConveyancePreference</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 11.3.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Attestation conveyance preference for WebAuthn.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-web_authn_policy_authenticator_attachment"></div>
+<div class="ansibleOptionAnchor" id="parameter-webAuthnPolicyAuthenticatorAttachment"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-webauthnpolicyauthenticatorattachment"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-web-authn-policy-authenticator-attachment"></span><strong>web_authn_policy_authenticator_attachment</strong></p>
+<a class="ansibleOptionLink" href="#parameter-web_authn_policy_authenticator_attachment" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: webAuthnPolicyAuthenticatorAttachment</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 11.3.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Authenticator attachment preference for WebAuthn authenticators.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-web_authn_policy_avoid_same_authenticator_register"></div>
+<div class="ansibleOptionAnchor" id="parameter-webAuthnPolicyAvoidSameAuthenticatorRegister"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-webauthnpolicyavoidsameauthenticatorregister"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-web-authn-policy-avoid-same-authenticator-register"></span><strong>web_authn_policy_avoid_same_authenticator_register</strong></p>
+<a class="ansibleOptionLink" href="#parameter-web_authn_policy_avoid_same_authenticator_register" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: webAuthnPolicyAvoidSameAuthenticatorRegister</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 11.3.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Avoid registering the same authenticator multiple times.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-web_authn_policy_create_timeout"></div>
+<div class="ansibleOptionAnchor" id="parameter-webAuthnPolicyCreateTimeout"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-webauthnpolicycreatetimeout"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-web-authn-policy-create-timeout"></span><strong>web_authn_policy_create_timeout</strong></p>
+<a class="ansibleOptionLink" href="#parameter-web_authn_policy_create_timeout" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: webAuthnPolicyCreateTimeout</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 11.3.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Timeout for WebAuthn credential creation (ms).</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-web_authn_policy_extra_origins"></div>
+<div class="ansibleOptionAnchor" id="parameter-webAuthnPolicyExtraOrigins"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-webauthnpolicyextraorigins"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-web-authn-policy-extra-origins"></span><strong>web_authn_policy_extra_origins</strong></p>
+<a class="ansibleOptionLink" href="#parameter-web_authn_policy_extra_origins" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: webAuthnPolicyExtraOrigins</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 11.3.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Additional acceptable origins for WebAuthn requests.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-web_authn_policy_passwordless_acceptable_aaguids"></div>
+<div class="ansibleOptionAnchor" id="parameter-webAuthnPolicyPasswordlessAcceptableAaguids"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-webauthnpolicypasswordlessacceptableaaguids"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-web-authn-policy-passwordless-acceptable-aaguids"></span><strong>web_authn_policy_passwordless_acceptable_aaguids</strong></p>
+<a class="ansibleOptionLink" href="#parameter-web_authn_policy_passwordless_acceptable_aaguids" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: webAuthnPolicyPasswordlessAcceptableAaguids</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 11.3.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>List of acceptable AAGUIDs for WebAuthn passwordless authenticators.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-web_authn_policy_passwordless_attestation_conveyance_preference"></div>
+<div class="ansibleOptionAnchor" id="parameter-webAuthnPolicyPasswordlessAttestationConveyancePreference"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-webauthnpolicypasswordlessattestationconveyancepreference"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-web-authn-policy-passwordless-attestation-conveyance-preference"></span><strong>web_authn_policy_passwordless_attestation_conveyance_preference</strong></p>
+<a class="ansibleOptionLink" href="#parameter-web_authn_policy_passwordless_attestation_conveyance_preference" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: webAuthnPolicyPasswordlessAttestationConveyancePreference</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 11.3.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Attestation conveyance preference for WebAuthn passwordless.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-web_authn_policy_passwordless_authenticator_attachment"></div>
+<div class="ansibleOptionAnchor" id="parameter-webAuthnPolicyPasswordlessAuthenticatorAttachment"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-webauthnpolicypasswordlessauthenticatorattachment"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-web-authn-policy-passwordless-authenticator-attachment"></span><strong>web_authn_policy_passwordless_authenticator_attachment</strong></p>
+<a class="ansibleOptionLink" href="#parameter-web_authn_policy_passwordless_authenticator_attachment" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: webAuthnPolicyPasswordlessAuthenticatorAttachment</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 11.3.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Authenticator attachment for WebAuthn passwordless.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-web_authn_policy_passwordless_avoid_same_authenticator_register"></div>
+<div class="ansibleOptionAnchor" id="parameter-webAuthnPolicyPasswordlessAvoidSameAuthenticatorRegister"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-webauthnpolicypasswordlessavoidsameauthenticatorregister"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-web-authn-policy-passwordless-avoid-same-authenticator-register"></span><strong>web_authn_policy_passwordless_avoid_same_authenticator_register</strong></p>
+<a class="ansibleOptionLink" href="#parameter-web_authn_policy_passwordless_avoid_same_authenticator_register" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: webAuthnPolicyPasswordlessAvoidSameAuthenticatorRegister</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 11.3.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Avoid registering the same authenticator multiple times for passwordless.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-web_authn_policy_passwordless_create_timeout"></div>
+<div class="ansibleOptionAnchor" id="parameter-webAuthnPolicyPasswordlessCreateTimeout"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-webauthnpolicypasswordlesscreatetimeout"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-web-authn-policy-passwordless-create-timeout"></span><strong>web_authn_policy_passwordless_create_timeout</strong></p>
+<a class="ansibleOptionLink" href="#parameter-web_authn_policy_passwordless_create_timeout" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: webAuthnPolicyPasswordlessCreateTimeout</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 11.3.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Timeout for WebAuthn passwordless credential creation (ms).</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-web_authn_policy_passwordless_extra_origins"></div>
+<div class="ansibleOptionAnchor" id="parameter-webAuthnPolicyPasswordlessExtraOrigins"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-webauthnpolicypasswordlessextraorigins"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-web-authn-policy-passwordless-extra-origins"></span><strong>web_authn_policy_passwordless_extra_origins</strong></p>
+<a class="ansibleOptionLink" href="#parameter-web_authn_policy_passwordless_extra_origins" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: webAuthnPolicyPasswordlessExtraOrigins</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 11.3.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Additional acceptable origins for WebAuthn passwordless requests.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-web_authn_policy_passwordless_passkeys_enabled"></div>
+<div class="ansibleOptionAnchor" id="parameter-webAuthnPolicyPasswordlessPasskeysEnabled"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-webauthnpolicypasswordlesspasskeysenabled"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-web-authn-policy-passwordless-passkeys-enabled"></span><strong>web_authn_policy_passwordless_passkeys_enabled</strong></p>
+<a class="ansibleOptionLink" href="#parameter-web_authn_policy_passwordless_passkeys_enabled" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: webAuthnPolicyPasswordlessPasskeysEnabled</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 12.1.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Enable passkeys (conditional UI) authentication in the username forms.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-web_authn_policy_passwordless_require_resident_key"></div>
+<div class="ansibleOptionAnchor" id="parameter-webAuthnPolicyPasswordlessRequireResidentKey"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-webauthnpolicypasswordlessrequireresidentkey"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-web-authn-policy-passwordless-require-resident-key"></span><strong>web_authn_policy_passwordless_require_resident_key</strong></p>
+<a class="ansibleOptionLink" href="#parameter-web_authn_policy_passwordless_require_resident_key" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: webAuthnPolicyPasswordlessRequireResidentKey</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 11.3.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Whether resident keys are required for WebAuthn passwordless (<code class="ansible-value docutils literal notranslate"><span class="pre">Yes</span></code>/<code class="ansible-value docutils literal notranslate"><span class="pre">No</span></code>/<code class="ansible-value docutils literal notranslate"><span class="pre">not</span> <span class="pre">specified</span></code>).</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-web_authn_policy_passwordless_rp_entity_name"></div>
+<div class="ansibleOptionAnchor" id="parameter-webAuthnPolicyPasswordlessRpEntityName"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-webauthnpolicypasswordlessrpentityname"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-web-authn-policy-passwordless-rp-entity-name"></span><strong>web_authn_policy_passwordless_rp_entity_name</strong></p>
+<a class="ansibleOptionLink" href="#parameter-web_authn_policy_passwordless_rp_entity_name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: webAuthnPolicyPasswordlessRpEntityName</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 11.3.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>WebAuthn Passwordless Relying Party Entity Name.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-web_authn_policy_passwordless_rp_id"></div>
+<div class="ansibleOptionAnchor" id="parameter-webAuthnPolicyPasswordlessRpId"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-webauthnpolicypasswordlessrpid"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-web-authn-policy-passwordless-rp-id"></span><strong>web_authn_policy_passwordless_rp_id</strong></p>
+<a class="ansibleOptionLink" href="#parameter-web_authn_policy_passwordless_rp_id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: webAuthnPolicyPasswordlessRpId</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 11.3.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>WebAuthn Passwordless Relying Party ID (domain).</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-web_authn_policy_passwordless_signature_algorithms"></div>
+<div class="ansibleOptionAnchor" id="parameter-webAuthnPolicyPasswordlessSignatureAlgorithms"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-webauthnpolicypasswordlesssignaturealgorithms"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-web-authn-policy-passwordless-signature-algorithms"></span><strong>web_authn_policy_passwordless_signature_algorithms</strong></p>
+<a class="ansibleOptionLink" href="#parameter-web_authn_policy_passwordless_signature_algorithms" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: webAuthnPolicyPasswordlessSignatureAlgorithms</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 11.3.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>List of acceptable WebAuthn signature algorithms for passwordless.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-web_authn_policy_passwordless_user_verification_requirement"></div>
+<div class="ansibleOptionAnchor" id="parameter-webAuthnPolicyPasswordlessUserVerificationRequirement"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-webauthnpolicypasswordlessuserverificationrequirement"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-web-authn-policy-passwordless-user-verification-requirement"></span><strong>web_authn_policy_passwordless_user_verification_requirement</strong></p>
+<a class="ansibleOptionLink" href="#parameter-web_authn_policy_passwordless_user_verification_requirement" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: webAuthnPolicyPasswordlessUserVerificationRequirement</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 11.3.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>User verification requirement for WebAuthn passwordless.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-web_authn_policy_require_resident_key"></div>
+<div class="ansibleOptionAnchor" id="parameter-webAuthnPolicyRequireResidentKey"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-webauthnpolicyrequireresidentkey"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-web-authn-policy-require-resident-key"></span><strong>web_authn_policy_require_resident_key</strong></p>
+<a class="ansibleOptionLink" href="#parameter-web_authn_policy_require_resident_key" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: webAuthnPolicyRequireResidentKey</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 11.3.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Whether resident keys are required for WebAuthn (Yes/No/not specified).</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-web_authn_policy_rp_entity_name"></div>
+<div class="ansibleOptionAnchor" id="parameter-webAuthnPolicyRpEntityName"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-webauthnpolicyrpentityname"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-web-authn-policy-rp-entity-name"></span><strong>web_authn_policy_rp_entity_name</strong></p>
+<a class="ansibleOptionLink" href="#parameter-web_authn_policy_rp_entity_name" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: webAuthnPolicyRpEntityName</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 11.3.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>WebAuthn Relying Party Entity Name.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-web_authn_policy_rp_id"></div>
+<div class="ansibleOptionAnchor" id="parameter-webAuthnPolicyRpId"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-webauthnpolicyrpid"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-web-authn-policy-rp-id"></span><strong>web_authn_policy_rp_id</strong></p>
+<a class="ansibleOptionLink" href="#parameter-web_authn_policy_rp_id" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: webAuthnPolicyRpId</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 11.3.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>WebAuthn Relying Party ID (domain). Empty string means use request host.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-web_authn_policy_signature_algorithms"></div>
+<div class="ansibleOptionAnchor" id="parameter-webAuthnPolicySignatureAlgorithms"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-webauthnpolicysignaturealgorithms"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-web-authn-policy-signature-algorithms"></span><strong>web_authn_policy_signature_algorithms</strong></p>
+<a class="ansibleOptionLink" href="#parameter-web_authn_policy_signature_algorithms" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: webAuthnPolicySignatureAlgorithms</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 11.3.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>List of acceptable WebAuthn signature algorithms.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-web_authn_policy_user_verification_requirement"></div>
+<div class="ansibleOptionAnchor" id="parameter-webAuthnPolicyUserVerificationRequirement"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-parameter-webauthnpolicyuserverificationrequirement"><span id="ansible-collections-community-general-keycloak-realm-module-parameter-web-authn-policy-user-verification-requirement"></span><strong>web_authn_policy_user_verification_requirement</strong></p>
+<a class="ansibleOptionLink" href="#parameter-web_authn_policy_user_verification_requirement" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: webAuthnPolicyUserVerificationRequirement</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 11.3.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>User verification requirement for WebAuthn.</p>
+</div></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="attributes">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Attributes</a><a class="headerlink" href="#attributes" title="Link to this heading"></a></h2>
+<table class="longtable ansible-option-table docutils align-default" style="width: 100%">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Support</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="attribute-action_group"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-attribute-action-group"><strong>action_group</strong></p>
+<a class="ansibleOptionLink" href="#attribute-action_group" title="Permalink to this attribute"></a></div></td>
+<td><div class="ansible-option-cell"><p><strong class="ansible-attribute-support-property">Action group:</strong> <strong class="ansible-attribute-support-full">community.general.keycloak</strong></p>
+<p><em class="ansible-option-versionadded">added in community.general 10.2.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Use <code class="docutils literal notranslate"><span class="pre">group/community.general.keycloak</span></code> in <code class="docutils literal notranslate"><span class="pre">module_defaults</span></code> to set defaults for this module.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="attribute-check_mode"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-attribute-check-mode"><strong>check_mode</strong></p>
+<a class="ansibleOptionLink" href="#attribute-check_mode" title="Permalink to this attribute"></a></div></td>
+<td><div class="ansible-option-cell"><p><strong class="ansible-attribute-support-label">Support: </strong><strong class="ansible-attribute-support-full">full</strong></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Can run in <code class="docutils literal notranslate"><span class="pre">check_mode</span></code> and return changed status prediction without modifying target.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="attribute-diff_mode"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-attribute-diff-mode"><strong>diff_mode</strong></p>
+<a class="ansibleOptionLink" href="#attribute-diff_mode" title="Permalink to this attribute"></a></div></td>
+<td><div class="ansible-option-cell"><p><strong class="ansible-attribute-support-label">Support: </strong><strong class="ansible-attribute-support-full">full</strong></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Returns details on what has changed (or possibly needs changing in <code class="docutils literal notranslate"><span class="pre">check_mode</span></code>), when in diff mode.</p>
+</div></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="examples">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Examples</a><a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Create or update Keycloak realm (minimal example)</span>
+<span class="w">  </span><span class="nt">community.general.keycloak_realm</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">auth_client_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">admin-cli</span>
+<span class="w">    </span><span class="nt">auth_keycloak_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://auth.example.com/auth</span>
+<span class="w">    </span><span class="nt">auth_realm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">master</span>
+<span class="w">    </span><span class="nt">auth_username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">USERNAME</span>
+<span class="w">    </span><span class="nt">auth_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PASSWORD</span>
+<span class="w">    </span><span class="nt">realm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unique_realm_name</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">present</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Delete a Keycloak realm</span>
+<span class="w">  </span><span class="nt">community.general.keycloak_realm</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">auth_client_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">admin-cli</span>
+<span class="w">    </span><span class="nt">auth_keycloak_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://auth.example.com/auth</span>
+<span class="w">    </span><span class="nt">auth_realm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">master</span>
+<span class="w">    </span><span class="nt">auth_username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">USERNAME</span>
+<span class="w">    </span><span class="nt">auth_password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PASSWORD</span>
+<span class="w">    </span><span class="nt">realm</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">unique_realm_name</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">absent</span>
+</pre></div>
+</div>
+</section>
+<section id="return-values">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Return Values</a><a class="headerlink" href="#return-values" title="Link to this heading"></a></h2>
+<p>Common return values are documented <a class="reference internal" href="../../../reference_appendices/common_return_values.html#common-return-values"><span class="std std-ref">here</span></a>, the following are the fields unique to this module:</p>
+<table class="longtable ansible-option-table docutils align-default" style="width: 100%">
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-end_state"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-return-end-state"><strong>end_state</strong></p>
+<a class="ansibleOptionLink" href="#return-end_state" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Representation of realm after module execution (sample is truncated).</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> on success</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">{&quot;adminUrl&quot;:</span> <span class="pre">&quot;http://www.example.com/admin_url&quot;,</span> <span class="pre">&quot;attributes&quot;:</span> <span class="pre">{&quot;request.object.signature.alg&quot;:</span> <span class="pre">&quot;RS256&quot;}}</span></code></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-existing"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-return-existing"><strong>existing</strong></p>
+<a class="ansibleOptionLink" href="#return-existing" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Representation of existing realm (sample is truncated).</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">{&quot;adminUrl&quot;:</span> <span class="pre">&quot;http://www.example.com/admin_url&quot;,</span> <span class="pre">&quot;attributes&quot;:</span> <span class="pre">{&quot;request.object.signature.alg&quot;:</span> <span class="pre">&quot;RS256&quot;}}</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-msg"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-return-msg"><strong>msg</strong></p>
+<a class="ansibleOptionLink" href="#return-msg" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Message as to what action was taken.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;Realm</span> <span class="pre">testrealm</span> <span class="pre">has</span> <span class="pre">been</span> <span class="pre">updated&quot;</span></code></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-proposed"></div><p class="ansible-option-title" id="ansible-collections-community-general-keycloak-realm-module-return-proposed"><strong>proposed</strong></p>
+<a class="ansibleOptionLink" href="#return-proposed" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">dictionary</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Representation of proposed realm.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">{&quot;realm&quot;:</span> <span class="pre">&quot;test&quot;}</span></code></p>
+</div></td>
+</tr>
+</tbody>
+</table>
+<section id="authors">
+<h3>Authors<a class="headerlink" href="#authors" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Christophe Gilles (&#64;kris2kris)</p></li>
+</ul>
+</section>
+<section id="collection-links">
+<h3>Collection links<a class="headerlink" href="#collection-links" title="Link to this heading"></a></h3>
+<ul class="ansible-links">
+<li><span><a aria-role="button" class="ansible-link reference external" href="https://github.com/ansible-collections/community.general/issues" rel="noopener external" target="_blank">Issue Tracker</a></span></li>
+<li><span><a aria-role="button" class="ansible-link reference external" href="https://github.com/ansible-collections/community.general" rel="noopener external" target="_blank">Repository (Sources)</a></span></li>
+<li><span><a aria-role="button" class="ansible-link reference external" href="https://forum.ansible.com/c/help/6/none" rel="noopener external" target="_blank">Ask for help</a></span></li>
+<li><span><a aria-role="button" class="ansible-link reference external" href="https://github.com/ansible-collections/community.general/issues/new?assignees=&amp;labels=&amp;template=bug_report.yml" rel="noopener external" target="_blank">Submit a bug report</a></span></li>
+<li><span><a aria-role="button" class="ansible-link reference external" href="https://github.com/ansible-collections/community.general/issues/new?assignees=&amp;labels=&amp;template=feature_request.yml" rel="noopener external" target="_blank">Request a feature</a></span></li>
+<li><span><a class="reference internal" href="index.html#communication-for-community-general"><span class="std std-ref">Communication</span></a></span></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="keycloak_identity_provider_module.html" class="btn btn-neutral float-left" title="community.general.keycloak_identity_provider module – Allows administration of Keycloak identity providers using Keycloak API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="keycloak_realm_info_module.html" class="btn btn-neutral float-right" title="community.general.keycloak_realm_info module – Allows obtaining Keycloak realm public information using Keycloak API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Apr 06, 2026.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme -->
+<!-- begin analytics -->
+<script>
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script>
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,52 @@
+{
+  "collection_ns": "ansible_builtin",
+  "collection": "ansible.builtin",
+  "module": "ansible.builtin.validate_argument_spec",
+  "slug": "validate_argument_spec_module#ansible-collections-ansible-builtin-validate-argument-spec-module",
+  "description": "This module validates role arguments with a defined argument specification.",
+  "parameters": [
+    {
+      "name": "argument_spec",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary like AnsibleModule argument_spec. See the options parameter for the specification format."
+    },
+    {
+      "name": "provided_arguments",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary of the arguments that will be validated according to argument_spec."
+    }
+  ],
+  "examples": [
+    "- name: verify vars needed for this task file are present when included\n  ansible.builtin.validate_argument_spec:\n    argument_spec: '{{ required_data }}'\n  vars:\n    required_data:\n      # unlike spec file, just put the options in directly\n      stuff:\n        description: stuff\n        type: str\n        choices: ['who', 'knows', 'what']\n        default: what\n      but:\n        description: i guess we need one\n        type: str\n        required: true\n\n\n- name: verify vars needed for this task file are present when included, with spec from a spec file\n  ansible.builtin.validate_argument_spec:\n    argument_spec: \"{{ (lookup('ansible.builtin.file', 'myargspec.yml') | from_yaml )['specname']['options'] }}\"\n\n\n- name: verify vars needed for next include and not from inside it, also with params i'll only define there\n  block:\n    - ansible.builtin.validate_argument_spec:\n        argument_spec: \"{{ lookup('ansible.builtin.file', 'nakedoptions.yml') }}\"\n        provided_arguments:\n          but: \"that i can define on the include itself, like in it's `vars:` keyword\"\n\n    - name: the include itself\n      vars:\n        stuff: knows\n        but: nobuts!"
+  ],
+  "return_values": [
+    {
+      "name": "argument_errors",
+      "type": "list",
+      "description": "A list of arg validation errors. Returned: failure Sample: [\"error message 1\", \"error message 2\"]",
+      "returned": "failure"
+    },
+    {
+      "name": "argument_spec_data",
+      "type": "dictionary",
+      "description": "A dict of the data from the ‘argument_spec’ arg. Returned: failure Sample: {\"some_arg\": {\"type\": \"str\"}, \"some_other_arg\": {\"required\": true, \"type\": \"int\"}}",
+      "returned": "failure"
+    },
+    {
+      "name": "validate_args_context",
+      "type": "dictionary",
+      "description": "A dict of info about where validate_args_spec was used Returned: always Sample: {\"argument_spec_name\": \"main\", \"name\": \"my_role\", \"path\": \"/home/user/roles/my_role/\", \"type\": \"role\"}",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/validate_argument_spec_module#ansible-collections-ansible-builtin-validate-argument-spec-module.html",
+  "parsed_at": "2026-04-11T13:52:53.099316"
+}

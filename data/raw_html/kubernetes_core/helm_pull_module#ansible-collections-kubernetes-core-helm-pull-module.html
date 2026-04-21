@@ -1,0 +1,756 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+<meta content="2.23.0" name="antsibull-docs" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>kubernetes.core.helm_pull module – download a chart from a repository and (optionally) unpack it in local directory. &mdash; Ansible Community Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=41de9001" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/ansible.css?v=b54c304f" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/antsibull-minimal.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/rtd-ethical-ads.css?v=289b023e" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/images/Ansible-Mark-RGB_Black.png"/>
+    <link rel="canonical" href="https://docs.ansible.com/projects/ansible/latest/collections/kubernetes/core/helm_pull_module.html"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=466ea2d0"></script>
+      <script src="../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="kubernetes.core.helm_registry_auth module – Helm registry authentication module" href="helm_registry_auth_module.html" />
+    <link rel="prev" title="kubernetes.core.helm_plugin_info module – Gather information about Helm plugins" href="helm_plugin_info_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+<script src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+<script async type="text/javascript" src="/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="package-doc-builds" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/collections/kubernetes/core/helm_pull_module.html" /><meta name="readthedocs-http-status" content="200" /></head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+    <li><a href="https://forum.ansible.com/" target="_blank">Ansible community forum</a></li>
+    <li><a href="https://docs.ansible.com/" target="_blank">Documentation</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../../../_static/images/Ansible-Mark-RGB_White.png"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Ansible Community Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Ansible
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <label class="sr-only" for="q">Search docs:</label>
+    <input type="text" class="st-default-search-input" id="q" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption" role="heading"><span class="caption-text">Ansible getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started/index.html">Getting started with Ansible</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started_ee/index.html">Getting started with Execution Environments</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../inventory_guide/index.html">Building Ansible inventories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../command_guide/index.html">Using Ansible command line tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../playbook_guide/index.html">Using Ansible playbooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../vault_guide/index.html">Protecting sensitive data with Ansible vault</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_plugin_guide/index.html">Using Ansible modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../collections_guide/index.html">Using Ansible collections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../os_guide/index.html">Using Ansible on Windows, BSD, and z/OS UNIX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tips_tricks/index.html">Ansible tips and tricks</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../community/index.html">Ansible Community Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../community/contributions_collections.html">Ansible Collections Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../community/contributions.html">ansible-core Contributors Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../community/advanced_index.html">Advanced Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_guide/style_guide/index.html">Ansible documentation style guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Collection Index</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../amazon/index.html">Collections in the Amazon Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ansible/index.html">Collections in the Ansible Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../arista/index.html">Collections in the Arista Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../awx/index.html">Collections in the Awx Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../azure/index.html">Collections in the Azure Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../check_point/index.html">Collections in the Check_point Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../chocolatey/index.html">Collections in the Chocolatey Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cisco/index.html">Collections in the Cisco Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cloud/index.html">Collections in the Cloud Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cloudscale_ch/index.html">Collections in the Cloudscale_ch Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../community/index.html">Collections in the Community Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../containers/index.html">Collections in the Containers Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cyberark/index.html">Collections in the Cyberark Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dellemc/index.html">Collections in the Dellemc Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../f5networks/index.html">Collections in the F5networks Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../fortinet/index.html">Collections in the Fortinet Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../frr/index.html">Collections in the Frr Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../gluster/index.html">Collections in the Gluster Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../google/index.html">Collections in the Google Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../grafana/index.html">Collections in the Grafana Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../graphiant/index.html">Collections in the Graphiant Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hetzner/index.html">Collections in the Hetzner Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hitachivantara/index.html">Collections in the Hitachivantara Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hpe/index.html">Collections in the Hpe Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ibm/index.html">Collections in the Ibm Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ieisystem/index.html">Collections in the Ieisystem Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../infinidat/index.html">Collections in the Infinidat Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../infoblox/index.html">Collections in the Infoblox Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../inspur/index.html">Collections in the Inspur Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../junipernetworks/index.html">Collections in the Junipernetworks Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../kaytus/index.html">Collections in the Kaytus Namespace</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">Collections in the Kubernetes Namespace</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">Kubernetes.Core</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="index.html#description">Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="index.html#scenario-guide">Scenario Guide</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="index.html#plugin-index">Plugin Index</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../kubevirt/index.html">Collections in the Kubevirt Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lowlydba/index.html">Collections in the Lowlydba Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../mellanox/index.html">Collections in the Mellanox Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../microsoft/index.html">Collections in the Microsoft Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../netapp/index.html">Collections in the Netapp Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../netapp_eseries/index.html">Collections in the Netapp_eseries Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../netbox/index.html">Collections in the Netbox Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ngine_io/index.html">Collections in the Ngine_io Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../openstack/index.html">Collections in the Openstack Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../openvswitch/index.html">Collections in the Openvswitch Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ovirt/index.html">Collections in the Ovirt Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pcg/index.html">Collections in the Pcg Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../purestorage/index.html">Collections in the Purestorage Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ravendb/index.html">Collections in the Ravendb Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../sensu/index.html">Collections in the Sensu Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../servicenow/index.html">Collections in the Servicenow Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../splunk/index.html">Collections in the Splunk Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../t_systems_mms/index.html">Collections in the T_systems_mms Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../telekom_mms/index.html">Collections in the Telekom_mms Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../theforeman/index.html">Collections in the Theforeman Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../vmware/index.html">Collections in the Vmware Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../vultr/index.html">Collections in the Vultr Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../vyos/index.html">Collections in the Vyos Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../wti/index.html">Collections in the Wti Namespace</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
+</ul>
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Collection Index</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Collections in the Kubernetes Namespace</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Kubernetes.Core</a></li>
+      <li class="breadcrumb-item active">kubernetes.core.helm_pull module – download a chart from a repository and (optionally) unpack it in local directory.</li>
+  <li class="wy-breadcrumbs-aside">
+            <!-- Remove main index page as it is no longer editable -->
+            
+              <br>
+
+            
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      /*use extra_banner for when we want something extra, like a survey or Community Day notice */
+      var extra_banner = '';
+    
+      var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Join us at <a href="https://www.redhat.com/en/summit?sc_id=RHCTE0250000464461" target="_blank">Red Hat Summit in Atlanta</a> to learn about Ansible Automation Platform | May 11-14, 2026' +
+        '</p>' +
+      '</div>';
+    
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/projects/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/projects/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="https://docs.ansible.com/projects/ansible/latest/">the latest documentation</a>.';
+        /* temp - add extra warning about core-2.19. Included in core 2.19 and later releases */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else if (startsWithOneOf(current_url_path, ["/projects/ansible/latest/", "/projects/ansible/13/"])) {
+        /* temp extra banner to advertise something */
+        banner += extra_banner;
+
+        msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
+        /* temp - add extra warning about core-2.19. Included in latest package release docs */
+ 
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+
+      } else if (startsWith(current_url_path, "/projects/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/projects/ansible/devel/")) {
+        /* temp extra banner to advertise something */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp - add extra warning about core-2.19.Added to latest and devel docs */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp extra banner to advertise something - this is for testing*/
+        banner += extra_banner;
+
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <span class="target" id="ansible-collections-kubernetes-core-helm-pull-module"></span><section id="kubernetes-core-helm-pull-module-download-a-chart-from-a-repository-and-optionally-unpack-it-in-local-directory">
+<h1>kubernetes.core.helm_pull module – download a chart from a repository and (optionally) unpack it in local directory.<a class="headerlink" href="#kubernetes-core-helm-pull-module-download-a-chart-from-a-repository-and-optionally-unpack-it-in-local-directory" title="Link to this heading"></a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/kubernetes/core/">kubernetes.core collection</a> (version 6.3.0).</p>
+<p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
+It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
+To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
+<p>To install it, use: <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">install</span> <span class="pre">kubernetes.core</span></code>.
+You need further requirements to be able to use this module,
+see <a class="reference internal" href="#ansible-collections-kubernetes-core-helm-pull-module-requirements"><span class="std std-ref">Requirements</span></a> for details.</p>
+<p>To use it in a playbook, specify: <code class="code docutils literal notranslate"><span class="pre">kubernetes.core.helm_pull</span></code>.</p>
+</div>
+<p class="ansible-version-added">New in kubernetes.core 2.4.0</p>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></p></li>
+<li><p><a class="reference internal" href="#requirements" id="id2">Requirements</a></p></li>
+<li><p><a class="reference internal" href="#parameters" id="id3">Parameters</a></p></li>
+<li><p><a class="reference internal" href="#examples" id="id4">Examples</a></p></li>
+<li><p><a class="reference internal" href="#return-values" id="id5">Return Values</a></p></li>
+</ul>
+</nav>
+<section id="synopsis">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Synopsis</a><a class="headerlink" href="#synopsis" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Retrieve a package from a package repository, and download it locally.</p></li>
+<li><p>It can also be used to perform cryptographic verification of a chart without installing the chart.</p></li>
+<li><p>There are options for unpacking the chart after download.</p></li>
+</ul>
+</section>
+<section id="requirements">
+<span id="ansible-collections-kubernetes-core-helm-pull-module-requirements"></span><h2><a class="toc-backref" href="#id2" role="doc-backlink">Requirements</a><a class="headerlink" href="#requirements" title="Link to this heading"></a></h2>
+<p>The below requirements are needed on the host that executes this module.</p>
+<ul class="simple">
+<li><p>helm &gt;= 3.0, &lt;4.0.0 (<a class="reference external" href="https://github.com/helm/helm/releases">https://github.com/helm/helm/releases</a>)</p></li>
+</ul>
+</section>
+<section id="parameters">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Parameters</a><a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
+<table class="longtable ansible-option-table docutils align-default" style="width: 100%">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-binary_path"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-pull-module-parameter-binary-path"><strong>binary_path</strong></p>
+<a class="ansibleOptionLink" href="#parameter-binary_path" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">path</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The path of a helm binary to use.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-chart_ca_cert"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-pull-module-parameter-chart-ca-cert"><strong>chart_ca_cert</strong></p>
+<a class="ansibleOptionLink" href="#parameter-chart_ca_cert" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">path</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Verify certificates of HTTPS-enabled servers using this CA bundle.</p>
+<p>Requires helm &gt;= 3.1.0.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-chart_devel"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-pull-module-parameter-chart-devel"><strong>chart_devel</strong></p>
+<a class="ansibleOptionLink" href="#parameter-chart_devel" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Use development versions, too. Equivalent to version ‘&gt;0.0.0-0’.</p>
+<p>Mutually exclusive with <code class="docutils literal notranslate"><span class="pre">chart_version</span></code>.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-chart_ref"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-pull-module-parameter-chart-ref"><strong>chart_ref</strong></p>
+<a class="ansibleOptionLink" href="#parameter-chart_ref" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>chart name on chart repository.</p>
+<p>absolute URL.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-chart_ssl_cert_file"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-pull-module-parameter-chart-ssl-cert-file"><strong>chart_ssl_cert_file</strong></p>
+<a class="ansibleOptionLink" href="#parameter-chart_ssl_cert_file" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">path</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Identify HTTPS client using this SSL certificate file.</p>
+<p>Requires helm &gt;= 3.1.0.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-chart_ssl_key_file"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-pull-module-parameter-chart-ssl-key-file"><strong>chart_ssl_key_file</strong></p>
+<a class="ansibleOptionLink" href="#parameter-chart_ssl_key_file" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">path</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Identify HTTPS client using this SSL key file</p>
+<p>Requires helm &gt;= 3.1.0.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-chart_version"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-pull-module-parameter-chart-version"><strong>chart_version</strong></p>
+<a class="ansibleOptionLink" href="#parameter-chart_version" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Specify a version constraint for the chart version to use.</p>
+<p>This constraint can be a specific tag (e.g. 1.1.1) or it may reference a valid range (e.g. ^2.0.0).</p>
+<p>Mutually exclusive with <code class="docutils literal notranslate"><span class="pre">chart_devel</span></code>.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-destination"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-pull-module-parameter-destination"><strong>destination</strong></p>
+<a class="ansibleOptionLink" href="#parameter-destination" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">path</span> / <span class="ansible-option-required">required</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>location to write the chart.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-force"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-pull-module-parameter-force"><strong>force</strong></p>
+<a class="ansibleOptionLink" href="#parameter-force" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><em class="ansible-option-versionadded">added in kubernetes.core 6.3.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Force download of the chart even if it already exists in the destination directory.</p>
+<p>By default, the module will skip downloading if the chart with the same version already exists for idempotency.</p>
+<p>When used with <code class="ansible-option-value docutils literal notranslate"><a class="reference internal" href="#ansible-collections-kubernetes-core-helm-pull-module-parameter-untar-chart"><span class="std std-ref"><span class="pre">untar_chart=true</span></span></a></code>, will remove any existing chart directory before extracting.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-pass_credentials"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-pull-module-parameter-pass-credentials"><strong>pass_credentials</strong></p>
+<a class="ansibleOptionLink" href="#parameter-pass_credentials" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Pass credentials to all domains.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-plain_http"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-pull-module-parameter-plain-http"><strong>plain_http</strong></p>
+<a class="ansibleOptionLink" href="#parameter-plain_http" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+<p><em class="ansible-option-versionadded">added in kubernetes.core 6.1.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Use HTTP instead of HTTPS when working with OCI registries</p>
+<p>Requires Helm &gt;= 3.13.0</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-provenance"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-pull-module-parameter-provenance"><strong>provenance</strong></p>
+<a class="ansibleOptionLink" href="#parameter-provenance" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Fetch the provenance file, but don’t perform verification.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-repo_password"></div>
+<div class="ansibleOptionAnchor" id="parameter-password"></div>
+<div class="ansibleOptionAnchor" id="parameter-chart_repo_password"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-pull-module-parameter-repo-password"><span id="ansible-collections-kubernetes-core-helm-pull-module-parameter-password"></span><span id="ansible-collections-kubernetes-core-helm-pull-module-parameter-chart-repo-password"></span><strong>repo_password</strong></p>
+<a class="ansibleOptionLink" href="#parameter-repo_password" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: password, chart_repo_password</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Chart repository password where to locate the requested chart.</p>
+<p>Required if <code class="docutils literal notranslate"><span class="pre">repo_username</span></code> is specified.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-repo_url"></div>
+<div class="ansibleOptionAnchor" id="parameter-url"></div>
+<div class="ansibleOptionAnchor" id="parameter-chart_repo_url"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-pull-module-parameter-url"><span id="ansible-collections-kubernetes-core-helm-pull-module-parameter-repo-url"></span><span id="ansible-collections-kubernetes-core-helm-pull-module-parameter-chart-repo-url"></span><strong>repo_url</strong></p>
+<a class="ansibleOptionLink" href="#parameter-repo_url" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: url, chart_repo_url</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>chart repository url where to locate the requested chart.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-repo_username"></div>
+<div class="ansibleOptionAnchor" id="parameter-username"></div>
+<div class="ansibleOptionAnchor" id="parameter-chart_repo_username"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-pull-module-parameter-username"><span id="ansible-collections-kubernetes-core-helm-pull-module-parameter-repo-username"></span><span id="ansible-collections-kubernetes-core-helm-pull-module-parameter-chart-repo-username"></span><strong>repo_username</strong></p>
+<a class="ansibleOptionLink" href="#parameter-repo_username" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: username, chart_repo_username</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Chart repository username where to locate the requested chart.</p>
+<p>Required if <code class="docutils literal notranslate"><span class="pre">repo_password</span></code> is specified.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-skip_tls_certs_check"></div>
+<div class="ansibleOptionAnchor" id="parameter-insecure_skip_tls_verify"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-pull-module-parameter-skip-tls-certs-check"><span id="ansible-collections-kubernetes-core-helm-pull-module-parameter-insecure-skip-tls-verify"></span><strong>skip_tls_certs_check</strong></p>
+<a class="ansibleOptionLink" href="#parameter-skip_tls_certs_check" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: insecure_skip_tls_verify</span></p>
+<p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Whether or not to check tls certificate for the chart download.</p>
+<p>Requires helm &gt;= 3.3.0. Alias <code class="docutils literal notranslate"><span class="pre">insecure_skip_tls_verify</span></code> added in 5.3.0.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-untar_chart"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-pull-module-parameter-untar-chart"><strong>untar_chart</strong></p>
+<a class="ansibleOptionLink" href="#parameter-untar_chart" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>if set to true, will untar the chart after downloading it.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-verify_chart"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-pull-module-parameter-verify-chart"><strong>verify_chart</strong></p>
+<a class="ansibleOptionLink" href="#parameter-verify_chart" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Verify the package before using it.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-verify_chart_keyring"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-pull-module-parameter-verify-chart-keyring"><strong>verify_chart_keyring</strong></p>
+<a class="ansibleOptionLink" href="#parameter-verify_chart_keyring" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">path</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>location of public keys used for verification.</p>
+</div></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="examples">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Examples</a><a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Download chart using chart url</span>
+<span class="w">  </span><span class="nt">kubernetes.core.helm_pull</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">chart_ref</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://github.com/grafana/helm-charts/releases/download/grafana-5.6.0/grafana-5.6.0.tgz</span>
+<span class="w">    </span><span class="nt">destination</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/chart</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Download Chart using chart_name and repo_url</span>
+<span class="w">  </span><span class="nt">kubernetes.core.helm_pull</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">chart_ref</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">redis</span>
+<span class="w">    </span><span class="nt">repo_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://charts.bitnami.com/bitnami</span>
+<span class="w">    </span><span class="nt">untar_chart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yes</span>
+<span class="w">    </span><span class="nt">destination</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/chart</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Download Chart (skip tls certificate check)</span>
+<span class="w">  </span><span class="nt">kubernetes.core.helm_pull</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">chart_ref</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">redis</span>
+<span class="w">    </span><span class="nt">repo_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://charts.bitnami.com/bitnami</span>
+<span class="w">    </span><span class="nt">untar_chart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yes</span>
+<span class="w">    </span><span class="nt">destination</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/chart</span>
+<span class="w">    </span><span class="nt">skip_tls_certs_check</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yes</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Download Chart using chart registry credentials</span>
+<span class="w">  </span><span class="nt">kubernetes.core.helm_pull</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">chart_ref</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">redis</span>
+<span class="w">    </span><span class="nt">repo_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://charts.bitnami.com/bitnami</span>
+<span class="w">    </span><span class="nt">untar_chart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yes</span>
+<span class="w">    </span><span class="nt">destination</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/chart</span>
+<span class="w">    </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">myuser</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mypassword123</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Download Chart (force re-download even if exists)</span>
+<span class="w">  </span><span class="nt">kubernetes.core.helm_pull</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">chart_ref</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">redis</span>
+<span class="w">    </span><span class="nt">repo_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://charts.bitnami.com/bitnami</span>
+<span class="w">    </span><span class="nt">chart_version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;17.0.0&#39;</span>
+<span class="w">    </span><span class="nt">destination</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/chart</span>
+<span class="w">    </span><span class="nt">force</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yes</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Download and untar chart (force re-extraction even if directory exists)</span>
+<span class="w">  </span><span class="nt">kubernetes.core.helm_pull</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">chart_ref</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">redis</span>
+<span class="w">    </span><span class="nt">repo_url</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">https://charts.bitnami.com/bitnami</span>
+<span class="w">    </span><span class="nt">chart_version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;17.0.0&#39;</span>
+<span class="w">    </span><span class="nt">destination</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/path/to/chart</span>
+<span class="w">    </span><span class="nt">untar_chart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yes</span>
+<span class="w">    </span><span class="nt">force</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">yes</span>
+</pre></div>
+</div>
+</section>
+<section id="return-values">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Return Values</a><a class="headerlink" href="#return-values" title="Link to this heading"></a></h2>
+<p>Common return values are documented <a class="reference internal" href="../../../reference_appendices/common_return_values.html#common-return-values"><span class="std std-ref">here</span></a>, the following are the fields unique to this module:</p>
+<table class="longtable ansible-option-table docutils align-default" style="width: 100%">
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-command"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-pull-module-return-command"><strong>command</strong></p>
+<a class="ansibleOptionLink" href="#return-command" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Full `helm pull` command built by this module, in case you want to re-run the command outside the module or debug a problem.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;helm</span> <span class="pre">pull</span> <span class="pre">--repo</span> <span class="pre">test</span> <span class="pre">...&quot;</span></code></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-msg"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-pull-module-return-msg"><strong>msg</strong></p>
+<a class="ansibleOptionLink" href="#return-msg" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>A message indicating the result of the operation.</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> when chart already exists</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;Chart</span> <span class="pre">redis</span> <span class="pre">version</span> <span class="pre">17.0.0</span> <span class="pre">already</span> <span class="pre">exists</span> <span class="pre">in</span> <span class="pre">destination</span> <span class="pre">directory&quot;</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-rc"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-pull-module-return-rc"><strong>rc</strong></p>
+<a class="ansibleOptionLink" href="#return-rc" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Helm pull command return code</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">1</span></code></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-stderr"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-pull-module-return-stderr"><strong>stderr</strong></p>
+<a class="ansibleOptionLink" href="#return-stderr" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Full `helm pull` command stderr, in case you want to display it or examine the event log</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="return-stdout"></div><p class="ansible-option-title" id="ansible-collections-kubernetes-core-helm-pull-module-return-stdout"><strong>stdout</strong></p>
+<a class="ansibleOptionLink" href="#return-stdout" title="Permalink to this return value"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Full `helm pull` command stdout, in case you want to display it or examine the event log</p>
+<p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+<p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-option-sample docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p>
+</div></td>
+</tr>
+</tbody>
+</table>
+<section id="authors">
+<h3>Authors<a class="headerlink" href="#authors" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Aubin Bikouo (&#64;abikouo)</p></li>
+</ul>
+</section>
+<section id="collection-links">
+<h3>Collection links<a class="headerlink" href="#collection-links" title="Link to this heading"></a></h3>
+<ul class="ansible-links">
+<li><span><a aria-role="button" class="ansible-link reference external" href="https://github.com/ansible-collections/kubernetes.core/issues" rel="noopener external" target="_blank">Issue Tracker</a></span></li>
+<li><span><a aria-role="button" class="ansible-link reference external" href="https://github.com/ansible-collections/kubernetes.core" rel="noopener external" target="_blank">Repository (Sources)</a></span></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="helm_plugin_info_module.html" class="btn btn-neutral float-left" title="kubernetes.core.helm_plugin_info module – Gather information about Helm plugins" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="helm_registry_auth_module.html" class="btn btn-neutral float-right" title="kubernetes.core.helm_registry_auth module – Helm registry authentication module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Apr 06, 2026.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme -->
+<!-- begin analytics -->
+<script>
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script>
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

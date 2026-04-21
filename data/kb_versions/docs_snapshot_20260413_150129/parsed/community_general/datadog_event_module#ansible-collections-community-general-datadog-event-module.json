@@ -1,0 +1,134 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.datadog_event",
+  "slug": "datadog_event_module#ansible-collections-community-general-datadog-event-module",
+  "description": "Allows to post events to Datadog (www.datadoghq.com) service.",
+  "parameters": [
+    {
+      "name": "aggregation_key",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "An arbitrary string to use for aggregation."
+    },
+    {
+      "name": "alert_type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"error\"",
+        "\"warning\"",
+        "\"info\" ← (default)",
+        "\"success\""
+      ],
+      "description": "Type of alert. Choices: \"error\" \"warning\" \"info\" ← (default) \"success\""
+    },
+    {
+      "name": "api_host",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "DataDog API endpoint URL."
+    },
+    {
+      "name": "api_key",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Your DataDog API key."
+    },
+    {
+      "name": "app_key",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Your DataDog app key."
+    },
+    {
+      "name": "date_happened",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "POSIX timestamp of the event. Default value is now."
+    },
+    {
+      "name": "host",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Host name to associate with the event. If not specified, it defaults to the remote system’s hostname."
+    },
+    {
+      "name": "priority",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"normal\" ← (default)",
+        "\"low\""
+      ],
+      "description": "The priority of the event. Choices: \"normal\" ← (default) \"low\""
+    },
+    {
+      "name": "tags",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Comma separated list of tags to apply to the event."
+    },
+    {
+      "name": "text",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The body of the event."
+    },
+    {
+      "name": "title",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The event title."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If false, SSL certificates are not validated. This should only be used on personally controlled sites using self-signed certificates. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Post an event with low priority\n  community.general.datadog_event:\n    title: Testing from ansible\n    text: Test\n    priority: low\n    api_key: 9775a026f1ca7d1c6c5af9d94d9595a4\n    app_key: j4JyCYfefWHhgFgiZUqRm63AXHNZQyPGBfJtAzmN\n\n- name: Post an event with several tags\n  community.general.datadog_event:\n    title: Testing from ansible\n    text: Test\n    api_key: 9775a026f1ca7d1c6c5af9d94d9595a4\n    app_key: j4JyCYfefWHhgFgiZUqRm63AXHNZQyPGBfJtAzmN\n    tags: 'aa,bb,#host:{{ inventory_hostname }}'\n\n- name: Post an event with several tags to another endpoint\n  community.general.datadog_event:\n    title: Testing from ansible\n    text: Test\n    api_key: 9775a026f1ca7d1c6c5af9d94d9595a4\n    app_key: j4JyCYfefWHhgFgiZUqRm63AXHNZQyPGBfJtAzmN\n    api_host: 'https://example.datadoghq.eu'\n    tags:\n      - aa\n      - b\n      - '#host:{{ inventory_hostname }}'"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/datadog_event_module#ansible-collections-community-general-datadog-event-module.html",
+  "parsed_at": "2026-04-11T13:53:12.186740"
+}

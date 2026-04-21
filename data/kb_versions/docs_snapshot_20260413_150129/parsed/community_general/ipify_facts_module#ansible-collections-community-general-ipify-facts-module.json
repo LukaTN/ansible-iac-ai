@@ -1,0 +1,52 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.ipify_facts",
+  "slug": "ipify_facts_module#ansible-collections-community-general-ipify-facts-module",
+  "description": "If behind NAT and need to know the public IP of your internet gateway.",
+  "parameters": [
+    {
+      "name": "api_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "https://api.ipify.org/",
+      "choices": [],
+      "description": "URL of the ipify.org API service. ?format=json is appended by default. Default: \"https://api.ipify.org/\""
+    },
+    {
+      "name": "timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "10",
+      "choices": [],
+      "description": "HTTP connection timeout in seconds. Default: 10"
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to false, SSL certificates are not validated. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "# Gather IP facts from ipify.org\n- name: Get my public IP\n  community.general.ipify_facts:\n\n# Gather IP facts from your own ipify service endpoint with a custom timeout\n- name: Get my public IP\n  community.general.ipify_facts:\n    api_url: http://api.example.com/ipify\n    timeout: 20"
+  ],
+  "return_values": [
+    {
+      "name": "ipify_public_ip",
+      "type": "string",
+      "description": "Public IP of the internet gateway. Returned: success Sample: \"1.2.3.4\"",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/ipify_facts_module#ansible-collections-community-general-ipify-facts-module.html",
+  "parsed_at": "2026-04-11T13:53:16.683645"
+}

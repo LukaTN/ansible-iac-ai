@@ -1,0 +1,196 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.redis_data",
+  "slug": "redis_data_module#ansible-collections-community-general-redis-data-module",
+  "description": "Set key value pairs in Redis database.",
+  "parameters": [
+    {
+      "name": "ca_certs",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to root certificates file. If not set and tls is set to true, certifi’s CA certificates are used."
+    },
+    {
+      "name": "client_cert_file",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the client certificate file."
+    },
+    {
+      "name": "client_key_file",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the client private key file."
+    },
+    {
+      "name": "existing",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Only set key if it already exists. Choices: false true"
+    },
+    {
+      "name": "expiration",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Expiration time in milliseconds. Setting this option always results in a change in the database."
+    },
+    {
+      "name": "keep_ttl",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Retain the time to live associated with the key. Choices: false true"
+    },
+    {
+      "name": "key",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Database key."
+    },
+    {
+      "name": "login_host",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "localhost",
+      "choices": [],
+      "description": "Specify the target host running the database. Default: \"localhost\""
+    },
+    {
+      "name": "login_password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specify the password to authenticate with. Usually not used when target is localhost."
+    },
+    {
+      "name": "login_port",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "6379",
+      "choices": [],
+      "description": "Specify the port to connect to. Default: 6379"
+    },
+    {
+      "name": "login_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specify the user to authenticate with. Requires redis >= 3.4.0."
+    },
+    {
+      "name": "non_existing",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Only set key if it does not already exist. Choices: false true"
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "State of the key. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "tls",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Specify whether or not to use TLS for the connection. Choices: false true ← (default)"
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Specify whether or not to validate TLS certificates. This should only be turned off for personally controlled sites or with localhost as target. Choices: false true ← (default)"
+    },
+    {
+      "name": "value",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Value that key should be set to."
+    }
+  ],
+  "examples": [
+    "- name: Set key foo=bar on localhost with no username\n  community.general.redis_data:\n    login_host: localhost\n    login_password: supersecret\n    key: foo\n    value: bar\n    state: present\n\n- name: Set key foo=bar if non existing with expiration of 30s\n  community.general.redis_data:\n    login_host: localhost\n    login_password: supersecret\n    key: foo\n    value: bar\n    non_existing: true\n    expiration: 30000\n    state: present\n\n- name: Set key foo=bar if existing and keep current TTL\n  community.general.redis_data:\n    login_host: localhost\n    login_password: supersecret\n    key: foo\n    value: bar\n    existing: true\n    keep_ttl: true\n\n- name: Set key foo=bar on redishost with custom ca-cert file\n  community.general.redis_data:\n    login_host: redishost\n    login_password: supersecret\n    login_user: someuser\n    validate_certs: true\n    ssl_ca_certs: /path/to/ca/certs\n    key: foo\n    value: bar\n\n- name: Delete key foo on localhost with no username\n  community.general.redis_data:\n    login_host: localhost\n    login_password: supersecret\n    key: foo\n    state: absent"
+  ],
+  "return_values": [
+    {
+      "name": "msg",
+      "type": "string",
+      "description": "A short message. Returned: always Sample: \"Set key: foo to bar\"",
+      "returned": "always"
+    },
+    {
+      "name": "old_value",
+      "type": "string",
+      "description": "Value of key before setting. Returned: on_success if state=present and key exists in database. Sample: \"old_value_of_key\"",
+      "returned": "on_success"
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "description": "Value key was set to. Returned: on success if state=present. Sample: \"new_value_of_key\"",
+      "returned": "on"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/redis_data_module#ansible-collections-community-general-redis-data-module.html",
+  "parsed_at": "2026-04-11T13:53:24.726922"
+}

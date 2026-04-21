@@ -1,0 +1,554 @@
+{
+  "collection_ns": "azure_azcollection",
+  "collection": "azure.azcollection",
+  "module": "azure.azcollection.azure_rm_afdrules",
+  "slug": "azure_rm_afdrules_module#ansible-collections-azure-azcollection-azure-rm-afdrules-module",
+  "description": "Create, update and delete an Azure Front Door Rules to be used by a Front Door Service Profile created using azure_rm_cdnprofile.",
+  "parameters": [
+    {
+      "name": "actions",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A list of actions that are executed when all the conditions of a rule are satisfied."
+    },
+    {
+      "name": "cache_behavior",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"BypassCache\"",
+        "\"Override\"",
+        "\"SetIfMissing\"",
+        "\"HonorOrigin\"",
+        "\"OverrideAlways\"",
+        "\"OverrideIfOriginMissing\""
+      ],
+      "description": "Caching behavior for the requests. Choices: \"BypassCache\" \"Override\" \"SetIfMissing\" \"HonorOrigin\" \"OverrideAlways\" \"OverrideIfOriginMissing\""
+    },
+    {
+      "name": "cache_duration",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The duration for which the content needs to be cached. Allowed format is [d.]hh:mm:ss."
+    },
+    {
+      "name": "custom_fragment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Fragment to add to the redirect URL. Fragment is the part of the URL that comes after"
+    },
+    {
+      "name": "custom_hostname",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Host to redirect. Leave empty to use the incoming host as the destination host."
+    },
+    {
+      "name": "custom_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The full path to redirect. Path cannot be empty and must start with /. Leave empty to use the incoming path as destination path."
+    },
+    {
+      "name": "custom_query_string",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The set of query strings to be placed in the redirect URL. Setting this value would replace any existing query string; leave empty to preserve the incoming query string. Query string must be in <key>=:code:<value> format. ? and & will be added automatically so do not include them."
+    },
+    {
+      "name": "destination",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Define the relative URL to which the above requests will be rewritten by."
+    },
+    {
+      "name": "destination_protocol",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"Http\"",
+        "\"Https\"",
+        "\"MatchRequest\" ← (default)"
+      ],
+      "description": "Protocol to use for the redirect. Choices: \"Http\" \"Https\" \"MatchRequest\" ← (default)"
+    },
+    {
+      "name": "forwarding_protocol",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"Http\"",
+        "\"Https\"",
+        "\"MatchRequest\" ← (default)"
+      ],
+      "description": "Protocol this rule will use when forwarding traffic to backends. Choices: \"Http\" \"Https\" \"MatchRequest\" ← (default)"
+    },
+    {
+      "name": "header_action",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"Append\"",
+        "\"Overwrite\"",
+        "\"Delete\""
+      ],
+      "description": "Action to perform. Choices: \"Append\" \"Overwrite\" \"Delete\""
+    },
+    {
+      "name": "header_name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of the header to modify."
+    },
+    {
+      "name": "is_compression_enabled",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"Enabled\"",
+        "\"Disabled\""
+      ],
+      "description": "The caching configuration for this route. Indicates whether content compression is enabled on AzureFrontDoor. If compression is enabled, content will be served as compressed if user requests for a compressed version. Content won’t be compressed on AzureFrontDoor when requested content is smaller than 1 byte or larger than 1 MB. Choices: \"Enabled\" \"Disabled\""
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [
+        "\"ModifyRequestHeader\"",
+        "\"ModifyResponseHeader\"",
+        "\"RouteConfigurationOverride\"",
+        "\"UrlRedirect\"",
+        "\"UrlRewrite\""
+      ],
+      "description": "The name of the action for the delivery rule. Choices: \"ModifyRequestHeader\" \"ModifyResponseHeader\" \"RouteConfigurationOverride\" \"UrlRedirect\" \"UrlRewrite\""
+    },
+    {
+      "name": "origin_group",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "defines the OriginGroup that would override the DefaultOriginGroup."
+    },
+    {
+      "name": "preserve_unmatched_path",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether to preserve unmatched path. Choices: false true ← (default)"
+    },
+    {
+      "name": "query_parameters",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "query parameters to include or exclude (comma separated)."
+    },
+    {
+      "name": "query_string_caching_behavior",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"IgnoreQueryString\"",
+        "\"UseQueryString\"",
+        "\"IgnoreSpecifiedQueryStrings\"",
+        "\"IncludeSpecifiedQueryStrings\""
+      ],
+      "description": "The caching configuration for this route. Defines how Frontdoor caches requests that include query strings. You can ignore any query strings when caching, ignore specific query strings, cache every request with a unique URL, or cache specific query strings. Choices: \"IgnoreQueryString\" \"UseQueryString\" \"IgnoreSpecifiedQueryStrings\" \"IncludeSpecifiedQueryStrings\""
+    },
+    {
+      "name": "redirect_type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"Moved\"",
+        "\"Found\"",
+        "\"TemporaryRedirect\"",
+        "\"PermanentRedirect\""
+      ],
+      "description": "The redirect type the rule will use when redirecting traffic. Choices: \"Moved\" \"Found\" \"TemporaryRedirect\" \"PermanentRedirect\""
+    },
+    {
+      "name": "source_pattern",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Define a request URI pattern that identifies the type of requests that may be rewritten. If value is blank, all strings are matched."
+    },
+    {
+      "name": "value",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Value for the specified action."
+    },
+    {
+      "name": "ad_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory username. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "adfs_authority_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure AD authority url. Use when authenticating with Username/password, and has your own ADFS authority."
+    },
+    {
+      "name": "api_profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "Selects an API profile to use when communicating with Azure services. Default value of latest is appropriate for public clouds; future values will allow use with Azure Stack. Default: \"latest\""
+    },
+    {
+      "name": "auth_source",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "az",
+      "choices": [
+        "\"auto\" ← (default)",
+        "\"cli\"",
+        "\"credential_file\"",
+        "\"env\"",
+        "\"msi\""
+      ],
+      "description": "Controls the source of the credentials to use for authentication. Can also be set via the ANSIBLE_AZURE_AUTH_SOURCE environment variable. When set to auto (the default) the precedence is module parameters -> env -> credential_file -> cli. When set to env, the credentials will be read from the environment variables When set to credential_file, it will read the profile from ~/.azure/credentials. When set to cli, the credentials will be sources from the Azure CLI profile. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if more than one is present otherwise the default az cli subscription is used. When set to msi, the host machine must be an azure resource with an enabled MSI extension. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if the resource is granted access to more than one subscription, otherwise the first subscription is chosen. The msi was added in Ansible 2.6. Choices: \"auto\" ← (default) \"cli\" \"credential_file\" \"env\" \"msi\""
+    },
+    {
+      "name": "cert_validation_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ignore\"",
+        "\"validate\""
+      ],
+      "description": "Controls the certificate validation behavior for Azure endpoints. By default, all modules will validate the server certificate, but when an HTTPS proxy is in use, or against Azure Stack, it may be necessary to disable this behavior by passing ignore. Can also be set via credential file profile or the AZURE_CERT_VALIDATION environment variable. Choices: \"ignore\" \"validate\""
+    },
+    {
+      "name": "client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client ID. Use when authenticating with a Service Principal or Managed Identity (msi). Can also be set via the AZURE_CLIENT_ID environment variable."
+    },
+    {
+      "name": "cloud_environment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "AzureCloud",
+      "choices": [],
+      "description": "For cloud environments other than the US public cloud, the environment name (as defined by Azure Python SDK, eg, AzureChinaCloud, AzureUSGovernment), or a metadata discovery endpoint URL (required for Azure Stack). Can also be set via credential file profile or the AZURE_CLOUD_ENVIRONMENT environment variable. Default: \"AzureCloud\""
+    },
+    {
+      "name": "conditions",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A list of conditions that must be matched for the actions to be executed."
+    },
+    {
+      "name": "match_values",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The match value for the condition of the delivery rule."
+    },
+    {
+      "name": "negate_condition",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Describes if this is a negate condition or not. Choices: false true"
+    },
+    {
+      "name": "operator",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [
+        "\"Any\"",
+        "\"Equal\"",
+        "\"Contains\"",
+        "\"BeginsWith\"",
+        "\"EndsWith\"",
+        "\"LessThan\"",
+        "\"LessThanOrEqual\"",
+        "\"GreaterThan\"",
+        "\"GreaterThanOrEqual\"",
+        "\"RegEx\"",
+        "\"IPMatch\"",
+        "\"GeoMatch\""
+      ],
+      "description": "Describes operator to be matched. Choices: \"Any\" \"Equal\" \"Contains\" \"BeginsWith\" \"EndsWith\" \"LessThan\" \"LessThanOrEqual\" \"GreaterThan\" \"GreaterThanOrEqual\" \"RegEx\" \"IPMatch\" \"GeoMatch\""
+    },
+    {
+      "name": "selector",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of item to be matched."
+    },
+    {
+      "name": "transforms",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"Lowercase\"",
+        "\"RemoveNulls\"",
+        "\"Trim\"",
+        "\"Uppercase\"",
+        "\"URLDecode\"",
+        "\"URLEncode\""
+      ],
+      "description": "List of transforms. Choices: \"Lowercase\" \"RemoveNulls\" \"Trim\" \"Uppercase\" \"URLDecode\" \"URLEncode\""
+    },
+    {
+      "name": "disable_instance_discovery",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Determines whether or not instance discovery is performed when attempting to authenticate. Setting this to true will completely disable both instance discovery and authority validation. This functionality is intended for use in scenarios where the metadata endpoint cannot be reached such as in private clouds or Azure Stack. The process of instance discovery entails retrieving authority metadata from https://login.microsoft.com/ to validate the authority. By setting this to **True**, the validation of the authority is disabled. As a result, it is crucial to ensure that the configured authority host is valid and trustworthy. Set via credential file profile or the AZURE_DISABLE_INSTANCE_DISCOVERY environment variable. Choices: false ← (default) true"
+    },
+    {
+      "name": "log_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "log_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "match_processing_behavior",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"Continue\" ← (default)",
+        "\"Stop\""
+      ],
+      "description": "If this rule is a match should the rules engine continue running the remaining rules or stop. Choices: \"Continue\" ← (default) \"Stop\""
+    },
+    {
+      "name": "order",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The order in which the rules are applied for the endpoint. A rule with a lesser order will be applied before a rule with a greater order. Rule with order 0 is a special rule. It does not require any condition and actions listed in it will always be applied."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory user password. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security profile found in ~/.azure/credentials file."
+    },
+    {
+      "name": "profile_name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the Azure Front Door Standard or Azure Front Door Premium profile which is unique within the resource group."
+    },
+    {
+      "name": "resource_group",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the Resource group within the Azure subscription."
+    },
+    {
+      "name": "rule_set_name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the rule set under the profile."
+    },
+    {
+      "name": "secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client secret. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)"
+      ],
+      "description": "Assert the state of the CDN profile. Use present to create or update a CDN profile and absent to delete it. Choices: \"absent\" \"present\" ← (default)"
+    },
+    {
+      "name": "subscription_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Your Azure subscription Id."
+    },
+    {
+      "name": "tenant",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure tenant ID. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "thumbprint",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The thumbprint of the private key specified in x509_certificate_path. Use when authenticating with a Service Principal. Required if x509_certificate_path is defined."
+    },
+    {
+      "name": "x509_certificate_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the X509 certificate used to create the service principal in PEM format. The certificate must be appended to the private key. Use when authenticating with a Service Principal."
+    }
+  ],
+  "examples": [
+    "- name: Create an AFD Rule with some actions and conditions\n  azure_rm_afdrules:\n    name: myRule1\n    rule_set_name: myRuleset\n    profile_name: myProfile\n    resource_group: myResourceGroup\n    match_processing_behavior: Continue\n    order: 1\n    action:\n      - name: ModifyResponseHeader\n        header_action: Append\n        header_name: Content-Security-Policy\n        value: \"frame-ancestors 'response'\"\n      - name: RouteConfigurationOverride\n        origin_group: \"myOtherOriginGroup\"\n    conditions:\n      - name: UrlPath\n        match_values:\n          - \".auth\"\n        negate_condition: false\n        operator: \"BeginsWith\"\n        transforms:\n          - LowerCase"
+  ],
+  "return_values": [
+    {
+      "name": "id",
+      "type": "string",
+      "description": "Resource ID. Returned: always",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_afdrules_module#ansible-collections-azure-azcollection-azure-rm-afdrules-module.html",
+  "parsed_at": "2026-04-11T13:52:54.064580"
+}

@@ -1,0 +1,436 @@
+{
+  "collection_ns": "azure_azcollection",
+  "collection": "azure.azcollection",
+  "module": "azure.azcollection.azure_rm_storageblob",
+  "slug": "azure_rm_storageblob_module#ansible-collections-azure-azcollection-azure-rm-storageblob-module",
+  "description": "Create, update and delete blob containers and blob objects.",
+  "parameters": [
+    {
+      "name": "ad_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory username. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "adfs_authority_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure AD authority url. Use when authenticating with Username/password, and has your own ADFS authority."
+    },
+    {
+      "name": "api_profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "Selects an API profile to use when communicating with Azure services. Default value of latest is appropriate for public clouds; future values will allow use with Azure Stack. Default: \"latest\""
+    },
+    {
+      "name": "append_tags",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Use to control if tags field is canonical or just appends to existing tags. When canonical, any tags not found in the tags parameter will be removed from the object’s metadata. Choices: false true ← (default)"
+    },
+    {
+      "name": "auth_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"key\" ← (default)",
+        "\"login\""
+      ],
+      "description": "The mode in which to run the command. login mode will directly use your login credentials for the authentication. The legacy key mode will attempt to query for an account key if no authentication parameters for the account are provided. Can also be set via the environment variable AZURE_STORAGE_AUTH_MODE. Choices: \"key\" ← (default) \"login\""
+    },
+    {
+      "name": "auth_source",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "az",
+      "choices": [
+        "\"auto\" ← (default)",
+        "\"cli\"",
+        "\"credential_file\"",
+        "\"env\"",
+        "\"msi\""
+      ],
+      "description": "Controls the source of the credentials to use for authentication. Can also be set via the ANSIBLE_AZURE_AUTH_SOURCE environment variable. When set to auto (the default) the precedence is module parameters -> env -> credential_file -> cli. When set to env, the credentials will be read from the environment variables When set to credential_file, it will read the profile from ~/.azure/credentials. When set to cli, the credentials will be sources from the Azure CLI profile. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if more than one is present otherwise the default az cli subscription is used. When set to msi, the host machine must be an azure resource with an enabled MSI extension. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if the resource is granted access to more than one subscription, otherwise the first subscription is chosen. The msi was added in Ansible 2.6. Choices: \"auto\" ← (default) \"cli\" \"credential_file\" \"env\" \"msi\""
+    },
+    {
+      "name": "batch_upload_dst",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Base directory in container when upload batch of files."
+    },
+    {
+      "name": "batch_upload_src",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Batch upload source directory. Use with state present to upload batch of files under the directory."
+    },
+    {
+      "name": "blob",
+      "aliases": [
+        "blob_name"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of a blob object within the container."
+    },
+    {
+      "name": "blob_type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"block\" ← (default)",
+        "\"page\""
+      ],
+      "description": "Type of blob object. Choices: \"block\" ← (default) \"page\""
+    },
+    {
+      "name": "cache_control",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Set the blob cache-control header."
+    },
+    {
+      "name": "cert_validation_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ignore\"",
+        "\"validate\""
+      ],
+      "description": "Controls the certificate validation behavior for Azure endpoints. By default, all modules will validate the server certificate, but when an HTTPS proxy is in use, or against Azure Stack, it may be necessary to disable this behavior by passing ignore. Can also be set via credential file profile or the AZURE_CERT_VALIDATION environment variable. Choices: \"ignore\" \"validate\""
+    },
+    {
+      "name": "client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client ID. Use when authenticating with a Service Principal or Managed Identity (msi). Can also be set via the AZURE_CLIENT_ID environment variable."
+    },
+    {
+      "name": "cloud_environment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "AzureCloud",
+      "choices": [],
+      "description": "For cloud environments other than the US public cloud, the environment name (as defined by Azure Python SDK, eg, AzureChinaCloud, AzureUSGovernment), or a metadata discovery endpoint URL (required for Azure Stack). Can also be set via credential file profile or the AZURE_CLOUD_ENVIRONMENT environment variable. Default: \"AzureCloud\""
+    },
+    {
+      "name": "container",
+      "aliases": [
+        "container_name"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of a blob container within the storage account."
+    },
+    {
+      "name": "content_disposition",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Set the blob content-disposition header."
+    },
+    {
+      "name": "content_encoding",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Set the blob encoding header."
+    },
+    {
+      "name": "content_language",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Set the blob content-language header."
+    },
+    {
+      "name": "content_md5",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Set the blob md5 hash value."
+    },
+    {
+      "name": "content_type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Set the blob content-type header. For example image/png."
+    },
+    {
+      "name": "dest",
+      "aliases": [
+        "destination"
+      ],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Destination file path. Use with state present to download a blob."
+    },
+    {
+      "name": "disable_instance_discovery",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Determines whether or not instance discovery is performed when attempting to authenticate. Setting this to true will completely disable both instance discovery and authority validation. This functionality is intended for use in scenarios where the metadata endpoint cannot be reached such as in private clouds or Azure Stack. The process of instance discovery entails retrieving authority metadata from https://login.microsoft.com/ to validate the authority. By setting this to **True**, the validation of the authority is disabled. As a result, it is crucial to ensure that the configured authority host is valid and trustworthy. Set via credential file profile or the AZURE_DISABLE_INSTANCE_DISCOVERY environment variable. Choices: false ← (default) true"
+    },
+    {
+      "name": "force",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Overwrite existing blob or file when uploading or downloading. Force deletion of a container that contains blobs. Choices: false ← (default) true"
+    },
+    {
+      "name": "log_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "log_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory user password. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security profile found in ~/.azure/credentials file."
+    },
+    {
+      "name": "public_access",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "containers",
+      "choices": [
+        "\"container\"",
+        "\"blob\""
+      ],
+      "description": "A container’s level of public access. By default containers are private. Can only be set at time of container creation. The public_access parameter should not be set for private access. If public_access is not configured, access level is by default private. It can not be set explicitely to private. Choices: \"container\" \"blob\""
+    },
+    {
+      "name": "resource_group",
+      "aliases": [
+        "resource_group_name"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the resource group to use."
+    },
+    {
+      "name": "secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client secret. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "source_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "HTTP/HTTPS URL of the source file to copy directly into the blob. The source must be publicly accessible, or authenticated via a shared access signature (SAS) appended to the URL, or via bearer token on supported Azure sources. Only supported for block blobs."
+    },
+    {
+      "name": "src",
+      "aliases": [
+        "source"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Source file path. Use with state present to upload a blob."
+    },
+    {
+      "name": "standard_blob_tier",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"Archive\"",
+        "\"Cool\"",
+        "\"Cold\"",
+        "\"Hot\""
+      ],
+      "description": "Specifies the blob tier to set the blob to. This is only applicable for block blobs on standard storage accounts. Choices: \"Archive\" \"Cool\" \"Cold\" \"Hot\""
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)"
+      ],
+      "description": "State of a container or blob. Use state absent with a container value only to delete a container. Include a blob value to remove a specific blob. A container will not be deleted, if it contains blobs. Use the force option to override, deleting the container and all associated blobs. Use state present to create or update a container and upload or download a blob. If the container does not exist, it will be created. If it exists, it will be updated with configuration options. Provide a blob name and either src or dest to upload or download. Provide a src path to upload and a dest path to download. If a blob (uploading) or a file (downloading) already exists, it will not be overwritten unless force=true. Choices: \"absent\" \"present\" ← (default)"
+    },
+    {
+      "name": "storage_account_name",
+      "aliases": [
+        "account_name",
+        "storage_account"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the storage account to use."
+    },
+    {
+      "name": "subscription_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Your Azure subscription Id."
+    },
+    {
+      "name": "tags",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Dictionary of string:string pairs to assign as metadata to the object. Metadata tags on the object will be updated with any provided values. To remove tags set append_tags option to false. Currently, Azure DNS zones and Traffic Manager services also don’t allow the use of spaces in the tag. Azure Front Door doesn’t support the use of Azure Automation and Azure CDN only support 15 tags on resources."
+    },
+    {
+      "name": "tenant",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure tenant ID. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "thumbprint",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The thumbprint of the private key specified in x509_certificate_path. Use when authenticating with a Service Principal. Required if x509_certificate_path is defined."
+    },
+    {
+      "name": "x509_certificate_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the X509 certificate used to create the service principal in PEM format. The certificate must be appended to the private key. Use when authenticating with a Service Principal."
+    }
+  ],
+  "examples": [
+    "- name: Remove container foo\n  azure_rm_storageblob:\n    resource_group: myResourceGroup\n    storage_account_name: clh0002\n    container: foo\n    state: absent\n\n- name: Create container foo and upload a file\n  azure_rm_storageblob:\n    resource_group: myResourceGroup\n    storage_account_name: clh0002\n    container: foo\n    blob: graylog.png\n    src: ./files/graylog.png\n    public_access: container\n    content_type: 'application/image'\n\n- name: Download the file\n  azure_rm_storageblob:\n    resource_group: myResourceGroup\n    storage_account_name: clh0002\n    container: foo\n    blob: graylog.png\n    dest: ~/tmp/images/graylog.png\n\n- name: Upload a blob directly from a web URL asynchronously (public HTTP/HTTPS)\n  azure_rm_storageblob:\n    resource_group: myResourceGroup\n    storage_account_name: clh0002\n    container: images\n    blob: graylog.png\n    source_url: https://example.com/path/to/graylog.png\n    content_type: image/png\n    cache_control: 'public, max-age=3600'\n    standard_blob_tier: Hot\n    state: present\n  async: 1800\n  poll: 0\n\n- name: Upload a blob directly from a web URL (public HTTP/HTTPS)\n  azure_rm_storageblob:\n    resource_group: myResourceGroup\n    storage_account_name: clh0002\n    container: images\n    blob: graylog.png\n    source_url: https://example.com/path/to/graylog.png\n    content_type: image/png\n    cache_control: 'public, max-age=3600'\n    standard_blob_tier: Hot\n    state: present"
+  ],
+  "return_values": [
+    {
+      "name": "blob",
+      "type": "dictionary",
+      "description": "Facts about the current state of the blob. Returned: when a blob is operated on Sample: {\"content_length\": 136532, \"content_settings\": {\"cache_control\": null, \"content_disposition\": null, \"content_encoding\": null, \"content_language\": null, \"content_md5\": null, \"content_type\": \"application/image\"}, \"last_modified\": \"09-Mar-2016 22:08:25 +0000\", \"name\": \"graylog.png\", \"standard_blob_tier\": \"Hot\", \"tags\": {}, \"type\": \"BlockBlob\"}",
+      "returned": "when"
+    },
+    {
+      "name": "container",
+      "type": "dictionary",
+      "description": "Facts about the current state of the selected container. Returned: always Sample: {\"last_modified\": \"09-Mar-2016 19:28:26 +0000\", \"name\": \"foo\", \"tags\": {}}",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_storageblob_module#ansible-collections-azure-azcollection-azure-rm-storageblob-module.html",
+  "parsed_at": "2026-04-11T13:53:07.632019"
+}

@@ -1,0 +1,316 @@
+{
+  "collection_ns": "azure_azcollection",
+  "collection": "azure.azcollection",
+  "module": "azure.azcollection.azure_rm_publicipaddress_info",
+  "slug": "azure_rm_publicipaddress_info_module#ansible-collections-azure-azcollection-azure-rm-publicipaddress-info-module",
+  "description": "Get facts for a specific public IP or all public IPs within a resource group.",
+  "parameters": [
+    {
+      "name": "ad_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory username. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "adfs_authority_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure AD authority url. Use when authenticating with Username/password, and has your own ADFS authority."
+    },
+    {
+      "name": "api_profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "Selects an API profile to use when communicating with Azure services. Default value of latest is appropriate for public clouds; future values will allow use with Azure Stack. Default: \"latest\""
+    },
+    {
+      "name": "auth_source",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "az",
+      "choices": [
+        "\"auto\" ← (default)",
+        "\"cli\"",
+        "\"credential_file\"",
+        "\"env\"",
+        "\"msi\""
+      ],
+      "description": "Controls the source of the credentials to use for authentication. Can also be set via the ANSIBLE_AZURE_AUTH_SOURCE environment variable. When set to auto (the default) the precedence is module parameters -> env -> credential_file -> cli. When set to env, the credentials will be read from the environment variables When set to credential_file, it will read the profile from ~/.azure/credentials. When set to cli, the credentials will be sources from the Azure CLI profile. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if more than one is present otherwise the default az cli subscription is used. When set to msi, the host machine must be an azure resource with an enabled MSI extension. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if the resource is granted access to more than one subscription, otherwise the first subscription is chosen. The msi was added in Ansible 2.6. Choices: \"auto\" ← (default) \"cli\" \"credential_file\" \"env\" \"msi\""
+    },
+    {
+      "name": "cert_validation_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ignore\"",
+        "\"validate\""
+      ],
+      "description": "Controls the certificate validation behavior for Azure endpoints. By default, all modules will validate the server certificate, but when an HTTPS proxy is in use, or against Azure Stack, it may be necessary to disable this behavior by passing ignore. Can also be set via credential file profile or the AZURE_CERT_VALIDATION environment variable. Choices: \"ignore\" \"validate\""
+    },
+    {
+      "name": "client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client ID. Use when authenticating with a Service Principal or Managed Identity (msi). Can also be set via the AZURE_CLIENT_ID environment variable."
+    },
+    {
+      "name": "cloud_environment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "AzureCloud",
+      "choices": [],
+      "description": "For cloud environments other than the US public cloud, the environment name (as defined by Azure Python SDK, eg, AzureChinaCloud, AzureUSGovernment), or a metadata discovery endpoint URL (required for Azure Stack). Can also be set via credential file profile or the AZURE_CLOUD_ENVIRONMENT environment variable. Default: \"AzureCloud\""
+    },
+    {
+      "name": "disable_instance_discovery",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Determines whether or not instance discovery is performed when attempting to authenticate. Setting this to true will completely disable both instance discovery and authority validation. This functionality is intended for use in scenarios where the metadata endpoint cannot be reached such as in private clouds or Azure Stack. The process of instance discovery entails retrieving authority metadata from https://login.microsoft.com/ to validate the authority. By setting this to **True**, the validation of the authority is disabled. As a result, it is crucial to ensure that the configured authority host is valid and trustworthy. Set via credential file profile or the AZURE_DISABLE_INSTANCE_DISCOVERY environment variable. Choices: false ← (default) true"
+    },
+    {
+      "name": "log_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "log_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Only show results for a specific Public IP."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory user password. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security profile found in ~/.azure/credentials file."
+    },
+    {
+      "name": "resource_group",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Limit results by resource group. Required when using name parameter."
+    },
+    {
+      "name": "secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client secret. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "subscription_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Your Azure subscription Id."
+    },
+    {
+      "name": "tags",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Limit results by providing a list of tags. Format tags as ‘key’ or ‘key:value’."
+    },
+    {
+      "name": "tenant",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure tenant ID. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "thumbprint",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The thumbprint of the private key specified in x509_certificate_path. Use when authenticating with a Service Principal. Required if x509_certificate_path is defined."
+    },
+    {
+      "name": "x509_certificate_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the X509 certificate used to create the service principal in PEM format. The certificate must be appended to the private key. Use when authenticating with a Service Principal."
+    }
+  ],
+  "examples": [
+    "- name: Get facts for one Public IP\n  azure_rm_publicipaddress_info:\n    resource_group: myResourceGroup\n    name: publicip001\n\n- name: Get facts for all Public IPs within a resource groups\n  azure_rm_publicipaddress_info:\n    resource_group: myResourceGroup\n    tags:\n      - key:value"
+  ],
+  "return_values": [
+    {
+      "name": "azure_publicipaddresses",
+      "type": "list",
+      "description": "List of public IP address dicts. Please note that this option will be deprecated in 2.10 when curated format will become the only supported format. Returned: always Sample: [{\"etag\": \"W/\\\"a31a6d7d-cb18-40a5-b16d-9f4a36c1b18a\\\"\", \"id\": \"/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroup/myResourceGroup/providers/Microsoft.Network/publicIPAddresses/pip2001\", \"location\": \"eastus2\", \"name\": \"pip2001\", \"properties\": {\"idleTimeoutInMinutes\": 4, \"provisioningState\": \"Succeeded\", \"publicIPAllocationMethod\": \"Dynamic\", \"resourceGuid\": \"29de82f4-a7da-440e-bd3d-9cabb79af95a\"}, \"type\": \"Microsoft.Network/publicIPAddresses\"}]",
+      "returned": "always"
+    },
+    {
+      "name": "publicipaddresses",
+      "type": "complex",
+      "description": "List of publicipaddress. Contains the detail which matches azure_rm_publicipaddress parameters. Returned when the format parameter set to curated. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "allocation_method",
+      "type": "string",
+      "description": "The public IP allocation method. Possible values are static and dynamic. Returned: always Sample: \"static\"",
+      "returned": "always"
+    },
+    {
+      "name": "dns_settings",
+      "type": "dictionary",
+      "description": "The FQDN of the DNS record associated with the public IP address. Returned: always Sample: {\"domain_name_label\": \"ansible-b57dc95985712e45eb8b9c2e\", \"fqdn\": \"ansible-b57dc95985712e45eb8b9c2e.eastus.cloudapp.azure.com\", \"reverse_fqdn\": \"ansible-b57dc95985712e45eb8b9c2f.eastus.cloudapp.azure.com\"}",
+      "returned": "always"
+    },
+    {
+      "name": "etag",
+      "type": "string",
+      "description": "A unique read-only string that changes whenever the resource is updated. Returned: always Sample: \"W/'1905ee13-7623-45b1-bc6b-4a12b2fb9d15'\"",
+      "returned": "always"
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "description": "Resource ID. Returned: always Sample: \"/subscriptions/xxx---xxxxx/resourceGroups/v-xisuRG/providers/Microsoft.Network/publicIPAddresses/pipb57dc95224\"",
+      "returned": "always"
+    },
+    {
+      "name": "idle_timeout",
+      "type": "integer",
+      "description": "The idle timeout of the public IP address. Returned: always Sample: 4",
+      "returned": "always"
+    },
+    {
+      "name": "ip_address",
+      "type": "string",
+      "description": "The Public IP Prefix this Public IP Address should be allocated from. Returned: always Sample: \"40.121.144.14\"",
+      "returned": "always"
+    },
+    {
+      "name": "ip_tags",
+      "type": "list",
+      "description": "The list of tags associated with the public IP address. Returned: always Sample: [{\"type\": \"FirstPartyUsage\", \"value\": \"Storage\"}]",
+      "returned": "always"
+    },
+    {
+      "name": "location",
+      "type": "string",
+      "description": "Resource location. Returned: always Sample: \"eastus\"",
+      "returned": "always"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "Name of the public IP address. Returned: always Sample: \"pipb57dc95224\"",
+      "returned": "always"
+    },
+    {
+      "name": "provisioning_state",
+      "type": "string",
+      "description": "The provisioning state of the PublicIP resource. Possible values is Succeeded. Returned: always Sample: \"Succeeded\"",
+      "returned": "always"
+    },
+    {
+      "name": "public_ip_prefix",
+      "type": "dictionary",
+      "description": "The Public IP Prefix this Public IP Address should be allocated from. Returned: when-used Sample: {\"id\": \"/subscriptions/xxx-xxx/resourceGroups/testRG/providers/Microsoft.Network/publicIPPrefixes/prefix01\"}",
+      "returned": "when"
+    },
+    {
+      "name": "sku",
+      "type": "string",
+      "description": "The public IP address SKU. Returned: always Sample: \"Standard\"",
+      "returned": "always"
+    },
+    {
+      "name": "tags",
+      "type": "dictionary",
+      "description": "Resource tags. Returned: always Sample: {\"delete\": \"on-exit\", \"testing\": \"testing\"}",
+      "returned": "always"
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "description": "Resource type. Returned: always Sample: \"Microsoft.Network/publicIPAddresses\"",
+      "returned": "always"
+    },
+    {
+      "name": "version",
+      "type": "string",
+      "description": "The public IP address version. Possible values are ipv4 and ipv6. Returned: always Sample: \"ipv4\"",
+      "returned": "always"
+    },
+    {
+      "name": "zones",
+      "type": "list",
+      "description": "A list of availability zones denoting the IP allocated for the resource needs to come from. Returned: always Sample: [\"1\", \"2\"]",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_publicipaddress_info_module.html",
+  "parsed_at": "2026-04-13T16:29:37.834518"
+}

@@ -1,0 +1,8 @@
+{
+  "indexed_at": "2026-04-13T15:25:45.099965",
+  "index_schema_version": "v2",
+  "chunk_schema_version": "v2_section_overlap",
+  "embed_model": "nomic-embed-text",
+  "collection": "all",
+  "total_docs": 8676
+}

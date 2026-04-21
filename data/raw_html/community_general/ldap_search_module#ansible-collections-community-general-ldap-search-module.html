@@ -1,0 +1,725 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+<meta content="2.23.0" name="antsibull-docs" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>community.general.ldap_search module – Search for entries in a LDAP server &mdash; Ansible Community Documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=41de9001" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/ansible.css?v=b54c304f" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/antsibull-minimal.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/rtd-ethical-ads.css?v=289b023e" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/images/Ansible-Mark-RGB_Black.png"/>
+    <link rel="canonical" href="https://docs.ansible.com/projects/ansible/latest/collections/community/general/ldap_search_module.html"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=466ea2d0"></script>
+      <script src="../../../_static/doctools.js?v=888ff710"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="community.general.librato_annotation module – Create an annotation in Librato" href="librato_annotation_module.html" />
+    <link rel="prev" title="community.general.ldap_passwd module – Set passwords in LDAP" href="ldap_passwd_module.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+<script src="https://www.redhat.com/dtm.js"></script>
+
+
+<!-- Google Tag Manager Data Layer -->
+<script>
+ dataLayer = [];
+</script>
+<!-- End Google Tag Manager Data Layer -->
+
+
+<script async type="text/javascript" src="/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="package-doc-builds" /><meta name="readthedocs-version-slug" content="latest" /><meta name="readthedocs-resolver-filename" content="/collections/community/general/ldap_search_module.html" /><meta name="readthedocs-http-status" content="200" /></head>
+
+<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
+<!-- Google Tag Manager -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PSB293" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f); })(window,document,'script','dataLayer','GTM-PSB293');</script>
+<!-- End Google Tag Manager -->
+
+<div class="DocSite-globalNav ansibleNav">
+  <ul>
+    <li><a href="https://www.ansible.com/blog" target="_blank">Blog</a></li>
+    <li><a href="https://forum.ansible.com/" target="_blank">Ansible community forum</a></li>
+    <li><a href="https://docs.ansible.com/" target="_blank">Documentation</a></li>
+  </ul>
+</div>
+
+<a class="DocSite-nav" href="/" style="padding-bottom: 30px;">
+
+  <img class="DocSiteNav-logo"
+    src="../../../_static/images/Ansible-Mark-RGB_White.png"
+    alt="Ansible Logo">
+  <div class="DocSiteNav-title">Ansible Community Documentation</div>
+</a>
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Ansible
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <label class="sr-only" for="q">Search docs:</label>
+    <input type="text" class="st-default-search-input" id="q" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+  
+              <p class="caption" role="heading"><span class="caption-text">Ansible getting started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started/index.html">Getting started with Ansible</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started_ee/index.html">Getting started with Execution Environments</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Installation, Upgrade &amp; Configuration</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation_guide/index.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../porting_guides/porting_guides.html">Ansible Porting Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Using Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../inventory_guide/index.html">Building Ansible inventories</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../command_guide/index.html">Using Ansible command line tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../playbook_guide/index.html">Using Ansible playbooks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../vault_guide/index.html">Protecting sensitive data with Ansible vault</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../module_plugin_guide/index.html">Using Ansible modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../collections_guide/index.html">Using Ansible collections</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../os_guide/index.html">Using Ansible on Windows, BSD, and z/OS UNIX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tips_tricks/index.html">Ansible tips and tricks</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Contributing to Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../community/index.html">Ansible Community Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../community/contributions_collections.html">Ansible Collections Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../community/contributions.html">ansible-core Contributors Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../community/advanced_index.html">Advanced Contributor Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_guide/style_guide/index.html">Ansible documentation style guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Extending Ansible</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_guide/index.html">Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Common Ansible Scenarios</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../scenario_guides/cloud_guides.html">Legacy Public Cloud Guides</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Network Automation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../network/getting_started/index.html">Network Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../network/user_guide/index.html">Network Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../network/dev_guide/index.html">Network Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Ansible Galaxy</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../galaxy/user_guide.html">Galaxy User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../galaxy/dev_guide.html">Galaxy Developer Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference &amp; Appendices</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Collection Index</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../amazon/index.html">Collections in the Amazon Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ansible/index.html">Collections in the Ansible Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../arista/index.html">Collections in the Arista Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../awx/index.html">Collections in the Awx Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../azure/index.html">Collections in the Azure Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../check_point/index.html">Collections in the Check_point Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../chocolatey/index.html">Collections in the Chocolatey Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cisco/index.html">Collections in the Cisco Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cloud/index.html">Collections in the Cloud Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cloudscale_ch/index.html">Collections in the Cloudscale_ch Namespace</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">Collections in the Community Namespace</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../aws/index.html">Community.Aws</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../ciscosmb/index.html">Community.Ciscosmb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../clickhouse/index.html">Community.Clickhouse</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../crypto/index.html">Community.Crypto</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../dns/index.html">Community.Dns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../docker/index.html">Community.Docker</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">Community.General</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="index.html#description">Description</a></li>
+<li class="toctree-l4"><a class="reference internal" href="index.html#communication">Communication</a></li>
+<li class="toctree-l4"><a class="reference internal" href="index.html#changelog">Changelog</a></li>
+<li class="toctree-l4"><a class="reference internal" href="index.html#guides">Guides</a></li>
+<li class="toctree-l4"><a class="reference internal" href="index.html#technology-guides">Technology Guides</a></li>
+<li class="toctree-l4"><a class="reference internal" href="index.html#developer-guides">Developer Guides</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="index.html#plugin-index">Plugin Index</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../grafana/index.html">Community.Grafana</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../hashi_vault/index.html">Community.Hashi_Vault</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../hrobot/index.html">Community.Hrobot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../library_inventory_filtering_v1/index.html">Community.Library_Inventory_Filtering_V1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../libvirt/index.html">Community.Libvirt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../mongodb/index.html">Community.Mongodb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../mysql/index.html">Community.Mysql</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../okd/index.html">Community.Okd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../postgresql/index.html">Community.Postgresql</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../proxmox/index.html">Community.Proxmox</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../proxysql/index.html">Community.Proxysql</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../rabbitmq/index.html">Community.Rabbitmq</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../routeros/index.html">Community.Routeros</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sap_libs/index.html">Community.Sap_Libs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sops/index.html">Community.Sops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../vmware/index.html">Community.Vmware</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../windows/index.html">Community.Windows</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../zabbix/index.html">Community.Zabbix</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../containers/index.html">Collections in the Containers Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cyberark/index.html">Collections in the Cyberark Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dellemc/index.html">Collections in the Dellemc Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../f5networks/index.html">Collections in the F5networks Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../fortinet/index.html">Collections in the Fortinet Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../frr/index.html">Collections in the Frr Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../gluster/index.html">Collections in the Gluster Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../google/index.html">Collections in the Google Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../grafana/index.html">Collections in the Grafana Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../graphiant/index.html">Collections in the Graphiant Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hetzner/index.html">Collections in the Hetzner Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hitachivantara/index.html">Collections in the Hitachivantara Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hpe/index.html">Collections in the Hpe Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ibm/index.html">Collections in the Ibm Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ieisystem/index.html">Collections in the Ieisystem Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../infinidat/index.html">Collections in the Infinidat Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../infoblox/index.html">Collections in the Infoblox Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../inspur/index.html">Collections in the Inspur Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../junipernetworks/index.html">Collections in the Junipernetworks Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../kaytus/index.html">Collections in the Kaytus Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../kubernetes/index.html">Collections in the Kubernetes Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../kubevirt/index.html">Collections in the Kubevirt Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../lowlydba/index.html">Collections in the Lowlydba Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../mellanox/index.html">Collections in the Mellanox Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../microsoft/index.html">Collections in the Microsoft Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../netapp/index.html">Collections in the Netapp Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../netapp_eseries/index.html">Collections in the Netapp_eseries Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../netbox/index.html">Collections in the Netbox Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ngine_io/index.html">Collections in the Ngine_io Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../openstack/index.html">Collections in the Openstack Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../openvswitch/index.html">Collections in the Openvswitch Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ovirt/index.html">Collections in the Ovirt Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../pcg/index.html">Collections in the Pcg Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../purestorage/index.html">Collections in the Purestorage Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../ravendb/index.html">Collections in the Ravendb Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../sensu/index.html">Collections in the Sensu Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../servicenow/index.html">Collections in the Servicenow Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../splunk/index.html">Collections in the Splunk Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../t_systems_mms/index.html">Collections in the T_systems_mms Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../telekom_mms/index.html">Collections in the Telekom_mms Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../theforeman/index.html">Collections in the Theforeman Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../vmware/index.html">Collections in the Vmware Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../vultr/index.html">Collections in the Vultr Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../vyos/index.html">Collections in the Vyos Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../wti/index.html">Collections in the Wti Namespace</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../all_plugins.html">Indexes of all modules and plugins</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/common_return_values.html">Return Values</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/config.html">Ansible Configuration Settings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/general_precedence.html">Controlling how Ansible behaves: precedence rules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/python_3_support.html">Python 3 Support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/interpreter_discovery.html">Interpreter Discovery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/release_and_maintenance.html">Releases and maintenance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_guide/testing/sanity/index.html">Sanity Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/faq.html">Frequently Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/module_utils.html">Ansible Reference: Module Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/special_variables.html">Special Variables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/tower.html">Red Hat Ansible Automation Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/automationhub.html">Ansible Automation Hub</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference_appendices/logging.html">Logging Ansible output</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Roadmaps</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../roadmap/ansible_roadmap_index.html">Ansible Roadmap</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../roadmap/ansible_core_roadmap_index.html">ansible-core Roadmaps</a></li>
+</ul>
+
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Ansible</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Collection Index</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Collections in the Community Namespace</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Community.General</a></li>
+      <li class="breadcrumb-item active">community.general.ldap_search module – Search for entries in a LDAP server</li>
+  <li class="wy-breadcrumbs-aside">
+          <!-- User defined GitHub URL -->
+          <a href="https://github.com/ansible-collections/community.general/edit/main/plugins/modules/ldap_search.py?description=%23%23%23%23%23%20SUMMARY%0A%3C!—%20Your%20description%20here%20–%3E%0A%0A%0A%23%23%23%23%23%20ISSUE%20TYPE%0A-%20Docs%20Pull%20Request%0A%0A%2Blabel:%20docsite_pr" class="fa fa-github"> Edit on GitHub</a>
+  </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+  <script>
+    function startsWith(str, needle) {
+      return str.slice(0, needle.length) == needle
+    }
+    function startsWithOneOf(str, needles) {
+      return needles.some(function (needle) {
+        return startsWith(str, needle);
+      });
+    }
+    var banner = '';
+      /*use extra_banner for when we want something extra, like a survey or Community Day notice */
+      var extra_banner = '';
+    
+      var extra_banner =
+      '<div id="latest_extra_banner_id" class="admonition important">' +
+        '<p style="padding-bottom: 1.2rem;text-align: center;">' +
+        'Join us at <a href="https://www.redhat.com/en/summit?sc_id=RHCTE0250000464461" target="_blank">Red Hat Summit in Atlanta</a> to learn about Ansible Automation Platform | May 11-14, 2026' +
+        '</p>' +
+      '</div>';
+    
+    // Create a banner if we're not on the official docs site
+    if (location.host == "docs.testing.ansible.com") {
+      document.write('<div id="testing_banner_id" class="admonition important">' +
+                     '<p>This is the testing site for Ansible Documentation. Unless you are reviewing pre-production changes, please visit the <a href="https://docs.ansible.com/projects/ansible/latest/">official documentation website</a>.</p> <p></p>' +
+                     '</div>');
+    }
+    
+      // Create a banner
+      current_url_path = window.location.pathname;
+
+      var important = false;
+      var msg = '<p>';
+      if (startsWith(current_url_path, "/projects/ansible-core/")) {
+        msg += 'You are reading documentation for Ansible Core, which contains no plugins except for those in ansible.builtin. For documentation of the Ansible package, go to <a href="https://docs.ansible.com/projects/ansible/latest/">the latest documentation</a>.';
+        /* temp - add extra warning about core-2.19. Included in core 2.19 and later releases */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else if (startsWithOneOf(current_url_path, ["/projects/ansible/latest/", "/projects/ansible/13/"])) {
+        /* temp extra banner to advertise something */
+        banner += extra_banner;
+
+        msg += 'This is the <b>latest</b> (stable) Ansible community documentation. For Red Hat Ansible Automation Platform subscriptions, see <a href="https://access.redhat.com/support/policy/updates/ansible-automation-platform">Life Cycle</a> for version details.';
+        /* temp - add extra warning about core-2.19. Included in latest package release docs */
+ 
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+
+      } else if (startsWith(current_url_path, "/projects/ansible/2.9/")) {
+        msg += 'You are reading the latest Red Hat released version of the Ansible documentation. Community users can use this version, or select <b>latest</b> from the version selector to the left for the most recent community version.';
+      } else if (startsWith(current_url_path, "/projects/ansible/devel/")) {
+        /* temp extra banner to advertise something */
+        banner += extra_banner;
+
+        msg += 'You are reading the <b>devel</b> version of the Ansible documentation - this version is not guaranteed stable. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp - add extra warning about core-2.19.Added to latest and devel docs */
+        msg += '<br><p><strong>Important:</strong> The ansible-core 2.19/Ansible 12 release has made <b>significant templating changes that might require you to update playbooks and roles</b>. The templating changes enable reporting of numerous problematic behaviors that went undetected in previous releases, with wide-ranging positive effects on security, performance, and user experience. You should validate your content to ensure compatibility with these templating changes before upgrading to ansible-core 2.19 or Ansible 12. See the <a href="https://docs.ansible.com/projects/ansible/devel/porting_guides/porting_guide_12.html">porting guide</a> to understand where you may need to update your playbooks and roles.';
+      } else {
+        msg += 'You are reading an older version of the Ansible documentation. Use the version selection to the left if you want the <b>latest</b> (stable) released version.';
+        /* temp extra banner to advertise something - this is for testing*/
+        banner += extra_banner;
+
+      }
+      msg += '</p>';
+
+      banner += '<div id="banner_id" class="admonition ';
+      banner += important ? 'important' : 'caution';
+      banner += '">';
+      banner += important ? '<br>' : '';
+      banner += msg;
+      banner += important ? '<br>' : '';
+      banner += '</div>';
+      document.write(banner);
+    
+  </script>
+
+
+  
+           <div itemprop="articleBody">
+             
+  <span class="target" id="ansible-collections-community-general-ldap-search-module"></span><section id="community-general-ldap-search-module-search-for-entries-in-a-ldap-server">
+<h1>community.general.ldap_search module – Search for entries in a LDAP server<a class="headerlink" href="#community-general-ldap-search-module-search-for-entries-in-a-ldap-server" title="Link to this heading"></a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This module is part of the <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/community/general/">community.general collection</a> (version 12.5.0).</p>
+<p>You might already have this collection installed if you are using the <code class="docutils literal notranslate"><span class="pre">ansible</span></code> package.
+It is not included in <code class="docutils literal notranslate"><span class="pre">ansible-core</span></code>.
+To check whether it is installed, run <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">list</span></code>.</p>
+<p>To install it, use: <code class="code docutils literal notranslate"><span class="pre">ansible-galaxy</span> <span class="pre">collection</span> <span class="pre">install</span> <span class="pre">community.general</span></code>.
+You need further requirements to be able to use this module,
+see <a class="reference internal" href="#ansible-collections-community-general-ldap-search-module-requirements"><span class="std std-ref">Requirements</span></a> for details.</p>
+<p>To use it in a playbook, specify: <code class="code docutils literal notranslate"><span class="pre">community.general.ldap_search</span></code>.</p>
+</div>
+<p class="ansible-version-added">New in community.general 0.2.0</p>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#synopsis" id="id1">Synopsis</a></p></li>
+<li><p><a class="reference internal" href="#requirements" id="id2">Requirements</a></p></li>
+<li><p><a class="reference internal" href="#parameters" id="id3">Parameters</a></p></li>
+<li><p><a class="reference internal" href="#attributes" id="id4">Attributes</a></p></li>
+<li><p><a class="reference internal" href="#notes" id="id5">Notes</a></p></li>
+<li><p><a class="reference internal" href="#examples" id="id6">Examples</a></p></li>
+</ul>
+</nav>
+<section id="synopsis">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Synopsis</a><a class="headerlink" href="#synopsis" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Return the results of an LDAP search.</p></li>
+</ul>
+</section>
+<section id="requirements">
+<span id="ansible-collections-community-general-ldap-search-module-requirements"></span><h2><a class="toc-backref" href="#id2" role="doc-backlink">Requirements</a><a class="headerlink" href="#requirements" title="Link to this heading"></a></h2>
+<p>The below requirements are needed on the host that executes this module.</p>
+<ul class="simple">
+<li><p>python-ldap</p></li>
+</ul>
+</section>
+<section id="parameters">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Parameters</a><a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
+<table class="longtable ansible-option-table docutils align-default" style="width: 100%">
+<thead>
+<tr class="row-odd"><th class="head"><p>Parameter</p></th>
+<th class="head"><p>Comments</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-attrs"></div><p class="ansible-option-title" id="ansible-collections-community-general-ldap-search-module-parameter-attrs"><strong>attrs</strong></p>
+<a class="ansibleOptionLink" href="#parameter-attrs" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>A list of attributes for limiting the result. Use an actual list or a comma-separated string.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-base64_attributes"></div><p class="ansible-option-title" id="ansible-collections-community-general-ldap-search-module-parameter-base64-attributes"><strong>base64_attributes</strong></p>
+<a class="ansibleOptionLink" href="#parameter-base64_attributes" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">list</span> / <span class="ansible-option-elements">elements=string</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 7.0.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>If provided, all attribute values returned that are listed in this option are Base64 encoded.</p>
+<p>If the special value <code class="ansible-value docutils literal notranslate"><span class="pre">*</span></code> appears in this list, all attributes are Base64 encoded.</p>
+<p>All other attribute values are converted to UTF-8 strings. If they contain binary data, please note that invalid UTF-8 bytes are omitted.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-bind_dn"></div><p class="ansible-option-title" id="ansible-collections-community-general-ldap-search-module-parameter-bind-dn"><strong>bind_dn</strong></p>
+<a class="ansibleOptionLink" href="#parameter-bind_dn" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>A DN to bind with. Try to use a SASL bind with the EXTERNAL mechanism as default when this parameter is omitted.</p>
+<p>Use an anonymous bind if the parameter is blank.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-bind_pw"></div><p class="ansible-option-title" id="ansible-collections-community-general-ldap-search-module-parameter-bind-pw"><strong>bind_pw</strong></p>
+<a class="ansibleOptionLink" href="#parameter-bind_pw" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The password to use with <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-ldap-search-module-parameter-bind-dn"><span class="std std-ref"><span class="pre">bind_dn</span></span></a></strong></code>.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-ca_path"></div><p class="ansible-option-title" id="ansible-collections-community-general-ldap-search-module-parameter-ca-path"><strong>ca_path</strong></p>
+<a class="ansibleOptionLink" href="#parameter-ca_path" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">path</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 6.5.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Set the path to PEM file with CA certs.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-client_cert"></div><p class="ansible-option-title" id="ansible-collections-community-general-ldap-search-module-parameter-client-cert"><strong>client_cert</strong></p>
+<a class="ansibleOptionLink" href="#parameter-client_cert" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">path</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 7.1.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>PEM formatted certificate chain file to be used for SSL client authentication.</p>
+<p>Required if <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-ldap-search-module-parameter-client-key"><span class="std std-ref"><span class="pre">client_key</span></span></a></strong></code> is defined.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-client_key"></div><p class="ansible-option-title" id="ansible-collections-community-general-ldap-search-module-parameter-client-key"><strong>client_key</strong></p>
+<a class="ansibleOptionLink" href="#parameter-client_key" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">path</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 7.1.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>PEM formatted file that contains your private key to be used for SSL client authentication.</p>
+<p>Required if <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-ldap-search-module-parameter-client-cert"><span class="std std-ref"><span class="pre">client_cert</span></span></a></strong></code> is defined.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-dn"></div><p class="ansible-option-title" id="ansible-collections-community-general-ldap-search-module-parameter-dn"><strong>dn</strong></p>
+<a class="ansibleOptionLink" href="#parameter-dn" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span> / <span class="ansible-option-required">required</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The LDAP DN to search in.</p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-filter"></div><p class="ansible-option-title" id="ansible-collections-community-general-ldap-search-module-parameter-filter"><strong>filter</strong></p>
+<a class="ansibleOptionLink" href="#parameter-filter" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Used for filtering the LDAP search result.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;(objectClass=*)&quot;</span></code></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-page_size"></div><p class="ansible-option-title" id="ansible-collections-community-general-ldap-search-module-parameter-page-size"><strong>page_size</strong></p>
+<a class="ansibleOptionLink" href="#parameter-page_size" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">integer</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 7.1.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The page size when performing a simple paged result search (RFC 2696). This setting can be tuned to reduce issues with timeouts and server limits.</p>
+<p>Setting the page size to <code class="ansible-value docutils literal notranslate"><span class="pre">0</span></code> (default) disables paged searching.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">0</span></code></p>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-referrals_chasing"></div><p class="ansible-option-title" id="ansible-collections-community-general-ldap-search-module-parameter-referrals-chasing"><strong>referrals_chasing</strong></p>
+<a class="ansibleOptionLink" href="#parameter-referrals_chasing" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 2.0.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Set the referrals chasing behavior.</p>
+<p><code class="ansible-value docutils literal notranslate"><span class="pre">anonymous</span></code> follow referrals anonymously. This is the default behavior.</p>
+<p><code class="ansible-value docutils literal notranslate"><span class="pre">disabled</span></code> disable referrals chasing. This sets <code class="docutils literal notranslate"><span class="pre">OPT_REFERRALS</span></code> to off.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;disabled&quot;</span></code></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">&quot;anonymous&quot;</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-sasl_class"></div><p class="ansible-option-title" id="ansible-collections-community-general-ldap-search-module-parameter-sasl-class"><strong>sasl_class</strong></p>
+<a class="ansibleOptionLink" href="#parameter-sasl_class" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 2.0.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The class to use for SASL authentication.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">&quot;external&quot;</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;gssapi&quot;</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-schema"></div><p class="ansible-option-title" id="ansible-collections-community-general-ldap-search-module-parameter-schema"><strong>schema</strong></p>
+<a class="ansibleOptionLink" href="#parameter-schema" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Set to <code class="ansible-value docutils literal notranslate"><span class="pre">true</span></code> to return the full attribute schema of entries, not their attribute values. Overrides <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-ldap-search-module-parameter-attrs"><span class="std std-ref"><span class="pre">attrs</span></span></a></strong></code> when provided.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-scope"></div><p class="ansible-option-title" id="ansible-collections-community-general-ldap-search-module-parameter-scope"><strong>scope</strong></p>
+<a class="ansibleOptionLink" href="#parameter-scope" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The LDAP scope to use.</p>
+<p><code class="ansible-value docutils literal notranslate"><span class="pre">subordinate</span></code> requires the LDAPv3 subordinate feature extension.</p>
+<p><code class="ansible-value docutils literal notranslate"><span class="pre">children</span></code> is equivalent to a “subtree” scope.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">&quot;base&quot;</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;onelevel&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;subordinate&quot;</span></code></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;children&quot;</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-server_uri"></div><p class="ansible-option-title" id="ansible-collections-community-general-ldap-search-module-parameter-server-uri"><strong>server_uri</strong></p>
+<a class="ansibleOptionLink" href="#parameter-server_uri" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>The <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-ldap-search-module-parameter-server-uri"><span class="std std-ref"><span class="pre">server_uri</span></span></a></strong></code> parameter may be a comma- or whitespace-separated list of URIs containing only the schema, the host, and the port fields.</p>
+<p>The default value lets the underlying LDAP client library look for a UNIX domain socket in its default location.</p>
+<p>Note that when using multiple URIs you cannot determine to which URI your client gets connected.</p>
+<p>For URIs containing additional fields, particularly when using commas, behavior is undefined.</p>
+<p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-option-default docutils literal notranslate"><span class="pre">&quot;ldapi:///&quot;</span></code></p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-start_tls"></div><p class="ansible-option-title" id="ansible-collections-community-general-ldap-search-module-parameter-start-tls"><strong>start_tls</strong></p>
+<a class="ansibleOptionLink" href="#parameter-start_tls" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Use the START_TLS LDAP extension if set to <code class="ansible-value docutils literal notranslate"><span class="pre">true</span></code>.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">false</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">true</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-validate_certs"></div><p class="ansible-option-title" id="ansible-collections-community-general-ldap-search-module-parameter-validate-certs"><strong>validate_certs</strong></p>
+<a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">boolean</span></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>If set to <code class="ansible-value docutils literal notranslate"><span class="pre">false</span></code>, SSL certificates are not validated.</p>
+<p>This should only be used on sites using self-signed certificates.</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">false</span></code></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">true</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+</ul>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="parameter-xorder_discovery"></div><p class="ansible-option-title" id="ansible-collections-community-general-ldap-search-module-parameter-xorder-discovery"><strong>xorder_discovery</strong></p>
+<a class="ansibleOptionLink" href="#parameter-xorder_discovery" title="Permalink to this option"></a><p class="ansible-option-type-line"><span class="ansible-option-type">string</span></p>
+<p><em class="ansible-option-versionadded">added in community.general 6.4.0</em></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Set the behavior on how to process Xordered DNs.</p>
+<p><code class="ansible-value docutils literal notranslate"><span class="pre">enable</span></code> performs a <code class="docutils literal notranslate"><span class="pre">ONELEVEL</span></code> search below the superior RDN to find the matching DN.</p>
+<p><code class="ansible-value docutils literal notranslate"><span class="pre">disable</span></code> always uses the DN unmodified (as passed by the <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-ldap-search-module-parameter-dn"><span class="std std-ref"><span class="pre">dn</span></span></a></strong></code> parameter).</p>
+<p><code class="ansible-value docutils literal notranslate"><span class="pre">auto</span></code> only performs a search if the first RDN does not contain an index number (<code class="docutils literal notranslate"><span class="pre">{x}</span></code>).</p>
+<p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+<ul class="simple">
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;enable&quot;</span></code></p></li>
+<li><p><code class="ansible-option-default-bold docutils literal notranslate"><strong><span class="pre">&quot;auto&quot;</span></strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+<li><p><code class="ansible-option-choices-entry docutils literal notranslate"><span class="pre">&quot;disable&quot;</span></code></p></li>
+</ul>
+</div></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="attributes">
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Attributes</a><a class="headerlink" href="#attributes" title="Link to this heading"></a></h2>
+<table class="longtable ansible-option-table docutils align-default" style="width: 100%">
+<thead>
+<tr class="row-odd"><th class="head"><p>Attribute</p></th>
+<th class="head"><p>Support</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="attribute-check_mode"></div><p class="ansible-option-title" id="ansible-collections-community-general-ldap-search-module-attribute-check-mode"><strong>check_mode</strong></p>
+<a class="ansibleOptionLink" href="#attribute-check_mode" title="Permalink to this attribute"></a></div></td>
+<td><div class="ansible-option-cell"><p><strong class="ansible-attribute-support-label">Support: </strong><strong class="ansible-attribute-support-full">full</strong></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Can run in <code class="docutils literal notranslate"><span class="pre">check_mode</span></code> and return changed status prediction without modifying target.</p>
+</div></td>
+</tr>
+<tr class="row-odd"><td><div class="ansible-option-cell">
+<div class="ansibleOptionAnchor" id="attribute-diff_mode"></div><p class="ansible-option-title" id="ansible-collections-community-general-ldap-search-module-attribute-diff-mode"><strong>diff_mode</strong></p>
+<a class="ansibleOptionLink" href="#attribute-diff_mode" title="Permalink to this attribute"></a></div></td>
+<td><div class="ansible-option-cell"><p><strong class="ansible-attribute-support-label">Support: </strong><strong class="ansible-attribute-support-none">none</strong></p>
+</div></td>
+<td><div class="ansible-option-cell"><p>Returns details on what has changed (or possibly needs changing in <code class="docutils literal notranslate"><span class="pre">check_mode</span></code>), when in diff mode.</p>
+</div></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="notes">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Notes</a><a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>The default authentication settings attempts to use a SASL EXTERNAL bind over a UNIX domain socket. This works well with the default Ubuntu install for example, which includes a <code class="docutils literal notranslate"><span class="pre">cn=peercred,cn=external,cn=auth</span></code> ACL rule allowing root to modify the server configuration. If you need to use a simple bind to access your server, pass the credentials in <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-ldap-search-module-parameter-bind-dn"><span class="std std-ref"><span class="pre">bind_dn</span></span></a></strong></code> and <code class="ansible-option docutils literal notranslate"><strong><a class="reference internal" href="#ansible-collections-community-general-ldap-search-module-parameter-bind-pw"><span class="std std-ref"><span class="pre">bind_pw</span></span></a></strong></code>.</p></li>
+</ul>
+</div>
+</section>
+<section id="examples">
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Examples</a><a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
+<div class="highlight-yaml+jinja notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Return all entries within the &#39;groups&#39; organizational unit.</span>
+<span class="w">  </span><span class="nt">community.general.ldap_search</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">dn</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ou=groups,dc=example,dc=com&quot;</span>
+<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ldap_groups</span>
+
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Return GIDs for all groups</span>
+<span class="w">  </span><span class="nt">community.general.ldap_search</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">dn</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ou=groups,dc=example,dc=com&quot;</span>
+<span class="w">    </span><span class="nt">scope</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;onelevel&quot;</span>
+<span class="w">    </span><span class="nt">attrs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;gidNumber&quot;</span>
+<span class="w">  </span><span class="nt">register</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ldap_group_gids</span>
+</pre></div>
+</div>
+<section id="authors">
+<h3>Authors<a class="headerlink" href="#authors" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Sebastian Pfahl (&#64;eryx12o45)</p></li>
+</ul>
+</section>
+<section id="collection-links">
+<h3>Collection links<a class="headerlink" href="#collection-links" title="Link to this heading"></a></h3>
+<ul class="ansible-links">
+<li><span><a aria-role="button" class="ansible-link reference external" href="https://github.com/ansible-collections/community.general/issues" rel="noopener external" target="_blank">Issue Tracker</a></span></li>
+<li><span><a aria-role="button" class="ansible-link reference external" href="https://github.com/ansible-collections/community.general" rel="noopener external" target="_blank">Repository (Sources)</a></span></li>
+<li><span><a aria-role="button" class="ansible-link reference external" href="https://forum.ansible.com/c/help/6/none" rel="noopener external" target="_blank">Ask for help</a></span></li>
+<li><span><a aria-role="button" class="ansible-link reference external" href="https://github.com/ansible-collections/community.general/issues/new?assignees=&amp;labels=&amp;template=bug_report.yml" rel="noopener external" target="_blank">Submit a bug report</a></span></li>
+<li><span><a aria-role="button" class="ansible-link reference external" href="https://github.com/ansible-collections/community.general/issues/new?assignees=&amp;labels=&amp;template=feature_request.yml" rel="noopener external" target="_blank">Request a feature</a></span></li>
+<li><span><a class="reference internal" href="index.html#communication-for-community-general"><span class="std std-ref">Communication</span></a></span></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          
+
+<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ldap_passwd_module.html" class="btn btn-neutral float-left" title="community.general.ldap_passwd module – Set passwords in LDAP" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="librato_annotation_module.html" class="btn btn-neutral float-right" title="community.general.librato_annotation module – Create an annotation in Librato" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Ansible project contributors.
+      <span class="lastupdated">Last updated on Apr 06, 2026.
+      </span></p>
+  </div>
+
+  
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme -->
+<!-- begin analytics -->
+<script>
+var _hsq = _hsq || [];
+_hsq.push(["setContentType", "standard-page"]);
+      (function(d,s,i,r) {
+      if (d.getElementById(i)){return;}
+      var n = d.createElement(s),e = document.getElementsByTagName(s)[0];
+      n.id=i;n.src = 'https://js.hs-analytics.net/analytics/'+(Math.ceil(new Date()/r)*r)+'/330046.js';
+      e.parentNode.insertBefore(n, e);
+      })(document, "script", "hs-analytics",300000);
+</script>
+<!-- end analytics -->
+<script>
+if (("undefined" !== typeof _satellite) && ("function" === typeof _satellite.pageBottom)) {
+  _satellite.pageBottom();
+}
+</script>
+
+</body>
+</html>

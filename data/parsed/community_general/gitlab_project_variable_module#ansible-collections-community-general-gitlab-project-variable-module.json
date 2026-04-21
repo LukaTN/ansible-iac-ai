@@ -1,0 +1,172 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.gitlab_project_variable",
+  "slug": "gitlab_project_variable_module#ansible-collections-community-general-gitlab-project-variable-module",
+  "description": "When a project variable does not exist, it is created.",
+  "parameters": [
+    {
+      "name": "api_job_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "GitLab CI job token for logging in."
+    },
+    {
+      "name": "api_oauth_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "GitLab OAuth token for logging in."
+    },
+    {
+      "name": "api_password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The password to use for authentication against the API."
+    },
+    {
+      "name": "api_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "GitLab access token with API permissions."
+    },
+    {
+      "name": "api_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The resolvable endpoint for the API."
+    },
+    {
+      "name": "api_username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The username to use for authentication against the API."
+    },
+    {
+      "name": "ca_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The CA certificates bundle to use to verify GitLab server certificate."
+    },
+    {
+      "name": "project",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The path and name of the project."
+    },
+    {
+      "name": "purge",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "When set to true, all variables which are not untouched in the task are deleted. Choices: false ← (default) true"
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Create or delete project variable. Possible values are present and absent. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether or not to validate SSL certs when supplying a HTTPS endpoint. Choices: false true ← (default)"
+    },
+    {
+      "name": "variables",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "A list of dictionaries that represents CI/CD variables. This module works internal with this structure, even if the older vars parameter is used. Default: []"
+    },
+    {
+      "name": "vars",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "When the list element is a simple key-value pair, masked, hidden, raw, and protected are set to false. When the list element is a dict with the keys value, masked, hidden, raw, and protected, the user can have full control about whether a value should be masked, hidden, raw, protected, or a combination. Support for protected values requires GitLab >= 9.3. Support for masked values requires GitLab >= 11.10. Support for hidden values requires GitLab >= 17.4, and was added in community.general 11.3.0. Support for raw values requires GitLab >= 15.7. Support for environment_scope requires GitLab Premium >= 13.11. Support for variable_type requires GitLab >= 11.11. A value must be a string or a number. Field variable_type must be a string with either env_var, which is the default, or file. Field environment_scope must be a string defined by scope environment. When a value is masked, it must be in Base64 and have a length of at least 8 characters. See GitLab documentation on acceptable values for a masked variable (https://docs.gitlab.com/ce/ci/variables/#masked-variables). Default: {}"
+    }
+  ],
+  "examples": [
+    "- name: Set or update some CI/CD variables\n  community.general.gitlab_project_variable:\n    api_url: https://gitlab.com\n    api_token: secret_access_token\n    project: markuman/dotfiles\n    purge: false\n    variables:\n      - name: ACCESS_KEY_ID\n        value: abc123\n      - name: SECRET_ACCESS_KEY\n        value: dassgrfaeui8989\n        masked: true\n        protected: true\n        environment_scope: production\n\n- name: Set or update some CI/CD variables\n  community.general.gitlab_project_variable:\n    api_url: https://gitlab.com\n    api_token: secret_access_token\n    project: markuman/dotfiles\n    purge: false\n    vars:\n      ACCESS_KEY_ID: abc123\n      SECRET_ACCESS_KEY:\n        value: 3214cbad\n        masked: true\n        protected: true\n        variable_type: env_var\n        environment_scope: '*'\n\n- name: Set or update some CI/CD variables with raw value\n  community.general.gitlab_project_variable:\n    api_url: https://gitlab.com\n    api_token: secret_access_token\n    project: markuman/dotfiles\n    purge: false\n    vars:\n      ACCESS_KEY_ID: abc123\n      SECRET_ACCESS_KEY:\n        value: 3214cbad\n        masked: true\n        protected: true\n        raw: true\n        variable_type: env_var\n        environment_scope: '*'\n\n- name: Set or update some CI/CD variables with expandable value\n  community.general.gitlab_project_variable:\n    api_url: https://gitlab.com\n    api_token: secret_access_token\n    project: markuman/dotfiles\n    purge: false\n    vars:\n      ACCESS_KEY_ID: abc123\n      SECRET_ACCESS_KEY:\n        value: '$MY_OTHER_VARIABLE'\n        masked: true\n        protected: true\n        raw: false\n        variable_type: env_var\n        environment_scope: '*'\n\n- name: Delete one variable\n  community.general.gitlab_project_variable:\n    api_url: https://gitlab.com\n    api_token: secret_access_token\n    project: markuman/dotfiles\n    state: absent\n    vars:\n      ACCESS_KEY_ID: abc123"
+  ],
+  "return_values": [
+    {
+      "name": "project_variable",
+      "type": "dictionary",
+      "description": "Four lists of the variablenames which were added, updated, removed or exist. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "added",
+      "type": "list",
+      "description": "A list of variables which were created. Returned: always Sample: [\"ACCESS_KEY_ID\", \"SECRET_ACCESS_KEY\"]",
+      "returned": "always"
+    },
+    {
+      "name": "removed",
+      "type": "list",
+      "description": "A list of variables which were deleted. Returned: always Sample: [\"ACCESS_KEY_ID\", \"SECRET_ACCESS_KEY\"]",
+      "returned": "always"
+    },
+    {
+      "name": "untouched",
+      "type": "list",
+      "description": "A list of variables which exist. Returned: always Sample: [\"ACCESS_KEY_ID\", \"SECRET_ACCESS_KEY\"]",
+      "returned": "always"
+    },
+    {
+      "name": "updated",
+      "type": "list",
+      "description": "A list of variables whose values were changed. Returned: always Sample: [\"ACCESS_KEY_ID\", \"SECRET_ACCESS_KEY\"]",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/gitlab_project_variable_module.html",
+  "parsed_at": "2026-04-13T16:29:46.755015"
+}

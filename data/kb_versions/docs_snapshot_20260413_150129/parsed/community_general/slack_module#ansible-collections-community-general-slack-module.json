@@ -1,0 +1,172 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.slack",
+  "slug": "slack_module#ansible-collections-community-general-slack-module",
+  "description": "The community.general.slack module sends notifications to http://slack.com using the Incoming WebHook integration.",
+  "parameters": [
+    {
+      "name": "attachments",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Define a list of attachments. This list mirrors the Slack JSON API. For more information, see https://api.slack.com/docs/attachments."
+    },
+    {
+      "name": "blocks",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Define a list of blocks. This list mirrors the Slack JSON API. For more information, see https://api.slack.com/block-kit."
+    },
+    {
+      "name": "channel",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Channel to send the message to. If absent, the message goes to the channel selected for the token."
+    },
+    {
+      "name": "color",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "colors",
+      "choices": [],
+      "description": "Allow text to use default colors - use the default of normal to not send a custom color bar at the start of the message. Allowed values for color can be one of normal, good, warning, danger, any valid 3 digit or 6 digit hex color value. Default: \"normal\""
+    },
+    {
+      "name": "domain",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "When using new format ‘Webhook token’ and WebAPI tokens: this can be slack.com or slack-gov.com and is ignored otherwise. When using old format ‘Webhook token’: Slack (sub)domain for your environment without protocol. (For example example.slack.com.) in Ansible 1.8 and beyond, this is deprecated and may be ignored. See token documentation for information."
+    },
+    {
+      "name": "icon_emoji",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Emoji for the message sender. See Slack documentation for options. If icon_emoji is set, icon_url is not used."
+    },
+    {
+      "name": "icon_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "https://docs.ansible.com/favicon.ico",
+      "choices": [],
+      "description": "URL for the message sender’s icon. Default: \"https://docs.ansible.com/favicon.ico\""
+    },
+    {
+      "name": "link_names",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [
+        "1 ← (default)",
+        "0"
+      ],
+      "description": "Automatically create links for channels and usernames in msg. Choices: 1 ← (default) 0"
+    },
+    {
+      "name": "message_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Optional. Message ID to edit, instead of posting a new message. If supplied channel must be in form of C0xxxxxxx. use {{ slack_response.channel }} to get channel from previous task run. The token needs history scope to get information on the message to edit (channels:history,groups:history,mpim:history,im:history). Corresponds to ts in the Slack API (https://api.slack.com/messaging/modifying)."
+    },
+    {
+      "name": "msg",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Message to send. Note that the module does not handle escaping characters. Plain-text angle brackets and ampersands should be converted to HTML entities (for example & to &amp;) before sending. See Slack’s documentation (https://api.slack.com/docs/message-formatting) for more."
+    },
+    {
+      "name": "parse",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"full\"",
+        "\"none\""
+      ],
+      "description": "Setting for the message parser at Slack. Choices: \"full\" \"none\""
+    },
+    {
+      "name": "prepend_hash",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "was",
+      "choices": [
+        "\"always\"",
+        "\"never\" ← (default)",
+        "\"auto\""
+      ],
+      "description": "Setting for automatically prepending a # symbol on the passed in channel. The auto method prepends a # unless channel starts with one of #, @, C0, GF, G0, CP. These prefixes only cover a small set of the prefixes that should not have a # prepended. Since an exact condition which channel values must not have the # prefix is not known, the value auto for this option is deprecated in the future. It is best to explicitly set prepend_hash=always or prepend_hash=never to obtain the needed behavior. Before community.general 12.0.0, the default was auto. It has been deprecated since community.general 10.2.0. Note that auto will be deprecated in a future version. Choices: \"always\" \"never\" ← (default) \"auto\""
+    },
+    {
+      "name": "thread_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Optional. Timestamp of parent message to thread this message, see https://api.slack.com/docs/message-threading."
+    },
+    {
+      "name": "token",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Slack integration token. This authenticates you to the Slack service. Make sure to use the correct type of token, depending on what method you use. Webhook token: Prior to Ansible 1.8, a token looked like 3Ffe373sfhRE6y42Fg3rvf4GlK. In Ansible 1.8 and above, Ansible adapts to the new Slack API where tokens look like G922VJP24/D921DW937/3Ffe373sfhRE6y42Fg3rvf4GlK. If tokens are in the new format then Slack ignores any value of domain except slack.com or slack-gov.com. If the token is in the old format the domain is required. Ansible has no control of when Slack is going to remove the old API. When Slack does that the old format is going to cease working. Please keep in mind the tokens are not the API tokens but are the webhook tokens. In Slack these are found in the webhook URL which are obtained under the apps and integrations. The incoming webhooks can be added in that area. In some cases this may be locked by your Slack admin and you must request access. It is there that the incoming webhooks can be added. The key is on the end of the URL given to you in that section. WebAPI token: Slack WebAPI requires a personal, bot or work application token. These tokens start with xoxp-, xoxb- or xoxa-, for example xoxb-1234-56789abcdefghijklmnop. WebAPI token is required if you intend to receive thread_id. See Slack’s documentation (https://api.slack.com/docs/token-types) for more information."
+    },
+    {
+      "name": "username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "Ansible",
+      "choices": [],
+      "description": "This is the sender of the message. Default: \"Ansible\""
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If false, SSL certificates are not validated. This should only be used on personally controlled sites using self-signed certificates. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Send notification message via Slack\n  community.general.slack:\n    token: thetoken/generatedby/slack\n    msg: '{{ inventory_hostname }} completed'\n  delegate_to: localhost\n\n- name: Send notification message via Slack all options\n  community.general.slack:\n    token: thetoken/generatedby/slack\n    msg: '{{ inventory_hostname }} completed'\n    channel: '#ansible'\n    thread_id: '1539917263.000100'\n    username: 'Ansible on {{ inventory_hostname }}'\n    icon_url: http://www.example.com/some-image-file.png\n    link_names: 0\n    parse: 'none'\n  delegate_to: localhost\n\n- name: Insert a color bar in front of the message for visibility purposes and use the default webhook icon and name configured\n    in Slack\n  community.general.slack:\n    token: thetoken/generatedby/slack\n    msg: '{{ inventory_hostname }} is alive!'\n    color: good\n    username: ''\n    icon_url: ''\n\n- name: Insert a color bar in front of the message with valid hex color value\n  community.general.slack:\n    token: thetoken/generatedby/slack\n    msg: 'This message uses color in hex value'\n    color: '#00aacc'\n    username: ''\n    icon_url: ''\n\n- name: Use the attachments API\n  community.general.slack:\n    token: thetoken/generatedby/slack\n    attachments:\n      - text: Display my system load on host A and B\n        color: '#ff00dd'\n        title: System load\n        fields:\n          - title: System A\n            value: \"load average: 0,74, 0,66, 0,63\"\n            short: true\n          - title: System B\n            value: 'load average: 5,16, 4,64, 2,43'\n            short: true\n\n- name: Use the blocks API\n  community.general.slack:\n    token: thetoken/generatedby/slack\n    blocks:\n      - type: section\n        text:\n          type: mrkdwn\n          text: |-\n            *System load*\n            Display my system load on host A and B\n      - type: context\n        elements:\n          - type: mrkdwn\n            text: |-\n              *System A*\n              load average: 0,74, 0,66, 0,63\n          - type: mrkdwn\n            text: |-\n              *System B*\n              load average: 5,16, 4,64, 2,43\n\n- name: Send a message with a link using Slack markup\n  community.general.slack:\n    token: thetoken/generatedby/slack\n    msg: We sent this message using <https://www.ansible.com|Ansible>!\n\n- name: Send a message with angle brackets and ampersands\n  community.general.slack:\n    token: thetoken/generatedby/slack\n    msg: This message has &lt;brackets&gt; &amp; ampersands in plain text.\n\n- name: Initial Threaded Slack message\n  community.general.slack:\n    channel: '#ansible'\n    token: xoxb-1234-56789abcdefghijklmnop\n    msg: 'Starting a thread with my initial post.'\n  register: slack_response\n- name: Add more info to thread\n  community.general.slack:\n    channel: '#ansible'\n    token: xoxb-1234-56789abcdefghijklmnop\n    thread_id: \"{{ slack_response['ts'] }}\"\n    color: good\n    msg: 'And this is my threaded response!'\n\n- name: Send a message to be edited later on\n  community.general.slack:\n    token: thetoken/generatedby/slack\n    channel: '#ansible'\n    msg: Deploying something...\n  register: slack_response\n- name: Edit message\n  community.general.slack:\n    token: thetoken/generatedby/slack\n    # The 'channel' option does not accept the channel name. It must use the 'channel_id',\n    # which can be retrieved for example from 'slack_response' from the previous task.\n    channel: \"{{ slack_response.channel }}\"\n    msg: Deployment complete!\n    message_id: \"{{ slack_response.ts }}\""
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/slack_module#ansible-collections-community-general-slack-module.html",
+  "parsed_at": "2026-04-11T13:53:26.560854"
+}

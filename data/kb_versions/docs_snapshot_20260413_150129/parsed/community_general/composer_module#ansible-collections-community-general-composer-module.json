@@ -1,0 +1,182 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.composer",
+  "slug": "composer_module#ansible-collections-community-general-composer-module",
+  "description": "Composer is a tool for dependency management in PHP. It allows you to declare the dependent libraries your project needs and it installs them in your project for you.",
+  "parameters": [
+    {
+      "name": "apcu_autoloader",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Uses APCu to cache found/not-found classes. Choices: false ← (default) true"
+    },
+    {
+      "name": "arguments",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Composer arguments like required package, version and so on. Default: \"\""
+    },
+    {
+      "name": "classmap_authoritative",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Autoload classes from classmap only. Implicitly enable optimize_autoloader. Recommended especially for production, but can take a bit of time to run. Choices: false ← (default) true"
+    },
+    {
+      "name": "command",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "install",
+      "choices": [],
+      "description": "Composer command like install, update and so on. Default: \"install\""
+    },
+    {
+      "name": "composer_executable",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to composer executable on the remote host, if composer is not in PATH or a custom composer is needed."
+    },
+    {
+      "name": "executable",
+      "aliases": [
+        "php_path"
+      ],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to PHP executable on the remote host, if PHP is not in PATH."
+    },
+    {
+      "name": "global_command",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Runs the specified command globally. Choices: false ← (default) true"
+    },
+    {
+      "name": "ignore_platform_reqs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Ignore php, hhvm, lib-* and ext-* requirements and force the installation even if the local machine does not fulfill these. Choices: false ← (default) true"
+    },
+    {
+      "name": "no_dev",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Disables installation of require-dev packages (see --no-dev). Choices: false true ← (default)"
+    },
+    {
+      "name": "no_plugins",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Disables all plugins (see --no-plugins). Choices: false ← (default) true"
+    },
+    {
+      "name": "no_scripts",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Skips the execution of all scripts defined in composer.json (see --no-scripts). Choices: false ← (default) true"
+    },
+    {
+      "name": "optimize_autoloader",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Optimize autoloader during autoloader dump (see --optimize-autoloader). Convert PSR-0/4 autoloading to classmap to get a faster autoloader. Recommended especially for production, but can take a bit of time to run. Choices: false true ← (default)"
+    },
+    {
+      "name": "prefer_dist",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Forces installation from package dist even for dev versions (see --prefer-dist). Choices: false ← (default) true"
+    },
+    {
+      "name": "prefer_source",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Forces installation from package sources when possible (see --prefer-source). Choices: false ← (default) true"
+    },
+    {
+      "name": "working_dir",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Directory of your project (see --working-dir). This is required when the command is not run globally. This is ignored if global_command=true."
+    }
+  ],
+  "examples": [
+    "- name: Download and installs all libs and dependencies outlined in the /path/to/project/composer.lock\n  community.general.composer:\n    command: install\n    working_dir: /path/to/project\n\n- name: Install a new package\n  community.general.composer:\n    command: require\n    arguments: my/package\n    working_dir: /path/to/project\n\n- name: Clone and install a project with all dependencies\n  community.general.composer:\n    command: create-project\n    arguments: package/package /path/to/project ~1.0\n    working_dir: /path/to/project\n    prefer_dist: true\n\n- name: Install a package globally\n  community.general.composer:\n    command: require\n    global_command: true\n    arguments: my/package"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/composer_module#ansible-collections-community-general-composer-module.html",
+  "parsed_at": "2026-04-11T13:53:11.588546"
+}

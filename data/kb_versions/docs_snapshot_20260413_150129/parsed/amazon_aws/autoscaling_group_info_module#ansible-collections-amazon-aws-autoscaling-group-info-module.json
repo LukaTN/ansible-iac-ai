@@ -1,0 +1,410 @@
+{
+  "collection_ns": "amazon_aws",
+  "collection": "amazon.aws",
+  "module": "amazon.aws.autoscaling_group_info",
+  "slug": "autoscaling_group_info_module#ansible-collections-amazon-aws-autoscaling-group-info-module",
+  "description": "Gather information about EC2 Auto Scaling Groups (ASGs) in AWS.",
+  "parameters": [
+    {
+      "name": "access_key",
+      "aliases": [
+        "aws_access_key_id",
+        "aws_access_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS access key ID. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY environment variables may also be used in decreasing order of preference. The aws_access_key and profile options are mutually exclusive. The aws_access_key_id alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "aws_ca_bundle",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The location of a CA Bundle to use when validating SSL certificates. The AWS_CA_BUNDLE environment variable may also be used."
+    },
+    {
+      "name": "aws_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary to modify the botocore configuration. Parameters can be found in the AWS documentation https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html#botocore.config.Config."
+    },
+    {
+      "name": "debug_botocore_endpoint_logs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use a botocore.endpoint logger to parse the unique (rather than total) \"resource:action\" API calls made during a task, outputing the set to the resource_actions key in the task results. Use the aws_resource_action callback to output to total list made during a playbook. The ANSIBLE_DEBUG_BOTOCORE_LOGS environment variable may also be used. Choices: false ← (default) true"
+    },
+    {
+      "name": "endpoint_url",
+      "aliases": [
+        "aws_endpoint_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "AWS",
+      "choices": [],
+      "description": "URL to connect to instead of the default AWS endpoints. While this can be used to connection to other AWS-compatible services the amazon.aws and community.aws collections are only tested against AWS. The AWS_URL environment variable may also be used."
+    },
+    {
+      "name": "name",
+      "aliases": [
+        "group_name"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The prefix or name of the auto scaling group(s) you are searching for. Note: This is a regular expression match with implicit ‘^’ (beginning of string). Append ‘$’ for a complete name match."
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "aws_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A named AWS profile to use for authentication. See the AWS documentation for more information about named profiles https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html. The AWS_PROFILE environment variable may also be used. The profile option is mutually exclusive with the aws_access_key, aws_secret_key and session_token options."
+    },
+    {
+      "name": "region",
+      "aliases": [
+        "aws_region"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The AWS region to use. For global services such as IAM, Route53 and CloudFront, region is ignored. The AWS_REGION environment variable may also be used. See the Amazon AWS documentation for more information http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region."
+    },
+    {
+      "name": "secret_key",
+      "aliases": [
+        "aws_secret_access_key",
+        "aws_secret_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS secret access key. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SECRET_ACCESS_KEY or AWS_SECRET_KEY environment variables may also be used in decreasing order of preference. The secret_key and profile options are mutually exclusive. The aws_secret_access_key alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "session_token",
+      "aliases": [
+        "aws_session_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS STS session token for use with temporary credentials. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SESSION_TOKEN environment variable may also be used. The session_token and profile options are mutually exclusive."
+    },
+    {
+      "name": "tags",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary/hash of tags in the format { tag1_name: ‘tag1_value’, tag2_name: ‘tag2_value’ } to match against the auto scaling group(s) you are searching for."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to false, SSL certificates will not be validated for communication with the AWS APIs. Setting validate_certs=false is strongly discouraged, as an alternative, consider setting aws_ca_bundle instead. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "# Note: These examples do not set authentication details, see the AWS Guide for details.\n\n- name: Find all groups\n  amazon.aws.autoscaling_group_info:\n  register: asgs\n\n- name: Find a group with matching name/prefix\n  amazon.aws.autoscaling_group_info:\n    name: public-webserver-asg\n  register: asgs\n\n- name: Find a group with matching tags\n  amazon.aws.autoscaling_group_info:\n    tags:\n      project: webapp\n      env: production\n  register: asgs\n\n- name: Find a group with matching name/prefix and tags\n  amazon.aws.autoscaling_group_info:\n    name: myproject\n    tags:\n      env: production\n  register: asgs\n\n- name: Fail if no groups are found\n  amazon.aws.autoscaling_group_info:\n    name: public-webserver-asg\n  register: asgs\n  failed_when: \"{{ asgs.results | length == 0 }}\"\n\n- name: Fail if more than 1 group is found\n  amazon.aws.autoscaling_group_info:\n    name: public-webserver-asg\n  register: asgs\n  failed_when: \"{{ asgs.results | length > 1 }}\""
+  ],
+  "return_values": [
+    {
+      "name": "results",
+      "type": "list",
+      "description": "A list of Auto Scaling Groups. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "auto_scaling_group_arn",
+      "type": "string",
+      "description": "The Amazon Resource Name of the ASG. Returned: success Sample: \"arn:aws:autoscaling:us-west-2:123456789012:autoScalingGroup:10787c52-0bcb-427d-82ba-c8e4b008ed2e:autoScalingGroupName/dev11\"",
+      "returned": "success"
+    },
+    {
+      "name": "auto_scaling_group_name",
+      "type": "string",
+      "description": "Name of autoscaling group. Returned: success Sample: \"public-webapp-production-1\"",
+      "returned": "success"
+    },
+    {
+      "name": "availability_zones",
+      "type": "list",
+      "description": "List of Availability Zones that are enabled for this ASG. Returned: success Sample: [\"us-west-2a\", \"us-west-2b\", \"us-west-2a\"]",
+      "returned": "success"
+    },
+    {
+      "name": "created_time",
+      "type": "string",
+      "description": "The date and time this ASG was created, in ISO 8601 format. Returned: success Sample: \"2015-11-25T00:05:36.309Z\"",
+      "returned": "success"
+    },
+    {
+      "name": "default_cooldown",
+      "type": "integer",
+      "description": "The default cooldown time in seconds. Returned: success Sample: 300",
+      "returned": "success"
+    },
+    {
+      "name": "desired_capacity",
+      "type": "integer",
+      "description": "The number of EC2 instances that should be running in this group. Returned: success Sample: 3",
+      "returned": "success"
+    },
+    {
+      "name": "enabled_metrics",
+      "type": "list",
+      "description": "The metrics enabled for the group. Returned: success Sample: [{\"granularity\": \"1Minute\", \"metric\": \"GroupAndWarmPoolTotalCapacity\"}]",
+      "returned": "success"
+    },
+    {
+      "name": "granularity",
+      "type": "string",
+      "description": "The granularity of the metric. The only valid value is 1Minute. Returned: success Sample: \"1Minute\"",
+      "returned": "success"
+    },
+    {
+      "name": "metric",
+      "type": "string",
+      "description": "Name of the metric. Returned: success Sample: \"GroupAndWarmPoolTotalCapacity\"",
+      "returned": "success"
+    },
+    {
+      "name": "health_check_grace_period",
+      "type": "integer",
+      "description": "Length of time in seconds after a new EC2 instance comes into service that Auto Scaling starts checking its health. Returned: success Sample: 300",
+      "returned": "success"
+    },
+    {
+      "name": "health_check_type",
+      "type": "string",
+      "description": "The service you want the health status from, one of “EC2” or “ELB”. Returned: success Sample: \"ELB\"",
+      "returned": "success"
+    },
+    {
+      "name": "instances",
+      "type": "list",
+      "description": "List of EC2 instances associated with ASG and their status. Returned: success Sample: [{\"availability_zone\": \"us-west-2a\", \"health_status\": \"Healthy\", \"instance_id\": \"i-es22ad25\", \"launch_configuration_name\": \"public-webapp-production-1\", \"launch_template\": {\"launch_template_id\": \"lt-0b19eb00123456789\", \"launch_template_name\": \"test-template\", \"version\": \"1\"}, \"lifecycle_state\": \"InService\", \"protected_from_scale_in\": \"false\"}]",
+      "returned": "success"
+    },
+    {
+      "name": "availability_zone",
+      "type": "string",
+      "description": "The Availability Zone of the instance. Returned: success Sample: \"ap-southeast-2a\"",
+      "returned": "success"
+    },
+    {
+      "name": "health_status",
+      "type": "string",
+      "description": "The last reported health status of the instance. Returned: success Sample: \"Healthy\"",
+      "returned": "success"
+    },
+    {
+      "name": "instance_id",
+      "type": "string",
+      "description": "The ID of the instance. Returned: success Sample: \"i-012345678\"",
+      "returned": "success"
+    },
+    {
+      "name": "instance_type",
+      "type": "string",
+      "description": "The instance type size of the running instance. Returned: success Sample: \"t2.micro\"",
+      "returned": "success"
+    },
+    {
+      "name": "launch_template",
+      "type": "dictionary",
+      "description": "The EC2 launch template to base instance configuration on. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "launch_template_id",
+      "type": "string",
+      "description": "The ID of the launch template. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "launch_template_name",
+      "type": "string",
+      "description": "The name of the launch template. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "version",
+      "type": "integer",
+      "description": "The specific version of the launch template to use. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "lifecycle_state",
+      "type": "string",
+      "description": "A description of the current lifecycle state. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "protected_from_scale_in",
+      "type": "boolean",
+      "description": "Indicates whether the instance is protected from termination by Amazon EC2 Auto Scaling when scaling in. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "launch_config_name",
+      "type": "string",
+      "description": "Name of launch configuration associated with the ASG. Same as launch_configuration_name, provided for compatibility with amazon.aws.autoscaling_group module. Returned: success Sample: \"public-webapp-production-1\"",
+      "returned": "success"
+    },
+    {
+      "name": "launch_configuration_name",
+      "type": "string",
+      "description": "Name of launch configuration associated with the ASG. Returned: success Sample: \"public-webapp-production-1\"",
+      "returned": "success"
+    },
+    {
+      "name": "lifecycle_hooks",
+      "type": "list",
+      "description": "List of lifecycle hooks for the ASG. Returned: success Sample: [{\"AutoScalingGroupName\": \"public-webapp-production-1\", \"DefaultResult\": \"ABANDON\", \"GlobalTimeout\": 172800, \"HeartbeatTimeout\": 3600, \"LifecycleHookName\": \"instance-launch\", \"LifecycleTransition\": \"autoscaling:EC2_INSTANCE_LAUNCHING\"}, {\"AutoScalingGroupName\": \"public-webapp-production-1\", \"DefaultResult\": \"ABANDON\", \"GlobalTimeout\": 172800, \"HeartbeatTimeout\": 3600, \"LifecycleHookName\": \"instance-terminate\", \"LifecycleTransition\": \"autoscaling:EC2_INSTANCE_TERMINATING\"}]",
+      "returned": "success"
+    },
+    {
+      "name": "load_balancer_names",
+      "type": "list",
+      "description": "List of load balancers names attached to the ASG. Returned: success Sample: [\"elb-webapp-prod\"]",
+      "returned": "success"
+    },
+    {
+      "name": "max_size",
+      "type": "integer",
+      "description": "Maximum size of group. Returned: success Sample: 3",
+      "returned": "success"
+    },
+    {
+      "name": "min_size",
+      "type": "integer",
+      "description": "Minimum size of group. Returned: success Sample: 1",
+      "returned": "success"
+    },
+    {
+      "name": "new_instances_protected_from_scale_in",
+      "type": "boolean",
+      "description": "Whether or not new instances a protected from automatic scaling in. Returned: success Sample: false",
+      "returned": "success"
+    },
+    {
+      "name": "placement_group",
+      "type": "string",
+      "description": "Placement group into which instances are launched, if any. Returned: success Sample: \"None\"",
+      "returned": "success"
+    },
+    {
+      "name": "service_linked_role_arn",
+      "type": "string",
+      "description": "The ARN of the service-linked role that the Auto Scaling group uses to call other Amazon Web Services on your behalf. Returned: success Sample: \"arn:aws:iam::721234567890:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling\"",
+      "returned": "success"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "description": "The current state of the group when DeleteAutoScalingGroup is in progress. Returned: success Sample: \"None\"",
+      "returned": "success"
+    },
+    {
+      "name": "suspended_processes",
+      "type": "list",
+      "description": "The suspended processes associated with the group. Returned: success Sample: [{\"process_name\": \"AddToLoadBalancer\", \"suspension_reason\": \"User suspended at 2018-08-30T14:11:58Z\"}]",
+      "returned": "success"
+    },
+    {
+      "name": "process_name",
+      "type": "string",
+      "description": "The name of the suspended process. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "suspension_reason",
+      "type": "string",
+      "description": "The reason that the process was suspended. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "tags",
+      "type": "list",
+      "description": "List of tags for the ASG, and whether or not each tag propagates to instances at launch. Returned: success Sample: [{\"key\": \"Name\", \"propagate_at_launch\": \"true\", \"resource_id\": \"public-webapp-production-1\", \"resource_type\": \"auto-scaling-group\", \"value\": \"public-webapp-production-1\"}, {\"key\": \"env\", \"propagate_at_launch\": \"true\", \"resource_id\": \"public-webapp-production-1\", \"resource_type\": \"auto-scaling-group\", \"value\": \"production\"}]",
+      "returned": "success"
+    },
+    {
+      "name": "target_group_arns",
+      "type": "list",
+      "description": "List of ARNs of the target groups that the ASG populates. Returned: success Sample: [\"arn:aws:elasticloadbalancing:ap-southeast-2:123456789012:targetgroup/target-group-host-hello/1a2b3c4d5e6f1a2b\", \"arn:aws:elasticloadbalancing:ap-southeast-2:123456789012:targetgroup/target-group-path-world/abcd1234abcd1234\"]",
+      "returned": "success"
+    },
+    {
+      "name": "target_group_names",
+      "type": "list",
+      "description": "List of names of the target groups that the ASG populates. Returned: success Sample: [\"target-group-host-hello\", \"target-group-path-world\"]",
+      "returned": "success"
+    },
+    {
+      "name": "termination_policies",
+      "type": "list",
+      "description": "A list of termination policies for the group. Returned: success Sample: [\"Default\"]",
+      "returned": "success"
+    },
+    {
+      "name": "traffic_sources",
+      "type": "list",
+      "description": "The traffic sources associated with this Auto Scaling group. Returned: success Sample: [{\"identifier\": \"arn:aws:elasticloadbalancing:us-west-2:721234567890:targetgroup/Check-Exter-A4XXXXXXXXXX/8aXXXXXXXXXXXXXX\", \"type\": \"elbv2\"}]",
+      "returned": "success"
+    },
+    {
+      "name": "identifier",
+      "type": "string",
+      "description": "Identifies the traffic source. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "description": "Provides additional context for the value of Identifier. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "vpc_zone_identifier",
+      "type": "string",
+      "description": "One or more subnet IDs, if applicable, separated by commas. Returned: success Sample: \"subnet-0352db1247ae60b40,subnet-01f266bb9928ddaee\"",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/amazon/aws/autoscaling_group_info_module#ansible-collections-amazon-aws-autoscaling-group-info-module.html",
+  "parsed_at": "2026-04-11T13:52:44.665956"
+}

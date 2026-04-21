@@ -1,0 +1,35 @@
+# ============================================================
+# AnsibleAI RAG Generator — LangChain + ChromaDB
+# Date        : 2026-04-11 11:42:43
+# Request     : create a kubernetes service of type LoadBalancer for the analytics-backend deployment on port 80 targeting port 8080
+# Module      : kubernetes.core.k8s_service
+# Collection  : kubernetes.core
+# RAG score   : 0.61
+# Chunks used : 6
+# Source URL  : https://docs.ansible.com/ansible/latest/collections/kubernetes/core/k8s_service_module.html
+# LLM model   : MISTRAL
+# ============================================================
+
+---
+- name: Create a Kubernetes Service of type LoadBalancer for analytics-backend deployment on port 80 targeting port 8080
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - kubernetes.core
+
+  tasks:
+    - name: Expose http port with LoadBalancer using spec
+      kubernetes.core.k8s_service:
+        state: present
+        name: analytics-backend
+        namespace: default
+        inline:
+          spec:
+            selector:
+              app: analytics-backend
+            ports:
+            - port: 80
+              protocol: TCP
+              targetPort: 8080
+              type: LoadBalancer

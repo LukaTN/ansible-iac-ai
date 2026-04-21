@@ -1,0 +1,35 @@
+---
+- name: Create CloudWatch Metric Alarms for API 5xx and Latency P95
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - amazon.aws
+  tasks:
+    - name: create api-5xx-alarm
+      amazon.aws.cloudwatch_metric_alarm:
+        state: present
+        region: us-east-1
+        name: "api-5xx-alarm"
+        metric_name: "HTTPCode_5XX"
+        namespace: "AWS/ApiGateway"
+        statistic: Sum
+        comparison: GreaterThanOrEqualToThreshold
+        threshold: 10
+        period: 60
+        evaluation_periods: 2
+        unit: "Count"
+
+    - name: create latency-p95-alarm
+      amazon.aws.cloudwatch_metric_alarm:
+        state: present
+        region: us-east-1
+        name: "latency-p95-alarm"
+        metric_name: "Latency"
+        namespace: "AWS/ApiGateway"
+        statistic: P95
+        comparison: GreaterThanOrEqualToThreshold
+        threshold: 200
+        period: 60
+        evaluation_periods: 2
+        unit: "Milliseconds"

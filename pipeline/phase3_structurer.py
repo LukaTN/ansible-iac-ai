@@ -1,15 +1,8 @@
 """
 =============================================================
   AI-Powered IaC — Phase 3 : Structurer
-  Input  : data/parsed/*.json     (Phase 2 output)
-  Output : data/knowledge_base.json
-=============================================================
-  What it does:
-    - Loads all parsed module JSONs
-    - Cleans remaining artifacts (bad defaults, empty fields)
-    - Organizes by category (helm / k8s)
-    - Builds a single knowledge_base.json optimized for LLM prompting
-    - Adds task_keywords to each module for intent matching
+  Input  : data/parsed/**/*.json
+  Output : data/kb_manifest.json
 =============================================================
 """
 
@@ -17,24 +10,13 @@ import os
 import json
 import re
 from datetime import datetime
+from kb_store import write_manifest
 
-# Always run from project root
 os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-
-# ─────────────────────────────────────────────
-#  CONFIG
-# ─────────────────────────────────────────────
-
-INPUT_DIR   = "data/parsed"
-OUTPUT_FILE = "data/knowledge_base.json"
+INPUT_DIR = "data/parsed"
+OUTPUT_FILE = "data/kb_manifest.json"
 REPORT_FILE = "reports/structure_report.json"
-
-
-# ─────────────────────────────────────────────
-#  TASK KEYWORDS MAP
-#  Used by Phase 4 to match user input → module
-# ─────────────────────────────────────────────
 
 TASK_KEYWORDS = {
     "k8s_module": [
@@ -109,39 +91,31 @@ TASK_KEYWORDS = {
     ],
 }
 
-# Module categories
 CATEGORIES = {
-    "k8s" : ["k8s_module", "k8s_info_module", "k8s_cluster_info_module",
-              "k8s_exec_module", "k8s_cp_module", "k8s_drain_module",
-              "k8s_log_module", "k8s_scale_module", "k8s_rollback_module",
-              "k8s_taint_module", "k8s_json_patch_module", "k8s_service_module"],
-    "helm": ["helm_module", "helm_info_module", "helm_repository_module",
-             "helm_plugin_module", "helm_plugin_info_module", "helm_template_module"],
+    "k8s": [
+        "k8s_module", "k8s_info_module", "k8s_cluster_info_module",
+        "k8s_exec_module", "k8s_cp_module", "k8s_drain_module",
+        "k8s_log_module", "k8s_scale_module", "k8s_rollback_module",
+        "k8s_taint_module", "k8s_json_patch_module", "k8s_service_module"
+    ],
+    "helm": [
+        "helm_module", "helm_info_module", "helm_repository_module",
+        "helm_plugin_module", "helm_plugin_info_module", "helm_template_module"
+    ],
 }
 
-
-# ─────────────────────────────────────────────
-#  CLEANERS
-# ─────────────────────────────────────────────
-
-# Words that should never be a "default" value (parsing artifacts)
 BAD_DEFAULTS = {
     "to", "the", "a", "an", "is", "are", "be", "by",
     "in", "of", "or", "if", "it", "this", "that", "and",
-    "false", "true",   # these belong in choices, not default
+    "false", "true",
 }
 
+
 def clean_default(value, choices):
-    """
-    Fix bad default values extracted by the parser.
-    e.g. 'to' from 'Default to false' → ''
-    But keep 'false'/'true' only if they're real defaults (not in bad list).
-    """
     if not value:
         return ""
     v = value.strip().lower()
     if v in BAD_DEFAULTS:
-        # Try to find a real default in choices
         if len(choices) == 1:
             return choices[0]
         return ""
@@ -149,112 +123,125 @@ def clean_default(value, choices):
 
 
 def clean_description(text):
-    """Remove excessive whitespace from descriptions."""
     if not text:
         return ""
     return re.sub(r"\s+", " ", text.strip())
 
 
 def clean_parameter(param):
-    """Clean and normalize a single parameter dict."""
     return {
-        "name"       : param.get("name", ""),
-        "aliases"    : param.get("aliases", []),
-        "type"       : param.get("type", ""),
-        "required"   : param.get("required", False),
-        "default"    : clean_default(
-                           param.get("default", ""),
-                           param.get("choices", [])
-                       ),
-        "choices"    : param.get("choices", []),
+        "name": param.get("name", ""),
+        "aliases": param.get("aliases", []),
+        "type": param.get("type", ""),
+        "required": param.get("required", False),
+        "default": clean_default(param.get("default", ""), param.get("choices", [])),
+        "choices": param.get("choices", []),
         "description": clean_description(param.get("description", "")),
     }
 
 
 def get_required_params(parameters):
-    """Return list of required parameter names."""
     return [p["name"] for p in parameters if p.get("required")]
 
 
-def get_category(slug):
-    """Return 'k8s', 'helm', or 'unknown' for a module slug."""
+def get_category(slug, collection_name="", module_name=""):
     for cat, slugs in CATEGORIES.items():
         if slug in slugs:
             return cat
+    module_short = (module_name or "").split(".")[-1]
+    if collection_name == "kubernetes.core":
+        return "helm" if module_short.startswith("helm") else "k8s"
+    if collection_name.startswith("amazon."):
+        return "aws"
+    if collection_name.startswith("azure."):
+        return "azure"
+    if collection_name == "ansible.builtin":
+        return "builtin"
+    if collection_name.startswith("community."):
+        return "community"
+    if "." in collection_name:
+        return collection_name.split(".", 1)[0]
     return "unknown"
 
 
-# ─────────────────────────────────────────────
-#  MAIN STRUCTURE BUILDER
-# ─────────────────────────────────────────────
+def iter_parsed_json_files(parsed_dir):
+    # Legacy flat layout: data/parsed/*.json
+    for entry in sorted(os.listdir(parsed_dir)):
+        p = os.path.join(parsed_dir, entry)
+        if os.path.isfile(p) and p.endswith(".json"):
+            yield p
+        elif os.path.isdir(p):
+            # New layout: data/parsed/<collection_ns>/*.json
+            for fn in sorted(os.listdir(p)):
+                fp = os.path.join(p, fn)
+                if os.path.isfile(fp) and fp.endswith(".json"):
+                    yield fp
+
 
 def build_knowledge_base(parsed_dir):
-    """
-    Load all parsed JSONs and build the knowledge base structure.
-    """
     knowledge_base = {
         "metadata": {
-            "collection"  : "kubernetes.core",
             "generated_at": datetime.now().isoformat(),
             "total_modules": 0,
-            "source"      : "https://docs.ansible.com/ansible/latest/collections/kubernetes/core/",
+            "collections": [],
+            "sources": {},
         },
-        "modules": {}
+        "modules": {},
     }
 
-    json_files = sorted([
-        f for f in os.listdir(parsed_dir)
-        if f.endswith(".json")
-    ])
+    json_paths = list(iter_parsed_json_files(parsed_dir))
+    print(f"\n  Found {len(json_paths)} parsed JSON files.\n")
 
-    print(f"\n  Found {len(json_files)} parsed JSON files.\n")
+    collections_seen = set()
 
-    for filename in json_files:
-        slug     = filename.replace(".json", "")
-        filepath = os.path.join(parsed_dir, filename)
-
+    for filepath in json_paths:
         with open(filepath, "r", encoding="utf-8") as f:
             data = json.load(f)
 
-        # Clean parameters
-        cleaned_params = [clean_parameter(p) for p in data.get("parameters", [])]
+        slug = data.get("slug") or os.path.basename(filepath).replace(".json", "")
+        collection_ns = data.get("collection_ns")
+        collection_name = data.get("collection", "unknown.collection")
 
-        # Build module entry
-        module_entry = {
-            "module"         : data.get("module", ""),
-            "slug"           : slug,
-            "category"       : get_category(slug),
-            "description"    : clean_description(data.get("description", "")),
+        if not collection_ns and "." in collection_name:
+            collection_ns = collection_name.replace(".", "_")
+        if not collection_ns:
+            rel = os.path.relpath(filepath, parsed_dir).split(os.sep)
+            collection_ns = rel[0] if len(rel) > 1 else "legacy"
+
+        collections_seen.add(collection_name)
+        knowledge_base["metadata"]["sources"][collection_name] = (
+            "https://docs.ansible.com/ansible/latest/collections/"
+            f"{collection_name.replace('.', '/')}/"
+        )
+
+        cleaned_params = [clean_parameter(p) for p in data.get("parameters", [])]
+        module_key = f"{collection_ns}::{slug}"
+
+        knowledge_base["modules"][module_key] = {
+            "module": data.get("module", ""),
+            "slug": slug,
+            "collection": collection_name,
+            "collection_ns": collection_ns,
+            "category": get_category(slug, collection_name, data.get("module", "")),
+            "description": clean_description(data.get("description", "")),
             "required_params": get_required_params(cleaned_params),
-            "parameters"     : cleaned_params,
-            "examples"       : data.get("examples", []),
-            "return_values"  : data.get("return_values", []),
-            "task_keywords"  : TASK_KEYWORDS.get(slug, []),
-            "source_url"     : data.get("source_url", ""),
+            "parameters": cleaned_params,
+            "examples": data.get("examples", []),
+            "return_values": data.get("return_values", []),
+            "task_keywords": TASK_KEYWORDS.get(slug, []),
+            "source_url": data.get("source_url", ""),
         }
 
-        knowledge_base["modules"][slug] = module_entry
+        print(f"  [OK]  {collection_name}/{slug}")
 
-        param_count = len(cleaned_params)
-        req_count   = len(module_entry["required_params"])
-        kw_count    = len(module_entry["task_keywords"])
-
-        print(f"  [OK]  {slug}")
-        print(f"         params={param_count}  "
-              f"required={module_entry['required_params']}  "
-              f"keywords={kw_count}")
-
+    knowledge_base["metadata"]["collections"] = sorted(collections_seen)
     knowledge_base["metadata"]["total_modules"] = len(knowledge_base["modules"])
     return knowledge_base
 
 
-# ─────────────────────────────────────────────
-#  MAIN
-# ─────────────────────────────────────────────
-
 def main():
     print("=" * 60)
-    print("  Ansible kubernetes.core — Phase 3 Structurer")
+    print("  Ansible Multi-Collection — Phase 3 Structurer")
     print(f"  Started : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("=" * 60)
 
@@ -263,56 +250,32 @@ def main():
 
     if not os.path.exists(INPUT_DIR):
         print(f"\n[ERROR] '{INPUT_DIR}/' not found.")
-        print("  → Make sure you ran phase2_parser.py first.")
+        print("  -> Make sure you ran phase2_parser.py first.")
         return
 
-    # Build knowledge base
     kb = build_knowledge_base(INPUT_DIR)
 
-    # Save knowledge_base.json
-    with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
-        json.dump(kb, f, indent=2, ensure_ascii=False)
+    manifest = write_manifest(kb, OUTPUT_FILE)
 
-    # Build & save report
     report = {
         "structure_date": datetime.now().isoformat(),
-        "output_file"   : OUTPUT_FILE,
-        "total_modules" : kb["metadata"]["total_modules"],
-        "modules"       : [
-            {
-                "slug"           : slug,
-                "module"         : entry["module"],
-                "category"       : entry["category"],
-                "param_count"    : len(entry["parameters"]),
-                "required_params": entry["required_params"],
-                "example_count"  : len(entry["examples"]),
-                "keyword_count"  : len(entry["task_keywords"]),
-            }
-            for slug, entry in kb["modules"].items()
-        ]
+        "output_file": OUTPUT_FILE,
+        "total_modules": kb["metadata"]["total_modules"],
+        "collections": kb["metadata"]["collections"],
+        "modules_per_collection": manifest.get("modules_per_collection", {}),
     }
 
     with open(REPORT_FILE, "w", encoding="utf-8") as f:
         json.dump(report, f, indent=2, ensure_ascii=False)
 
-    # Summary by category
-    helm_mods = [s for s, e in kb["modules"].items() if e["category"] == "helm"]
-    k8s_mods  = [s for s, e in kb["modules"].items() if e["category"] == "k8s"]
-
-    print(f"""
-{'=' * 60}
-  STRUCTURING COMPLETE
-
-  Total modules : {kb['metadata']['total_modules']}
-  k8s modules   : {len(k8s_mods)}
-  helm modules  : {len(helm_mods)}
-
-  Knowledge base → {OUTPUT_FILE}
-  Report         → {REPORT_FILE}
-
-  Next step      → run phase4_generator.py
-{'=' * 60}
-""")
+    print("\n" + "=" * 60)
+    print("  STRUCTURING COMPLETE")
+    print(f"  Total modules : {kb['metadata']['total_modules']}")
+    print(f"  Collections   : {len(kb['metadata']['collections'])}")
+    print(f"  Manifest       -> {OUTPUT_FILE}")
+    print(f"  Report         -> {REPORT_FILE}")
+    print("  Next step      -> run rag/indexer.py --build --reset")
+    print("=" * 60)
 
 
 if __name__ == "__main__":

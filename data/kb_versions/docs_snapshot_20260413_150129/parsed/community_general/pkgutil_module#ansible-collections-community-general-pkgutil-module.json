@@ -1,0 +1,74 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.pkgutil",
+  "slug": "pkgutil_module#ansible-collections-community-general-pkgutil-module",
+  "description": "This module installs, updates and removes packages from the OpenCSW project for Solaris.",
+  "parameters": [
+    {
+      "name": "force",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "To allow the update process to downgrade packages to match what is present in the repository, set this to true. This is useful for rolling back to stable from testing, or similar operations. Choices: false ← (default) true"
+    },
+    {
+      "name": "name",
+      "aliases": [
+        "pkg"
+      ],
+      "type": "list",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the package. When using state=latest, this can be '*', which updates all installed packages managed by pkgutil."
+    },
+    {
+      "name": "site",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The repository path to install the package from. Its global definition is in /etc/opt/csw/pkgutil.conf."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"installed\"",
+        "\"latest\"",
+        "\"present\"",
+        "\"removed\""
+      ],
+      "description": "Whether to install (present/installed), or remove (absent/removed) packages. The upgrade (latest) operation updates/installs the packages to the latest version available. Choices: \"absent\" \"installed\" \"latest\" \"present\" \"removed\""
+    },
+    {
+      "name": "update_catalog",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If you always want to refresh your catalog from the mirror, even when it is not stale, set this to true. Choices: false ← (default) true"
+    }
+  ],
+  "examples": [
+    "- name: Install a package\n  community.general.pkgutil:\n    name: CSWcommon\n    state: present\n\n- name: Install a package from a specific repository\n  community.general.pkgutil:\n    name: CSWnrpe\n    site: ftp://myinternal.repo/opencsw/kiel\n    state: latest\n\n- name: Remove a package\n  community.general.pkgutil:\n    name: CSWtop\n    state: absent\n\n- name: Install several packages\n  community.general.pkgutil:\n    name:\n      - CSWsudo\n      - CSWtop\n    state: present\n\n- name: Update all packages\n  community.general.pkgutil:\n    name: '*'\n    state: latest\n\n- name: Update all packages and force versions to match latest in catalog\n  community.general.pkgutil:\n    name: '*'\n    state: latest\n    force: true"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/pkgutil_module#ansible-collections-community-general-pkgutil-module.html",
+  "parsed_at": "2026-04-11T13:53:23.854347"
+}

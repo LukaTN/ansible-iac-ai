@@ -1,0 +1,651 @@
+{
+  "collection_ns": "azure_azcollection",
+  "collection": "azure.azcollection",
+  "module": "azure.azcollection.azure_rm_containerinstance",
+  "slug": "azure_rm_containerinstance_module#ansible-collections-azure-azcollection-azure-rm-containerinstance-module",
+  "description": "Create, update and delete an Azure Container Instance.",
+  "parameters": [
+    {
+      "name": "acr_identity",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The Identity to use for access to the registry server."
+    },
+    {
+      "name": "ad_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory username. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "adfs_authority_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure AD authority url. Use when authenticating with Username/password, and has your own ADFS authority."
+    },
+    {
+      "name": "api_profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "Selects an API profile to use when communicating with Azure services. Default value of latest is appropriate for public clouds; future values will allow use with Azure Stack. Default: \"latest\""
+    },
+    {
+      "name": "append_tags",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Use to control if tags field is canonical or just appends to existing tags. When canonical, any tags not found in the tags parameter will be removed from the object’s metadata. Choices: false true ← (default)"
+    },
+    {
+      "name": "auth_source",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "az",
+      "choices": [
+        "\"auto\" ← (default)",
+        "\"cli\"",
+        "\"credential_file\"",
+        "\"env\"",
+        "\"msi\""
+      ],
+      "description": "Controls the source of the credentials to use for authentication. Can also be set via the ANSIBLE_AZURE_AUTH_SOURCE environment variable. When set to auto (the default) the precedence is module parameters -> env -> credential_file -> cli. When set to env, the credentials will be read from the environment variables When set to credential_file, it will read the profile from ~/.azure/credentials. When set to cli, the credentials will be sources from the Azure CLI profile. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if more than one is present otherwise the default az cli subscription is used. When set to msi, the host machine must be an azure resource with an enabled MSI extension. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if the resource is granted access to more than one subscription, otherwise the first subscription is chosen. The msi was added in Ansible 2.6. Choices: \"auto\" ← (default) \"cli\" \"credential_file\" \"env\" \"msi\""
+    },
+    {
+      "name": "cert_validation_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ignore\"",
+        "\"validate\""
+      ],
+      "description": "Controls the certificate validation behavior for Azure endpoints. By default, all modules will validate the server certificate, but when an HTTPS proxy is in use, or against Azure Stack, it may be necessary to disable this behavior by passing ignore. Can also be set via credential file profile or the AZURE_CERT_VALIDATION environment variable. Choices: \"ignore\" \"validate\""
+    },
+    {
+      "name": "client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client ID. Use when authenticating with a Service Principal or Managed Identity (msi). Can also be set via the AZURE_CLIENT_ID environment variable."
+    },
+    {
+      "name": "cloud_environment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "AzureCloud",
+      "choices": [],
+      "description": "For cloud environments other than the US public cloud, the environment name (as defined by Azure Python SDK, eg, AzureChinaCloud, AzureUSGovernment), or a metadata discovery endpoint URL (required for Azure Stack). Can also be set via credential file profile or the AZURE_CLOUD_ENVIRONMENT environment variable. Default: \"AzureCloud\""
+    },
+    {
+      "name": "containers",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of containers. Required when creation."
+    },
+    {
+      "name": "commands",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of commands to execute within the container instance in exec form. When updating existing container all existing commands will be replaced by new ones."
+    },
+    {
+      "name": "cpu",
+      "aliases": [],
+      "type": "float",
+      "required": false,
+      "default": "1.0",
+      "choices": [],
+      "description": "The required number of CPU cores of the containers. Default: 1.0"
+    },
+    {
+      "name": "environment_variables",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of container environment variables. When updating existing container all existing variables will be replaced by new ones."
+    },
+    {
+      "name": "is_secure",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Is variable secure. Choices: false true"
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Environment variable name."
+    },
+    {
+      "name": "value",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Environment variable value."
+    },
+    {
+      "name": "image",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The container image name."
+    },
+    {
+      "name": "memory",
+      "aliases": [],
+      "type": "float",
+      "required": false,
+      "default": "1.5",
+      "choices": [],
+      "description": "The required memory of the containers in GB. Default: 1.5"
+    },
+    {
+      "name": "ports",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of ports exposed within the container group."
+    },
+    {
+      "name": "volume_mounts",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The volume mounts for the container instance"
+    },
+    {
+      "name": "mount_path",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The path within the container where the volume should be mounted"
+    },
+    {
+      "name": "read_only",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "The flag indicating whether the volume mount is read-only Choices: false true"
+    },
+    {
+      "name": "disable_instance_discovery",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Determines whether or not instance discovery is performed when attempting to authenticate. Setting this to true will completely disable both instance discovery and authority validation. This functionality is intended for use in scenarios where the metadata endpoint cannot be reached such as in private clouds or Azure Stack. The process of instance discovery entails retrieving authority metadata from https://login.microsoft.com/ to validate the authority. By setting this to **True**, the validation of the authority is disabled. As a result, it is crucial to ensure that the configured authority host is valid and trustworthy. Set via credential file profile or the AZURE_DISABLE_INSTANCE_DISCOVERY environment variable. Choices: false ← (default) true"
+    },
+    {
+      "name": "dns_name_label",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The Dns name label for the IP."
+    },
+    {
+      "name": "force_update",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Force update of existing container instance. Any update will result in deletion and recreation of existing containers. Choices: false ← (default) true"
+    },
+    {
+      "name": "identity",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Identity for the Server."
+    },
+    {
+      "name": "type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "None",
+      "choices": [
+        "\"SystemAssigned\"",
+        "\"SystemAssigned, UserAssigned\"",
+        "\"UserAssigned\""
+      ],
+      "description": "Type of the managed identity Choices: \"SystemAssigned\" \"SystemAssigned, UserAssigned\" \"UserAssigned\" Default: \"None\""
+    },
+    {
+      "name": "user_assigned_identities",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "User Assigned Managed Identities and its options Default: {}"
+    },
+    {
+      "name": "id",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "List of the user assigned identities IDs associated to the VM Default: []"
+    },
+    {
+      "name": "ip_address",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "is",
+      "choices": [
+        "\"public\"",
+        "\"none\" ← (default)",
+        "\"private\""
+      ],
+      "description": "The IP address type of the container group. Default is none and creating an instance without public IP. Choices: \"public\" \"none\" ← (default) \"private\""
+    },
+    {
+      "name": "location",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Valid azure location. Defaults to location of the resource group."
+    },
+    {
+      "name": "log_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "log_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "os_type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"linux\" ← (default)",
+        "\"windows\"",
+        "\"Linux\"",
+        "\"Windows\""
+      ],
+      "description": "The OS type of containers. Choices: \"linux\" ← (default) \"windows\" \"Linux\" \"Windows\""
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory user password. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security profile found in ~/.azure/credentials file."
+    },
+    {
+      "name": "registry_login_server",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The container image registry login server."
+    },
+    {
+      "name": "registry_password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The password to log in container image registry server."
+    },
+    {
+      "name": "registry_username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The username to log in container image registry server."
+    },
+    {
+      "name": "resource_group",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of resource group."
+    },
+    {
+      "name": "restart_policy",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"always\"",
+        "\"on_failure\"",
+        "\"never\""
+      ],
+      "description": "Restart policy for all containers within the container group. Choices: \"always\" \"on_failure\" \"never\""
+    },
+    {
+      "name": "secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client secret. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)"
+      ],
+      "description": "Assert the state of the container instance. Use present to create or update an container instance and absent to delete it. Choices: \"absent\" \"present\" ← (default)"
+    },
+    {
+      "name": "subnet_ids",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The subnet resource IDs for a container group. Multiple subnets are not yet supported. Only 1 subnet can be used."
+    },
+    {
+      "name": "subscription_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Your Azure subscription Id."
+    },
+    {
+      "name": "tags",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Dictionary of string:string pairs to assign as metadata to the object. Metadata tags on the object will be updated with any provided values. To remove tags set append_tags option to false. Currently, Azure DNS zones and Traffic Manager services also don’t allow the use of spaces in the tag. Azure Front Door doesn’t support the use of Azure Automation and Azure CDN only support 15 tags on resources."
+    },
+    {
+      "name": "tenant",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure tenant ID. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "thumbprint",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The thumbprint of the private key specified in x509_certificate_path. Use when authenticating with a Service Principal. Required if x509_certificate_path is defined."
+    },
+    {
+      "name": "volumes",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of Volumes that can be mounted by containers in this container group."
+    },
+    {
+      "name": "azure_file",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The Azure File volume"
+    },
+    {
+      "name": "share_name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the Azure File share to be mounted as a volume"
+    },
+    {
+      "name": "storage_account_key",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The storage account access key used to access the Azure File share"
+    },
+    {
+      "name": "storage_account_name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the storage account that contains the Azure File share"
+    },
+    {
+      "name": "empty_dir",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The empty directory volume"
+    },
+    {
+      "name": "git_repo",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The git repo volume"
+    },
+    {
+      "name": "directory",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Target directory name"
+    },
+    {
+      "name": "repository",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Repository URL"
+    },
+    {
+      "name": "revision",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Commit hash for the specified revision"
+    },
+    {
+      "name": "x509_certificate_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the X509 certificate used to create the service principal in PEM format. The certificate must be appended to the private key. Use when authenticating with a Service Principal."
+    }
+  ],
+  "examples": [
+    "- name: Create sample container group\n  azure_rm_containerinstance:\n    resource_group: myResourceGroup\n    name: myContainerInstanceGroup\n    os_type: linux\n    ip_address: public\n    containers:\n      - name: myContainer1\n        image: httpd\n        memory: 1.5\n        ports:\n          - 80\n          - 81\n\n- name: Create sample container group with azure file share volume\n  azure_rm_containerinstance:\n    resource_group: myResourceGroup\n    name: myContainerInstanceGroupz\n    os_type: linux\n    ip_address: public\n    containers:\n      - name: mycontainer1\n        image: httpd\n        memory: 1\n        volume_mounts:\n          - name: filesharevolume\n            mount_path: \"/data/files\"\n        ports:\n          - 80\n          - 81\n    volumes:\n      - name: filesharevolume\n        azure_file:\n          storage_account_name: mystorageaccount\n          share_name: acishare\n          storage_account_key: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n- name: Create sample container group with git repo volume\n  azure_rm_containerinstance:\n    resource_group: myResourceGroup\n    name: myContainerInstanceGroup\n    os_type: linux\n    ip_address: public\n    containers:\n      - name: mycontainer1\n        image: httpd\n        memory: 1\n        volume_mounts:\n          - name: myvolume1\n            mount_path: \"/mnt/test\"\n        ports:\n          - 80\n          - 81\n    volumes:\n      - name: myvolume1\n        git_repo:\n          repository: \"https://github.com/Azure-Samples/aci-helloworld.git\"\n\n- name: Create sample container instance with subnet\n  azure_rm_containerinstance:\n    resource_group: myResourceGroup\n    name: myContainerInstanceGroup\n    os_type: linux\n    ip_address: private\n    location: eastus\n    subnet_ids:\n      - \"{{ subnet_id }}\"\n    ports:\n      - 80\n    containers:\n      - name: mycontainer1\n        image: httpd\n        memory: 1.5\n        ports:\n          - 80\n          - 81"
+  ],
+  "return_values": [
+    {
+      "name": "containers",
+      "type": "list",
+      "description": "The containers within the container group. Returned: always Sample: [{\"commands\": null, \"cpu\": 1.0, \"environment_variables\": null, \"image\": \"httpd\", \"memory\": 1.0, \"name\": \"mycontainer1\", \"ports\": [80, 81], \"volume_mounts\": [{\"mount_path\": \"/data/files\", \"name\": \"filesharevolume\", \"read_only\": false}]}]",
+      "returned": "always"
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "description": "Resource ID. Returned: always Sample: \"/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/myResourceGroup/providers/Microsoft.ContainerInstance/containerGroups/aci1b6dd89\"",
+      "returned": "always"
+    },
+    {
+      "name": "ip_address",
+      "type": "string",
+      "description": "Public IP Address of created container group. Returned: if address is public Sample: \"175.12.233.11\"",
+      "returned": "if"
+    },
+    {
+      "name": "provisioning_state",
+      "type": "string",
+      "description": "Provisioning state of the container. Returned: always Sample: \"Creating\"",
+      "returned": "always"
+    },
+    {
+      "name": "volumes",
+      "type": "list",
+      "description": "The list of volumes that mounted by containers in container group Returned: if volumes specified",
+      "returned": "if"
+    },
+    {
+      "name": "azure_file",
+      "type": "dictionary",
+      "description": "Azure file share volume details Returned: If Azure file share type of volume requested Sample: {\"read_only\": null, \"share_name\": \"acishare\", \"storage_account_key\": \"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\", \"storage_account_name\": \"mystorageaccount\"}",
+      "returned": "If"
+    },
+    {
+      "name": "empty_dir",
+      "type": "dictionary",
+      "description": "Empty directory volume details Returned: If Empty directory type of volume requested Sample: {}",
+      "returned": "If"
+    },
+    {
+      "name": "git_repo",
+      "type": "dictionary",
+      "description": "Git Repo volume details Returned: If Git repo type of volume requested Sample: {\"directory\": null, \"repository\": \"https://github.com/Azure-Samples/aci-helloworld.git\", \"revision\": null}",
+      "returned": "If"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "The name of the Volume Returned: always Sample: \"filesharevolume\"",
+      "returned": "always"
+    },
+    {
+      "name": "secret",
+      "type": "dictionary",
+      "description": "Secret volume details Returned: If Secret type of volume requested Sample: {}",
+      "returned": "If"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_containerinstance_module#ansible-collections-azure-azcollection-azure-rm-containerinstance-module.html",
+  "parsed_at": "2026-04-11T13:52:56.717956"
+}

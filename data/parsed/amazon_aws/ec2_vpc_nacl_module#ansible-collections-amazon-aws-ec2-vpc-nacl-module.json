@@ -1,0 +1,221 @@
+{
+  "collection_ns": "amazon_aws",
+  "collection": "amazon.aws",
+  "module": "amazon.aws.ec2_vpc_nacl",
+  "slug": "ec2_vpc_nacl_module#ansible-collections-amazon-aws-ec2-vpc-nacl-module",
+  "description": "Read the AWS documentation for Network ACLS https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_ACLs.html.",
+  "parameters": [
+    {
+      "name": "access_key",
+      "aliases": [
+        "aws_access_key_id",
+        "aws_access_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS access key ID. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY environment variables may also be used in decreasing order of preference. The aws_access_key and profile options are mutually exclusive. The aws_access_key_id alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "aws_ca_bundle",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The location of a CA Bundle to use when validating SSL certificates. The AWS_CA_BUNDLE environment variable may also be used."
+    },
+    {
+      "name": "aws_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary to modify the botocore configuration. Parameters can be found in the AWS documentation https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html#botocore.config.Config."
+    },
+    {
+      "name": "debug_botocore_endpoint_logs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use a botocore.endpoint logger to parse the unique (rather than total) \"resource:action\" API calls made during a task, outputing the set to the resource_actions key in the task results. Use the aws_resource_action callback to output to total list made during a playbook. The ANSIBLE_DEBUG_BOTOCORE_LOGS environment variable may also be used. Choices: false ← (default) true"
+    },
+    {
+      "name": "egress",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "A list of rules for outgoing traffic. Each rule must be specified as a list. Each rule may contain the rule number (integer 1-32766), protocol (one of [‘tcp’, ‘udp’, ‘icmp’, ‘ipv6-icmp’, ‘-1’, ‘all’]), the rule action (‘allow’ or ‘deny’) the CIDR of the IPv4 or IPv6 network range to allow or deny, the ICMP type (-1 means all types), the ICMP code (-1 means all codes), the last port in the range for TCP or UDP protocols, and the first port in the range for TCP or UDP protocols. See examples. Default: []"
+    },
+    {
+      "name": "endpoint_url",
+      "aliases": [
+        "aws_endpoint_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "AWS",
+      "choices": [],
+      "description": "URL to connect to instead of the default AWS endpoints. While this can be used to connection to other AWS-compatible services the amazon.aws and community.aws collections are only tested against AWS. The AWS_URL environment variable may also be used."
+    },
+    {
+      "name": "ingress",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "List of rules for incoming traffic. Each rule must be specified as a list. Each rule may contain the rule number (integer 1-32766), protocol (one of [‘tcp’, ‘udp’, ‘icmp’, ‘ipv6-icmp’, ‘-1’, ‘all’]), the rule action (‘allow’ or ‘deny’) the CIDR of the IPv4 or IPv6 network range to allow or deny, the ICMP type (-1 means all types), the ICMP code (-1 means all codes), the last port in the range for TCP or UDP protocols, and the first port in the range for TCP or UDP protocols. See examples. Default: []"
+    },
+    {
+      "name": "nacl_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "NACL id identifying a network ACL. One and only one of the name or nacl_id is required. Mutually exclusive with name."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Tagged name identifying a network ACL. One and only one of the name or nacl_id is required. Mutually exclusive with nacl_id."
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "aws_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A named AWS profile to use for authentication. See the AWS documentation for more information about named profiles https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html. The AWS_PROFILE environment variable may also be used. The profile option is mutually exclusive with the aws_access_key, aws_secret_key and session_token options."
+    },
+    {
+      "name": "purge_tags",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If purge_tags=true and tags is set, existing tags will be purged from the resource to match exactly what is defined by tags parameter. If the tags parameter is not set then tags will not be modified, even if purge_tags=True. Tag keys beginning with aws: are reserved by Amazon and can not be modified. As such they will be ignored for the purposes of the purge_tags parameter. See the Amazon documentation for more information https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html#tag-conventions. Choices: false true ← (default)"
+    },
+    {
+      "name": "region",
+      "aliases": [
+        "aws_region"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The AWS region to use. For global services such as IAM, Route53 and CloudFront, region is ignored. The AWS_REGION environment variable may also be used. See the Amazon AWS documentation for more information http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region."
+    },
+    {
+      "name": "secret_key",
+      "aliases": [
+        "aws_secret_access_key",
+        "aws_secret_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS secret access key. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SECRET_ACCESS_KEY or AWS_SECRET_KEY environment variables may also be used in decreasing order of preference. The secret_key and profile options are mutually exclusive. The aws_secret_access_key alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "session_token",
+      "aliases": [
+        "aws_session_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS STS session token for use with temporary credentials. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SESSION_TOKEN environment variable may also be used. The session_token and profile options are mutually exclusive."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "NACL.",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Creates or modifies an existing NACL. Deletes a NACL and reassociates subnets to the default NACL. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "subnets",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "The list of subnets that should be associated with the network ACL. Must be specified as a list Each subnet can be specified as subnet ID, or its tagged name. Default: []"
+    },
+    {
+      "name": "tags",
+      "aliases": [
+        "resource_tags"
+      ],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary representing the tags to be applied to the resource. If the tags parameter is not set then tags will not be modified."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to false, SSL certificates will not be validated for communication with the AWS APIs. Setting validate_certs=false is strongly discouraged, as an alternative, consider setting aws_ca_bundle instead. Choices: false true ← (default)"
+    },
+    {
+      "name": "vpc_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "VPC id of the requesting VPC. Required when state present."
+    }
+  ],
+  "examples": [
+    "# Complete example to create and delete a network ACL\n# that allows SSH, HTTP and ICMP in, and all traffic out.\n- name: \"Create and associate production DMZ network ACL with DMZ subnets\"\n  amazon.aws.ec2_vpc_nacl:\n    vpc_id: vpc-12345678\n    name: prod-dmz-nacl\n    region: ap-southeast-2\n    subnets: ['prod-dmz-1', 'prod-dmz-2']\n    tags:\n      CostCode: CC1234\n      Project: phoenix\n      Description: production DMZ\n    ingress:\n      # rule no, protocol, allow/deny, cidr, icmp_type, icmp_code,\n      #                                             port from, port to\n      - [100, 'tcp', 'allow', '0.0.0.0/0', null, null, 22, 22]\n      - [200, 'tcp', 'allow', '0.0.0.0/0', null, null, 80, 80]\n      - [205, 'tcp', 'allow', '::/0', null, null, 80, 80]\n      - [300, 'icmp', 'allow', '0.0.0.0/0', 0, 8]\n      - [305, 'ipv6-icmp', 'allow', '::/0', 0, 8]\n    egress:\n      - [100, 'all', 'allow', '0.0.0.0/0', null, null, null, null]\n      - [105, 'all', 'allow', '::/0', null, null, null, null]\n    state: 'present'\n\n- name: \"Remove the ingress and egress rules - defaults to deny all\"\n  amazon.aws.ec2_vpc_nacl:\n    vpc_id: vpc-12345678\n    name: prod-dmz-nacl\n    region: ap-southeast-2\n    subnets:\n      - prod-dmz-1\n      - prod-dmz-2\n    tags:\n      CostCode: CC1234\n      Project: phoenix\n      Description: production DMZ\n    state: present\n\n- name: \"Remove the NACL subnet associations and tags\"\n  amazon.aws.ec2_vpc_nacl:\n    vpc_id: 'vpc-12345678'\n    name: prod-dmz-nacl\n    region: ap-southeast-2\n    state: present\n\n- name: \"Delete nacl and subnet associations\"\n  amazon.aws.ec2_vpc_nacl:\n    vpc_id: vpc-12345678\n    name: prod-dmz-nacl\n    state: absent\n\n- name: \"Delete nacl by its id\"\n  amazon.aws.ec2_vpc_nacl:\n    nacl_id: acl-33b4ee5b\n    state: absent"
+  ],
+  "return_values": [
+    {
+      "name": "nacl_id",
+      "type": "string",
+      "description": "The id of the NACL (when creating or updating an ACL). Returned: success Sample: \"acl-123456789abcdef01\"",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_vpc_nacl_module.html",
+  "parsed_at": "2026-04-13T16:29:21.464326"
+}

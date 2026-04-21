@@ -1,0 +1,247 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.hwc_vpc_port",
+  "slug": "hwc_vpc_port_module#ansible-collections-community-general-hwc-vpc-port-module",
+  "description": "VPC port management.",
+  "parameters": [
+    {
+      "name": "admin_state_up",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Specifies the administrative state of the port. Choices: false true"
+    },
+    {
+      "name": "allowed_address_pairs",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies a set of zero or more allowed address pairs."
+    },
+    {
+      "name": "ip_address",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies the IP address. It cannot set it to 0.0.0.0. Configure an independent security group for the port if a large CIDR block (subnet mask less than 24) is configured for parameter allowed_address_pairs."
+    },
+    {
+      "name": "mac_address",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies the MAC address."
+    },
+    {
+      "name": "domain",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the Domain to scope to (Identity v3). Currently only domain names are supported, and not domain IDs."
+    },
+    {
+      "name": "extra_dhcp_opts",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies the extended option of DHCP."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies the option name."
+    },
+    {
+      "name": "value",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies the option value."
+    },
+    {
+      "name": "id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The ID of resource to be managed."
+    },
+    {
+      "name": "identity_endpoint",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The Identity authentication URL."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The password to login with."
+    },
+    {
+      "name": "project",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the Tenant (Identity v2) or Project (Identity v3). Currently only project names are supported, and not project IDs."
+    },
+    {
+      "name": "region",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The region to which the project belongs."
+    },
+    {
+      "name": "security_groups",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies the ID of the security group."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Whether the given object should exist in Huawei Cloud. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "subnet_id",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Specifies the ID of the subnet to which the port belongs."
+    },
+    {
+      "name": "timeouts",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "The timeouts for each operations. Default: {}"
+    },
+    {
+      "name": "create",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "15m",
+      "choices": [],
+      "description": "The timeouts for create operation. Default: \"15m\""
+    },
+    {
+      "name": "user",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The user name to login with. Currently only user names are supported, and not user IDs."
+    }
+  ],
+  "examples": [
+    "# create a port\n- name: Create vpc\n  hwc_network_vpc:\n    cidr: \"192.168.100.0/24\"\n    name: \"ansible_network_vpc_test\"\n  register: vpc\n- name: Create subnet\n  hwc_vpc_subnet:\n    gateway_ip: \"192.168.100.32\"\n    name: \"ansible_network_subnet_test\"\n    dhcp_enable: true\n    vpc_id: \"{{ vpc.id }}\"\n    cidr: \"192.168.100.0/26\"\n  register: subnet\n- name: Create a port\n  community.general.hwc_vpc_port:\n    subnet_id: \"{{ subnet.id }}\"\n    ip_address: \"192.168.100.33\""
+  ],
+  "return_values": [
+    {
+      "name": "admin_state_up",
+      "type": "boolean",
+      "description": "Specifies the administrative state of the port. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "allowed_address_pairs",
+      "type": "list",
+      "description": "Specifies a set of zero or more allowed address pairs. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "ip_address",
+      "type": "string",
+      "description": "Specifies the IP address. It cannot set it to 0.0.0.0. Configure an independent security group for the port if a large CIDR block (subnet mask less than 24) is configured for parameter allowed_address_pairs. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "mac_address",
+      "type": "string",
+      "description": "Specifies the MAC address. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "extra_dhcp_opts",
+      "type": "list",
+      "description": "Specifies the extended option of DHCP. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "Specifies the option name. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "description": "Specifies the option value. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "security_groups",
+      "type": "list",
+      "description": "Specifies the ID of the security group. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "subnet_id",
+      "type": "string",
+      "description": "Specifies the ID of the subnet to which the port belongs. Returned: success",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/hwc_vpc_port_module#ansible-collections-community-general-hwc-vpc-port-module.html",
+  "parsed_at": "2026-04-11T13:53:15.029453"
+}

@@ -1,0 +1,267 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.gitlab_runner",
+  "slug": "gitlab_runner_module#ansible-collections-community-general-gitlab-runner-module",
+  "description": "Register, update and delete runners on GitLab Server side with the GitLab API.",
+  "parameters": [
+    {
+      "name": "access_level",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "was",
+      "choices": [
+        "\"not_protected\"",
+        "\"ref_protected\""
+      ],
+      "description": "Determines if a runner can pick up jobs only from protected branches. If access_level_on_creation is not explicitly set to true, this option is ignored on registration and is only applied on updates. If set to not_protected, runner can pick up jobs from both protected and unprotected branches. If set to ref_protected, runner can pick up jobs only from protected branches. Before community.general 8.0.0 the default was ref_protected. This was changed to no default in community.general 8.0.0. If this option is not specified explicitly, GitLab uses not_protected on creation, and the value set is not changed on any updates. Choices: \"not_protected\" \"ref_protected\""
+    },
+    {
+      "name": "access_level_on_creation",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "access",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether the runner should be registered with an access level or not. If set to true, the value of access_level is used for runner registration. If set to false, GitLab registers the runner with the default access level. The default of this option changed to true in community.general 7.0.0. Before, it was false. Choices: false true ← (default)"
+    },
+    {
+      "name": "active",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Define if the runners is immediately active after creation. Mutually exclusive with paused. Choices: false true ← (default)"
+    },
+    {
+      "name": "api_job_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "GitLab CI job token for logging in."
+    },
+    {
+      "name": "api_oauth_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "GitLab OAuth token for logging in."
+    },
+    {
+      "name": "api_password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The password to use for authentication against the API."
+    },
+    {
+      "name": "api_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "GitLab access token with API permissions."
+    },
+    {
+      "name": "api_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The resolvable endpoint for the API."
+    },
+    {
+      "name": "api_username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The username to use for authentication against the API."
+    },
+    {
+      "name": "ca_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The CA certificates bundle to use to verify GitLab server certificate."
+    },
+    {
+      "name": "description",
+      "aliases": [
+        "name"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The unique name of the runner."
+    },
+    {
+      "name": "group",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "ID or full path of the group in the form group/subgroup. Mutually exclusive with owned and project. Must be group’s numeric ID if registration_token is not set and state=present."
+    },
+    {
+      "name": "locked",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Determines if the runner is locked or not. Choices: false ← (default) true"
+    },
+    {
+      "name": "maximum_timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "3600",
+      "choices": [],
+      "description": "The maximum time that a runner has to complete a specific job. Use 0 to disable the timeout. This is available since community.general 12.1.0. Default: 3600"
+    },
+    {
+      "name": "owned",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Searches only runners available to the user when searching for existing, when false admin token required. Mutually exclusive with project since community.general 4.5.0. Mutually exclusive with group. Choices: false ← (default) true"
+    },
+    {
+      "name": "paused",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Define if the runners is active or paused after creation. Mutually exclusive with active. Choices: false ← (default) true"
+    },
+    {
+      "name": "project",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "ID or full path of the project in the form of group/name. Mutually exclusive with owned since community.general 4.5.0. Mutually exclusive with group. Must be project’s numeric ID if registration_token is not set and state=present."
+    },
+    {
+      "name": "registration_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The registration token is used to register new runners before GitLab 16.0. Required if state=present for GitLab < 16.0. If set, the runner is created using the old runner creation workflow. If not set, the runner is created using the new runner creation workflow, introduced in GitLab 16.0. If not set, requires python-gitlab >= 4.0.0."
+    },
+    {
+      "name": "run_untagged",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Run untagged jobs or not. Choices: false true ← (default)"
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Make sure that the runner with the same name exists with the same configuration or delete the runner with the same name. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "tag_list",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "The tags that apply to the runner. Default: []"
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether or not to validate SSL certs when supplying a HTTPS endpoint. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Create an instance-level runner\n  community.general.gitlab_runner:\n    api_url: https://gitlab.example.com/\n    api_token: \"{{ access_token }}\"\n    description: Docker Machine t1\n    state: present\n    active: true\n    tag_list: ['docker']\n    run_untagged: false\n    locked: false\n  register: runner # Register module output to run C(gitlab-runner register) command in another task\n\n- name: Create a group-level runner\n  community.general.gitlab_runner:\n    api_url: https://gitlab.example.com/\n    api_token: \"{{ access_token }}\"\n    description: Docker Machine t1\n    state: present\n    active: true\n    tag_list: ['docker']\n    run_untagged: false\n    locked: false\n    group: top-level-group/subgroup\n  register: runner # Register module output to run C(gitlab-runner register) command in another task\n\n- name: Create a project-level runner\n  community.general.gitlab_runner:\n    api_url: https://gitlab.example.com/\n    api_token: \"{{ access_token }}\"\n    description: Docker Machine t1\n    state: present\n    active: true\n    tag_list: ['docker']\n    run_untagged: false\n    locked: false\n    project: top-level-group/subgroup/project\n  register: runner # Register module output to run C(gitlab-runner register) command in another task\n\n- name: \"Register instance-level runner with registration token (deprecated)\"\n  community.general.gitlab_runner:\n    api_url: https://gitlab.example.com/\n    api_token: \"{{ access_token }}\"\n    registration_token: 4gfdsg345\n    description: Docker Machine t1\n    state: present\n    active: true\n    tag_list: ['docker']\n    run_untagged: false\n    locked: false\n  register: runner # Register module output to run C(gitlab-runner register) command in another task\n\n- name: \"Delete runner\"\n  community.general.gitlab_runner:\n    api_url: https://gitlab.example.com/\n    api_token: \"{{ access_token }}\"\n    description: Docker Machine t1\n    state: absent\n\n- name: Delete an owned runner as a non-admin\n  community.general.gitlab_runner:\n    api_url: https://gitlab.example.com/\n    api_token: \"{{ access_token }}\"\n    description: Docker Machine t1\n    owned: true\n    state: absent\n\n- name: \"Register a project-level runner with registration token (deprecated)\"\n  community.general.gitlab_runner:\n    api_url: https://gitlab.example.com/\n    api_token: \"{{ access_token }}\"\n    registration_token: 4gfdsg345\n    description: MyProject runner\n    state: present\n    project: mygroup/mysubgroup/myproject\n  register: runner # Register module output to run C(gitlab-runner register) command in another task"
+  ],
+  "return_values": [
+    {
+      "name": "error",
+      "type": "string",
+      "description": "The error message returned by the GitLab API. Returned: failed Sample: \"400: path is already in use\"",
+      "returned": "failed"
+    },
+    {
+      "name": "msg",
+      "type": "string",
+      "description": "Success or failure message. Returned: always Sample: \"Success\"",
+      "returned": "always"
+    },
+    {
+      "name": "result",
+      "type": "dictionary",
+      "description": "JSON-parsed response from the server. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "runner",
+      "type": "dictionary",
+      "description": "API object. Returned: always",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/gitlab_runner_module.html",
+  "parsed_at": "2026-04-13T16:29:46.831645"
+}

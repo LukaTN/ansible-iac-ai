@@ -1,0 +1,160 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.oneandone_private_network",
+  "slug": "oneandone_private_network_module#ansible-collections-community-general-oneandone-private-network-module",
+  "description": "Create, remove, reconfigure, update a private network. This module has a dependency on 1and1 >= 1.0.",
+  "parameters": [
+    {
+      "name": "add_members",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "List of server identifiers (name or id) to be added to the private network. Default: []"
+    },
+    {
+      "name": "api_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Custom API URL. Overrides the ONEANDONE_API_URL environment variable."
+    },
+    {
+      "name": "auth_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Authenticating API token provided by 1&1."
+    },
+    {
+      "name": "datacenter",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"US\"",
+        "\"ES\"",
+        "\"DE\"",
+        "\"GB\""
+      ],
+      "description": "The identifier of the datacenter where the private network is created. Choices: \"US\" \"ES\" \"DE\" \"GB\""
+    },
+    {
+      "name": "description",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Set a description for the network."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Private network name used with present state. Used as identifier (id or name) when used with absent state."
+    },
+    {
+      "name": "network_address",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Set a private network space, for example 192.168.1.0."
+    },
+    {
+      "name": "private_network",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The identifier (id or name) of the network used with update state."
+    },
+    {
+      "name": "remove_members",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "List of server identifiers (name or id) to be removed from the private network. Default: []"
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\"",
+        "\"update\""
+      ],
+      "description": "Define a network’s state to create, remove, or update. Choices: \"present\" ← (default) \"absent\" \"update\""
+    },
+    {
+      "name": "subnet_mask",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Set the netmask for the private network, for example 255.255.255.0."
+    },
+    {
+      "name": "wait",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Wait for the instance to be in state ‘running’ before returning. Choices: false true ← (default)"
+    },
+    {
+      "name": "wait_interval",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "5",
+      "choices": [],
+      "description": "Defines the number of seconds to wait when using the _wait_for methods. Default: 5"
+    },
+    {
+      "name": "wait_timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "600",
+      "choices": [],
+      "description": "How long before wait gives up, in seconds. Default: 600"
+    }
+  ],
+  "examples": [
+    "- name: Create a private network\n  community.general.oneandone_private_network:\n    auth_token: oneandone_private_api_key\n    name: backup_network\n    description: Testing creation of a private network with ansible\n    network_address: 70.35.193.100\n    subnet_mask: 255.0.0.0\n    datacenter: US\n\n- name: Destroy a private network\n  community.general.oneandone_private_network:\n    auth_token: oneandone_private_api_key\n    state: absent\n    name: backup_network\n\n- name: Modify the private network\n  community.general.oneandone_private_network:\n    auth_token: oneandone_private_api_key\n    state: update\n    private_network: backup_network\n    network_address: 192.168.2.0\n    subnet_mask: 255.255.255.0\n\n- name: Add members to the private network\n  community.general.oneandone_private_network:\n    auth_token: oneandone_private_api_key\n    state: update\n    private_network: backup_network\n    add_members:\n      - server identifier (id or name)\n\n- name: Remove members from the private network\n  community.general.oneandone_private_network:\n    auth_token: oneandone_private_api_key\n    state: update\n    private_network: backup_network\n    remove_members:\n      - server identifier (id or name)"
+  ],
+  "return_values": [
+    {
+      "name": "private_network",
+      "type": "dictionary",
+      "description": "Information about the private network. Returned: always Sample: {\"id\": \"55726DEDA20C99CF6F2AF8F18CAC9963\", \"name\": \"backup_network\"}",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/oneandone_private_network_module#ansible-collections-community-general-oneandone-private-network-module.html",
+  "parsed_at": "2026-04-11T13:53:22.212363"
+}

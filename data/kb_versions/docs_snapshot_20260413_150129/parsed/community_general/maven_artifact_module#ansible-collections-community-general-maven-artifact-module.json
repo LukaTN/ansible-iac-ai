@@ -1,0 +1,323 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.maven_artifact",
+  "slug": "maven_artifact_module#ansible-collections-community-general-maven-artifact-module",
+  "description": "Downloads an artifact from a maven repository given the maven coordinates provided to the module.",
+  "parameters": [
+    {
+      "name": "artifact_id",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The maven artifactId coordinate."
+    },
+    {
+      "name": "attributes",
+      "aliases": [
+        "attr"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The attributes the resulting filesystem object should have. To get supported flags look at the man page for chattr on the target system. This string should contain the attributes in the same order as the one displayed by lsattr. The = operator is assumed as default, otherwise + or - operators need to be included in the string."
+    },
+    {
+      "name": "checksum_alg",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"md5\" ← (default)",
+        "\"sha1\""
+      ],
+      "description": "If md5, checksums use the MD5 algorithm. This is the default. If sha1, checksums use the SHA1 algorithm. This can be used on systems configured to use FIPS-compliant algorithms, since MD5 is blocked on such systems. Choices: \"md5\" ← (default) \"sha1\""
+    },
+    {
+      "name": "classifier",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The maven classifier coordinate. Default: \"\""
+    },
+    {
+      "name": "client_cert",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "PEM formatted certificate chain file to be used for SSL client authentication. This file can also include the key as well, and if the key is included, client_key is not required."
+    },
+    {
+      "name": "client_key",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "PEM formatted file that contains your private key to be used for SSL client authentication. If client_cert contains both the certificate and key, this option is not required."
+    },
+    {
+      "name": "dest",
+      "aliases": [],
+      "type": "path",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The path where the artifact should be written to. If file mode or ownerships are specified and destination path already exists, they affect the downloaded file."
+    },
+    {
+      "name": "directory_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Filesystem permission mode applied recursively to dest when it is a directory."
+    },
+    {
+      "name": "extension",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "jar",
+      "choices": [],
+      "description": "The maven type/extension coordinate. Default: \"jar\""
+    },
+    {
+      "name": "force_basic_auth",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "httplib2, the library used by the URI module only sends authentication information when a webservice responds to an initial request with a 401 status. Since some basic auth services do not properly send a 401, logins fail. This option forces the sending of the Basic authentication header upon initial request. Choices: false ← (default) true"
+    },
+    {
+      "name": "group",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of the group that should own the filesystem object, as would be fed to chown. When left unspecified, it uses the current group of the current user unless you are root, in which case it can preserve the previous ownership."
+    },
+    {
+      "name": "group_id",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The Maven groupId coordinate."
+    },
+    {
+      "name": "headers",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Add custom HTTP headers to a request in hash/dict format."
+    },
+    {
+      "name": "keep_name",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If true, the downloaded artifact’s name is preserved, in other words the version number remains part of it. This option only has effect when dest is a directory and version is set to latest or version_by_spec is defined. Choices: false ← (default) true"
+    },
+    {
+      "name": "mode",
+      "aliases": [],
+      "type": "any",
+      "required": false,
+      "default": "umask",
+      "choices": [],
+      "description": "The permissions the resulting filesystem object should have. For those used to /usr/bin/chmod remember that modes are actually octal numbers. You must give Ansible enough information to parse them correctly. For consistent results, quote octal numbers (for example, '644' or '1777') so Ansible receives a string and can do its own conversion from string into number. Adding a leading zero (for example, 0755) works sometimes, but can fail in loops and some other circumstances. Giving Ansible a number without following either of these rules will end up with a decimal number which will have unexpected results. As of Ansible 1.8, the mode may be specified as a symbolic mode (for example, u+rwx or u=rw,g=r,o=r). If mode is not specified and the destination filesystem object does not exist, the default umask on the system will be used when setting the mode for the newly created filesystem object. If mode is not specified and the destination filesystem object does exist, the mode of the existing filesystem object will be used. Specifying mode is the best way to ensure filesystem objects are created with the correct permissions. See CVE-2020-1736 for further details."
+    },
+    {
+      "name": "owner",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of the user that should own the filesystem object, as would be fed to chown. When left unspecified, it uses the current user unless you are root, in which case it can preserve the previous ownership. Specifying a numeric username will be assumed to be a user ID and not a username. Avoid numeric usernames to avoid this confusion."
+    },
+    {
+      "name": "password",
+      "aliases": [
+        "aws_secret_access_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The password to authenticate with to the Maven Repository. Use AWS secret access key of the repository is hosted on S3."
+    },
+    {
+      "name": "repository_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "https://repo1.maven.org/maven2",
+      "choices": [],
+      "description": "The URL of the Maven Repository to download from. Use s3://... if the repository is hosted on Amazon S3. Use file://... if the repository is local. Default: \"https://repo1.maven.org/maven2\""
+    },
+    {
+      "name": "selevel",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The level part of the SELinux filesystem object context. This is the MLS/MCS attribute, sometimes known as the range. When set to _default, it will use the level portion of the policy if available."
+    },
+    {
+      "name": "serole",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The role part of the SELinux filesystem object context. When set to _default, it will use the role portion of the policy if available."
+    },
+    {
+      "name": "setype",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The type part of the SELinux filesystem object context. When set to _default, it will use the type portion of the policy if available."
+    },
+    {
+      "name": "seuser",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "it",
+      "choices": [],
+      "description": "The user part of the SELinux filesystem object context. By default it uses the system policy, where applicable. When set to _default, it will use the user portion of the policy if available."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "The desired state of the artifact. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "10",
+      "choices": [],
+      "description": "Specifies a timeout in seconds for the connection attempt. Default: 10"
+    },
+    {
+      "name": "unredirected_headers",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "of",
+      "choices": [],
+      "description": "A list of headers that should not be included in the redirection. This headers are sent to the fetch_url function. On ansible-core version 2.12 or later, the default of this option is [Authorization, Cookie]. Useful if the redirection URL does not need to have sensitive headers in the request. Requires ansible-core version 2.12 or later."
+    },
+    {
+      "name": "unsafe_writes",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "this",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Influence when to use atomic operation to prevent data corruption or inconsistent reads from the target filesystem object. By default this module uses atomic operations to prevent data corruption or inconsistent reads from the target filesystem objects, but sometimes systems are configured or just broken in ways that prevent this. One example is docker mounted filesystem objects, which cannot be updated atomically from inside the container and can only be written in an unsafe manner. This option allows Ansible to fall back to unsafe methods of updating filesystem objects when atomic operations fail (however, it doesn’t force Ansible to perform unsafe writes). IMPORTANT! Unsafe writes are subject to race conditions and can lead to data corruption. Choices: false ← (default) true"
+    },
+    {
+      "name": "username",
+      "aliases": [
+        "aws_secret_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The username to authenticate as to the Maven Repository. Use AWS secret key of the repository is hosted on S3."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If false, SSL certificates are not validated. This should only be set to false when no other option exists. Choices: false true ← (default)"
+    },
+    {
+      "name": "verify_checksum",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"never\"",
+        "\"download\" ← (default)",
+        "\"change\"",
+        "\"always\""
+      ],
+      "description": "If never, the MD5/SHA1 checksum is never downloaded and verified. If download, the MD5/SHA1 checksum is downloaded and verified only after artifact download. This is the default. If change, the MD5/SHA1 checksum is downloaded and verified if the destination already exist, to verify if they are identical. This was the behaviour before 2.6. Since it downloads the checksum before (maybe) downloading the artifact, and since some repository software, when acting as a proxy/cache, return a 404 error if the artifact has not been cached yet, it may fail unexpectedly. If you still need it, you should consider using always instead - if you deal with a checksum, it is better to use it to verify integrity after download. always combines download and change. Choices: \"never\" \"download\" ← (default) \"change\" \"always\""
+    },
+    {
+      "name": "version",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The maven version coordinate. Mutually exclusive with version_by_spec."
+    },
+    {
+      "name": "version_by_spec",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The maven dependency version ranges. See supported version ranges on https://cwiki.apache.org/confluence/display/MAVENOLD/Dependency+Mediation+and+Conflict+Resolution. The range type (,1.0],[1.2,) and (,1.1),(1.1,) is not supported. Mutually exclusive with version."
+    }
+  ],
+  "examples": [
+    "- name: Download the latest version of the JUnit framework artifact from Maven Central\n  community.general.maven_artifact:\n    group_id: junit\n    artifact_id: junit\n    dest: /tmp/junit-latest.jar\n\n- name: Download JUnit 4.11 from Maven Central\n  community.general.maven_artifact:\n    group_id: junit\n    artifact_id: junit\n    version: 4.11\n    dest: /tmp/junit-4.11.jar\n\n- name: Download an artifact from a private repository requiring authentication\n  community.general.maven_artifact:\n    group_id: com.company\n    artifact_id: library-name\n    repository_url: 'https://repo.company.com/maven'\n    username: user\n    password: pass\n    dest: /tmp/library-name-latest.jar\n\n- name: Download an artifact from a private repository requiring certificate authentication\n  community.general.maven_artifact:\n    group_id: com.company\n    artifact_id: library-name\n    repository_url: 'https://repo.company.com/maven'\n    client_cert: /path/to/cert.pem\n    client_key: /path/to/key.pem\n    dest: /tmp/library-name-latest.jar\n\n- name: Download a WAR File to the Tomcat webapps directory to be deployed\n  community.general.maven_artifact:\n    group_id: com.company\n    artifact_id: web-app\n    extension: war\n    repository_url: 'https://repo.company.com/maven'\n    dest: /var/lib/tomcat7/webapps/web-app.war\n\n- name: Keep a downloaded artifact's name, i.e. retain the version\n  community.general.maven_artifact:\n    version: latest\n    artifact_id: spring-core\n    group_id: org.springframework\n    dest: /tmp/\n    keep_name: true\n\n- name: Download the latest version of the JUnit framework artifact from Maven local\n  community.general.maven_artifact:\n    group_id: junit\n    artifact_id: junit\n    dest: /tmp/junit-latest.jar\n    repository_url: \"file://{{ lookup('env','HOME') }}/.m2/repository\"\n\n- name: Download the latest version between 3.8 and 4.0 (exclusive) of the JUnit framework artifact from Maven Central\n  community.general.maven_artifact:\n    group_id: junit\n    artifact_id: junit\n    version_by_spec: \"[3.8,4.0)\"\n    dest: /tmp/"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/maven_artifact_module#ansible-collections-community-general-maven-artifact-module.html",
+  "parsed_at": "2026-04-11T13:53:20.408402"
+}

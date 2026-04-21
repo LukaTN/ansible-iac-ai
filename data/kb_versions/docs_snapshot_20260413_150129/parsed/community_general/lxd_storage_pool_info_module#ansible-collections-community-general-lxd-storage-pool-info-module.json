@@ -1,0 +1,146 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.lxd_storage_pool_info",
+  "slug": "lxd_storage_pool_info_module#ansible-collections-community-general-lxd-storage-pool-info-module",
+  "description": "Retrieve information about LXD storage pools.",
+  "parameters": [
+    {
+      "name": "client_cert",
+      "aliases": [
+        "cert_file"
+      ],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The client certificate file path. If not specified, it defaults to $HOME/.config/lxc/client.crt."
+    },
+    {
+      "name": "client_key",
+      "aliases": [
+        "key_file"
+      ],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The client certificate key file path. If not specified, it defaults to $HOME/.config/lxc/client.key."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of a specific storage pool to retrieve information about. If not specified, information about all storage pools are returned."
+    },
+    {
+      "name": "project",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Project of the storage pool. See https://documentation.ubuntu.com/lxd/en/latest/projects/."
+    },
+    {
+      "name": "snap_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "unix:/var/snap/lxd/common/lxd/unix.socket",
+      "choices": [],
+      "description": "The Unix domain socket path when LXD is installed by snap package manager. Default: \"unix:/var/snap/lxd/common/lxd/unix.socket\""
+    },
+    {
+      "name": "trust_password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The client trusted password. You need to set this password on the LXD server before running this module using the following command: lxc config set core.trust_password <some random password> See https://www.stgraber.org/2016/04/18/lxd-api-direct-interaction/. If trust_password is set, this module sends a request for authentication before sending any requests."
+    },
+    {
+      "name": "type",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "Filter storage pools by driver/type (for example dir, zfs, btrfs, lvm, or ceph). If not specified, all storage pool types are returned. Can be a single type or a list of types. Default: []"
+    },
+    {
+      "name": "url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "unix:/var/lib/lxd/unix.socket",
+      "choices": [],
+      "description": "The Unix domain socket path or the https URL for the LXD server. Default: \"unix:/var/lib/lxd/unix.socket\""
+    }
+  ],
+  "examples": [
+    "- name: Get information about all storage pools\n  community.general.lxd_storage_pool_info:\n  register: result\n\n- name: Get information about a specific storage pool\n  community.general.lxd_storage_pool_info:\n    name: default\n  register: result\n\n- name: Get information about all ZFS storage pools\n  community.general.lxd_storage_pool_info:\n    type:\n      - zfs\n      - ceph\n  register: result\n\n- name: Get information about ZFS and BTRFS storage pools\n  community.general.lxd_storage_pool_info:\n    type:\n      - zfs\n      - btrfs\n  register: result\n\n- name: Get storage pool information via HTTPS connection\n  community.general.lxd_storage_pool_info:\n    url: https://127.0.0.1:8443\n    trust_password: mypassword\n    name: default\n  register: result\n\n- name: Get storage pool information for a specific project\n  community.general.lxd_storage_pool_info:\n    project: myproject\n  register: result"
+  ],
+  "return_values": [
+    {
+      "name": "logs",
+      "type": "list",
+      "description": "The logs of requests and responses. Returned: when ansible-playbook is invoked with -vvvv. Sample: [{\"request\": {\"json\": null, \"method\": \"GET\", \"timeout\": null, \"url\": \"/1.0/storage-pools\"}, \"response\": {\"json\": {\"status\": \"Success\", \"type\": \"sync\"}}, \"type\": \"sent request\"}]",
+      "returned": "when"
+    },
+    {
+      "name": "storage_pools",
+      "type": "list",
+      "description": "List of LXD storage pools. Returned: success Sample: [{\"config\": {\"source\": \"/var/lib/lxd/storage-pools/default\"}, \"description\": \"Default storage pool\", \"driver\": \"dir\", \"locations\": [\"none\"], \"name\": \"default\", \"status\": \"Created\", \"used_by\": [\"/1.0/instances/container1\"]}]",
+      "returned": "success"
+    },
+    {
+      "name": "config",
+      "type": "dictionary",
+      "description": "Configuration of the storage pool. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "description": "Description of the storage pool. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "driver",
+      "type": "string",
+      "description": "The storage pool driver/type. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "locations",
+      "type": "list",
+      "description": "Cluster member locations for the pool. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "The name of the storage pool. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "description": "Current status of the storage pool. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "used_by",
+      "type": "list",
+      "description": "List of resources using this storage pool. Returned: success",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/lxd_storage_pool_info_module#ansible-collections-community-general-lxd-storage-pool-info-module.html",
+  "parsed_at": "2026-04-11T13:53:19.842551"
+}

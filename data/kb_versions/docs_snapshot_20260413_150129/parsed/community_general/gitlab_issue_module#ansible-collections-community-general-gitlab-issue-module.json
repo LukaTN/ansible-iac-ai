@@ -1,0 +1,212 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.gitlab_issue",
+  "slug": "gitlab_issue_module#ansible-collections-community-general-gitlab-issue-module",
+  "description": "Creates an issue if it does not exist.",
+  "parameters": [
+    {
+      "name": "api_job_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "GitLab CI job token for logging in."
+    },
+    {
+      "name": "api_oauth_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "GitLab OAuth token for logging in."
+    },
+    {
+      "name": "api_password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The password to use for authentication against the API."
+    },
+    {
+      "name": "api_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "GitLab access token with API permissions."
+    },
+    {
+      "name": "api_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The resolvable endpoint for the API."
+    },
+    {
+      "name": "api_username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The username to use for authentication against the API."
+    },
+    {
+      "name": "assignee_ids",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A list of assignee usernames omitting @ character. Set to an empty array to unassign all assignees."
+    },
+    {
+      "name": "ca_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The CA certificates bundle to use to verify GitLab server certificate."
+    },
+    {
+      "name": "description",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A description of the issue. Gets overridden by a content of file specified at description_path, if found."
+    },
+    {
+      "name": "description_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A path of file containing issue’s description. Accepts MarkDown formatted files."
+    },
+    {
+      "name": "issue_type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"issue\" ← (default)",
+        "\"incident\"",
+        "\"test_case\""
+      ],
+      "description": "Type of the issue. Choices: \"issue\" ← (default) \"incident\" \"test_case\""
+    },
+    {
+      "name": "labels",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A list of label names. Set to an empty array to remove all labels."
+    },
+    {
+      "name": "milestone_group_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The path or numeric ID of the group hosting desired milestone."
+    },
+    {
+      "name": "milestone_search",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The name of the milestone. Set to empty string to unassign milestone."
+    },
+    {
+      "name": "project",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The path or name of the project."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Create or delete issue. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "state_filter",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"opened\" ← (default)",
+        "\"closed\""
+      ],
+      "description": "Filter specifying state of issues while searching. Choices: \"opened\" ← (default) \"closed\""
+    },
+    {
+      "name": "title",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "A title for the issue. The title is used as a unique identifier to ensure idempotency."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether or not to validate SSL certs when supplying a HTTPS endpoint. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Create Issue\n  community.general.gitlab_issue:\n    api_url: https://gitlab.com\n    api_token: secret_access_token\n    project: \"group1/project1\"\n    title: \"Ansible demo Issue\"\n    description: \"Demo Issue description\"\n    labels:\n      - Ansible\n      - Demo\n    assignee_ids:\n      - testassignee\n    state_filter: \"opened\"\n    state: present\n\n- name: Delete Issue\n  community.general.gitlab_issue:\n    api_url: https://gitlab.com\n    api_token: secret_access_token\n    project: \"group1/project1\"\n    title: \"Ansible demo Issue\"\n    state_filter: \"opened\"\n    state: absent"
+  ],
+  "return_values": [
+    {
+      "name": "issue",
+      "type": "dictionary",
+      "description": "API object. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "msg",
+      "type": "string",
+      "description": "Success or failure message. Returned: always Sample: \"Success\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/gitlab_issue_module#ansible-collections-community-general-gitlab-issue-module.html",
+  "parsed_at": "2026-04-11T13:53:13.900673"
+}

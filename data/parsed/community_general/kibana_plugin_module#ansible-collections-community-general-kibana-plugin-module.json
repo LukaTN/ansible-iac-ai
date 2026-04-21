@@ -1,0 +1,136 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.kibana_plugin",
+  "slug": "kibana_plugin_module#ansible-collections-community-general-kibana-plugin-module",
+  "description": "This module can be used to manage Kibana plugins.",
+  "parameters": [
+    {
+      "name": "allow_root",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Whether to allow kibana and kibana-plugin to be run as root. Passes the --allow-root flag to these commands. Choices: false ← (default) true"
+    },
+    {
+      "name": "force",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Delete and re-install the plugin. It can be useful for plugins update. Choices: false ← (default) true"
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the plugin to install."
+    },
+    {
+      "name": "plugin_bin",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "/opt/kibana/bin/kibana",
+      "choices": [],
+      "description": "Location of the Kibana binary. Default: \"/opt/kibana/bin/kibana\""
+    },
+    {
+      "name": "plugin_dir",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "/opt/kibana/installedPlugins/",
+      "choices": [],
+      "description": "Your configured plugin directory specified in Kibana. Default: \"/opt/kibana/installedPlugins/\""
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Desired state of a plugin. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "timeout",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "1m",
+      "choices": [],
+      "description": "Timeout setting: 30s, 1m, 1h and so on. Default: \"1m\""
+    },
+    {
+      "name": "url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Set exact URL to download the plugin from. For local file, prefix its absolute path with file://."
+    },
+    {
+      "name": "version",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Version of the plugin to be installed. If the plugin is installed with in a previous version, it is not updated unless force=true."
+    }
+  ],
+  "examples": [
+    "- name: Install Elasticsearch head plugin\n  community.general.kibana_plugin:\n    state: present\n    name: elasticsearch/marvel\n\n- name: Install specific version of a plugin\n  community.general.kibana_plugin:\n    state: present\n    name: elasticsearch/marvel\n    version: '2.3.3'\n\n- name: Uninstall Elasticsearch head plugin\n  community.general.kibana_plugin:\n    state: absent\n    name: elasticsearch/marvel"
+  ],
+  "return_values": [
+    {
+      "name": "cmd",
+      "type": "string",
+      "description": "The launched command during plugin management (install / remove). Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "The plugin name to install or remove. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "state",
+      "type": "string",
+      "description": "The state for the managed plugin. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "timeout",
+      "type": "string",
+      "description": "The timeout for plugin download. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "url",
+      "type": "string",
+      "description": "The URL from where the plugin is installed from. Returned: success",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/kibana_plugin_module.html",
+  "parsed_at": "2026-04-13T16:29:51.332448"
+}

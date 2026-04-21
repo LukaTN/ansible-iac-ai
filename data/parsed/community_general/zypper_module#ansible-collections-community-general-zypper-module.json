@@ -1,0 +1,234 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.zypper",
+  "slug": "zypper_module#ansible-collections-community-general-zypper-module",
+  "description": "Manage packages on SUSE and openSUSE using the zypper and rpm tools.",
+  "parameters": [
+    {
+      "name": "allow_vendor_change",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Adds --allow_vendor_change option to zypper dist-upgrade command. Choices: false ← (default) true"
+    },
+    {
+      "name": "auto_import_keys",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Whether to automatically import new repository signing keys. Adds --gpg-auto-import-keys option to zypper. Is only used when installing. Choices: false ← (default) true"
+    },
+    {
+      "name": "clean_deps",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Adds --clean-deps option to zypper remove command. Choices: false ← (default) true"
+    },
+    {
+      "name": "disable_gpg_check",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Whether to disable to GPG signature checking of the package signature being installed. Has an effect only if state is present or latest. Choices: false ← (default) true"
+    },
+    {
+      "name": "disable_recommends",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "behavior",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Corresponds to the --no-recommends option for zypper. Default behavior (true) modifies zypper’s default behavior; false does install recommended packages. Choices: false true ← (default)"
+    },
+    {
+      "name": "extra_args",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Add additional options to zypper command. Options should be supplied in a single line as if given in the command line."
+    },
+    {
+      "name": "extra_args_precommand",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Add additional global target options to zypper. Options should be supplied in a single line as if given in the command line."
+    },
+    {
+      "name": "force",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Adds --force option to zypper. Allows to downgrade packages and change vendor or architecture. Choices: false ← (default) true"
+    },
+    {
+      "name": "force_resolution",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Adds --force-resolution option to zypper. Allows to (un)install packages with conflicting requirements (resolver chooses a solution). Choices: false ← (default) true"
+    },
+    {
+      "name": "name",
+      "aliases": [
+        "pkg"
+      ],
+      "type": "list",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Package name name or package specifier or a list of either. Can include a version like name=1.0, name>3.4 or name<=2.7. If a version is given, oldpackage is implied and zypper is allowed to update the package within the version range given. You can also pass a URL or a local path to a rpm file. When using state=latest, this can be *, which updates all installed packages."
+    },
+    {
+      "name": "oldpackage",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Adds --oldpackage option to zypper. Allows to downgrade packages with less side-effects than force. This is implied as soon as a version is specified as part of the package name. Choices: false ← (default) true"
+    },
+    {
+      "name": "quiet",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Adds --quiet option to zypper install/update command. Choices: false true ← (default)"
+    },
+    {
+      "name": "replacefiles",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Adds --replacefiles option to zypper install/update command. Choices: false ← (default) true"
+    },
+    {
+      "name": "simple_errors",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "When set to true, provide a simplified error output (parses only the <message> tag text in the XML output). Choices: false ← (default) true"
+    },
+    {
+      "name": "skip_post_errors",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "When set to true, ignore zypper return code 107 (post install script errors). Choices: false ← (default) true"
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"latest\"",
+        "\"absent\"",
+        "\"dist-upgrade\"",
+        "\"installed\"",
+        "\"removed\""
+      ],
+      "description": "present makes sure the package is installed. latest makes sure the latest version of the package is installed. absent makes sure the specified package is not installed. dist-upgrade makes sure the latest version of all installed packages from all enabled repositories is installed. When using dist-upgrade, name should be *. Choices: \"present\" ← (default) \"latest\" \"absent\" \"dist-upgrade\" \"installed\" \"removed\""
+    },
+    {
+      "name": "type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"package\" ← (default)",
+        "\"patch\"",
+        "\"pattern\"",
+        "\"product\"",
+        "\"srcpackage\"",
+        "\"application\""
+      ],
+      "description": "The type of package to be operated on. Choices: \"package\" ← (default) \"patch\" \"pattern\" \"product\" \"srcpackage\" \"application\""
+    },
+    {
+      "name": "update_cache",
+      "aliases": [
+        "refresh"
+      ],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Run the equivalent of zypper refresh before the operation. Disabled in check mode. Choices: false ← (default) true"
+    }
+  ],
+  "examples": [
+    "- name: Install nmap\n  community.general.zypper:\n    name: nmap\n    state: present\n\n- name: Install apache2 with recommended packages\n  community.general.zypper:\n    name: apache2\n    state: present\n    disable_recommends: false\n\n- name: Apply a given patch\n  community.general.zypper:\n    name: openSUSE-2016-128\n    state: present\n    type: patch\n\n- name: Remove the nmap package\n  community.general.zypper:\n    name: nmap\n    state: absent\n\n- name: Install the nginx rpm from a remote repo\n  community.general.zypper:\n    name: 'http://nginx.org/packages/sles/12/x86_64/RPMS/nginx-1.8.0-1.sles12.ngx.x86_64.rpm'\n    state: present\n\n- name: Install local rpm file\n  community.general.zypper:\n    name: /tmp/fancy-software.rpm\n    state: present\n\n- name: Update all packages\n  community.general.zypper:\n    name: '*'\n    state: latest\n\n- name: Install latest packages but dump error messages in a simplified format\n  community.general.zypper:\n    name: '*'\n    state: latest\n    simple_errors: true\n    quiet: false\n\n- name: Apply all available patches\n  community.general.zypper:\n    name: '*'\n    state: latest\n    type: patch\n\n- name: Perform a dist-upgrade with additional arguments\n  community.general.zypper:\n    name: '*'\n    state: dist-upgrade\n    allow_vendor_change: true\n    extra_args: '--allow-arch-change'\n\n- name: Perform a installation of nmap with the install option replacefiles\n  community.general.zypper:\n    name: 'nmap'\n    state: latest\n    replacefiles: true\n\n- name: Refresh repositories and update package openssl\n  community.general.zypper:\n    name: openssl\n    state: present\n    update_cache: true\n\n- name: \"Install specific version (possible comparisons: <, >, <=, >=, =)\"\n  community.general.zypper:\n    name: 'docker>=1.10'\n    state: present\n\n- name: Wait 20 seconds to acquire the lock before failing\n  community.general.zypper:\n    name: mosh\n    state: present\n  environment:\n    ZYPP_LOCK_TIMEOUT: 20\n\n- name: Install the package with post-install error without failing\n  community.general.zypper:\n    name: <package_with_post_install_error>\n    state: present\n    skip_post_errors: true"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/zypper_module.html",
+  "parsed_at": "2026-04-13T16:30:01.206762"
+}

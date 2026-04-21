@@ -1,0 +1,625 @@
+{
+  "collection_ns": "ansible_builtin",
+  "collection": "ansible.builtin",
+  "module": "ansible.builtin.yum_repository",
+  "slug": "yum_repository_module#ansible-collections-ansible-builtin-yum-repository-module",
+  "description": "Add or remove YUM repositories in RPM-based Linux distributions.",
+  "parameters": [
+    {
+      "name": "async",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "value",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "If set to true Yum will download packages and metadata from this repo in parallel, if possible. In ansible-core 2.11, 2.12, and 2.13 the default value is true. This option has been removed in RHEL 8. If you’re using one of the versions listed above, you can set this option to null to avoid passing an unknown configuration option. This parameter is deprecated as it has been removed on systems supported by ansible-core and will be removed in ansible-core 2.22. Choices: false true"
+    },
+    {
+      "name": "attributes",
+      "aliases": [
+        "attr"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The attributes the resulting filesystem object should have. To get supported flags look at the man page for chattr on the target system. This string should contain the attributes in the same order as the one displayed by lsattr. The = operator is assumed as default, otherwise + or - operators need to be included in the string."
+    },
+    {
+      "name": "bandwidth",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "is",
+      "choices": [],
+      "description": "Maximum available network bandwidth in bytes/second. Used with the throttle option. If throttle is a percentage and bandwidth is 0 then bandwidth throttling will be disabled. If throttle is expressed as a data rate (bytes/sec) then this option is ignored. Default is 0 (no bandwidth throttling)."
+    },
+    {
+      "name": "baseurl",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "URL to the directory where the yum repository’s ‘repodata’ directory lives. It can also be a list of multiple URLs. This, the metalink or mirrorlist parameters are required if state is set to present."
+    },
+    {
+      "name": "cost",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Relative cost of accessing this repository. Useful for weighing one repo’s packages as greater/less than any other."
+    },
+    {
+      "name": "countme",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Whether a special flag should be added to a randomly chosen metalink/mirrorlist query each week. This allows the repository owner to estimate the number of systems consuming it. Choices: false true"
+    },
+    {
+      "name": "deltarpm_metadata_percentage",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "When the relative size of deltarpm metadata vs pkgs is larger than this, deltarpm metadata is not downloaded from the repo. Note that you can give values over 100, so 200 means that the metadata is required to be half the size of the packages. Use 0 to turn off this check, and always download metadata. This parameter is deprecated as it has no effect with dnf as an underlying package manager and will be removed in ansible-core 2.22."
+    },
+    {
+      "name": "deltarpm_percentage",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "When the relative size of delta vs pkg is larger than this, delta is not used. Use 0 to turn off delta rpm processing. Local repositories (with file://baseurl) have delta rpms turned off by default."
+    },
+    {
+      "name": "description",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A human-readable string describing the repository. This option corresponds to the name property in the repo file. This parameter is only required if state=present."
+    },
+    {
+      "name": "enabled",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "value",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "This tells yum whether or not use this repository. Yum default value is true. Choices: false true"
+    },
+    {
+      "name": "enablegroups",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "value",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Determines whether yum will allow the use of package groups for this repository. Yum default value is true. Choices: false true"
+    },
+    {
+      "name": "exclude",
+      "aliases": [
+        "excludepkgs"
+      ],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of packages to exclude from updates or installs. This should be a space separated list. Shell globs using wildcards (for example * and ?) are allowed. The list can also be a regular YAML array. excludepkgs alias was added in ansible-core 2.18."
+    },
+    {
+      "name": "failovermethod",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"roundrobin\"",
+        "\"priority\""
+      ],
+      "description": "roundrobin randomly selects a URL out of the list of URLs to start with and proceeds through each of them as it encounters a failure contacting the host. priority starts from the first baseurl listed and reads through them sequentially. Choices: \"roundrobin\" \"priority\""
+    },
+    {
+      "name": "file",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "File name without the .repo extension to save the repo in. Defaults to the value of name."
+    },
+    {
+      "name": "gpgcakey",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A URL pointing to the ASCII-armored CA key file for the repository. This parameter is deprecated as it has no effect with dnf as an underlying package manager and will be removed in ansible-core 2.22."
+    },
+    {
+      "name": "gpgcheck",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "setting.",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Tells yum whether or not it should perform a GPG signature check on packages. No default setting. If the value is not set, the system setting from /etc/yum.conf or system default of false will be used. Choices: false true"
+    },
+    {
+      "name": "gpgkey",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A URL pointing to the ASCII-armored GPG key file for the repository. It can also be a list of multiple URLs."
+    },
+    {
+      "name": "group",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of the group that should own the filesystem object, as would be fed to chown. When left unspecified, it uses the current group of the current user unless you are root, in which case it can preserve the previous ownership."
+    },
+    {
+      "name": "http_caching",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"all\"",
+        "\"packages\"",
+        "\"none\""
+      ],
+      "description": "Determines how upstream HTTP caches are instructed to handle any HTTP downloads that Yum does. all means that all HTTP downloads should be cached. packages means that only RPM package downloads should be cached (but not repository metadata downloads). none means that no HTTP downloads should be cached. This parameter is deprecated as it has no effect with dnf as an underlying package manager and will be removed in ansible-core 2.22. Choices: \"all\" \"packages\" \"none\""
+    },
+    {
+      "name": "include",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Include external configuration file. Both, local path and URL is supported. Configuration file will be inserted at the position of the include= line. Included files may contain further include lines. Yum will abort with an error if an inclusion loop is detected."
+    },
+    {
+      "name": "includepkgs",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of packages you want to only use from a repository. This should be a space separated list. Shell globs using wildcards (for example * and ?) are allowed. Substitution variables (for example $releasever) are honored here. The list can also be a regular YAML array."
+    },
+    {
+      "name": "ip_resolve",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"4\"",
+        "\"6\"",
+        "\"IPv4\"",
+        "\"IPv6\"",
+        "\"whatever\""
+      ],
+      "description": "Determines how yum resolves host names. 4 or IPv4 - resolve to IPv4 addresses only. 6 or IPv6 - resolve to IPv6 addresses only. Choices: \"4\" \"6\" \"IPv4\" \"IPv6\" \"whatever\""
+    },
+    {
+      "name": "keepalive",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "This tells yum whether or not HTTP/1.1 keepalive should be used with this repository. This can improve transfer speeds by using one connection when downloading multiple files from a repository. This parameter is deprecated as it has no effect with dnf as an underlying package manager and will be removed in ansible-core 2.22. Choices: false true"
+    },
+    {
+      "name": "metadata_expire",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "Time (in seconds) after which the metadata will expire. Default value is 6 hours."
+    },
+    {
+      "name": "metadata_expire_filter",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"never\"",
+        "\"read-only:past\"",
+        "\"read-only:present\"",
+        "\"read-only:future\""
+      ],
+      "description": "Filter the metadata_expire time, allowing a trade of speed for accuracy if a command doesn’t require it. Each yum command can specify that it requires a certain level of timeliness quality from the remote repos. from “I’m about to install/upgrade, so this better be current” to “Anything that’s available is good enough”. never - Nothing is filtered, always obey metadata_expire. read-only:past - Commands that only care about past information are filtered from metadata expiring. Eg. yum history info (if history needs to lookup anything about a previous transaction, then by definition the remote package was available in the past). read-only:present - Commands that are balanced between past and future. Eg. yum list yum. read-only:future - Commands that are likely to result in running other commands which will require the latest metadata. Eg. yum check-update. Note that this option does not override yum clean expire-cache. This parameter is deprecated as it has no effect with dnf as an underlying package manager and will be removed in ansible-core 2.22. Choices: \"never\" \"read-only:past\" \"read-only:present\" \"read-only:future\""
+    },
+    {
+      "name": "metalink",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies a URL to a metalink file for the repomd.xml, a list of mirrors for the entire repository are generated by converting the mirrors for the repomd.xml file to a baseurl. This, the baseurl or mirrorlist parameters are required if state is set to present."
+    },
+    {
+      "name": "mirrorlist",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies a URL to a file containing a list of baseurls. This, the baseurl or metalink parameters are required if state is set to present."
+    },
+    {
+      "name": "mirrorlist_expire",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "Time (in seconds) after which the mirrorlist locally cached will expire. Default value is 6 hours. This parameter is deprecated as it has no effect with dnf as an underlying package manager and will be removed in ansible-core 2.22."
+    },
+    {
+      "name": "mode",
+      "aliases": [],
+      "type": "any",
+      "required": false,
+      "default": "umask",
+      "choices": [],
+      "description": "The permissions the resulting filesystem object should have. For those used to /usr/bin/chmod remember that modes are actually octal numbers. You must give Ansible enough information to parse them correctly. For consistent results, quote octal numbers (for example, '644' or '1777') so Ansible receives a string and can do its own conversion from string into number. Adding a leading zero (for example, 0755) works sometimes, but can fail in loops and some other circumstances. Giving Ansible a number without following either of these rules will end up with a decimal number which will have unexpected results. As of Ansible 1.8, the mode may be specified as a symbolic mode (for example, u+rwx or u=rw,g=r,o=r). If mode is not specified and the destination filesystem object does not exist, the default umask on the system will be used when setting the mode for the newly created filesystem object. If mode is not specified and the destination filesystem object does exist, the mode of the existing filesystem object will be used. Specifying mode is the best way to ensure filesystem objects are created with the correct permissions. See CVE-2020-1736 for further details."
+    },
+    {
+      "name": "module_hotfixes",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "is",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Disable module RPM filtering and make all RPMs from the repository available. The default is null. Choices: false true"
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Unique repository ID. This option builds the section name of the repository in the repo file. This parameter is only required if state is set to present or absent."
+    },
+    {
+      "name": "owner",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of the user that should own the filesystem object, as would be fed to chown. When left unspecified, it uses the current user unless you are root, in which case it can preserve the previous ownership. Specifying a numeric username will be assumed to be a user ID and not a username. Avoid numeric usernames to avoid this confusion."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Password to use with the username for basic authentication."
+    },
+    {
+      "name": "priority",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Enforce ordered protection of repositories. The value is an integer from 1 to 99. This option only works if the YUM Priorities plugin is installed."
+    },
+    {
+      "name": "protect",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Protect packages from updates from other repositories. This parameter is deprecated as it has no effect with dnf as an underlying package manager and will be removed in ansible-core 2.22. Choices: false true"
+    },
+    {
+      "name": "proxy",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "URL to the proxy server that yum should use. Set to _none_ to disable the global proxy setting."
+    },
+    {
+      "name": "proxy_password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Password for this proxy."
+    },
+    {
+      "name": "proxy_username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Username to use for proxy."
+    },
+    {
+      "name": "repo_gpgcheck",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "This tells yum whether or not it should perform a GPG signature check on the repodata from this repository. Choices: false true"
+    },
+    {
+      "name": "reposdir",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "/etc/yum.repos.d",
+      "choices": [],
+      "description": "Directory where the .repo files will be stored. Default: \"/etc/yum.repos.d\""
+    },
+    {
+      "name": "retries",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Set the number of times any attempt to retrieve a file should retry before returning an error. Setting this to 0 makes yum try forever."
+    },
+    {
+      "name": "s3_enabled",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Enables support for S3 repositories. This option only works if the YUM S3 plugin is installed. Choices: false true"
+    },
+    {
+      "name": "selevel",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The level part of the SELinux filesystem object context. This is the MLS/MCS attribute, sometimes known as the range. When set to _default, it will use the level portion of the policy if available."
+    },
+    {
+      "name": "serole",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The role part of the SELinux filesystem object context. When set to _default, it will use the role portion of the policy if available."
+    },
+    {
+      "name": "setype",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The type part of the SELinux filesystem object context. When set to _default, it will use the type portion of the policy if available."
+    },
+    {
+      "name": "seuser",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "it",
+      "choices": [],
+      "description": "The user part of the SELinux filesystem object context. By default it uses the system policy, where applicable. When set to _default, it will use the user portion of the policy if available."
+    },
+    {
+      "name": "skip_if_unavailable",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "If set to true yum will continue running if this repository cannot be contacted for any reason. This should be set carefully as all repos are consulted for any given command. Choices: false true"
+    },
+    {
+      "name": "ssl_check_cert_permissions",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Whether yum should check the permissions on the paths for the certificates on the repository (both remote and local). If we can’t read any of the files then yum will force skip_if_unavailable to be true. This is most useful for non-root processes which use yum on repos that have client cert files which are readable only by root. This parameter is deprecated as it has no effect with dnf as an underlying package manager and will be removed in ansible-core 2.22. Choices: false true"
+    },
+    {
+      "name": "sslcacert",
+      "aliases": [
+        "ca_cert"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the directory containing the databases of the certificate authorities yum should use to verify SSL certificates."
+    },
+    {
+      "name": "sslclientcert",
+      "aliases": [
+        "client_cert"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the SSL client certificate yum should use to connect to repos/remote sites."
+    },
+    {
+      "name": "sslclientkey",
+      "aliases": [
+        "client_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the SSL client key yum should use to connect to repos/remote sites."
+    },
+    {
+      "name": "sslverify",
+      "aliases": [
+        "validate_certs"
+      ],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Defines whether yum should verify SSL certificates/hosts at all. Choices: false true"
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)"
+      ],
+      "description": "State of the repo file. Choices: \"absent\" \"present\" ← (default)"
+    },
+    {
+      "name": "throttle",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Enable bandwidth throttling for downloads. This option can be expressed as a absolute data rate in bytes/sec. An SI prefix (k, M or G) may be appended to the bandwidth value."
+    },
+    {
+      "name": "timeout",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Number of seconds to wait for a connection before timing out."
+    },
+    {
+      "name": "ui_repoid_vars",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "When a repository id is displayed, append these yum variables to the string if they are used in the baseurl/etc. Variables are appended in the order listed (and found). This parameter is deprecated as it has no effect with dnf as an underlying package manager and will be removed in ansible-core 2.22."
+    },
+    {
+      "name": "unsafe_writes",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "this",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Influence when to use atomic operation to prevent data corruption or inconsistent reads from the target filesystem object. By default this module uses atomic operations to prevent data corruption or inconsistent reads from the target filesystem objects, but sometimes systems are configured or just broken in ways that prevent this. One example is docker mounted filesystem objects, which cannot be updated atomically from inside the container and can only be written in an unsafe manner. This option allows Ansible to fall back to unsafe methods of updating filesystem objects when atomic operations fail (however, it doesn’t force Ansible to perform unsafe writes). IMPORTANT! Unsafe writes are subject to race conditions and can lead to data corruption. Choices: false ← (default) true"
+    },
+    {
+      "name": "username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Username to use for basic authentication to a repo or really any url."
+    }
+  ],
+  "examples": [
+    "- name: Add repository\n  ansible.builtin.yum_repository:\n    name: epel\n    description: EPEL YUM repo\n    baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/\n\n- name: Add multiple repositories into the same file (1/2)\n  ansible.builtin.yum_repository:\n    name: epel\n    description: EPEL YUM repo\n    file: external_repos\n    baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/\n    gpgcheck: no\n\n- name: Add multiple repositories into the same file (2/2)\n  ansible.builtin.yum_repository:\n    name: rpmforge\n    description: RPMforge YUM repo\n    file: external_repos\n    baseurl: http://apt.sw.be/redhat/el7/en/$basearch/rpmforge\n    mirrorlist: http://mirrorlist.repoforge.org/el7/mirrors-rpmforge\n    enabled: no\n\n# Handler showing how to clean yum metadata cache\n- name: yum-clean-metadata\n  ansible.builtin.command: yum clean metadata\n\n# Example removing a repository and cleaning up metadata cache\n- name: Remove repository (and clean up left-over metadata)\n  ansible.builtin.yum_repository:\n    name: epel\n    state: absent\n  notify: yum-clean-metadata\n\n- name: Remove repository from a specific repo file\n  ansible.builtin.yum_repository:\n    name: epel\n    file: external_repos\n    state: absent"
+  ],
+  "return_values": [
+    {
+      "name": "repo",
+      "type": "string",
+      "description": "repository name Returned: success Sample: \"epel\"",
+      "returned": "success"
+    },
+    {
+      "name": "state",
+      "type": "string",
+      "description": "state of the target, after execution Returned: success Sample: \"present\"",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/yum_repository_module.html",
+  "parsed_at": "2026-04-13T16:29:26.638072"
+}

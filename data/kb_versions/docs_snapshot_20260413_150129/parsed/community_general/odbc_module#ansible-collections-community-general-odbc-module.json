@@ -1,0 +1,73 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.odbc",
+  "slug": "odbc_module#ansible-collections-community-general-odbc-module",
+  "description": "Read/Write info using ODBC drivers.",
+  "parameters": [
+    {
+      "name": "commit",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "is",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Perform a commit after the execution of the SQL query. Some databases allow a commit after a select whereas others raise an exception. Default is true to support legacy module behavior. Choices: false true ← (default)"
+    },
+    {
+      "name": "dsn",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The connection string passed into ODBC."
+    },
+    {
+      "name": "params",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parameters to pass to the SQL query."
+    },
+    {
+      "name": "query",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The SQL query to perform."
+    }
+  ],
+  "examples": [
+    "- name: Set some values in the test db\n  community.general.odbc:\n    dsn: \"DRIVER={ODBC Driver 13 for SQL Server};Server=db.ansible.com;Database=my_db;UID=admin;PWD=password;\"\n    query: \"Select * from table_a where column1 = ?\"\n    params:\n      - \"value1\"\n    commit: false\n  changed_when: false"
+  ],
+  "return_values": [
+    {
+      "name": "description",
+      "type": "list",
+      "description": "List of dicts about the columns selected from the cursors, likely empty for DDL statements. See notes. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "results",
+      "type": "list",
+      "description": "List of lists of strings containing selected rows, likely empty for DDL statements. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "row_count",
+      "type": "string",
+      "description": "The number of rows selected or modified according to the cursor defaults to -1. See notes. Returned: success",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/odbc_module#ansible-collections-community-general-odbc-module.html",
+  "parsed_at": "2026-04-11T13:53:21.592460"
+}

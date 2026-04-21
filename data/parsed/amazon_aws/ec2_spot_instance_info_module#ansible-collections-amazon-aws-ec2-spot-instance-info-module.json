@@ -1,0 +1,330 @@
+{
+  "collection_ns": "amazon_aws",
+  "collection": "amazon.aws",
+  "module": "amazon.aws.ec2_spot_instance_info",
+  "slug": "ec2_spot_instance_info_module#ansible-collections-amazon-aws-ec2-spot-instance-info-module",
+  "description": "Describes the specified Spot Instance requests.",
+  "parameters": [
+    {
+      "name": "access_key",
+      "aliases": [
+        "aws_access_key_id",
+        "aws_access_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS access key ID. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY environment variables may also be used in decreasing order of preference. The aws_access_key and profile options are mutually exclusive. The aws_access_key_id alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "aws_ca_bundle",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The location of a CA Bundle to use when validating SSL certificates. The AWS_CA_BUNDLE environment variable may also be used."
+    },
+    {
+      "name": "aws_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary to modify the botocore configuration. Parameters can be found in the AWS documentation https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html#botocore.config.Config."
+    },
+    {
+      "name": "debug_botocore_endpoint_logs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use a botocore.endpoint logger to parse the unique (rather than total) \"resource:action\" API calls made during a task, outputing the set to the resource_actions key in the task results. Use the aws_resource_action callback to output to total list made during a playbook. The ANSIBLE_DEBUG_BOTOCORE_LOGS environment variable may also be used. Choices: false ← (default) true"
+    },
+    {
+      "name": "endpoint_url",
+      "aliases": [
+        "aws_endpoint_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "AWS",
+      "choices": [],
+      "description": "URL to connect to instead of the default AWS endpoints. While this can be used to connection to other AWS-compatible services the amazon.aws and community.aws collections are only tested against AWS. The AWS_URL environment variable may also be used."
+    },
+    {
+      "name": "filters",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "A dict of filters to apply. Each dict item consists of a filter key and a filter value. Filter names and values are case sensitive. See https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeSpotInstanceRequests.html for possible filters. Default: {}"
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "aws_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A named AWS profile to use for authentication. See the AWS documentation for more information about named profiles https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html. The AWS_PROFILE environment variable may also be used. The profile option is mutually exclusive with the aws_access_key, aws_secret_key and session_token options."
+    },
+    {
+      "name": "region",
+      "aliases": [
+        "aws_region"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The AWS region to use. For global services such as IAM, Route53 and CloudFront, region is ignored. The AWS_REGION environment variable may also be used. See the Amazon AWS documentation for more information http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region."
+    },
+    {
+      "name": "secret_key",
+      "aliases": [
+        "aws_secret_access_key",
+        "aws_secret_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS secret access key. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SECRET_ACCESS_KEY or AWS_SECRET_KEY environment variables may also be used in decreasing order of preference. The secret_key and profile options are mutually exclusive. The aws_secret_access_key alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "session_token",
+      "aliases": [
+        "aws_session_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS STS session token for use with temporary credentials. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SESSION_TOKEN environment variable may also be used. The session_token and profile options are mutually exclusive."
+    },
+    {
+      "name": "spot_instance_request_ids",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "One or more Spot Instance request IDs. Default: []"
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to false, SSL certificates will not be validated for communication with the AWS APIs. Setting validate_certs=false is strongly discouraged, as an alternative, consider setting aws_ca_bundle instead. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "# Note: These examples do not set authentication details, see the AWS Guide for details.\n\n- name: describe the Spot Instance requests based on request IDs\n  amazon.aws.ec2_spot_instance_info:\n    spot_instance_request_ids:\n      - sir-12345678\n\n- name: describe the Spot Instance requests and filter results based on instance type\n  amazon.aws.ec2_spot_instance_info:\n    spot_instance_request_ids:\n      - sir-12345678\n      - sir-13579246\n      - sir-87654321\n    filters:\n      launch.instance-type: t3.medium\n\n- name: describe the Spot requests filtered using multiple filters\n  amazon.aws.ec2_spot_instance_info:\n    filters:\n      state: active\n      launch.block-device-mapping.device-name: /dev/sdb"
+  ],
+  "return_values": [
+    {
+      "name": "spot_request",
+      "type": "list",
+      "description": "The gathered information about specified spot instance requests. Returned: when success Sample: {\"create_time\": \"2021-09-01T21:05:57+00:00\", \"instance_id\": \"i-08877936b801ac475\", \"instance_interruption_behavior\": \"terminate\", \"launch_specification\": {\"ebs_optimized\": false, \"image_id\": \"ami-0443305dabd4be2bc\", \"instance_type\": \"t2.medium\", \"key_name\": \"zuul\", \"monitoring\": {\"enabled\": false}, \"placement\": {\"availability_zone\": \"us-east-2b\"}, \"security_groups\": [{\"group_id\": \"sg-01f9833207d53b937\", \"group_name\": \"default\"}], \"subnet_id\": \"subnet-07d906b8358869bda\"}, \"launched_availability_zone\": \"us-east-2b\", \"product_description\": \"Linux/UNIX\", \"spot_instance_request_id\": \"sir-c3cp9jsk\", \"spot_price\": \"0.046400\", \"state\": \"active\", \"status\": {\"code\": \"fulfilled\", \"message\": \"Your spot request is fulfilled.\", \"update_time\": \"2021-09-01T21:05:59+00:00\"}, \"tags\": {}, \"type\": \"one-time\", \"valid_until\": \"2021-09-08T21:05:57+00:00\"}",
+      "returned": "when"
+    },
+    {
+      "name": "create_time",
+      "type": "string",
+      "description": "The date and time when the Spot Instance request was created. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "instance_id",
+      "type": "string",
+      "description": "The instance ID, if an instance has been launched to fulfill the Spot Instance request. Returned: when instance exists",
+      "returned": "when"
+    },
+    {
+      "name": "instance_interruption_behavior",
+      "type": "string",
+      "description": "The behavior when a Spot Instance is interruped. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "launch_specification",
+      "type": "dictionary",
+      "description": "Additional information for launching instances. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "ebs_optimized",
+      "type": "boolean",
+      "description": "Indicates whether the instance is optimized for EBS I/O. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "image_id",
+      "type": "string",
+      "description": "The ID of the AMI. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "instance_type",
+      "type": "string",
+      "description": "The instance type. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "key_name",
+      "type": "string",
+      "description": "The name of the key pair. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "monitoring",
+      "type": "dictionary",
+      "description": "Described the monitoring of an instance. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "enabled",
+      "type": "boolean",
+      "description": "Indicated whether detailed monitoring is enabled. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "placement",
+      "type": "dictionary",
+      "description": "The placement information for the instance. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "availability_zone",
+      "type": "string",
+      "description": "The name of the availability zone. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "security_groups",
+      "type": "list",
+      "description": "List of security groups. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "group_id",
+      "type": "string",
+      "description": "The ID of the security group. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "group_name",
+      "type": "string",
+      "description": "The name of the security group. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "subnet_id",
+      "type": "string",
+      "description": "The ID of the subnet. Returned: when creating a network interface when launching an instance",
+      "returned": "when"
+    },
+    {
+      "name": "launched_availability_zone",
+      "type": "string",
+      "description": "The availability zone in which the request is launched. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "product_description",
+      "type": "string",
+      "description": "The product description associated with the Spot Instance. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "spot_instance_request_id",
+      "type": "string",
+      "description": "The ID of the Spot Instance request. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "spot_price",
+      "type": "string",
+      "description": "The maximum price per hour that you are willing to pay for a Spot Instance. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "state",
+      "type": "string",
+      "description": "The state of the Spot Instance request. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "status",
+      "type": "dictionary",
+      "description": "Extra information about the status of the Spot Instance request. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "code",
+      "type": "string",
+      "description": "The status code. See https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-request-status.html#spot-instance-request-status-understand for codes. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "message",
+      "type": "string",
+      "description": "The description of the status code. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "update_time",
+      "type": "string",
+      "description": "The date and time of the most recent status update in UTC format. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "tags",
+      "type": "list",
+      "description": "List of tags associated with the resource. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "key",
+      "type": "string",
+      "description": "The key of the tag. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "description": "The value of the tag. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "description": "The Spot Instance request type. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "valid_until",
+      "type": "string",
+      "description": "The end date of the request in UTC format. Returned: always",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_spot_instance_info_module.html",
+  "parsed_at": "2026-04-13T16:29:20.789499"
+}

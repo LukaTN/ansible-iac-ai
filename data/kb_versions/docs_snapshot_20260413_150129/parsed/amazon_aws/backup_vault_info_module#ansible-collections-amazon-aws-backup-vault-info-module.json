@@ -1,0 +1,201 @@
+{
+  "collection_ns": "amazon_aws",
+  "collection": "amazon.aws",
+  "module": "amazon.aws.backup_vault_info",
+  "slug": "backup_vault_info_module#ansible-collections-amazon-aws-backup-vault-info-module",
+  "description": "Lists info about Backup Vault configuration.",
+  "parameters": [
+    {
+      "name": "access_key",
+      "aliases": [
+        "aws_access_key_id",
+        "aws_access_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS access key ID. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY environment variables may also be used in decreasing order of preference. The aws_access_key and profile options are mutually exclusive. The aws_access_key_id alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "aws_ca_bundle",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The location of a CA Bundle to use when validating SSL certificates. The AWS_CA_BUNDLE environment variable may also be used."
+    },
+    {
+      "name": "aws_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary to modify the botocore configuration. Parameters can be found in the AWS documentation https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html#botocore.config.Config."
+    },
+    {
+      "name": "backup_vault_names",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "Specifies a list of vault names. If an empty list is specified, information for the backup vaults in the current region is returned. Default: []"
+    },
+    {
+      "name": "debug_botocore_endpoint_logs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use a botocore.endpoint logger to parse the unique (rather than total) \"resource:action\" API calls made during a task, outputing the set to the resource_actions key in the task results. Use the aws_resource_action callback to output to total list made during a playbook. The ANSIBLE_DEBUG_BOTOCORE_LOGS environment variable may also be used. Choices: false ← (default) true"
+    },
+    {
+      "name": "endpoint_url",
+      "aliases": [
+        "aws_endpoint_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "AWS",
+      "choices": [],
+      "description": "URL to connect to instead of the default AWS endpoints. While this can be used to connection to other AWS-compatible services the amazon.aws and community.aws collections are only tested against AWS. The AWS_URL environment variable may also be used."
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "aws_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A named AWS profile to use for authentication. See the AWS documentation for more information about named profiles https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html. The AWS_PROFILE environment variable may also be used. The profile option is mutually exclusive with the aws_access_key, aws_secret_key and session_token options."
+    },
+    {
+      "name": "region",
+      "aliases": [
+        "aws_region"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The AWS region to use. For global services such as IAM, Route53 and CloudFront, region is ignored. The AWS_REGION environment variable may also be used. See the Amazon AWS documentation for more information http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region."
+    },
+    {
+      "name": "secret_key",
+      "aliases": [
+        "aws_secret_access_key",
+        "aws_secret_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS secret access key. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SECRET_ACCESS_KEY or AWS_SECRET_KEY environment variables may also be used in decreasing order of preference. The secret_key and profile options are mutually exclusive. The aws_secret_access_key alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "session_token",
+      "aliases": [
+        "aws_session_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS STS session token for use with temporary credentials. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SESSION_TOKEN environment variable may also be used. The session_token and profile options are mutually exclusive."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to false, SSL certificates will not be validated for communication with the AWS APIs. Setting validate_certs=false is strongly discouraged, as an alternative, consider setting aws_ca_bundle instead. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "# Note: These examples do not set authentication details, see the AWS Guide for details.\n\n# Gather information about all backup vaults\n- amazon.aws.backup_vault_info\n\n# Gather information about a particular backup vault\n- amazon.aws.backup_vault_info:\n    backup vault_names:\n      - \"arn:aws:backup_vault:us-east-2:123456789012:backup_vault/defaultvault\""
+  ],
+  "return_values": [
+    {
+      "name": "backup_vaults",
+      "type": "list",
+      "description": "List of backup vault objects. Each element consists of a dict with all the information related to that backup vault. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "backup_vault_arn",
+      "type": "string",
+      "description": "ARN of the backup vault. Returned: success Sample: \"arn:aws:backup:us-west-2:111122223333:vault/1234abcd-12ab-34cd-56ef-1234567890ab\"",
+      "returned": "success"
+    },
+    {
+      "name": "backup_vault_name",
+      "type": "string",
+      "description": "Name of the backup vault. Returned: success Sample: \"default vault\"",
+      "returned": "success"
+    },
+    {
+      "name": "creation_date",
+      "type": "string",
+      "description": "The date and time a backup vault is created, in Unix format and Coordinated Universal Time (UTC). Returned: success Sample: \"1516925490.087 (represents Friday, January 26, 2018 12:11:30.087 AM).\"",
+      "returned": "success"
+    },
+    {
+      "name": "creator_request_id",
+      "type": "string",
+      "description": "A unique string that identifies the request and allows failed requests to be retried without the risk of running the operation twice. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "encryption_key_arn",
+      "type": "string",
+      "description": "The server-side encryption key that is used to protect the backups. Returned: success Sample: \"arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab\"",
+      "returned": "success"
+    },
+    {
+      "name": "lock_date",
+      "type": "string",
+      "description": "The date and time when Backup Vault Lock configuration cannot be changed or deleted. Returned: success Sample: \"1516925490.087 represents Friday, January 26, 2018 12:11:30.087 AM.\"",
+      "returned": "success"
+    },
+    {
+      "name": "locked",
+      "type": "boolean",
+      "description": "Indicates whether Backup Vault Lock is currently protecting the backup vault. True means that Vault Lock causes delete or update operations on the recovery points stored in the vault to fail. Returned: success Sample: true",
+      "returned": "success"
+    },
+    {
+      "name": "max_retention_days",
+      "type": "integer",
+      "description": "The maximum retention period that the vault retains its recovery points. If this parameter is not specified, Vault Lock does not enforce a maximum retention period (allowing indefinite storage). Returned: success Sample: 123",
+      "returned": "success"
+    },
+    {
+      "name": "min_retention_days",
+      "type": "integer",
+      "description": "The minimum retention period that the vault retains its recovery points. If this parameter is not specified, Vault Lock does not enforce a minimum retention period. Returned: success Sample: 120",
+      "returned": "success"
+    },
+    {
+      "name": "number_of_recovery_points",
+      "type": "integer",
+      "description": "The number of recovery points that are stored in a backup vault. Returned: success",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/amazon/aws/backup_vault_info_module#ansible-collections-amazon-aws-backup-vault-info-module.html",
+  "parsed_at": "2026-04-11T13:52:45.262535"
+}

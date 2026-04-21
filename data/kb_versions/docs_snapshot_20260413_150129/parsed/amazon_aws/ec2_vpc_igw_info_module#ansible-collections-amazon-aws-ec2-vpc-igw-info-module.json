@@ -1,0 +1,198 @@
+{
+  "collection_ns": "amazon_aws",
+  "collection": "amazon.aws",
+  "module": "amazon.aws.ec2_vpc_igw_info",
+  "slug": "ec2_vpc_igw_info_module#ansible-collections-amazon-aws-ec2-vpc-igw-info-module",
+  "description": "Gather information about internet gateways in AWS.",
+  "parameters": [
+    {
+      "name": "access_key",
+      "aliases": [
+        "aws_access_key_id",
+        "aws_access_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS access key ID. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY environment variables may also be used in decreasing order of preference. The aws_access_key and profile options are mutually exclusive. The aws_access_key_id alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "aws_ca_bundle",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The location of a CA Bundle to use when validating SSL certificates. The AWS_CA_BUNDLE environment variable may also be used."
+    },
+    {
+      "name": "aws_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary to modify the botocore configuration. Parameters can be found in the AWS documentation https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html#botocore.config.Config."
+    },
+    {
+      "name": "convert_tags",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Convert tags from boto3 format (list of dictionaries) to the standard dictionary format. Prior to release 4.0.0 this defaulted to false. Choices: false true ← (default)"
+    },
+    {
+      "name": "debug_botocore_endpoint_logs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use a botocore.endpoint logger to parse the unique (rather than total) \"resource:action\" API calls made during a task, outputing the set to the resource_actions key in the task results. Use the aws_resource_action callback to output to total list made during a playbook. The ANSIBLE_DEBUG_BOTOCORE_LOGS environment variable may also be used. Choices: false ← (default) true"
+    },
+    {
+      "name": "endpoint_url",
+      "aliases": [
+        "aws_endpoint_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "AWS",
+      "choices": [],
+      "description": "URL to connect to instead of the default AWS endpoints. While this can be used to connection to other AWS-compatible services the amazon.aws and community.aws collections are only tested against AWS. The AWS_URL environment variable may also be used."
+    },
+    {
+      "name": "filters",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "A dict of filters to apply. Each dict item consists of a filter key and a filter value. See https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInternetGateways.html for possible filters. Default: {}"
+    },
+    {
+      "name": "internet_gateway_ids",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Get details of specific Internet Gateway ID. Provide this value as a list."
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "aws_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A named AWS profile to use for authentication. See the AWS documentation for more information about named profiles https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html. The AWS_PROFILE environment variable may also be used. The profile option is mutually exclusive with the aws_access_key, aws_secret_key and session_token options."
+    },
+    {
+      "name": "region",
+      "aliases": [
+        "aws_region"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The AWS region to use. For global services such as IAM, Route53 and CloudFront, region is ignored. The AWS_REGION environment variable may also be used. See the Amazon AWS documentation for more information http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region."
+    },
+    {
+      "name": "secret_key",
+      "aliases": [
+        "aws_secret_access_key",
+        "aws_secret_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS secret access key. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SECRET_ACCESS_KEY or AWS_SECRET_KEY environment variables may also be used in decreasing order of preference. The secret_key and profile options are mutually exclusive. The aws_secret_access_key alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "session_token",
+      "aliases": [
+        "aws_session_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS STS session token for use with temporary credentials. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SESSION_TOKEN environment variable may also be used. The session_token and profile options are mutually exclusive."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to false, SSL certificates will not be validated for communication with the AWS APIs. Setting validate_certs=false is strongly discouraged, as an alternative, consider setting aws_ca_bundle instead. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "# # Note: These examples do not set authentication details, see the AWS Guide for details.\n\n- name: Gather information about all Internet Gateways for an account or profile\n  amazon.aws.ec2_vpc_igw_info:\n    region: ap-southeast-2\n    profile: production\n  register: igw_info\n\n- name: Gather information about a filtered list of Internet Gateways\n  amazon.aws.ec2_vpc_igw_info:\n    region: ap-southeast-2\n    profile: production\n    filters:\n      \"tag:Name\": \"igw-123\"\n  register: igw_info\n\n- name: Gather information about a specific internet gateway by InternetGatewayId\n  amazon.aws.ec2_vpc_igw_info:\n    region: ap-southeast-2\n    profile: production\n    internet_gateway_ids: igw-c1231234\n  register: igw_info"
+  ],
+  "return_values": [
+    {
+      "name": "changed",
+      "type": "boolean",
+      "description": "True if listing the internet gateways succeeds. Returned: always Sample: false",
+      "returned": "always"
+    },
+    {
+      "name": "internet_gateways",
+      "type": "complex",
+      "description": "The internet gateways for the account. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "attachments",
+      "type": "complex",
+      "description": "Any VPCs attached to the internet gateway. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "state",
+      "type": "string",
+      "description": "The current state of the attachment. Returned: always Sample: \"available\"",
+      "returned": "always"
+    },
+    {
+      "name": "vpc_id",
+      "type": "string",
+      "description": "The ID of the VPC. Returned: always Sample: \"vpc-02123b67\"",
+      "returned": "always"
+    },
+    {
+      "name": "internet_gateway_id",
+      "type": "string",
+      "description": "The ID of the internet gateway. Returned: always Sample: \"igw-2123634d\"",
+      "returned": "always"
+    },
+    {
+      "name": "tags",
+      "type": "dictionary",
+      "description": "Any tags assigned to the internet gateway. Returned: always Sample: {\"tags\": {\"Ansible\": \"Test\"}}",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_vpc_igw_info_module#ansible-collections-amazon-aws-ec2-vpc-igw-info-module.html",
+  "parsed_at": "2026-04-11T13:52:47.717165"
+}

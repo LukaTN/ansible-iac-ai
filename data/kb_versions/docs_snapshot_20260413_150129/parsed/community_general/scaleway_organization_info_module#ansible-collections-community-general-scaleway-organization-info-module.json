@@ -1,0 +1,87 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.scaleway_organization_info",
+  "slug": "scaleway_organization_info_module#ansible-collections-community-general-scaleway-organization-info-module",
+  "description": "Gather information about the Scaleway organizations available.",
+  "parameters": [
+    {
+      "name": "api_timeout",
+      "aliases": [
+        "timeout"
+      ],
+      "type": "integer",
+      "required": false,
+      "default": "30",
+      "choices": [],
+      "description": "HTTP timeout to Scaleway API in seconds. Default: 30"
+    },
+    {
+      "name": "api_token",
+      "aliases": [
+        "oauth_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Scaleway OAuth token. This is required if profile is not specified."
+    },
+    {
+      "name": "api_url",
+      "aliases": [
+        "base_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "https://account.scaleway.com",
+      "choices": [],
+      "description": "Scaleway API URL. Default: \"https://account.scaleway.com\""
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "scw_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The config profile in config file to load the Scaleway OAuth token from, use instead of api_token. It is also possible to set SCW_PROFILE to use a SCW CLI config profile."
+    },
+    {
+      "name": "query_parameters",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "List of parameters passed to the query string. Default: {}"
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Validate SSL certs of the Scaleway API. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Gather Scaleway organizations information\n  community.general.scaleway_organization_info:\n  register: result\n\n- ansible.builtin.debug:\n    msg: \"{{ result.scaleway_organization_info }}\""
+  ],
+  "return_values": [
+    {
+      "name": "scaleway_organization_info",
+      "type": "list",
+      "description": "Response from Scaleway API. Returned: success Sample: [{\"address_city_name\": \"Paris\", \"address_country_code\": \"FR\", \"address_line1\": \"42 Rue de l'univers\", \"address_line2\": null, \"address_postal_code\": \"75042\", \"address_subdivision_code\": \"FR-75\", \"creation_date\": \"2018-08-06T13:43:28.508575+00:00\", \"currency\": \"EUR\", \"customer_class\": \"individual\", \"id\": \"3f709602-5e6c-4619-b80c-e8432ferewtr\", \"locale\": \"fr_FR\", \"modification_date\": \"2018-08-06T14:56:41.401685+00:00\", \"name\": \"James Bond\", \"support_id\": \"694324\", \"support_level\": \"basic\", \"support_pin\": \"9324\", \"users\": [], \"vat_number\": null, \"warnings\": []}]",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/scaleway_organization_info_module#ansible-collections-community-general-scaleway-organization-info-module.html",
+  "parsed_at": "2026-04-11T13:53:25.803262"
+}

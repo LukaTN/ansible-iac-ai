@@ -1,0 +1,66 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.heroku_collaborator",
+  "slug": "heroku_collaborator_module#ansible-collections-community-general-heroku-collaborator-module",
+  "description": "Manages collaborators for Heroku apps.",
+  "parameters": [
+    {
+      "name": "api_key",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Heroku API key."
+    },
+    {
+      "name": "apps",
+      "aliases": [],
+      "type": "list",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "List of Heroku App names."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Create or remove the heroku collaborator. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "suppress_invitation",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Suppress email invitation when creating collaborator. Choices: false ← (default) true"
+    },
+    {
+      "name": "user",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "User ID or e-mail."
+    }
+  ],
+  "examples": [
+    "- name: Create a heroku collaborator\n  community.general.heroku_collaborator:\n    api_key: YOUR_API_KEY\n    user: max.mustermann@example.com\n    apps: heroku-example-app\n    state: present\n\n- name: An example of using the module in loop\n  community.general.heroku_collaborator:\n    api_key: YOUR_API_KEY\n    user: '{{ item.user }}'\n    apps: '{{ item.apps | default(apps) }}'\n    suppress_invitation: '{{ item.suppress_invitation | default(suppress_invitation) }}'\n    state: '{{ item.state | default(\"present\") }}'\n  with_items:\n    - {user: 'a.b@example.com'}\n    - {state: 'absent', user: 'b.c@example.com', suppress_invitation: false}\n    - {user: 'x.y@example.com', apps: [\"heroku-example-app\"]}"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/heroku_collaborator_module#ansible-collections-community-general-heroku-collaborator-module.html",
+  "parsed_at": "2026-04-11T13:53:14.476055"
+}

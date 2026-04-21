@@ -1,0 +1,201 @@
+{
+  "collection_ns": "amazon_aws",
+  "collection": "amazon.aws",
+  "module": "amazon.aws.aws_az_info",
+  "slug": "aws_az_info_module#ansible-collections-amazon-aws-aws-az-info-module",
+  "description": "Gather information about availability zones in AWS.",
+  "parameters": [
+    {
+      "name": "access_key",
+      "aliases": [
+        "aws_access_key_id",
+        "aws_access_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS access key ID. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY environment variables may also be used in decreasing order of preference. The aws_access_key and profile options are mutually exclusive. The aws_access_key_id alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "aws_ca_bundle",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The location of a CA Bundle to use when validating SSL certificates. The AWS_CA_BUNDLE environment variable may also be used."
+    },
+    {
+      "name": "aws_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary to modify the botocore configuration. Parameters can be found in the AWS documentation https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html#botocore.config.Config."
+    },
+    {
+      "name": "debug_botocore_endpoint_logs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use a botocore.endpoint logger to parse the unique (rather than total) \"resource:action\" API calls made during a task, outputing the set to the resource_actions key in the task results. Use the aws_resource_action callback to output to total list made during a playbook. The ANSIBLE_DEBUG_BOTOCORE_LOGS environment variable may also be used. Choices: false ← (default) true"
+    },
+    {
+      "name": "endpoint_url",
+      "aliases": [
+        "aws_endpoint_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "AWS",
+      "choices": [],
+      "description": "URL to connect to instead of the default AWS endpoints. While this can be used to connection to other AWS-compatible services the amazon.aws and community.aws collections are only tested against AWS. The AWS_URL environment variable may also be used."
+    },
+    {
+      "name": "filters",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "A dict of filters to apply. Each dict item consists of a filter key and a filter value. See https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeAvailabilityZones.html for possible filters. Filter names and values are case sensitive. You can use underscores instead of dashes (-) in the filter keys. Filter keys with underscores will take precedence in case of conflict. Default: {}"
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "aws_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A named AWS profile to use for authentication. See the AWS documentation for more information about named profiles https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html. The AWS_PROFILE environment variable may also be used. The profile option is mutually exclusive with the aws_access_key, aws_secret_key and session_token options."
+    },
+    {
+      "name": "region",
+      "aliases": [
+        "aws_region"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The AWS region to use. For global services such as IAM, Route53 and CloudFront, region is ignored. The AWS_REGION environment variable may also be used. See the Amazon AWS documentation for more information http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region."
+    },
+    {
+      "name": "secret_key",
+      "aliases": [
+        "aws_secret_access_key",
+        "aws_secret_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS secret access key. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SECRET_ACCESS_KEY or AWS_SECRET_KEY environment variables may also be used in decreasing order of preference. The secret_key and profile options are mutually exclusive. The aws_secret_access_key alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "session_token",
+      "aliases": [
+        "aws_session_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS STS session token for use with temporary credentials. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SESSION_TOKEN environment variable may also be used. The session_token and profile options are mutually exclusive."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to false, SSL certificates will not be validated for communication with the AWS APIs. Setting validate_certs=false is strongly discouraged, as an alternative, consider setting aws_ca_bundle instead. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "# Note: These examples do not set authentication details, see the AWS Guide for details.\n\n- name: Gather information about all availability zones\n  amazon.aws.aws_az_info:\n\n- name: Gather information about a single availability zone\n  amazon.aws.aws_az_info:\n    filters:\n      zone-name: eu-west-1a\n\n- name: Gather information in a availability zones based on their state, such as \"available\"\n  amazon.aws.aws_az_info:\n    region: us-east-1\n    filters:\n      state: available"
+  ],
+  "return_values": [
+    {
+      "name": "availability_zones",
+      "type": "list",
+      "description": "Availability zones that match the provided filters. Each element consists of a dict with all the information related to that available zone. Returned: on success Sample: [{\"group_name\": \"us-east-1\", \"messages\": [], \"network_border_group\": \"us-east-1\", \"opt_in_status\": \"opt-in-not-required\", \"region_name\": \"us-east-1\", \"state\": \"available\", \"zone_id\": \"use1-az6\", \"zone_name\": \"us-east-1a\", \"zone_type\": \"availability-zone\"}, {\"group_name\": \"us-east-1\", \"messages\": [], \"network_border_group\": \"us-east-1\", \"opt_in_status\": \"opt-in-not-required\", \"region_name\": \"us-east-1\", \"state\": \"available\", \"zone_id\": \"use1-az1\", \"zone_name\": \"us-east-1b\", \"zone_type\": \"availability-zone\"}]",
+      "returned": "on"
+    },
+    {
+      "name": "group_name",
+      "type": "string",
+      "description": "The name of the associated group. For availability zones, this will be the same as availability_zones.region_name. Returned: on success Sample: \"us-east-1\"",
+      "returned": "on"
+    },
+    {
+      "name": "messages",
+      "type": "list",
+      "description": "List of messages about the availability zone. Returned: on success Sample: [{\"message\": \"message_one\"}, {\"message\": \"message_two\"}]",
+      "returned": "on"
+    },
+    {
+      "name": "message",
+      "type": "string",
+      "description": "The message about the availability zone. Returned: on success Sample: \"msg\"",
+      "returned": "on"
+    },
+    {
+      "name": "network_border_group",
+      "type": "string",
+      "description": "The name of the network border group. Returned: on success Sample: \"us-east-1\"",
+      "returned": "on"
+    },
+    {
+      "name": "opt_in_status",
+      "type": "string",
+      "description": "The opt-in status. The value is always opt-in-not-required for availability zones. Returned: on success Sample: \"opt-in-not-required\"",
+      "returned": "on"
+    },
+    {
+      "name": "region_name",
+      "type": "string",
+      "description": "The name of the region. Returned: on success Sample: \"us-east-1\"",
+      "returned": "on"
+    },
+    {
+      "name": "state",
+      "type": "string",
+      "description": "The state of the availability zone. The value is always available. Returned: on success Sample: \"available\"",
+      "returned": "on"
+    },
+    {
+      "name": "zone_id",
+      "type": "string",
+      "description": "The ID of the availability zone. Returned: on success Sample: \"use1-az5\"",
+      "returned": "on"
+    },
+    {
+      "name": "zone_name",
+      "type": "string",
+      "description": "The name of the availability zone. Returned: on success Sample: \"us-east-1e\"",
+      "returned": "on"
+    },
+    {
+      "name": "zone_type",
+      "type": "string",
+      "description": "The type of zone. Returned: on success Sample: \"availability-zone\"",
+      "returned": "on"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/amazon/aws/aws_az_info_module#ansible-collections-amazon-aws-aws-az-info-module.html",
+  "parsed_at": "2026-04-11T13:52:44.932769"
+}

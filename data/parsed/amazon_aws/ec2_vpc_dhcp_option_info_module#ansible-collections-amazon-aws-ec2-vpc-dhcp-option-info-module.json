@@ -1,0 +1,228 @@
+{
+  "collection_ns": "amazon_aws",
+  "collection": "amazon.aws",
+  "module": "amazon.aws.ec2_vpc_dhcp_option_info",
+  "slug": "ec2_vpc_dhcp_option_info_module#ansible-collections-amazon-aws-ec2-vpc-dhcp-option-info-module",
+  "description": "Gather information about DHCP options sets in AWS.",
+  "parameters": [
+    {
+      "name": "access_key",
+      "aliases": [
+        "aws_access_key_id",
+        "aws_access_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS access key ID. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY environment variables may also be used in decreasing order of preference. The aws_access_key and profile options are mutually exclusive. The aws_access_key_id alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "aws_ca_bundle",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The location of a CA Bundle to use when validating SSL certificates. The AWS_CA_BUNDLE environment variable may also be used."
+    },
+    {
+      "name": "aws_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary to modify the botocore configuration. Parameters can be found in the AWS documentation https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html#botocore.config.Config."
+    },
+    {
+      "name": "debug_botocore_endpoint_logs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use a botocore.endpoint logger to parse the unique (rather than total) \"resource:action\" API calls made during a task, outputing the set to the resource_actions key in the task results. Use the aws_resource_action callback to output to total list made during a playbook. The ANSIBLE_DEBUG_BOTOCORE_LOGS environment variable may also be used. Choices: false ← (default) true"
+    },
+    {
+      "name": "dhcp_options_ids",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Get details of specific DHCP option IDs."
+    },
+    {
+      "name": "dry_run",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Checks whether you have the required permissions to view the DHCP options. Choices: false ← (default) true"
+    },
+    {
+      "name": "endpoint_url",
+      "aliases": [
+        "aws_endpoint_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "AWS",
+      "choices": [],
+      "description": "URL to connect to instead of the default AWS endpoints. While this can be used to connection to other AWS-compatible services the amazon.aws and community.aws collections are only tested against AWS. The AWS_URL environment variable may also be used."
+    },
+    {
+      "name": "filters",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "A dict of filters to apply. Each dict item consists of a filter key and a filter value. See https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeDhcpOptions.html for possible filters. Default: {}"
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "aws_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A named AWS profile to use for authentication. See the AWS documentation for more information about named profiles https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html. The AWS_PROFILE environment variable may also be used. The profile option is mutually exclusive with the aws_access_key, aws_secret_key and session_token options."
+    },
+    {
+      "name": "region",
+      "aliases": [
+        "aws_region"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The AWS region to use. For global services such as IAM, Route53 and CloudFront, region is ignored. The AWS_REGION environment variable may also be used. See the Amazon AWS documentation for more information http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region."
+    },
+    {
+      "name": "secret_key",
+      "aliases": [
+        "aws_secret_access_key",
+        "aws_secret_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS secret access key. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SECRET_ACCESS_KEY or AWS_SECRET_KEY environment variables may also be used in decreasing order of preference. The secret_key and profile options are mutually exclusive. The aws_secret_access_key alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "session_token",
+      "aliases": [
+        "aws_session_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS STS session token for use with temporary credentials. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SESSION_TOKEN environment variable may also be used. The session_token and profile options are mutually exclusive."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to false, SSL certificates will not be validated for communication with the AWS APIs. Setting validate_certs=false is strongly discouraged, as an alternative, consider setting aws_ca_bundle instead. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "# # Note: These examples do not set authentication details, see the AWS Guide for details.\n\n- name: Gather information about all DHCP Option sets for an account or profile\n  amazon.aws.ec2_vpc_dhcp_option_info:\n    region: ap-southeast-2\n    profile: production\n  register: dhcp_info\n\n- name: Gather information about a filtered list of DHCP Option sets\n  amazon.aws.ec2_vpc_dhcp_option_info:\n    region: ap-southeast-2\n    profile: production\n    filters:\n      \"tag:Name\": \"abc-123\"\n  register: dhcp_info\n\n- name: Gather information about a specific DHCP Option set by DhcpOptionId\n  amazon.aws.ec2_vpc_dhcp_option_info:\n    region: ap-southeast-2\n    profile: production\n    dhcp_options_ids: dopt-123fece2\n  register: dhcp_info"
+  ],
+  "return_values": [
+    {
+      "name": "changed",
+      "type": "boolean",
+      "description": "True if listing the dhcp options succeeds. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "dhcp_config",
+      "type": "list",
+      "description": "The boto2-style DHCP options created, associated or found. This return value has been deprecated and will be removed in a release after 2026-12-01. Use dhcp_options instead. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "domain-name",
+      "type": "list",
+      "description": "The domain name for hosts in the DHCP option sets. Returned: when available Sample: [\"my.example.com\"]",
+      "returned": "when"
+    },
+    {
+      "name": "domain-name-servers",
+      "type": "list",
+      "description": "The IP addresses of up to four domain name servers, or AmazonProvidedDNS. Returned: when available Sample: [\"10.0.0.1\", \"10.0.1.1\"]",
+      "returned": "when"
+    },
+    {
+      "name": "netbios-name-servers",
+      "type": "list",
+      "description": "The IP addresses of up to four NetBIOS name servers. Returned: when available Sample: [\"10.0.0.1\", \"10.0.1.1\"]",
+      "returned": "when"
+    },
+    {
+      "name": "netbios-node-type",
+      "type": "string",
+      "description": "The NetBIOS node type (1, 2, 4, or 8). Returned: when available Sample: \"2\"",
+      "returned": "when"
+    },
+    {
+      "name": "ntp-servers",
+      "type": "list",
+      "description": "The IP addresses of up to four Network Time Protocol (NTP) servers. Returned: when available Sample: [\"10.0.0.1\", \"10.0.1.1\"]",
+      "returned": "when"
+    },
+    {
+      "name": "dhcp_options",
+      "type": "list",
+      "description": "The DHCP options created, associated or found. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "dhcp_configurations",
+      "type": "list",
+      "description": "The DHCP configuration for the option set. Returned: success Sample: [{\"key\": \"ntp-servers\", \"values\": [{\"value\": \"10.0.1.2\"}]}, \"{\\\"key\\\": \\\"netbios-name-servers\\\", \\\"values\\\": [{value\\\": \\\"10.0.0.1\\\"}, {\\\"value\\\": \\\"10.0.1.1\\\" }]}\"]",
+      "returned": "success"
+    },
+    {
+      "name": "dhcp_options_id",
+      "type": "string",
+      "description": "The aws resource id of the primary DHCP options set created or found. Returned: success Sample: \"dopt-0955331de6a20dd07\"",
+      "returned": "success"
+    },
+    {
+      "name": "owner_id",
+      "type": "string",
+      "description": "The ID of the AWS account that owns the DHCP options set. Returned: success Sample: \"012345678912\"",
+      "returned": "success"
+    },
+    {
+      "name": "tags",
+      "type": "list",
+      "description": "The tags to be applied to a DHCP options set. Returned: success Sample: [{\"Key\": \"CreatedBy\", \"Value\": \"ansible-test\"}, {\"Key\": \"Collection\", \"Value\": \"amazon.aws\"}]",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_vpc_dhcp_option_info_module.html",
+  "parsed_at": "2026-04-13T16:29:21.135824"
+}

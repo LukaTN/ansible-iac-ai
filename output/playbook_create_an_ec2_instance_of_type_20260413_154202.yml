@@ -1,0 +1,38 @@
+# ============================================================
+# AnsibleAI RAG Generator — LangChain + ChromaDB
+# Date        : 2026-04-13 15:42:02
+# Request     : create an EC2 instance of type t3.micro in us-east-1 region with tag Name=webserver
+# Module      : amazon.aws.elb_classic_lb
+# Collection  : amazon.aws
+# RAG score   : 0.644
+# Chunks used : 6
+# Source URL  : https://docs.ansible.com/ansible/latest/collections/amazon/aws/elb_classic_lb_module#ansible-collections-amazon-aws-elb-classic-lb-module.html
+# LLM model   : qwen2.5-coder:7b
+# ============================================================
+
+---
+- name: Create an EC2 instance and tag it
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - amazon.aws
+  tasks:
+    - name: Launch EC2 instance
+      amazon.aws.ec2_instance:
+        key_name: my-key-pair
+        region: us-east-1
+        instance_type: t3.micro
+        image_id: ami-0c55b159cbfafe1f0
+        wait: yes
+        group_ids:
+          - sg-0e42d8a6ce7b72890
+        assign_public_ip: yes
+      register: ec2_instance
+
+    - name: Tag EC2 instance
+      amazon.aws.ec2_tag:
+        resource_id: "{{ ec2_instance.instances[0].id }}"
+        region: us-east-1
+        tags:
+          Name: webserver

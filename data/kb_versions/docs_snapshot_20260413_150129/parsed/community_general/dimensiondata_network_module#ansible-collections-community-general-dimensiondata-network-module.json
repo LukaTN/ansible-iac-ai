@@ -1,0 +1,184 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.dimensiondata_network",
+  "slug": "dimensiondata_network_module#ansible-collections-community-general-dimensiondata-network-module",
+  "description": "Create, update, and delete MCP 1.0 & 2.0 networks.",
+  "parameters": [
+    {
+      "name": "description",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Additional description of the network domain."
+    },
+    {
+      "name": "location",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The target datacenter."
+    },
+    {
+      "name": "mcp_password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The password used to authenticate to the CloudControl API. If not specified, falls back to MCP_PASSWORD from environment variable or ~/.dimensiondata. Required if mcp_user is specified."
+    },
+    {
+      "name": "mcp_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The username used to authenticate to the CloudControl API. If not specified, falls back to MCP_USER from environment variable or ~/.dimensiondata."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the network domain to create."
+    },
+    {
+      "name": "region",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "The target region. Regions are defined in Apache libcloud project [libcloud/common/dimensiondata.py]. They are also listed in https://libcloud.readthedocs.io/en/latest/compute/drivers/dimensiondata.html. Note that the default value na stands for “North America”. The module prepends dd- to the region choice. Default: \"na\""
+    },
+    {
+      "name": "service_plan",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ESSENTIALS\" ← (default)",
+        "\"ADVANCED\""
+      ],
+      "description": "The service plan, either “ESSENTIALS” or “ADVANCED”. MCP 2.0 Only. Choices: \"ESSENTIALS\" ← (default) \"ADVANCED\""
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Should the resource be present or absent. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If false, SSL certificates are not validated. This should only be used on private instances of the CloudControl API that use self-signed certificates. Choices: false true ← (default)"
+    },
+    {
+      "name": "wait",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Should we wait for the task to complete before moving onto the next. Choices: false ← (default) true"
+    },
+    {
+      "name": "wait_poll_interval",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "2",
+      "choices": [],
+      "description": "The amount of time (in seconds) to wait between checks for task completion. Only applicable if wait=true. Default: 2"
+    },
+    {
+      "name": "wait_time",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "600",
+      "choices": [],
+      "description": "The maximum amount of time (in seconds) to wait for the task to complete. Only applicable if wait=true. Default: 600"
+    }
+  ],
+  "examples": [
+    "- name: Create an MCP 1.0 network\n  community.general.dimensiondata_network:\n    region: na\n    location: NA5\n    name: mynet\n\n- name: Create an MCP 2.0 network\n  community.general.dimensiondata_network:\n    region: na\n    mcp_user: my_user\n    mcp_password: my_password\n    location: NA9\n    name: mynet\n    service_plan: ADVANCED\n\n- name: Delete a network\n  community.general.dimensiondata_network:\n    region: na\n    location: NA1\n    name: mynet\n    state: absent"
+  ],
+  "return_values": [
+    {
+      "name": "network",
+      "type": "complex",
+      "description": "Dictionary describing the network. Returned: On success when state=present.",
+      "returned": "On"
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "description": "Network description. Returned: success Sample: \"My network description\"",
+      "returned": "success"
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "description": "Network ID. Returned: success Sample: \"8c787000-a000-4050-a215-280893411a7d\"",
+      "returned": "success"
+    },
+    {
+      "name": "location",
+      "type": "string",
+      "description": "Datacenter location. Returned: success Sample: \"NA3\"",
+      "returned": "success"
+    },
+    {
+      "name": "multicast",
+      "type": "boolean",
+      "description": "Multicast enabled? (MCP 1.0 only). Returned: success Sample: false",
+      "returned": "success"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "Network name. Returned: success Sample: \"My network\"",
+      "returned": "success"
+    },
+    {
+      "name": "private_net",
+      "type": "string",
+      "description": "Private network subnet. (MCP 1.0 only). Returned: success Sample: \"10.2.3.0\"",
+      "returned": "success"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "description": "Network status. (MCP 2.0 only). Returned: success Sample: \"NORMAL\"",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/dimensiondata_network_module#ansible-collections-community-general-dimensiondata-network-module.html",
+  "parsed_at": "2026-04-11T13:53:12.371492"
+}

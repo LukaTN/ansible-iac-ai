@@ -1,0 +1,109 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.zfs_facts",
+  "slug": "zfs_facts_module#ansible-collections-community-general-zfs-facts-module",
+  "description": "Gather facts from ZFS dataset properties.",
+  "parameters": [
+    {
+      "name": "depth",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "0",
+      "choices": [],
+      "description": "Specifies recursion depth. Default: 0"
+    },
+    {
+      "name": "name",
+      "aliases": [
+        "ds",
+        "dataset"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "ZFS dataset name."
+    },
+    {
+      "name": "parsable",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Specifies if property values should be displayed in machine friendly format. Choices: false ← (default) true"
+    },
+    {
+      "name": "properties",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "all",
+      "choices": [],
+      "description": "Specifies which dataset properties should be queried in comma-separated format. For more information about dataset properties, check zfs(1M) man page. Default: \"all\""
+    },
+    {
+      "name": "recurse",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Specifies if properties for any children should be recursively displayed. Choices: false ← (default) true"
+    },
+    {
+      "name": "type",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[",
+      "choices": [
+        "\"all\" ← (default)",
+        "\"filesystem\"",
+        "\"volume\"",
+        "\"snapshot\"",
+        "\"bookmark\""
+      ],
+      "description": "Specifies which datasets types to display. Multiple values have to be provided as a list or in comma-separated form. Value all cannot be used together with other values. Choices: \"all\" ← (default) \"filesystem\" \"volume\" \"snapshot\" \"bookmark\" Default: [\"all\"]"
+    }
+  ],
+  "examples": [
+    "- name: Gather facts about ZFS dataset rpool/export/home\n  community.general.zfs_facts:\n    dataset: rpool/export/home\n\n- name: Report space usage on ZFS filesystems under data/home\n  community.general.zfs_facts:\n    name: data/home\n    recurse: true\n    type: filesystem\n\n- ansible.builtin.debug:\n    msg: 'ZFS dataset {{ item.name }} consumes {{ item.used }} of disk space.'\n  with_items: '{{ ansible_zfs_datasets }}'"
+  ],
+  "return_values": [
+    {
+      "name": "name",
+      "type": "string",
+      "description": "ZFS dataset name. Returned: always Sample: \"rpool/var/spool\"",
+      "returned": "always"
+    },
+    {
+      "name": "parsable",
+      "type": "boolean",
+      "description": "If parsable output should be provided in machine friendly format. Returned: if parsable=True Sample: true",
+      "returned": "if"
+    },
+    {
+      "name": "recurse",
+      "type": "boolean",
+      "description": "If we should recurse over ZFS dataset. Returned: if recurse=True Sample: true",
+      "returned": "if"
+    },
+    {
+      "name": "zfs_datasets",
+      "type": "string",
+      "description": "ZFS dataset facts. Returned: always Sample: \"{'aclinherit': 'restricted', 'aclmode': 'discard', 'atime': 'on', 'available': '43.8G', 'canmount': 'on', 'casesensitivity': 'sensitive', 'checksum': 'on', 'compression': 'off', 'compressratio': '1.00x', 'copies': '1', 'creation': 'Thu Jun 16 11:37 2016', 'dedup': 'off', 'devices': 'on', 'exec': 'on', 'filesystem_count': 'none', 'filesystem_limit': 'none', 'logbias': 'latency', 'logicalreferenced': '18.5K', 'logicalused': '3.45G', 'mlslabel': 'none', 'mounted': 'yes', 'mountpoint': '/rpool', 'name': 'rpool', 'nbmand': 'off', 'normalization': 'none', 'org.openindiana.caiman:install': 'ready', 'primarycache': 'all', 'quota': 'none', 'readonly': 'off', 'recordsize': '128K', 'redundant_metadata': 'all', 'refcompressratio': '1.00x', 'referenced': '29.5K', 'refquota': 'none', 'refreservation': 'none', 'reservation': 'none', 'secondarycache': 'all', 'setuid': 'on', 'sharenfs': 'off', 'sharesmb': 'off', 'snapdir': 'hidden', 'snapshot_count': 'none', 'snapshot_limit': 'none', 'sync': 'standard', 'type': 'filesystem', 'used': '4.41G', 'usedbychildren': '4.41G', 'usedbydataset': '29.5K', 'usedbyrefreservation': '0', 'usedbysnapshots': '0', 'utf8only': 'off', 'version': '5', 'vscan': 'off', 'written': '29.5K', 'xattr': 'on', 'zoned': 'off'}\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/zfs_facts_module.html",
+  "parsed_at": "2026-04-13T16:30:01.078553"
+}

@@ -1,0 +1,346 @@
+{
+  "collection_ns": "azure_azcollection",
+  "collection": "azure.azcollection",
+  "module": "azure.azcollection.azure_rm_containerinstance_info",
+  "slug": "azure_rm_containerinstance_info_module#ansible-collections-azure-azcollection-azure-rm-containerinstance-info-module",
+  "description": "Get facts of Container Instance.",
+  "parameters": [
+    {
+      "name": "ad_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory username. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "adfs_authority_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure AD authority url. Use when authenticating with Username/password, and has your own ADFS authority."
+    },
+    {
+      "name": "api_profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "Selects an API profile to use when communicating with Azure services. Default value of latest is appropriate for public clouds; future values will allow use with Azure Stack. Default: \"latest\""
+    },
+    {
+      "name": "auth_source",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "az",
+      "choices": [
+        "\"auto\" ← (default)",
+        "\"cli\"",
+        "\"credential_file\"",
+        "\"env\"",
+        "\"msi\""
+      ],
+      "description": "Controls the source of the credentials to use for authentication. Can also be set via the ANSIBLE_AZURE_AUTH_SOURCE environment variable. When set to auto (the default) the precedence is module parameters -> env -> credential_file -> cli. When set to env, the credentials will be read from the environment variables When set to credential_file, it will read the profile from ~/.azure/credentials. When set to cli, the credentials will be sources from the Azure CLI profile. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if more than one is present otherwise the default az cli subscription is used. When set to msi, the host machine must be an azure resource with an enabled MSI extension. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if the resource is granted access to more than one subscription, otherwise the first subscription is chosen. The msi was added in Ansible 2.6. Choices: \"auto\" ← (default) \"cli\" \"credential_file\" \"env\" \"msi\""
+    },
+    {
+      "name": "cert_validation_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ignore\"",
+        "\"validate\""
+      ],
+      "description": "Controls the certificate validation behavior for Azure endpoints. By default, all modules will validate the server certificate, but when an HTTPS proxy is in use, or against Azure Stack, it may be necessary to disable this behavior by passing ignore. Can also be set via credential file profile or the AZURE_CERT_VALIDATION environment variable. Choices: \"ignore\" \"validate\""
+    },
+    {
+      "name": "client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client ID. Use when authenticating with a Service Principal or Managed Identity (msi). Can also be set via the AZURE_CLIENT_ID environment variable."
+    },
+    {
+      "name": "cloud_environment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "AzureCloud",
+      "choices": [],
+      "description": "For cloud environments other than the US public cloud, the environment name (as defined by Azure Python SDK, eg, AzureChinaCloud, AzureUSGovernment), or a metadata discovery endpoint URL (required for Azure Stack). Can also be set via credential file profile or the AZURE_CLOUD_ENVIRONMENT environment variable. Default: \"AzureCloud\""
+    },
+    {
+      "name": "disable_instance_discovery",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Determines whether or not instance discovery is performed when attempting to authenticate. Setting this to true will completely disable both instance discovery and authority validation. This functionality is intended for use in scenarios where the metadata endpoint cannot be reached such as in private clouds or Azure Stack. The process of instance discovery entails retrieving authority metadata from https://login.microsoft.com/ to validate the authority. By setting this to **True**, the validation of the authority is disabled. As a result, it is crucial to ensure that the configured authority host is valid and trustworthy. Set via credential file profile or the AZURE_DISABLE_INSTANCE_DISCOVERY environment variable. Choices: false ← (default) true"
+    },
+    {
+      "name": "log_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "log_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The name of the container instance."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory user password. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security profile found in ~/.azure/credentials file."
+    },
+    {
+      "name": "resource_group",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the resource group."
+    },
+    {
+      "name": "secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client secret. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "subscription_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Your Azure subscription Id."
+    },
+    {
+      "name": "tags",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Limit results by providing of tags. Format tags ‘key:value’."
+    },
+    {
+      "name": "tenant",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure tenant ID. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "thumbprint",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The thumbprint of the private key specified in x509_certificate_path. Use when authenticating with a Service Principal. Required if x509_certificate_path is defined."
+    },
+    {
+      "name": "x509_certificate_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the X509 certificate used to create the service principal in PEM format. The certificate must be appended to the private key. Use when authenticating with a Service Principal."
+    }
+  ],
+  "examples": [
+    "- name: Get specific Container Instance facts\n  azure_rm_containerinstance_info:\n    resource_group: myResourceGroup\n    name: myContainer\n\n- name: List Container Instances in a specified resource group name\n  azure_rm_containerinstance_info:\n    resource_group: myResourceGroup\n    tags:\n      - key\n      - key:value"
+  ],
+  "return_values": [
+    {
+      "name": "container_groups",
+      "type": "complex",
+      "description": "A list of Container Instance dictionaries. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "containers",
+      "type": "complex",
+      "description": "The containers within the container group. Returned: always Sample: \"containers\"",
+      "returned": "always"
+    },
+    {
+      "name": "commands",
+      "type": "list",
+      "description": "List of commands to execute within the container instance in exec form. Returned: always Sample: [\"pip install abc\"]",
+      "returned": "always"
+    },
+    {
+      "name": "cpu",
+      "type": "integer",
+      "description": "The required number of CPU cores of the containers. Returned: always Sample: 1",
+      "returned": "always"
+    },
+    {
+      "name": "environment_variables",
+      "type": "complex",
+      "description": "List of container environment variables. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "Environment variable name. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "description": "Environment variable value. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "image",
+      "type": "string",
+      "description": "The container image name. Returned: always Sample: \"/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/myResourceGroup/providers/Microsoft.ContainerInstance /containerGroups/myContainer\"",
+      "returned": "always"
+    },
+    {
+      "name": "memory",
+      "type": "float",
+      "description": "The required memory of the containers in GB. Returned: always Sample: 1.5",
+      "returned": "always"
+    },
+    {
+      "name": "ports",
+      "type": "list",
+      "description": "List of ports exposed within the container group. Returned: always Sample: [80, 81]",
+      "returned": "always"
+    },
+    {
+      "name": "volume_mounts",
+      "type": "list",
+      "description": "The list of volumes mounted in container instance Returned: If volumes mounted in container instance Sample: [{\"mount_path\": \"/mnt/repo\", \"name\": \"myvolume1\"}]",
+      "returned": "If"
+    },
+    {
+      "name": "dns_name_label",
+      "type": "string",
+      "description": "The Dns name label for the IP. Returned: always Sample: \"mydomain\"",
+      "returned": "always"
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "description": "The resource id. Returned: always Sample: \"/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/myResourceGroup/providers/Microsoft.ContainerInstance/contain erGroups/myContainer\"",
+      "returned": "always"
+    },
+    {
+      "name": "identity",
+      "type": "complex",
+      "description": "Identity for the Server. Returned: when available",
+      "returned": "when"
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "description": "Type of the managed identity Returned: always Sample: \"UserAssigned\"",
+      "returned": "always"
+    },
+    {
+      "name": "user_assigned_identities",
+      "type": "complex",
+      "description": "User Assigned Managed Identities and its options Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "ip_address",
+      "type": "string",
+      "description": "IP address of the container instance. Returned: always Sample: \"173.15.18.1\"",
+      "returned": "always"
+    },
+    {
+      "name": "location",
+      "type": "string",
+      "description": "The resource location. Returned: always Sample: \"westus\"",
+      "returned": "always"
+    },
+    {
+      "name": "os_type",
+      "type": "string",
+      "description": "The OS type of containers. Returned: always Sample: \"linux\"",
+      "returned": "always"
+    },
+    {
+      "name": "resource_group",
+      "type": "string",
+      "description": "Resource group where the container exists. Returned: always Sample: \"testrg\"",
+      "returned": "always"
+    },
+    {
+      "name": "subnet_ids",
+      "type": "list",
+      "description": "The subnet resource IDs for a container group. Returned: always Sample: [{\"id\": \"/subscriptions/xxx-xxx/resourceGroups/myRG/providers/Microsoft.Network/virtualNetworks/vnetrpfx/subnets/subrpfx\"}]",
+      "returned": "always"
+    },
+    {
+      "name": "tags",
+      "type": "dictionary",
+      "description": "Tags assigned to the resource. Dictionary of string:string pairs. Returned: success Sample: {\"tag1\": \"abc\"}",
+      "returned": "success"
+    },
+    {
+      "name": "volumes",
+      "type": "list",
+      "description": "The list of Volumes that can be mounted by container instances Returned: If container group has volumes Sample: [{\"git_repo\": {\"repository\": \"https://github.com/Azure-Samples/aci-helloworld.git\"}, \"name\": \"myvolume1\"}]",
+      "returned": "If"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_containerinstance_info_module#ansible-collections-azure-azcollection-azure-rm-containerinstance-info-module.html",
+  "parsed_at": "2026-04-11T13:52:56.657550"
+}

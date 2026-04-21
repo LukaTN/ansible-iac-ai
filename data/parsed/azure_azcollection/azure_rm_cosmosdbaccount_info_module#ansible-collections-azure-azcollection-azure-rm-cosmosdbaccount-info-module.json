@@ -1,0 +1,466 @@
+{
+  "collection_ns": "azure_azcollection",
+  "collection": "azure.azcollection",
+  "module": "azure.azcollection.azure_rm_cosmosdbaccount_info",
+  "slug": "azure_rm_cosmosdbaccount_info_module#ansible-collections-azure-azcollection-azure-rm-cosmosdbaccount-info-module",
+  "description": "Get facts of Azure Cosmos DB Account.",
+  "parameters": [
+    {
+      "name": "ad_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory username. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "adfs_authority_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure AD authority url. Use when authenticating with Username/password, and has your own ADFS authority."
+    },
+    {
+      "name": "api_profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "Selects an API profile to use when communicating with Azure services. Default value of latest is appropriate for public clouds; future values will allow use with Azure Stack. Default: \"latest\""
+    },
+    {
+      "name": "auth_source",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "az",
+      "choices": [
+        "\"auto\" ← (default)",
+        "\"cli\"",
+        "\"credential_file\"",
+        "\"env\"",
+        "\"msi\""
+      ],
+      "description": "Controls the source of the credentials to use for authentication. Can also be set via the ANSIBLE_AZURE_AUTH_SOURCE environment variable. When set to auto (the default) the precedence is module parameters -> env -> credential_file -> cli. When set to env, the credentials will be read from the environment variables When set to credential_file, it will read the profile from ~/.azure/credentials. When set to cli, the credentials will be sources from the Azure CLI profile. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if more than one is present otherwise the default az cli subscription is used. When set to msi, the host machine must be an azure resource with an enabled MSI extension. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if the resource is granted access to more than one subscription, otherwise the first subscription is chosen. The msi was added in Ansible 2.6. Choices: \"auto\" ← (default) \"cli\" \"credential_file\" \"env\" \"msi\""
+    },
+    {
+      "name": "cert_validation_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ignore\"",
+        "\"validate\""
+      ],
+      "description": "Controls the certificate validation behavior for Azure endpoints. By default, all modules will validate the server certificate, but when an HTTPS proxy is in use, or against Azure Stack, it may be necessary to disable this behavior by passing ignore. Can also be set via credential file profile or the AZURE_CERT_VALIDATION environment variable. Choices: \"ignore\" \"validate\""
+    },
+    {
+      "name": "client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client ID. Use when authenticating with a Service Principal or Managed Identity (msi). Can also be set via the AZURE_CLIENT_ID environment variable."
+    },
+    {
+      "name": "cloud_environment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "AzureCloud",
+      "choices": [],
+      "description": "For cloud environments other than the US public cloud, the environment name (as defined by Azure Python SDK, eg, AzureChinaCloud, AzureUSGovernment), or a metadata discovery endpoint URL (required for Azure Stack). Can also be set via credential file profile or the AZURE_CLOUD_ENVIRONMENT environment variable. Default: \"AzureCloud\""
+    },
+    {
+      "name": "disable_instance_discovery",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Determines whether or not instance discovery is performed when attempting to authenticate. Setting this to true will completely disable both instance discovery and authority validation. This functionality is intended for use in scenarios where the metadata endpoint cannot be reached such as in private clouds or Azure Stack. The process of instance discovery entails retrieving authority metadata from https://login.microsoft.com/ to validate the authority. By setting this to **True**, the validation of the authority is disabled. As a result, it is crucial to ensure that the configured authority host is valid and trustworthy. Set via credential file profile or the AZURE_DISABLE_INSTANCE_DISCOVERY environment variable. Choices: false ← (default) true"
+    },
+    {
+      "name": "log_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "log_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Cosmos DB database account name."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory user password. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security profile found in ~/.azure/credentials file."
+    },
+    {
+      "name": "resource_group",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of an Azure resource group."
+    },
+    {
+      "name": "retrieve_connection_strings",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Retrieve connection strings. Choices: false true"
+    },
+    {
+      "name": "retrieve_keys",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"all\"",
+        "\"readonly\""
+      ],
+      "description": "Retrieve keys and connection strings. Choices: \"all\" \"readonly\""
+    },
+    {
+      "name": "secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client secret. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "subscription_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Your Azure subscription Id."
+    },
+    {
+      "name": "tags",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Limit results by providing a list of tags. Format tags as ‘key’ or ‘key:value’."
+    },
+    {
+      "name": "tenant",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure tenant ID. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "thumbprint",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The thumbprint of the private key specified in x509_certificate_path. Use when authenticating with a Service Principal. Required if x509_certificate_path is defined."
+    },
+    {
+      "name": "x509_certificate_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the X509 certificate used to create the service principal in PEM format. The certificate must be appended to the private key. Use when authenticating with a Service Principal."
+    }
+  ],
+  "examples": [
+    "- name: Get instance of Database Account\n  azure_rm_cosmosdbaccount_info:\n    resource_group: myResourceGroup\n    name: testaccount\n\n- name: List instances of Database Account\n  azure_rm_cosmosdbaccount_info:\n    resource_group: myResourceGroup\n    tags:\n      - key\n      - key:value"
+  ],
+  "return_values": [
+    {
+      "name": "accounts",
+      "type": "complex",
+      "description": "A list of dictionaries containing facts for Database Account. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "connection_strings",
+      "type": "list",
+      "description": "List of connection strings. Returned: when requested",
+      "returned": "when"
+    },
+    {
+      "name": "connection_string",
+      "type": "string",
+      "description": "Description of connection string. Returned: always Sample: \"Primary SQL Connection String\"",
+      "returned": "always"
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "description": "Connection string. Returned: always Sample: \"AccountEndpoint=https://testaccount.documents.azure.com:443/;AccountKey=xxxxx\"",
+      "returned": "always"
+    },
+    {
+      "name": "consistency_policy",
+      "type": "complex",
+      "description": "Consistency policy. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "default_consistency_level",
+      "type": "string",
+      "description": "Default consistency level. Returned: always Sample: \"session\"",
+      "returned": "always"
+    },
+    {
+      "name": "max_interval_in_seconds",
+      "type": "integer",
+      "description": "Maximum interval in seconds. Returned: always Sample: 5",
+      "returned": "always"
+    },
+    {
+      "name": "max_staleness_prefix",
+      "type": "integer",
+      "description": "Maximum staleness prefix. Returned: always Sample: 100",
+      "returned": "always"
+    },
+    {
+      "name": "database_account_offer_type",
+      "type": "string",
+      "description": "Offer type. Returned: always Sample: \"Standard\"",
+      "returned": "always"
+    },
+    {
+      "name": "document_endpoint",
+      "type": "string",
+      "description": "Document endpoint. Returned: always Sample: \"https://testaccount.documents.azure.com:443/\"",
+      "returned": "always"
+    },
+    {
+      "name": "enable_automatic_failover",
+      "type": "boolean",
+      "description": "Enable automatic failover. Returned: always Sample: true",
+      "returned": "always"
+    },
+    {
+      "name": "enable_cassandra",
+      "type": "boolean",
+      "description": "Enable Cassandra. Returned: always Sample: true",
+      "returned": "always"
+    },
+    {
+      "name": "enable_free_tier",
+      "type": "boolean",
+      "description": "If enabled the account is free-tier. Returned: always Sample: true",
+      "returned": "always"
+    },
+    {
+      "name": "enable_gremlin",
+      "type": "boolean",
+      "description": "Enable Gremlin. Returned: always Sample: true",
+      "returned": "always"
+    },
+    {
+      "name": "enable_multiple_write_locations",
+      "type": "boolean",
+      "description": "Enable multiple write locations. Returned: always Sample: true",
+      "returned": "always"
+    },
+    {
+      "name": "enable_table",
+      "type": "boolean",
+      "description": "Enable Table. Returned: always Sample: true",
+      "returned": "always"
+    },
+    {
+      "name": "failover_policies",
+      "type": "complex",
+      "description": "The list of new failover policies for the failover priority change. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "failover_priority",
+      "type": "integer",
+      "description": "Failover priority. Returned: always Sample: 0",
+      "returned": "always"
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "description": "Read location ID. Returned: always Sample: \"testaccount-eastus\"",
+      "returned": "always"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "Location name. Returned: always Sample: \"eastus\"",
+      "returned": "always"
+    },
+    {
+      "name": "ip_range_filter",
+      "type": "string",
+      "description": "(deprecated) Enabled IP range filter. This value has been deprecated, and will be removed in a later version. Use c(ip_rules) instead. Returned: always Sample: \"10.10.10.10\"",
+      "returned": "always"
+    },
+    {
+      "name": "ip_rules",
+      "type": "list",
+      "description": "The IP addresses or IP address ranges in CIDR form included as the allowed list of client IPs. Returned: always Sample: [\"10.10.10.10\", \"20.20.20.20/28\"]",
+      "returned": "always"
+    },
+    {
+      "name": "is_virtual_network_filter_enabled",
+      "type": "boolean",
+      "description": "Enable virtual network filter. Returned: always Sample: true",
+      "returned": "always"
+    },
+    {
+      "name": "kind",
+      "type": "string",
+      "description": "Indicates the type of database account. Returned: always Sample: \"global_document_db\"",
+      "returned": "always"
+    },
+    {
+      "name": "location",
+      "type": "string",
+      "description": "The location of the resource group to which the resource belongs. Returned: always Sample: \"westus\"",
+      "returned": "always"
+    },
+    {
+      "name": "mongo_version",
+      "type": "string",
+      "description": "Server version for the MongoDB account. Only used for c(kind) = i(mongo_db); otherwise value is null/none. Returned: always Sample: \"4.0\"",
+      "returned": "always"
+    },
+    {
+      "name": "primary_master_key",
+      "type": "string",
+      "description": "Primary master key. Returned: when requested Sample: \"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\"",
+      "returned": "when"
+    },
+    {
+      "name": "primary_readonly_master_key",
+      "type": "string",
+      "description": "Primary master key. Returned: when requested Sample: \"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\"",
+      "returned": "when"
+    },
+    {
+      "name": "provisioning_state",
+      "type": "string",
+      "description": "Provisioning state of Cosmos DB. Returned: always Sample: \"Succeeded\"",
+      "returned": "always"
+    },
+    {
+      "name": "public_network_access",
+      "type": "string",
+      "description": "If public network access is allowed to the server. Returned: always Sample: \"Enabled\"",
+      "returned": "always"
+    },
+    {
+      "name": "read_locations",
+      "type": "complex",
+      "description": "Read locations. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "resource_group",
+      "type": "string",
+      "description": "Name of an Azure resource group. Returned: always Sample: \"myResourceGroup\"",
+      "returned": "always"
+    },
+    {
+      "name": "secondary_master_key",
+      "type": "string",
+      "description": "Primary master key. Returned: when requested Sample: \"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\"",
+      "returned": "when"
+    },
+    {
+      "name": "secondary_readonly_master_key",
+      "type": "string",
+      "description": "Primary master key. Returned: when requested Sample: \"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\"",
+      "returned": "when"
+    },
+    {
+      "name": "tags",
+      "type": "dictionary",
+      "description": "Tags assigned to the resource. Dictionary of “string”:”string” pairs. Returned: always Sample: {\"tag1\": \"abc\"}",
+      "returned": "always"
+    },
+    {
+      "name": "virtual_network_rules",
+      "type": "list",
+      "description": "List of Virtual Network ACL rules configured for the Cosmos DB account. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "ignore_missing_v_net_service_endpoint",
+      "type": "boolean",
+      "description": "Create Cosmos DB account without existing virtual network service endpoint. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "subnet",
+      "type": "string",
+      "description": "Resource id of a subnet. Returned: success Sample: \"/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/myResourceGroup/providers/Microsoft.Network/virtualNet works/testvnet/subnets/testsubnet1\"",
+      "returned": "success"
+    },
+    {
+      "name": "write_locations",
+      "type": "complex",
+      "description": "Write locations. Returned: always",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_cosmosdbaccount_info_module.html",
+  "parsed_at": "2026-04-13T16:29:30.614793"
+}

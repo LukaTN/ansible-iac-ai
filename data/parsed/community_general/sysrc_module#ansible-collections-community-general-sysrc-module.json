@@ -1,0 +1,74 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.sysrc",
+  "slug": "sysrc_module#ansible-collections-community-general-sysrc-module",
+  "description": "Manages /etc/rc.conf for FreeBSD.",
+  "parameters": [
+    {
+      "name": "delim",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Delimiter to be used instead of \" \" (space). Only used when state=value_present or state=value_absent. Default: \" \""
+    },
+    {
+      "name": "jail",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name or ID of the jail to operate on."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of variable in /etc/rc.conf to manage."
+    },
+    {
+      "name": "path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "/etc/rc.conf",
+      "choices": [],
+      "description": "Path to file to use instead of /etc/rc.conf. Default: \"/etc/rc.conf\""
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)",
+        "\"value_present\"",
+        "\"value_absent\""
+      ],
+      "description": "Use present to add the variable. Use absent to remove the variable. Use value_present to add the value to the existing variable. Use value_absent to remove the value from the existing variable. Choices: \"absent\" \"present\" ← (default) \"value_present\" \"value_absent\""
+    },
+    {
+      "name": "value",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The value to set when state=present. The value to add when state=value_present. The value to remove when state=value_absent."
+    }
+  ],
+  "examples": [
+    "# enable mysql in the /etc/rc.conf\n- name: Configure mysql pid file\n  community.general.sysrc:\n    name: mysql_pidfile\n    value: \"/var/run/mysqld/mysqld.pid\"\n\n# enable accf_http kld in the boot loader\n- name: Enable accf_http kld\n  community.general.sysrc:\n    name: accf_http_load\n    state: present\n    value: \"YES\"\n    path: /boot/loader.conf\n\n# add gif0 to cloned_interfaces\n- name: Add gif0 interface\n  community.general.sysrc:\n    name: cloned_interfaces\n    state: value_present\n    value: \"gif0\"\n\n# enable nginx on a jail\n- name: Enable nginx in test jail\n  community.general.sysrc:\n    name: nginx_enable\n    value: \"YES\"\n    jail: testjail"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/sysrc_module.html",
+  "parsed_at": "2026-04-13T16:29:59.385540"
+}

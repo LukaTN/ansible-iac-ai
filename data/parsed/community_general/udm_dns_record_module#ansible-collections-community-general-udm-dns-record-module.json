@@ -1,0 +1,65 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.udm_dns_record",
+  "slug": "udm_dns_record_module#ansible-collections-community-general-udm-dns-record-module",
+  "description": "This module allows to manage DNS records on a univention corporate server (UCS). It uses the Python API of the UCS to create a new object or edit it.",
+  "parameters": [
+    {
+      "name": "data",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "Additional data for this record, for example {'a': '192.0.2.1'}. Required if state=present. Default: {}"
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the record, this is also the DNS record. For example www for www.example.com. For PTR records this has to be the IP address."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Whether the DNS record is present or not. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "type",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [
+        "are"
+      ],
+      "description": "Define the record type. host_record is a A or AAAA record, alias is a CNAME, ptr_record is a PTR record, srv_record is a SRV record and txt_record is a TXT record. The available choices are: host_record, alias, ptr_record, srv_record, txt_record."
+    },
+    {
+      "name": "zone",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Corresponding DNS zone for this record, for example example.com. For PTR records this has to be the full reverse zone (for example 1.1.192.in-addr.arpa)."
+    }
+  ],
+  "examples": [
+    "- name: Create a DNS record on a UCS\n  community.general.udm_dns_record:\n    name: www\n    zone: example.com\n    type: host_record\n    data:\n      a:\n        - 192.0.2.1\n        - 2001:0db8::42\n\n- name: Create a DNS v4 PTR record on a UCS\n  community.general.udm_dns_record:\n    name: 192.0.2.1\n    zone: 2.0.192.in-addr.arpa\n    type: ptr_record\n    data:\n      ptr_record: \"www.example.com.\"\n\n- name: Create a DNS v6 PTR record on a UCS\n  community.general.udm_dns_record:\n    name: 2001:db8:0:0:0:ff00:42:8329\n    zone: 2.4.0.0.0.0.f.f.0.0.0.0.0.0.0.0.0.0.0.0.8.b.d.0.1.0.0.2.ip6.arpa\n    type: ptr_record\n    data:\n      ptr_record: \"www.example.com.\""
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/udm_dns_record_module.html",
+  "parsed_at": "2026-04-13T16:29:59.642044"
+}

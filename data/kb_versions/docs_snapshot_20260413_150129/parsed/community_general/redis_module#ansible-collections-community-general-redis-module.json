@@ -1,0 +1,188 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.redis",
+  "slug": "redis_module#ansible-collections-community-general-redis-module",
+  "description": "Unified utility to interact with redis instances.",
+  "parameters": [
+    {
+      "name": "ca_certs",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to root certificates file. If not set and tls is set to true, certifi’s CA certificates are used."
+    },
+    {
+      "name": "client_cert_file",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the client certificate file."
+    },
+    {
+      "name": "client_key_file",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the client private key file."
+    },
+    {
+      "name": "command",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"config\"",
+        "\"flush\"",
+        "\"replica\"",
+        "\"slave\""
+      ],
+      "description": "The selected redis command. config ensures a configuration setting on an instance. flush flushes all the instance or a specified db. replica sets a redis instance in replica or master mode. (slave is an alias for replica). Choices: \"config\" \"flush\" \"replica\" \"slave\""
+    },
+    {
+      "name": "db",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The database to flush (used in DB mode) [flush command]."
+    },
+    {
+      "name": "flush_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"all\" ← (default)",
+        "\"db\""
+      ],
+      "description": "Type of flush (all the DBs in a redis instance or a specific one) [flush command]. Choices: \"all\" ← (default) \"db\""
+    },
+    {
+      "name": "login_host",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "localhost",
+      "choices": [],
+      "description": "Specify the target host running the database. Default: \"localhost\""
+    },
+    {
+      "name": "login_password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specify the password to authenticate with. Usually not used when target is localhost."
+    },
+    {
+      "name": "login_port",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "6379",
+      "choices": [],
+      "description": "Specify the port to connect to. Default: 6379"
+    },
+    {
+      "name": "login_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specify the user to authenticate with. Requires redis >= 3.4.0."
+    },
+    {
+      "name": "master_host",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The host of the master instance [replica command]."
+    },
+    {
+      "name": "master_port",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The port of the master instance [replica command]."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A redis config key."
+    },
+    {
+      "name": "replica_mode",
+      "aliases": [
+        "slave_mode"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"master\"",
+        "\"replica\" ← (default)",
+        "\"slave\""
+      ],
+      "description": "The mode of the redis instance [replica command]. slave is an alias for replica. Choices: \"master\" \"replica\" ← (default) \"slave\""
+    },
+    {
+      "name": "tls",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Specify whether or not to use TLS for the connection. Choices: false ← (default) true"
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Specify whether or not to validate TLS certificates. This should only be turned off for personally controlled sites or with localhost as target. Choices: false true ← (default)"
+    },
+    {
+      "name": "value",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A redis config value. When memory size is needed, it is possible to specify it in the usual form of 1KB, 2M, 400MB where the base is 1024. Units are case insensitive, in other words 1m = 1mb = 1M = 1MB."
+    }
+  ],
+  "examples": [
+    "- name: Set local redis instance to be a replica of melee.island on port 6377\n  community.general.redis:\n    command: replica\n    master_host: melee.island\n    master_port: 6377\n\n- name: Deactivate replica mode\n  community.general.redis:\n    command: replica\n    replica_mode: master\n\n- name: Flush all the redis db\n  community.general.redis:\n    command: flush\n    flush_mode: all\n\n- name: Flush only one db in a redis instance\n  community.general.redis:\n    command: flush\n    db: 1\n    flush_mode: db\n\n- name: Configure local redis to have 10000 max clients\n  community.general.redis:\n    command: config\n    name: maxclients\n    value: 10000\n\n- name: Configure local redis maxmemory to 4GB\n  community.general.redis:\n    command: config\n    name: maxmemory\n    value: 4GB\n\n- name: Configure local redis to have lua time limit of 100 ms\n  community.general.redis:\n    command: config\n    name: lua-time-limit\n    value: 100\n\n- name: Connect using TLS and certificate authentication\n  community.general.redis:\n    command: config\n    name: lua-time-limit\n    value: 100\n    tls: true\n    ca_certs: /etc/redis/certs/ca.crt\n    client_cert_file: /etc/redis/certs/redis.crt\n    client_key_file: /etc/redis/certs/redis.key"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/redis_module#ansible-collections-community-general-redis-module.html",
+  "parsed_at": "2026-04-11T13:53:24.793152"
+}

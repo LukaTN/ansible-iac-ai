@@ -1,0 +1,36 @@
+{
+  "collection_ns": "ansible_builtin",
+  "collection": "ansible.builtin",
+  "module": "ansible.builtin.set_fact",
+  "slug": "set_fact_module#ansible-collections-ansible-builtin-set-fact-module",
+  "description": "This action allows setting variables associated to the current host.",
+  "parameters": [
+    {
+      "name": "cacheable",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "This boolean converts the variable into an actual ‘fact’ which will also be added to the fact cache. It does not enable fact caching across runs, it just means it will work with it if already enabled. Normally this module creates ‘host level variables’ and has much higher precedence, this option changes the nature and precedence (by 7 steps) of the variable created. https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html#variable-precedence-where-should-i-put-a-variable This actually creates 2 copies of the variable, a normal ‘set_fact’ host variable with high precedence and a lower ‘ansible_fact’ one that is available for persistence via the facts cache plugin. This creates a possibly confusing interaction with meta: clear_facts as it will remove the ‘ansible_fact’ but not the host variable. Choices: false ← (default) true"
+    },
+    {
+      "name": "key_value",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The ansible.builtin.set_fact module takes key=value pairs or key: value (YAML notation) as variables to set in the playbook scope. The ‘key’ is the resulting variable name and the value is, of course, the value of said variable. You can create multiple variables at once, by supplying multiple pairs, but do NOT mix notations."
+    }
+  ],
+  "examples": [
+    "- name: Setting host facts using key=value pairs, this format can only create strings or booleans\n  ansible.builtin.set_fact: one_fact=\"something\" other_fact=\"{{ local_var }}\"\n\n- name: Setting host facts using complex arguments\n  ansible.builtin.set_fact:\n    one_fact: something\n    other_fact: \"{{ local_var * 2 }}\"\n    another_fact: \"{{ some_registered_var.results | map(attribute='ansible_facts.some_fact') | list }}\"\n\n- name: Setting facts so that they will be persisted in the fact cache\n  ansible.builtin.set_fact:\n    one_fact: something\n    other_fact: \"{{ local_var * 2 }}\"\n    cacheable: yes\n\n- name: Creating list and dictionary variables\n  ansible.builtin.set_fact:\n    one_dict:\n        something: here\n        other: there\n    one_list:\n        - a\n        - b\n        - c\n# As of Ansible 1.8, Ansible will convert boolean strings ('true', 'false', 'yes', 'no')\n# to proper boolean values when using the key=value syntax, however it is still\n# recommended that booleans be set using the complex argument style:\n- name: Setting booleans using complex argument style\n  ansible.builtin.set_fact:\n    one_fact: yes\n    other_fact: no\n\n- name: Creating list and dictionary variables using 'shorthand' YAML\n  ansible.builtin.set_fact:\n    two_dict: {'something': here2, 'other': somewhere}\n    two_list: [1,2,3]"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/set_fact_module.html",
+  "parsed_at": "2026-04-13T16:29:26.045467"
+}

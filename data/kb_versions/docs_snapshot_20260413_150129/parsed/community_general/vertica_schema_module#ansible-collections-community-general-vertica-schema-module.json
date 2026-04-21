@@ -1,0 +1,114 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.vertica_schema",
+  "slug": "vertica_schema_module#ansible-collections-community-general-vertica-schema-module",
+  "description": "Adds or removes Vertica database schema and, optionally, roles with schema access privileges.",
+  "parameters": [
+    {
+      "name": "cluster",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "localhost",
+      "choices": [],
+      "description": "Name of the Vertica cluster. Default: \"localhost\""
+    },
+    {
+      "name": "create_roles",
+      "aliases": [
+        "create_role"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Comma separated list of roles to create and grant usage and create access to the schema."
+    },
+    {
+      "name": "db",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of the Vertica database."
+    },
+    {
+      "name": "login_password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The password used to authenticate with."
+    },
+    {
+      "name": "login_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "dbadmin",
+      "choices": [],
+      "description": "The username used to authenticate with. Default: \"dbadmin\""
+    },
+    {
+      "name": "owner",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of the user to set as owner of the schema."
+    },
+    {
+      "name": "port",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "5433",
+      "choices": [],
+      "description": "Vertica cluster port to connect to. Default: \"5433\""
+    },
+    {
+      "name": "schema",
+      "aliases": [
+        "name"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the schema to add or remove."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Whether to create present, or drop absent a schema. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "usage_roles",
+      "aliases": [
+        "usage_role"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Comma separated list of roles to create and grant usage access to the schema."
+    }
+  ],
+  "examples": [
+    "- name: Creating a new vertica schema\n  community.general.vertica_schema: name=schema_name db=db_name state=present\n\n- name: Creating a new schema with specific schema owner\n  community.general.vertica_schema: name=schema_name owner=dbowner db=db_name state=present\n\n- name: Creating a new schema with roles\n  community.general.vertica_schema: name=schema_name create_roles=schema_name_all usage_roles=schema_name_ro,schema_name_rw\n    db=db_name state=present"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/vertica_schema_module#ansible-collections-community-general-vertica-schema-module.html",
+  "parsed_at": "2026-04-11T13:53:28.348882"
+}

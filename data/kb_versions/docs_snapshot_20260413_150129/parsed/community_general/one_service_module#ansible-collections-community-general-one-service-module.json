@@ -1,0 +1,244 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.one_service",
+  "slug": "one_service_module#ansible-collections-community-general-one-service-module",
+  "description": "Manage OpenNebula services.",
+  "parameters": [
+    {
+      "name": "api_password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Password of the user to login into OpenNebula OneFlow API server. If not set then the value of the ONEFLOW_PASSWORD environment variable is used."
+    },
+    {
+      "name": "api_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "URL of the OpenNebula OneFlow API server. It is recommended to use HTTPS so that the username/password are not transferred over the network unencrypted. If not set then the value of the ONEFLOW_URL environment variable is used."
+    },
+    {
+      "name": "api_username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of the user to login into the OpenNebula OneFlow API server. If not set then the value of the ONEFLOW_USERNAME environment variable is used."
+    },
+    {
+      "name": "cardinality",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Number of VMs for the specified role."
+    },
+    {
+      "name": "custom_attrs",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "Dictionary of key/value custom attributes which is used when instantiating a new service. Default: {}"
+    },
+    {
+      "name": "force",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Force the new cardinality even if it is outside the limits. Choices: false ← (default) true"
+    },
+    {
+      "name": "group_id",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "ID of the group which is set as the group of the service."
+    },
+    {
+      "name": "mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Set permission mode of a service instance in octet format, for example 0600 to give owner use and manage and nothing to group and others."
+    },
+    {
+      "name": "owner_id",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "ID of the user which is set as the owner of the service."
+    },
+    {
+      "name": "role",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of the role whose cardinality should be changed."
+    },
+    {
+      "name": "service_id",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "ID of a service instance that you would like to manage."
+    },
+    {
+      "name": "service_name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of a service instance that you would like to manage."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "present - instantiate a service from a template specified with template_id or template_name. absent - terminate an instance of a service specified with template_id or template_name. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "template_id",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "ID of a service template to use to create a new instance of a service."
+    },
+    {
+      "name": "template_name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of service template to use to create a new instance of a service."
+    },
+    {
+      "name": "unique",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Setting unique=true ensures that there is only one service instance running with a name set with service_name when instantiating a service from a template specified with template_id or template_name. Check examples below. Choices: false ← (default) true"
+    },
+    {
+      "name": "wait",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Wait for the instance to reach RUNNING state after DEPLOYING or COOLDOWN state after SCALING. Choices: false ← (default) true"
+    },
+    {
+      "name": "wait_timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "300",
+      "choices": [],
+      "description": "How long before wait gives up, in seconds. Default: 300"
+    }
+  ],
+  "examples": [
+    "- name: Instantiate a new service\n  community.general.one_service:\n    template_id: 90\n  register: result\n\n- name: Print service properties\n  ansible.builtin.debug:\n    msg: result\n\n- name: Instantiate a new service with specified service_name, service group and mode\n  community.general.one_service:\n    template_name: 'app1_template'\n    service_name: 'app1'\n    group_id: 1\n    mode: '660'\n\n- name: Instantiate a new service with template_id and pass custom_attrs dict\n  community.general.one_service:\n    template_id: 90\n    custom_attrs:\n      public_network_id: 21\n      private_network_id: 26\n\n- name: Instantiate a new service 'foo' if the service doesn't already exist, otherwise do nothing\n  community.general.one_service:\n    template_id: 53\n    service_name: 'foo'\n    unique: true\n\n- name: Delete a service by ID\n  community.general.one_service:\n    service_id: 153\n    state: absent\n\n- name: Get service info\n  community.general.one_service:\n    service_id: 153\n  register: service_info\n\n- name: Change service owner, group and mode\n  community.general.one_service:\n    service_name: 'app2'\n    owner_id: 34\n    group_id: 113\n    mode: '600'\n\n- name: Instantiate service and wait for it to become RUNNING\n  community.general.one_service:\n    template_id: 43\n    service_name: 'foo1'\n\n- name: Wait service to become RUNNING\n  community.general.one_service:\n    service_id: 112\n    wait: true\n\n- name: Change role cardinality\n  community.general.one_service:\n    service_id: 153\n    role: bar\n    cardinality: 5\n\n- name: Change role cardinality and wait for it to be applied\n  community.general.one_service:\n    service_id: 112\n    role: foo\n    cardinality: 7\n    wait: true"
+  ],
+  "return_values": [
+    {
+      "name": "group_id",
+      "type": "integer",
+      "description": "Service’s group ID. Returned: success Sample: 1",
+      "returned": "success"
+    },
+    {
+      "name": "group_name",
+      "type": "string",
+      "description": "Service’s group name. Returned: success Sample: \"one-users\"",
+      "returned": "success"
+    },
+    {
+      "name": "mode",
+      "type": "integer",
+      "description": "Service’s mode. Returned: success Sample: 660",
+      "returned": "success"
+    },
+    {
+      "name": "owner_id",
+      "type": "integer",
+      "description": "Service’s owner ID. Returned: success Sample: 143",
+      "returned": "success"
+    },
+    {
+      "name": "owner_name",
+      "type": "string",
+      "description": "Service’s owner name. Returned: success Sample: \"ansible-test\"",
+      "returned": "success"
+    },
+    {
+      "name": "roles",
+      "type": "list",
+      "description": "List of dictionaries of roles, each role is described by name, cardinality, state and nodes IDs. Returned: success Sample: [{\"cardinality\": 1, \"ids\": [123, 456], \"name\": \"foo\", \"state\": \"RUNNING\"}, {\"cardinality\": 2, \"ids\": [452, 567, 746], \"name\": \"bar\", \"state\": \"RUNNING\"}]",
+      "returned": "success"
+    },
+    {
+      "name": "service_id",
+      "type": "integer",
+      "description": "Service ID. Returned: success Sample: 153",
+      "returned": "success"
+    },
+    {
+      "name": "service_name",
+      "type": "string",
+      "description": "Service name. Returned: success Sample: \"app1\"",
+      "returned": "success"
+    },
+    {
+      "name": "state",
+      "type": "string",
+      "description": "State of service instance. Returned: success Sample: \"RUNNING\"",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/one_service_module#ansible-collections-community-general-one-service-module.html",
+  "parsed_at": "2026-04-11T13:53:21.841368"
+}

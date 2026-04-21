@@ -1,0 +1,21 @@
+---
+- name: Launch EC2 instance named melek-instance
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - amazon.aws
+  tasks:
+    - name: Create EC2 instance
+      amazon.aws.ec2_instance:
+        state: present
+        name: "melek-instance"
+        key_name: "prod-ssh-key"
+        vpc_subnet_id: subnet-5ca1ab1e
+        instance_type: c5.large
+        security_group: default
+        network_interfaces:
+          - assign_public_ip: true
+        image_id: ami-123456
+        tags:
+          Environment: Testing

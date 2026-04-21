@@ -1,0 +1,520 @@
+{
+  "collection_ns": "azure_azcollection",
+  "collection": "azure.azcollection",
+  "module": "azure.azcollection.azure_rm_aksagentpool_info",
+  "slug": "azure_rm_aksagentpool_info_module#ansible-collections-azure-azcollection-azure-rm-aksagentpool-info-module",
+  "description": "Get the details for a node pool in the managed Kubernetes cluster.",
+  "parameters": [
+    {
+      "name": "ad_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory username. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "adfs_authority_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure AD authority url. Use when authenticating with Username/password, and has your own ADFS authority."
+    },
+    {
+      "name": "api_profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "Selects an API profile to use when communicating with Azure services. Default value of latest is appropriate for public clouds; future values will allow use with Azure Stack. Default: \"latest\""
+    },
+    {
+      "name": "auth_source",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "az",
+      "choices": [
+        "\"auto\" ← (default)",
+        "\"cli\"",
+        "\"credential_file\"",
+        "\"env\"",
+        "\"msi\""
+      ],
+      "description": "Controls the source of the credentials to use for authentication. Can also be set via the ANSIBLE_AZURE_AUTH_SOURCE environment variable. When set to auto (the default) the precedence is module parameters -> env -> credential_file -> cli. When set to env, the credentials will be read from the environment variables When set to credential_file, it will read the profile from ~/.azure/credentials. When set to cli, the credentials will be sources from the Azure CLI profile. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if more than one is present otherwise the default az cli subscription is used. When set to msi, the host machine must be an azure resource with an enabled MSI extension. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if the resource is granted access to more than one subscription, otherwise the first subscription is chosen. The msi was added in Ansible 2.6. Choices: \"auto\" ← (default) \"cli\" \"credential_file\" \"env\" \"msi\""
+    },
+    {
+      "name": "cert_validation_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ignore\"",
+        "\"validate\""
+      ],
+      "description": "Controls the certificate validation behavior for Azure endpoints. By default, all modules will validate the server certificate, but when an HTTPS proxy is in use, or against Azure Stack, it may be necessary to disable this behavior by passing ignore. Can also be set via credential file profile or the AZURE_CERT_VALIDATION environment variable. Choices: \"ignore\" \"validate\""
+    },
+    {
+      "name": "client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client ID. Use when authenticating with a Service Principal or Managed Identity (msi). Can also be set via the AZURE_CLIENT_ID environment variable."
+    },
+    {
+      "name": "cloud_environment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "AzureCloud",
+      "choices": [],
+      "description": "For cloud environments other than the US public cloud, the environment name (as defined by Azure Python SDK, eg, AzureChinaCloud, AzureUSGovernment), or a metadata discovery endpoint URL (required for Azure Stack). Can also be set via credential file profile or the AZURE_CLOUD_ENVIRONMENT environment variable. Default: \"AzureCloud\""
+    },
+    {
+      "name": "cluster_name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The cluster name."
+    },
+    {
+      "name": "disable_instance_discovery",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Determines whether or not instance discovery is performed when attempting to authenticate. Setting this to true will completely disable both instance discovery and authority validation. This functionality is intended for use in scenarios where the metadata endpoint cannot be reached such as in private clouds or Azure Stack. The process of instance discovery entails retrieving authority metadata from https://login.microsoft.com/ to validate the authority. By setting this to **True**, the validation of the authority is disabled. As a result, it is crucial to ensure that the configured authority host is valid and trustworthy. Set via credential file profile or the AZURE_DISABLE_INSTANCE_DISCOVERY environment variable. Choices: false ← (default) true"
+    },
+    {
+      "name": "log_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "log_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The node pool name."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory user password. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security profile found in ~/.azure/credentials file."
+    },
+    {
+      "name": "resource_group",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the resource group."
+    },
+    {
+      "name": "secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client secret. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "subscription_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Your Azure subscription Id."
+    },
+    {
+      "name": "tenant",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure tenant ID. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "thumbprint",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The thumbprint of the private key specified in x509_certificate_path. Use when authenticating with a Service Principal. Required if x509_certificate_path is defined."
+    },
+    {
+      "name": "x509_certificate_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the X509 certificate used to create the service principal in PEM format. The certificate must be appended to the private key. Use when authenticating with a Service Principal."
+    }
+  ],
+  "examples": [
+    "- name: Get node agent pool by cluster name\n  azure_rm_aksagentpool_info:\n    resource_group: myRG\n    cluster_name: testcluster\n\n- name: Get node agent pool by name\n  azure_rm_aksagentpool_info:\n    resource_group: myRG\n    cluster_name: testcluster\n    name: default"
+  ],
+  "return_values": [
+    {
+      "name": "aks_agent_pools",
+      "type": "complex",
+      "description": "Details for a node pool in the managed Kubernetes cluster. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "availability_zones",
+      "type": "list",
+      "description": "Availability zones for nodes. Must use VirtualMachineScaleSets AgentPoolType. Returned: always Sample: [1, 2]",
+      "returned": "always"
+    },
+    {
+      "name": "capacity_reservation_group_id",
+      "type": "string",
+      "description": "The ID of Capacity Reservation Group. Returned: always Sample: \"/subscriptions/xxxxx/resourceGroups/testRG/providers/Microsoft.Compute/capacityReservationGroups/crgid\"",
+      "returned": "always"
+    },
+    {
+      "name": "cluster_name",
+      "type": "string",
+      "description": "The cluster name. Returned: always Sample: \"testcluster\"",
+      "returned": "always"
+    },
+    {
+      "name": "count",
+      "type": "integer",
+      "description": "Number of agents (VMs) to host docker containers. Returned: always Sample: 2",
+      "returned": "always"
+    },
+    {
+      "name": "enable_auto_scaling",
+      "type": "boolean",
+      "description": "Whether to enable auto-scaler. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "enable_encryption_at_host",
+      "type": "boolean",
+      "description": "This is only supported on certain VM sizes and in certain Azure regions. Returned: always Sample: false",
+      "returned": "always"
+    },
+    {
+      "name": "enable_node_public_ip",
+      "type": "boolean",
+      "description": "Enable public IP for nodes. Returned: always Sample: true",
+      "returned": "always"
+    },
+    {
+      "name": "enable_ultra_ssd",
+      "type": "boolean",
+      "description": "Whether enable FIPS node pool. Returned: always Sample: false",
+      "returned": "always"
+    },
+    {
+      "name": "gpu_instance_profile",
+      "type": "string",
+      "description": "GPUInstanceProfile to be used to specify GPU MIG instance profile for supported GPU VM SKU. Returned: always Sample: \"MIG1g\"",
+      "returned": "always"
+    },
+    {
+      "name": "host_group_id",
+      "type": "string",
+      "description": "The host group ID. Returned: always Sample: \"/subscriptions/xxxxx/resourceGroups/testRG/providers/Microsoft.Compute/hostGroups/hostgroup\"",
+      "returned": "always"
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "description": "Resource ID. Returned: always Sample: \"/subscriptions/xxx-xxxf/resourcegroups/myRG/providers/Microsoft.ContainerService/managedClusters/cluster/agentPools/default\"",
+      "returned": "always"
+    },
+    {
+      "name": "kubelet_config",
+      "type": "dictionary",
+      "description": "The Kubelet configuration on the agent pool nodes. Returned: always Sample: {\"cpu_cfs_quota\": true, \"cpu_cfs_quota_period\": \"100ms\", \"cpu_manager_policy\": \"static\", \"fail_swap_on\": false, \"image_gc_high_threshold\": 85, \"image_gc_low_threshold\": 80, \"topology_manager_policy\": \"none\"}",
+      "returned": "always"
+    },
+    {
+      "name": "kubelet_disk_type",
+      "type": "string",
+      "description": "Determines the placement of emptyDir volumes, container runtime data root, and Kubelet ephemeral storage. Returned: always Sample: \"OS\"",
+      "returned": "always"
+    },
+    {
+      "name": "linux_os_config",
+      "type": "dictionary",
+      "description": "The OS configuration of Linux agent nodes. Returned: always Sample: {\"swap_file_size_mb\": 1500, \"sysctls\": {}, \"transparent_huge_page_defrag\": \"defer+madvise\", \"transparent_huge_page_enabled\": \"madvise\"}",
+      "returned": "always"
+    },
+    {
+      "name": "max_count",
+      "type": "integer",
+      "description": "Maximum number of nodes for auto-scaling. Returned: always Sample: 10",
+      "returned": "always"
+    },
+    {
+      "name": "max_pods",
+      "type": "integer",
+      "description": "Maximum number of pods that can run on a node. Returned: always Sample: 42",
+      "returned": "always"
+    },
+    {
+      "name": "min_count",
+      "type": "integer",
+      "description": "Minimum number of nodes for auto-scaling. Returned: always Sample: 1",
+      "returned": "always"
+    },
+    {
+      "name": "mode",
+      "type": "string",
+      "description": "AgentPoolMode represents mode of an agent pool. Returned: always Sample: \"System\"",
+      "returned": "always"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "Resource name. Returned: always Sample: \"default\"",
+      "returned": "always"
+    },
+    {
+      "name": "network_profile",
+      "type": "complex",
+      "description": "Network-related settings of an agent pool. Returned: when-used",
+      "returned": "when"
+    },
+    {
+      "name": "allowed_host_ports",
+      "type": "list",
+      "description": "The port ranges that are allowed to access. Returned: always Sample: [{\"port_end\": 200, \"port_start\": 10, \"protocol\": \"TCP\"}]",
+      "returned": "always"
+    },
+    {
+      "name": "application_security_groups",
+      "type": "list",
+      "description": "The IDs of the application security groups which agent pool will associate when created. Returned: always Sample: [\"/subscriptions/xxxxxx/resourceGroups/testRG/providers/Microsoft.Network/applicationSecurityGroups/appnsg\"]",
+      "returned": "always"
+    },
+    {
+      "name": "node_image_version",
+      "type": "string",
+      "description": "Version of node image. Returned: always Sample: \"AKSUbuntu-1804gen2containerd-2022.08.23\"",
+      "returned": "always"
+    },
+    {
+      "name": "node_labels",
+      "type": "list",
+      "description": "Agent pool node labels to be persisted across all nodes in agent pool. Returned: always Sample: [{\"release\": \"stable\"}]",
+      "returned": "always"
+    },
+    {
+      "name": "node_public_ip_prefix_id",
+      "type": "string",
+      "description": "The Azure Public IP prefix’s ID. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "node_taints",
+      "type": "list",
+      "description": "Taints added to new nodes during node pool create and scale. Returned: always Sample: [\"CriticalAddonsOnly=false:NoSchedule\"]",
+      "returned": "always"
+    },
+    {
+      "name": "orchestrator_version",
+      "type": "string",
+      "description": "Version of orchestrator specified when creating the managed cluster. Returned: always Sample: \"1.22.11\"",
+      "returned": "always"
+    },
+    {
+      "name": "os_disk_size_gb",
+      "type": "integer",
+      "description": "OS Disk Size in GB to be used to specify the disk size for every machine in this master agent pool. Returned: always Sample: 128",
+      "returned": "always"
+    },
+    {
+      "name": "os_disk_type",
+      "type": "string",
+      "description": "The type of the OS disk. Returned: always Sample: \"Managed\"",
+      "returned": "always"
+    },
+    {
+      "name": "os_sku",
+      "type": "string",
+      "description": "OS SKU to be used to specify os type. Returned: always Sample: \"Windows2022\"",
+      "returned": "always"
+    },
+    {
+      "name": "os_type",
+      "type": "string",
+      "description": "OsType to be used to specify os type. Returned: always Sample: \"Linux\"",
+      "returned": "always"
+    },
+    {
+      "name": "pod_subnet_id",
+      "type": "string",
+      "description": "The subnet ID. Returned: always Sample: \"/subscriptions/xxxx/resourceGroups/testRG/providers/Microsoft.Network/virtualNetworks/My_Virtual_Network/subnets/foobar\"",
+      "returned": "always"
+    },
+    {
+      "name": "power_state",
+      "type": "dictionary",
+      "description": "The agent pool’s power state. Returned: always Sample: {\"code\": \"Running\"}",
+      "returned": "always"
+    },
+    {
+      "name": "provisioning_state",
+      "type": "string",
+      "description": "The current deployment or provisioning state, which only appears in the response. Returned: always Sample: \"Succeeded\"",
+      "returned": "always"
+    },
+    {
+      "name": "proximity_placement_group_id",
+      "type": "string",
+      "description": "The ID for Proximity Placement Group. Returned: always Sample: \"/subscriptions/xxx-xxx/resourceGroups/myRG/providers/Microsoft.Compute/proximityPlacementGroups/proxi01\"",
+      "returned": "always"
+    },
+    {
+      "name": "resource_group",
+      "type": "string",
+      "description": "Resource group name. Returned: always Sample: \"myRG\"",
+      "returned": "always"
+    },
+    {
+      "name": "scale_down_mode",
+      "type": "string",
+      "description": "This also effects the cluster autoscaler behavior. Returned: always Sample: \"Delete\"",
+      "returned": "always"
+    },
+    {
+      "name": "scale_set_eviction_policy",
+      "type": "string",
+      "description": "ScaleSetEvictionPolicy to be used to specify eviction policy for Spot virtual machine scale set. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "scale_set_priority",
+      "type": "string",
+      "description": "caleSetPriority to be used to specify virtual machine scale set priority. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "security_profile",
+      "type": "complex",
+      "description": "The security settings of an agent pool. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "enable_secure_boot",
+      "type": "boolean",
+      "description": "The secure boot is diabled or enabled. Returned: always Sample: true",
+      "returned": "always"
+    },
+    {
+      "name": "enable_vtpm",
+      "type": "boolean",
+      "description": "The vTPM is diabled or enabled. Returned: always Sample: true",
+      "returned": "always"
+    },
+    {
+      "name": "spot_max_price",
+      "type": "float",
+      "description": "SpotMaxPrice to be used to specify the maximum price you are willing to pay in US Dollars. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "tags",
+      "type": "dictionary",
+      "description": "The tags of the node agent pool. Returned: always Sample: {\"key1\": \"value1\", \"key2\": \"value2\"}",
+      "returned": "always"
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "description": "Resource Type. Returned: always Sample: \"Microsoft.ContainerService/managedClusters/agentPools\"",
+      "returned": "always"
+    },
+    {
+      "name": "type_properties_type",
+      "type": "string",
+      "description": "AgentPoolType represents types of an agent pool. Returned: always Sample: \"VirtualMachineScaleSets\"",
+      "returned": "always"
+    },
+    {
+      "name": "upgrade_settings",
+      "type": "string",
+      "description": "Settings for upgrading the agentpool. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "vm_size",
+      "type": "string",
+      "description": "Size of agent VMs. Returned: always Sample: \"Standard_B2s\"",
+      "returned": "always"
+    },
+    {
+      "name": "vnet_subnet_id",
+      "type": "string",
+      "description": "VNet SubnetID specifies the VNet’s subnet identifier. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "windows_profile",
+      "type": "dictionary",
+      "description": "The Windows agent pool’s specific profile. Returned: when-used Sample: {\"disable_outbound_nat\": false}",
+      "returned": "when"
+    },
+    {
+      "name": "workload_runtime",
+      "type": "string",
+      "description": "Determines the type of workload a node can run. Returned: always Sample: \"OCIContainer\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_aksagentpool_info_module.html",
+  "parsed_at": "2026-04-13T16:29:27.712181"
+}

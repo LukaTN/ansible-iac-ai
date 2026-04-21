@@ -1,0 +1,31 @@
+# ============================================================
+# AnsibleAI RAG Generator — LangChain + ChromaDB
+# Date        : 2026-04-11 11:40:57
+# Request     : create an EC2 instance of type t3.micro in us-east-1 region with tag Name=webserver
+# Module      : None
+# Collection  : None
+# RAG score   : 0.0
+# Chunks used : 0
+# Source URL  : 
+# LLM model   : MISTRAL
+# ============================================================
+
+---
+- name: Create EC2 instance of type t3.micro in us-east-1 region with tag Name=webserver
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - aws.aws
+
+  tasks:
+    - name: Create AWS EC2 instance
+      aws_ec2_instance:
+        count: 1
+        instance_type: t3.micro
+        region: us-east-1
+        ami: 'ami-0c94855ba95b76c7f' # Amazon Linux 2 AMI ID (HVM), SSD Volume Type - ami-ID may change based on your AWS account and region
+        subnet_id: <subnet_id> # Replace with the desired subnet ID
+        key_name: <key_pair_name> # Replace with the name of your existing key pair
+        tag:
+          Name: webserver

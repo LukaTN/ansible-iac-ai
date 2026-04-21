@@ -1,0 +1,118 @@
+{
+  "collection_ns": "ansible_builtin",
+  "collection": "ansible.builtin",
+  "module": "ansible.builtin.include_vars",
+  "slug": "include_vars_module#ansible-collections-ansible-builtin-include-vars-module",
+  "description": "Loads YAML/JSON variables dynamically from a file or directory, recursively, during task runtime.",
+  "parameters": [
+    {
+      "name": "depth",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "0",
+      "choices": [],
+      "description": "When using dir, this module will, by default, recursively go through each sub directory and load up the variables. By explicitly setting the depth, this module will only go as deep as the depth. Default: 0"
+    },
+    {
+      "name": "dir",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The directory name from which the variables should be loaded. If the path is relative and the task is inside a role, it will look inside the role’s vars/ subdirectory. If the path is relative and not inside a role, it will be parsed relative to the playbook."
+    },
+    {
+      "name": "extensions",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[",
+      "choices": [],
+      "description": "List of file extensions to read when using dir. Default: [\"json\", \"yaml\", \"yml\"]"
+    },
+    {
+      "name": "file",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The file name from which variables should be loaded. If the path is relative, it will look for the file in vars/ subdirectory of a role or relative to playbook."
+    },
+    {
+      "name": "files_matching",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Limit the files that are loaded within any directory to this regular expression."
+    },
+    {
+      "name": "free-form",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "This module allows you to specify the file option directly without any other options. There is no free-form option, this is just an indicator, see example below."
+    },
+    {
+      "name": "hash_behaviour",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"replace\"",
+        "\"merge\""
+      ],
+      "description": "If set to merge, merges existing hash variables instead of overwriting them. If omitted (null), the behavior falls back to the global hash_behaviour configuration. This option is self-contained and does not apply to individual files in dir. You can use a loop to apply hash_behaviour per file. Choices: \"replace\" \"merge\""
+    },
+    {
+      "name": "ignore_files",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of file names to ignore."
+    },
+    {
+      "name": "ignore_unknown_extensions",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Ignore unknown file extensions within the directory. This allows users to specify a directory containing vars files that are intermingled with non-vars files extension types (for example, a directory with a README in it and vars files). Choices: false ← (default) true"
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The name of a variable into which assign the included vars. If omitted (null) they will be made top level vars."
+    }
+  ],
+  "examples": [
+    "- name: Include vars of stuff.yaml into the 'stuff' variable (2.2).\n  ansible.builtin.include_vars:\n    file: stuff.yaml\n    name: stuff\n\n- name: Conditionally decide to load in variables into 'plans' when x is 0, otherwise do not. (2.2)\n  ansible.builtin.include_vars:\n    file: contingency_plan.yaml\n    name: plans\n  when: x == 0\n\n- name: Load a variable file based on the OS type, or a default if not found. Using free-form to specify the file.\n  ansible.builtin.include_vars: \"{{ lookup('ansible.builtin.first_found', params) }}\"\n  vars:\n    params:\n      files:\n        - '{{ansible_distribution}}.yaml'\n        - '{{ansible_os_family}}.yaml'\n        - default.yaml\n      paths:\n        - 'vars'\n\n- name: Bare include (free-form)\n  ansible.builtin.include_vars: myvars.yaml\n\n- name: Include all .json and .jsn files in vars/all and all nested directories (2.3)\n  ansible.builtin.include_vars:\n    dir: vars/all\n    extensions:\n      - 'json'\n      - 'jsn'\n\n- name: Include all default extension files in vars/all and all nested directories and save the output in test. (2.2)\n  ansible.builtin.include_vars:\n    dir: vars/all\n    name: test\n\n- name: Include default extension files in vars/services (2.2)\n  ansible.builtin.include_vars:\n    dir: vars/services\n    depth: 1\n\n- name: Include only files matching bastion.yaml (2.2)\n  ansible.builtin.include_vars:\n    dir: vars\n    files_matching: bastion.yaml\n\n- name: Include all .yaml files except bastion.yaml (2.3)\n  ansible.builtin.include_vars:\n    dir: vars\n    ignore_files:\n      - 'bastion.yaml'\n    extensions:\n      - 'yaml'\n\n- name: Ignore warnings raised for files with unknown extensions while loading (2.7)\n  ansible.builtin.include_vars:\n    dir: vars\n    ignore_unknown_extensions: True\n    extensions:\n      - ''\n      - 'yaml'\n      - 'yml'\n      - 'json'"
+  ],
+  "return_values": [
+    {
+      "name": "ansible_included_var_files",
+      "type": "list",
+      "description": "A list of files that were successfully included Returned: success Sample: [\"/path/to/file.json\", \"/path/to/file.yaml\"]",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/include_vars_module#ansible-collections-ansible-builtin-include-vars-module.html",
+  "parsed_at": "2026-04-11T13:52:52.148315"
+}

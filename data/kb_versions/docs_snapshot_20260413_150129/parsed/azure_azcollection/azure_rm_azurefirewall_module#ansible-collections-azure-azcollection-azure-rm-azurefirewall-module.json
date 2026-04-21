@@ -1,0 +1,439 @@
+{
+  "collection_ns": "azure_azcollection",
+  "collection": "azure.azcollection",
+  "module": "azure.azcollection.azure_rm_azurefirewall",
+  "slug": "azure_rm_azurefirewall_module#ansible-collections-azure-azcollection-azure-rm-azurefirewall-module",
+  "description": "Create, update and delete instance of Azure Firewall.",
+  "parameters": [
+    {
+      "name": "ad_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory username. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "adfs_authority_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure AD authority url. Use when authenticating with Username/password, and has your own ADFS authority."
+    },
+    {
+      "name": "api_profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "Selects an API profile to use when communicating with Azure services. Default value of latest is appropriate for public clouds; future values will allow use with Azure Stack. Default: \"latest\""
+    },
+    {
+      "name": "append_tags",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Use to control if tags field is canonical or just appends to existing tags. When canonical, any tags not found in the tags parameter will be removed from the object’s metadata. Choices: false true ← (default)"
+    },
+    {
+      "name": "application_rule_collections",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Collection of application rule collections used by Azure Firewall."
+    },
+    {
+      "name": "action",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"allow\"",
+        "\"deny\""
+      ],
+      "description": "The action type of a rule collection. Choices: \"allow\" \"deny\""
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Gets name of the resource that is unique within a resource group. This name can be used to access the resource."
+    },
+    {
+      "name": "priority",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Priority of the application rule collection resource."
+    },
+    {
+      "name": "rules",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Collection of rules used by a application rule collection."
+    },
+    {
+      "name": "description",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Description of the rule."
+    },
+    {
+      "name": "fqdn_tags",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of FQDN Tags for this rule."
+    },
+    {
+      "name": "protocols",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Array of ApplicationRuleProtocols."
+    },
+    {
+      "name": "port",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The ports of the protocols."
+    },
+    {
+      "name": "type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The type of the protocols."
+    },
+    {
+      "name": "source_addresses",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of source IP addresses for this rule."
+    },
+    {
+      "name": "target_fqdns",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of FQDNs for this rule."
+    },
+    {
+      "name": "auth_source",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "az",
+      "choices": [
+        "\"auto\" ← (default)",
+        "\"cli\"",
+        "\"credential_file\"",
+        "\"env\"",
+        "\"msi\""
+      ],
+      "description": "Controls the source of the credentials to use for authentication. Can also be set via the ANSIBLE_AZURE_AUTH_SOURCE environment variable. When set to auto (the default) the precedence is module parameters -> env -> credential_file -> cli. When set to env, the credentials will be read from the environment variables When set to credential_file, it will read the profile from ~/.azure/credentials. When set to cli, the credentials will be sources from the Azure CLI profile. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if more than one is present otherwise the default az cli subscription is used. When set to msi, the host machine must be an azure resource with an enabled MSI extension. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if the resource is granted access to more than one subscription, otherwise the first subscription is chosen. The msi was added in Ansible 2.6. Choices: \"auto\" ← (default) \"cli\" \"credential_file\" \"env\" \"msi\""
+    },
+    {
+      "name": "cert_validation_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ignore\"",
+        "\"validate\""
+      ],
+      "description": "Controls the certificate validation behavior for Azure endpoints. By default, all modules will validate the server certificate, but when an HTTPS proxy is in use, or against Azure Stack, it may be necessary to disable this behavior by passing ignore. Can also be set via credential file profile or the AZURE_CERT_VALIDATION environment variable. Choices: \"ignore\" \"validate\""
+    },
+    {
+      "name": "client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client ID. Use when authenticating with a Service Principal or Managed Identity (msi). Can also be set via the AZURE_CLIENT_ID environment variable."
+    },
+    {
+      "name": "cloud_environment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "AzureCloud",
+      "choices": [],
+      "description": "For cloud environments other than the US public cloud, the environment name (as defined by Azure Python SDK, eg, AzureChinaCloud, AzureUSGovernment), or a metadata discovery endpoint URL (required for Azure Stack). Can also be set via credential file profile or the AZURE_CLOUD_ENVIRONMENT environment variable. Default: \"AzureCloud\""
+    },
+    {
+      "name": "disable_instance_discovery",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Determines whether or not instance discovery is performed when attempting to authenticate. Setting this to true will completely disable both instance discovery and authority validation. This functionality is intended for use in scenarios where the metadata endpoint cannot be reached such as in private clouds or Azure Stack. The process of instance discovery entails retrieving authority metadata from https://login.microsoft.com/ to validate the authority. By setting this to **True**, the validation of the authority is disabled. As a result, it is crucial to ensure that the configured authority host is valid and trustworthy. Set via credential file profile or the AZURE_DISABLE_INSTANCE_DISCOVERY environment variable. Choices: false ← (default) true"
+    },
+    {
+      "name": "ip_configurations",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "IP configuration of the Azure Firewall resource."
+    },
+    {
+      "name": "public_ip_address",
+      "aliases": [],
+      "type": "any",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Existing public IP address. It can be a string containing resource ID. It can be a string containing a name in current resource group. It can be a dictionary containing name and optionally resource_group."
+    },
+    {
+      "name": "subnet",
+      "aliases": [],
+      "type": "any",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Existing subnet. It can be a string containing subnet resource ID. It can be a dictionary containing name, virtual_network_name and optionally resource_group ."
+    },
+    {
+      "name": "location",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Resource location."
+    },
+    {
+      "name": "log_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "log_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "nat_rule_collections",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Collection of NAT rule collections used by Azure Firewall."
+    },
+    {
+      "name": "destination_addresses",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of destination IP addresses for this rule."
+    },
+    {
+      "name": "destination_ports",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of destination ports."
+    },
+    {
+      "name": "translated_address",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The translated address for this NAT rule."
+    },
+    {
+      "name": "translated_port",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The translated port for this NAT rule."
+    },
+    {
+      "name": "network_rule_collections",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Collection of network rule collections used by Azure Firewall."
+    },
+    {
+      "name": "destination_fqdns",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of destination FQDNS."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory user password. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security profile found in ~/.azure/credentials file."
+    },
+    {
+      "name": "resource_group",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the resource group."
+    },
+    {
+      "name": "secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client secret. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)"
+      ],
+      "description": "Assert the state of the AzureFirewall. Use present to create or update an AzureFirewall and absent to delete it. Choices: \"absent\" \"present\" ← (default)"
+    },
+    {
+      "name": "subscription_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Your Azure subscription Id."
+    },
+    {
+      "name": "tags",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Dictionary of string:string pairs to assign as metadata to the object. Metadata tags on the object will be updated with any provided values. To remove tags set append_tags option to false. Currently, Azure DNS zones and Traffic Manager services also don’t allow the use of spaces in the tag. Azure Front Door doesn’t support the use of Azure Automation and Azure CDN only support 15 tags on resources."
+    },
+    {
+      "name": "tenant",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure tenant ID. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "thumbprint",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The thumbprint of the private key specified in x509_certificate_path. Use when authenticating with a Service Principal. Required if x509_certificate_path is defined."
+    },
+    {
+      "name": "x509_certificate_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the X509 certificate used to create the service principal in PEM format. The certificate must be appended to the private key. Use when authenticating with a Service Principal."
+    }
+  ],
+  "examples": [
+    "- name: Create Azure Firewall\n  azure_rm_azurefirewall:\n    resource_group: myResourceGroup\n    name: myAzureFirewall\n    tags:\n      key1: value1\n    application_rule_collections:\n      - priority: 110\n        action: deny\n        rules:\n          - name: rule1\n            description: Deny inbound rule\n            source_addresses:\n              - 216.58.216.164\n              - 10.0.0.0/24\n            protocols:\n              - type: https\n                port: '443'\n            target_fqdns:\n              - www.test.com\n        name: apprulecoll\n    nat_rule_collections:\n      - priority: 112\n        action: dnat\n        rules:\n          - name: DNAT-HTTPS-traffic\n            description: D-NAT all outbound web traffic for inspection\n            source_addresses:\n              - '*'\n            destination_addresses:\n              - 1.2.3.4\n            destination_ports:\n              - '443'\n            protocols:\n              - tcp\n            translated_address: 1.2.3.5\n            translated_port: '8443'\n        name: natrulecoll\n    network_rule_collections:\n      - priority: 112\n        action: deny\n        name: netrulecoll\n        rules:\n          - name: L4-traffic\n            description: Block traffic based on source IPs and ports\n            protocols:\n              - tcp\n            source_addresses:\n              - 192.168.1.1-192.168.1.12\n              - 10.1.4.12-10.1.4.255\n            destination_addresses:\n              - '*'\n            destination_ports:\n              - 443-444\n              - '8443'\n          - name: L4-traffic-destination_fqdns\n            description: Block traffic based on source IPs and ports to amazon\n            protocols:\n              - tcp\n            source_addresses:\n              - 10.2.4.12-10.2.4.255\n            destination_fqdns:\n              - 'www.test.com'\n            destination_ports:\n              - 443-444\n              - '8443'\n    ip_configurations:\n      - subnet: >-\n          /subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/myResourceGroup\n          /providers/Microsoft.Network/virtualNetworks/myVirtualNetwork\n          /subnets/AzureFirewallSubnet\n        public_ip_address: >-\n          /subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/myResourceGroup\n          /providers/Microsoft.Network/publicIPAddresses/\n          myPublicIpAddress\n        name: azureFirewallIpConfiguration\n- name: Delete Azure Firewall\n  azure_rm_azurefirewall:\n    resource_group: myResourceGroup\n    name: myAzureFirewall\n    state: absent"
+  ],
+  "return_values": [
+    {
+      "name": "id",
+      "type": "string",
+      "description": "Resource ID. Returned: always Sample: \"/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/myResourceGroup/providers/Microsoft.Network/azureFirewalls/myAzureFirewall\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_azurefirewall_module#ansible-collections-azure-azcollection-azure-rm-azurefirewall-module.html",
+  "parsed_at": "2026-04-11T13:52:55.671097"
+}

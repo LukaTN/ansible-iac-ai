@@ -1,0 +1,157 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.ilo_redfish_info",
+  "slug": "ilo_redfish_info_module#ansible-collections-community-general-ilo-redfish-info-module",
+  "description": "Builds Redfish URIs locally and sends them to iLO to get information back.",
+  "parameters": [
+    {
+      "name": "auth_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security token for authenticating to iLO."
+    },
+    {
+      "name": "baseuri",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Base URI of iLO."
+    },
+    {
+      "name": "ca_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "PEM formatted file that contains a CA certificate to be used for validation. Only used if validate_certs=true."
+    },
+    {
+      "name": "category",
+      "aliases": [],
+      "type": "list",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "List of categories to execute on iLO."
+    },
+    {
+      "name": "ciphers",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "TLS/SSL Ciphers to use for the request. When a list is provided, all ciphers are joined in order with :. See the OpenSSL Cipher List Format for more details. The available ciphers is dependent on the Python and OpenSSL/LibreSSL versions."
+    },
+    {
+      "name": "command",
+      "aliases": [],
+      "type": "list",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "List of commands to execute on iLO."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Password for authenticating to iLO."
+    },
+    {
+      "name": "timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "10",
+      "choices": [],
+      "description": "Timeout in seconds for HTTP requests to iLO. Default: 10"
+    },
+    {
+      "name": "username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Username for authenticating to iLO."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If false, TLS/SSL certificates are not validated. Set this to true to enable certificate checking. Should be used together with ca_path. Choices: false ← (default) true"
+    }
+  ],
+  "examples": [
+    "- name: Get iLO Sessions\n  community.general.ilo_redfish_info:\n    category: Sessions\n    command: GetiLOSessions\n    baseuri: \"{{ baseuri }}\"\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n  register: result_sessions"
+  ],
+  "return_values": [
+    {
+      "name": "ilo_redfish_info",
+      "type": "dictionary",
+      "description": "Returns iLO sessions. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "GetiLOSessions",
+      "type": "dictionary",
+      "description": "Returns the iLO session msg and whether the function executed successfully. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "msg",
+      "type": "list",
+      "description": "Information of all active iLO sessions. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "Description",
+      "type": "string",
+      "description": "Provides a description of the resource. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "Id",
+      "type": "string",
+      "description": "The sessionId. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "Name",
+      "type": "string",
+      "description": "The name of the resource. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "UserName",
+      "type": "string",
+      "description": "Name to use to log in to the management processor. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "ret",
+      "type": "boolean",
+      "description": "Check variable to see if the information was successfully retrieved. Returned: success",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/ilo_redfish_info_module.html",
+  "parsed_at": "2026-04-13T16:29:48.041841"
+}

@@ -1,0 +1,31 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.rhsm_release",
+  "slug": "rhsm_release_module#ansible-collections-community-general-rhsm-release-module",
+  "description": "Sets or unsets the release version used by RHSM repositories.",
+  "parameters": [
+    {
+      "name": "release",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "RHSM release version to use. To unset either pass null for this option, or omit this option."
+    }
+  ],
+  "examples": [
+    "# Set release version to 7.1\n- name: Set RHSM release version\n  community.general.rhsm_release:\n    release: \"7.1\"\n\n# Set release version to 6Server\n- name: Set RHSM release version\n  community.general.rhsm_release:\n    release: \"6Server\"\n\n# Unset release version\n- name: Unset RHSM release release\n  community.general.rhsm_release:\n    release:"
+  ],
+  "return_values": [
+    {
+      "name": "current_release",
+      "type": "string",
+      "description": "The current RHSM release version value. Returned: success",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/rhsm_release_module#ansible-collections-community-general-rhsm-release-module.html",
+  "parsed_at": "2026-04-11T13:53:24.866527"
+}

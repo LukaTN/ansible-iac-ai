@@ -1,0 +1,59 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.pear",
+  "slug": "pear_module#ansible-collections-community-general-pear-module",
+  "description": "Manage PHP packages with the pear package manager.",
+  "parameters": [
+    {
+      "name": "executable",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the pear executable."
+    },
+    {
+      "name": "name",
+      "aliases": [
+        "pkg"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the package to install, upgrade, or remove."
+    },
+    {
+      "name": "prompts",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of regular expressions that can be used to detect prompts during pear package installation to answer the expected question. Prompts are processed in the same order as the packages list. You can optionally specify an answer to any question in the list. If no answer is provided, the list item must contain only the regular expression. To specify an answer, the item must be a dictionary with the regular expression as key and the answer as value my_regular_expression: 'an_answer'. You can provide a list containing items with or without answer. A prompt list can be shorter or longer than the packages list but it issues a warning. If you want to specify that a package does not need prompts in the middle of a list, null."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"installed\"",
+        "\"latest\"",
+        "\"absent\"",
+        "\"removed\""
+      ],
+      "description": "Desired state of the package. Choices: \"present\" ← (default) \"installed\" \"latest\" \"absent\" \"removed\""
+    }
+  ],
+  "examples": [
+    "- name: Install pear package\n  community.general.pear:\n    name: Net_URL2\n    state: present\n\n- name: Install pecl package\n  community.general.pear:\n    name: pecl/json_post\n    state: present\n\n- name: Install pecl package with expected prompt\n  community.general.pear:\n    name: pecl/apcu\n    state: present\n    prompts:\n      - (.*)Enable internal debugging in APCu \\[no\\]\n\n- name: Install pecl package with expected prompt and an answer\n  community.general.pear:\n    name: pecl/apcu\n    state: present\n    prompts:\n      - (.*)Enable internal debugging in APCu \\[no\\]: \"yes\"\n\n- name: Install multiple pear/pecl packages at once with prompts. Prompts will be processed on the same order as the packages\n    order. If there is more prompts than packages, packages without prompts will be installed without any prompt expected.\n    If there is more packages than prompts, additional prompts will be ignored.\n  community.general.pear:\n    name: pecl/gnupg, pecl/apcu\n    state: present\n    prompts:\n      - I am a test prompt because gnupg doesnt asks anything\n      - (.*)Enable internal debugging in APCu \\[no\\]: \"yes\"\n\n- name: Install multiple pear/pecl packages at once skipping the first prompt. Prompts will be processed on the same order\n    as the packages order. If there is more prompts than packages, packages without prompts will be installed without any\n    prompt expected. If there is more packages than prompts, additional prompts will be ignored.\n  community.general.pear:\n    name: pecl/gnupg, pecl/apcu\n    state: present\n    prompts:\n      - null\n      - (.*)Enable internal debugging in APCu \\[no\\]: \"yes\"\n\n- name: Upgrade package\n  community.general.pear:\n    name: Net_URL2\n    state: latest\n\n- name: Remove packages\n  community.general.pear:\n    name: Net_URL2,pecl/json_post\n    state: absent"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/pear_module#ansible-collections-community-general-pear-module.html",
+  "parsed_at": "2026-04-11T13:53:23.579083"
+}

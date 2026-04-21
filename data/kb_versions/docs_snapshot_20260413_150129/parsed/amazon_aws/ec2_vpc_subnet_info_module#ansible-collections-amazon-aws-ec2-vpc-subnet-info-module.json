@@ -1,0 +1,290 @@
+{
+  "collection_ns": "amazon_aws",
+  "collection": "amazon.aws",
+  "module": "amazon.aws.ec2_vpc_subnet_info",
+  "slug": "ec2_vpc_subnet_info_module#ansible-collections-amazon-aws-ec2-vpc-subnet-info-module",
+  "description": "Gather information about EC2 VPC subnets in AWS.",
+  "parameters": [
+    {
+      "name": "access_key",
+      "aliases": [
+        "aws_access_key_id",
+        "aws_access_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS access key ID. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY environment variables may also be used in decreasing order of preference. The aws_access_key and profile options are mutually exclusive. The aws_access_key_id alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "aws_ca_bundle",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The location of a CA Bundle to use when validating SSL certificates. The AWS_CA_BUNDLE environment variable may also be used."
+    },
+    {
+      "name": "aws_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary to modify the botocore configuration. Parameters can be found in the AWS documentation https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html#botocore.config.Config."
+    },
+    {
+      "name": "debug_botocore_endpoint_logs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use a botocore.endpoint logger to parse the unique (rather than total) \"resource:action\" API calls made during a task, outputing the set to the resource_actions key in the task results. Use the aws_resource_action callback to output to total list made during a playbook. The ANSIBLE_DEBUG_BOTOCORE_LOGS environment variable may also be used. Choices: false ← (default) true"
+    },
+    {
+      "name": "endpoint_url",
+      "aliases": [
+        "aws_endpoint_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "AWS",
+      "choices": [],
+      "description": "URL to connect to instead of the default AWS endpoints. While this can be used to connection to other AWS-compatible services the amazon.aws and community.aws collections are only tested against AWS. The AWS_URL environment variable may also be used."
+    },
+    {
+      "name": "filters",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "A dict of filters to apply. Each dict item consists of a filter key and a filter value. See https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeSubnets.html for possible filters. Default: {}"
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "aws_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A named AWS profile to use for authentication. See the AWS documentation for more information about named profiles https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html. The AWS_PROFILE environment variable may also be used. The profile option is mutually exclusive with the aws_access_key, aws_secret_key and session_token options."
+    },
+    {
+      "name": "region",
+      "aliases": [
+        "aws_region"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The AWS region to use. For global services such as IAM, Route53 and CloudFront, region is ignored. The AWS_REGION environment variable may also be used. See the Amazon AWS documentation for more information http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region."
+    },
+    {
+      "name": "secret_key",
+      "aliases": [
+        "aws_secret_access_key",
+        "aws_secret_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS secret access key. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SECRET_ACCESS_KEY or AWS_SECRET_KEY environment variables may also be used in decreasing order of preference. The secret_key and profile options are mutually exclusive. The aws_secret_access_key alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "session_token",
+      "aliases": [
+        "aws_session_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS STS session token for use with temporary credentials. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SESSION_TOKEN environment variable may also be used. The session_token and profile options are mutually exclusive."
+    },
+    {
+      "name": "subnet_ids",
+      "aliases": [
+        "subnet_id"
+      ],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "A list of subnet IDs to gather information for. Default: []"
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to false, SSL certificates will not be validated for communication with the AWS APIs. Setting validate_certs=false is strongly discouraged, as an alternative, consider setting aws_ca_bundle instead. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "# Note: These examples do not set authentication details, see the AWS Guide for details.\n\n# Gather information about all VPC subnets\n- amazon.aws.ec2_vpc_subnet_info:\n\n# Gather information about a particular VPC subnet using ID\n- amazon.aws.ec2_vpc_subnet_info:\n    subnet_ids: subnet-00112233\n\n# Gather information about any VPC subnet with a tag key Name and value Example\n- amazon.aws.ec2_vpc_subnet_info:\n    filters:\n      \"tag:Name\": Example\n\n# Gather information about any VPC subnet within VPC with ID vpc-abcdef00\n- amazon.aws.ec2_vpc_subnet_info:\n    filters:\n      vpc-id: vpc-abcdef00\n\n# Gather information about a set of VPC subnets, publicA, publicB and publicC within a\n# VPC with ID vpc-abcdef00 and then use the jinja map function to return the\n# subnet_ids as a list.\n\n- amazon.aws.ec2_vpc_subnet_info:\n    filters:\n      vpc-id: vpc-abcdef00\n      \"tag:Name\": \"{{ item }}\"\n  loop:\n    - publicA\n    - publicB\n    - publicC\n  register: subnet_info\n\n- set_fact:\n    subnet_ids: \"{{ subnet_info.results | sum(attribute='subnets', start=[]) | map(attribute='subnet_id') }}\""
+  ],
+  "return_values": [
+    {
+      "name": "subnets",
+      "type": "complex",
+      "description": "Returns an array of complex objects as described below. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "assign_ipv6_address_on_creation",
+      "type": "boolean",
+      "description": "whether IPv6 address is auto-assigned to new instances. Returned: always Sample: false",
+      "returned": "always"
+    },
+    {
+      "name": "availability_zone",
+      "type": "string",
+      "description": "Availability zone of the Subnet. Returned: always Sample: \"us-east-1a\"",
+      "returned": "always"
+    },
+    {
+      "name": "availability_zone_id",
+      "type": "string",
+      "description": "The AZ ID of the subnet. Returned: always Sample: \"use1-az6\"",
+      "returned": "always"
+    },
+    {
+      "name": "available_ip_address_count",
+      "type": "string",
+      "description": "number of available IPv4 addresses. Returned: always Sample: \"251\"",
+      "returned": "always"
+    },
+    {
+      "name": "cidr_block",
+      "type": "string",
+      "description": "The IPv4 CIDR of the Subnet. Returned: always Sample: \"10.0.0.0/16\"",
+      "returned": "always"
+    },
+    {
+      "name": "default_for_az",
+      "type": "boolean",
+      "description": "indicates whether this is the default Subnet for this Availability Zone. Returned: always Sample: false",
+      "returned": "always"
+    },
+    {
+      "name": "enable_dns64",
+      "type": "boolean",
+      "description": "Indicates whether DNS queries made should return synthetic IPv6 addresses for IPv4-only destinations. Returned: success Sample: false",
+      "returned": "success"
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "description": "Subnet resource id. Returned: always Sample: \"subnet-b883b2c4\"",
+      "returned": "always"
+    },
+    {
+      "name": "ipv6_association_id",
+      "type": "string",
+      "description": "The IPv6 association ID for the currently associated CIDR. Returned: always Sample: \"subnet-cidr-assoc-b85c74d2\"",
+      "returned": "always"
+    },
+    {
+      "name": "ipv6_cidr_block",
+      "type": "string",
+      "description": "The IPv6 CIDR block actively associated with the Subnet. Returned: always Sample: \"2001:db8:0:102::/64\"",
+      "returned": "always"
+    },
+    {
+      "name": "ipv6_cidr_block_association_set",
+      "type": "complex",
+      "description": "An array of IPv6 cidr block association set information. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "association_id",
+      "type": "string",
+      "description": "The association ID. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "ipv6_cidr_block_state",
+      "type": "dictionary",
+      "description": "A hash/dict that contains a single item. The state of the cidr block association. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "state",
+      "type": "string",
+      "description": "The CIDR block association state. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "ipv6_native",
+      "type": "boolean",
+      "description": "Indicates whether this is an IPv6 only subnet. Returned: success Sample: false",
+      "returned": "success"
+    },
+    {
+      "name": "map_customer_owned_ip_on_launch",
+      "type": "boolean",
+      "description": "Indicates whether a network interface receives a customer-owned IPv4 address. Returned: success Sample: \"flase\"",
+      "returned": "success"
+    },
+    {
+      "name": "map_public_ip_on_launch",
+      "type": "boolean",
+      "description": "whether public IP is auto-assigned to new instances. Returned: always Sample: false",
+      "returned": "always"
+    },
+    {
+      "name": "owner_id",
+      "type": "string",
+      "description": "The ID of the Amazon Web Services account that owns the subnet. Returned: success Sample: \"12344567\"",
+      "returned": "success"
+    },
+    {
+      "name": "private_dns_name_options_on_launch",
+      "type": "dictionary",
+      "description": "The type of hostnames to assign to instances in the subnet at launch. An instance hostname is based on the IPv4 address or ID of the instance. Returned: success Sample: {\"enable_resource_name_dns_a_record\": false, \"enable_resource_name_dns_aaaa_record\": false, \"hostname_type\": \"ip-name\"}",
+      "returned": "success"
+    },
+    {
+      "name": "subnet_arn",
+      "type": "string",
+      "description": "The Amazon Resource Name (ARN) of the subnet. Returned: success Sample: \"arn:aws:ec2:us-east-1:xxx:subnet/subnet-xxx\"",
+      "returned": "success"
+    },
+    {
+      "name": "subnet_id",
+      "type": "string",
+      "description": "The ID of the Subnet. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "tags",
+      "type": "dictionary",
+      "description": "tags attached to the Subnet, includes name. Returned: always Sample: {\"Name\": \"My Subnet\", \"env\": \"staging\"}",
+      "returned": "always"
+    },
+    {
+      "name": "vpc_id",
+      "type": "string",
+      "description": "the id of the VPC where this Subnet exists. Returned: always Sample: \"vpc-67236184\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_vpc_subnet_info_module#ansible-collections-amazon-aws-ec2-vpc-subnet-info-module.html",
+  "parsed_at": "2026-04-11T13:52:48.183388"
+}

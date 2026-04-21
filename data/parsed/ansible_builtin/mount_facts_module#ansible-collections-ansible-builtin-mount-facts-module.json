@@ -1,0 +1,85 @@
+{
+  "collection_ns": "ansible_builtin",
+  "collection": "ansible.builtin",
+  "module": "ansible.builtin.mount_facts",
+  "slug": "mount_facts_module#ansible-collections-ansible-builtin-mount-facts-module",
+  "description": "Retrieve information about mounts from preferred sources and filter the results based on the filesystem type and device.",
+  "parameters": [
+    {
+      "name": "devices",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A list of fnmatch patterns to filter mounts by the special device or remote file system."
+    },
+    {
+      "name": "fstypes",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A list of fnmatch patterns to filter mounts by the type of the file system."
+    },
+    {
+      "name": "include_aggregate_mounts",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Whether or not the module should return the aggregate_mounts list in ansible_facts. When this is null, a warning will be emitted if multiple mounts for the same mount point are found. Choices: false true"
+    },
+    {
+      "name": "mount_binary",
+      "aliases": [],
+      "type": "any",
+      "required": false,
+      "default": "mount",
+      "choices": [],
+      "description": "The mount_binary is used if sources contain the value “mount”, or if sources contains a dynamic source, and none were found (as can be expected on BSD or AIX hosts). Set to null to stop after no dynamic file source is found instead. Default: \"mount\""
+    },
+    {
+      "name": "on_timeout",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"error\" ← (default)",
+        "\"warn\"",
+        "\"ignore\""
+      ],
+      "description": "The action to take when gathering mount information exceeds timeout. Choices: \"error\" ← (default) \"warn\" \"ignore\""
+    },
+    {
+      "name": "sources",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A list of sources used to determine the mounts. Missing file sources (or empty files) are skipped. Repeat sources, including symlinks, are skipped. The mount_points return value contains the first definition found for a mount point. Additional mounts to the same mount point are available from aggregate_mounts (if enabled). By default, mounts are retrieved from all of the standard locations, which have the predefined aliases all/static/dynamic. all contains dynamic and static. dynamic contains /etc/mtab, /proc/mounts, /etc/mnttab, and the value of mount_binary if it is not None. This allows platforms like BSD or AIX, which don’t have an equivalent to /proc/mounts, to collect the current mounts by default. See the mount_binary option to disable the fall back or configure a different executable. static contains /etc/fstab, /etc/vfstab, and /etc/filesystems. Note that /etc/filesystems is specific to AIX. The Linux file by this name has a different format/purpose and is ignored. The value of mount_binary can be configured as a source, which will cause it to always execute. Depending on the other sources configured, this could be inefficient/redundant. For example, if /proc/mounts and mount are listed as sources, Linux hosts will retrieve the same mounts twice."
+    },
+    {
+      "name": "timeout",
+      "aliases": [],
+      "type": "float",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "This is the maximum number of seconds to wait for each mount to complete. When this is null, wait indefinitely. Configure in conjunction with on_timeout to skip unresponsive mounts. This timeout also applies to the mount_binary command to list mounts. If the module is configured to run during the play’s fact gathering stage, set a timeout using module_defaults to prevent a hang (see example)."
+    }
+  ],
+  "examples": [
+    "- name: Get non-local devices\n  mount_facts:\n    devices: \"[!/]*\"\n\n- name: Get FUSE subtype mounts\n  mount_facts:\n    fstypes:\n      - \"fuse.*\"\n\n- name: Get NFS mounts during gather_facts with timeout\n  hosts: all\n  gather_facts: true\n  vars:\n    ansible_facts_modules:\n      - ansible.builtin.mount_facts\n  module_default:\n    ansible.builtin.mount_facts:\n      timeout: 10\n      fstypes:\n        - nfs\n        - nfs4\n\n- name: Get mounts from a non-default location\n  mount_facts:\n    sources:\n      - /usr/etc/fstab\n\n- name: Get mounts from the mount binary\n  mount_facts:\n    sources:\n      - mount\n    mount_binary: /sbin/mount"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/mount_facts_module.html",
+  "parsed_at": "2026-04-13T16:29:25.741878"
+}

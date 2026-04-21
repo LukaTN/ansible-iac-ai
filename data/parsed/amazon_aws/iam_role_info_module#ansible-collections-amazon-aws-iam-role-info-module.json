@@ -1,0 +1,251 @@
+{
+  "collection_ns": "amazon_aws",
+  "collection": "amazon.aws",
+  "module": "amazon.aws.iam_role_info",
+  "slug": "iam_role_info_module#ansible-collections-amazon-aws-iam-role-info-module",
+  "description": "Gathers information about IAM roles.",
+  "parameters": [
+    {
+      "name": "access_key",
+      "aliases": [
+        "aws_access_key_id",
+        "aws_access_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS access key ID. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY environment variables may also be used in decreasing order of preference. The aws_access_key and profile options are mutually exclusive. The aws_access_key_id alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "aws_ca_bundle",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The location of a CA Bundle to use when validating SSL certificates. The AWS_CA_BUNDLE environment variable may also be used."
+    },
+    {
+      "name": "aws_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary to modify the botocore configuration. Parameters can be found in the AWS documentation https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html#botocore.config.Config."
+    },
+    {
+      "name": "debug_botocore_endpoint_logs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use a botocore.endpoint logger to parse the unique (rather than total) \"resource:action\" API calls made during a task, outputing the set to the resource_actions key in the task results. Use the aws_resource_action callback to output to total list made during a playbook. The ANSIBLE_DEBUG_BOTOCORE_LOGS environment variable may also be used. Choices: false ← (default) true"
+    },
+    {
+      "name": "endpoint_url",
+      "aliases": [
+        "aws_endpoint_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "AWS",
+      "choices": [],
+      "description": "URL to connect to instead of the default AWS endpoints. While this can be used to connection to other AWS-compatible services the amazon.aws and community.aws collections are only tested against AWS. The AWS_URL environment variable may also be used."
+    },
+    {
+      "name": "name",
+      "aliases": [
+        "role_name"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of a role to search for. Mutually exclusive with path_prefix."
+    },
+    {
+      "name": "path_prefix",
+      "aliases": [
+        "path",
+        "prefix"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Prefix of role to restrict IAM role search for. Mutually exclusive with name. path and prefix were added as aliases in release 7.2.0. In a release after 2026-05-01 paths must begin and end with /. Prior to this paths will automatically have / added as appropriate to ensure that they start and end with /."
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "aws_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A named AWS profile to use for authentication. See the AWS documentation for more information about named profiles https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html. The AWS_PROFILE environment variable may also be used. The profile option is mutually exclusive with the aws_access_key, aws_secret_key and session_token options."
+    },
+    {
+      "name": "region",
+      "aliases": [
+        "aws_region"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The AWS region to use. For global services such as IAM, Route53 and CloudFront, region is ignored. The AWS_REGION environment variable may also be used. See the Amazon AWS documentation for more information http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region."
+    },
+    {
+      "name": "secret_key",
+      "aliases": [
+        "aws_secret_access_key",
+        "aws_secret_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS secret access key. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SECRET_ACCESS_KEY or AWS_SECRET_KEY environment variables may also be used in decreasing order of preference. The secret_key and profile options are mutually exclusive. The aws_secret_access_key alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "session_token",
+      "aliases": [
+        "aws_session_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS STS session token for use with temporary credentials. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SESSION_TOKEN environment variable may also be used. The session_token and profile options are mutually exclusive."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to false, SSL certificates will not be validated for communication with the AWS APIs. Setting validate_certs=false is strongly discouraged, as an alternative, consider setting aws_ca_bundle instead. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: find all existing IAM roles\n  amazon.aws.iam_role_info:\n  register: result\n\n- name: describe a single role\n  amazon.aws.iam_role_info:\n    name: MyIAMRole\n\n- name: describe all roles matching a path prefix\n  amazon.aws.iam_role_info:\n    path_prefix: /application/path/"
+  ],
+  "return_values": [
+    {
+      "name": "iam_roles",
+      "type": "complex",
+      "description": "List of IAM roles. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "arn",
+      "type": "string",
+      "description": "Amazon Resource Name for IAM role. Returned: always Sample: \"arn:aws:iam::123456789012:role/AnsibleTestRole\"",
+      "returned": "always"
+    },
+    {
+      "name": "assume_role_policy_document",
+      "type": "dictionary",
+      "description": "The policy that grants an entity permission to assume the role. Note: the case of keys in this dictionary are no longer converted from CamelCase to snake_case. This behaviour changed in release 8.0.0. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "assume_role_policy_document_raw",
+      "type": "dictionary",
+      "description": "Note: this return value has been deprecated and will be removed in a release after 2026-05-01. iam_roles.assume_role_policy_document and iam_roles.assume_role_policy_document_raw now use the same format. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "create_date",
+      "type": "string",
+      "description": "Date IAM role was created. Returned: always Sample: \"2017-10-23T00:05:08+00:00\"",
+      "returned": "always"
+    },
+    {
+      "name": "inline_policies",
+      "type": "list",
+      "description": "List of names of inline policies. Returned: always Sample: []",
+      "returned": "always"
+    },
+    {
+      "name": "instance_profiles",
+      "type": "complex",
+      "description": "List of attached instance profiles. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "instance_profile_id",
+      "type": "string",
+      "description": "Amazon Identifier for the instance profile. Returned: always Sample: \"AROAII7ABCD123456EFGH\"",
+      "returned": "always"
+    },
+    {
+      "name": "instance_profile_name",
+      "type": "string",
+      "description": "Name of instance profile. Returned: always Sample: \"AnsibleTestEC2Policy\"",
+      "returned": "always"
+    },
+    {
+      "name": "path",
+      "type": "string",
+      "description": "Path of instance profile. Returned: always Sample: \"/\"",
+      "returned": "always"
+    },
+    {
+      "name": "roles",
+      "type": "list",
+      "description": "List of roles associated with this instance profile. Returned: always Sample: []",
+      "returned": "always"
+    },
+    {
+      "name": "managed_policies",
+      "type": "complex",
+      "description": "List of attached managed policies. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "policy_arn",
+      "type": "string",
+      "description": "Amazon Resource Name for the policy. Returned: always Sample: \"arn:aws:iam::123456789012:policy/AnsibleTestEC2Policy\"",
+      "returned": "always"
+    },
+    {
+      "name": "policy_name",
+      "type": "string",
+      "description": "Name of managed policy. Returned: always Sample: \"AnsibleTestEC2Policy\"",
+      "returned": "always"
+    },
+    {
+      "name": "role_id",
+      "type": "string",
+      "description": "Amazon Identifier for the role. Returned: always Sample: \"AROAII7ABCD123456EFGH\"",
+      "returned": "always"
+    },
+    {
+      "name": "role_name",
+      "type": "string",
+      "description": "Name of the role. Returned: always Sample: \"AnsibleTestRole\"",
+      "returned": "always"
+    },
+    {
+      "name": "tags",
+      "type": "dictionary",
+      "description": "Role tags. Returned: always Sample: {\"Env\": \"Prod\"}",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/amazon/aws/iam_role_info_module.html",
+  "parsed_at": "2026-04-13T16:29:22.763593"
+}

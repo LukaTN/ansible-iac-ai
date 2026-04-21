@@ -1,0 +1,147 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.one_host",
+  "slug": "one_host_module#ansible-collections-community-general-one-host-module",
+  "description": "Manages OpenNebula Hosts.",
+  "parameters": [
+    {
+      "name": "api_password",
+      "aliases": [
+        "api_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The password or token for XMLRPC authentication. If not specified then the value of the ONE_PASSWORD environment variable, if any, is used."
+    },
+    {
+      "name": "api_url",
+      "aliases": [
+        "api_endpoint"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The ENDPOINT URL of the XMLRPC server. If not specified then the value of the ONE_URL environment variable, if any, is used."
+    },
+    {
+      "name": "api_username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The name of the user for XMLRPC authentication. If not specified then the value of the ONE_USERNAME environment variable, if any, is used."
+    },
+    {
+      "name": "cluster_id",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "0",
+      "choices": [],
+      "description": "The cluster ID. Default: 0"
+    },
+    {
+      "name": "cluster_name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The cluster specified by name."
+    },
+    {
+      "name": "im_mad_name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "kvm",
+      "choices": [],
+      "description": "The name of the information manager, this values are taken from the oned.conf with the tag name IM_MAD (name). Default: \"kvm\""
+    },
+    {
+      "name": "labels",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The labels for this host."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Hostname of the machine to manage."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)",
+        "\"enabled\"",
+        "\"disabled\"",
+        "\"offline\""
+      ],
+      "description": "Takes the host to the desired lifecycle state. If absent the host is deleted from the cluster. If present the host is created in the cluster (includes enabled, disabled and offline states). If enabled the host is fully operational. disabled, for example to perform maintenance operations. offline, host is totally offline. Choices: \"absent\" \"present\" ← (default) \"enabled\" \"disabled\" \"offline\""
+    },
+    {
+      "name": "template",
+      "aliases": [
+        "attributes"
+      ],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The template or attribute changes to merge into the host template."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether to validate the TLS/SSL certificates or not. This parameter is ignored if PYTHONHTTPSVERIFY environment variable is used. Choices: false true ← (default)"
+    },
+    {
+      "name": "vmm_mad_name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "kvm",
+      "choices": [],
+      "description": "The name of the virtual machine manager mad name, this values are taken from the oned.conf with the tag name VM_MAD (name). Default: \"kvm\""
+    },
+    {
+      "name": "wait_timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "300",
+      "choices": [],
+      "description": "Time to wait for the desired state to be reached before timeout, in seconds. Default: 300"
+    }
+  ],
+  "examples": [
+    "- name: Create a new host in OpenNebula\n  community.general.one_host:\n    name: host1\n    cluster_id: 1\n    api_url: http://127.0.0.1:2633/RPC2\n\n- name: Create a host and adjust its template\n  community.general.one_host:\n    name: host2\n    cluster_name: default\n    template:\n      LABELS:\n        - gold\n        - ssd\n      RESERVED_CPU: -100"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/one_host_module#ansible-collections-community-general-one-host-module.html",
+  "parsed_at": "2026-04-11T13:53:21.695891"
+}

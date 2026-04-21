@@ -1,0 +1,453 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.ali_instance_info",
+  "slug": "ali_instance_info_module#ansible-collections-community-general-ali-instance-info-module",
+  "description": "This module fetches data from the Open API in Alicloud. The module must be called from within the ECS instance itself.",
+  "parameters": [
+    {
+      "name": "alicloud_access_key",
+      "aliases": [
+        "access_key_id",
+        "access_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Alibaba Cloud access key. If not set then the value of environment variable ALICLOUD_ACCESS_KEY, ALICLOUD_ACCESS_KEY_ID is used instead."
+    },
+    {
+      "name": "alicloud_assume_role",
+      "aliases": [
+        "assume_role"
+      ],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "If provided with a role ARN, Ansible attempts to assume this role using the supplied credentials. The nested assume_role block supports alicloud_assume_role_arn, alicloud_assume_role_session_name, alicloud_assume_role_session_expiration and alicloud_assume_role_policy."
+    },
+    {
+      "name": "alicloud_assume_role_arn",
+      "aliases": [
+        "assume_role_arn"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The Alibaba Cloud role_arn. The ARN of the role to assume. If ARN is set to an empty string, it does not perform role switching. It supports environment variable ALICLOUD_ASSUME_ROLE_ARN. Ansible executes with provided credentials."
+    },
+    {
+      "name": "alicloud_assume_role_session_expiration",
+      "aliases": [
+        "assume_role_session_expiration"
+      ],
+      "type": "integer",
+      "required": false,
+      "default": "to",
+      "choices": [],
+      "description": "The Alibaba Cloud session_expiration. The time after which the established session for assuming role expires. Valid value range 900-3600 seconds. Default to 3600 (in this case Alicloud use own default value). It supports environment variable ALICLOUD_ASSUME_ROLE_SESSION_EXPIRATION."
+    },
+    {
+      "name": "alicloud_assume_role_session_name",
+      "aliases": [
+        "assume_role_session_name"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The Alibaba Cloud session_name. The session name to use when assuming the role. If omitted, ‘ansible’ is passed to the AssumeRole call as session name. It supports environment variable ALICLOUD_ASSUME_ROLE_SESSION_NAME."
+    },
+    {
+      "name": "alicloud_region",
+      "aliases": [
+        "region",
+        "region_id"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The Alibaba Cloud region to use. If not specified then the value of environment variable ALICLOUD_REGION, ALICLOUD_REGION_ID is used instead."
+    },
+    {
+      "name": "alicloud_secret_key",
+      "aliases": [
+        "secret_access_key",
+        "secret_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Alibaba Cloud secret key. If not set then the value of environment variable ALICLOUD_SECRET_KEY, ALICLOUD_SECRET_ACCESS_KEY is used instead."
+    },
+    {
+      "name": "alicloud_security_token",
+      "aliases": [
+        "security_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The Alibaba Cloud security token. If not specified then the value of environment variable ALICLOUD_SECURITY_TOKEN is used instead."
+    },
+    {
+      "name": "ecs_role_name",
+      "aliases": [
+        "role_name"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The RAM Role Name attached on a ECS instance for API operations. You can retrieve this from the ‘Access Control’ section of the Alibaba Cloud console. If you are running Ansible from an ECS instance with RAM Instance using RAM Role, Ansible just accesses the metadata http://100.100.100.200/latest/meta-data/ram/security-credentials/<ecs_role_name> to obtain the STS credential. This is a preferred approach over any other when running in ECS as you can avoid hard coding credentials. Instead these are leased on-the-fly by Ansible which reduces the chance of leakage."
+    },
+    {
+      "name": "filters",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dict of filters to apply. Each dict item consists of a filter key and a filter value. The filter keys can be all of request parameters. See https://www.alibabacloud.com/help/doc-detail/25506.htm for parameter details. Filter keys can be same as request parameter name or be lower case and use underscore (\"_\") or dash (\"-\") to connect different words in one parameter. InstanceIds should be a list. Tag.n.Key and Tag.n.Value should be a dict and using tags instead."
+    },
+    {
+      "name": "name_prefix",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Use a instance name prefix to filter ECS instances."
+    },
+    {
+      "name": "profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "This is the Alicloud profile name as set in the shared credentials file. It can also be sourced from the ALICLOUD_PROFILE environment variable."
+    },
+    {
+      "name": "shared_credentials_file",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "This is the path to the shared credentials file. It can also be sourced from the ALICLOUD_SHARED_CREDENTIALS_FILE environment variable. If this is not set and a profile is specified, ~/.aliyun/config.json is used."
+    },
+    {
+      "name": "tags",
+      "aliases": [
+        "instance_tags"
+      ],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A hash/dictionaries of instance tags. {\"key\":\"value\"}."
+    }
+  ],
+  "examples": [
+    "# Fetch instances details according to setting different filters\n\n- name: Find all instances in the specified region\n  community.general.ali_instance_info:\n  register: all_instances\n\n- name: Find all instances based on the specified ids\n  community.general.ali_instance_info:\n    instance_ids:\n      - \"i-35b333d9\"\n      - \"i-ddav43kd\"\n  register: instances_by_ids\n\n- name: Find all instances based on the specified name_prefix\n  community.general.ali_instance_info:\n    name_prefix: \"ecs_instance_\"\n  register: instances_by_name_prefix\n\n- name: Find instances based on tags\n  community.general.ali_instance_info:\n    tags:\n      Test: \"add\""
+  ],
+  "return_values": [
+    {
+      "name": "ids",
+      "type": "list",
+      "description": "List of ECS instance IDs. Returned: always Sample: [\"i-12345er\", \"i-3245fs\"]",
+      "returned": "always"
+    },
+    {
+      "name": "instances",
+      "type": "complex",
+      "description": "List of ECS instances. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "availability_zone",
+      "type": "string",
+      "description": "The availability zone of the instance is in. Returned: always Sample: \"cn-beijing-a\"",
+      "returned": "always"
+    },
+    {
+      "name": "block_device_mappings",
+      "type": "complex",
+      "description": "Any block device mapping entries for the instance. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "attach_time",
+      "type": "string",
+      "description": "The time stamp when the attachment initiated. Returned: always Sample: \"2018-06-25T04:08:26Z\"",
+      "returned": "always"
+    },
+    {
+      "name": "delete_on_termination",
+      "type": "boolean",
+      "description": "Indicates whether the volume is deleted on instance termination. Returned: always Sample: true",
+      "returned": "always"
+    },
+    {
+      "name": "device_name",
+      "type": "string",
+      "description": "The device name exposed to the instance (for example, /dev/xvda). Returned: always Sample: \"/dev/xvda\"",
+      "returned": "always"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "description": "The attachment state. Returned: always Sample: \"in_use\"",
+      "returned": "always"
+    },
+    {
+      "name": "volume_id",
+      "type": "string",
+      "description": "The ID of the cloud disk. Returned: always Sample: \"d-2zei53pjsi117y6gf9t6\"",
+      "returned": "always"
+    },
+    {
+      "name": "cpu",
+      "type": "integer",
+      "description": "The CPU core count of the instance. Returned: always Sample: 4",
+      "returned": "always"
+    },
+    {
+      "name": "creation_time",
+      "type": "string",
+      "description": "The time the instance was created. Returned: always Sample: \"2018-06-25T04:08Z\"",
+      "returned": "always"
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "description": "The instance description. Returned: always Sample: \"my ansible instance\"",
+      "returned": "always"
+    },
+    {
+      "name": "eip",
+      "type": "complex",
+      "description": "The attribution of EIP associated with the instance. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "allocation_id",
+      "type": "string",
+      "description": "The ID of the EIP. Returned: always Sample: \"eip-12345\"",
+      "returned": "always"
+    },
+    {
+      "name": "internet_charge_type",
+      "type": "string",
+      "description": "The internet charge type of the EIP. Returned: always Sample: \"paybybandwidth\"",
+      "returned": "always"
+    },
+    {
+      "name": "ip_address",
+      "type": "string",
+      "description": "EIP address. Returned: always Sample: \"42.10.2.2\"",
+      "returned": "always"
+    },
+    {
+      "name": "expired_time",
+      "type": "string",
+      "description": "The time the instance expires. Returned: always Sample: \"2099-12-31T15:59Z\"",
+      "returned": "always"
+    },
+    {
+      "name": "gpu",
+      "type": "complex",
+      "description": "The attribution of instance GPU. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "amount",
+      "type": "integer",
+      "description": "The count of the GPU. Returned: always Sample: 0",
+      "returned": "always"
+    },
+    {
+      "name": "spec",
+      "type": "string",
+      "description": "The specification of the GPU. Returned: always Sample: \"\"",
+      "returned": "always"
+    },
+    {
+      "name": "host_name",
+      "type": "string",
+      "description": "The host name of the instance. Returned: always Sample: \"iZ2zewaoZ\"",
+      "returned": "always"
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "description": "Alias of instance_id. Returned: always Sample: \"i-abc12345\"",
+      "returned": "always"
+    },
+    {
+      "name": "image_id",
+      "type": "string",
+      "description": "The ID of the image used to launch the instance. Returned: always Sample: \"m-0011223344\"",
+      "returned": "always"
+    },
+    {
+      "name": "inner_ip_address",
+      "type": "string",
+      "description": "The inner IPv4 address of the classic instance. Returned: always Sample: \"10.0.0.2\"",
+      "returned": "always"
+    },
+    {
+      "name": "instance_charge_type",
+      "type": "string",
+      "description": "The instance charge type. Returned: always Sample: \"PostPaid\"",
+      "returned": "always"
+    },
+    {
+      "name": "instance_id",
+      "type": "string",
+      "description": "ECS instance resource ID. Returned: always Sample: \"i-abc12345\"",
+      "returned": "always"
+    },
+    {
+      "name": "instance_name",
+      "type": "string",
+      "description": "The name of the instance. Returned: always Sample: \"my-ecs\"",
+      "returned": "always"
+    },
+    {
+      "name": "instance_type",
+      "type": "string",
+      "description": "The instance type of the running instance. Returned: always Sample: \"ecs.sn1ne.xlarge\"",
+      "returned": "always"
+    },
+    {
+      "name": "instance_type_family",
+      "type": "string",
+      "description": "The instance type family of the instance belongs. Returned: always Sample: \"ecs.sn1ne\"",
+      "returned": "always"
+    },
+    {
+      "name": "internet_max_bandwidth_in",
+      "type": "integer",
+      "description": "Maximum incoming bandwidth from the internet network. Returned: always Sample: 200",
+      "returned": "always"
+    },
+    {
+      "name": "internet_max_bandwidth_out",
+      "type": "integer",
+      "description": "Maximum incoming bandwidth from the internet network. Returned: always Sample: 20",
+      "returned": "always"
+    },
+    {
+      "name": "io_optimized",
+      "type": "boolean",
+      "description": "Indicates whether the instance is optimized for EBS I/O. Returned: always Sample: false",
+      "returned": "always"
+    },
+    {
+      "name": "memory",
+      "type": "integer",
+      "description": "Memory size of the instance. Returned: always Sample: 8192",
+      "returned": "always"
+    },
+    {
+      "name": "network_interfaces",
+      "type": "complex",
+      "description": "One or more network interfaces for the instance. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "mac_address",
+      "type": "string",
+      "description": "The MAC address. Returned: always Sample: \"00:11:22:33:44:55\"",
+      "returned": "always"
+    },
+    {
+      "name": "network_interface_id",
+      "type": "string",
+      "description": "The ID of the network interface. Returned: always Sample: \"eni-01234567\"",
+      "returned": "always"
+    },
+    {
+      "name": "primary_ip_address",
+      "type": "string",
+      "description": "The primary IPv4 address of the network interface within the vswitch. Returned: always Sample: \"10.0.0.1\"",
+      "returned": "always"
+    },
+    {
+      "name": "osname",
+      "type": "string",
+      "description": "The operation system name of the instance owned. Returned: always Sample: \"CentOS\"",
+      "returned": "always"
+    },
+    {
+      "name": "ostype",
+      "type": "string",
+      "description": "The operation system type of the instance owned. Returned: always Sample: \"linux\"",
+      "returned": "always"
+    },
+    {
+      "name": "private_ip_address",
+      "type": "string",
+      "description": "The IPv4 address of the network interface within the subnet. Returned: always Sample: \"10.0.0.1\"",
+      "returned": "always"
+    },
+    {
+      "name": "public_ip_address",
+      "type": "string",
+      "description": "The public IPv4 address assigned to the instance or EIP address. Returned: always Sample: \"43.0.0.1\"",
+      "returned": "always"
+    },
+    {
+      "name": "resource_group_id",
+      "type": "string",
+      "description": "The ID of the resource group to which the instance belongs. Returned: always Sample: \"my-ecs-group\"",
+      "returned": "always"
+    },
+    {
+      "name": "security_groups",
+      "type": "list",
+      "description": "One or more security groups for the instance. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "group_id",
+      "type": "string",
+      "description": "The ID of the security group. Returned: always Sample: \"sg-0123456\"",
+      "returned": "always"
+    },
+    {
+      "name": "group_name",
+      "type": "string",
+      "description": "The name of the security group. Returned: always Sample: \"my-security-group\"",
+      "returned": "always"
+    },
+    {
+      "name": "tags",
+      "type": "dictionary",
+      "description": "Any tags assigned to the instance. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "vpc_id",
+      "type": "string",
+      "description": "The ID of the VPC the instance is in. Returned: always Sample: \"vpc-0011223344\"",
+      "returned": "always"
+    },
+    {
+      "name": "vswitch_id",
+      "type": "string",
+      "description": "The ID of the vswitch in which the instance is running. Returned: always Sample: \"vsw-dew00abcdef\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/ali_instance_info_module#ansible-collections-community-general-ali-instance-info-module.html",
+  "parsed_at": "2026-04-11T13:53:10.530719"
+}

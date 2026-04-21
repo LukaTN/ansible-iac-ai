@@ -1,0 +1,27 @@
+# ============================================================
+# AnsibleAI RAG Generator — LangChain + ChromaDB
+# Date        : 2026-04-11 11:41:17
+# Request     : create an IAM user named ci-deployer with programmatic access
+# Module      : None
+# Collection  : None
+# RAG score   : 0.0
+# Chunks used : 0
+# Source URL  : 
+# LLM model   : MISTRAL
+# ============================================================
+
+---
+- name: Create IAM user named ci-deployer with programmatic access
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+    - name: Create IAM user ci-deployer with programmatic access
+      aws.aws.iam:
+        user:
+          name: ci-deployer
+          groups:
+            - IAMUsersForAccessKey
+          path: /
+          force_create: yes
+          create_access_key: yes

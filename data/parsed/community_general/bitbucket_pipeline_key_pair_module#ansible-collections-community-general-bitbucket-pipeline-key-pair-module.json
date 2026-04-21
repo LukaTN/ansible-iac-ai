@@ -1,0 +1,101 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.bitbucket_pipeline_key_pair",
+  "slug": "bitbucket_pipeline_key_pair_module#ansible-collections-community-general-bitbucket-pipeline-key-pair-module",
+  "description": "Manages Bitbucket pipeline SSH key pair.",
+  "parameters": [
+    {
+      "name": "client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The OAuth consumer key. If not set the environment variable BITBUCKET_CLIENT_ID is used."
+    },
+    {
+      "name": "client_secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The OAuth consumer secret. If not set the environment variable BITBUCKET_CLIENT_SECRET is used."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The App password. If not set the environment variable BITBUCKET_PASSWORD is used."
+    },
+    {
+      "name": "private_key",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The private key."
+    },
+    {
+      "name": "public_key",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The public key."
+    },
+    {
+      "name": "repository",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The repository name."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\""
+      ],
+      "description": "Indicates desired state of the key pair. Choices: \"absent\" \"present\""
+    },
+    {
+      "name": "user",
+      "aliases": [
+        "username"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The username. If not set the environment variable BITBUCKET_USERNAME is used. username is an alias of user since community.general 6.0.0. It was an alias of workspace before."
+    },
+    {
+      "name": "workspace",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The repository owner. Note: username used to be an alias of this option. Since community.general 6.0.0 it is an alias of user."
+    }
+  ],
+  "examples": [
+    "- name: Create or update SSH key pair\n  community.general.bitbucket_pipeline_key_pair:\n    repository: 'bitbucket-repo'\n    workspace: bitbucket_workspace\n    public_key: '{{lookup(\"file\", \"bitbucket.pub\") }}'\n    private_key: '{{lookup(\"file\", \"bitbucket\") }}'\n    state: present\n\n- name: Remove SSH key pair\n  community.general.bitbucket_pipeline_key_pair:\n    repository: bitbucket-repo\n    workspace: bitbucket_workspace\n    state: absent"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/bitbucket_pipeline_key_pair_module.html",
+  "parsed_at": "2026-04-13T16:29:43.657018"
+}

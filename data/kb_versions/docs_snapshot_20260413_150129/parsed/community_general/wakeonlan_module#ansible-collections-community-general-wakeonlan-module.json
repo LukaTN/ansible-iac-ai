@@ -1,0 +1,42 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.wakeonlan",
+  "slug": "wakeonlan_module#ansible-collections-community-general-wakeonlan-module",
+  "description": "The wakeonlan module sends magic Wake-on-LAN (WoL) broadcast packets.",
+  "parameters": [
+    {
+      "name": "broadcast",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "255.255.255.255",
+      "choices": [],
+      "description": "Network broadcast address to use for broadcasting magic Wake-on-LAN packet. Default: \"255.255.255.255\""
+    },
+    {
+      "name": "mac",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "MAC address to send Wake-on-LAN broadcast packet for."
+    },
+    {
+      "name": "port",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "7",
+      "choices": [],
+      "description": "UDP port to use for magic Wake-on-LAN packet. Default: 7"
+    }
+  ],
+  "examples": [
+    "- name: Send a magic Wake-on-LAN packet to 00:00:5E:00:53:66\n  community.general.wakeonlan:\n    mac: '00:00:5E:00:53:66'\n    broadcast: 192.0.2.23\n  delegate_to: localhost\n\n- community.general.wakeonlan:\n    mac: 00:00:5E:00:53:66\n    port: 9\n  delegate_to: localhost"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/wakeonlan_module#ansible-collections-community-general-wakeonlan-module.html",
+  "parsed_at": "2026-04-11T13:53:28.490265"
+}

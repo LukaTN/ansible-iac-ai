@@ -1,0 +1,223 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.gitlab_label",
+  "slug": "gitlab_label_module#ansible-collections-community-general-gitlab-label-module",
+  "description": "When a label does not exist, it is created.",
+  "parameters": [
+    {
+      "name": "api_job_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "GitLab CI job token for logging in."
+    },
+    {
+      "name": "api_oauth_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "GitLab OAuth token for logging in."
+    },
+    {
+      "name": "api_password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The password to use for authentication against the API."
+    },
+    {
+      "name": "api_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "GitLab access token with API permissions."
+    },
+    {
+      "name": "api_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The resolvable endpoint for the API."
+    },
+    {
+      "name": "api_username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The username to use for authentication against the API."
+    },
+    {
+      "name": "ca_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The CA certificates bundle to use to verify GitLab server certificate."
+    },
+    {
+      "name": "group",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The path of the group. Either this or project is required."
+    },
+    {
+      "name": "labels",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "A list of dictionaries that represents gitlab project’s or group’s labels. Default: []"
+    },
+    {
+      "name": "color",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The color of the label. Required when state=present."
+    },
+    {
+      "name": "description",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Label’s description."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the label."
+    },
+    {
+      "name": "new_name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Optional field to change label’s name."
+    },
+    {
+      "name": "priority",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Integer value to give priority to the label."
+    },
+    {
+      "name": "project",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The path and name of the project. Either this or group is required."
+    },
+    {
+      "name": "purge",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "When set to true, delete all labels which are not mentioned in the task. Choices: false ← (default) true"
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Create or delete project or group label. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether or not to validate SSL certs when supplying a HTTPS endpoint. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "# same project's task can be executed for group\n- name: Create one Label\n  community.general.gitlab_label:\n    api_url: https://gitlab.com\n    api_token: secret_access_token\n    project: \"group1/project1\"\n    labels:\n      - name: label_one\n        color: \"#123456\"\n    state: present\n\n- name: Create many group labels\n  community.general.gitlab_label:\n    api_url: https://gitlab.com\n    api_token: secret_access_token\n    group: \"group1\"\n    labels:\n      - name: label_one\n        color: \"#123456\"\n        description: this is a label\n        priority: 20\n      - name: label_two\n        color: \"#554422\"\n    state: present\n\n- name: Create many project labels\n  community.general.gitlab_label:\n    api_url: https://gitlab.com\n    api_token: secret_access_token\n    project: \"group1/project1\"\n    labels:\n      - name: label_one\n        color: \"#123456\"\n        description: this is a label\n        priority: 20\n      - name: label_two\n        color: \"#554422\"\n    state: present\n\n- name: Set or update some labels\n  community.general.gitlab_label:\n    api_url: https://gitlab.com\n    api_token: secret_access_token\n    project: \"group1/project1\"\n    labels:\n      - name: label_one\n        color: \"#224488\"\n    state: present\n\n- name: Add label in check mode\n  community.general.gitlab_label:\n    api_url: https://gitlab.com\n    api_token: secret_access_token\n    project: \"group1/project1\"\n    labels:\n      - name: label_one\n        color: \"#224488\"\n    check_mode: true\n\n- name: Delete Label\n  community.general.gitlab_label:\n    api_url: https://gitlab.com\n    api_token: secret_access_token\n    project: \"group1/project1\"\n    labels:\n      - name: label_one\n    state: absent\n\n- name: Change Label name\n  community.general.gitlab_label:\n    api_url: https://gitlab.com\n    api_token: secret_access_token\n    project: \"group1/project1\"\n    labels:\n      - name: label_one\n        new_name: label_two\n    state: absent\n\n- name: Purge all labels\n  community.general.gitlab_label:\n    api_url: https://gitlab.com\n    api_token: secret_access_token\n    project: \"group1/project1\"\n    purge: true\n\n- name: Delete many labels\n  community.general.gitlab_label:\n    api_url: https://gitlab.com\n    api_token: secret_access_token\n    project: \"group1/project1\"\n    state: absent\n    labels:\n      - name: label-abc123\n      - name: label-two"
+  ],
+  "return_values": [
+    {
+      "name": "labels",
+      "type": "dictionary",
+      "description": "Four lists of the labels which were added, updated, removed or exist. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "added",
+      "type": "list",
+      "description": "A list of labels which were created. Returned: always Sample: [\"abcd\", \"label-one\"]",
+      "returned": "always"
+    },
+    {
+      "name": "removed",
+      "type": "list",
+      "description": "A list of labels which were deleted. Returned: always Sample: [\"defg\", \"new-label\"]",
+      "returned": "always"
+    },
+    {
+      "name": "untouched",
+      "type": "list",
+      "description": "A list of labels which exist. Returned: always Sample: [\"defg\", \"new-label\"]",
+      "returned": "always"
+    },
+    {
+      "name": "updated",
+      "type": "list",
+      "description": "A list pre-existing labels whose values have been set. Returned: always Sample: [\"defg\", \"new-label\"]",
+      "returned": "always"
+    },
+    {
+      "name": "labels_obj",
+      "type": "dictionary",
+      "description": "API object. Returned: success",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/gitlab_label_module#ansible-collections-community-general-gitlab-label-module.html",
+  "parsed_at": "2026-04-11T13:53:13.952510"
+}

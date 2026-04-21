@@ -1,0 +1,185 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.lxd_project",
+  "slug": "lxd_project_module#ansible-collections-community-general-lxd-project-module",
+  "description": "Management of LXD projects.",
+  "parameters": [
+    {
+      "name": "client_cert",
+      "aliases": [
+        "cert_file"
+      ],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The client certificate file path. If not specified, it defaults to $HOME/.config/lxc/client.crt."
+    },
+    {
+      "name": "client_key",
+      "aliases": [
+        "key_file"
+      ],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The client certificate key file path. If not specified, it defaults to $HOME/.config/lxc/client.key."
+    },
+    {
+      "name": "config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The config for the project (for example {\"features.profiles\": \"true\"}). See https://documentation.ubuntu.com/lxd/en/latest/api/#/projects/project_get. If the project already exists and its “config” value in metadata obtained from GET /1.0/projects/<name> https://documentation.ubuntu.com/lxd/en/latest/api/#/projects/project_get are different, then this module tries to apply the configurations https://documentation.ubuntu.com/lxd/en/latest/api/#/projects/project_put."
+    },
+    {
+      "name": "description",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Description of the project."
+    },
+    {
+      "name": "merge_project",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Merge the configuration of the present project with the new desired configuration, instead of replacing it. If configuration is the same after merged, no change is made. Choices: false ← (default) true"
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the project."
+    },
+    {
+      "name": "new_name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A new name of a project. If this parameter is specified a project is renamed to this name. See https://documentation.ubuntu.com/lxd/en/latest/api/#/projects/project_post."
+    },
+    {
+      "name": "snap_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "unix:/var/snap/lxd/common/lxd/unix.socket",
+      "choices": [],
+      "description": "The Unix domain socket path when LXD is installed by snap package manager. Default: \"unix:/var/snap/lxd/common/lxd/unix.socket\""
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Define the state of a project. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "trust_password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The client trusted password. You need to set this password on the LXD server before running this module using the following command: lxc config set core.trust_password <some random password> See https://www.stgraber.org/2016/04/18/lxd-api-direct-interaction/. If trust_password is set, this module send a request for authentication before sending any requests."
+    },
+    {
+      "name": "url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "unix:/var/lib/lxd/unix.socket",
+      "choices": [],
+      "description": "The Unix domain socket path or the https URL for the LXD server. Default: \"unix:/var/lib/lxd/unix.socket\""
+    }
+  ],
+  "examples": [
+    "# An example for creating a project\n- hosts: localhost\n  connection: local\n  tasks:\n    - name: Create a project\n      community.general.lxd_project:\n        name: ansible-test-project\n        state: present\n        config: {}\n        description: my new project\n\n# An example for renaming a project\n- hosts: localhost\n  connection: local\n  tasks:\n    - name: Rename ansible-test-project to ansible-test-project-new-name\n      community.general.lxd_project:\n        name: ansible-test-project\n        new_name: ansible-test-project-new-name\n        state: present\n        config: {}\n        description: my new project"
+  ],
+  "return_values": [
+    {
+      "name": "actions",
+      "type": "list",
+      "description": "List of actions performed for the project. Returned: success Sample: [\"create\"]",
+      "returned": "success"
+    },
+    {
+      "name": "logs",
+      "type": "list",
+      "description": "The logs of requests and responses. Returned: when ansible-playbook is invoked with -vvvv.",
+      "returned": "when"
+    },
+    {
+      "name": "request",
+      "type": "dictionary",
+      "description": "HTTP request sent to LXD server. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "json",
+      "type": "string",
+      "description": "JSON body of HTTP request. Returned: success Sample: \"(too long to be placed here)\"",
+      "returned": "success"
+    },
+    {
+      "name": "method",
+      "type": "string",
+      "description": "Method of HTTP request. Returned: success Sample: \"GET\"",
+      "returned": "success"
+    },
+    {
+      "name": "timeout",
+      "type": "integer",
+      "description": "Timeout of HTTP request, null if unset. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "url",
+      "type": "string",
+      "description": "URL path of HTTP request. Returned: success Sample: \"/1.0/projects/test-project\"",
+      "returned": "success"
+    },
+    {
+      "name": "response",
+      "type": "dictionary",
+      "description": "HTTP response received from LXD server. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "description": "Type of actions performed, currently only sent request. Returned: success Sample: \"sent request\"",
+      "returned": "success"
+    },
+    {
+      "name": "old_state",
+      "type": "string",
+      "description": "The old state of the project. Returned: success Sample: \"absent\"",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/lxd_project_module#ansible-collections-community-general-lxd-project-module.html",
+  "parsed_at": "2026-04-11T13:53:19.817842"
+}

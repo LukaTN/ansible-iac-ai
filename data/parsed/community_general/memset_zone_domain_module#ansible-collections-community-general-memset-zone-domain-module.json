@@ -1,0 +1,75 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.memset_zone_domain",
+  "slug": "memset_zone_domain_module#ansible-collections-community-general-memset-zone-domain-module",
+  "description": "Manage DNS zone domains in a Memset account.",
+  "parameters": [
+    {
+      "name": "api_key",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The API key obtained from the Memset control panel."
+    },
+    {
+      "name": "domain",
+      "aliases": [
+        "name"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The zone domain name. Ensure this value has at most 250 characters."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)"
+      ],
+      "description": "Indicates desired state of resource. Choices: \"absent\" \"present\" ← (default)"
+    },
+    {
+      "name": "zone",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The zone to add the domain to (this must already exist)."
+    }
+  ],
+  "examples": [
+    "# Create the zone domain 'test.com'\n- name: Create zone domain\n  community.general.memset_zone_domain:\n    domain: test.com\n    zone: testzone\n    state: present\n    api_key: 5eb86c9196ab03919abcf03857163741\n  delegate_to: localhost"
+  ],
+  "return_values": [
+    {
+      "name": "memset_api",
+      "type": "complex",
+      "description": "Domain info from the Memset API. Returned: when changed or state == present",
+      "returned": "when"
+    },
+    {
+      "name": "domain",
+      "type": "string",
+      "description": "Domain name. Returned: always Sample: \"example.com\"",
+      "returned": "always"
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "description": "Domain ID. Returned: always Sample: \"b0bb1ce851aeea6feeb2dc32fe83bf9c\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/memset_zone_domain_module.html",
+  "parsed_at": "2026-04-13T16:29:53.173407"
+}

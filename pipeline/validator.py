@@ -7,21 +7,30 @@
   Checks performed:
     [1] YAML syntax          → is it valid YAML?
     [2] Playbook structure   → starts with ---, has hosts/tasks?
-    [3] Module name          → is kubernetes.core.* module present?
+    [3] Module name          → is a known collection module present?
     [4] Required params      → are all required params present?
     [5] Param types          → basic type checking (int/bool/string)
     [6] No placeholder left  → detects "your-*" / "PLACEHOLDER" values
+    [7] ansible-lint         → quality + security lint rules
 =============================================================
 """
 
 import os
+import sys
 import json
 import re
+import shutil
+import subprocess
 import yaml
 from datetime import datetime
+from kb_store import load_knowledge_base as load_kb_store
 
 # Always run from project root
 os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
 KNOWLEDGE_BASE  = "data/knowledge_base.json"
 OUTPUT_DIR      = "output"
@@ -65,8 +74,7 @@ PLACEHOLDER_PATTERNS = [
 # ─────────────────────────────────────────────
 
 def load_knowledge_base():
-    with open(KNOWLEDGE_BASE, "r", encoding="utf-8") as f:
-        return json.load(f)
+    return load_kb_store(prefer_parsed=True)
 
 
 def load_playbook_file(filepath: str) -> str:
@@ -93,6 +101,10 @@ class ValidationResult:
         self.errors     = []
         self.raw_yaml   = None
         self.parsed     = None   # parsed YAML object
+        self.ansible_lint = {
+            "status": "not_run",
+            "violations": [],
+        }
 
     @property
     def is_valid(self):
@@ -155,20 +167,57 @@ def check_playbook_structure(result: ValidationResult):
         result.ok("Playbook structure is correct")
 
 
-def check_module_present(result: ValidationResult):
-    """Check 3: Is a kubernetes.core.* module used?"""
+def check_module_present(result: ValidationResult, kb_modules: dict):
+    """Check 3: Is a known collection module used?"""
     raw = result.raw_yaml or ""
-    # Pick the LONGEST match to avoid 'kubernetes.core.k8s' swallowing
-    # 'kubernetes.core.k8s_exec', 'kubernetes.core.k8s_scale', etc.
-    matches = [mod for mod in K8S_CORE_MODULES if mod in raw]
+    known_modules = {
+        entry.get("module", "")
+        for entry in (kb_modules or {}).values()
+        if entry.get("module")
+    }
+    matches = [mod for mod in known_modules if mod in raw]
     found = max(matches, key=len) if matches else None
 
     if found:
         result.ok(f"Module found: {found}")
         result._detected_module = found
     else:
-        result.fail("No kubernetes.core.* module detected in playbook")
+        result.fail("No known collection module detected in playbook")
         result._detected_module = None
+
+
+def _refine_required_params(entry: dict, required: list[str]) -> list[str]:
+    """
+    Reduce false positives caused by scraped nested-option "required" flags.
+    Keep required params that appear in module examples when available.
+    """
+    if not required:
+        return []
+
+    examples = entry.get("examples", []) or []
+    if not examples:
+        return required
+
+    all_params = entry.get("parameters", []) or []
+    alias_map = {}
+    for p in all_params:
+        name = p.get("name")
+        if not name:
+            continue
+        alias_map[name] = [name] + (p.get("aliases", []) or [])
+
+    refined = []
+    for param in required:
+        names = alias_map.get(param, [param])
+        present_in_examples = any(
+            re.search(rf"(?m)^\s*{re.escape(n)}\s*:", ex)
+            for n in names
+            for ex in examples
+        )
+        if present_in_examples:
+            refined.append(param)
+
+    return refined or required
 
 
 def check_required_params(result: ValidationResult, kb_modules: dict):
@@ -179,11 +228,17 @@ def check_required_params(result: ValidationResult, kb_modules: dict):
         return
 
     slug = get_module_slug(module_name)
-    if slug not in kb_modules:
-        result.warn(f"Module '{module_name}' not in knowledge base")
+    entry = kb_modules.get(slug)
+    if not entry:
+        for key, mod_entry in kb_modules.items():
+            if key.endswith(f"::{slug}") or mod_entry.get("module") == module_name:
+                entry = mod_entry
+                break
+    if not entry:
+        result.warn(f"Module '{module_name}' not in knowledge data")
         return
 
-    required = kb_modules[slug].get("required_params", [])
+    required = _refine_required_params(entry, entry.get("required_params", []))
 
     # field_manager is only needed with server_side_apply — skip it
     OPTIONAL_IN_PRACTICE = {"field_manager", "value"}
@@ -196,7 +251,7 @@ def check_required_params(result: ValidationResult, kb_modules: dict):
     raw = result.raw_yaml or ""
 
     # Build alias map: param_name → [param_name, alias1, alias2, ...]
-    all_params = kb_modules[slug].get("parameters", [])
+    all_params = entry.get("parameters", [])
     alias_map = {}
     for p in all_params:
         names = [p["name"]] + p.get("aliases", [])
@@ -255,6 +310,79 @@ def check_hosts_field(result: ValidationResult):
         result.ok(f"hosts: {play.get('hosts')}")
 
 
+def check_ansible_lint(result: ValidationResult):
+    """
+    Check 7: Run ansible-lint for quality/security rules.
+    """
+    lint_bin = shutil.which("ansible-lint")
+    if not lint_bin:
+        py_scripts = os.path.join(os.path.dirname(sys.executable), "Scripts")
+        candidates = [
+            os.path.join(py_scripts, "ansible-lint"),
+            os.path.join(py_scripts, "ansible-lint.exe"),
+            os.path.join(
+                os.path.expanduser("~"),
+                "AppData",
+                "Roaming",
+                "Python",
+                f"Python{sys.version_info.major}{sys.version_info.minor}",
+                "Scripts",
+                "ansible-lint.exe",
+            ),
+        ]
+        for path in candidates:
+            if os.path.exists(path):
+                lint_bin = path
+                break
+    if not lint_bin:
+        result.warn("ansible-lint not installed; linting skipped")
+        result.ansible_lint = {"status": "skipped", "violations": []}
+        return
+
+    try:
+        proc = subprocess.run(
+            [lint_bin, "-p", result.filepath],
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=180,
+        )
+    except subprocess.TimeoutExpired:
+        result.warn("ansible-lint timed out after 180s")
+        result.ansible_lint = {"status": "timeout", "violations": []}
+        return
+    except Exception as e:
+        result.warn(f"ansible-lint execution failed: {e}")
+        result.ansible_lint = {"status": "failed_to_run", "violations": []}
+        return
+
+    lines = []
+    for block in (proc.stdout or "", proc.stderr or ""):
+        for line in block.splitlines():
+            line = line.strip()
+            if line:
+                lines.append(line)
+
+    if proc.returncode == 0:
+        result.ok("ansible-lint passed (no lint violations)")
+        result.ansible_lint = {"status": "passed", "violations": []}
+        return
+
+    combined = "\n".join(lines).lower()
+    if "no module named 'grp'" in combined:
+        result.warn("ansible-lint unavailable on this platform/runtime (missing grp module)")
+        result.ansible_lint = {
+            "status": "unsupported_platform",
+            "violations": lines[:10],
+        }
+        return
+
+    violations = lines[:50]
+    result.fail(f"ansible-lint reported {len(violations)} violation(s)")
+    result.ansible_lint = {"status": "violations", "violations": violations}
+
+
 # ─────────────────────────────────────────────
 #  MAIN VALIDATOR
 # ─────────────────────────────────────────────
@@ -276,10 +404,11 @@ def validate_playbook(filepath: str, kb_modules: dict) -> ValidationResult:
     # Run all checks
     check_yaml_syntax(result)
     check_playbook_structure(result)
-    check_module_present(result)
+    check_module_present(result, kb_modules)
     check_required_params(result, kb_modules)
     check_hosts_field(result)
     check_no_placeholders(result)
+    check_ansible_lint(result)
 
     # Summary
     print(f"\n  Result: ", end="")
@@ -300,7 +429,7 @@ def validate_all(target_path: str = None):
     Validate one file or all files in output/.
     """
     print("=" * 60)
-    print("  Ansible kubernetes.core — Playbook Validator")
+    print("  Ansible Multi-Collection — Playbook Validator")
     print(f"  Started : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("=" * 60)
 
@@ -358,6 +487,7 @@ def validate_all(target_path: str = None):
                 "passed"  : r.passed,
                 "warnings": r.warnings,
                 "errors"  : r.errors,
+                "ansible_lint": r.ansible_lint,
             }
             for r in results
         ]

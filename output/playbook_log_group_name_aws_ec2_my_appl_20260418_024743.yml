@@ -1,0 +1,20 @@
+---
+- name: Create metric filter for log group /aws/ec2/my-application-log-group
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - amazon.aws
+  tasks:
+    - name: Set metric filter on log group /aws/ec2/my-application-log-group
+      amazon.aws.cloudwatchlogs_log_group_metric_filter:
+        log_group_name: /aws/ec2/my-application-log-group
+        filter_name: ErrorFilter
+        filter_pattern: 'ERROR'
+        state: present
+        metric_transformation:
+          metric_name: ErrorCount
+          metric_namespace: MyApplication/Metrics
+          metric_value: "1"
+          default_value: 0
+          unit: Count

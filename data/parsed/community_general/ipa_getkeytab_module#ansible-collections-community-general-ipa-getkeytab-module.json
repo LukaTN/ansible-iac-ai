@@ -1,0 +1,146 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.ipa_getkeytab",
+  "slug": "ipa_getkeytab_module#ansible-collections-community-general-ipa-getkeytab-module",
+  "description": "Manage keytab file with ipa-getkeytab utility.",
+  "parameters": [
+    {
+      "name": "bind_dn",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The LDAP DN to bind as when retrieving a keytab without Kerberos credentials. Generally used with the bind_pw option."
+    },
+    {
+      "name": "bind_pw",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The LDAP password to use when not binding with Kerberos."
+    },
+    {
+      "name": "ca_cert",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The path to the IPA CA certificate used to validate LDAPS/STARTTLS connections."
+    },
+    {
+      "name": "encryption_types",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The list of encryption types to use to generate keys. It uses local client defaults if not provided. Valid values depend on the Kerberos library version and configuration."
+    },
+    {
+      "name": "force",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Force recreation if exists already. Choices: false true"
+    },
+    {
+      "name": "ipa_host",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The IPA server to retrieve the keytab from (FQDN)."
+    },
+    {
+      "name": "ldap_uri",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "LDAP URI. If ldap:// is specified, STARTTLS is initiated by default. Can not be used with the ipa_host option."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Use this password for the key instead of one randomly generated."
+    },
+    {
+      "name": "path",
+      "aliases": [
+        "keytab"
+      ],
+      "type": "path",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The base path where to put generated keytab file."
+    },
+    {
+      "name": "principal",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The non-realm part of the full principal name."
+    },
+    {
+      "name": "retrieve_mode",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Retrieve an existing key from the server instead of generating a new one. This is incompatible with the password, and works only against a IPA server more recent than version 3.3. The user requesting the keytab must have access to the keys for this operation to succeed. Be aware that if set true, a new keytab is generated. This invalidates all previously retrieved keytabs for this service principal. Choices: false true"
+    },
+    {
+      "name": "sasl_mech",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"GSSAPI\"",
+        "\"EXTERNAL\""
+      ],
+      "description": "SASL mechanism to use if bind_dn and bind_pw are not specified. Choices: \"GSSAPI\" \"EXTERNAL\""
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "The state of the keytab file. present only check for existence of a file, if you want to recreate keytab with other parameters you should set force=true. Choices: \"present\" ← (default) \"absent\""
+    }
+  ],
+  "examples": [
+    "- name: Get Kerberos ticket using default principal\n  community.general.krb_ticket:\n    password: \"{{ aldpro_admin_password }}\"\n\n- name: Create keytab\n  community.general.ipa_getkeytab:\n    path: /etc/ipa/test.keytab\n    principal: HTTP/freeipa-dc02.ipa.test\n    ipa_host: freeipa-dc01.ipa.test\n\n- name: Retrieve already existing keytab\n  community.general.ipa_getkeytab:\n    path: /etc/ipa/test.keytab\n    principal: HTTP/freeipa-dc02.ipa.test\n    ipa_host: freeipa-dc01.ipa.test\n    retrieve_mode: true\n\n- name: Force keytab recreation\n  community.general.ipa_getkeytab:\n    path: /etc/ipa/test.keytab\n    principal: HTTP/freeipa-dc02.ipa.test\n    ipa_host: freeipa-dc01.ipa.test\n    force: true"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/ipa_getkeytab_module.html",
+  "parsed_at": "2026-04-13T16:29:48.581486"
+}

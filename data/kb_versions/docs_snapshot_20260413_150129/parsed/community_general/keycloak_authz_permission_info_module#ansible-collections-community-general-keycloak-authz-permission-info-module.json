@@ -1,0 +1,205 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.keycloak_authz_permission_info",
+  "slug": "keycloak_authz_permission_info_module#ansible-collections-community-general-keycloak-authz-permission-info-module",
+  "description": "This module allows querying information about Keycloak client authorization permissions from the resources endpoint using the Keycloak REST API. Authorization permissions are only available if a client has Authorization enabled.",
+  "parameters": [
+    {
+      "name": "auth_client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "admin-cli",
+      "choices": [],
+      "description": "OpenID Connect client_id to authenticate to the API with. Default: \"admin-cli\""
+    },
+    {
+      "name": "auth_client_secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Client Secret to use in conjunction with auth_client_id (if required)."
+    },
+    {
+      "name": "auth_keycloak_url",
+      "aliases": [
+        "url"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "URL to the Keycloak instance."
+    },
+    {
+      "name": "auth_password",
+      "aliases": [
+        "password"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Password to authenticate for API access with."
+    },
+    {
+      "name": "auth_realm",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Keycloak realm name to authenticate to for API access."
+    },
+    {
+      "name": "auth_username",
+      "aliases": [
+        "username"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Username to authenticate for API access with."
+    },
+    {
+      "name": "client_id",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The clientId of the keycloak client that should have the authorization scope. This is usually a human-readable name of the Keycloak client."
+    },
+    {
+      "name": "connection_timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "10",
+      "choices": [],
+      "description": "Controls the HTTP connections timeout period (in seconds) to Keycloak API. Default: 10"
+    },
+    {
+      "name": "http_agent",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "Ansible",
+      "choices": [],
+      "description": "Configures the HTTP User-Agent header. Default: \"Ansible\""
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the authorization permission to create."
+    },
+    {
+      "name": "realm",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the Keycloak realm the Keycloak client is in."
+    },
+    {
+      "name": "refresh_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Authentication refresh token for Keycloak API."
+    },
+    {
+      "name": "token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Authentication token for Keycloak API."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Verify TLS certificates (do not disable this in production). Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Query Keycloak authorization permission\n  community.general.keycloak_authz_permission_info:\n    name: ScopePermission\n    client_id: myclient\n    realm: myrealm\n    auth_keycloak_url: http://localhost:8080/auth\n    auth_username: keycloak\n    auth_password: keycloak\n    auth_realm: master"
+  ],
+  "return_values": [
+    {
+      "name": "msg",
+      "type": "string",
+      "description": "Message as to what action was taken. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "queried_state",
+      "type": "complex",
+      "description": "State of the resource (a policy) as seen by Keycloak. Returned: on success",
+      "returned": "on"
+    },
+    {
+      "name": "config",
+      "type": "dictionary",
+      "description": "Configuration of the permission (empty in all observed cases). Returned: success Sample: {}",
+      "returned": "success"
+    },
+    {
+      "name": "decisionStrategy",
+      "type": "string",
+      "description": "The decision strategy. Returned: success Sample: \"UNANIMOUS\"",
+      "returned": "success"
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "description": "Description of the authorization permission. Returned: success Sample: \"Resource Permission\"",
+      "returned": "success"
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "description": "ID of the authorization permission. Returned: success Sample: \"9da05cd2-b273-4354-bbd8-0c133918a454\"",
+      "returned": "success"
+    },
+    {
+      "name": "logic",
+      "type": "string",
+      "description": "The logic used for the permission (part of the payload, but has a fixed value). Returned: success Sample: \"POSITIVE\"",
+      "returned": "success"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "Name of the authorization permission. Returned: success Sample: \"ResourcePermission\"",
+      "returned": "success"
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "description": "Type of the authorization permission. Returned: success Sample: \"resource\"",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/keycloak_authz_permission_info_module#ansible-collections-community-general-keycloak-authz-permission-info-module.html",
+  "parsed_at": "2026-04-11T13:53:17.707992"
+}

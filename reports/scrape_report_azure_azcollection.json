@@ -1,0 +1,2491 @@
+{
+  "collection": "azure.azcollection",
+  "description": "Microsoft Azure modules",
+  "index_url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/index.html",
+  "scraped_at": "2026-04-11T13:05:27.398267",
+  "total": 413,
+  "ok": 407,
+  "skipped": 0,
+  "errors": 6,
+  "output_dir": "data/raw_html\\azure_azcollection",
+  "results": [
+    {
+      "slug": "azure_rm_accesstoken_info_module#ansible-collections-azure-azcollection-azure-rm-accesstoken-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_accesstoken_info_module.html#ansible-collections-azure-azcollection-azure-rm-accesstoken-info-module",
+      "status": "ok",
+      "size": 60516
+    },
+    {
+      "slug": "azure_rm_account_info_module#ansible-collections-azure-azcollection-azure-rm-account-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_account_info_module.html#ansible-collections-azure-azcollection-azure-rm-account-info-module",
+      "status": "ok",
+      "size": 67807
+    },
+    {
+      "slug": "azure_rm_adapplication_module#ansible-collections-azure-azcollection-azure-rm-adapplication-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_adapplication_module.html#ansible-collections-azure-azcollection-azure-rm-adapplication-module",
+      "status": "ok",
+      "size": 119583
+    },
+    {
+      "slug": "azure_rm_adapplication_info_module#ansible-collections-azure-azcollection-azure-rm-adapplication-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_adapplication_info_module.html#ansible-collections-azure-azcollection-azure-rm-adapplication-info-module",
+      "status": "ok",
+      "size": 94853
+    },
+    {
+      "slug": "azure_rm_adgroup_module#ansible-collections-azure-azcollection-azure-rm-adgroup-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_adgroup_module.html#ansible-collections-azure-azcollection-azure-rm-adgroup-module",
+      "status": "ok",
+      "size": 85018
+    },
+    {
+      "slug": "azure_rm_adgroup_info_module#ansible-collections-azure-azcollection-azure-rm-adgroup-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_adgroup_info_module.html#ansible-collections-azure-azcollection-azure-rm-adgroup-info-module",
+      "status": "ok",
+      "size": 78972
+    },
+    {
+      "slug": "azure_rm_adpassword_module#ansible-collections-azure-azcollection-azure-rm-adpassword-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_adpassword_module.html#ansible-collections-azure-azcollection-azure-rm-adpassword-module",
+      "status": "ok",
+      "size": 65185
+    },
+    {
+      "slug": "azure_rm_adpassword_info_module#ansible-collections-azure-azcollection-azure-rm-adpassword-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_adpassword_info_module.html#ansible-collections-azure-azcollection-azure-rm-adpassword-info-module",
+      "status": "ok",
+      "size": 64514
+    },
+    {
+      "slug": "azure_rm_adserviceprincipal_module#ansible-collections-azure-azcollection-azure-rm-adserviceprincipal-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_adserviceprincipal_module.html#ansible-collections-azure-azcollection-azure-rm-adserviceprincipal-module",
+      "status": "ok",
+      "size": 65668
+    },
+    {
+      "slug": "azure_rm_adserviceprincipal_info_module#ansible-collections-azure-azcollection-azure-rm-adserviceprincipal-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_adserviceprincipal_info_module.html#ansible-collections-azure-azcollection-azure-rm-adserviceprincipal-info-module",
+      "status": "ok",
+      "size": 65834
+    },
+    {
+      "slug": "azure_rm_aduser_module#ansible-collections-azure-azcollection-azure-rm-aduser-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_aduser_module.html#ansible-collections-azure-azcollection-azure-rm-aduser-module",
+      "status": "ok",
+      "size": 88429
+    },
+    {
+      "slug": "azure_rm_aduser_info_module#ansible-collections-azure-azcollection-azure-rm-aduser-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_aduser_info_module.html#ansible-collections-azure-azcollection-azure-rm-aduser-info-module",
+      "status": "ok",
+      "size": 75995
+    },
+    {
+      "slug": "azure_rm_afdendpoint_module#ansible-collections-azure-azcollection-azure-rm-afdendpoint-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_afdendpoint_module.html#ansible-collections-azure-azcollection-azure-rm-afdendpoint-module",
+      "status": "ok",
+      "size": 68422
+    },
+    {
+      "slug": "azure_rm_afdendpoint_info_module#ansible-collections-azure-azcollection-azure-rm-afdendpoint-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_afdendpoint_info_module.html#ansible-collections-azure-azcollection-azure-rm-afdendpoint-info-module",
+      "status": "ok",
+      "size": 73754
+    },
+    {
+      "slug": "azure_rm_afdorigin_module#ansible-collections-azure-azcollection-azure-rm-afdorigin-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_afdorigin_module.html#ansible-collections-azure-azcollection-azure-rm-afdorigin-module",
+      "status": "ok",
+      "size": 76411
+    },
+    {
+      "slug": "azure_rm_afdorigin_info_module#ansible-collections-azure-azcollection-azure-rm-afdorigin-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_afdorigin_info_module.html#ansible-collections-azure-azcollection-azure-rm-afdorigin-info-module",
+      "status": "ok",
+      "size": 82269
+    },
+    {
+      "slug": "azure_rm_afdorigingroup_module#ansible-collections-azure-azcollection-azure-rm-afdorigingroup-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_afdorigingroup_module.html#ansible-collections-azure-azcollection-azure-rm-afdorigingroup-module",
+      "status": "ok",
+      "size": 71339
+    },
+    {
+      "slug": "azure_rm_afdorigingroup_info_module#ansible-collections-azure-azcollection-azure-rm-afdorigingroup-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_afdorigingroup_info_module.html#ansible-collections-azure-azcollection-azure-rm-afdorigingroup-info-module",
+      "status": "ok",
+      "size": 78270
+    },
+    {
+      "slug": "azure_rm_afdroute_module#ansible-collections-azure-azcollection-azure-rm-afdroute-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_afdroute_module.html#ansible-collections-azure-azcollection-azure-rm-afdroute-module",
+      "status": "ok",
+      "size": 79760
+    },
+    {
+      "slug": "azure_rm_afdroute_info_module#ansible-collections-azure-azcollection-azure-rm-afdroute-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_afdroute_info_module.html#ansible-collections-azure-azcollection-azure-rm-afdroute-info-module",
+      "status": "ok",
+      "size": 81106
+    },
+    {
+      "slug": "azure_rm_afdrules_module#ansible-collections-azure-azcollection-azure-rm-afdrules-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_afdrules_module.html#ansible-collections-azure-azcollection-azure-rm-afdrules-module",
+      "status": "ok",
+      "size": 98524
+    },
+    {
+      "slug": "azure_rm_afdrules_info_module#ansible-collections-azure-azcollection-azure-rm-afdrules-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_afdrules_info_module.html#ansible-collections-azure-azcollection-azure-rm-afdrules-info-module",
+      "status": "ok",
+      "size": 94783
+    },
+    {
+      "slug": "azure_rm_afdruleset_module#ansible-collections-azure-azcollection-azure-rm-afdruleset-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_afdruleset_module.html#ansible-collections-azure-azcollection-azure-rm-afdruleset-module",
+      "status": "error",
+      "error": "('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))"
+    },
+    {
+      "slug": "azure_rm_afdruleset_info_module#ansible-collections-azure-azcollection-azure-rm-afdruleset-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_afdruleset_info_module.html#ansible-collections-azure-azcollection-azure-rm-afdruleset-info-module",
+      "status": "ok",
+      "size": 66386
+    },
+    {
+      "slug": "azure_rm_aks_module#ansible-collections-azure-azcollection-azure-rm-aks-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_aks_module.html#ansible-collections-azure-azcollection-azure-rm-aks-module",
+      "status": "ok",
+      "size": 209193
+    },
+    {
+      "slug": "azure_rm_aks_info_module#ansible-collections-azure-azcollection-azure-rm-aks-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_aks_info_module.html#ansible-collections-azure-azcollection-azure-rm-aks-info-module",
+      "status": "ok",
+      "size": 60627
+    },
+    {
+      "slug": "azure_rm_aksagentpool_module#ansible-collections-azure-azcollection-azure-rm-aksagentpool-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_aksagentpool_module.html#ansible-collections-azure-azcollection-azure-rm-aksagentpool-module",
+      "status": "ok",
+      "size": 214382
+    },
+    {
+      "slug": "azure_rm_aksagentpool_info_module#ansible-collections-azure-azcollection-azure-rm-aksagentpool-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_aksagentpool_info_module.html#ansible-collections-azure-azcollection-azure-rm-aksagentpool-info-module",
+      "status": "ok",
+      "size": 115512
+    },
+    {
+      "slug": "azure_rm_aksagentpoolversion_info_module#ansible-collections-azure-azcollection-azure-rm-aksagentpoolversion-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_aksagentpoolversion_info_module.html#ansible-collections-azure-azcollection-azure-rm-aksagentpoolversion-info-module",
+      "status": "ok",
+      "size": 58852
+    },
+    {
+      "slug": "azure_rm_akscredentials_info_module#ansible-collections-azure-azcollection-azure-rm-akscredentials-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_akscredentials_info_module.html#ansible-collections-azure-azcollection-azure-rm-akscredentials-info-module",
+      "status": "ok",
+      "size": 67636
+    },
+    {
+      "slug": "azure_rm_aksupgrade_info_module#ansible-collections-azure-azcollection-azure-rm-aksupgrade-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_aksupgrade_info_module.html#ansible-collections-azure-azcollection-azure-rm-aksupgrade-info-module",
+      "status": "ok",
+      "size": 74103
+    },
+    {
+      "slug": "azure_rm_aksversion_info_module#ansible-collections-azure-azcollection-azure-rm-aksversion-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_aksversion_info_module.html#ansible-collections-azure-azcollection-azure-rm-aksversion-info-module",
+      "status": "ok",
+      "size": 60606
+    },
+    {
+      "slug": "azure_rm_apimanagement_module#ansible-collections-azure-azcollection-azure-rm-apimanagement-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_apimanagement_module.html#ansible-collections-azure-azcollection-azure-rm-apimanagement-module",
+      "status": "ok",
+      "size": 95203
+    },
+    {
+      "slug": "azure_rm_apimanagement_info_module#ansible-collections-azure-azcollection-azure-rm-apimanagement-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_apimanagement_info_module.html#ansible-collections-azure-azcollection-azure-rm-apimanagement-info-module",
+      "status": "ok",
+      "size": 67872
+    },
+    {
+      "slug": "azure_rm_apimanagementservice_module#ansible-collections-azure-azcollection-azure-rm-apimanagementservice-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_apimanagementservice_module.html#ansible-collections-azure-azcollection-azure-rm-apimanagementservice-module",
+      "status": "ok",
+      "size": 66809
+    },
+    {
+      "slug": "azure_rm_apimanagementservice_info_module#ansible-collections-azure-azcollection-azure-rm-apimanagementservice-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_apimanagementservice_info_module.html#ansible-collections-azure-azcollection-azure-rm-apimanagementservice-info-module",
+      "status": "ok",
+      "size": 69104
+    },
+    {
+      "slug": "azure_rm_appconfiguration_module#ansible-collections-azure-azcollection-azure-rm-appconfiguration-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_appconfiguration_module.html#ansible-collections-azure-azcollection-azure-rm-appconfiguration-module",
+      "status": "ok",
+      "size": 81326
+    },
+    {
+      "slug": "azure_rm_appconfiguration_info_module#ansible-collections-azure-azcollection-azure-rm-appconfiguration-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_appconfiguration_info_module.html#ansible-collections-azure-azcollection-azure-rm-appconfiguration-info-module",
+      "status": "ok",
+      "size": 81702
+    },
+    {
+      "slug": "azure_rm_appconfigurationkey_module#ansible-collections-azure-azcollection-azure-rm-appconfigurationkey-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_appconfigurationkey_module.html#ansible-collections-azure-azcollection-azure-rm-appconfigurationkey-module",
+      "status": "ok",
+      "size": 68861
+    },
+    {
+      "slug": "azure_rm_appconfigurationkey_info_module#ansible-collections-azure-azcollection-azure-rm-appconfigurationkey-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_appconfigurationkey_info_module.html#ansible-collections-azure-azcollection-azure-rm-appconfigurationkey-info-module",
+      "status": "ok",
+      "size": 68531
+    },
+    {
+      "slug": "azure_rm_appgateway_module#ansible-collections-azure-azcollection-azure-rm-appgateway-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_appgateway_module.html#ansible-collections-azure-azcollection-azure-rm-appgateway-module",
+      "status": "ok",
+      "size": 328775
+    },
+    {
+      "slug": "azure_rm_appgateway_info_module#ansible-collections-azure-azcollection-azure-rm-appgateway-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_appgateway_info_module.html#ansible-collections-azure-azcollection-azure-rm-appgateway-info-module",
+      "status": "ok",
+      "size": 68211
+    },
+    {
+      "slug": "azure_rm_applicationfirewallpolicy_module#ansible-collections-azure-azcollection-azure-rm-applicationfirewallpolicy-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_applicationfirewallpolicy_module.html#ansible-collections-azure-azcollection-azure-rm-applicationfirewallpolicy-module",
+      "status": "ok",
+      "size": 176078
+    },
+    {
+      "slug": "azure_rm_applicationfirewallpolicy_info_module#ansible-collections-azure-azcollection-azure-rm-applicationfirewallpolicy-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_applicationfirewallpolicy_info_module.html#ansible-collections-azure-azcollection-azure-rm-applicationfirewallpolicy-info-module",
+      "status": "ok",
+      "size": 90739
+    },
+    {
+      "slug": "azure_rm_applicationsecuritygroup_module#ansible-collections-azure-azcollection-azure-rm-applicationsecuritygroup-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_applicationsecuritygroup_module.html#ansible-collections-azure-azcollection-azure-rm-applicationsecuritygroup-module",
+      "status": "ok",
+      "size": 63180
+    },
+    {
+      "slug": "azure_rm_applicationsecuritygroup_info_module#ansible-collections-azure-azcollection-azure-rm-applicationsecuritygroup-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_applicationsecuritygroup_info_module.html#ansible-collections-azure-azcollection-azure-rm-applicationsecuritygroup-info-module",
+      "status": "ok",
+      "size": 64533
+    },
+    {
+      "slug": "azure_rm_appserviceplan_module#ansible-collections-azure-azcollection-azure-rm-appserviceplan-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_appserviceplan_module.html#ansible-collections-azure-azcollection-azure-rm-appserviceplan-module",
+      "status": "ok",
+      "size": 68193
+    },
+    {
+      "slug": "azure_rm_appserviceplan_info_module#ansible-collections-azure-azcollection-azure-rm-appserviceplan-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_appserviceplan_info_module.html#ansible-collections-azure-azcollection-azure-rm-appserviceplan-info-module",
+      "status": "ok",
+      "size": 70887
+    },
+    {
+      "slug": "azure_rm_arcssh_module#ansible-collections-azure-azcollection-azure-rm-arcssh-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_arcssh_module.html#ansible-collections-azure-azcollection-azure-rm-arcssh-module",
+      "status": "ok",
+      "size": 67847
+    },
+    {
+      "slug": "azure_rm_automationaccount_module#ansible-collections-azure-azcollection-azure-rm-automationaccount-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_automationaccount_module.html#ansible-collections-azure-azcollection-azure-rm-automationaccount-module",
+      "status": "ok",
+      "size": 62996
+    },
+    {
+      "slug": "azure_rm_automationaccount_info_module#ansible-collections-azure-azcollection-azure-rm-automationaccount-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_automationaccount_info_module.html#ansible-collections-azure-azcollection-azure-rm-automationaccount-info-module",
+      "status": "ok",
+      "size": 91040
+    },
+    {
+      "slug": "azure_rm_automationrunbook_module#ansible-collections-azure-azcollection-azure-rm-automationrunbook-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_automationrunbook_module.html#ansible-collections-azure-azcollection-azure-rm-automationrunbook-module",
+      "status": "ok",
+      "size": 89984
+    },
+    {
+      "slug": "azure_rm_automationrunbook_info_module#ansible-collections-azure-azcollection-azure-rm-automationrunbook-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_automationrunbook_info_module.html#ansible-collections-azure-azcollection-azure-rm-automationrunbook-info-module",
+      "status": "ok",
+      "size": 79962
+    },
+    {
+      "slug": "azure_rm_autoscale_module#ansible-collections-azure-azcollection-azure-rm-autoscale-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_autoscale_module.html#ansible-collections-azure-azcollection-azure-rm-autoscale-module",
+      "status": "ok",
+      "size": 116865
+    },
+    {
+      "slug": "azure_rm_autoscale_info_module#ansible-collections-azure-azcollection-azure-rm-autoscale-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_autoscale_info_module.html#ansible-collections-azure-azcollection-azure-rm-autoscale-info-module",
+      "status": "ok",
+      "size": 63571
+    },
+    {
+      "slug": "azure_rm_availabilityset_module#ansible-collections-azure-azcollection-azure-rm-availabilityset-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_availabilityset_module.html#ansible-collections-azure-azcollection-azure-rm-availabilityset-module",
+      "status": "ok",
+      "size": 77725
+    },
+    {
+      "slug": "azure_rm_availabilityset_info_module#ansible-collections-azure-azcollection-azure-rm-availabilityset-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_availabilityset_info_module.html#ansible-collections-azure-azcollection-azure-rm-availabilityset-info-module",
+      "status": "ok",
+      "size": 69315
+    },
+    {
+      "slug": "azure_rm_azurefirewall_module#ansible-collections-azure-azcollection-azure-rm-azurefirewall-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_azurefirewall_module.html#ansible-collections-azure-azcollection-azure-rm-azurefirewall-module",
+      "status": "ok",
+      "size": 109558
+    },
+    {
+      "slug": "azure_rm_azurefirewall_info_module#ansible-collections-azure-azcollection-azure-rm-azurefirewall-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_azurefirewall_info_module.html#ansible-collections-azure-azcollection-azure-rm-azurefirewall-info-module",
+      "status": "ok",
+      "size": 77848
+    },
+    {
+      "slug": "azure_rm_backupazurevm_module#ansible-collections-azure-azcollection-azure-rm-backupazurevm-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_backupazurevm_module.html#ansible-collections-azure-azcollection-azure-rm-backupazurevm-module",
+      "status": "ok",
+      "size": 69851
+    },
+    {
+      "slug": "azure_rm_backupazurevm_info_module#ansible-collections-azure-azcollection-azure-rm-backupazurevm-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_backupazurevm_info_module.html#ansible-collections-azure-azcollection-azure-rm-backupazurevm-info-module",
+      "status": "ok",
+      "size": 61595
+    },
+    {
+      "slug": "azure_rm_backuppolicy_module#ansible-collections-azure-azcollection-azure-rm-backuppolicy-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_backuppolicy_module.html#ansible-collections-azure-azcollection-azure-rm-backuppolicy-module",
+      "status": "ok",
+      "size": 80656
+    },
+    {
+      "slug": "azure_rm_backuppolicy_info_module#ansible-collections-azure-azcollection-azure-rm-backuppolicy-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_backuppolicy_info_module.html#ansible-collections-azure-azcollection-azure-rm-backuppolicy-info-module",
+      "status": "ok",
+      "size": 64711
+    },
+    {
+      "slug": "azure_rm_bastionhost_module#ansible-collections-azure-azcollection-azure-rm-bastionhost-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_bastionhost_module.html#ansible-collections-azure-azcollection-azure-rm-bastionhost-module",
+      "status": "ok",
+      "size": 102661
+    },
+    {
+      "slug": "azure_rm_bastionhost_info_module#ansible-collections-azure-azcollection-azure-rm-bastionhost-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_bastionhost_info_module.html#ansible-collections-azure-azcollection-azure-rm-bastionhost-info-module",
+      "status": "ok",
+      "size": 84390
+    },
+    {
+      "slug": "azure_rm_batchaccount_module#ansible-collections-azure-azcollection-azure-rm-batchaccount-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_batchaccount_module.html#ansible-collections-azure-azcollection-azure-rm-batchaccount-module",
+      "status": "ok",
+      "size": 69290
+    },
+    {
+      "slug": "azure_rm_batchaccount_info_module#ansible-collections-azure-azcollection-azure-rm-batchaccount-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_batchaccount_info_module.html#ansible-collections-azure-azcollection-azure-rm-batchaccount-info-module",
+      "status": "ok",
+      "size": 60356
+    },
+    {
+      "slug": "azure_rm_batchaccountapplication_module#ansible-collections-azure-azcollection-azure-rm-batchaccountapplication-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_batchaccountapplication_module.html#ansible-collections-azure-azcollection-azure-rm-batchaccountapplication-module",
+      "status": "ok",
+      "size": 73016
+    },
+    {
+      "slug": "azure_rm_batchaccountapplication_info_module#ansible-collections-azure-azcollection-azure-rm-batchaccountapplication-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_batchaccountapplication_info_module.html#ansible-collections-azure-azcollection-azure-rm-batchaccountapplication-info-module",
+      "status": "ok",
+      "size": 68835
+    },
+    {
+      "slug": "azure_rm_batchaccountapplicationpackage_module#ansible-collections-azure-azcollection-azure-rm-batchaccountapplicationpackage-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_batchaccountapplicationpackage_module.html#ansible-collections-azure-azcollection-azure-rm-batchaccountapplicationpackage-module",
+      "status": "ok",
+      "size": 78313
+    },
+    {
+      "slug": "azure_rm_batchaccountapplicationpackage_info_module#ansible-collections-azure-azcollection-azure-rm-batchaccountapplicationpackage-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_batchaccountapplicationpackage_info_module.html#ansible-collections-azure-azcollection-azure-rm-batchaccountapplicationpackage-info-module",
+      "status": "ok",
+      "size": 74724
+    },
+    {
+      "slug": "azure_rm_batchaccountpool_module#ansible-collections-azure-azcollection-azure-rm-batchaccountpool-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_batchaccountpool_module.html#ansible-collections-azure-azcollection-azure-rm-batchaccountpool-module",
+      "status": "ok",
+      "size": 300475
+    },
+    {
+      "slug": "azure_rm_batchaccountpool_info_module#ansible-collections-azure-azcollection-azure-rm-batchaccountpool-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_batchaccountpool_info_module.html#ansible-collections-azure-azcollection-azure-rm-batchaccountpool-info-module",
+      "status": "ok",
+      "size": 66356
+    },
+    {
+      "slug": "azure_rm_capacityreservationgroup_module#ansible-collections-azure-azcollection-azure-rm-capacityreservationgroup-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_capacityreservationgroup_module.html#ansible-collections-azure-azcollection-azure-rm-capacityreservationgroup-module",
+      "status": "ok",
+      "size": 71374
+    },
+    {
+      "slug": "azure_rm_capacityreservationgroup_info_module#ansible-collections-azure-azcollection-azure-rm-capacityreservationgroup-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_capacityreservationgroup_info_module.html#ansible-collections-azure-azcollection-azure-rm-capacityreservationgroup-info-module",
+      "status": "ok",
+      "size": 68102
+    },
+    {
+      "slug": "azure_rm_cdnendpoint_module#ansible-collections-azure-azcollection-azure-rm-cdnendpoint-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_cdnendpoint_module.html#ansible-collections-azure-azcollection-azure-rm-cdnendpoint-module",
+      "status": "ok",
+      "size": 79954
+    },
+    {
+      "slug": "azure_rm_cdnendpoint_info_module#ansible-collections-azure-azcollection-azure-rm-cdnendpoint-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_cdnendpoint_info_module.html#ansible-collections-azure-azcollection-azure-rm-cdnendpoint-info-module",
+      "status": "ok",
+      "size": 78402
+    },
+    {
+      "slug": "azure_rm_cdnprofile_module#ansible-collections-azure-azcollection-azure-rm-cdnprofile-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_cdnprofile_module.html#ansible-collections-azure-azcollection-azure-rm-cdnprofile-module",
+      "status": "ok",
+      "size": 71543
+    },
+    {
+      "slug": "azure_rm_cdnprofile_info_module#ansible-collections-azure-azcollection-azure-rm-cdnprofile-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_cdnprofile_info_module.html#ansible-collections-azure-azcollection-azure-rm-cdnprofile-info-module",
+      "status": "ok",
+      "size": 68714
+    },
+    {
+      "slug": "azure_rm_cognitivesearch_module#ansible-collections-azure-azcollection-azure-rm-cognitivesearch-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_cognitivesearch_module.html#ansible-collections-azure-azcollection-azure-rm-cognitivesearch-module",
+      "status": "ok",
+      "size": 87374
+    },
+    {
+      "slug": "azure_rm_cognitivesearch_info_module#ansible-collections-azure-azcollection-azure-rm-cognitivesearch-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_cognitivesearch_info_module.html#ansible-collections-azure-azcollection-azure-rm-cognitivesearch-info-module",
+      "status": "ok",
+      "size": 80921
+    },
+    {
+      "slug": "azure_rm_containerinstance_module#ansible-collections-azure-azcollection-azure-rm-containerinstance-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_containerinstance_module.html#ansible-collections-azure-azcollection-azure-rm-containerinstance-module",
+      "status": "ok",
+      "size": 120799
+    },
+    {
+      "slug": "azure_rm_containerinstance_info_module#ansible-collections-azure-azcollection-azure-rm-containerinstance-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_containerinstance_info_module.html#ansible-collections-azure-azcollection-azure-rm-containerinstance-info-module",
+      "status": "ok",
+      "size": 89191
+    },
+    {
+      "slug": "azure_rm_containerregistry_module#ansible-collections-azure-azcollection-azure-rm-containerregistry-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_containerregistry_module.html#ansible-collections-azure-azcollection-azure-rm-containerregistry-module",
+      "status": "ok",
+      "size": 81022
+    },
+    {
+      "slug": "azure_rm_containerregistry_info_module#ansible-collections-azure-azcollection-azure-rm-containerregistry-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_containerregistry_info_module.html#ansible-collections-azure-azcollection-azure-rm-containerregistry-info-module",
+      "status": "error",
+      "error": "('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))"
+    },
+    {
+      "slug": "azure_rm_containerregistryreplication_module#ansible-collections-azure-azcollection-azure-rm-containerregistryreplication-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_containerregistryreplication_module.html#ansible-collections-azure-azcollection-azure-rm-containerregistryreplication-module",
+      "status": "ok",
+      "size": 63455
+    },
+    {
+      "slug": "azure_rm_containerregistryreplication_info_module#ansible-collections-azure-azcollection-azure-rm-containerregistryreplication-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_containerregistryreplication_info_module.html#ansible-collections-azure-azcollection-azure-rm-containerregistryreplication-info-module",
+      "status": "ok",
+      "size": 68982
+    },
+    {
+      "slug": "azure_rm_containerregistryscopemap_module#ansible-collections-azure-azcollection-azure-rm-containerregistryscopemap-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_containerregistryscopemap_module.html#ansible-collections-azure-azcollection-azure-rm-containerregistryscopemap-module",
+      "status": "ok",
+      "size": 75198
+    },
+    {
+      "slug": "azure_rm_containerregistryscopemap_info_module#ansible-collections-azure-azcollection-azure-rm-containerregistryscopemap-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_containerregistryscopemap_info_module.html#ansible-collections-azure-azcollection-azure-rm-containerregistryscopemap-info-module",
+      "status": "ok",
+      "size": 72735
+    },
+    {
+      "slug": "azure_rm_containerregistrytag_module#ansible-collections-azure-azcollection-azure-rm-containerregistrytag-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_containerregistrytag_module.html#ansible-collections-azure-azcollection-azure-rm-containerregistrytag-module",
+      "status": "ok",
+      "size": 68431
+    },
+    {
+      "slug": "azure_rm_containerregistrytag_info_module#ansible-collections-azure-azcollection-azure-rm-containerregistrytag-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_containerregistrytag_info_module.html#ansible-collections-azure-azcollection-azure-rm-containerregistrytag-info-module",
+      "status": "ok",
+      "size": 66692
+    },
+    {
+      "slug": "azure_rm_containerregistrytoken_module#ansible-collections-azure-azcollection-azure-rm-containerregistrytoken-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_containerregistrytoken_module.html#ansible-collections-azure-azcollection-azure-rm-containerregistrytoken-module",
+      "status": "ok",
+      "size": 75994
+    },
+    {
+      "slug": "azure_rm_containerregistrytoken_info_module#ansible-collections-azure-azcollection-azure-rm-containerregistrytoken-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_containerregistrytoken_info_module.html#ansible-collections-azure-azcollection-azure-rm-containerregistrytoken-info-module",
+      "status": "ok",
+      "size": 72847
+    },
+    {
+      "slug": "azure_rm_containerregistrytokenpassword_module#ansible-collections-azure-azcollection-azure-rm-containerregistrytokenpassword-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_containerregistrytokenpassword_module.html#ansible-collections-azure-azcollection-azure-rm-containerregistrytokenpassword-module",
+      "status": "ok",
+      "size": 62633
+    },
+    {
+      "slug": "azure_rm_containerregistrywebhook_module#ansible-collections-azure-azcollection-azure-rm-containerregistrywebhook-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_containerregistrywebhook_module.html#ansible-collections-azure-azcollection-azure-rm-containerregistrywebhook-module",
+      "status": "ok",
+      "size": 66997
+    },
+    {
+      "slug": "azure_rm_containerregistrywebhook_info_module#ansible-collections-azure-azcollection-azure-rm-containerregistrywebhook-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_containerregistrywebhook_info_module.html#ansible-collections-azure-azcollection-azure-rm-containerregistrywebhook-info-module",
+      "status": "error",
+      "error": "('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))"
+    },
+    {
+      "slug": "azure_rm_cosmosdbaccount_module#ansible-collections-azure-azcollection-azure-rm-cosmosdbaccount-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_cosmosdbaccount_module.html#ansible-collections-azure-azcollection-azure-rm-cosmosdbaccount-module",
+      "status": "ok",
+      "size": 95301
+    },
+    {
+      "slug": "azure_rm_cosmosdbaccount_info_module#ansible-collections-azure-azcollection-azure-rm-cosmosdbaccount-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_cosmosdbaccount_info_module.html#ansible-collections-azure-azcollection-azure-rm-cosmosdbaccount-info-module",
+      "status": "ok",
+      "size": 116680
+    },
+    {
+      "slug": "azure_rm_datafactory_module#ansible-collections-azure-azcollection-azure-rm-datafactory-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_datafactory_module.html#ansible-collections-azure-azcollection-azure-rm-datafactory-module",
+      "status": "ok",
+      "size": 89009
+    },
+    {
+      "slug": "azure_rm_datafactory_info_module#ansible-collections-azure-azcollection-azure-rm-datafactory-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_datafactory_info_module.html#ansible-collections-azure-azcollection-azure-rm-datafactory-info-module",
+      "status": "ok",
+      "size": 79669
+    },
+    {
+      "slug": "azure_rm_ddosprotectionplan_module#ansible-collections-azure-azcollection-azure-rm-ddosprotectionplan-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_ddosprotectionplan_module.html#ansible-collections-azure-azcollection-azure-rm-ddosprotectionplan-module",
+      "status": "ok",
+      "size": 64304
+    },
+    {
+      "slug": "azure_rm_ddosprotectionplan_info_module#ansible-collections-azure-azcollection-azure-rm-ddosprotectionplan-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_ddosprotectionplan_info_module.html#ansible-collections-azure-azcollection-azure-rm-ddosprotectionplan-info-module",
+      "status": "ok",
+      "size": 56512
+    },
+    {
+      "slug": "azure_rm_dedicatedhost_module#ansible-collections-azure-azcollection-azure-rm-dedicatedhost-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_dedicatedhost_module.html#ansible-collections-azure-azcollection-azure-rm-dedicatedhost-module",
+      "status": "ok",
+      "size": 82748
+    },
+    {
+      "slug": "azure_rm_dedicatedhost_info_module#ansible-collections-azure-azcollection-azure-rm-dedicatedhost-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_dedicatedhost_info_module.html#ansible-collections-azure-azcollection-azure-rm-dedicatedhost-info-module",
+      "status": "ok",
+      "size": 73430
+    },
+    {
+      "slug": "azure_rm_deployment_module#ansible-collections-azure-azcollection-azure-rm-deployment-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_deployment_module.html#ansible-collections-azure-azcollection-azure-rm-deployment-module",
+      "status": "ok",
+      "size": 118137
+    },
+    {
+      "slug": "azure_rm_deployment_info_module#ansible-collections-azure-azcollection-azure-rm-deployment-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_deployment_info_module.html#ansible-collections-azure-azcollection-azure-rm-deployment-info-module",
+      "status": "ok",
+      "size": 70555
+    },
+    {
+      "slug": "azure_rm_devtestlab_module#ansible-collections-azure-azcollection-azure-rm-devtestlab-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_devtestlab_module.html#ansible-collections-azure-azcollection-azure-rm-devtestlab-module",
+      "status": "ok",
+      "size": 64159
+    },
+    {
+      "slug": "azure_rm_devtestlab_info_module#ansible-collections-azure-azcollection-azure-rm-devtestlab-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_devtestlab_info_module.html#ansible-collections-azure-azcollection-azure-rm-devtestlab-info-module",
+      "status": "ok",
+      "size": 73502
+    },
+    {
+      "slug": "azure_rm_devtestlabarmtemplate_info_module#ansible-collections-azure-azcollection-azure-rm-devtestlabarmtemplate-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_devtestlabarmtemplate_info_module.html#ansible-collections-azure-azcollection-azure-rm-devtestlabarmtemplate-info-module",
+      "status": "ok",
+      "size": 68826
+    },
+    {
+      "slug": "azure_rm_devtestlabartifact_info_module#ansible-collections-azure-azcollection-azure-rm-devtestlabartifact-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_devtestlabartifact_info_module.html#ansible-collections-azure-azcollection-azure-rm-devtestlabartifact-info-module",
+      "status": "ok",
+      "size": 71422
+    },
+    {
+      "slug": "azure_rm_devtestlabartifactsource_module#ansible-collections-azure-azcollection-azure-rm-devtestlabartifactsource-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_devtestlabartifactsource_module.html#ansible-collections-azure-azcollection-azure-rm-devtestlabartifactsource-module",
+      "status": "ok",
+      "size": 70070
+    },
+    {
+      "slug": "azure_rm_devtestlabartifactsource_info_module#ansible-collections-azure-azcollection-azure-rm-devtestlabartifactsource-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_devtestlabartifactsource_info_module.html#ansible-collections-azure-azcollection-azure-rm-devtestlabartifactsource-info-module",
+      "status": "ok",
+      "size": 72963
+    },
+    {
+      "slug": "azure_rm_devtestlabcustomimage_module#ansible-collections-azure-azcollection-azure-rm-devtestlabcustomimage-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_devtestlabcustomimage_module.html#ansible-collections-azure-azcollection-azure-rm-devtestlabcustomimage-module",
+      "status": "ok",
+      "size": 67138
+    },
+    {
+      "slug": "azure_rm_devtestlabcustomimage_info_module#ansible-collections-azure-azcollection-azure-rm-devtestlabcustomimage-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_devtestlabcustomimage_info_module.html#ansible-collections-azure-azcollection-azure-rm-devtestlabcustomimage-info-module",
+      "status": "ok",
+      "size": 68294
+    },
+    {
+      "slug": "azure_rm_devtestlabenvironment_module#ansible-collections-azure-azcollection-azure-rm-devtestlabenvironment-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_devtestlabenvironment_module.html#ansible-collections-azure-azcollection-azure-rm-devtestlabenvironment-module",
+      "status": "ok",
+      "size": 67491
+    },
+    {
+      "slug": "azure_rm_devtestlabenvironment_info_module#ansible-collections-azure-azcollection-azure-rm-devtestlabenvironment-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_devtestlabenvironment_info_module.html#ansible-collections-azure-azcollection-azure-rm-devtestlabenvironment-info-module",
+      "status": "ok",
+      "size": 69506
+    },
+    {
+      "slug": "azure_rm_devtestlabpolicy_module#ansible-collections-azure-azcollection-azure-rm-devtestlabpolicy-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_devtestlabpolicy_module.html#ansible-collections-azure-azcollection-azure-rm-devtestlabpolicy-module",
+      "status": "ok",
+      "size": 66849
+    },
+    {
+      "slug": "azure_rm_devtestlabpolicy_info_module#ansible-collections-azure-azcollection-azure-rm-devtestlabpolicy-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_devtestlabpolicy_info_module.html#ansible-collections-azure-azcollection-azure-rm-devtestlabpolicy-info-module",
+      "status": "ok",
+      "size": 68772
+    },
+    {
+      "slug": "azure_rm_devtestlabschedule_module#ansible-collections-azure-azcollection-azure-rm-devtestlabschedule-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_devtestlabschedule_module.html#ansible-collections-azure-azcollection-azure-rm-devtestlabschedule-module",
+      "status": "ok",
+      "size": 64363
+    },
+    {
+      "slug": "azure_rm_devtestlabschedule_info_module#ansible-collections-azure-azcollection-azure-rm-devtestlabschedule-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_devtestlabschedule_info_module.html#ansible-collections-azure-azcollection-azure-rm-devtestlabschedule-info-module",
+      "status": "ok",
+      "size": 67034
+    },
+    {
+      "slug": "azure_rm_devtestlabvirtualmachine_module#ansible-collections-azure-azcollection-azure-rm-devtestlabvirtualmachine-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_devtestlabvirtualmachine_module.html#ansible-collections-azure-azcollection-azure-rm-devtestlabvirtualmachine-module",
+      "status": "ok",
+      "size": 85519
+    },
+    {
+      "slug": "azure_rm_devtestlabvirtualmachine_info_module#ansible-collections-azure-azcollection-azure-rm-devtestlabvirtualmachine-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_devtestlabvirtualmachine_info_module.html#ansible-collections-azure-azcollection-azure-rm-devtestlabvirtualmachine-info-module",
+      "status": "ok",
+      "size": 86459
+    },
+    {
+      "slug": "azure_rm_devtestlabvirtualnetwork_module#ansible-collections-azure-azcollection-azure-rm-devtestlabvirtualnetwork-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_devtestlabvirtualnetwork_module.html#ansible-collections-azure-azcollection-azure-rm-devtestlabvirtualnetwork-module",
+      "status": "ok",
+      "size": 65393
+    },
+    {
+      "slug": "azure_rm_devtestlabvirtualnetwork_info_module#ansible-collections-azure-azcollection-azure-rm-devtestlabvirtualnetwork-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_devtestlabvirtualnetwork_info_module.html#ansible-collections-azure-azcollection-azure-rm-devtestlabvirtualnetwork-info-module",
+      "status": "ok",
+      "size": 67891
+    },
+    {
+      "slug": "azure_rm_diskaccess_module#ansible-collections-azure-azcollection-azure-rm-diskaccess-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_diskaccess_module.html#ansible-collections-azure-azcollection-azure-rm-diskaccess-module",
+      "status": "ok",
+      "size": 73507
+    },
+    {
+      "slug": "azure_rm_diskaccess_info_module#ansible-collections-azure-azcollection-azure-rm-diskaccess-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_diskaccess_info_module.html#ansible-collections-azure-azcollection-azure-rm-diskaccess-info-module",
+      "status": "ok",
+      "size": 67351
+    },
+    {
+      "slug": "azure_rm_diskencryptionset_module#ansible-collections-azure-azcollection-azure-rm-diskencryptionset-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_diskencryptionset_module.html#ansible-collections-azure-azcollection-azure-rm-diskencryptionset-module",
+      "status": "ok",
+      "size": 77702
+    },
+    {
+      "slug": "azure_rm_diskencryptionset_info_module#ansible-collections-azure-azcollection-azure-rm-diskencryptionset-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_diskencryptionset_info_module.html#ansible-collections-azure-azcollection-azure-rm-diskencryptionset-info-module",
+      "status": "ok",
+      "size": 61367
+    },
+    {
+      "slug": "azure_rm_dnsrecordset_module#ansible-collections-azure-azcollection-azure-rm-dnsrecordset-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_dnsrecordset_module.html#ansible-collections-azure-azcollection-azure-rm-dnsrecordset-module",
+      "status": "ok",
+      "size": 104833
+    },
+    {
+      "slug": "azure_rm_dnsrecordset_info_module#ansible-collections-azure-azcollection-azure-rm-dnsrecordset-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_dnsrecordset_info_module.html#ansible-collections-azure-azcollection-azure-rm-dnsrecordset-info-module",
+      "status": "ok",
+      "size": 75166
+    },
+    {
+      "slug": "azure_rm_dnszone_module#ansible-collections-azure-azcollection-azure-rm-dnszone-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_dnszone_module.html#ansible-collections-azure-azcollection-azure-rm-dnszone-module",
+      "status": "ok",
+      "size": 65944
+    },
+    {
+      "slug": "azure_rm_dnszone_info_module#ansible-collections-azure-azcollection-azure-rm-dnszone-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_dnszone_info_module.html#ansible-collections-azure-azcollection-azure-rm-dnszone-info-module",
+      "status": "ok",
+      "size": 70124
+    },
+    {
+      "slug": "azure_rm_eventgrid_subscription_module#ansible-collections-azure-azcollection-azure-rm-eventgrid-subscription-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_eventgrid_subscription_module.html#ansible-collections-azure-azcollection-azure-rm-eventgrid-subscription-module",
+      "status": "error",
+      "error": "('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))"
+    },
+    {
+      "slug": "azure_rm_eventgrid_subscription_info_module#ansible-collections-azure-azcollection-azure-rm-eventgrid-subscription-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_eventgrid_subscription_info_module.html#ansible-collections-azure-azcollection-azure-rm-eventgrid-subscription-info-module",
+      "status": "ok",
+      "size": 81748
+    },
+    {
+      "slug": "azure_rm_eventgrid_topic_module#ansible-collections-azure-azcollection-azure-rm-eventgrid-topic-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_eventgrid_topic_module.html#ansible-collections-azure-azcollection-azure-rm-eventgrid-topic-module",
+      "status": "ok",
+      "size": 107682
+    },
+    {
+      "slug": "azure_rm_eventgrid_topic_info_module#ansible-collections-azure-azcollection-azure-rm-eventgrid-topic-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_eventgrid_topic_info_module.html#ansible-collections-azure-azcollection-azure-rm-eventgrid-topic-info-module",
+      "status": "ok",
+      "size": 79505
+    },
+    {
+      "slug": "azure_rm_eventgrid_topic_subscription_module#ansible-collections-azure-azcollection-azure-rm-eventgrid-topic-subscription-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_eventgrid_topic_subscription_module.html#ansible-collections-azure-azcollection-azure-rm-eventgrid-topic-subscription-module",
+      "status": "ok",
+      "size": 99332
+    },
+    {
+      "slug": "azure_rm_eventhub_module#ansible-collections-azure-azcollection-azure-rm-eventhub-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_eventhub_module.html#ansible-collections-azure-azcollection-azure-rm-eventhub-module",
+      "status": "ok",
+      "size": 78099
+    },
+    {
+      "slug": "azure_rm_eventhub_info_module#ansible-collections-azure-azcollection-azure-rm-eventhub-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_eventhub_info_module.html#ansible-collections-azure-azcollection-azure-rm-eventhub-info-module",
+      "status": "ok",
+      "size": 59938
+    },
+    {
+      "slug": "azure_rm_expressroute_module#ansible-collections-azure-azcollection-azure-rm-expressroute-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_expressroute_module.html#ansible-collections-azure-azcollection-azure-rm-expressroute-module",
+      "status": "ok",
+      "size": 77148
+    },
+    {
+      "slug": "azure_rm_expressroute_info_module#ansible-collections-azure-azcollection-azure-rm-expressroute-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_expressroute_info_module.html#ansible-collections-azure-azcollection-azure-rm-expressroute-info-module",
+      "status": "ok",
+      "size": 61799
+    },
+    {
+      "slug": "azure_rm_firewallpolicy_module#ansible-collections-azure-azcollection-azure-rm-firewallpolicy-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_firewallpolicy_module.html#ansible-collections-azure-azcollection-azure-rm-firewallpolicy-module",
+      "status": "ok",
+      "size": 87544
+    },
+    {
+      "slug": "azure_rm_firewallpolicy_info_module#ansible-collections-azure-azcollection-azure-rm-firewallpolicy-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_firewallpolicy_info_module.html#ansible-collections-azure-azcollection-azure-rm-firewallpolicy-info-module",
+      "status": "ok",
+      "size": 61651
+    },
+    {
+      "slug": "azure_rm_functionapp_module#ansible-collections-azure-azcollection-azure-rm-functionapp-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_functionapp_module.html#ansible-collections-azure-azcollection-azure-rm-functionapp-module",
+      "status": "ok",
+      "size": 81603
+    },
+    {
+      "slug": "azure_rm_functionapp_info_module#ansible-collections-azure-azcollection-azure-rm-functionapp-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_functionapp_info_module.html#ansible-collections-azure-azcollection-azure-rm-functionapp-info-module",
+      "status": "ok",
+      "size": 63343
+    },
+    {
+      "slug": "azure_rm_gallery_module#ansible-collections-azure-azcollection-azure-rm-gallery-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_gallery_module.html#ansible-collections-azure-azcollection-azure-rm-gallery-module",
+      "status": "ok",
+      "size": 62881
+    },
+    {
+      "slug": "azure_rm_gallery_info_module#ansible-collections-azure-azcollection-azure-rm-gallery-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_gallery_info_module.html#ansible-collections-azure-azcollection-azure-rm-gallery-info-module",
+      "status": "ok",
+      "size": 64702
+    },
+    {
+      "slug": "azure_rm_galleryimage_module#ansible-collections-azure-azcollection-azure-rm-galleryimage-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_galleryimage_module.html#ansible-collections-azure-azcollection-azure-rm-galleryimage-module",
+      "status": "ok",
+      "size": 85650
+    },
+    {
+      "slug": "azure_rm_galleryimage_info_module#ansible-collections-azure-azcollection-azure-rm-galleryimage-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_galleryimage_info_module.html#ansible-collections-azure-azcollection-azure-rm-galleryimage-info-module",
+      "status": "ok",
+      "size": 69879
+    },
+    {
+      "slug": "azure_rm_galleryimageversion_module#ansible-collections-azure-azcollection-azure-rm-galleryimageversion-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_galleryimageversion_module.html#ansible-collections-azure-azcollection-azure-rm-galleryimageversion-module",
+      "status": "ok",
+      "size": 113115
+    },
+    {
+      "slug": "azure_rm_galleryimageversion_info_module#ansible-collections-azure-azcollection-azure-rm-galleryimageversion-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_galleryimageversion_info_module.html#ansible-collections-azure-azcollection-azure-rm-galleryimageversion-info-module",
+      "status": "ok",
+      "size": 70056
+    },
+    {
+      "slug": "azure_rm_hdinsightcluster_module#ansible-collections-azure-azcollection-azure-rm-hdinsightcluster-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_hdinsightcluster_module.html#ansible-collections-azure-azcollection-azure-rm-hdinsightcluster-module",
+      "status": "ok",
+      "size": 88943
+    },
+    {
+      "slug": "azure_rm_hdinsightcluster_info_module#ansible-collections-azure-azcollection-azure-rm-hdinsightcluster-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_hdinsightcluster_info_module.html#ansible-collections-azure-azcollection-azure-rm-hdinsightcluster-info-module",
+      "status": "ok",
+      "size": 81630
+    },
+    {
+      "slug": "azure_rm_hostgroup_module#ansible-collections-azure-azcollection-azure-rm-hostgroup-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_hostgroup_module.html#ansible-collections-azure-azcollection-azure-rm-hostgroup-module",
+      "status": "ok",
+      "size": 73390
+    },
+    {
+      "slug": "azure_rm_hostgroup_info_module#ansible-collections-azure-azcollection-azure-rm-hostgroup-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_hostgroup_info_module.html#ansible-collections-azure-azcollection-azure-rm-hostgroup-info-module",
+      "status": "ok",
+      "size": 59781
+    },
+    {
+      "slug": "azure_rm_image_module#ansible-collections-azure-azcollection-azure-rm-image-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_image_module.html#ansible-collections-azure-azcollection-azure-rm-image-module",
+      "status": "ok",
+      "size": 71852
+    },
+    {
+      "slug": "azure_rm_image_info_module#ansible-collections-azure-azcollection-azure-rm-image-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_image_info_module.html#ansible-collections-azure-azcollection-azure-rm-image-info-module",
+      "status": "ok",
+      "size": 81458
+    },
+    {
+      "slug": "azure_rm_imagesku_info_module#ansible-collections-azure-azcollection-azure-rm-imagesku-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_imagesku_info_module.html#ansible-collections-azure-azcollection-azure-rm-imagesku-info-module",
+      "status": "ok",
+      "size": 72331
+    },
+    {
+      "slug": "azure_rm_iotdevice_module#ansible-collections-azure-azcollection-azure-rm-iotdevice-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_iotdevice_module.html#ansible-collections-azure-azcollection-azure-rm-iotdevice-module",
+      "status": "ok",
+      "size": 79603
+    },
+    {
+      "slug": "azure_rm_iotdevice_info_module#ansible-collections-azure-azcollection-azure-rm-iotdevice-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_iotdevice_info_module.html#ansible-collections-azure-azcollection-azure-rm-iotdevice-info-module",
+      "status": "ok",
+      "size": 71966
+    },
+    {
+      "slug": "azure_rm_iotdevicemodule_module#ansible-collections-azure-azcollection-azure-rm-iotdevicemodule-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_iotdevicemodule_module.html#ansible-collections-azure-azcollection-azure-rm-iotdevicemodule-module",
+      "status": "ok",
+      "size": 74493
+    },
+    {
+      "slug": "azure_rm_iothub_module#ansible-collections-azure-azcollection-azure-rm-iothub-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_iothub_module.html#ansible-collections-azure-azcollection-azure-rm-iothub-module",
+      "status": "error",
+      "error": "HTTPSConnectionPool(host='docs.ansible.com', port=443): Read timed out. (read timeout=30)"
+    },
+    {
+      "slug": "azure_rm_iothub_info_module#ansible-collections-azure-azcollection-azure-rm-iothub-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_iothub_info_module.html#ansible-collections-azure-azcollection-azure-rm-iothub-info-module",
+      "status": "ok",
+      "size": 126381
+    },
+    {
+      "slug": "azure_rm_iothubconsumergroup_module#ansible-collections-azure-azcollection-azure-rm-iothubconsumergroup-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_iothubconsumergroup_module.html#ansible-collections-azure-azcollection-azure-rm-iothubconsumergroup-module",
+      "status": "ok",
+      "size": 63926
+    },
+    {
+      "slug": "azure_rm_ipgroup_module#ansible-collections-azure-azcollection-azure-rm-ipgroup-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_ipgroup_module.html#ansible-collections-azure-azcollection-azure-rm-ipgroup-module",
+      "status": "ok",
+      "size": 74923
+    },
+    {
+      "slug": "azure_rm_ipgroup_info_module#ansible-collections-azure-azcollection-azure-rm-ipgroup-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_ipgroup_info_module.html#ansible-collections-azure-azcollection-azure-rm-ipgroup-info-module",
+      "status": "ok",
+      "size": 59900
+    },
+    {
+      "slug": "azure_rm_keyvault_module#ansible-collections-azure-azcollection-azure-rm-keyvault-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_keyvault_module.html#ansible-collections-azure-azcollection-azure-rm-keyvault-module",
+      "status": "ok",
+      "size": 102707
+    },
+    {
+      "slug": "azure_rm_keyvault_info_module#ansible-collections-azure-azcollection-azure-rm-keyvault-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_keyvault_info_module.html#ansible-collections-azure-azcollection-azure-rm-keyvault-info-module",
+      "status": "ok",
+      "size": 91007
+    },
+    {
+      "slug": "azure_rm_keyvaultcertificate_module#ansible-collections-azure-azcollection-azure-rm-keyvaultcertificate-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_keyvaultcertificate_module.html#ansible-collections-azure-azcollection-azure-rm-keyvaultcertificate-module",
+      "status": "ok",
+      "size": 151980
+    },
+    {
+      "slug": "azure_rm_keyvaultcertificate_info_module#ansible-collections-azure-azcollection-azure-rm-keyvaultcertificate-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_keyvaultcertificate_info_module.html#ansible-collections-azure-azcollection-azure-rm-keyvaultcertificate-info-module",
+      "status": "ok",
+      "size": 115138
+    },
+    {
+      "slug": "azure_rm_keyvaultkey_module#ansible-collections-azure-azcollection-azure-rm-keyvaultkey-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_keyvaultkey_module.html#ansible-collections-azure-azcollection-azure-rm-keyvaultkey-module",
+      "status": "ok",
+      "size": 69864
+    },
+    {
+      "slug": "azure_rm_keyvaultkey_info_module#ansible-collections-azure-azcollection-azure-rm-keyvaultkey-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_keyvaultkey_info_module.html#ansible-collections-azure-azcollection-azure-rm-keyvaultkey-info-module",
+      "status": "ok",
+      "size": 82828
+    },
+    {
+      "slug": "azure_rm_keyvaultsecret_module#ansible-collections-azure-azcollection-azure-rm-keyvaultsecret-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_keyvaultsecret_module.html#ansible-collections-azure-azcollection-azure-rm-keyvaultsecret-module",
+      "status": "ok",
+      "size": 69775
+    },
+    {
+      "slug": "azure_rm_keyvaultsecret_info_module#ansible-collections-azure-azcollection-azure-rm-keyvaultsecret-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_keyvaultsecret_info_module.html#ansible-collections-azure-azcollection-azure-rm-keyvaultsecret-info-module",
+      "status": "ok",
+      "size": 76784
+    },
+    {
+      "slug": "azure_rm_keyvaultsecuritydomain_module#ansible-collections-azure-azcollection-azure-rm-keyvaultsecuritydomain-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_keyvaultsecuritydomain_module.html#ansible-collections-azure-azcollection-azure-rm-keyvaultsecuritydomain-module",
+      "status": "ok",
+      "size": 63856
+    },
+    {
+      "slug": "azure_rm_loadbalancer_module#ansible-collections-azure-azcollection-azure-rm-loadbalancer-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_loadbalancer_module.html#ansible-collections-azure-azcollection-azure-rm-loadbalancer-module",
+      "status": "ok",
+      "size": 122007
+    },
+    {
+      "slug": "azure_rm_loadbalancer_info_module#ansible-collections-azure-azcollection-azure-rm-loadbalancer-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_loadbalancer_info_module.html#ansible-collections-azure-azcollection-azure-rm-loadbalancer-info-module",
+      "status": "ok",
+      "size": 63117
+    },
+    {
+      "slug": "azure_rm_localnetworkgateway_module#ansible-collections-azure-azcollection-azure-rm-localnetworkgateway-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_localnetworkgateway_module.html#ansible-collections-azure-azcollection-azure-rm-localnetworkgateway-module",
+      "status": "ok",
+      "size": 85988
+    },
+    {
+      "slug": "azure_rm_localnetworkgateway_info_module#ansible-collections-azure-azcollection-azure-rm-localnetworkgateway-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_localnetworkgateway_info_module.html#ansible-collections-azure-azcollection-azure-rm-localnetworkgateway-info-module",
+      "status": "ok",
+      "size": 76544
+    },
+    {
+      "slug": "azure_rm_lock_module#ansible-collections-azure-azcollection-azure-rm-lock-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_lock_module.html#ansible-collections-azure-azcollection-azure-rm-lock-module",
+      "status": "ok",
+      "size": 64674
+    },
+    {
+      "slug": "azure_rm_lock_info_module#ansible-collections-azure-azcollection-azure-rm-lock-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_lock_info_module.html#ansible-collections-azure-azcollection-azure-rm-lock-info-module",
+      "status": "ok",
+      "size": 65591
+    },
+    {
+      "slug": "azure_rm_loganalyticsworkspace_module#ansible-collections-azure-azcollection-azure-rm-loganalyticsworkspace-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_loganalyticsworkspace_module.html#ansible-collections-azure-azcollection-azure-rm-loganalyticsworkspace-module",
+      "status": "ok",
+      "size": 77731
+    },
+    {
+      "slug": "azure_rm_loganalyticsworkspace_info_module#ansible-collections-azure-azcollection-azure-rm-loganalyticsworkspace-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_loganalyticsworkspace_info_module.html#ansible-collections-azure-azcollection-azure-rm-loganalyticsworkspace-info-module",
+      "status": "ok",
+      "size": 72049
+    },
+    {
+      "slug": "azure_rm_manageddisk_module#ansible-collections-azure-azcollection-azure-rm-manageddisk-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_manageddisk_module.html#ansible-collections-azure-azcollection-azure-rm-manageddisk-module",
+      "status": "ok",
+      "size": 149645
+    },
+    {
+      "slug": "azure_rm_manageddisk_info_module#ansible-collections-azure-azcollection-azure-rm-manageddisk-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_manageddisk_info_module.html#ansible-collections-azure-azcollection-azure-rm-manageddisk-info-module",
+      "status": "ok",
+      "size": 95320
+    },
+    {
+      "slug": "azure_rm_managementgroup_module#ansible-collections-azure-azcollection-azure-rm-managementgroup-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_managementgroup_module.html#ansible-collections-azure-azcollection-azure-rm-managementgroup-module",
+      "status": "ok",
+      "size": 85013
+    },
+    {
+      "slug": "azure_rm_managementgroup_info_module#ansible-collections-azure-azcollection-azure-rm-managementgroup-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_managementgroup_info_module.html#ansible-collections-azure-azcollection-azure-rm-managementgroup-info-module",
+      "status": "ok",
+      "size": 76570
+    },
+    {
+      "slug": "azure_rm_mariadbconfiguration_module#ansible-collections-azure-azcollection-azure-rm-mariadbconfiguration-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_mariadbconfiguration_module.html#ansible-collections-azure-azcollection-azure-rm-mariadbconfiguration-module",
+      "status": "ok",
+      "size": 61194
+    },
+    {
+      "slug": "azure_rm_mariadbconfiguration_info_module#ansible-collections-azure-azcollection-azure-rm-mariadbconfiguration-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_mariadbconfiguration_info_module.html#ansible-collections-azure-azcollection-azure-rm-mariadbconfiguration-info-module",
+      "status": "ok",
+      "size": 64957
+    },
+    {
+      "slug": "azure_rm_mariadbdatabase_module#ansible-collections-azure-azcollection-azure-rm-mariadbdatabase-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_mariadbdatabase_module.html#ansible-collections-azure-azcollection-azure-rm-mariadbdatabase-module",
+      "status": "ok",
+      "size": 64065
+    },
+    {
+      "slug": "azure_rm_mariadbdatabase_info_module#ansible-collections-azure-azcollection-azure-rm-mariadbdatabase-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_mariadbdatabase_info_module.html#ansible-collections-azure-azcollection-azure-rm-mariadbdatabase-info-module",
+      "status": "ok",
+      "size": 65799
+    },
+    {
+      "slug": "azure_rm_mariadbfirewallrule_module#ansible-collections-azure-azcollection-azure-rm-mariadbfirewallrule-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_mariadbfirewallrule_module.html#ansible-collections-azure-azcollection-azure-rm-mariadbfirewallrule-module",
+      "status": "ok",
+      "size": 62210
+    },
+    {
+      "slug": "azure_rm_mariadbfirewallrule_info_module#ansible-collections-azure-azcollection-azure-rm-mariadbfirewallrule-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_mariadbfirewallrule_info_module.html#ansible-collections-azure-azcollection-azure-rm-mariadbfirewallrule-info-module",
+      "status": "ok",
+      "size": 64865
+    },
+    {
+      "slug": "azure_rm_mariadbserver_module#ansible-collections-azure-azcollection-azure-rm-mariadbserver-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_mariadbserver_module.html#ansible-collections-azure-azcollection-azure-rm-mariadbserver-module",
+      "status": "ok",
+      "size": 75492
+    },
+    {
+      "slug": "azure_rm_mariadbserver_info_module#ansible-collections-azure-azcollection-azure-rm-mariadbserver-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_mariadbserver_info_module.html#ansible-collections-azure-azcollection-azure-rm-mariadbserver-info-module",
+      "status": "ok",
+      "size": 74898
+    },
+    {
+      "slug": "azure_rm_ml_component_module#ansible-collections-azure-azcollection-azure-rm-ml-component-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_ml_component_module.html#ansible-collections-azure-azcollection-azure-rm-ml-component-module",
+      "status": "ok",
+      "size": 71833
+    },
+    {
+      "slug": "azure_rm_ml_component_info_module#ansible-collections-azure-azcollection-azure-rm-ml-component-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_ml_component_info_module.html#ansible-collections-azure-azcollection-azure-rm-ml-component-info-module",
+      "status": "ok",
+      "size": 67158
+    },
+    {
+      "slug": "azure_rm_ml_compute_module#ansible-collections-azure-azcollection-azure-rm-ml-compute-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_ml_compute_module.html#ansible-collections-azure-azcollection-azure-rm-ml-compute-module",
+      "status": "ok",
+      "size": 79716
+    },
+    {
+      "slug": "azure_rm_ml_compute_info_module#ansible-collections-azure-azcollection-azure-rm-ml-compute-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_ml_compute_info_module.html#ansible-collections-azure-azcollection-azure-rm-ml-compute-info-module",
+      "status": "ok",
+      "size": 66517
+    },
+    {
+      "slug": "azure_rm_ml_data_module#ansible-collections-azure-azcollection-azure-rm-ml-data-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_ml_data_module.html#ansible-collections-azure-azcollection-azure-rm-ml-data-module",
+      "status": "ok",
+      "size": 72612
+    },
+    {
+      "slug": "azure_rm_ml_data_info_module#ansible-collections-azure-azcollection-azure-rm-ml-data-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_ml_data_info_module.html#ansible-collections-azure-azcollection-azure-rm-ml-data-info-module",
+      "status": "ok",
+      "size": 64569
+    },
+    {
+      "slug": "azure_rm_ml_datastore_module#ansible-collections-azure-azcollection-azure-rm-ml-datastore-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_ml_datastore_module.html#ansible-collections-azure-azcollection-azure-rm-ml-datastore-module",
+      "status": "ok",
+      "size": 66917
+    },
+    {
+      "slug": "azure_rm_ml_datastore_info_module#ansible-collections-azure-azcollection-azure-rm-ml-datastore-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_ml_datastore_info_module.html#ansible-collections-azure-azcollection-azure-rm-ml-datastore-info-module",
+      "status": "ok",
+      "size": 60747
+    },
+    {
+      "slug": "azure_rm_ml_environment_module#ansible-collections-azure-azcollection-azure-rm-ml-environment-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_ml_environment_module.html#ansible-collections-azure-azcollection-azure-rm-ml-environment-module",
+      "status": "ok",
+      "size": 73811
+    },
+    {
+      "slug": "azure_rm_ml_environment_info_module#ansible-collections-azure-azcollection-azure-rm-ml-environment-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_ml_environment_info_module.html#ansible-collections-azure-azcollection-azure-rm-ml-environment-info-module",
+      "status": "ok",
+      "size": 65573
+    },
+    {
+      "slug": "azure_rm_ml_workspace_module#ansible-collections-azure-azcollection-azure-rm-ml-workspace-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_ml_workspace_module.html#ansible-collections-azure-azcollection-azure-rm-ml-workspace-module",
+      "status": "ok",
+      "size": 90610
+    },
+    {
+      "slug": "azure_rm_ml_workspace_info_module#ansible-collections-azure-azcollection-azure-rm-ml-workspace-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_ml_workspace_info_module.html#ansible-collections-azure-azcollection-azure-rm-ml-workspace-info-module",
+      "status": "ok",
+      "size": 77466
+    },
+    {
+      "slug": "azure_rm_monitoractiongroups_module#ansible-collections-azure-azcollection-azure-rm-monitoractiongroups-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_monitoractiongroups_module.html#ansible-collections-azure-azcollection-azure-rm-monitoractiongroups-module",
+      "status": "ok",
+      "size": 124502
+    },
+    {
+      "slug": "azure_rm_monitoractiongroups_info_module#ansible-collections-azure-azcollection-azure-rm-monitoractiongroups-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_monitoractiongroups_info_module.html#ansible-collections-azure-azcollection-azure-rm-monitoractiongroups-info-module",
+      "status": "ok",
+      "size": 61409
+    },
+    {
+      "slug": "azure_rm_monitoractivitylogalerts_module#ansible-collections-azure-azcollection-azure-rm-monitoractivitylogalerts-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_monitoractivitylogalerts_module.html#ansible-collections-azure-azcollection-azure-rm-monitoractivitylogalerts-module",
+      "status": "ok",
+      "size": 90880
+    },
+    {
+      "slug": "azure_rm_monitoractivitylogalerts_info_module#ansible-collections-azure-azcollection-azure-rm-monitoractivitylogalerts-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_monitoractivitylogalerts_info_module.html#ansible-collections-azure-azcollection-azure-rm-monitoractivitylogalerts-info-module",
+      "status": "ok",
+      "size": 63239
+    },
+    {
+      "slug": "azure_rm_monitordatacollectionendpoint_module#ansible-collections-azure-azcollection-azure-rm-monitordatacollectionendpoint-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_monitordatacollectionendpoint_module.html#ansible-collections-azure-azcollection-azure-rm-monitordatacollectionendpoint-module",
+      "status": "ok",
+      "size": 85588
+    },
+    {
+      "slug": "azure_rm_monitordatacollectionendpoint_info_module#ansible-collections-azure-azcollection-azure-rm-monitordatacollectionendpoint-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_monitordatacollectionendpoint_info_module.html#ansible-collections-azure-azcollection-azure-rm-monitordatacollectionendpoint-info-module",
+      "status": "ok",
+      "size": 77077
+    },
+    {
+      "slug": "azure_rm_monitordatacollectionruleassociation_module#ansible-collections-azure-azcollection-azure-rm-monitordatacollectionruleassociation-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_monitordatacollectionruleassociation_module.html#ansible-collections-azure-azcollection-azure-rm-monitordatacollectionruleassociation-module",
+      "status": "ok",
+      "size": 74017
+    },
+    {
+      "slug": "azure_rm_monitordatacollectionruleassociation_info_module#ansible-collections-azure-azcollection-azure-rm-monitordatacollectionruleassociation-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_monitordatacollectionruleassociation_info_module.html#ansible-collections-azure-azcollection-azure-rm-monitordatacollectionruleassociation-info-module",
+      "status": "ok",
+      "size": 73726
+    },
+    {
+      "slug": "azure_rm_monitordatacollectionrules_module#ansible-collections-azure-azcollection-azure-rm-monitordatacollectionrules-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_monitordatacollectionrules_module.html#ansible-collections-azure-azcollection-azure-rm-monitordatacollectionrules-module",
+      "status": "ok",
+      "size": 163683
+    },
+    {
+      "slug": "azure_rm_monitordatacollectionrules_info_module#ansible-collections-azure-azcollection-azure-rm-monitordatacollectionrules-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_monitordatacollectionrules_info_module.html#ansible-collections-azure-azcollection-azure-rm-monitordatacollectionrules-info-module",
+      "status": "ok",
+      "size": 62010
+    },
+    {
+      "slug": "azure_rm_monitordiagnosticsetting_module#ansible-collections-azure-azcollection-azure-rm-monitordiagnosticsetting-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_monitordiagnosticsetting_module.html#ansible-collections-azure-azcollection-azure-rm-monitordiagnosticsetting-module",
+      "status": "ok",
+      "size": 108697
+    },
+    {
+      "slug": "azure_rm_monitordiagnosticsetting_info_module#ansible-collections-azure-azcollection-azure-rm-monitordiagnosticsetting-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_monitordiagnosticsetting_info_module.html#ansible-collections-azure-azcollection-azure-rm-monitordiagnosticsetting-info-module",
+      "status": "ok",
+      "size": 85126
+    },
+    {
+      "slug": "azure_rm_monitorlogprofile_module#ansible-collections-azure-azcollection-azure-rm-monitorlogprofile-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_monitorlogprofile_module.html#ansible-collections-azure-azcollection-azure-rm-monitorlogprofile-module",
+      "status": "ok",
+      "size": 69501
+    },
+    {
+      "slug": "azure_rm_monitormetricalerts_module#ansible-collections-azure-azcollection-azure-rm-monitormetricalerts-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_monitormetricalerts_module.html#ansible-collections-azure-azcollection-azure-rm-monitormetricalerts-module",
+      "status": "ok",
+      "size": 87826
+    },
+    {
+      "slug": "azure_rm_monitormetricalerts_info_module#ansible-collections-azure-azcollection-azure-rm-monitormetricalerts-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_monitormetricalerts_info_module.html#ansible-collections-azure-azcollection-azure-rm-monitormetricalerts-info-module",
+      "status": "ok",
+      "size": 63011
+    },
+    {
+      "slug": "azure_rm_monitorscheduledqueryrules_module#ansible-collections-azure-azcollection-azure-rm-monitorscheduledqueryrules-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_monitorscheduledqueryrules_module.html#ansible-collections-azure-azcollection-azure-rm-monitorscheduledqueryrules-module",
+      "status": "ok",
+      "size": 98192
+    },
+    {
+      "slug": "azure_rm_monitorscheduledqueryrules_info_module#ansible-collections-azure-azcollection-azure-rm-monitorscheduledqueryrules-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_monitorscheduledqueryrules_info_module.html#ansible-collections-azure-azcollection-azure-rm-monitorscheduledqueryrules-info-module",
+      "status": "ok",
+      "size": 63670
+    },
+    {
+      "slug": "azure_rm_multiplemanageddisks_module#ansible-collections-azure-azcollection-azure-rm-multiplemanageddisks-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_multiplemanageddisks_module.html#ansible-collections-azure-azcollection-azure-rm-multiplemanageddisks-module",
+      "status": "ok",
+      "size": 104583
+    },
+    {
+      "slug": "azure_rm_mysqlconfiguration_module#ansible-collections-azure-azcollection-azure-rm-mysqlconfiguration-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_mysqlconfiguration_module.html#ansible-collections-azure-azcollection-azure-rm-mysqlconfiguration-module",
+      "status": "ok",
+      "size": 61062
+    },
+    {
+      "slug": "azure_rm_mysqlconfiguration_info_module#ansible-collections-azure-azcollection-azure-rm-mysqlconfiguration-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_mysqlconfiguration_info_module.html#ansible-collections-azure-azcollection-azure-rm-mysqlconfiguration-info-module",
+      "status": "ok",
+      "size": 64799
+    },
+    {
+      "slug": "azure_rm_mysqldatabase_module#ansible-collections-azure-azcollection-azure-rm-mysqldatabase-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_mysqldatabase_module.html#ansible-collections-azure-azcollection-azure-rm-mysqldatabase-module",
+      "status": "ok",
+      "size": 63891
+    },
+    {
+      "slug": "azure_rm_mysqldatabase_info_module#ansible-collections-azure-azcollection-azure-rm-mysqldatabase-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_mysqldatabase_info_module.html#ansible-collections-azure-azcollection-azure-rm-mysqldatabase-info-module",
+      "status": "ok",
+      "size": 65625
+    },
+    {
+      "slug": "azure_rm_mysqlfirewallrule_module#ansible-collections-azure-azcollection-azure-rm-mysqlfirewallrule-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_mysqlfirewallrule_module.html#ansible-collections-azure-azcollection-azure-rm-mysqlfirewallrule-module",
+      "status": "ok",
+      "size": 62102
+    },
+    {
+      "slug": "azure_rm_mysqlfirewallrule_info_module#ansible-collections-azure-azcollection-azure-rm-mysqlfirewallrule-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_mysqlfirewallrule_info_module.html#ansible-collections-azure-azcollection-azure-rm-mysqlfirewallrule-info-module",
+      "status": "ok",
+      "size": 64751
+    },
+    {
+      "slug": "azure_rm_mysqlflexibleconfiguration_module#ansible-collections-azure-azcollection-azure-rm-mysqlflexibleconfiguration-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_mysqlflexibleconfiguration_module.html#ansible-collections-azure-azcollection-azure-rm-mysqlflexibleconfiguration-module",
+      "status": "ok",
+      "size": 65157
+    },
+    {
+      "slug": "azure_rm_mysqlflexibleconfiguration_info_module#ansible-collections-azure-azcollection-azure-rm-mysqlflexibleconfiguration-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_mysqlflexibleconfiguration_info_module.html#ansible-collections-azure-azcollection-azure-rm-mysqlflexibleconfiguration-info-module",
+      "status": "ok",
+      "size": 65183
+    },
+    {
+      "slug": "azure_rm_mysqlflexibledatabase_module#ansible-collections-azure-azcollection-azure-rm-mysqlflexibledatabase-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_mysqlflexibledatabase_module.html#ansible-collections-azure-azcollection-azure-rm-mysqlflexibledatabase-module",
+      "status": "ok",
+      "size": 66373
+    },
+    {
+      "slug": "azure_rm_mysqlflexibledatabase_info_module#ansible-collections-azure-azcollection-azure-rm-mysqlflexibledatabase-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_mysqlflexibledatabase_info_module.html#ansible-collections-azure-azcollection-azure-rm-mysqlflexibledatabase-info-module",
+      "status": "ok",
+      "size": 66152
+    },
+    {
+      "slug": "azure_rm_mysqlflexiblefirewallrule_module#ansible-collections-azure-azcollection-azure-rm-mysqlflexiblefirewallrule-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_mysqlflexiblefirewallrule_module.html#ansible-collections-azure-azcollection-azure-rm-mysqlflexiblefirewallrule-module",
+      "status": "ok",
+      "size": 67300
+    },
+    {
+      "slug": "azure_rm_mysqlflexiblefirewallrule_info_module#ansible-collections-azure-azcollection-azure-rm-mysqlflexiblefirewallrule-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_mysqlflexiblefirewallrule_info_module.html#ansible-collections-azure-azcollection-azure-rm-mysqlflexiblefirewallrule-info-module",
+      "status": "ok",
+      "size": 65253
+    },
+    {
+      "slug": "azure_rm_mysqlflexibleserver_module#ansible-collections-azure-azcollection-azure-rm-mysqlflexibleserver-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_mysqlflexibleserver_module.html#ansible-collections-azure-azcollection-azure-rm-mysqlflexibleserver-module",
+      "status": "ok",
+      "size": 116096
+    },
+    {
+      "slug": "azure_rm_mysqlflexibleserver_info_module#ansible-collections-azure-azcollection-azure-rm-mysqlflexibleserver-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_mysqlflexibleserver_info_module.html#ansible-collections-azure-azcollection-azure-rm-mysqlflexibleserver-info-module",
+      "status": "ok",
+      "size": 89813
+    },
+    {
+      "slug": "azure_rm_mysqlserver_module#ansible-collections-azure-azcollection-azure-rm-mysqlserver-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_mysqlserver_module.html#ansible-collections-azure-azcollection-azure-rm-mysqlserver-module",
+      "status": "ok",
+      "size": 80909
+    },
+    {
+      "slug": "azure_rm_mysqlserver_info_module#ansible-collections-azure-azcollection-azure-rm-mysqlserver-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_mysqlserver_info_module.html#ansible-collections-azure-azcollection-azure-rm-mysqlserver-info-module",
+      "status": "ok",
+      "size": 79178
+    },
+    {
+      "slug": "azure_rm_natgateway_module#ansible-collections-azure-azcollection-azure-rm-natgateway-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_natgateway_module.html#ansible-collections-azure-azcollection-azure-rm-natgateway-module",
+      "status": "ok",
+      "size": 70813
+    },
+    {
+      "slug": "azure_rm_natgateway_info_module#ansible-collections-azure-azcollection-azure-rm-natgateway-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_natgateway_info_module.html#ansible-collections-azure-azcollection-azure-rm-natgateway-info-module",
+      "status": "ok",
+      "size": 67373
+    },
+    {
+      "slug": "azure_rm_networkflowlog_module#ansible-collections-azure-azcollection-azure-rm-networkflowlog-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_networkflowlog_module.html#ansible-collections-azure-azcollection-azure-rm-networkflowlog-module",
+      "status": "ok",
+      "size": 102358
+    },
+    {
+      "slug": "azure_rm_networkflowlog_info_module#ansible-collections-azure-azcollection-azure-rm-networkflowlog-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_networkflowlog_info_module.html#ansible-collections-azure-azcollection-azure-rm-networkflowlog-info-module",
+      "status": "ok",
+      "size": 84735
+    },
+    {
+      "slug": "azure_rm_networkinterface_module#ansible-collections-azure-azcollection-azure-rm-networkinterface-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_networkinterface_module.html#ansible-collections-azure-azcollection-azure-rm-networkinterface-module",
+      "status": "ok",
+      "size": 130050
+    },
+    {
+      "slug": "azure_rm_networkinterface_info_module#ansible-collections-azure-azcollection-azure-rm-networkinterface-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_networkinterface_info_module.html#ansible-collections-azure-azcollection-azure-rm-networkinterface-info-module",
+      "status": "ok",
+      "size": 97614
+    },
+    {
+      "slug": "azure_rm_networkwatcher_module#ansible-collections-azure-azcollection-azure-rm-networkwatcher-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_networkwatcher_module.html#ansible-collections-azure-azcollection-azure-rm-networkwatcher-module",
+      "status": "ok",
+      "size": 70266
+    },
+    {
+      "slug": "azure_rm_networkwatcher_info_module#ansible-collections-azure-azcollection-azure-rm-networkwatcher-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_networkwatcher_info_module.html#ansible-collections-azure-azcollection-azure-rm-networkwatcher-info-module",
+      "status": "ok",
+      "size": 67100
+    },
+    {
+      "slug": "azure_rm_notificationhub_module#ansible-collections-azure-azcollection-azure-rm-notificationhub-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_notificationhub_module.html#ansible-collections-azure-azcollection-azure-rm-notificationhub-module",
+      "status": "ok",
+      "size": 69406
+    },
+    {
+      "slug": "azure_rm_notificationhub_info_module#ansible-collections-azure-azcollection-azure-rm-notificationhub-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_notificationhub_info_module.html#ansible-collections-azure-azcollection-azure-rm-notificationhub-info-module",
+      "status": "ok",
+      "size": 60252
+    },
+    {
+      "slug": "azure_rm_openshiftmanagedcluster_module#ansible-collections-azure-azcollection-azure-rm-openshiftmanagedcluster-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_openshiftmanagedcluster_module.html#ansible-collections-azure-azcollection-azure-rm-openshiftmanagedcluster-module",
+      "status": "ok",
+      "size": 136456
+    },
+    {
+      "slug": "azure_rm_openshiftmanagedcluster_info_module#ansible-collections-azure-azcollection-azure-rm-openshiftmanagedcluster-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_openshiftmanagedcluster_info_module.html#ansible-collections-azure-azcollection-azure-rm-openshiftmanagedcluster-info-module",
+      "status": "ok",
+      "size": 94367
+    },
+    {
+      "slug": "azure_rm_openshiftmanagedclusterkubeconfig_info_module#ansible-collections-azure-azcollection-azure-rm-openshiftmanagedclusterkubeconfig-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_openshiftmanagedclusterkubeconfig_info_module.html#ansible-collections-azure-azcollection-azure-rm-openshiftmanagedclusterkubeconfig-info-module",
+      "status": "ok",
+      "size": 62043
+    },
+    {
+      "slug": "azure_rm_openshiftmanagedclusterversion_info_module#ansible-collections-azure-azcollection-azure-rm-openshiftmanagedclusterversion-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_openshiftmanagedclusterversion_info_module.html#ansible-collections-azure-azcollection-azure-rm-openshiftmanagedclusterversion-info-module",
+      "status": "ok",
+      "size": 58058
+    },
+    {
+      "slug": "azure_rm_postgresqlconfiguration_module#ansible-collections-azure-azcollection-azure-rm-postgresqlconfiguration-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_postgresqlconfiguration_module.html#ansible-collections-azure-azcollection-azure-rm-postgresqlconfiguration-module",
+      "status": "ok",
+      "size": 61425
+    },
+    {
+      "slug": "azure_rm_postgresqlconfiguration_info_module#ansible-collections-azure-azcollection-azure-rm-postgresqlconfiguration-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_postgresqlconfiguration_info_module.html#ansible-collections-azure-azcollection-azure-rm-postgresqlconfiguration-info-module",
+      "status": "ok",
+      "size": 65052
+    },
+    {
+      "slug": "azure_rm_postgresqldatabase_module#ansible-collections-azure-azcollection-azure-rm-postgresqldatabase-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_postgresqldatabase_module.html#ansible-collections-azure-azcollection-azure-rm-postgresqldatabase-module",
+      "status": "ok",
+      "size": 64228
+    },
+    {
+      "slug": "azure_rm_postgresqldatabase_info_module#ansible-collections-azure-azcollection-azure-rm-postgresqldatabase-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_postgresqldatabase_info_module.html#ansible-collections-azure-azcollection-azure-rm-postgresqldatabase-info-module",
+      "status": "ok",
+      "size": 66004
+    },
+    {
+      "slug": "azure_rm_postgresqlfirewallrule_module#ansible-collections-azure-azcollection-azure-rm-postgresqlfirewallrule-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_postgresqlfirewallrule_module.html#ansible-collections-azure-azcollection-azure-rm-postgresqlfirewallrule-module",
+      "status": "ok",
+      "size": 62345
+    },
+    {
+      "slug": "azure_rm_postgresqlfirewallrule_info_module#ansible-collections-azure-azcollection-azure-rm-postgresqlfirewallrule-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_postgresqlfirewallrule_info_module.html#ansible-collections-azure-azcollection-azure-rm-postgresqlfirewallrule-info-module",
+      "status": "ok",
+      "size": 65096
+    },
+    {
+      "slug": "azure_rm_postgresqlflexibleadministrator_module#ansible-collections-azure-azcollection-azure-rm-postgresqlflexibleadministrator-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_postgresqlflexibleadministrator_module.html#ansible-collections-azure-azcollection-azure-rm-postgresqlflexibleadministrator-module",
+      "status": "ok",
+      "size": 73983
+    },
+    {
+      "slug": "azure_rm_postgresqlflexibleadministrator_info_module#ansible-collections-azure-azcollection-azure-rm-postgresqlflexibleadministrator-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_postgresqlflexibleadministrator_info_module.html#ansible-collections-azure-azcollection-azure-rm-postgresqlflexibleadministrator-info-module",
+      "status": "ok",
+      "size": 69231
+    },
+    {
+      "slug": "azure_rm_postgresqlflexiblebackup_module#ansible-collections-azure-azcollection-azure-rm-postgresqlflexiblebackup-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_postgresqlflexiblebackup_module.html#ansible-collections-azure-azcollection-azure-rm-postgresqlflexiblebackup-module",
+      "status": "ok",
+      "size": 69976
+    },
+    {
+      "slug": "azure_rm_postgresqlflexiblebackup_info_module#ansible-collections-azure-azcollection-azure-rm-postgresqlflexiblebackup-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_postgresqlflexiblebackup_info_module.html#ansible-collections-azure-azcollection-azure-rm-postgresqlflexiblebackup-info-module",
+      "status": "ok",
+      "size": 68527
+    },
+    {
+      "slug": "azure_rm_postgresqlflexibleconfiguration_info_module#ansible-collections-azure-azcollection-azure-rm-postgresqlflexibleconfiguration-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_postgresqlflexibleconfiguration_info_module.html#ansible-collections-azure-azcollection-azure-rm-postgresqlflexibleconfiguration-info-module",
+      "status": "ok",
+      "size": 67603
+    },
+    {
+      "slug": "azure_rm_postgresqlflexibledatabase_module#ansible-collections-azure-azcollection-azure-rm-postgresqlflexibledatabase-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_postgresqlflexibledatabase_module.html#ansible-collections-azure-azcollection-azure-rm-postgresqlflexibledatabase-module",
+      "status": "ok",
+      "size": 68209
+    },
+    {
+      "slug": "azure_rm_postgresqlflexibledatabase_info_module#ansible-collections-azure-azcollection-azure-rm-postgresqlflexibledatabase-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_postgresqlflexibledatabase_info_module.html#ansible-collections-azure-azcollection-azure-rm-postgresqlflexibledatabase-info-module",
+      "status": "ok",
+      "size": 72029
+    },
+    {
+      "slug": "azure_rm_postgresqlflexiblefirewallrule_module#ansible-collections-azure-azcollection-azure-rm-postgresqlflexiblefirewallrule-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_postgresqlflexiblefirewallrule_module.html#ansible-collections-azure-azcollection-azure-rm-postgresqlflexiblefirewallrule-module",
+      "status": "error",
+      "error": "HTTPSConnectionPool(host='docs.ansible.com', port=443): Max retries exceeded with url: /ansible/latest/collections/azure/azcollection/azure_rm_postgresqlflexiblefirewallrule_module.html (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1018)')))"
+    },
+    {
+      "slug": "azure_rm_postgresqlflexiblefirewallrule_info_module#ansible-collections-azure-azcollection-azure-rm-postgresqlflexiblefirewallrule-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_postgresqlflexiblefirewallrule_info_module.html#ansible-collections-azure-azcollection-azure-rm-postgresqlflexiblefirewallrule-info-module",
+      "status": "ok",
+      "size": 65489
+    },
+    {
+      "slug": "azure_rm_postgresqlflexibleserver_module#ansible-collections-azure-azcollection-azure-rm-postgresqlflexibleserver-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_postgresqlflexibleserver_module.html#ansible-collections-azure-azcollection-azure-rm-postgresqlflexibleserver-module",
+      "status": "ok",
+      "size": 152181
+    },
+    {
+      "slug": "azure_rm_postgresqlflexibleserver_info_module#ansible-collections-azure-azcollection-azure-rm-postgresqlflexibleserver-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_postgresqlflexibleserver_info_module.html#ansible-collections-azure-azcollection-azure-rm-postgresqlflexibleserver-info-module",
+      "status": "ok",
+      "size": 103790
+    },
+    {
+      "slug": "azure_rm_postgresqlflexiblevirtualendpoint_module#ansible-collections-azure-azcollection-azure-rm-postgresqlflexiblevirtualendpoint-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_postgresqlflexiblevirtualendpoint_module.html#ansible-collections-azure-azcollection-azure-rm-postgresqlflexiblevirtualendpoint-module",
+      "status": "ok",
+      "size": 72962
+    },
+    {
+      "slug": "azure_rm_postgresqlflexiblevirtualendpoint_info_module#ansible-collections-azure-azcollection-azure-rm-postgresqlflexiblevirtualendpoint-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_postgresqlflexiblevirtualendpoint_info_module.html#ansible-collections-azure-azcollection-azure-rm-postgresqlflexiblevirtualendpoint-info-module",
+      "status": "ok",
+      "size": 69742
+    },
+    {
+      "slug": "azure_rm_postgresqlserver_module#ansible-collections-azure-azcollection-azure-rm-postgresqlserver-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_postgresqlserver_module.html#ansible-collections-azure-azcollection-azure-rm-postgresqlserver-module",
+      "status": "ok",
+      "size": 81345
+    },
+    {
+      "slug": "azure_rm_postgresqlserver_info_module#ansible-collections-azure-azcollection-azure-rm-postgresqlserver-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_postgresqlserver_info_module.html#ansible-collections-azure-azcollection-azure-rm-postgresqlserver-info-module",
+      "status": "ok",
+      "size": 77359
+    },
+    {
+      "slug": "azure_rm_privatednsrecordset_module#ansible-collections-azure-azcollection-azure-rm-privatednsrecordset-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_privatednsrecordset_module.html#ansible-collections-azure-azcollection-azure-rm-privatednsrecordset-module",
+      "status": "ok",
+      "size": 92549
+    },
+    {
+      "slug": "azure_rm_privatednsrecordset_info_module#ansible-collections-azure-azcollection-azure-rm-privatednsrecordset-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_privatednsrecordset_info_module.html#ansible-collections-azure-azcollection-azure-rm-privatednsrecordset-info-module",
+      "status": "ok",
+      "size": 65826
+    },
+    {
+      "slug": "azure_rm_privatednszone_module#ansible-collections-azure-azcollection-azure-rm-privatednszone-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_privatednszone_module.html#ansible-collections-azure-azcollection-azure-rm-privatednszone-module",
+      "status": "ok",
+      "size": 62739
+    },
+    {
+      "slug": "azure_rm_privatednszone_info_module#ansible-collections-azure-azcollection-azure-rm-privatednszone-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_privatednszone_info_module.html#ansible-collections-azure-azcollection-azure-rm-privatednszone-info-module",
+      "status": "ok",
+      "size": 67183
+    },
+    {
+      "slug": "azure_rm_privatednszonelink_module#ansible-collections-azure-azcollection-azure-rm-privatednszonelink-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_privatednszonelink_module.html#ansible-collections-azure-azcollection-azure-rm-privatednszonelink-module",
+      "status": "ok",
+      "size": 79276
+    },
+    {
+      "slug": "azure_rm_privatednszonelink_info_module#ansible-collections-azure-azcollection-azure-rm-privatednszonelink-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_privatednszonelink_info_module.html#ansible-collections-azure-azcollection-azure-rm-privatednszonelink-info-module",
+      "status": "ok",
+      "size": 61908
+    },
+    {
+      "slug": "azure_rm_privateendpoint_module#ansible-collections-azure-azcollection-azure-rm-privateendpoint-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_privateendpoint_module.html#ansible-collections-azure-azcollection-azure-rm-privateendpoint-module",
+      "status": "ok",
+      "size": 109328
+    },
+    {
+      "slug": "azure_rm_privateendpoint_info_module#ansible-collections-azure-azcollection-azure-rm-privateendpoint-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_privateendpoint_info_module.html#ansible-collections-azure-azcollection-azure-rm-privateendpoint-info-module",
+      "status": "ok",
+      "size": 100739
+    },
+    {
+      "slug": "azure_rm_privateendpointconnection_module#ansible-collections-azure-azcollection-azure-rm-privateendpointconnection-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_privateendpointconnection_module.html#ansible-collections-azure-azcollection-azure-rm-privateendpointconnection-module",
+      "status": "ok",
+      "size": 78866
+    },
+    {
+      "slug": "azure_rm_privateendpointconnection_info_module#ansible-collections-azure-azcollection-azure-rm-privateendpointconnection-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_privateendpointconnection_info_module.html#ansible-collections-azure-azcollection-azure-rm-privateendpointconnection-info-module",
+      "status": "ok",
+      "size": 73892
+    },
+    {
+      "slug": "azure_rm_privateendpointdnszonegroup_module#ansible-collections-azure-azcollection-azure-rm-privateendpointdnszonegroup-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_privateendpointdnszonegroup_module.html#ansible-collections-azure-azcollection-azure-rm-privateendpointdnszonegroup-module",
+      "status": "ok",
+      "size": 80891
+    },
+    {
+      "slug": "azure_rm_privateendpointdnszonegroup_info_module#ansible-collections-azure-azcollection-azure-rm-privateendpointdnszonegroup-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_privateendpointdnszonegroup_info_module.html#ansible-collections-azure-azcollection-azure-rm-privateendpointdnszonegroup-info-module",
+      "status": "ok",
+      "size": 75657
+    },
+    {
+      "slug": "azure_rm_privatelinkservice_module#ansible-collections-azure-azcollection-azure-rm-privatelinkservice-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_privatelinkservice_module.html#ansible-collections-azure-azcollection-azure-rm-privatelinkservice-module",
+      "status": "ok",
+      "size": 109007
+    },
+    {
+      "slug": "azure_rm_privatelinkservice_info_module#ansible-collections-azure-azcollection-azure-rm-privatelinkservice-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_privatelinkservice_info_module.html#ansible-collections-azure-azcollection-azure-rm-privatelinkservice-info-module",
+      "status": "ok",
+      "size": 87845
+    },
+    {
+      "slug": "azure_rm_proximityplacementgroup_module#ansible-collections-azure-azcollection-azure-rm-proximityplacementgroup-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_proximityplacementgroup_module.html#ansible-collections-azure-azcollection-azure-rm-proximityplacementgroup-module",
+      "status": "ok",
+      "size": 71026
+    },
+    {
+      "slug": "azure_rm_proximityplacementgroup_info_module#ansible-collections-azure-azcollection-azure-rm-proximityplacementgroup-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_proximityplacementgroup_info_module.html#ansible-collections-azure-azcollection-azure-rm-proximityplacementgroup-info-module",
+      "status": "ok",
+      "size": 61352
+    },
+    {
+      "slug": "azure_rm_publicipaddress_module#ansible-collections-azure-azcollection-azure-rm-publicipaddress-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_publicipaddress_module.html#ansible-collections-azure-azcollection-azure-rm-publicipaddress-module",
+      "status": "ok",
+      "size": 90801
+    },
+    {
+      "slug": "azure_rm_publicipaddress_info_module#ansible-collections-azure-azcollection-azure-rm-publicipaddress-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_publicipaddress_info_module.html#ansible-collections-azure-azcollection-azure-rm-publicipaddress-info-module",
+      "status": "ok",
+      "size": 80267
+    },
+    {
+      "slug": "azure_rm_publicipprefix_module#ansible-collections-azure-azcollection-azure-rm-publicipprefix-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_publicipprefix_module.html#ansible-collections-azure-azcollection-azure-rm-publicipprefix-module",
+      "status": "ok",
+      "size": 83914
+    },
+    {
+      "slug": "azure_rm_publicipprefix_info_module#ansible-collections-azure-azcollection-azure-rm-publicipprefix-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_publicipprefix_info_module.html#ansible-collections-azure-azcollection-azure-rm-publicipprefix-info-module",
+      "status": "ok",
+      "size": 78438
+    },
+    {
+      "slug": "azure_rm_recoveryservicesvault_module#ansible-collections-azure-azcollection-azure-rm-recoveryservicesvault-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_recoveryservicesvault_module.html#ansible-collections-azure-azcollection-azure-rm-recoveryservicesvault-module",
+      "status": "ok",
+      "size": 77708
+    },
+    {
+      "slug": "azure_rm_recoveryservicesvault_info_module#ansible-collections-azure-azcollection-azure-rm-recoveryservicesvault-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_recoveryservicesvault_info_module.html#ansible-collections-azure-azcollection-azure-rm-recoveryservicesvault-info-module",
+      "status": "ok",
+      "size": 69827
+    },
+    {
+      "slug": "azure_rm_recoveryservicesvaultconfig_module#ansible-collections-azure-azcollection-azure-rm-recoveryservicesvaultconfig-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_recoveryservicesvaultconfig_module.html#ansible-collections-azure-azcollection-azure-rm-recoveryservicesvaultconfig-module",
+      "status": "ok",
+      "size": 69112
+    },
+    {
+      "slug": "azure_rm_recoveryservicesvaultconfig_info_module#ansible-collections-azure-azcollection-azure-rm-recoveryservicesvaultconfig-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_recoveryservicesvaultconfig_info_module.html#ansible-collections-azure-azcollection-azure-rm-recoveryservicesvaultconfig-info-module",
+      "status": "ok",
+      "size": 62306
+    },
+    {
+      "slug": "azure_rm_rediscache_module#ansible-collections-azure-azcollection-azure-rm-rediscache-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_rediscache_module.html#ansible-collections-azure-azcollection-azure-rm-rediscache-module",
+      "status": "ok",
+      "size": 96747
+    },
+    {
+      "slug": "azure_rm_rediscache_info_module#ansible-collections-azure-azcollection-azure-rm-rediscache-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_rediscache_info_module.html#ansible-collections-azure-azcollection-azure-rm-rediscache-info-module",
+      "status": "ok",
+      "size": 84673
+    },
+    {
+      "slug": "azure_rm_rediscachefirewallrule_module#ansible-collections-azure-azcollection-azure-rm-rediscachefirewallrule-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_rediscachefirewallrule_module.html#ansible-collections-azure-azcollection-azure-rm-rediscachefirewallrule-module",
+      "status": "ok",
+      "size": 63381
+    },
+    {
+      "slug": "azure_rm_registrationassignment_module#ansible-collections-azure-azcollection-azure-rm-registrationassignment-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_registrationassignment_module.html#ansible-collections-azure-azcollection-azure-rm-registrationassignment-module",
+      "status": "ok",
+      "size": 70408
+    },
+    {
+      "slug": "azure_rm_registrationassignment_info_module#ansible-collections-azure-azcollection-azure-rm-registrationassignment-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_registrationassignment_info_module.html#ansible-collections-azure-azcollection-azure-rm-registrationassignment-info-module",
+      "status": "ok",
+      "size": 66800
+    },
+    {
+      "slug": "azure_rm_registrationdefinition_module#ansible-collections-azure-azcollection-azure-rm-registrationdefinition-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_registrationdefinition_module.html#ansible-collections-azure-azcollection-azure-rm-registrationdefinition-module",
+      "status": "ok",
+      "size": 89700
+    },
+    {
+      "slug": "azure_rm_registrationdefinition_info_module#ansible-collections-azure-azcollection-azure-rm-registrationdefinition-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_registrationdefinition_info_module.html#ansible-collections-azure-azcollection-azure-rm-registrationdefinition-info-module",
+      "status": "ok",
+      "size": 75830
+    },
+    {
+      "slug": "azure_rm_resource_module#ansible-collections-azure-azcollection-azure-rm-resource-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_resource_module.html#ansible-collections-azure-azcollection-azure-rm-resource-module",
+      "status": "ok",
+      "size": 81740
+    },
+    {
+      "slug": "azure_rm_resource_info_module#ansible-collections-azure-azcollection-azure-rm-resource-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_resource_info_module.html#ansible-collections-azure-azcollection-azure-rm-resource-info-module",
+      "status": "ok",
+      "size": 98135
+    },
+    {
+      "slug": "azure_rm_resourcegroup_module#ansible-collections-azure-azcollection-azure-rm-resourcegroup-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_resourcegroup_module.html#ansible-collections-azure-azcollection-azure-rm-resourcegroup-module",
+      "status": "ok",
+      "size": 70763
+    },
+    {
+      "slug": "azure_rm_resourcegroup_info_module#ansible-collections-azure-azcollection-azure-rm-resourcegroup-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_resourcegroup_info_module.html#ansible-collections-azure-azcollection-azure-rm-resourcegroup-info-module",
+      "status": "ok",
+      "size": 70524
+    },
+    {
+      "slug": "azure_rm_resourcehealthstates_info_module#ansible-collections-azure-azcollection-azure-rm-resourcehealthstates-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_resourcehealthstates_info_module.html#ansible-collections-azure-azcollection-azure-rm-resourcehealthstates-info-module",
+      "status": "ok",
+      "size": 77589
+    },
+    {
+      "slug": "azure_rm_roleassignment_module#ansible-collections-azure-azcollection-azure-rm-roleassignment-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_roleassignment_module.html#ansible-collections-azure-azcollection-azure-rm-roleassignment-module",
+      "status": "ok",
+      "size": 72425
+    },
+    {
+      "slug": "azure_rm_roleassignment_info_module#ansible-collections-azure-azcollection-azure-rm-roleassignment-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_roleassignment_info_module.html#ansible-collections-azure-azcollection-azure-rm-roleassignment-info-module",
+      "status": "ok",
+      "size": 72143
+    },
+    {
+      "slug": "azure_rm_roledefinition_module#ansible-collections-azure-azcollection-azure-rm-roledefinition-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_roledefinition_module.html#ansible-collections-azure-azcollection-azure-rm-roledefinition-module",
+      "status": "ok",
+      "size": 65400
+    },
+    {
+      "slug": "azure_rm_roledefinition_info_module#ansible-collections-azure-azcollection-azure-rm-roledefinition-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_roledefinition_info_module.html#ansible-collections-azure-azcollection-azure-rm-roledefinition-info-module",
+      "status": "ok",
+      "size": 70223
+    },
+    {
+      "slug": "azure_rm_route_module#ansible-collections-azure-azcollection-azure-rm-route-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_route_module.html#ansible-collections-azure-azcollection-azure-rm-route-module",
+      "status": "ok",
+      "size": 65913
+    },
+    {
+      "slug": "azure_rm_route_info_module#ansible-collections-azure-azcollection-azure-rm-route-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_route_info_module.html#ansible-collections-azure-azcollection-azure-rm-route-info-module",
+      "status": "ok",
+      "size": 67120
+    },
+    {
+      "slug": "azure_rm_routetable_module#ansible-collections-azure-azcollection-azure-rm-routetable-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_routetable_module.html#ansible-collections-azure-azcollection-azure-rm-routetable-module",
+      "status": "ok",
+      "size": 65023
+    },
+    {
+      "slug": "azure_rm_routetable_info_module#ansible-collections-azure-azcollection-azure-rm-routetable-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_routetable_info_module.html#ansible-collections-azure-azcollection-azure-rm-routetable-info-module",
+      "status": "ok",
+      "size": 65305
+    },
+    {
+      "slug": "azure_rm_securitygroup_module#ansible-collections-azure-azcollection-azure-rm-securitygroup-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_securitygroup_module.html#ansible-collections-azure-azcollection-azure-rm-securitygroup-module",
+      "status": "ok",
+      "size": 127677
+    },
+    {
+      "slug": "azure_rm_securitygroup_info_module#ansible-collections-azure-azcollection-azure-rm-securitygroup-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_securitygroup_info_module.html#ansible-collections-azure-azcollection-azure-rm-securitygroup-info-module",
+      "status": "ok",
+      "size": 82509
+    },
+    {
+      "slug": "azure_rm_servicebus_module#ansible-collections-azure-azcollection-azure-rm-servicebus-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_servicebus_module.html#ansible-collections-azure-azcollection-azure-rm-servicebus-module",
+      "status": "ok",
+      "size": 74655
+    },
+    {
+      "slug": "azure_rm_servicebus_info_module#ansible-collections-azure-azcollection-azure-rm-servicebus-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_servicebus_info_module.html#ansible-collections-azure-azcollection-azure-rm-servicebus-info-module",
+      "status": "ok",
+      "size": 116634
+    },
+    {
+      "slug": "azure_rm_servicebusqueue_module#ansible-collections-azure-azcollection-azure-rm-servicebusqueue-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_servicebusqueue_module.html#ansible-collections-azure-azcollection-azure-rm-servicebusqueue-module",
+      "status": "ok",
+      "size": 74524
+    },
+    {
+      "slug": "azure_rm_servicebussaspolicy_module#ansible-collections-azure-azcollection-azure-rm-servicebussaspolicy-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_servicebussaspolicy_module.html#ansible-collections-azure-azcollection-azure-rm-servicebussaspolicy-module",
+      "status": "ok",
+      "size": 74558
+    },
+    {
+      "slug": "azure_rm_servicebustopic_module#ansible-collections-azure-azcollection-azure-rm-servicebustopic-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_servicebustopic_module.html#ansible-collections-azure-azcollection-azure-rm-servicebustopic-module",
+      "status": "ok",
+      "size": 70628
+    },
+    {
+      "slug": "azure_rm_servicebustopicsubscription_module#ansible-collections-azure-azcollection-azure-rm-servicebustopicsubscription-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_servicebustopicsubscription_module.html#ansible-collections-azure-azcollection-azure-rm-servicebustopicsubscription-module",
+      "status": "ok",
+      "size": 72453
+    },
+    {
+      "slug": "azure_rm_serviceendpointpolicy_module#ansible-collections-azure-azcollection-azure-rm-serviceendpointpolicy-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_serviceendpointpolicy_module.html#ansible-collections-azure-azcollection-azure-rm-serviceendpointpolicy-module",
+      "status": "ok",
+      "size": 73748
+    },
+    {
+      "slug": "azure_rm_serviceendpointpolicy_info_module#ansible-collections-azure-azcollection-azure-rm-serviceendpointpolicy-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_serviceendpointpolicy_info_module.html#ansible-collections-azure-azcollection-azure-rm-serviceendpointpolicy-info-module",
+      "status": "ok",
+      "size": 70029
+    },
+    {
+      "slug": "azure_rm_serviceendpointpolicydefinition_module#ansible-collections-azure-azcollection-azure-rm-serviceendpointpolicydefinition-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_serviceendpointpolicydefinition_module.html#ansible-collections-azure-azcollection-azure-rm-serviceendpointpolicydefinition-module",
+      "status": "ok",
+      "size": 76377
+    },
+    {
+      "slug": "azure_rm_serviceendpointpolicydefinition_info_module#ansible-collections-azure-azcollection-azure-rm-serviceendpointpolicydefinition-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_serviceendpointpolicydefinition_info_module.html#ansible-collections-azure-azcollection-azure-rm-serviceendpointpolicydefinition-info-module",
+      "status": "ok",
+      "size": 72374
+    },
+    {
+      "slug": "azure_rm_snapshot_module#ansible-collections-azure-azcollection-azure-rm-snapshot-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_snapshot_module.html#ansible-collections-azure-azcollection-azure-rm-snapshot-module",
+      "status": "ok",
+      "size": 71848
+    },
+    {
+      "slug": "azure_rm_snapshot_info_module#ansible-collections-azure-azcollection-azure-rm-snapshot-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_snapshot_info_module.html#ansible-collections-azure-azcollection-azure-rm-snapshot-info-module",
+      "status": "ok",
+      "size": 69276
+    },
+    {
+      "slug": "azure_rm_sqldatabase_module#ansible-collections-azure-azcollection-azure-rm-sqldatabase-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_sqldatabase_module.html#ansible-collections-azure-azcollection-azure-rm-sqldatabase-module",
+      "status": "ok",
+      "size": 89215
+    },
+    {
+      "slug": "azure_rm_sqldatabase_info_module#ansible-collections-azure-azcollection-azure-rm-sqldatabase-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_sqldatabase_info_module.html#ansible-collections-azure-azcollection-azure-rm-sqldatabase-info-module",
+      "status": "ok",
+      "size": 74921
+    },
+    {
+      "slug": "azure_rm_sqlelasticpool_module#ansible-collections-azure-azcollection-azure-rm-sqlelasticpool-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_sqlelasticpool_module.html#ansible-collections-azure-azcollection-azure-rm-sqlelasticpool-module",
+      "status": "ok",
+      "size": 92894
+    },
+    {
+      "slug": "azure_rm_sqlelasticpool_info_module#ansible-collections-azure-azcollection-azure-rm-sqlelasticpool-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_sqlelasticpool_info_module.html#ansible-collections-azure-azcollection-azure-rm-sqlelasticpool-info-module",
+      "status": "ok",
+      "size": 78323
+    },
+    {
+      "slug": "azure_rm_sqlfirewallrule_module#ansible-collections-azure-azcollection-azure-rm-sqlfirewallrule-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_sqlfirewallrule_module.html#ansible-collections-azure-azcollection-azure-rm-sqlfirewallrule-module",
+      "status": "ok",
+      "size": 62303
+    },
+    {
+      "slug": "azure_rm_sqlfirewallrule_info_module#ansible-collections-azure-azcollection-azure-rm-sqlfirewallrule-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_sqlfirewallrule_info_module.html#ansible-collections-azure-azcollection-azure-rm-sqlfirewallrule-info-module",
+      "status": "ok",
+      "size": 65633
+    },
+    {
+      "slug": "azure_rm_sqlmanagedinstance_module#ansible-collections-azure-azcollection-azure-rm-sqlmanagedinstance-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_sqlmanagedinstance_module.html#ansible-collections-azure-azcollection-azure-rm-sqlmanagedinstance-module",
+      "status": "ok",
+      "size": 138680
+    },
+    {
+      "slug": "azure_rm_sqlmanagedinstance_info_module#ansible-collections-azure-azcollection-azure-rm-sqlmanagedinstance-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_sqlmanagedinstance_info_module.html#ansible-collections-azure-azcollection-azure-rm-sqlmanagedinstance-info-module",
+      "status": "ok",
+      "size": 104661
+    },
+    {
+      "slug": "azure_rm_sqlmidatabase_module#ansible-collections-azure-azcollection-azure-rm-sqlmidatabase-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_sqlmidatabase_module.html#ansible-collections-azure-azcollection-azure-rm-sqlmidatabase-module",
+      "status": "ok",
+      "size": 85126
+    },
+    {
+      "slug": "azure_rm_sqlmidatabase_info_module#ansible-collections-azure-azcollection-azure-rm-sqlmidatabase-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_sqlmidatabase_info_module.html#ansible-collections-azure-azcollection-azure-rm-sqlmidatabase-info-module",
+      "status": "ok",
+      "size": 79719
+    },
+    {
+      "slug": "azure_rm_sqlmidblongtermretentionpolicy_module#ansible-collections-azure-azcollection-azure-rm-sqlmidblongtermretentionpolicy-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_sqlmidblongtermretentionpolicy_module.html#ansible-collections-azure-azcollection-azure-rm-sqlmidblongtermretentionpolicy-module",
+      "status": "ok",
+      "size": 75405
+    },
+    {
+      "slug": "azure_rm_sqlmidblongtermretentionpolicy_info_module#ansible-collections-azure-azcollection-azure-rm-sqlmidblongtermretentionpolicy-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_sqlmidblongtermretentionpolicy_info_module.html#ansible-collections-azure-azcollection-azure-rm-sqlmidblongtermretentionpolicy-info-module",
+      "status": "ok",
+      "size": 72411
+    },
+    {
+      "slug": "azure_rm_sqlmidbshorttermretentionpolicy_module#ansible-collections-azure-azcollection-azure-rm-sqlmidbshorttermretentionpolicy-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_sqlmidbshorttermretentionpolicy_module.html#ansible-collections-azure-azcollection-azure-rm-sqlmidbshorttermretentionpolicy-module",
+      "status": "ok",
+      "size": 69957
+    },
+    {
+      "slug": "azure_rm_sqlmidbshorttermretentionpolicy_info_module#ansible-collections-azure-azcollection-azure-rm-sqlmidbshorttermretentionpolicy-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_sqlmidbshorttermretentionpolicy_info_module.html#ansible-collections-azure-azcollection-azure-rm-sqlmidbshorttermretentionpolicy-info-module",
+      "status": "ok",
+      "size": 68957
+    },
+    {
+      "slug": "azure_rm_sqlserver_module#ansible-collections-azure-azcollection-azure-rm-sqlserver-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_sqlserver_module.html#ansible-collections-azure-azcollection-azure-rm-sqlserver-module",
+      "status": "ok",
+      "size": 84518
+    },
+    {
+      "slug": "azure_rm_sqlserver_info_module#ansible-collections-azure-azcollection-azure-rm-sqlserver-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_sqlserver_info_module.html#ansible-collections-azure-azcollection-azure-rm-sqlserver-info-module",
+      "status": "ok",
+      "size": 89135
+    },
+    {
+      "slug": "azure_rm_sshpublickey_module#ansible-collections-azure-azcollection-azure-rm-sshpublickey-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_sshpublickey_module.html#ansible-collections-azure-azcollection-azure-rm-sshpublickey-module",
+      "status": "ok",
+      "size": 70200
+    },
+    {
+      "slug": "azure_rm_sshpublickey_info_module#ansible-collections-azure-azcollection-azure-rm-sshpublickey-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_sshpublickey_info_module.html#ansible-collections-azure-azcollection-azure-rm-sshpublickey-info-module",
+      "status": "ok",
+      "size": 65010
+    },
+    {
+      "slug": "azure_rm_storageaccount_module#ansible-collections-azure-azcollection-azure-rm-storageaccount-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_storageaccount_module.html#ansible-collections-azure-azcollection-azure-rm-storageaccount-module",
+      "status": "ok",
+      "size": 208493
+    },
+    {
+      "slug": "azure_rm_storageaccount_info_module#ansible-collections-azure-azcollection-azure-rm-storageaccount-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_storageaccount_info_module.html#ansible-collections-azure-azcollection-azure-rm-storageaccount-info-module",
+      "status": "ok",
+      "size": 165285
+    },
+    {
+      "slug": "azure_rm_storageaccountmanagementpolicy_module#ansible-collections-azure-azcollection-azure-rm-storageaccountmanagementpolicy-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_storageaccountmanagementpolicy_module.html#ansible-collections-azure-azcollection-azure-rm-storageaccountmanagementpolicy-module",
+      "status": "ok",
+      "size": 121644
+    },
+    {
+      "slug": "azure_rm_storageaccountmanagementpolicy_info_module#ansible-collections-azure-azcollection-azure-rm-storageaccountmanagementpolicy-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_storageaccountmanagementpolicy_info_module.html#ansible-collections-azure-azcollection-azure-rm-storageaccountmanagementpolicy-info-module",
+      "status": "ok",
+      "size": 70554
+    },
+    {
+      "slug": "azure_rm_storageblob_module#ansible-collections-azure-azcollection-azure-rm-storageblob-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_storageblob_module.html#ansible-collections-azure-azcollection-azure-rm-storageblob-module",
+      "status": "ok",
+      "size": 89323
+    },
+    {
+      "slug": "azure_rm_storageblob_info_module#ansible-collections-azure-azcollection-azure-rm-storageblob-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_storageblob_info_module.html#ansible-collections-azure-azcollection-azure-rm-storageblob-info-module",
+      "status": "ok",
+      "size": 68002
+    },
+    {
+      "slug": "azure_rm_storageshare_module#ansible-collections-azure-azcollection-azure-rm-storageshare-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_storageshare_module.html#ansible-collections-azure-azcollection-azure-rm-storageshare-module",
+      "status": "ok",
+      "size": 77737
+    },
+    {
+      "slug": "azure_rm_storageshare_info_module#ansible-collections-azure-azcollection-azure-rm-storageshare-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_storageshare_info_module.html#ansible-collections-azure-azcollection-azure-rm-storageshare-info-module",
+      "status": "ok",
+      "size": 75889
+    },
+    {
+      "slug": "azure_rm_subnet_module#ansible-collections-azure-azcollection-azure-rm-subnet-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_subnet_module.html#ansible-collections-azure-azcollection-azure-rm-subnet-module",
+      "status": "ok",
+      "size": 108163
+    },
+    {
+      "slug": "azure_rm_subnet_info_module#ansible-collections-azure-azcollection-azure-rm-subnet-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_subnet_info_module.html#ansible-collections-azure-azcollection-azure-rm-subnet-info-module",
+      "status": "ok",
+      "size": 86408
+    },
+    {
+      "slug": "azure_rm_subscription_info_module#ansible-collections-azure-azcollection-azure-rm-subscription-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_subscription_info_module.html#ansible-collections-azure-azcollection-azure-rm-subscription-info-module",
+      "status": "ok",
+      "size": 67863
+    },
+    {
+      "slug": "azure_rm_tags_module#ansible-collections-azure-azcollection-azure-rm-tags-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_tags_module.html#ansible-collections-azure-azcollection-azure-rm-tags-module",
+      "status": "ok",
+      "size": 67198
+    },
+    {
+      "slug": "azure_rm_tags_info_module#ansible-collections-azure-azcollection-azure-rm-tags-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_tags_info_module.html#ansible-collections-azure-azcollection-azure-rm-tags-info-module",
+      "status": "ok",
+      "size": 69453
+    },
+    {
+      "slug": "azure_rm_trafficmanager_module#ansible-collections-azure-azcollection-azure-rm-trafficmanager-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_trafficmanager_module.html#ansible-collections-azure-azcollection-azure-rm-trafficmanager-module",
+      "status": "ok",
+      "size": 90947
+    },
+    {
+      "slug": "azure_rm_trafficmanagerendpoint_module#ansible-collections-azure-azcollection-azure-rm-trafficmanagerendpoint-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_trafficmanagerendpoint_module.html#ansible-collections-azure-azcollection-azure-rm-trafficmanagerendpoint-module",
+      "status": "ok",
+      "size": 68898
+    },
+    {
+      "slug": "azure_rm_trafficmanagerendpoint_info_module#ansible-collections-azure-azcollection-azure-rm-trafficmanagerendpoint-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_trafficmanagerendpoint_info_module.html#ansible-collections-azure-azcollection-azure-rm-trafficmanagerendpoint-info-module",
+      "status": "ok",
+      "size": 72981
+    },
+    {
+      "slug": "azure_rm_trafficmanagerprofile_module#ansible-collections-azure-azcollection-azure-rm-trafficmanagerprofile-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_trafficmanagerprofile_module.html#ansible-collections-azure-azcollection-azure-rm-trafficmanagerprofile-module",
+      "status": "ok",
+      "size": 87005
+    },
+    {
+      "slug": "azure_rm_trafficmanagerprofile_info_module#ansible-collections-azure-azcollection-azure-rm-trafficmanagerprofile-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_trafficmanagerprofile_info_module.html#ansible-collections-azure-azcollection-azure-rm-trafficmanagerprofile-info-module",
+      "status": "ok",
+      "size": 97714
+    },
+    {
+      "slug": "azure_rm_virtualhub_module#ansible-collections-azure-azcollection-azure-rm-virtualhub-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualhub_module.html#ansible-collections-azure-azcollection-azure-rm-virtualhub-module",
+      "status": "ok",
+      "size": 127162
+    },
+    {
+      "slug": "azure_rm_virtualhub_info_module#ansible-collections-azure-azcollection-azure-rm-virtualhub-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualhub_info_module.html#ansible-collections-azure-azcollection-azure-rm-virtualhub-info-module",
+      "status": "ok",
+      "size": 135732
+    },
+    {
+      "slug": "azure_rm_virtualhubconnection_module#ansible-collections-azure-azcollection-azure-rm-virtualhubconnection-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualhubconnection_module.html#ansible-collections-azure-azcollection-azure-rm-virtualhubconnection-module",
+      "status": "ok",
+      "size": 101647
+    },
+    {
+      "slug": "azure_rm_virtualhubconnection_info_module#ansible-collections-azure-azcollection-azure-rm-virtualhubconnection-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualhubconnection_info_module.html#ansible-collections-azure-azcollection-azure-rm-virtualhubconnection-info-module",
+      "status": "ok",
+      "size": 84200
+    },
+    {
+      "slug": "azure_rm_virtualmachine_module#ansible-collections-azure-azcollection-azure-rm-virtualmachine-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualmachine_module.html#ansible-collections-azure-azcollection-azure-rm-virtualmachine-module",
+      "status": "ok",
+      "size": 221166
+    },
+    {
+      "slug": "azure_rm_virtualmachine_info_module#ansible-collections-azure-azcollection-azure-rm-virtualmachine-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualmachine_info_module.html#ansible-collections-azure-azcollection-azure-rm-virtualmachine-info-module",
+      "status": "ok",
+      "size": 113388
+    },
+    {
+      "slug": "azure_rm_virtualmachineextension_module#ansible-collections-azure-azcollection-azure-rm-virtualmachineextension-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualmachineextension_module.html#ansible-collections-azure-azcollection-azure-rm-virtualmachineextension-module",
+      "status": "ok",
+      "size": 71211
+    },
+    {
+      "slug": "azure_rm_virtualmachineextension_info_module#ansible-collections-azure-azcollection-azure-rm-virtualmachineextension-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualmachineextension_info_module.html#ansible-collections-azure-azcollection-azure-rm-virtualmachineextension-info-module",
+      "status": "ok",
+      "size": 73347
+    },
+    {
+      "slug": "azure_rm_virtualmachineimage_info_module#ansible-collections-azure-azcollection-azure-rm-virtualmachineimage-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualmachineimage_info_module.html#ansible-collections-azure-azcollection-azure-rm-virtualmachineimage-info-module",
+      "status": "ok",
+      "size": 64985
+    },
+    {
+      "slug": "azure_rm_virtualmachinescaleset_module#ansible-collections-azure-azcollection-azure-rm-virtualmachinescaleset-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualmachinescaleset_module.html#ansible-collections-azure-azcollection-azure-rm-virtualmachinescaleset-module",
+      "status": "ok",
+      "size": 159893
+    },
+    {
+      "slug": "azure_rm_virtualmachinescaleset_info_module#ansible-collections-azure-azcollection-azure-rm-virtualmachinescaleset-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualmachinescaleset_info_module.html#ansible-collections-azure-azcollection-azure-rm-virtualmachinescaleset-info-module",
+      "status": "ok",
+      "size": 70734
+    },
+    {
+      "slug": "azure_rm_virtualmachinescalesetextension_module#ansible-collections-azure-azcollection-azure-rm-virtualmachinescalesetextension-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualmachinescalesetextension_module.html#ansible-collections-azure-azcollection-azure-rm-virtualmachinescalesetextension-module",
+      "status": "ok",
+      "size": 68627
+    },
+    {
+      "slug": "azure_rm_virtualmachinescalesetextension_info_module#ansible-collections-azure-azcollection-azure-rm-virtualmachinescalesetextension-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualmachinescalesetextension_info_module.html#ansible-collections-azure-azcollection-azure-rm-virtualmachinescalesetextension-info-module",
+      "status": "ok",
+      "size": 69943
+    },
+    {
+      "slug": "azure_rm_virtualmachinescalesetinstance_module#ansible-collections-azure-azcollection-azure-rm-virtualmachinescalesetinstance-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualmachinescalesetinstance_module.html#ansible-collections-azure-azcollection-azure-rm-virtualmachinescalesetinstance-module",
+      "status": "ok",
+      "size": 67194
+    },
+    {
+      "slug": "azure_rm_virtualmachinescalesetinstance_info_module#ansible-collections-azure-azcollection-azure-rm-virtualmachinescalesetinstance-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualmachinescalesetinstance_info_module.html#ansible-collections-azure-azcollection-azure-rm-virtualmachinescalesetinstance-info-module",
+      "status": "ok",
+      "size": 69776
+    },
+    {
+      "slug": "azure_rm_virtualmachinesize_info_module#ansible-collections-azure-azcollection-azure-rm-virtualmachinesize-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualmachinesize_info_module.html#ansible-collections-azure-azcollection-azure-rm-virtualmachinesize-info-module",
+      "status": "ok",
+      "size": 64971
+    },
+    {
+      "slug": "azure_rm_virtualnetwork_module#ansible-collections-azure-azcollection-azure-rm-virtualnetwork-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualnetwork_module.html#ansible-collections-azure-azcollection-azure-rm-virtualnetwork-module",
+      "status": "ok",
+      "size": 79996
+    },
+    {
+      "slug": "azure_rm_virtualnetwork_info_module#ansible-collections-azure-azcollection-azure-rm-virtualnetwork-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualnetwork_info_module.html#ansible-collections-azure-azcollection-azure-rm-virtualnetwork-info-module",
+      "status": "ok",
+      "size": 84186
+    },
+    {
+      "slug": "azure_rm_virtualnetworkgateway_module#ansible-collections-azure-azcollection-azure-rm-virtualnetworkgateway-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualnetworkgateway_module.html#ansible-collections-azure-azcollection-azure-rm-virtualnetworkgateway-module",
+      "status": "ok",
+      "size": 83672
+    },
+    {
+      "slug": "azure_rm_virtualnetworkgateway_info_module#ansible-collections-azure-azcollection-azure-rm-virtualnetworkgateway-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualnetworkgateway_info_module.html#ansible-collections-azure-azcollection-azure-rm-virtualnetworkgateway-info-module",
+      "status": "ok",
+      "size": 76870
+    },
+    {
+      "slug": "azure_rm_virtualnetworkgatewayconnection_module#ansible-collections-azure-azcollection-azure-rm-virtualnetworkgatewayconnection-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualnetworkgatewayconnection_module.html#ansible-collections-azure-azcollection-azure-rm-virtualnetworkgatewayconnection-module",
+      "status": "ok",
+      "size": 104996
+    },
+    {
+      "slug": "azure_rm_virtualnetworkgatewayconnection_info_module#ansible-collections-azure-azcollection-azure-rm-virtualnetworkgatewayconnection-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualnetworkgatewayconnection_info_module.html#ansible-collections-azure-azcollection-azure-rm-virtualnetworkgatewayconnection-info-module",
+      "status": "ok",
+      "size": 88984
+    },
+    {
+      "slug": "azure_rm_virtualnetworkgatewaynatrule_module#ansible-collections-azure-azcollection-azure-rm-virtualnetworkgatewaynatrule-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualnetworkgatewaynatrule_module.html#ansible-collections-azure-azcollection-azure-rm-virtualnetworkgatewaynatrule-module",
+      "status": "ok",
+      "size": 81644
+    },
+    {
+      "slug": "azure_rm_virtualnetworkgatewaynatrule_info_module#ansible-collections-azure-azcollection-azure-rm-virtualnetworkgatewaynatrule-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualnetworkgatewaynatrule_info_module.html#ansible-collections-azure-azcollection-azure-rm-virtualnetworkgatewaynatrule-info-module",
+      "status": "ok",
+      "size": 72690
+    },
+    {
+      "slug": "azure_rm_virtualnetworkpeering_module#ansible-collections-azure-azcollection-azure-rm-virtualnetworkpeering-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualnetworkpeering_module.html#ansible-collections-azure-azcollection-azure-rm-virtualnetworkpeering-module",
+      "status": "ok",
+      "size": 69129
+    },
+    {
+      "slug": "azure_rm_virtualnetworkpeering_info_module#ansible-collections-azure-azcollection-azure-rm-virtualnetworkpeering-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualnetworkpeering_info_module.html#ansible-collections-azure-azcollection-azure-rm-virtualnetworkpeering-info-module",
+      "status": "ok",
+      "size": 73142
+    },
+    {
+      "slug": "azure_rm_virtualwan_module#ansible-collections-azure-azcollection-azure-rm-virtualwan-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualwan_module.html#ansible-collections-azure-azcollection-azure-rm-virtualwan-module",
+      "status": "ok",
+      "size": 87740
+    },
+    {
+      "slug": "azure_rm_virtualwan_info_module#ansible-collections-azure-azcollection-azure-rm-virtualwan-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualwan_info_module.html#ansible-collections-azure-azcollection-azure-rm-virtualwan-info-module",
+      "status": "ok",
+      "size": 77469
+    },
+    {
+      "slug": "azure_rm_vmbackuppolicy_module#ansible-collections-azure-azcollection-azure-rm-vmbackuppolicy-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_vmbackuppolicy_module.html#ansible-collections-azure-azcollection-azure-rm-vmbackuppolicy-module",
+      "status": "ok",
+      "size": 76265
+    },
+    {
+      "slug": "azure_rm_vmbackuppolicy_info_module#ansible-collections-azure-azcollection-azure-rm-vmbackuppolicy-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_vmbackuppolicy_info_module.html#ansible-collections-azure-azcollection-azure-rm-vmbackuppolicy-info-module",
+      "status": "ok",
+      "size": 68554
+    },
+    {
+      "slug": "azure_rm_vmsku_info_module#ansible-collections-azure-azcollection-azure-rm-vmsku-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_vmsku_info_module.html#ansible-collections-azure-azcollection-azure-rm-vmsku-info-module",
+      "status": "ok",
+      "size": 86389
+    },
+    {
+      "slug": "azure_rm_vmssnetworkinterface_info_module#ansible-collections-azure-azcollection-azure-rm-vmssnetworkinterface-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_vmssnetworkinterface_info_module.html#ansible-collections-azure-azcollection-azure-rm-vmssnetworkinterface-info-module",
+      "status": "ok",
+      "size": 95106
+    },
+    {
+      "slug": "azure_rm_vpnsite_module#ansible-collections-azure-azcollection-azure-rm-vpnsite-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_vpnsite_module.html#ansible-collections-azure-azcollection-azure-rm-vpnsite-module",
+      "status": "ok",
+      "size": 101644
+    },
+    {
+      "slug": "azure_rm_vpnsite_info_module#ansible-collections-azure-azcollection-azure-rm-vpnsite-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_vpnsite_info_module.html#ansible-collections-azure-azcollection-azure-rm-vpnsite-info-module",
+      "status": "ok",
+      "size": 81512
+    },
+    {
+      "slug": "azure_rm_vpnsitelink_info_module#ansible-collections-azure-azcollection-azure-rm-vpnsitelink-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_vpnsitelink_info_module.html#ansible-collections-azure-azcollection-azure-rm-vpnsitelink-info-module",
+      "status": "ok",
+      "size": 71065
+    },
+    {
+      "slug": "azure_rm_webapp_module#ansible-collections-azure-azcollection-azure-rm-webapp-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_webapp_module.html#ansible-collections-azure-azcollection-azure-rm-webapp-module",
+      "status": "ok",
+      "size": 149886
+    },
+    {
+      "slug": "azure_rm_webapp_info_module#ansible-collections-azure-azcollection-azure-rm-webapp-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_webapp_info_module.html#ansible-collections-azure-azcollection-azure-rm-webapp-info-module",
+      "status": "ok",
+      "size": 87690
+    },
+    {
+      "slug": "azure_rm_webappaccessrestriction_module#ansible-collections-azure-azcollection-azure-rm-webappaccessrestriction-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_webappaccessrestriction_module.html#ansible-collections-azure-azcollection-azure-rm-webappaccessrestriction-module",
+      "status": "ok",
+      "size": 104497
+    },
+    {
+      "slug": "azure_rm_webappaccessrestriction_info_module#ansible-collections-azure-azcollection-azure-rm-webappaccessrestriction-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_webappaccessrestriction_info_module.html#ansible-collections-azure-azcollection-azure-rm-webappaccessrestriction-info-module",
+      "status": "ok",
+      "size": 80320
+    },
+    {
+      "slug": "azure_rm_webappslot_module#ansible-collections-azure-azcollection-azure-rm-webappslot-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_webappslot_module.html#ansible-collections-azure-azcollection-azure-rm-webappslot-module",
+      "status": "ok",
+      "size": 92935
+    },
+    {
+      "slug": "azure_rm_webappvnetconnection_module#ansible-collections-azure-azcollection-azure-rm-webappvnetconnection-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_webappvnetconnection_module.html#ansible-collections-azure-azcollection-azure-rm-webappvnetconnection-module",
+      "status": "ok",
+      "size": 70082
+    },
+    {
+      "slug": "azure_rm_webappvnetconnection_info_module#ansible-collections-azure-azcollection-azure-rm-webappvnetconnection-info-module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_webappvnetconnection_info_module.html#ansible-collections-azure-azcollection-azure-rm-webappvnetconnection-info-module",
+      "status": "ok",
+      "size": 64803
+    },
+    {
+      "slug": "azure_rm_accesstoken_info_module",
+      "url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_accesstoken_info_module.html",
+      "status": "ok",
+      "size": 60516
+    }
+  ]
+}

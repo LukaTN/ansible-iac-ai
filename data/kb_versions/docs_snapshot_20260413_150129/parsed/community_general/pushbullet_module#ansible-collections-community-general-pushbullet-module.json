@@ -1,0 +1,81 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.pushbullet",
+  "slug": "pushbullet_module#ansible-collections-community-general-pushbullet-module",
+  "description": "This module sends push notifications through Pushbullet to channels or devices.",
+  "parameters": [
+    {
+      "name": "api_key",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Push bullet API token."
+    },
+    {
+      "name": "body",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Body of the notification, for example details of the fault you are alerting."
+    },
+    {
+      "name": "channel",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The channel TAG you wish to broadcast a push notification, as seen on the “My Channels” > “Edit your channel” at Pushbullet page."
+    },
+    {
+      "name": "device",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The device NAME you wish to send a push notification, as seen on the Pushbullet main page."
+    },
+    {
+      "name": "push_type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"note\" ← (default)",
+        "\"link\""
+      ],
+      "description": "Thing you wish to push. Choices: \"note\" ← (default) \"link\""
+    },
+    {
+      "name": "title",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Title of the notification."
+    },
+    {
+      "name": "url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "URL field, used when push_type=link."
+    }
+  ],
+  "examples": [
+    "- name: Sends a push notification to a device\n  community.general.pushbullet:\n    api_key: \"ABC123abc123ABC123abc123ABC123ab\"\n    device: \"Chrome\"\n    title: \"You may see this on Google Chrome\"\n\n- name: Sends a link to a device\n  community.general.pushbullet:\n    api_key: ABC123abc123ABC123abc123ABC123ab\n    device: Chrome\n    push_type: link\n    title: Ansible Documentation\n    body: https://docs.ansible.com/\n\n- name: Sends a push notification to a channel\n  community.general.pushbullet:\n    api_key: ABC123abc123ABC123abc123ABC123ab\n    channel: my-awesome-channel\n    title: \"Broadcasting a message to the #my-awesome-channel folks\"\n\n- name: Sends a push notification with title and body to a channel\n  community.general.pushbullet:\n    api_key: ABC123abc123ABC123abc123ABC123ab\n    channel: my-awesome-channel\n    title: ALERT! Signup service is down\n    body: Error rate on signup service is over 90% for more than 2 minutes"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/pushbullet_module#ansible-collections-community-general-pushbullet-module.html",
+  "parsed_at": "2026-04-11T13:53:24.187607"
+}

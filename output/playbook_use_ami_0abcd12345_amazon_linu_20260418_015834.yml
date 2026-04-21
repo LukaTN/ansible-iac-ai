@@ -1,0 +1,36 @@
+---
+- name: Launch EC2 Instance using AMI ami-0abcd12345
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - amazon.aws
+  tasks:
+    - name: Gather information about the specified AMI
+      amazon.aws.ec2_ami_info:
+        image_ids: ami-0abcd12345
+      register: ami_info
+
+    - name: Launch EC2 Instance using the gathered AMI information
+      amazon.aws.ec2_launch_template:
+        launch_template_name: my-launch-template
+        instance_type: t3.micro
+        key_name: my-key-pair
+        region: us-east-1
+        block_device_mappings:
+          - device_name: /dev/sdb
+            ebs:
+              volume_size: 20
+              delete_on_termination: true
+              volume_type: standard
+        tag_specifications:
+          - resource_type: instance
+            tags:
+              OsType: Linux
+          - resource_type: volume
+            tags:
+              foo: bar
+      vars:
+        ami_id: "{{ ami_info.ansible_facts.images[0].ImageId }}"
+        security_group_ids: ["sg-12345678"]
+        subnet_id: "subnet-12345678"

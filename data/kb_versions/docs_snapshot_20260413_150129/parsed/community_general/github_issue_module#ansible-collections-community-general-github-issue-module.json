@@ -1,0 +1,60 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.github_issue",
+  "slug": "github_issue_module#ansible-collections-community-general-github-issue-module",
+  "description": "View GitHub issue for a given repository and organization.",
+  "parameters": [
+    {
+      "name": "action",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"get_status\" ← (default)"
+      ],
+      "description": "Get various details about issue depending upon action specified. Choices: \"get_status\" ← (default)"
+    },
+    {
+      "name": "issue",
+      "aliases": [],
+      "type": "integer",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Issue number for which information is required."
+    },
+    {
+      "name": "organization",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the GitHub organization in which the repository is hosted."
+    },
+    {
+      "name": "repo",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of repository from which issue needs to be retrieved."
+    }
+  ],
+  "examples": [
+    "- name: Check if GitHub issue is closed or not\n  community.general.github_issue:\n    organization: ansible\n    repo: ansible\n    issue: 23642\n    action: get_status\n  register: r\n\n- name: Take action depending upon issue status\n  ansible.builtin.debug:\n    msg: Do something when issue 23642 is open\n  when: r.issue_status == 'open'"
+  ],
+  "return_values": [
+    {
+      "name": "issue_status",
+      "type": "string",
+      "description": "State of the GitHub issue. Returned: success Sample: \"open, closed\"",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/github_issue_module#ansible-collections-community-general-github-issue-module.html",
+  "parsed_at": "2026-04-11T13:53:13.378207"
+}

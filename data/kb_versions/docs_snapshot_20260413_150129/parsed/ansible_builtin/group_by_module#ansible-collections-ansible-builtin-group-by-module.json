@@ -1,0 +1,33 @@
+{
+  "collection_ns": "ansible_builtin",
+  "collection": "ansible.builtin",
+  "module": "ansible.builtin.group_by",
+  "slug": "group_by_module#ansible-collections-ansible-builtin-group-by-module",
+  "description": "Use facts to create ad-hoc groups that can be used later in a playbook.",
+  "parameters": [
+    {
+      "name": "key",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The variables whose values will be used as groups."
+    },
+    {
+      "name": "parents",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[",
+      "choices": [],
+      "description": "The list of the parent groups. Default: [\"all\"]"
+    }
+  ],
+  "examples": [
+    "- name: Create groups based on the machine architecture\n  ansible.builtin.group_by:\n    key: machine_{{ ansible_machine }}\n\n- name: Create groups like 'virt_kvm_host'\n  ansible.builtin.group_by:\n    key: virt_{{ ansible_virtualization_type }}_{{ ansible_virtualization_role }}\n\n- name: Create nested groups\n  ansible.builtin.group_by:\n    key: el{{ ansible_distribution_major_version }}-{{ ansible_architecture }}\n    parents:\n      - el{{ ansible_distribution_major_version }}\n\n- name: Add all active hosts to a static group\n  ansible.builtin.group_by:\n    key: done"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/group_by_module#ansible-collections-ansible-builtin-group-by-module.html",
+  "parsed_at": "2026-04-11T13:52:51.963709"
+}

@@ -1,0 +1,121 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.hwc_vpc_private_ip",
+  "slug": "hwc_vpc_private_ip_module#ansible-collections-community-general-hwc-vpc-private-ip-module",
+  "description": "VPC private IP management.",
+  "parameters": [
+    {
+      "name": "domain",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the Domain to scope to (Identity v3). Currently only domain names are supported, and not domain IDs."
+    },
+    {
+      "name": "id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The ID of resource to be managed."
+    },
+    {
+      "name": "identity_endpoint",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The Identity authentication URL."
+    },
+    {
+      "name": "ip_address",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies the target IP address. The value can be an available IP address in the subnet. If it is not specified, the system automatically assigns an IP address. Cannot be changed after creating the private IP."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The password to login with."
+    },
+    {
+      "name": "project",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the Tenant (Identity v2) or Project (Identity v3). Currently only project names are supported, and not project IDs."
+    },
+    {
+      "name": "region",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The region to which the project belongs."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Whether the given object should exist in Huawei Cloud. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "subnet_id",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Specifies the ID of the subnet from which IP addresses are assigned. Cannot be changed after creating the private IP."
+    },
+    {
+      "name": "user",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The user name to login with. Currently only user names are supported, and not user IDs."
+    }
+  ],
+  "examples": [
+    "# create a private IP\n- name: Create vpc\n  hwc_network_vpc:\n    cidr: \"192.168.100.0/24\"\n    name: \"ansible_network_vpc_test\"\n  register: vpc\n- name: Create subnet\n  hwc_vpc_subnet:\n    gateway_ip: \"192.168.100.32\"\n    name: \"ansible_network_subnet_test\"\n    dhcp_enable: true\n    vpc_id: \"{{ vpc.id }}\"\n    cidr: \"192.168.100.0/26\"\n  register: subnet\n- name: Create a private IP\n  community.general.hwc_vpc_private_ip:\n    subnet_id: \"{{ subnet.id }}\"\n    ip_address: \"192.168.100.33\""
+  ],
+  "return_values": [
+    {
+      "name": "ip_address",
+      "type": "string",
+      "description": "Specifies the target IP address. The value can be an available IP address in the subnet. If it is not specified, the system automatically assigns an IP address. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "subnet_id",
+      "type": "string",
+      "description": "Specifies the ID of the subnet from which IP addresses are assigned. Returned: success",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/hwc_vpc_private_ip_module#ansible-collections-community-general-hwc-vpc-private-ip-module.html",
+  "parsed_at": "2026-04-11T13:53:15.050329"
+}

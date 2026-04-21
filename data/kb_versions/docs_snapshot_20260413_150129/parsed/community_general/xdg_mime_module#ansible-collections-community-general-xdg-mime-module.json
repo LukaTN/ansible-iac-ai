@@ -1,0 +1,46 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.xdg_mime",
+  "slug": "xdg_mime_module#ansible-collections-community-general-xdg-mime-module",
+  "description": "This module allows configuring the default handler for specific MIME types when you use applications that rely on XDG.",
+  "parameters": [
+    {
+      "name": "handler",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "handler",
+      "choices": [],
+      "description": "Sets the default handler for the specified MIME types. The desktop file must be installed in the system. If the desktop file is not installed, the module does not fail, but the handler is not set either. You must pass a handler in the form *.desktop, otherwise the module fails."
+    },
+    {
+      "name": "mime_types",
+      "aliases": [],
+      "type": "list",
+      "required": true,
+      "default": "handler",
+      "choices": [],
+      "description": "One or more MIME types for which a default handler is set."
+    }
+  ],
+  "examples": [
+    "- name: Set Chrome as the default handler for HTTPS\n  community.general.xdg_mime:\n    mime_types: x-scheme-handler/https\n    handler: google-chrome.desktop\n  register: result\n\n- name: Set Chrome as the default handler for both HTTP and HTTPS\n  community.general.xdg_mime:\n    mime_types:\n      - x-scheme-handler/http\n      - x-scheme-handler/https\n    handler: google-chrome.desktop\n  register: result"
+  ],
+  "return_values": [
+    {
+      "name": "current_handlers",
+      "type": "list",
+      "description": "Currently set handlers for the passed MIME types. Returned: success Sample: [\"google-chrome.desktop\", \"firefox.desktop\"]",
+      "returned": "success"
+    },
+    {
+      "name": "version",
+      "type": "string",
+      "description": "Version of the xdg-mime tool. Returned: always Sample: \"1.2.1\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/xdg_mime_module#ansible-collections-community-general-xdg-mime-module.html",
+  "parsed_at": "2026-04-11T13:53:28.687450"
+}

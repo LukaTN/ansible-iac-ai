@@ -1,0 +1,123 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.hpilo_boot",
+  "slug": "hpilo_boot_module#ansible-collections-community-general-hpilo-boot-module",
+  "description": "This module boots a system through its HP iLO interface. The boot media can be one of: cdrom, floppy, hdd, network, or usb.",
+  "parameters": [
+    {
+      "name": "force",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Whether to force a reboot (even when the system is already booted). As a safeguard, without force, community.general.hpilo_boot refuses to reboot a server that is already running. Choices: false ← (default) true"
+    },
+    {
+      "name": "host",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The HP iLO hostname/address that is linked to the physical system."
+    },
+    {
+      "name": "idempotent_boot_once",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "This option makes state=boot_once succeed instead of failing when the server is already powered on. Choices: false ← (default) true"
+    },
+    {
+      "name": "image",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The URL of a cdrom, floppy or usb boot media image in the form protocol://username:password@hostname:port/filename. protocol is either http or https. username:password is optional. port is optional."
+    },
+    {
+      "name": "login",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "Administrator",
+      "choices": [],
+      "description": "The login name to authenticate to the HP iLO interface. Default: \"Administrator\""
+    },
+    {
+      "name": "media",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"cdrom\"",
+        "\"floppy\"",
+        "\"rbsu\"",
+        "\"hdd\"",
+        "\"network\"",
+        "\"normal\"",
+        "\"usb\""
+      ],
+      "description": "The boot media to boot the system from. Choices: \"cdrom\" \"floppy\" \"rbsu\" \"hdd\" \"network\" \"normal\" \"usb\""
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "admin",
+      "choices": [],
+      "description": "The password to authenticate to the HP iLO interface. Default: \"admin\""
+    },
+    {
+      "name": "ssl_version",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"SSLv3\"",
+        "\"SSLv23\"",
+        "\"TLSv1\" ← (default)",
+        "\"TLSv1_1\"",
+        "\"TLSv1_2\""
+      ],
+      "description": "Change the ssl_version used. Choices: \"SSLv3\" \"SSLv23\" \"TLSv1\" ← (default) \"TLSv1_1\" \"TLSv1_2\""
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"boot_always\"",
+        "\"boot_once\" ← (default)",
+        "\"connect\"",
+        "\"disconnect\"",
+        "\"no_boot\"",
+        "\"poweroff\""
+      ],
+      "description": "The state of the boot media. no_boot: Do not boot from the device. boot_once: Boot from the device once and then notthereafter. boot_always: Boot from the device each time the server is rebooted. connect: Connect the virtual media device and set to boot_always. disconnect: Disconnects the virtual media device and set to no_boot. poweroff: Power off the server. Choices: \"boot_always\" \"boot_once\" ← (default) \"connect\" \"disconnect\" \"no_boot\" \"poweroff\""
+    }
+  ],
+  "examples": [
+    "- name: Task to boot a system using an ISO from an HP iLO interface only if the system is an HP server\n  community.general.hpilo_boot:\n    host: YOUR_ILO_ADDRESS\n    login: YOUR_ILO_LOGIN\n    password: YOUR_ILO_PASSWORD\n    media: cdrom\n    image: http://some-web-server/iso/boot.iso\n  when: cmdb_hwmodel.startswith('HP ')\n  delegate_to: localhost\n\n- name: Power off a server\n  community.general.hpilo_boot:\n    host: YOUR_ILO_HOST\n    login: YOUR_ILO_LOGIN\n    password: YOUR_ILO_PASSWORD\n    state: poweroff\n  delegate_to: localhost"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/hpilo_boot_module#ansible-collections-community-general-hpilo-boot-module.html",
+  "parsed_at": "2026-04-11T13:53:14.692426"
+}

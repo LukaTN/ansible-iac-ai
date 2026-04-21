@@ -1,0 +1,129 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.aerospike_migrations",
+  "slug": "aerospike_migrations_module#ansible-collections-community-general-aerospike-migrations-module",
+  "description": "This can be used to check for migrations in a cluster. This makes it easy to do a rolling upgrade/update on Aerospike nodes.",
+  "parameters": [
+    {
+      "name": "connect_timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "1000",
+      "choices": [],
+      "description": "How long to try to connect before giving up (milliseconds). Default: 1000"
+    },
+    {
+      "name": "consecutive_good_checks",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "3",
+      "choices": [],
+      "description": "How many times should the cluster report “no migrations” consecutively before returning OK back to ansible? Default: 3"
+    },
+    {
+      "name": "fail_on_cluster_change",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Fail if the cluster key changes if something else is changing the cluster, we may want to fail. Choices: false true ← (default)"
+    },
+    {
+      "name": "host",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "localhost",
+      "choices": [],
+      "description": "Which host do we use as seed for info connection. Default: \"localhost\""
+    },
+    {
+      "name": "local_only",
+      "aliases": [],
+      "type": "boolean",
+      "required": true,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Do you wish to only check for migrations on the local node before returning, or do you want all nodes in the cluster to finish before returning? Choices: false true"
+    },
+    {
+      "name": "migrate_rx_key",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "migrate_rx_partitions_remaining",
+      "choices": [],
+      "description": "The metric key used to determine if we have rx migrations remaining. Changeable due to backwards compatibility. Default: \"migrate_rx_partitions_remaining\""
+    },
+    {
+      "name": "migrate_tx_key",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "migrate_tx_partitions_remaining",
+      "choices": [],
+      "description": "The metric key used to determine if we have tx migrations remaining. Changeable due to backwards compatibility. Default: \"migrate_tx_partitions_remaining\""
+    },
+    {
+      "name": "min_cluster_size",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "1",
+      "choices": [],
+      "description": "Check fails until cluster size is met or until tries is exhausted. Default: 1"
+    },
+    {
+      "name": "port",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "3000",
+      "choices": [],
+      "description": "Which port to connect to Aerospike on (service port). Default: 3000"
+    },
+    {
+      "name": "sleep_between_checks",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "60",
+      "choices": [],
+      "description": "How long to sleep between each check (seconds). Default: 60"
+    },
+    {
+      "name": "target_cluster_size",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "When all aerospike builds in the cluster are greater than version 4.3, then the cluster-stable info command is used. Inside this command, you can optionally specify what the target cluster size is - but it is not necessary. You can still rely on min_cluster_size if you do not want to use this option. If this option is specified on a cluster that has at least one host <4.3 then it is ignored until the min version reaches 4.3."
+    },
+    {
+      "name": "tries_limit",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "300",
+      "choices": [],
+      "description": "How many times do we poll before giving up and failing? Default: 300"
+    }
+  ],
+  "examples": [
+    "# check for migrations on local node\n- name: Wait for migrations on local node before proceeding\n  community.general.aerospike_migrations:\n    host: \"localhost\"\n    connect_timeout: 2000\n    consecutive_good_checks: 5\n    sleep_between_checks: 15\n    tries_limit: 600\n    local_only: false\n\n# example playbook:\n- name: Upgrade aerospike\n  hosts: all\n  become: true\n  serial: 1\n  tasks:\n    - name: Install dependencies\n      ansible.builtin.apt:\n        name:\n          - python\n          - python-pip\n          - python-setuptools\n        state: latest\n    - name: Setup aerospike\n      ansible.builtin.pip:\n        name: aerospike\n# check for migrations every (sleep_between_checks)\n# If at least (consecutive_good_checks) checks come back OK in a row, then return OK.\n# Will exit if any exception, which can be caused by bad nodes,\n# nodes not returning data, or other reasons.\n# Maximum runtime before giving up in this case will be:\n# Tries Limit * Sleep Between Checks * delay * retries\n    - name: Wait for aerospike migrations\n      community.general.aerospike_migrations:\n        local_only: true\n        sleep_between_checks: 1\n        tries_limit: 5\n        consecutive_good_checks: 3\n        fail_on_cluster_change: true\n        min_cluster_size: 3\n        target_cluster_size: 4\n      register: migrations_check\n      until: migrations_check is succeeded\n      changed_when: false\n      delay: 60\n      retries: 120\n    - name: Another thing\n      ansible.builtin.shell: |\n        echo foo\n    - name: Reboot\n      ansible.builtin.reboot:"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/aerospike_migrations_module#ansible-collections-community-general-aerospike-migrations-module.html",
+  "parsed_at": "2026-04-11T13:53:10.231863"
+}

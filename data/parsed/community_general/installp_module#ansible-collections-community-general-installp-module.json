@@ -1,0 +1,59 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.installp",
+  "slug": "installp_module#ansible-collections-community-general-installp-module",
+  "description": "Manage packages using ‘installp’ on AIX.",
+  "parameters": [
+    {
+      "name": "accept_license",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Whether to accept the license for the package(s). Choices: false ← (default) true"
+    },
+    {
+      "name": "name",
+      "aliases": [
+        "pkg"
+      ],
+      "type": "list",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "One or more packages to install or remove. Use all to install all packages available on informed repository_path."
+    },
+    {
+      "name": "repository_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path with AIX packages (required to install)."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)"
+      ],
+      "description": "Whether the package needs to be present on or absent from the system. Choices: \"absent\" \"present\" ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Install package foo\n  community.general.installp:\n    name: foo\n    repository_path: /repository/AIX71/installp/base\n    accept_license: true\n    state: present\n\n- name: Install bos.sysmgt that includes bos.sysmgt.nim.master, bos.sysmgt.nim.spot\n  community.general.installp:\n    name: bos.sysmgt\n    repository_path: /repository/AIX71/installp/base\n    accept_license: true\n    state: present\n\n- name: Install bos.sysmgt.nim.master only\n  community.general.installp:\n    name: bos.sysmgt.nim.master\n    repository_path: /repository/AIX71/installp/base\n    accept_license: true\n    state: present\n\n- name: Install bos.sysmgt.nim.master and bos.sysmgt.nim.spot\n  community.general.installp:\n    name: bos.sysmgt.nim.master, bos.sysmgt.nim.spot\n    repository_path: /repository/AIX71/installp/base\n    accept_license: true\n    state: present\n\n- name: Remove packages bos.sysmgt.nim.master\n  community.general.installp:\n    name: bos.sysmgt.nim.master\n    state: absent"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/installp_module.html",
+  "parsed_at": "2026-04-13T16:29:48.369657"
+}

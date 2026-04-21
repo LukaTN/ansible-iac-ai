@@ -1,0 +1,28 @@
+# ============================================================
+# AnsibleAI RAG Generator — LangChain + ChromaDB
+# Date        : 2026-04-13 15:43:24
+# Request     : get cluster information including kubernetes version and available APIs
+# Module      : kubernetes.core.helm_info
+# Collection  : kubernetes.core
+# RAG score   : 0.756
+# Chunks used : 6
+# Source URL  : https://docs.ansible.com/ansible/latest/collections/kubernetes/core/helm_info_module#ansible-collections-kubernetes-core-helm-info-module.html
+# LLM model   : qwen2.5-coder:7b
+# ============================================================
+
+---
+- name: Get Kubernetes cluster information
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - kubernetes.core
+  tasks:
+    - name: Gather cluster information
+      kubernetes.core.k8s_cluster_info:
+        invalidate_cache: False
+      register: api_status
+
+    - name: Display Kubernetes version and available APIs
+      debug:
+        var: api_status.cluster_info

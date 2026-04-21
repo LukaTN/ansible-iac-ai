@@ -1,0 +1,84 @@
+# ============================================================
+# AnsibleAI RAG Generator — LangChain + ChromaDB
+# Date        : 2026-04-11 14:13:58
+# Request     : Deploy an analytics backend application with the following characteristics: - deployment name: analytics-backend - image: myregistry/analytics-api:latest - replicas: 3 - container port: 8080 - must load configuration values from the ConfigMap - must read database credentials from the Secret - must connect to the postgres-service
+# Module      : kubernetes.core.k8s_scale
+# Collection  : kubernetes.core
+# RAG score   : 0.671
+# Chunks used : 6
+# Source URL  : https://docs.ansible.com/ansible/latest/collections/kubernetes/core/k8s_scale_module#ansible-collections-kubernetes-core-k8s-scale-module.html
+# LLM model   : qwen2.5-coder:7b
+# ============================================================
+
+---
+- name: Deploy analytics backend application
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - kubernetes.core
+  tasks:
+    - name: Create ConfigMap for configuration values
+      kubernetes.core.k8s_resource:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: analytics-config
+            namespace: default
+          data:
+            config.yaml: |
+              # Configuration values here
+
+    - name: Create Secret for database credentials
+      kubernetes.core.k8s_resource:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: analytics-secret
+            namespace: default
+          stringData:
+            DB_HOST: postgres-service
+            DB_USER: user
+            DB_PASSWORD: password
+
+    - name: Deploy analytics backend application
+      kubernetes.core.k8s_resource:
+        state: present
+        definition:
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: analytics-backend
+            namespace: default
+          spec:
+            replicas: 3
+            selector:
+              matchLabels:
+                app: analytics-backend
+            template:
+              metadata:
+                labels:
+                  app: analytics-backend
+              spec:
+                containers:
+                  - name: analytics-api
+                    image: myregistry/analytics-api:latest
+                    ports:
+                      - containerPort: 8080
+                    envFrom:
+                      - configMapRef:
+                          name: analytics-config
+                      - secretRef:
+                          name: analytics-secret
+
+    - name: Scale deployment to 3 replicas
+      kubernetes.core.k8s_scale:
+        api_version: apps/v1
+        kind: Deployment
+        name: analytics-backend
+        namespace: default
+        replicas: 3

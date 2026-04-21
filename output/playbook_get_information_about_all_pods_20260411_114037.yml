@@ -1,0 +1,26 @@
+# ============================================================
+# AnsibleAI RAG Generator — LangChain + ChromaDB
+# Date        : 2026-04-11 11:40:37
+# Request     : get information about all pods in the kube-system namespace
+# Module      : kubernetes.core.k8s_cp
+# Collection  : kubernetes.core
+# RAG score   : 0.616
+# Chunks used : 6
+# Source URL  : https://docs.ansible.com/ansible/latest/collections/kubernetes/core/k8s_cp_module.html
+# LLM model   : MISTRAL
+# ============================================================
+
+---
+- name: Get information about all pods in the kube-system namespace
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - kubernetes.core
+
+  tasks:
+    - name: Execute 'kubectl get pods' command to list all pods in kube-system namespace
+      kubernetes.core.k8s_exec:
+        command: "kubectl get pods --namespace=kube-system"
+        namespace: local
+        pod: null

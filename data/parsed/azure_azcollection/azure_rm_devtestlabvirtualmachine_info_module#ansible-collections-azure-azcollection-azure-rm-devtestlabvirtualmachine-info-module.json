@@ -1,0 +1,361 @@
+{
+  "collection_ns": "azure_azcollection",
+  "collection": "azure.azcollection",
+  "module": "azure.azcollection.azure_rm_devtestlabvirtualmachine_info",
+  "slug": "azure_rm_devtestlabvirtualmachine_info_module#ansible-collections-azure-azcollection-azure-rm-devtestlabvirtualmachine-info-module",
+  "description": "Get facts of Azure DevTest Lab Virtual Machine.",
+  "parameters": [
+    {
+      "name": "ad_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory username. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "adfs_authority_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure AD authority url. Use when authenticating with Username/password, and has your own ADFS authority."
+    },
+    {
+      "name": "api_profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "Selects an API profile to use when communicating with Azure services. Default value of latest is appropriate for public clouds; future values will allow use with Azure Stack. Default: \"latest\""
+    },
+    {
+      "name": "auth_source",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "az",
+      "choices": [
+        "\"auto\" ← (default)",
+        "\"cli\"",
+        "\"credential_file\"",
+        "\"env\"",
+        "\"msi\""
+      ],
+      "description": "Controls the source of the credentials to use for authentication. Can also be set via the ANSIBLE_AZURE_AUTH_SOURCE environment variable. When set to auto (the default) the precedence is module parameters -> env -> credential_file -> cli. When set to env, the credentials will be read from the environment variables When set to credential_file, it will read the profile from ~/.azure/credentials. When set to cli, the credentials will be sources from the Azure CLI profile. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if more than one is present otherwise the default az cli subscription is used. When set to msi, the host machine must be an azure resource with an enabled MSI extension. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if the resource is granted access to more than one subscription, otherwise the first subscription is chosen. The msi was added in Ansible 2.6. Choices: \"auto\" ← (default) \"cli\" \"credential_file\" \"env\" \"msi\""
+    },
+    {
+      "name": "cert_validation_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ignore\"",
+        "\"validate\""
+      ],
+      "description": "Controls the certificate validation behavior for Azure endpoints. By default, all modules will validate the server certificate, but when an HTTPS proxy is in use, or against Azure Stack, it may be necessary to disable this behavior by passing ignore. Can also be set via credential file profile or the AZURE_CERT_VALIDATION environment variable. Choices: \"ignore\" \"validate\""
+    },
+    {
+      "name": "client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client ID. Use when authenticating with a Service Principal or Managed Identity (msi). Can also be set via the AZURE_CLIENT_ID environment variable."
+    },
+    {
+      "name": "cloud_environment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "AzureCloud",
+      "choices": [],
+      "description": "For cloud environments other than the US public cloud, the environment name (as defined by Azure Python SDK, eg, AzureChinaCloud, AzureUSGovernment), or a metadata discovery endpoint URL (required for Azure Stack). Can also be set via credential file profile or the AZURE_CLOUD_ENVIRONMENT environment variable. Default: \"AzureCloud\""
+    },
+    {
+      "name": "disable_instance_discovery",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Determines whether or not instance discovery is performed when attempting to authenticate. Setting this to true will completely disable both instance discovery and authority validation. This functionality is intended for use in scenarios where the metadata endpoint cannot be reached such as in private clouds or Azure Stack. The process of instance discovery entails retrieving authority metadata from https://login.microsoft.com/ to validate the authority. By setting this to **True**, the validation of the authority is disabled. As a result, it is crucial to ensure that the configured authority host is valid and trustworthy. Set via credential file profile or the AZURE_DISABLE_INSTANCE_DISCOVERY environment variable. Choices: false ← (default) true"
+    },
+    {
+      "name": "lab_name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the lab."
+    },
+    {
+      "name": "log_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "log_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The name of the virtual machine."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory user password. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security profile found in ~/.azure/credentials file."
+    },
+    {
+      "name": "resource_group",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the resource group."
+    },
+    {
+      "name": "secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client secret. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "subscription_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Your Azure subscription Id."
+    },
+    {
+      "name": "tags",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Limit results by providing a list of tags. Format tags as ‘key’ or ‘key:value’."
+    },
+    {
+      "name": "tenant",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure tenant ID. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "thumbprint",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The thumbprint of the private key specified in x509_certificate_path. Use when authenticating with a Service Principal. Required if x509_certificate_path is defined."
+    },
+    {
+      "name": "x509_certificate_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the X509 certificate used to create the service principal in PEM format. The certificate must be appended to the private key. Use when authenticating with a Service Principal."
+    }
+  ],
+  "examples": [
+    "- name: Get instance of DTL Virtual Machine\n  azure_rm_devtestlabvirtualmachine_info:\n    resource_group: myResourceGroup\n    lab_name: myLab\n    name: myVm\n    tags:\n      - key:value"
+  ],
+  "return_values": [
+    {
+      "name": "virtualmachines",
+      "type": "complex",
+      "description": "A list of dictionaries containing facts for DevTest Lab Virtual Machine. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "compute_vm_id",
+      "type": "string",
+      "description": "Resource id of compute virtual machine. Returned: always Sample: \"/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/myLab-myVm-097933/providers/Microsoft.Compute/virtualMachines/myVm\"",
+      "returned": "always"
+    },
+    {
+      "name": "compute_vm_name",
+      "type": "string",
+      "description": "Name of compute virtual machine. Returned: always Sample: \"myVm\"",
+      "returned": "always"
+    },
+    {
+      "name": "compute_vm_resource_group",
+      "type": "string",
+      "description": "Resource group where compute virtual machine is created. Returned: always Sample: \"myLab-myVm-097933\"",
+      "returned": "always"
+    },
+    {
+      "name": "disallow_public_ip_address",
+      "type": "boolean",
+      "description": "Whether public IP should be not allowed. Returned: always Sample: false",
+      "returned": "always"
+    },
+    {
+      "name": "expiration_date",
+      "type": "string",
+      "description": "Virtual machine expiration date. Returned: always Sample: \"2029-02-22T01:49:12.117974Z\"",
+      "returned": "always"
+    },
+    {
+      "name": "fqdn",
+      "type": "string",
+      "description": "Fully qualified domain name. Returned: always Sample: \"myvm.eastus.cloudapp.azure.com\"",
+      "returned": "always"
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "description": "The identifier of the virtual machine. Returned: always Sample: \"/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourcegroups/myResourceGroup/providers/microsoft.devtestlab/labs/myLab/virt ualmachines/myVm\"",
+      "returned": "always"
+    },
+    {
+      "name": "image",
+      "type": "complex",
+      "description": "Gallery image reference. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "offer",
+      "type": "string",
+      "description": "The offer of the gallery image. Returned: when created from gallery image Sample: \"UbuntuServer\"",
+      "returned": "when"
+    },
+    {
+      "name": "os_type",
+      "type": "string",
+      "description": "Operating system type. Returned: when created from gallery image Sample: \"Linux\"",
+      "returned": "when"
+    },
+    {
+      "name": "publisher",
+      "type": "string",
+      "description": "The publisher of the gallery image. Returned: when created from gallery image Sample: \"Canonical\"",
+      "returned": "when"
+    },
+    {
+      "name": "sku",
+      "type": "string",
+      "description": "The SKU of the gallery image. Returned: when created from gallery image Sample: \"20_04-lts\"",
+      "returned": "when"
+    },
+    {
+      "name": "version",
+      "type": "string",
+      "description": "The version of the gallery image. Returned: when created from gallery image Sample: \"latest\"",
+      "returned": "when"
+    },
+    {
+      "name": "is_authentication_with_ssh_key",
+      "type": "boolean",
+      "description": "Indicates whether this virtual machine uses an SSH key for authentication. Returned: always Sample: false",
+      "returned": "always"
+    },
+    {
+      "name": "lab_name",
+      "type": "string",
+      "description": "Name of the lab. Returned: always Sample: \"myLab\"",
+      "returned": "always"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "Name of the virtual machine. Returned: always Sample: \"myVm\"",
+      "returned": "always"
+    },
+    {
+      "name": "notes",
+      "type": "string",
+      "description": "Notes of the virtual machine. Returned: always Sample: \"My VM notes\"",
+      "returned": "always"
+    },
+    {
+      "name": "provisioning_state",
+      "type": "string",
+      "description": "Provisioning state of the virtual network. Returned: always Sample: \"Succeeded\"",
+      "returned": "always"
+    },
+    {
+      "name": "resource_group",
+      "type": "string",
+      "description": "Name of the resource group. Returned: always Sample: \"myResourceGroup\"",
+      "returned": "always"
+    },
+    {
+      "name": "storage_type",
+      "type": "string",
+      "description": "Storage type to use for virtual machine. Returned: always Sample: \"standard\"",
+      "returned": "always"
+    },
+    {
+      "name": "tags",
+      "type": "dictionary",
+      "description": "The tags of the resource. Returned: always Sample: {\"foo\": \"bar\"}",
+      "returned": "always"
+    },
+    {
+      "name": "user_name",
+      "type": "string",
+      "description": "Admin user name. Returned: always Sample: \"dtl_admin\"",
+      "returned": "always"
+    },
+    {
+      "name": "vm_size",
+      "type": "string",
+      "description": "Virtual machine size. Returned: always Sample: \"Standard_A2_v2\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_devtestlabvirtualmachine_info_module.html",
+  "parsed_at": "2026-04-13T16:29:31.532893"
+}

@@ -1,0 +1,148 @@
+{
+  "collection_ns": "ansible_builtin",
+  "collection": "ansible.builtin",
+  "module": "ansible.builtin.wait_for",
+  "slug": "wait_for_module#ansible-collections-ansible-builtin-wait-for-module",
+  "description": "You can wait for a set amount of time timeout, this is the default if nothing is specified or just timeout is specified. This does not produce an error.",
+  "parameters": [
+    {
+      "name": "active_connection_states",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[",
+      "choices": [],
+      "description": "The list of TCP connection states which are counted as active connections. Default: [\"ESTABLISHED\", \"FIN_WAIT1\", \"FIN_WAIT2\", \"SYN_RECV\", \"SYN_SENT\", \"TIME_WAIT\"]"
+    },
+    {
+      "name": "connect_timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "5",
+      "choices": [],
+      "description": "Maximum number of seconds to wait for a connection to happen before closing and retrying. Default: 5"
+    },
+    {
+      "name": "delay",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "0",
+      "choices": [],
+      "description": "Number of seconds to wait before starting to poll. Default: 0"
+    },
+    {
+      "name": "exclude_hosts",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of hosts or IPs to ignore when looking for active TCP connections for drained state."
+    },
+    {
+      "name": "host",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "127.0.0.1",
+      "choices": [],
+      "description": "A resolvable hostname or IP address to wait for. Default: \"127.0.0.1\""
+    },
+    {
+      "name": "msg",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "This overrides the normal error message from a failure to meet the required conditions."
+    },
+    {
+      "name": "path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to a file on the filesystem that must exist before continuing. path and port are mutually exclusive parameters."
+    },
+    {
+      "name": "port",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Port number to poll. path and port are mutually exclusive parameters."
+    },
+    {
+      "name": "search_regex",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "logs",
+      "choices": [],
+      "description": "Can be used to match a string in either a file or a socket connection. Defaults to a multiline regex. When inspecting a system log file and a static string, remember that Ansible by default logs its own actions there; see the notes and examples for information."
+    },
+    {
+      "name": "sleep",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "1",
+      "choices": [],
+      "description": "Number of seconds to sleep between checks. Before Ansible 2.3 this was hardcoded to 1 second. Default: 1"
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"drained\"",
+        "\"present\"",
+        "\"started\" ← (default)",
+        "\"stopped\""
+      ],
+      "description": "Either present, started, or stopped, absent, or drained. When checking a port started will ensure the port is open, stopped will check that it is closed, drained will check for active connections. When checking for a file or a search string present or started will ensure that the file or string is present before continuing, absent will check that file is absent or removed. Choices: \"absent\" \"drained\" \"present\" \"started\" ← (default) \"stopped\""
+    },
+    {
+      "name": "timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "300",
+      "choices": [],
+      "description": "Maximum number of seconds to wait for, when used with another condition it will force an error. When used without other conditions it is equivalent of just sleeping. Default: 300"
+    }
+  ],
+  "examples": [
+    "- name: Sleep for 300 seconds and continue with play\n  ansible.builtin.wait_for:\n    timeout: 300\n  delegate_to: localhost\n\n- name: Wait for port 8000 to become open on the host, don't start checking for 10 seconds\n  ansible.builtin.wait_for:\n    port: 8000\n    delay: 10\n\n- name: Waits for port 8000 of any IP to close active connections, don't start checking for 10 seconds\n  ansible.builtin.wait_for:\n    host: 0.0.0.0\n    port: 8000\n    delay: 10\n    state: drained\n\n- name: Wait for port 8000 of any IP to close active connections, ignoring connections for specified hosts\n  ansible.builtin.wait_for:\n    host: 0.0.0.0\n    port: 8000\n    state: drained\n    exclude_hosts: 10.2.1.2,10.2.1.3\n\n- name: Wait until the file /tmp/foo is present before continuing\n  ansible.builtin.wait_for:\n    path: /tmp/foo\n\n- name: Wait until the string \"completed\" is in the file /tmp/foo before continuing\n  ansible.builtin.wait_for:\n    path: /tmp/foo\n    search_regex: completed\n\n- name: Wait until the string \"tomcat up\" is in syslog, use regex character set to avoid self match\n  ansible.builtin.wait_for:\n    path: /var/log/syslog\n    search_regex: 'tomcat [u]p'\n\n- name: Wait until regex pattern matches in the file /tmp/foo and print the matched group\n  ansible.builtin.wait_for:\n    path: /tmp/foo\n    search_regex: completed (?P<task>\\w+)\n  register: waitfor\n- ansible.builtin.debug:\n    msg: Completed {{ waitfor['match_groupdict']['task'] }}\n\n- name: Wait until the lock file is removed\n  ansible.builtin.wait_for:\n    path: /var/lock/file.lock\n    state: absent\n\n- name: Wait until the process is finished and pid was destroyed\n  ansible.builtin.wait_for:\n    path: /proc/3466/status\n    state: absent\n\n- name: Output customized message when failed\n  ansible.builtin.wait_for:\n    path: /tmp/foo\n    state: present\n    msg: Timeout to find file /tmp/foo\n\n# Do not assume the inventory_hostname is resolvable and delay 10 seconds at start\n- name: Wait 300 seconds for port 22 to become open and contain \"OpenSSH\"\n  ansible.builtin.wait_for:\n    port: 22\n    host: '{{ (ansible_ssh_host|default(ansible_host))|default(inventory_hostname) }}'\n    search_regex: OpenSSH\n    delay: 10\n    timeout: 300\n  delegate_to: localhost\n\n# Same as above but using config lookup for the target,\n# most plugins use 'remote_addr', but ssh uses 'host'\n- name: Wait 300 seconds for port 22 to become open and contain \"OpenSSH\"\n  ansible.builtin.wait_for:\n    port: 22\n    host: \"{{ lookup('config', 'host', plugin_name='ssh', plugin_type='connection') }}\"\n    search_regex: OpenSSH\n    delay: 10\n    timeout: 300\n  delegate_to: localhost"
+  ],
+  "return_values": [
+    {
+      "name": "elapsed",
+      "type": "integer",
+      "description": "The number of seconds that elapsed while waiting Returned: always Sample: 23",
+      "returned": "always"
+    },
+    {
+      "name": "match_groupdict",
+      "type": "dictionary",
+      "description": "Dictionary containing all the named subgroups of the match, keyed by the subgroup name, as returned by https://docs.python.org/3/library/re.html#re.Match.groupdict Returned: always Sample: {\"group\": \"match\"}",
+      "returned": "always"
+    },
+    {
+      "name": "match_groups",
+      "type": "list",
+      "description": "Tuple containing all the subgroups of the match as returned by https://docs.python.org/3/library/re.html#re.Match.groups Returned: always Sample: [\"match 1\", \"match 2\"]",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/wait_for_module.html",
+  "parsed_at": "2026-04-13T16:29:26.583417"
+}

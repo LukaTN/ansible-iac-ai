@@ -1,0 +1,121 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.github_repo",
+  "slug": "github_repo_module#ansible-collections-community-general-github-repo-module",
+  "description": "Manages Github repositories using PyGithub library.",
+  "parameters": [
+    {
+      "name": "access_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Token parameter for authentication. This is only needed when not using username and password."
+    },
+    {
+      "name": "api_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "https://api.github.com",
+      "choices": [],
+      "description": "URL to the GitHub API if not using github.com but you own instance. Default: \"https://api.github.com\""
+    },
+    {
+      "name": "description",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "in",
+      "choices": [],
+      "description": "Description for the repository. Defaults to empty if force_defaults=true, which is the default in this module. Defaults to empty if force_defaults=false when creating a new repository. This is only used when state is present."
+    },
+    {
+      "name": "force_defaults",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "value",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "If true, overwrite current description and private attributes with defaults. true is deprecated for this option and will not be allowed starting in community.general 13.0.0. false will be the default value then. Choices: false true"
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Repository name."
+    },
+    {
+      "name": "organization",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Organization for the repository. When state=present, the repository is created in the current user profile."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Password used for authentication. This is only needed when not using access_token."
+    },
+    {
+      "name": "private",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "in",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Whether the repository should be private or not. Defaults to false if force_defaults=true, which is the default in this module. Defaults to false if force_defaults=false when creating a new repository. This is only used when state=present. Choices: false true"
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)"
+      ],
+      "description": "Whether the repository should exist or not. Choices: \"absent\" \"present\" ← (default)"
+    },
+    {
+      "name": "username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Username used for authentication. This is only needed when not using access_token."
+    }
+  ],
+  "examples": [
+    "- name: Create a Github repository\n  community.general.github_repo:\n    access_token: mytoken\n    organization: MyOrganization\n    name: myrepo\n    description: \"Just for fun\"\n    private: true\n    state: present\n    force_defaults: false\n  register: result\n\n- name: Delete the repository\n  community.general.github_repo:\n    username: octocat\n    password: password\n    organization: MyOrganization\n    name: myrepo\n    state: absent\n  register: result"
+  ],
+  "return_values": [
+    {
+      "name": "repo",
+      "type": "dictionary",
+      "description": "Repository information as JSON. See https://docs.github.com/en/rest/reference/repos#get-a-repository. Returned: success and state=present",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/github_repo_module#ansible-collections-community-general-github-repo-module.html",
+  "parsed_at": "2026-04-11T13:53:13.447685"
+}

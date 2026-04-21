@@ -1,0 +1,130 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.pipx_info",
+  "slug": "pipx_info_module#ansible-collections-community-general-pipx-info-module",
+  "description": "Retrieve details about Python applications installed in isolated virtualenvs using pipx.",
+  "parameters": [
+    {
+      "name": "executable",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the pipx installed in the system. If not specified, the module uses python -m pipx to run the tool, using the same Python interpreter as ansible itself."
+    },
+    {
+      "name": "global",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "The module passes the --global argument to pipx, to execute actions in global scope. Choices: false ← (default) true"
+    },
+    {
+      "name": "include_deps",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Include dependent packages in the output. Choices: false ← (default) true"
+    },
+    {
+      "name": "include_injected",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Include injected packages in the output. Choices: false ← (default) true"
+    },
+    {
+      "name": "include_raw",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Returns the raw output of pipx list --json. The raw output is not affected by include_deps or include_injected. Choices: false ← (default) true"
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of an application installed with pipx."
+    }
+  ],
+  "examples": [
+    "- name: retrieve all installed applications\n  community.general.pipx_info: {}\n\n- name: retrieve all installed applications, include dependencies and injected packages\n  community.general.pipx_info:\n    include_deps: true\n    include_injected: true\n\n- name: retrieve application tox\n  community.general.pipx_info:\n    name: tox\n    include_deps: true\n\n- name: retrieve application ansible-lint, include dependencies\n  community.general.pipx_info:\n    name: ansible-lint\n    include_deps: true"
+  ],
+  "return_values": [
+    {
+      "name": "application",
+      "type": "list",
+      "description": "The list of installed applications. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "dependencies",
+      "type": "list",
+      "description": "The dependencies of the installed application, when include_deps=true. Returned: success Sample: [\"virtualenv\"]",
+      "returned": "success"
+    },
+    {
+      "name": "injected",
+      "type": "dictionary",
+      "description": "The injected packages for the installed application, when include_injected=true. Returned: success Sample: {\"licenses\": \"0.6.1\"}",
+      "returned": "success"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "The name of the installed application. Returned: success Sample: \"tox\"",
+      "returned": "success"
+    },
+    {
+      "name": "pinned",
+      "type": "boolean",
+      "description": "Whether the installed application is pinned or not. When using pipx<=1.6.0, this returns null. Returned: success Sample: {\"pinned\": true}",
+      "returned": "success"
+    },
+    {
+      "name": "version",
+      "type": "string",
+      "description": "The version of the installed application. Returned: success Sample: \"3.24.0\"",
+      "returned": "success"
+    },
+    {
+      "name": "cmd",
+      "type": "list",
+      "description": "Command executed to obtain the list of installed applications. Returned: success Sample: [\"/usr/bin/python3.10\", \"-m\", \"pipx\", \"list\", \"--include-injected\", \"--json\"]",
+      "returned": "success"
+    },
+    {
+      "name": "raw_output",
+      "type": "dictionary",
+      "description": "The raw output of the pipx list command, when include_raw=true. Used for debugging. Returned: success",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/pipx_info_module#ansible-collections-community-general-pipx-info-module.html",
+  "parsed_at": "2026-04-11T13:53:23.662365"
+}

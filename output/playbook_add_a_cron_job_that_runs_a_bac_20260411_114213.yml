@@ -1,0 +1,43 @@
+# ============================================================
+# AnsibleAI RAG Generator — LangChain + ChromaDB
+# Date        : 2026-04-11 11:42:13
+# Request     : add a cron job that runs a backup script every day at 2am
+# Module      : None
+# Collection  : None
+# RAG score   : 0.0
+# Chunks used : 0
+# Source URL  : 
+# LLM model   : MISTRAL
+# ============================================================
+
+---
+- name: Add cron job for daily backup at 2am
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - ansible.collection.k8s
+  tasks:
+    - name: Create or update the cronjob
+      k8s.core.v1.cronjob:
+        cronjob: "{{ cronjob }}"
+      vars:
+        cronjob:
+          apiVersion: batch/v1beta1
+          kind: CronJob
+          metadata:
+            name: backup-cronjob
+          spec:
+            schedule: "0 2 * * *"
+            jobTemplate:
+              spec:
+                template:
+                  metadata:
+                    labels:
+                      app: backup
+                  spec:
+                    containers:
+                      - name: backup-container
+                        image: <backup_image>
+                        command: ["/bin/sh", "-c"]
+                        args: ["./backup.sh"]

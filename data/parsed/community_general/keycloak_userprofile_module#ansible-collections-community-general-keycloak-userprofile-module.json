@@ -1,0 +1,195 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.keycloak_userprofile",
+  "slug": "keycloak_userprofile_module#ansible-collections-community-general-keycloak-userprofile-module",
+  "description": "This module allows you to create, update, or delete Keycloak User Profiles using the Keycloak API. You can also customize the “Unmanaged Attributes” with it.",
+  "parameters": [
+    {
+      "name": "auth_client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "admin-cli",
+      "choices": [],
+      "description": "OpenID Connect client_id to authenticate to the API with. Default: \"admin-cli\""
+    },
+    {
+      "name": "auth_client_secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Client Secret to use in conjunction with auth_client_id (if required)."
+    },
+    {
+      "name": "auth_keycloak_url",
+      "aliases": [
+        "url"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "URL to the Keycloak instance."
+    },
+    {
+      "name": "auth_password",
+      "aliases": [
+        "password"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Password to authenticate for API access with."
+    },
+    {
+      "name": "auth_realm",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Keycloak realm name to authenticate to for API access."
+    },
+    {
+      "name": "auth_username",
+      "aliases": [
+        "username"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Username to authenticate for API access with."
+    },
+    {
+      "name": "config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The configuration of the User Profile Provider."
+    },
+    {
+      "name": "connection_timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "10",
+      "choices": [],
+      "description": "Controls the HTTP connections timeout period (in seconds) to Keycloak API. Default: 10"
+    },
+    {
+      "name": "http_agent",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "Ansible",
+      "choices": [],
+      "description": "Configures the HTTP User-Agent header. Default: \"Ansible\""
+    },
+    {
+      "name": "parent_id",
+      "aliases": [
+        "parentId",
+        "realm"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The parent ID of the realm key. In practice the ID (name) of the realm."
+    },
+    {
+      "name": "provider_id",
+      "aliases": [
+        "providerId"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"declarative-user-profile\" ← (default)"
+      ],
+      "description": "The name of the provider ID for the key (supported value is declarative-user-profile). Choices: \"declarative-user-profile\" ← (default)"
+    },
+    {
+      "name": "provider_type",
+      "aliases": [
+        "providerType"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"org.keycloak.userprofile.UserProfileProvider\" ← (default)"
+      ],
+      "description": "Component type for User Profile (only supported value is org.keycloak.userprofile.UserProfileProvider). Choices: \"org.keycloak.userprofile.UserProfileProvider\" ← (default)"
+    },
+    {
+      "name": "refresh_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Authentication refresh token for Keycloak API."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "State of the User Profile provider. On present, the User Profile provider is created if it does not yet exist, or updated with the parameters you provide. On absent, the User Profile provider is removed if it exists. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Authentication token for Keycloak API."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Verify TLS certificates (do not disable this in production). Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Create a Declarative User Profile with default settings\n  community.general.keycloak_userprofile:\n    state: present\n    parent_id: master\n    config:\n      kc_user_profile_config:\n        - attributes:\n            - name: username\n              displayName: ${username}\n              validations:\n                length:\n                  min: 3\n                  max: 255\n                username_prohibited_characters: {}\n                up_username_not_idn_homograph: {}\n              annotations: {}\n              permissions:\n                view:\n                  - admin\n                  - user\n                edit: []\n              multivalued: false\n            - name: email\n              displayName: ${email}\n              validations:\n                email: {}\n                length:\n                  max: 255\n              annotations: {}\n              required:\n                roles:\n                  - user\n              permissions:\n                view:\n                  - admin\n                  - user\n                edit: []\n              multivalued: false\n            - name: firstName\n              displayName: ${firstName}\n              validations:\n                length:\n                  max: 255\n                person_name_prohibited_characters: {}\n              annotations: {}\n              required:\n                roles:\n                  - user\n              permissions:\n                view:\n                  - admin\n                  - user\n                edit: []\n              multivalued: false\n            - name: lastName\n              displayName: ${lastName}\n              validations:\n                length:\n                  max: 255\n                person_name_prohibited_characters: {}\n              annotations: {}\n              required:\n                roles:\n                  - user\n              permissions:\n                view:\n                  - admin\n                  - user\n                edit: []\n              multivalued: false\n            - name: testAttribute\n              displayName: ${testAttribute}\n              validations:\n                integer:\n                  min: 0\n                  max: 255\n              annotations: {}\n              required:\n                roles:\n                  - user\n              permissions:\n                view:\n                  - admin\n                  - user\n                edit: []\n              multivalued: false\n          groups:\n            - name: user-metadata\n              displayHeader: User metadata\n              displayDescription: Attributes, which refer to user metadata\n              annotations: {}\n\n- name: Delete a Keycloak User Profile Provider\n  keycloak_userprofile:\n    state: absent\n    parent_id: master\n\n# Unmanaged attributes are user attributes not explicitly defined in the User Profile\n# configuration. By default, unmanaged attributes are \"Disabled\" and are not\n# available from any context such as registration, account, and the\n# administration console. By setting \"Enabled\", unmanaged attributes are fully\n# recognized by the server and accessible through all contexts, useful if you are\n# starting migrating an existing realm to the declarative User Profile\n# and you don't have yet all user attributes defined in the User Profile configuration.\n- name: Enable Unmanaged Attributes\n  community.general.keycloak_userprofile:\n    state: present\n    parent_id: master\n    config:\n      kc_user_profile_config:\n        - unmanagedAttributePolicy: ENABLED\n\n# By setting \"Only administrators can write\", unmanaged attributes can be managed\n# only through the administration console and API, useful if you have already\n# defined any custom attribute that can be managed by users but you are unsure\n# about adding other attributes that should only be managed by administrators.\n- name: Enable ADMIN_EDIT on Unmanaged Attributes\n  community.general.keycloak_userprofile:\n    state: present\n    parent_id: master\n    config:\n      kc_user_profile_config:\n        - unmanagedAttributePolicy: ADMIN_EDIT\n\n# By setting `Only administrators can view`, unmanaged attributes are read-only\n# and only available through the administration console and API.\n- name: Enable ADMIN_VIEW on Unmanaged Attributes\n  community.general.keycloak_userprofile:\n    state: present\n    parent_id: master\n    config:\n      kc_user_profile_config:\n        - unmanagedAttributePolicy: ADMIN_VIEW"
+  ],
+  "return_values": [
+    {
+      "name": "data",
+      "type": "dictionary",
+      "description": "The data returned by the Keycloak API. Returned: when state is present",
+      "returned": "when"
+    },
+    {
+      "name": "msg",
+      "type": "string",
+      "description": "The output message generated by the module. Returned: always Sample: \"UserProfileProvider created successfully\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/keycloak_userprofile_module.html",
+  "parsed_at": "2026-04-13T16:29:51.245738"
+}

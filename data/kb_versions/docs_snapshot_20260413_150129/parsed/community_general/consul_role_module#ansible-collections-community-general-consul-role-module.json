@@ -1,0 +1,218 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.consul_role",
+  "slug": "consul_role_module#ansible-collections-community-general-consul-role-module",
+  "description": "Allows the addition, modification and deletion of roles in a Consul cluster using the agent. For more details on using and configuring ACLs, see https://www.consul.io/docs/guides/acl.html.",
+  "parameters": [
+    {
+      "name": "ca_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The CA bundle to use for https connections."
+    },
+    {
+      "name": "description",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Description of the role. If not specified, the assigned description is not changed."
+    },
+    {
+      "name": "host",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "localhost",
+      "choices": [],
+      "description": "Host of the Consul agent. Default: \"localhost\""
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "A name used to identify the role."
+    },
+    {
+      "name": "node_identities",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of node identities to attach to the role. If not specified, any node identities currently assigned are not changed. If the parameter is an empty array ([]), any node identities assigned are unassigned."
+    },
+    {
+      "name": "datacenter",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The nodes datacenter. This results in effective policy only being valid in this datacenter."
+    },
+    {
+      "name": "node_name",
+      "aliases": [
+        "name"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the node. Must not be longer than 256 characters, must start and end with a lowercase alphanumeric character. May only contain lowercase alphanumeric characters as well as - and _. This suboption has been renamed from node_identities[].name to node_identities[].node_name in community.general 8.3.0. The old name can still be used."
+    },
+    {
+      "name": "policies",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of policies to attach to the role. Each policy is a dict. If the parameter is left blank, any policies currently assigned are not changed. Any empty array ([]) clears any policies previously set."
+    },
+    {
+      "name": "id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The ID of the policy to attach to this role; see community.general.consul_policy for more info. Either this or policies[].name must be specified."
+    },
+    {
+      "name": "port",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "8500",
+      "choices": [],
+      "description": "The port on which the consul agent is running. Default: 8500"
+    },
+    {
+      "name": "scheme",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "http",
+      "choices": [],
+      "description": "The protocol scheme on which the Consul agent is running. Defaults to http and can be set to https for secure connections. Default: \"http\""
+    },
+    {
+      "name": "service_identities",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of service identities to attach to the role. If not specified, any service identities currently assigned are not changed. If the parameter is an empty array ([]), any node identities assigned are unassigned."
+    },
+    {
+      "name": "datacenters",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The datacenters where the policies are effective. This results in effective policy only being valid in this datacenter. If an empty array ([]) is specified, the policies are valid in all datacenters. Including those which do not yet exist but may in the future."
+    },
+    {
+      "name": "service_name",
+      "aliases": [
+        "name"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the node. Must not be longer than 256 characters, must start and end with a lowercase alphanumeric character. May only contain lowercase alphanumeric characters as well as - and _. This suboption has been renamed from service_identities[].name to service_identities[].service_name in community.general 8.3.0. The old name can still be used."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Whether the role should be present or absent. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "templated_policies",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The list of templated policies that should be applied to the role."
+    },
+    {
+      "name": "template_name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The templated policy name."
+    },
+    {
+      "name": "template_variables",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The templated policy variables. Not all templated policies require variables."
+    },
+    {
+      "name": "token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The token to use for authorization."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether to verify the TLS certificate of the Consul agent. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Create a role with 2 policies\n  community.general.consul_role:\n    host: consul1.example.com\n    token: some_management_acl\n    name: foo-role\n    policies:\n      - id: 783beef3-783f-f41f-7422-7087dc272765\n      - name: \"policy-1\"\n\n- name: Create a role with service identity\n  community.general.consul_role:\n    host: consul1.example.com\n    token: some_management_acl\n    name: foo-role-2\n    service_identities:\n      - name: web\n        datacenters:\n          - dc1\n\n- name: Create a role with node identity\n  community.general.consul_role:\n    host: consul1.example.com\n    token: some_management_acl\n    name: foo-role-3\n    node_identities:\n      - name: node-1\n        datacenter: dc2\n\n- name: Remove a role\n  community.general.consul_role:\n    host: consul1.example.com\n    token: some_management_acl\n    name: foo-role-3\n    state: absent"
+  ],
+  "return_values": [
+    {
+      "name": "operation",
+      "type": "string",
+      "description": "The operation performed on the role. Returned: changed Sample: \"update\"",
+      "returned": "changed"
+    },
+    {
+      "name": "role",
+      "type": "dictionary",
+      "description": "The role object. Returned: success Sample: {\"CreateIndex\": 39, \"Description\": \"\", \"Hash\": \"Trt0QJtxVEfvTTIcdTUbIJRr6Dsi6E4EcwSFxx9tCYM=\", \"ID\": \"9a300b8d-48db-b720-8544-a37c0f5dafb5\", \"ModifyIndex\": 39, \"Name\": \"foo-role\", \"Policies\": [{\"ID\": \"b1a00172-d7a1-0e66-a12e-7a4045c4b774\", \"Name\": \"foo-access\"}]}",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/consul_role_module#ansible-collections-community-general-consul-role-module.html",
+  "parsed_at": "2026-04-11T13:53:11.955062"
+}

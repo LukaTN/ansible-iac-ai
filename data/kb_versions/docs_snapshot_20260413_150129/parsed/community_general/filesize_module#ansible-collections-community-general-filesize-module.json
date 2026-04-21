@@ -1,0 +1,216 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.filesize",
+  "slug": "filesize_module#ansible-collections-community-general-filesize-module",
+  "description": "This module is a simple wrapper around dd to create, extend or truncate a file, given its size. It can be used to manage swap files (that require contiguous blocks) or alternatively, huge sparse files.",
+  "parameters": [
+    {
+      "name": "attributes",
+      "aliases": [
+        "attr"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The attributes the resulting filesystem object should have. To get supported flags look at the man page for chattr on the target system. This string should contain the attributes in the same order as the one displayed by lsattr. The = operator is assumed as default, otherwise + or - operators need to be included in the string."
+    },
+    {
+      "name": "blocksize",
+      "aliases": [],
+      "type": "any",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Size of blocks, in bytes if not followed by a multiplicative suffix. The numeric value (before the unit) MUST be an integer (or a float if it equals an integer). If not set, the size of blocks is guessed from the OS and commonly results in 512 or 4096 bytes, that is used internally by the module or when size has no unit."
+    },
+    {
+      "name": "force",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Whether or not to overwrite the file if it exists, in other words, to truncate it from 0. When true, the module is not idempotent, that means it always reports changed=true. force=true and sparse=true are mutually exclusive. Choices: false ← (default) true"
+    },
+    {
+      "name": "group",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of the group that should own the filesystem object, as would be fed to chown. When left unspecified, it uses the current group of the current user unless you are root, in which case it can preserve the previous ownership."
+    },
+    {
+      "name": "mode",
+      "aliases": [],
+      "type": "any",
+      "required": false,
+      "default": "umask",
+      "choices": [],
+      "description": "The permissions the resulting filesystem object should have. For those used to /usr/bin/chmod remember that modes are actually octal numbers. You must give Ansible enough information to parse them correctly. For consistent results, quote octal numbers (for example, '644' or '1777') so Ansible receives a string and can do its own conversion from string into number. Adding a leading zero (for example, 0755) works sometimes, but can fail in loops and some other circumstances. Giving Ansible a number without following either of these rules will end up with a decimal number which will have unexpected results. As of Ansible 1.8, the mode may be specified as a symbolic mode (for example, u+rwx or u=rw,g=r,o=r). If mode is not specified and the destination filesystem object does not exist, the default umask on the system will be used when setting the mode for the newly created filesystem object. If mode is not specified and the destination filesystem object does exist, the mode of the existing filesystem object will be used. Specifying mode is the best way to ensure filesystem objects are created with the correct permissions. See CVE-2020-1736 for further details."
+    },
+    {
+      "name": "owner",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of the user that should own the filesystem object, as would be fed to chown. When left unspecified, it uses the current user unless you are root, in which case it can preserve the previous ownership. Specifying a numeric username will be assumed to be a user ID and not a username. Avoid numeric usernames to avoid this confusion."
+    },
+    {
+      "name": "path",
+      "aliases": [],
+      "type": "path",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Path of the regular file to create or resize."
+    },
+    {
+      "name": "selevel",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The level part of the SELinux filesystem object context. This is the MLS/MCS attribute, sometimes known as the range. When set to _default, it will use the level portion of the policy if available."
+    },
+    {
+      "name": "serole",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The role part of the SELinux filesystem object context. When set to _default, it will use the role portion of the policy if available."
+    },
+    {
+      "name": "setype",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The type part of the SELinux filesystem object context. When set to _default, it will use the type portion of the policy if available."
+    },
+    {
+      "name": "seuser",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "it",
+      "choices": [],
+      "description": "The user part of the SELinux filesystem object context. By default it uses the system policy, where applicable. When set to _default, it will use the user portion of the policy if available."
+    },
+    {
+      "name": "size",
+      "aliases": [],
+      "type": "any",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Requested size of the file. The value is a number (either int or float) optionally followed by a multiplicative suffix, that can be one of B (bytes), KB or kB (= 1000B), MB or mB (= 1000kB), GB or gB (= 1000MB), and so on for T, P, E, Z and Y; or alternatively one of K, k or KiB (= 1024B); M, m or MiB (= 1024KiB); G, g or GiB (= 1024MiB); and so on. If the multiplicative suffix is not provided, the value is treated as an integer number of blocks of blocksize bytes each (float values are rounded to the closest integer). When the size value is equal to the current file size, does nothing. When the size value is bigger than the current file size, bytes from source (if sparse is not false) are appended to the file without truncating it, in other words, without modifying the existing bytes of the file. When the size value is smaller than the current file size, it is truncated to the requested value without modifying bytes before this value. That means that a file of any arbitrary size can be grown to any other arbitrary size, and then resized down to its initial size without modifying its initial content."
+    },
+    {
+      "name": "source",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "/dev/zero",
+      "choices": [],
+      "description": "Device or file that provides input data to provision the file. This parameter is ignored when sparse=true. Default: \"/dev/zero\""
+    },
+    {
+      "name": "sparse",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Whether or not the file to create should be a sparse file. This option is effective only on newly created files, or when growing a file, only for the bytes to append. This option is not supported on OSes or filesystems not supporting sparse files. force=true and sparse=true are mutually exclusive. Choices: false ← (default) true"
+    },
+    {
+      "name": "unsafe_writes",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "This option is silently ignored. This module always modifies file size in-place. Choices: false ← (default) true"
+    }
+  ],
+  "examples": [
+    "- name: Create a file of 1G filled with null bytes\n  community.general.filesize:\n    path: /var/bigfile\n    size: 1G\n\n- name: Extend the file to 2G (2*1024^3)\n  community.general.filesize:\n    path: /var/bigfile\n    size: 2G\n\n- name: Reduce the file to 2GB (2*1000^3)\n  community.general.filesize:\n    path: /var/bigfile\n    size: 2GB\n\n- name: Fill a file with random bytes for backing a LUKS device\n  community.general.filesize:\n    path: ~/diskimage.luks\n    size: 512.0 MiB\n    source: /dev/urandom\n\n- name: Take a backup of MBR boot code into a file, overwriting it if it exists\n  community.general.filesize:\n    path: /media/sdb1/mbr.bin\n    size: 440B\n    source: /dev/sda\n    force: true\n\n- name: Create/resize a sparse file of/to 8TB\n  community.general.filesize:\n    path: /var/local/sparsefile\n    size: 8TB\n    sparse: true\n\n- name: Create a file with specific size and attributes, to be used as swap space\n  community.general.filesize:\n    path: /var/swapfile\n    size: 2G\n    blocksize: 512B\n    mode: u=rw,go=\n    owner: root\n    group: root"
+  ],
+  "return_values": [
+    {
+      "name": "cmd",
+      "type": "string",
+      "description": "Command executed to create or resize the file. Returned: when changed or failed Sample: \"/usr/bin/dd if=/dev/zero of=/var/swapfile bs=1048576 seek=3072 count=1024\"",
+      "returned": "when"
+    },
+    {
+      "name": "filesize",
+      "type": "dictionary",
+      "description": "Dictionary of sizes related to the file. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "blocks",
+      "type": "integer",
+      "description": "Number of blocks in the file. Returned: success Sample: 500",
+      "returned": "success"
+    },
+    {
+      "name": "blocksize",
+      "type": "integer",
+      "description": "Size of the blocks in bytes. Returned: success Sample: 1024",
+      "returned": "success"
+    },
+    {
+      "name": "bytes",
+      "type": "integer",
+      "description": "Size of the file, in bytes, as the product of filesize.blocks and filesize.blocksize. Returned: success Sample: 512000",
+      "returned": "success"
+    },
+    {
+      "name": "iec",
+      "type": "string",
+      "description": "Size of the file, in human-readable format, following IEC standard. Returned: success Sample: \"500.0 KiB\"",
+      "returned": "success"
+    },
+    {
+      "name": "si",
+      "type": "string",
+      "description": "Size of the file, in human-readable format, following SI standard. Returned: success Sample: \"512.0 kB\"",
+      "returned": "success"
+    },
+    {
+      "name": "path",
+      "type": "string",
+      "description": "Realpath of the file if it is a symlink, otherwise the same than module’s param. Returned: always Sample: \"/var/swap0\"",
+      "returned": "always"
+    },
+    {
+      "name": "size_diff",
+      "type": "integer",
+      "description": "Difference (positive or negative) between old size and new size, in bytes. Returned: always Sample: -1234567890",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/filesize_module#ansible-collections-community-general-filesize-module.html",
+  "parsed_at": "2026-04-11T13:53:13.091574"
+}

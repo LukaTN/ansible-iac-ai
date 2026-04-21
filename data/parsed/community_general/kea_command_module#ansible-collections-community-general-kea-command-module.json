@@ -1,0 +1,67 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.kea_command",
+  "slug": "kea_command_module#ansible-collections-community-general-kea-command-module",
+  "description": "Submits a command to the JSON API of an ISC KEA server running on the target and obtains the result.",
+  "parameters": [
+    {
+      "name": "arguments",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The arguments sent along with the command, if any. Use {} to send an empty arguments dict/object instead of omitting it."
+    },
+    {
+      "name": "command",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the command to send, for example status-get."
+    },
+    {
+      "name": "rv_changed",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "A list of result codes to indicate success and changed system state. Omit this for most acquisition commands. Set it to [0] for command=lease4-del and similar which return changed system state that way. Any result codes not listed in either rv_unchanged or rv_changed are interpreted as indicating an error result. rv_unchanged has precedence over rv_changed if a result code is in both lists. Default: []"
+    },
+    {
+      "name": "rv_unchanged",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "A list of result codes to indicate success but unchanged system state. Set this to [0] for most acquisition commands. Use [3] for command=lease4-del and similar which have a separate code for this. Any result codes not listed in either rv_unchanged or rv_changed are interpreted as indicating an error result. rv_unchanged has precedence over rv_changed if a result code is in both lists. Default: []"
+    },
+    {
+      "name": "socket",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "The full pathname of the Unix Domain Socket to connect to. The default value is suitable for kea-dhcp4-server on Debian trixie. This module directly interfaces using UDS; the HTTP wrappers are not supported. Default: \"/run/kea/kea4-ctrl-socket\""
+    }
+  ],
+  "examples": [
+    "vars:\n  ipaddr: \"192.168.123.45\"\n  hwaddr: \"00:00:5E:00:53:00\"\ntasks:\n\n  # an example for a request acquiring information\n  - name: Get KEA DHCP6 status\n    kea_command:\n      command: status-get\n      rv_unchanged: [0]\n      socket: /run/kea/kea6-ctrl-socket\n    register: kea6_status\n  - name: Display registered status result\n    ansible.builtin.debug:\n      msg: KEA DHCP6 running on PID {{ kea6_status.response.arguments.pid }}\n\n  # an example for requests modifying state\n  - name: Remove existing leases for {{ ipaddr }}, if any\n    kea_command:\n      command: lease4-del\n      arguments:\n        ip-address: \"{{ ipaddr }}\"\n      rv_changed: [0]\n      rv_unchanged: [3]\n  - name: Add DHCP lease for {{ ipaddr }}\n    kea_command:\n      command: lease4-add\n      arguments:\n        ip-address: \"{{ ipaddr }}\"\n        hw-address: \"{{ hwaddr }}\"\n      rv_changed: [0]"
+  ],
+  "return_values": [
+    {
+      "name": "response",
+      "type": "dictionary",
+      "description": "The server JSON response. Returned: when available",
+      "returned": "when"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/kea_command_module.html",
+  "parsed_at": "2026-04-13T16:29:49.852611"
+}

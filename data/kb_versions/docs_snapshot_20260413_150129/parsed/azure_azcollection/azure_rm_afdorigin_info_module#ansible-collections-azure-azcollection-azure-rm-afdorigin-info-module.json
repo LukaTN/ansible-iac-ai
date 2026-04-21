@@ -1,0 +1,355 @@
+{
+  "collection_ns": "azure_azcollection",
+  "collection": "azure.azcollection",
+  "module": "azure.azcollection.azure_rm_afdorigin_info",
+  "slug": "azure_rm_afdorigin_info_module#ansible-collections-azure-azcollection-azure-rm-afdorigin-info-module",
+  "description": "Get facts for a specific Azure Front Door (AFD) Origin or all AFD Origins.",
+  "parameters": [
+    {
+      "name": "ad_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory username. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "adfs_authority_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure AD authority url. Use when authenticating with Username/password, and has your own ADFS authority."
+    },
+    {
+      "name": "api_profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "Selects an API profile to use when communicating with Azure services. Default value of latest is appropriate for public clouds; future values will allow use with Azure Stack. Default: \"latest\""
+    },
+    {
+      "name": "auth_source",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "az",
+      "choices": [
+        "\"auto\" ← (default)",
+        "\"cli\"",
+        "\"credential_file\"",
+        "\"env\"",
+        "\"msi\""
+      ],
+      "description": "Controls the source of the credentials to use for authentication. Can also be set via the ANSIBLE_AZURE_AUTH_SOURCE environment variable. When set to auto (the default) the precedence is module parameters -> env -> credential_file -> cli. When set to env, the credentials will be read from the environment variables When set to credential_file, it will read the profile from ~/.azure/credentials. When set to cli, the credentials will be sources from the Azure CLI profile. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if more than one is present otherwise the default az cli subscription is used. When set to msi, the host machine must be an azure resource with an enabled MSI extension. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if the resource is granted access to more than one subscription, otherwise the first subscription is chosen. The msi was added in Ansible 2.6. Choices: \"auto\" ← (default) \"cli\" \"credential_file\" \"env\" \"msi\""
+    },
+    {
+      "name": "cert_validation_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ignore\"",
+        "\"validate\""
+      ],
+      "description": "Controls the certificate validation behavior for Azure endpoints. By default, all modules will validate the server certificate, but when an HTTPS proxy is in use, or against Azure Stack, it may be necessary to disable this behavior by passing ignore. Can also be set via credential file profile or the AZURE_CERT_VALIDATION environment variable. Choices: \"ignore\" \"validate\""
+    },
+    {
+      "name": "client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client ID. Use when authenticating with a Service Principal or Managed Identity (msi). Can also be set via the AZURE_CLIENT_ID environment variable."
+    },
+    {
+      "name": "cloud_environment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "AzureCloud",
+      "choices": [],
+      "description": "For cloud environments other than the US public cloud, the environment name (as defined by Azure Python SDK, eg, AzureChinaCloud, AzureUSGovernment), or a metadata discovery endpoint URL (required for Azure Stack). Can also be set via credential file profile or the AZURE_CLOUD_ENVIRONMENT environment variable. Default: \"AzureCloud\""
+    },
+    {
+      "name": "disable_instance_discovery",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Determines whether or not instance discovery is performed when attempting to authenticate. Setting this to true will completely disable both instance discovery and authority validation. This functionality is intended for use in scenarios where the metadata endpoint cannot be reached such as in private clouds or Azure Stack. The process of instance discovery entails retrieving authority metadata from https://login.microsoft.com/ to validate the authority. By setting this to **True**, the validation of the authority is disabled. As a result, it is crucial to ensure that the configured authority host is valid and trustworthy. Set via credential file profile or the AZURE_DISABLE_INSTANCE_DISCOVERY environment variable. Choices: false ← (default) true"
+    },
+    {
+      "name": "log_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "log_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Limit results to a specific AFD Origin."
+    },
+    {
+      "name": "origin_group_name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the origin group which is unique within the profile."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory user password. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security profile found in ~/.azure/credentials file."
+    },
+    {
+      "name": "profile_name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the AFD profile."
+    },
+    {
+      "name": "resource_group",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the resource group where this AFD Profile belongs."
+    },
+    {
+      "name": "secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client secret. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "subscription_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Your Azure subscription Id."
+    },
+    {
+      "name": "tenant",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure tenant ID. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "thumbprint",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The thumbprint of the private key specified in x509_certificate_path. Use when authenticating with a Service Principal. Required if x509_certificate_path is defined."
+    },
+    {
+      "name": "x509_certificate_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the X509 certificate used to create the service principal in PEM format. The certificate must be appended to the private key. Use when authenticating with a Service Principal."
+    }
+  ],
+  "examples": [
+    "- name: Get facts for all Origins in AFD Profile\n  azure_rm_afdorigin_info:\n    resource_group: myResourceGroup\n    profile_name: myCDNProfile\n\n- name: Get facts of specific AFD Origin\n  azure_rm_afdorigin_info:\n    name: myOrigin1\n    profile_name: myCDNProfile\n    resource_group: myResourceGroup"
+  ],
+  "return_values": [
+    {
+      "name": "afdorigins",
+      "type": "complex",
+      "description": "List of AFD Origins. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "azure_origin",
+      "type": "string",
+      "description": "Resource reference to the AFD origin resource. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "deployment_status",
+      "type": "string",
+      "description": "Current state of the resource. Returned: success Sample: \"NotStarted\"",
+      "returned": "success"
+    },
+    {
+      "name": "enabled_state",
+      "type": "string",
+      "description": "Whether to enable health probes to be made against backends defined under backend pools. Health probes can only be disabled if there is a single enabled backend in single enabled backend pool. Returned: success Sample: \"Enabled\"",
+      "returned": "success"
+    },
+    {
+      "name": "host_name",
+      "type": "string",
+      "description": "The address of the origin. Domain names, IPv4 addresses, and IPv6 addresses are supported. This should be unique across all origins in an endpoint. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "http_port",
+      "type": "integer",
+      "description": "The value of the HTTP port. Must be between 1 and 65535. Returned: success Sample: 80",
+      "returned": "success"
+    },
+    {
+      "name": "https_port",
+      "type": "integer",
+      "description": "The value of the HTTPS port. Must be between 1 and 65535. Returned: success Sample: 443",
+      "returned": "success"
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "description": "ID of the AFD Origin. Returned: success Sample: \"/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxx/resourcegroups/myRG/providers/Microsoft.Cdn/profiles/myProf/origingroups/myOG/origins/myO\"",
+      "returned": "success"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "Name of the AFD Origin. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "origin_group_name",
+      "type": "string",
+      "description": "Name of the origin group which is unique within the profile. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "origin_host_header",
+      "type": "string",
+      "description": "The host header value sent to the origin with each request. If you leave this blank, the request hostname determines this value. Azure Front Door origins, such as Web Apps, Blob Storage, and Cloud Services require this host header value to match the origin hostname by default. This overrides the host header defined at the AFD Endpoint. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "priority",
+      "type": "integer",
+      "description": "Priority of origin in given origin group for load balancing. Higher priorities will not be used for load balancing if any lower priority origin is healthy. Must be between 1 and 5. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "profile_name",
+      "type": "string",
+      "description": "Name of the AFD Profile where the Origin will be added. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "provisioning_state",
+      "type": "string",
+      "description": "Provisioning status of the AFD Origin. Returned: success Sample: \"Succeeded\"",
+      "returned": "success"
+    },
+    {
+      "name": "resource_group",
+      "type": "string",
+      "description": "Name of a resource group where the AFD Origin exists or will be created. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "shared_private_link_resource",
+      "type": "dictionary",
+      "description": "The properties of the private link resource for private origin. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "group_id",
+      "type": "string",
+      "description": "The group id from the provider of resource the shared private link resource is for. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "private_link",
+      "type": "string",
+      "description": "The resource id of the resource the shared private link resource is for. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "private_link_location",
+      "type": "string",
+      "description": "The location of the shared private link resource. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "request_message",
+      "type": "string",
+      "description": "The request message for requesting approval of the shared private link resource. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "description": "Status of the shared private link resource. Can be Pending, Approved, Rejected, Disconnected, or Timeout. Returned: success Sample: \"Approved\"",
+      "returned": "success"
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "description": "Resource type. Returned: success Sample: \"Microsoft.Cdn/profiles/origingroups/origins\"",
+      "returned": "success"
+    },
+    {
+      "name": "weight",
+      "type": "integer",
+      "description": "Weight of the origin in given origin group for load balancing. Must be between 1 and 1000. Returned: success",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_afdorigin_info_module#ansible-collections-azure-azcollection-azure-rm-afdorigin-info-module.html",
+  "parsed_at": "2026-04-11T13:52:53.761873"
+}

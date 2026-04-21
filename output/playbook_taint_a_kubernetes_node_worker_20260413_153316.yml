@@ -1,0 +1,28 @@
+# ============================================================
+# AnsibleAI RAG Generator — LangChain + ChromaDB
+# Date        : 2026-04-13 15:33:16
+# Request     : taint a kubernetes node worker-02 with key env and value production using NoSchedule effect
+# Module      : kubernetes.core.k8s_taint
+# Collection  : kubernetes.core
+# RAG score   : 0.711
+# Chunks used : 6
+# Source URL  : https://docs.ansible.com/ansible/latest/collections/kubernetes/core/k8s_taint_module#ansible-collections-kubernetes-core-k8s-taint-module.html
+# LLM model   : qwen2.5-coder:7b
+# ============================================================
+
+---
+- name: Taint Kubernetes node worker-02
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - kubernetes.core
+  tasks:
+    - name: Taint node "worker-02"
+      kubernetes.core.k8s_taint:
+        state: present
+        name: worker-02
+        taints:
+        - effect: NoSchedule
+          key: env
+          value: production

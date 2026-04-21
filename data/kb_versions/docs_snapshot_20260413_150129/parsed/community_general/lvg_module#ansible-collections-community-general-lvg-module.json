@@ -1,0 +1,134 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.lvg",
+  "slug": "lvg_module#ansible-collections-community-general-lvg-module",
+  "description": "This module creates, removes or resizes volume groups.",
+  "parameters": [
+    {
+      "name": "force",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If true, allows to remove volume group with logical volumes. Choices: false ← (default) true"
+    },
+    {
+      "name": "pesize",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "unit",
+      "choices": [],
+      "description": "The size of the physical extent. pesize must be a power of 2 of at least 1 sector (where the sector size is the largest sector size of the PVs currently used in the VG), or at least 128KiB. pesize can be optionally suffixed by a UNIT (k/K/m/M/g/G), default unit is megabyte. Default: \"4\""
+    },
+    {
+      "name": "pv_options",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Additional options to pass to pvcreate when creating the volume group. Default: \"\""
+    },
+    {
+      "name": "pvresize",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If true, resize the physical volume to the maximum available size. Choices: false ← (default) true"
+    },
+    {
+      "name": "pvs",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of comma-separated devices to use as physical devices in this volume group. Required when creating or resizing volume group. The module runs pvcreate if needed. remove_extra_pvs controls whether or not unspecified physical devices are removed from the volume group."
+    },
+    {
+      "name": "remove_extra_pvs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Remove physical volumes from the volume group which are not in pvs. Choices: false true ← (default)"
+    },
+    {
+      "name": "reset_pv_uuid",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Whether the volume group’s physical volumes’ UUIDs are regenerated. This is not idempotent. Specifying this parameter always results in a change. Choices: false ← (default) true"
+    },
+    {
+      "name": "reset_vg_uuid",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Whether the volume group’s UUID is regenerated. This is not idempotent. Specifying this parameter always results in a change. Choices: false ← (default) true"
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)",
+        "\"active\"",
+        "\"inactive\""
+      ],
+      "description": "Control if the volume group exists and its state. The states active and inactive implies present state. Added in 7.1.0. If active or inactive, the module manages the VG’s logical volumes current state. The module also handles the VG’s autoactivation state if supported unless when creating a volume group and the autoactivation option specified in vg_options. Choices: \"absent\" \"present\" ← (default) \"active\" \"inactive\""
+    },
+    {
+      "name": "vg",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the volume group."
+    },
+    {
+      "name": "vg_options",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Additional options to pass to vgcreate when creating the volume group. Default: \"\""
+    }
+  ],
+  "examples": [
+    "- name: Create a volume group on top of /dev/sda1 with physical extent size = 32MB\n  community.general.lvg:\n    vg: vg.services\n    pvs: /dev/sda1\n    pesize: 32\n\n- name: Create a volume group on top of /dev/sdb with physical extent size = 128KiB\n  community.general.lvg:\n    vg: vg.services\n    pvs: /dev/sdb\n    pesize: 128K\n\n# If, for example, we already have VG vg.services on top of /dev/sdb1,\n# this VG will be extended by /dev/sdc5.  Or if vg.services was created on\n# top of /dev/sda5, we first extend it with /dev/sdb1 and /dev/sdc5,\n# and then reduce by /dev/sda5.\n- name: Create or resize a volume group on top of /dev/sdb1 and /dev/sdc5.\n  community.general.lvg:\n    vg: vg.services\n    pvs:\n      - /dev/sdb1\n      - /dev/sdc5\n\n- name: Remove a volume group with name vg.services\n  community.general.lvg:\n    vg: vg.services\n    state: absent\n\n- name: Create a volume group on top of /dev/sda3 and resize the volume group /dev/sda3 to the maximum possible\n  community.general.lvg:\n    vg: resizableVG\n    pvs: /dev/sda3\n    pvresize: true\n\n- name: Deactivate a volume group\n  community.general.lvg:\n    state: inactive\n    vg: vg.services\n\n- name: Activate a volume group\n  community.general.lvg:\n    state: active\n    vg: vg.services\n\n- name: Add new PVs to volume group without removing existing ones\n  community.general.lvg:\n    vg: vg.services\n    pvs: /dev/sdb1,/dev/sdc1\n    remove_extra_pvs: false\n    state: present\n\n- name: Reset a volume group UUID\n  community.general.lvg:\n    state: inactive\n    vg: vg.services\n    reset_vg_uuid: true\n\n- name: Reset both volume group and pv UUID\n  community.general.lvg:\n    state: inactive\n    vg: vg.services\n    pvs:\n      - /dev/sdb1\n      - /dev/sdc5\n    reset_vg_uuid: true\n    reset_pv_uuid: true"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/lvg_module#ansible-collections-community-general-lvg-module.html",
+  "parsed_at": "2026-04-11T13:53:19.468223"
+}

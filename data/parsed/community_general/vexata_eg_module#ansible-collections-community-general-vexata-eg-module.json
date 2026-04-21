@@ -1,0 +1,102 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.vexata_eg",
+  "slug": "vexata_eg_module#ansible-collections-community-general-vexata-eg-module",
+  "description": "Create or delete export groups on a Vexata VX100 array.",
+  "parameters": [
+    {
+      "name": "array",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Vexata VX100 array hostname or IPv4 Address."
+    },
+    {
+      "name": "ig",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Initiator group name."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Export group name."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Vexata API user password. Uses the VEXATA_PASSWORD environment variable as a fallback."
+    },
+    {
+      "name": "pg",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Port group name."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Creates export group when present or delete when absent. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Vexata API user with administrative privileges. Uses the VEXATA_USER environment variable as a fallback."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Allows connection when SSL certificates are not valid. Set to false when certificates are not trusted. If set to true, please make sure Python >= 2.7.9 is installed on the given machine. Choices: false ← (default) true"
+    },
+    {
+      "name": "vg",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Volume group name."
+    }
+  ],
+  "examples": [
+    "- name: Create export group named db_export.\n  community.general.vexata_eg:\n    name: db_export\n    vg: dbvols\n    ig: dbhosts\n    pg: pg1\n    state: present\n    array: vx100_ultra.test.com\n    user: admin\n    password: secret\n\n- name: Delete export group named db_export\n  community.general.vexata_eg:\n    name: db_export\n    state: absent\n    array: vx100_ultra.test.com\n    user: admin\n    password: secret"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/vexata_eg_module.html",
+  "parsed_at": "2026-04-13T16:30:00.483002"
+}

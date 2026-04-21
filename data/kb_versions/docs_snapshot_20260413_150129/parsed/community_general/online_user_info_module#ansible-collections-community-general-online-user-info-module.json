@@ -1,0 +1,67 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.online_user_info",
+  "slug": "online_user_info_module#ansible-collections-community-general-online-user-info-module",
+  "description": "Gather information about the user.",
+  "parameters": [
+    {
+      "name": "api_timeout",
+      "aliases": [
+        "timeout"
+      ],
+      "type": "integer",
+      "required": false,
+      "default": "30",
+      "choices": [],
+      "description": "HTTP timeout to Online API in seconds. Default: 30"
+    },
+    {
+      "name": "api_token",
+      "aliases": [
+        "oauth_token"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Online OAuth token."
+    },
+    {
+      "name": "api_url",
+      "aliases": [
+        "base_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "https://api.online.net",
+      "choices": [],
+      "description": "Online API URL. Default: \"https://api.online.net\""
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Validate SSL certs of the Online API. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Gather Online user info\n  community.general.online_user_info:\n  register: result\n\n- ansible.builtin.debug:\n    msg: \"{{ result.online_user_info }}\""
+  ],
+  "return_values": [
+    {
+      "name": "online_user_info",
+      "type": "dictionary",
+      "description": "Response from Online API. For more details please refer to: https://console.online.net/en/api/. Returned: success Sample: {\"company\": \"foobar LLC\", \"email\": \"foobar@example.com\", \"first_name\": \"foo\", \"id\": 42, \"last_name\": \"bar\", \"login\": \"foobar\"}",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/online_user_info_module#ansible-collections-community-general-online-user-info-module.html",
+  "parsed_at": "2026-04-11T13:53:22.750863"
+}

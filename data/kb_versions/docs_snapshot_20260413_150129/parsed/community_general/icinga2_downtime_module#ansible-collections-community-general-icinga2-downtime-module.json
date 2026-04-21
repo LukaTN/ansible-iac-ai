@@ -1,0 +1,327 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.icinga2_downtime",
+  "slug": "icinga2_downtime_module#ansible-collections-community-general-icinga2-downtime-module",
+  "description": "Manages downtimes in Icinga 2 through its REST API.",
+  "parameters": [
+    {
+      "name": "all_services",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Whether downtimes should be created for all services of the matched host objects. If omitted, Icinga 2 does not create downtimes for all services of the matched host objects by default. Choices: false true"
+    },
+    {
+      "name": "author",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "Ansible",
+      "choices": [],
+      "description": "Name of the author. Default: \"Ansible\""
+    },
+    {
+      "name": "ca_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "CA certificates bundle to use to verify the Icinga 2 server certificate."
+    },
+    {
+      "name": "child_options",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"DowntimeNoChildren\"",
+        "\"DowntimeTriggeredChildren\"",
+        "\"DowntimeNonTriggeredChildren\""
+      ],
+      "description": "Schedule child downtimes. Choices: \"DowntimeNoChildren\" \"DowntimeTriggeredChildren\" \"DowntimeNonTriggeredChildren\""
+    },
+    {
+      "name": "client_cert",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "PEM formatted certificate chain file to be used for SSL client authentication. This file can also include the key as well, and if the key is included, client_key is not required."
+    },
+    {
+      "name": "client_key",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "PEM formatted file that contains your private key to be used for SSL client authentication. If client_cert contains both the certificate and key, this option is not required."
+    },
+    {
+      "name": "comment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "Downtime",
+      "choices": [],
+      "description": "A descriptive comment. Default: \"Downtime scheduled by Ansible\""
+    },
+    {
+      "name": "duration",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Duration of the downtime. Required in case of a flexible downtime."
+    },
+    {
+      "name": "end_time",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "End time of the downtime as UNIX timestamp."
+    },
+    {
+      "name": "filter",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Filter expression limiting the objects to operate on."
+    },
+    {
+      "name": "filter_vars",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Variable names and values used in the filter expression."
+    },
+    {
+      "name": "fixed",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Whether the downtime is fixed or flexible. If omitted, Icinga 2 creates a fixed downtime by default. Choices: false true"
+    },
+    {
+      "name": "force",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If yes do not get a cached copy. Choices: false ← (default) true"
+    },
+    {
+      "name": "force_basic_auth",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Credentials specified with url_username and url_password should be passed in HTTP Header. Choices: false ← (default) true"
+    },
+    {
+      "name": "http_agent",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "ansible-httpget",
+      "choices": [],
+      "description": "Header to identify as, generally appears in web server logs. Default: \"ansible-httpget\""
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of the downtime object. This option has no effect for states other than absent."
+    },
+    {
+      "name": "object_type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"Service\"",
+        "\"Host\" ← (default)",
+        "\"Downtime\""
+      ],
+      "description": "Use Host for a host downtime and Service for a service downtime. Use Downtime and give the name of the downtime object you want to remove. Choices: \"Service\" \"Host\" ← (default) \"Downtime\""
+    },
+    {
+      "name": "start_time",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Start time of the downtime as UNIX timestamp."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "State of the downtime. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "10",
+      "choices": [],
+      "description": "How long to wait for the server to send data before giving up. Default: 10"
+    },
+    {
+      "name": "trigger_name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of the downtime trigger."
+    },
+    {
+      "name": "url",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "URL of the Icinga 2 REST API."
+    },
+    {
+      "name": "url_password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The password for use in HTTP basic authentication. If the url_username parameter is not specified, the url_password parameter will not be used."
+    },
+    {
+      "name": "url_username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The username for use in HTTP basic authentication. This parameter can be used without url_password for sites that allow empty passwords."
+    },
+    {
+      "name": "use_gssapi",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use GSSAPI to perform the authentication, typically this is for Kerberos or Kerberos through Negotiate authentication. Requires the Python library gssapi to be installed. Credentials for GSSAPI can be specified with url_username/url_password or with the GSSAPI env var KRB5CCNAME that specified a custom Kerberos credential cache. NTLM authentication is not supported even if the GSSAPI mech for NTLM has been installed. Choices: false ← (default) true"
+    },
+    {
+      "name": "use_proxy",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If no, it will not use a proxy, even if one is defined in an environment variable on the target hosts. Choices: false true ← (default)"
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If no, SSL certificates will not be validated. This should only be used on personally controlled sites using self-signed certificates. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Schedule a host downtime\n  community.general.icinga2_downtime:\n    url: \"https://icinga2.example.com:5665\"\n    url_username: icingadmin\n    url_password: secret\n    state: present\n    author: Ansible\n    comment: Scheduled downtime for test purposes.\n    all_services: true\n    start_time: \"{{ downtime_start_time }}\"\n    end_time: \"{{ downtime_end_time }}\"\n    duration: \"{{ downtime_duration }}\"\n    fixed: true\n    object_type: Host\n    filter: host.name==\"host.example.com\"\n  delegate_to: localhost\n  register: icinga2_downtime_response\n  vars:\n    downtime_start_time: \"{{ ansible_date_time['epoch'] | int }}\"\n    downtime_end_time: \"{{ downtime_start_time | int + 3600 }}\"\n    downtime_duration: \"{{ downtime_end_time | int - downtime_start_time | int }}\"\n\n- name: Remove scheduled host downtime\n  community.general.icinga2_downtime:\n    url: \"https://icinga2.example.com:5665\"\n    url_username: icingadmin\n    url_password: secret\n    state: absent\n    author: Ansible\n    object_type: Downtime\n    name: \"{{ icinga2_downtime_response.results[0].name }}\"\n  delegate_to: localhost\n  when: icinga2_downtime_response.results | default([]) | length > 0"
+  ],
+  "return_values": [
+    {
+      "name": "error",
+      "type": "dictionary",
+      "description": "Error message as JSON dictionary returned from the Icinga 2 API. Returned: if downtime scheduling or removal did not succeed Sample: {\"error\": 404, \"status\": \"No objects found.\"}",
+      "returned": "if"
+    },
+    {
+      "name": "results",
+      "type": "list",
+      "description": "Results of downtime scheduling or removal Returned: success Sample: [{\"code\": 200, \"legacy_id\": 28911, \"name\": \"host.example.com!e19c705a-54c2-49c5-8014-70ff624f9e51\", \"status\": \"Successfully scheduled downtime 'host.example.com!e19c705a-54c2-49c5-8014-70ff624f9e51' for object 'host.example.com'.\"}]",
+      "returned": "success"
+    },
+    {
+      "name": "code",
+      "type": "integer",
+      "description": "Success or error code of downtime scheduling. Returned: always Sample: 200",
+      "returned": "always"
+    },
+    {
+      "name": "legacy_id",
+      "type": "integer",
+      "description": "Legacy id of the downtime object. Returned: if a downtime was scheduled successfully Sample: 28911",
+      "returned": "if"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "Name of the downtime object. Returned: if a downtime was scheduled successfully Sample: \"host.example.com!e19c705a-54c2-49c5-8014-70ff624f9e51\"",
+      "returned": "if"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "description": "Human-readable message describing the result of downtime scheduling. Returned: always Sample: \"Successfully scheduled downtime 'host.example.com!e19c705a-54c2-49c5-8014-70ff624f9e51' for object 'host.example.com'.\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/icinga2_downtime_module#ansible-collections-community-general-icinga2-downtime-module.html",
+  "parsed_at": "2026-04-11T13:53:15.386079"
+}

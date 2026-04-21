@@ -1,0 +1,373 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.one_image",
+  "slug": "one_image_module#ansible-collections-community-general-one-image-module",
+  "description": "Manages OpenNebula images.",
+  "parameters": [
+    {
+      "name": "api_password",
+      "aliases": [
+        "api_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The password or token for XMLRPC authentication. If not specified then the value of the ONE_PASSWORD environment variable, if any, is used."
+    },
+    {
+      "name": "api_url",
+      "aliases": [
+        "api_endpoint"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The ENDPOINT URL of the XMLRPC server. If not specified then the value of the ONE_URL environment variable, if any, is used."
+    },
+    {
+      "name": "api_username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The name of the user for XMLRPC authentication. If not specified then the value of the ONE_USERNAME environment variable, if any, is used."
+    },
+    {
+      "name": "create",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Whether the image should be created if not present. This is ignored if state=absent. Choices: false true"
+    },
+    {
+      "name": "datastore_id",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Use with create=true to specify datastore for image."
+    },
+    {
+      "name": "enabled",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Whether the image should be enabled or disabled. Choices: false true"
+    },
+    {
+      "name": "id",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A id of the image you would like to manage."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A name of the image you would like to manage. Required if create=true."
+    },
+    {
+      "name": "new_name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "new_name",
+      "choices": [],
+      "description": "A name that is assigned to the existing or new image. In the case of cloning, by default new_name is set to the name of the origin image with the prefix ‘Copy of’."
+    },
+    {
+      "name": "persistent",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Whether the image should be persistent or non-persistent. Choices: false true"
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\"",
+        "\"cloned\"",
+        "\"renamed\""
+      ],
+      "description": "present - state that is used to manage the image. absent - delete the image. cloned - clone the image. renamed - rename the image to the new_name. Choices: \"present\" ← (default) \"absent\" \"cloned\" \"renamed\""
+    },
+    {
+      "name": "template",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Use with create=true to specify image template."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether to validate the TLS/SSL certificates or not. This parameter is ignored if PYTHONHTTPSVERIFY environment variable is used. Choices: false true ← (default)"
+    },
+    {
+      "name": "wait_timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "60",
+      "choices": [],
+      "description": "Seconds to wait until image is ready, deleted or cloned. Default: 60"
+    }
+  ],
+  "examples": [
+    "- name: Fetch the IMAGE by id\n  community.general.one_image:\n    id: 45\n  register: result\n\n- name: Print the IMAGE properties\n  ansible.builtin.debug:\n    var: result\n\n- name: Rename existing IMAGE\n  community.general.one_image:\n    id: 34\n    state: renamed\n    new_name: bar-image\n\n- name: Disable the IMAGE by id\n  community.general.one_image:\n    id: 37\n    enabled: false\n\n- name: Make the IMAGE persistent\n  community.general.one_image:\n    id: 37\n    persistent: true\n\n- name: Enable the IMAGE by name\n  community.general.one_image:\n    name: bar-image\n    enabled: true\n\n- name: Clone the IMAGE by name\n  community.general.one_image:\n    name: bar-image\n    state: cloned\n    new_name: bar-image-clone\n  register: result\n\n- name: Delete the IMAGE by id\n  community.general.one_image:\n    id: '{{ result.id }}'\n    state: absent\n\n- name: Make sure IMAGE is present\n  community.general.one_image:\n    name: myyy-image\n    state: present\n    create: true\n    datastore_id: 100\n    template: |\n      PATH = \"/var/tmp/image\"\n      TYPE = \"OS\"\n      SIZE = 20512\n      FORMAT = \"qcow2\"\n      PERSISTENT = \"Yes\"\n      DEV_PREFIX = \"vd\"\n\n- name: Make sure IMAGE is present with a longer timeout\n  community.general.one_image:\n    name: big-image\n    state: present\n    create: true\n    datastore_id: 100\n    wait_timeout: 900\n    template: |-\n      PATH = \"https://192.0.2.200/repo/tipa_image.raw\"\n      TYPE = \"OS\"\n      SIZE = 82048\n      FORMAT = \"raw\"\n      PERSISTENT = \"Yes\"\n      DEV_PREFIX = \"vd\""
+  ],
+  "return_values": [
+    {
+      "name": "app_clones",
+      "type": "list",
+      "description": "The image’s list of app_clones ID’s. Returned: when state=present, state=cloned, or state=renamed Sample: [1, 2, 3]",
+      "returned": "when"
+    },
+    {
+      "name": "clones",
+      "type": "list",
+      "description": "The image’s list of clones ID’s. Returned: when state=present, state=cloned, or state=renamed Sample: [1, 2, 3]",
+      "returned": "when"
+    },
+    {
+      "name": "cloning_id",
+      "type": "integer",
+      "description": "The image’s cloning ID. Returned: when state=present, state=cloned, or state=renamed Sample: -1",
+      "returned": "when"
+    },
+    {
+      "name": "cloning_ops",
+      "type": "integer",
+      "description": "The image’s cloning operations per second. Returned: when state=present, state=cloned, or state=renamed Sample: 0",
+      "returned": "when"
+    },
+    {
+      "name": "datastore",
+      "type": "integer",
+      "description": "The image’s datastore name. Returned: when state=present, state=cloned, or state=renamed Sample: \"image_datastore\"",
+      "returned": "when"
+    },
+    {
+      "name": "datastore_id",
+      "type": "integer",
+      "description": "The image’s datastore ID. Returned: when state=present, state=cloned, or state=renamed Sample: 100",
+      "returned": "when"
+    },
+    {
+      "name": "disk_type",
+      "type": "string",
+      "description": "The image’s format type. Returned: when state=present, state=cloned, or state=renamed Sample: \"0\"",
+      "returned": "when"
+    },
+    {
+      "name": "fstype",
+      "type": "string",
+      "description": "The image’s filesystem type. Returned: when state=present, state=cloned, or state=renamed Sample: \"ext4\"",
+      "returned": "when"
+    },
+    {
+      "name": "group_id",
+      "type": "integer",
+      "description": "Image’s group ID. Returned: when state=present, state=cloned, or state=renamed Sample: 1",
+      "returned": "when"
+    },
+    {
+      "name": "group_name",
+      "type": "string",
+      "description": "Image’s group name. Returned: when state=present, state=cloned, or state=renamed Sample: \"one-users\"",
+      "returned": "when"
+    },
+    {
+      "name": "id",
+      "type": "integer",
+      "description": "Image ID. Returned: when state=present, state=cloned, or state=renamed Sample: 153",
+      "returned": "when"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "Image name. Returned: when state=present, state=cloned, or state=renamed Sample: \"app1\"",
+      "returned": "when"
+    },
+    {
+      "name": "owner_id",
+      "type": "integer",
+      "description": "Image’s owner ID. Returned: when state=present, state=cloned, or state=renamed Sample: 143",
+      "returned": "when"
+    },
+    {
+      "name": "owner_name",
+      "type": "string",
+      "description": "Image’s owner name. Returned: when state=present, state=cloned, or state=renamed Sample: \"ansible-test\"",
+      "returned": "when"
+    },
+    {
+      "name": "path",
+      "type": "string",
+      "description": "The image’s filesystem path. Returned: when state=present, state=cloned, or state=renamed Sample: \"/var/tmp/hello.qcow2\"",
+      "returned": "when"
+    },
+    {
+      "name": "permissions",
+      "type": "dictionary",
+      "description": "The image’s permissions. Returned: when state=present, state=cloned, or state=renamed Sample: {\"group_a\": 0, \"group_m\": 0, \"group_u\": 0, \"other_a\": 0, \"other_m\": 0, \"other_u\": 0, \"owner_a\": 0, \"owner_m\": 0, \"owner_u\": 1}",
+      "returned": "when"
+    },
+    {
+      "name": "group_a",
+      "type": "string",
+      "description": "The image’s group ADMIN permissions. Returned: success Sample: \"0\"",
+      "returned": "success"
+    },
+    {
+      "name": "group_m",
+      "type": "string",
+      "description": "The image’s group MANAGE permissions. Returned: success Sample: \"0\"",
+      "returned": "success"
+    },
+    {
+      "name": "group_u",
+      "type": "string",
+      "description": "The image’s group USAGE permissions. Returned: success Sample: \"0\"",
+      "returned": "success"
+    },
+    {
+      "name": "other_a",
+      "type": "string",
+      "description": "The image’s other users ADMIN permissions. Returned: success Sample: \"0\"",
+      "returned": "success"
+    },
+    {
+      "name": "other_m",
+      "type": "string",
+      "description": "The image’s other users MANAGE permissions. Returned: success Sample: \"0\"",
+      "returned": "success"
+    },
+    {
+      "name": "other_u",
+      "type": "string",
+      "description": "The image’s other users USAGE permissions. Returned: success Sample: \"0\"",
+      "returned": "success"
+    },
+    {
+      "name": "owner_a",
+      "type": "string",
+      "description": "The image’s owner ADMIN permissions. Returned: success Sample: \"0\"",
+      "returned": "success"
+    },
+    {
+      "name": "owner_m",
+      "type": "string",
+      "description": "The image’s owner MANAGE permissions. Returned: success Sample: \"0\"",
+      "returned": "success"
+    },
+    {
+      "name": "owner_u",
+      "type": "string",
+      "description": "The image’s owner USAGE permissions. Returned: success Sample: \"1\"",
+      "returned": "success"
+    },
+    {
+      "name": "persistent",
+      "type": "integer",
+      "description": "The image’s persistence status (1 means true, 0 means false). Returned: when state=present, state=cloned, or state=renamed Sample: 1",
+      "returned": "when"
+    },
+    {
+      "name": "running_vms",
+      "type": "integer",
+      "description": "Count of running vms that use this image. Returned: when state=present, state=cloned, or state=renamed Sample: 7",
+      "returned": "when"
+    },
+    {
+      "name": "size",
+      "type": "integer",
+      "description": "The image’s size in MegaBytes. Returned: when state=present, state=cloned, or state=renamed Sample: 10000",
+      "returned": "when"
+    },
+    {
+      "name": "snapshots",
+      "type": "list",
+      "description": "The image’s list of snapshots. Returned: when state=present, state=cloned, or state=renamed Sample: [{\"active\": 1, \"allow_orphans\": 1, \"children\": 0, \"date\": 123123, \"name\": \"SampleName\", \"parent\": 1, \"size\": 10228}]",
+      "returned": "when"
+    },
+    {
+      "name": "source",
+      "type": "string",
+      "description": "The image’s source. Returned: when state=present, state=cloned, or state=renamed Sample: \"/var/lib/one//datastores/100/somerandomstringxd\"",
+      "returned": "when"
+    },
+    {
+      "name": "state",
+      "type": "string",
+      "description": "State of image instance. Returned: when state=present, state=cloned, or state=renamed Sample: \"READY\"",
+      "returned": "when"
+    },
+    {
+      "name": "target_snapshot",
+      "type": "integer",
+      "description": "The image’s target snapshot. Returned: when state=present, state=cloned, or state=renamed Sample: 1",
+      "returned": "when"
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "description": "The image’s type. Returned: when state=present, state=cloned, or state=renamed Sample: \"0\"",
+      "returned": "when"
+    },
+    {
+      "name": "used",
+      "type": "boolean",
+      "description": "Is image in use. Returned: when state=present, state=cloned, or state=renamed Sample: true",
+      "returned": "when"
+    },
+    {
+      "name": "vms",
+      "type": "list",
+      "description": "The image’s list of VM ID’s. Returned: when state=present, state=cloned, or state=renamed Sample: [1, 2, 3]",
+      "returned": "when"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/one_image_module#ansible-collections-community-general-one-image-module.html",
+  "parsed_at": "2026-04-11T13:53:21.796073"
+}

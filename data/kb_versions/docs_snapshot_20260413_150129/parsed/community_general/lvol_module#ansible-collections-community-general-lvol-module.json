@@ -1,0 +1,138 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.lvol",
+  "slug": "lvol_module#ansible-collections-community-general-lvol-module",
+  "description": "This module creates, removes or resizes logical volumes.",
+  "parameters": [
+    {
+      "name": "active",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether the volume is active and visible to the host. Choices: false true ← (default)"
+    },
+    {
+      "name": "force",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Shrink or remove operations of volumes requires this switch. Ensures that filesystems never get corrupted/destroyed by mistake. Choices: false ← (default) true"
+    },
+    {
+      "name": "lv",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The name of the logical volume."
+    },
+    {
+      "name": "opts",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Free-form options to be passed to the lvcreate command."
+    },
+    {
+      "name": "pvs",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of physical volumes (for example /dev/sda, /dev/sdb)."
+    },
+    {
+      "name": "resizefs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Resize the underlying filesystem together with the logical volume. Supported for ext2, ext3, ext4, reiserfs and XFS filesystems. Attempts to resize other filesystem types result in failure. Choices: false ← (default) true"
+    },
+    {
+      "name": "shrink",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Shrink if current size is higher than size requested. Choices: false true ← (default)"
+    },
+    {
+      "name": "size",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "in",
+      "choices": [],
+      "description": "The size of the logical volume, according to lvcreate(8) --size, by default in megabytes or optionally with one of [bBsSkKmMgGtTpPeE] units; or according to lvcreate(8) --extents as a percentage of [VG|PVS|FREE|ORIGIN]; Float values must begin with a digit. When resizing, apart from specifying an absolute size you may, according to lvextend(8)|lvreduce(8) --size, specify the amount to extend the logical volume with the prefix + or the amount to reduce the logical volume by with prefix -. Resizing using + or - was not supported prior to community.general 3.0.0. Please note that when using +, -, or percentage of FREE, the module is not idempotent."
+    },
+    {
+      "name": "snapshot",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The name of a snapshot volume to be configured. When creating a snapshot volume, the lv parameter specifies the origin volume."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)"
+      ],
+      "description": "Control if the logical volume exists. If present and the volume does not already exist then the size option is required. Choices: \"absent\" \"present\" ← (default)"
+    },
+    {
+      "name": "thinpool",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The thin pool volume name. When you want to create a thin provisioned volume, specify a thin pool volume name."
+    },
+    {
+      "name": "vg",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The volume group this logical volume is part of."
+    }
+  ],
+  "examples": [
+    "- name: Create a logical volume of 512m\n  community.general.lvol:\n    vg: firefly\n    lv: test\n    size: 512\n\n- name: Create a logical volume of 512m with disks /dev/sda and /dev/sdb\n  community.general.lvol:\n    vg: firefly\n    lv: test\n    size: 512\n    pvs:\n      - /dev/sda\n      - /dev/sdb\n\n- name: Create cache pool logical volume\n  community.general.lvol:\n    vg: firefly\n    lv: lvcache\n    size: 512m\n    opts: --type cache-pool\n\n- name: Create a logical volume of 512g.\n  community.general.lvol:\n    vg: firefly\n    lv: test\n    size: 512g\n\n- name: Create a logical volume the size of all remaining space in the volume group\n  community.general.lvol:\n    vg: firefly\n    lv: test\n    size: 100%FREE\n\n- name: Create a logical volume with special options\n  community.general.lvol:\n    vg: firefly\n    lv: test\n    size: 512g\n    opts: -r 16\n\n- name: Extend the logical volume to 1024m.\n  community.general.lvol:\n    vg: firefly\n    lv: test\n    size: 1024\n\n- name: Extend the logical volume to consume all remaining space in the volume group\n  community.general.lvol:\n    vg: firefly\n    lv: test\n    size: +100%FREE\n\n- name: Extend the logical volume by given space\n  community.general.lvol:\n    vg: firefly\n    lv: test\n    size: +512M\n\n- name: Extend the logical volume to take all remaining space of the PVs and resize the underlying filesystem\n  community.general.lvol:\n    vg: firefly\n    lv: test\n    size: 100%PVS\n    resizefs: true\n\n- name: Resize the logical volume to % of VG\n  community.general.lvol:\n    vg: firefly\n    lv: test\n    size: 80%VG\n    force: true\n\n- name: Reduce the logical volume to 512m\n  community.general.lvol:\n    vg: firefly\n    lv: test\n    size: 512\n    force: true\n\n- name: Reduce the logical volume by given space\n  community.general.lvol:\n    vg: firefly\n    lv: test\n    size: -512M\n    force: true\n\n- name: Set the logical volume to 512m and do not try to shrink if size is lower than current one\n  community.general.lvol:\n    vg: firefly\n    lv: test\n    size: 512\n    shrink: false\n\n- name: Remove the logical volume.\n  community.general.lvol:\n    vg: firefly\n    lv: test\n    state: absent\n    force: true\n\n- name: Create a snapshot volume of the test logical volume.\n  community.general.lvol:\n    vg: firefly\n    lv: test\n    snapshot: snap1\n    size: 100m\n\n- name: Deactivate a logical volume\n  community.general.lvol:\n    vg: firefly\n    lv: test\n    active: false\n\n- name: Create a deactivated logical volume\n  community.general.lvol:\n    vg: firefly\n    lv: test\n    size: 512g\n    active: false\n\n- name: Create a thin pool of 512g\n  community.general.lvol:\n    vg: firefly\n    thinpool: testpool\n    size: 512g\n\n- name: Create a thin volume of 128g\n  community.general.lvol:\n    vg: firefly\n    lv: test\n    thinpool: testpool\n    size: 128g"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/lvol_module#ansible-collections-community-general-lvol-module.html",
+  "parsed_at": "2026-04-11T13:53:19.558909"
+}

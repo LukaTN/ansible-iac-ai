@@ -1,0 +1,163 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.one_template",
+  "slug": "one_template_module#ansible-collections-community-general-one-template-module",
+  "description": "Manages OpenNebula templates.",
+  "parameters": [
+    {
+      "name": "api_password",
+      "aliases": [
+        "api_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The password or token for XMLRPC authentication. If not specified then the value of the ONE_PASSWORD environment variable, if any, is used."
+    },
+    {
+      "name": "api_url",
+      "aliases": [
+        "api_endpoint"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The ENDPOINT URL of the XMLRPC server. If not specified then the value of the ONE_URL environment variable, if any, is used."
+    },
+    {
+      "name": "api_username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The name of the user for XMLRPC authentication. If not specified then the value of the ONE_USERNAME environment variable, if any, is used."
+    },
+    {
+      "name": "filter",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"user_primary_group\"",
+        "\"user\" ← (default)",
+        "\"all\"",
+        "\"user_groups\""
+      ],
+      "description": "user_primary_group - Resources belonging to the user’s primary group. user - Resources belonging to the user. all - All resources. user_groups - Resources belonging to the user and any of his groups. Choices: \"user_primary_group\" \"user\" ← (default) \"all\" \"user_groups\""
+    },
+    {
+      "name": "id",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A id of the template you would like to manage. If not set then a new template is created with the given name."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A name of the template you would like to manage. If a template with the given name does not exist it is created, otherwise it is managed by this module."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "present - state that is used to manage the template. absent - delete the template. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "template",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A string containing the template contents."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether to validate the TLS/SSL certificates or not. This parameter is ignored if PYTHONHTTPSVERIFY environment variable is used. Choices: false true ← (default)"
+    },
+    {
+      "name": "wait_timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "300",
+      "choices": [],
+      "description": "Time to wait for the desired state to be reached before timeout, in seconds. Default: 300"
+    }
+  ],
+  "examples": [
+    "- name: Fetch the TEMPLATE by id\n  community.general.one_template:\n    id: 6459\n  register: result\n\n- name: Print the TEMPLATE properties\n  ansible.builtin.debug:\n    var: result\n\n- name: Fetch the TEMPLATE by name\n  community.general.one_template:\n    name: tf-prd-users-workerredis-p6379a\n  register: result\n\n- name: Create a new or update an existing TEMPLATE\n  community.general.one_template:\n    name: generic-opensuse\n    template: |\n      CONTEXT = [\n        HOSTNAME = \"generic-opensuse\"\n      ]\n      CPU = \"1\"\n      CUSTOM_ATTRIBUTE = \"\"\n      DISK = [\n        CACHE = \"writeback\",\n        DEV_PREFIX = \"sd\",\n        DISCARD = \"unmap\",\n        IMAGE = \"opensuse-leap-15.2\",\n        IMAGE_UNAME = \"oneadmin\",\n        IO = \"threads\",\n        SIZE = \"\" ]\n      MEMORY = \"2048\"\n      NIC = [\n        MODEL = \"virtio\",\n        NETWORK = \"testnet\",\n        NETWORK_UNAME = \"oneadmin\" ]\n      OS = [\n        ARCH = \"x86_64\",\n        BOOT = \"disk0\" ]\n      SCHED_REQUIREMENTS = \"CLUSTER_ID=\\\\\"100\\\\\"\"\n      VCPU = \"2\"\n\n- name: Delete the TEMPLATE by id\n  community.general.one_template:\n    id: 6459\n    state: absent"
+  ],
+  "return_values": [
+    {
+      "name": "group_id",
+      "type": "integer",
+      "description": "Template’s group ID. Returned: when state=present Sample: 1",
+      "returned": "when"
+    },
+    {
+      "name": "group_name",
+      "type": "string",
+      "description": "Template’s group name. Returned: when state=present Sample: \"one-users\"",
+      "returned": "when"
+    },
+    {
+      "name": "id",
+      "type": "integer",
+      "description": "Template ID. Returned: when state=present Sample: 153",
+      "returned": "when"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "Template name. Returned: when state=present Sample: \"app1\"",
+      "returned": "when"
+    },
+    {
+      "name": "owner_id",
+      "type": "integer",
+      "description": "Template’s owner ID. Returned: when state=present Sample: 143",
+      "returned": "when"
+    },
+    {
+      "name": "owner_name",
+      "type": "string",
+      "description": "Template’s owner name. Returned: when state=present Sample: \"ansible-test\"",
+      "returned": "when"
+    },
+    {
+      "name": "template",
+      "type": "dictionary",
+      "description": "The parsed template. Returned: when state=present",
+      "returned": "when"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/one_template_module.html",
+  "parsed_at": "2026-04-13T16:29:54.342328"
+}

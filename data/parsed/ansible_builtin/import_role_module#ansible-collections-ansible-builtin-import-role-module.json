@@ -1,0 +1,96 @@
+{
+  "collection_ns": "ansible_builtin",
+  "collection": "ansible.builtin",
+  "module": "ansible.builtin.import_role",
+  "slug": "import_role_module#ansible-collections-ansible-builtin-import-role-module",
+  "description": "Much like the roles: keyword, this task loads a role, but it allows you to control when the role tasks run in between other tasks of the play.",
+  "parameters": [
+    {
+      "name": "allow_duplicates",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Overrides the role’s metadata setting to allow using a role more than once with the same parameters. Choices: false true ← (default)"
+    },
+    {
+      "name": "defaults_from",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "main",
+      "choices": [],
+      "description": "File to load from a role’s defaults/ directory. Default: \"main\""
+    },
+    {
+      "name": "handlers_from",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "main",
+      "choices": [],
+      "description": "File to load from a role’s handlers/ directory. Default: \"main\""
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the role to be executed."
+    },
+    {
+      "name": "public",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "depends",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "This option dictates whether the role’s vars and defaults are exposed to the play. Variables are exposed to the play at playbook parsing time, and available to earlier roles and tasks as well unlike include_role. The default depends on the configuration option DEFAULT_PRIVATE_ROLE_VARS. Choices: false true ← (default)"
+    },
+    {
+      "name": "rolespec_validate",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Perform role argument spec validation if an argument spec is defined. Choices: false true ← (default)"
+    },
+    {
+      "name": "tasks_from",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "main",
+      "choices": [],
+      "description": "File to load from a role’s tasks/ directory. Default: \"main\""
+    },
+    {
+      "name": "vars_from",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "main",
+      "choices": [],
+      "description": "File to load from a role’s vars/ directory. Default: \"main\""
+    }
+  ],
+  "examples": [
+    "- hosts: all\n  tasks:\n    - ansible.builtin.import_role:\n        name: myrole\n\n    - name: Run tasks/other.yaml instead of 'main'\n      ansible.builtin.import_role:\n        name: myrole\n        tasks_from: other\n\n    - name: Pass variables to role\n      ansible.builtin.import_role:\n        name: myrole\n      vars:\n        rolevar1: value from task\n\n    - name: Apply condition to each task in role\n      ansible.builtin.import_role:\n        name: myrole\n      when: not idontwanttorun"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/import_role_module.html",
+  "parsed_at": "2026-04-13T16:29:25.461365"
+}

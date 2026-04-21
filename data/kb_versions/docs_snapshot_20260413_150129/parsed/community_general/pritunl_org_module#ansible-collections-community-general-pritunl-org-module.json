@@ -1,0 +1,96 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.pritunl_org",
+  "slug": "pritunl_org_module#ansible-collections-community-general-pritunl-org-module",
+  "description": "A module to manage Pritunl organizations using the Pritunl API.",
+  "parameters": [
+    {
+      "name": "force",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "force",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If force is true and state is absent, the module deletes the organization, no matter if it contains users or not. By default force is false, which causes the module to fail the deletion of the organization when it contains users. Choices: false ← (default) true"
+    },
+    {
+      "name": "name",
+      "aliases": [
+        "org"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the organization to manage in Pritunl."
+    },
+    {
+      "name": "pritunl_api_secret",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "API Secret found in Administrators > USERNAME > API Secret."
+    },
+    {
+      "name": "pritunl_api_token",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "API Token of a Pritunl admin user. It needs to be enabled in Administrators > USERNAME > Enable Token Authentication."
+    },
+    {
+      "name": "pritunl_url",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "URL and port of the Pritunl server on which the API is enabled."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "If present, the module adds organization name to Pritunl. If absent, attempt to delete the organization from Pritunl (please read about force usage). Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If certificates should be validated or not. This should never be set to false, except if you are very sure that your connection to the server can not be subject to a Man In The Middle attack. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Ensure the organization named MyOrg exists\n  community.general.pritunl_org:\n    state: present\n    name: MyOrg\n\n- name: Ensure the organization named MyOrg does not exist\n  community.general.pritunl_org:\n    state: absent\n    name: MyOrg"
+  ],
+  "return_values": [
+    {
+      "name": "response",
+      "type": "dictionary",
+      "description": "JSON representation of a Pritunl Organization. Returned: success Sample: {\"auth_api\": false, \"auth_secret\": null, \"auth_token\": null, \"id\": \"csftwlu6uhralzi2dpmhekz3\", \"name\": \"Foo\", \"user_count\": 0}",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/pritunl_org_module#ansible-collections-community-general-pritunl-org-module.html",
+  "parsed_at": "2026-04-11T13:53:24.006796"
+}

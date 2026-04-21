@@ -1,0 +1,204 @@
+{
+  "collection_ns": "amazon_aws",
+  "collection": "amazon.aws",
+  "module": "amazon.aws.ec2_vpc_vgw_info",
+  "slug": "ec2_vpc_vgw_info_module#ansible-collections-amazon-aws-ec2-vpc-vgw-info-module",
+  "description": "Gather information about virtual gateways (VGWs) in AWS.",
+  "parameters": [
+    {
+      "name": "access_key",
+      "aliases": [
+        "aws_access_key_id",
+        "aws_access_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS access key ID. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY environment variables may also be used in decreasing order of preference. The aws_access_key and profile options are mutually exclusive. The aws_access_key_id alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "aws_ca_bundle",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The location of a CA Bundle to use when validating SSL certificates. The AWS_CA_BUNDLE environment variable may also be used."
+    },
+    {
+      "name": "aws_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary to modify the botocore configuration. Parameters can be found in the AWS documentation https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html#botocore.config.Config."
+    },
+    {
+      "name": "debug_botocore_endpoint_logs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use a botocore.endpoint logger to parse the unique (rather than total) \"resource:action\" API calls made during a task, outputing the set to the resource_actions key in the task results. Use the aws_resource_action callback to output to total list made during a playbook. The ANSIBLE_DEBUG_BOTOCORE_LOGS environment variable may also be used. Choices: false ← (default) true"
+    },
+    {
+      "name": "endpoint_url",
+      "aliases": [
+        "aws_endpoint_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "AWS",
+      "choices": [],
+      "description": "URL to connect to instead of the default AWS endpoints. While this can be used to connection to other AWS-compatible services the amazon.aws and community.aws collections are only tested against AWS. The AWS_URL environment variable may also be used."
+    },
+    {
+      "name": "filters",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "A dict of filters to apply. Each dict item consists of a filter key and a filter value. See https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeVpnGateways.html for possible filters. Default: {}"
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "aws_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A named AWS profile to use for authentication. See the AWS documentation for more information about named profiles https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html. The AWS_PROFILE environment variable may also be used. The profile option is mutually exclusive with the aws_access_key, aws_secret_key and session_token options."
+    },
+    {
+      "name": "region",
+      "aliases": [
+        "aws_region"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The AWS region to use. For global services such as IAM, Route53 and CloudFront, region is ignored. The AWS_REGION environment variable may also be used. See the Amazon AWS documentation for more information http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region."
+    },
+    {
+      "name": "secret_key",
+      "aliases": [
+        "aws_secret_access_key",
+        "aws_secret_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS secret access key. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SECRET_ACCESS_KEY or AWS_SECRET_KEY environment variables may also be used in decreasing order of preference. The secret_key and profile options are mutually exclusive. The aws_secret_access_key alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "session_token",
+      "aliases": [
+        "aws_session_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS STS session token for use with temporary credentials. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SESSION_TOKEN environment variable may also be used. The session_token and profile options are mutually exclusive."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to false, SSL certificates will not be validated for communication with the AWS APIs. Setting validate_certs=false is strongly discouraged, as an alternative, consider setting aws_ca_bundle instead. Choices: false true ← (default)"
+    },
+    {
+      "name": "vpn_gateway_ids",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "One or more virtual private gateway IDs."
+    }
+  ],
+  "examples": [
+    "# Note: These examples do not set authentication details, see the AWS Guide for details.\n\n- name: Gather information about all virtual gateways for an account or profile\n  amazon.aws.ec2_vpc_vgw_info:\n    region: ap-southeast-2\n\n- name: Gather information about a filtered list of Virtual Gateways\n  amazon.aws.ec2_vpc_vgw_info:\n    region: ap-southeast-2\n    profile: production\n    filters:\n      \"tag:Name\": \"main-virt-gateway\"\n\n- name: Gather information about a specific virtual gateway by VpnGatewayIds\n  amazon.aws.ec2_vpc_vgw_info:\n    region: ap-southeast-2\n    profile: production\n    vpn_gateway_ids: vgw-c432f6a7"
+  ],
+  "return_values": [
+    {
+      "name": "virtual_gateways",
+      "type": "list",
+      "description": "Information about one or more virtual private gateways. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "resource_tags",
+      "type": "dictionary",
+      "description": "A dictionary representing the tags attached to the VGW. Represents the same details as virtual_gateways.tags. Returned: success Sample: {\"Env\": \"Dev_Test_01\", \"MyKey\": \"MyValue\"}",
+      "returned": "success"
+    },
+    {
+      "name": "state",
+      "type": "string",
+      "description": "Informtion about the current state of the virtual private gateway. Returned: success Sample: \"available\"",
+      "returned": "success"
+    },
+    {
+      "name": "tags",
+      "type": "list",
+      "description": "A list of dictionaries representing the tags attached to the virtual private gateway. Represents the same details as virtual_gateways.resource_tags. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "key",
+      "type": "string",
+      "description": "The key of the tag. Returned: success Sample: \"MyKey\"",
+      "returned": "success"
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "description": "The value of the tag. Returned: success Sample: \"MyValue\"",
+      "returned": "success"
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "description": "Information about type of VPN connection the virtual private gateway supports. Returned: success Sample: \"ipsec.1\"",
+      "returned": "success"
+    },
+    {
+      "name": "vpc_attachments",
+      "type": "list",
+      "description": "Information about the VPCs attached to the virtual private gateway. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "vpc_id",
+      "type": "string",
+      "description": "The ID of the VPC. Returned: success Sample: \"vpc-12345678901234567\"",
+      "returned": "success"
+    },
+    {
+      "name": "vpn_gateway_id",
+      "type": "string",
+      "description": "The ID of the virtual private gateway. Returned: success Sample: \"vgw-0123456789abcdef0\"",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_vpc_vgw_info_module#ansible-collections-amazon-aws-ec2-vpc-vgw-info-module.html",
+  "parsed_at": "2026-04-11T13:52:48.258120"
+}

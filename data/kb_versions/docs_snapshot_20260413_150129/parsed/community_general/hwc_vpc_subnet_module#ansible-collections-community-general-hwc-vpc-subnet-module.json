@@ -1,0 +1,226 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.hwc_vpc_subnet",
+  "slug": "hwc_vpc_subnet_module#ansible-collections-community-general-hwc-vpc-subnet-module",
+  "description": "Subnet management.",
+  "parameters": [
+    {
+      "name": "availability_zone",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies the AZ to which the subnet belongs. Cannot be changed after creating the subnet."
+    },
+    {
+      "name": "cidr",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Specifies the subnet CIDR block. The value must be within the VPC CIDR block and be in CIDR format. The subnet mask cannot be greater than 28. Cannot be changed after creating the subnet."
+    },
+    {
+      "name": "dhcp_enable",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "value",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Specifies whether DHCP is enabled for the subnet. The value can be true (enabled) or false(disabled), and default value is true. If this parameter is set to false, newly created ECSs cannot obtain IP addresses, and usernames and passwords cannot be injected using Cloud-init. Choices: false true"
+    },
+    {
+      "name": "dns_address",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies the DNS server addresses for subnet. The address in the head is used first."
+    },
+    {
+      "name": "domain",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the Domain to scope to (Identity v3). Currently only domain names are supported, and not domain IDs."
+    },
+    {
+      "name": "gateway_ip",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Specifies the gateway of the subnet. The value must be an IP address in the subnet. Cannot be changed after creating the subnet."
+    },
+    {
+      "name": "id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The ID of resource to be managed."
+    },
+    {
+      "name": "identity_endpoint",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The Identity authentication URL."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Specifies the subnet name. The value is a string of 1 to 64 characters that can contain letters, digits, underscores (_), hyphens (-), and periods (.)."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The password to login with."
+    },
+    {
+      "name": "project",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the Tenant (Identity v2) or Project (Identity v3). Currently only project names are supported, and not project IDs."
+    },
+    {
+      "name": "region",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The region to which the project belongs."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Whether the given object should exist in Huawei Cloud. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "timeouts",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "The timeouts for each operations. Default: {}"
+    },
+    {
+      "name": "create",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "15m",
+      "choices": [],
+      "description": "The timeouts for create operation. Default: \"15m\""
+    },
+    {
+      "name": "update",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "15m",
+      "choices": [],
+      "description": "The timeouts for update operation. Default: \"15m\""
+    },
+    {
+      "name": "user",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The user name to login with. Currently only user names are supported, and not user IDs."
+    },
+    {
+      "name": "vpc_id",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Specifies the ID of the VPC to which the subnet belongs. Cannot be changed after creating the subnet."
+    }
+  ],
+  "examples": [
+    "# create subnet\n- name: Create vpc\n  hwc_network_vpc:\n    cidr: \"192.168.100.0/24\"\n    name: \"ansible_network_vpc_test\"\n  register: vpc\n- name: Create subnet\n  community.general.hwc_vpc_subnet:\n    vpc_id: \"{{ vpc.id }}\"\n    cidr: \"192.168.100.0/26\"\n    gateway_ip: \"192.168.100.32\"\n    name: \"ansible_network_subnet_test\"\n    dhcp_enable: true"
+  ],
+  "return_values": [
+    {
+      "name": "availability_zone",
+      "type": "string",
+      "description": "Specifies the AZ to which the subnet belongs. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "cidr",
+      "type": "string",
+      "description": "Specifies the subnet CIDR block. The value must be within the VPC CIDR block and be in CIDR format. The subnet mask cannot be greater than 28. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "dhcp_enable",
+      "type": "boolean",
+      "description": "Specifies whether DHCP is enabled for the subnet. The value can be true (enabled) or false(disabled), and default value is true. If this parameter is set to false, newly created ECSs cannot obtain IP addresses, and usernames and passwords cannot be injected using Cloud-init. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "dns_address",
+      "type": "list",
+      "description": "Specifies the DNS server addresses for subnet. The address in the head is used first. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "gateway_ip",
+      "type": "string",
+      "description": "Specifies the gateway of the subnet. The value must be an IP address in the subnet. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "Specifies the subnet name. The value is a string of 1 to 64 characters that can contain letters, digits, underscores (_), hyphens (-), and periods (.). Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "vpc_id",
+      "type": "string",
+      "description": "Specifies the ID of the VPC to which the subnet belongs. Returned: success",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/hwc_vpc_subnet_module#ansible-collections-community-general-hwc-vpc-subnet-module.html",
+  "parsed_at": "2026-04-11T13:53:15.179851"
+}

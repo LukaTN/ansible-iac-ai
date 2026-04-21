@@ -1,0 +1,261 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.ssh_config",
+  "slug": "ssh_config_module#ansible-collections-community-general-ssh-config-module",
+  "description": "Configures SSH hosts with special IdentityFiles and hostnames.",
+  "parameters": [
+    {
+      "name": "add_keys_to_agent",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Sets the AddKeysToAgent option. Choices: false true"
+    },
+    {
+      "name": "controlmaster",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"yes\"",
+        "\"no\"",
+        "\"ask\"",
+        "\"auto\"",
+        "\"autoask\""
+      ],
+      "description": "Sets the ControlMaster option. Choices: \"yes\" \"no\" \"ask\" \"auto\" \"autoask\""
+    },
+    {
+      "name": "controlpath",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Sets the ControlPath option."
+    },
+    {
+      "name": "controlpersist",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Sets the ControlPersist option."
+    },
+    {
+      "name": "dynamicforward",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Sets the DynamicForward option."
+    },
+    {
+      "name": "forward_agent",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Sets the ForwardAgent option. Choices: false true"
+    },
+    {
+      "name": "group",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Which group this configuration file belongs to. If none given, user is used."
+    },
+    {
+      "name": "host",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The endpoint this configuration is valid for. It can be an actual address on the internet or an alias that connects to the value of hostname."
+    },
+    {
+      "name": "host_key_algorithms",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Sets the HostKeyAlgorithms option."
+    },
+    {
+      "name": "hostname",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The actual host to connect to when connecting to the host defined."
+    },
+    {
+      "name": "identities_only",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "files,",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Specifies that SSH should only use the configured authentication identity and certificate files (either the default files, or those explicitly configured in the ssh_config files or passed on the ssh command-line), even if ssh-agent or a PKCS11Provider or SecurityKeyProvider offers more identities. Choices: false true"
+    },
+    {
+      "name": "identity_file",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The path to an identity file (SSH private key) that is used when connecting to this host. File need to exist and have mode 0600 to be valid."
+    },
+    {
+      "name": "other_options",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Allows specifying arbitrary SSH config entry options using a dictionary. The key names must be lower case. Keys with upper case values are rejected. The values must be strings. Other values are rejected."
+    },
+    {
+      "name": "port",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The actual port to connect to when connecting to the host defined."
+    },
+    {
+      "name": "proxycommand",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Sets the ProxyCommand option. Mutually exclusive with proxyjump."
+    },
+    {
+      "name": "proxyjump",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Sets the ProxyJump option. Mutually exclusive with proxycommand."
+    },
+    {
+      "name": "remote_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies the user to log in as."
+    },
+    {
+      "name": "ssh_config_file",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "SSH config file. If user and this option are not specified, /etc/ssh/ssh_config is used. Mutually exclusive with user."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Whether a host entry should exist or not. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "strict_host_key_checking",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"yes\"",
+        "\"no\"",
+        "\"ask\"",
+        "\"accept-new\""
+      ],
+      "description": "Whether to strictly check the host key when doing connections to the remote host. The value accept-new is supported since community.general 8.6.0. Choices: \"yes\" \"no\" \"ask\" \"accept-new\""
+    },
+    {
+      "name": "user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Which user account this configuration file belongs to. If none given and ssh_config_file is not specified, /etc/ssh/ssh_config is used. If a user is given, ~/.ssh/config is used. Mutually exclusive with ssh_config_file."
+    },
+    {
+      "name": "user_known_hosts_file",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Sets the user known hosts file option."
+    }
+  ],
+  "examples": [
+    "- name: Add a host in the configuration\n  community.general.ssh_config:\n    user: akasurde\n    host: \"example.com\"\n    hostname: \"github.com\"\n    identity_file: \"/home/akasurde/.ssh/id_rsa\"\n    port: '2223'\n    state: present\n    other_options:\n      serveraliveinterval: '30'\n\n- name: Add SSH config with key auto-added to agent\n  community.general.ssh_config:\n    user: devops\n    host: \"example.com\"\n    hostname: \"staging.example.com\"\n    identity_file: \"/home/devops/.ssh/id_rsa\"\n    add_keys_to_agent: true\n    state: present\n\n- name: Delete a host from the configuration\n  community.general.ssh_config:\n    ssh_config_file: \"{{ ssh_config_test }}\"\n    host: \"example.com\"\n    state: absent"
+  ],
+  "return_values": [
+    {
+      "name": "hosts_added",
+      "type": "list",
+      "description": "A list of host added. Returned: success Sample: [\"example.com\"]",
+      "returned": "success"
+    },
+    {
+      "name": "hosts_change_diff",
+      "type": "list",
+      "description": "A list of host diff changes. Returned: on change Sample: [{\"example.com\": {\"new\": {\"hostname\": \"github.com\", \"identityfile\": [\"/tmp/test_ssh_config/fake_id_rsa\"], \"port\": \"2224\"}, \"old\": {\"hostname\": \"github.com\", \"identityfile\": [\"/tmp/test_ssh_config/fake_id_rsa\"], \"port\": \"2224\"}}}]",
+      "returned": "on"
+    },
+    {
+      "name": "hosts_changed",
+      "type": "list",
+      "description": "A list of host changed. Returned: success Sample: [\"example.com\"]",
+      "returned": "success"
+    },
+    {
+      "name": "hosts_removed",
+      "type": "list",
+      "description": "A list of host removed. Returned: success Sample: [\"example.com\"]",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/ssh_config_module#ansible-collections-community-general-ssh-config-module.html",
+  "parsed_at": "2026-04-11T13:53:26.985564"
+}

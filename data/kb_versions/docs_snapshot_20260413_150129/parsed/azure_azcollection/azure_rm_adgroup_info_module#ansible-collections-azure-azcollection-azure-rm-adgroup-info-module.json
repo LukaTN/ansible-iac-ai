@@ -1,0 +1,340 @@
+{
+  "collection_ns": "azure_azcollection",
+  "collection": "azure.azcollection",
+  "module": "azure.azcollection.azure_rm_adgroup_info",
+  "slug": "azure_rm_adgroup_info_module#ansible-collections-azure-azcollection-azure-rm-adgroup-info-module",
+  "description": "Get Azure Active Directory group info.",
+  "parameters": [
+    {
+      "name": "ad_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory username. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "adfs_authority_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure AD authority url. Use when authenticating with Username/password, and has your own ADFS authority."
+    },
+    {
+      "name": "all",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If True, will return all groups in tenant. If False will return no users. It is recommended that you instead identify a subset of groups and use filter. Choices: false ← (default) true"
+    },
+    {
+      "name": "api_profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "Selects an API profile to use when communicating with Azure services. Default value of latest is appropriate for public clouds; future values will allow use with Azure Stack. Default: \"latest\""
+    },
+    {
+      "name": "attribute_name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The name of an attribute that you want to match to attribute_value. If attribute_name is not a collection type it will return groups where attribute_name is equal to attribute_value. If attribute_name is a collection type it will return groups where attribute_value is in attribute_name."
+    },
+    {
+      "name": "attribute_value",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The value to match attribute_name to. If attribute_name is not a collection type it will return groups where attribute_name is equal to attribute_value. If attribute_name is a collection type it will groups users where attribute_value is in attribute_name."
+    },
+    {
+      "name": "auth_source",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "az",
+      "choices": [
+        "\"auto\" ← (default)",
+        "\"cli\"",
+        "\"credential_file\"",
+        "\"env\"",
+        "\"msi\""
+      ],
+      "description": "Controls the source of the credentials to use for authentication. Can also be set via the ANSIBLE_AZURE_AUTH_SOURCE environment variable. When set to auto (the default) the precedence is module parameters -> env -> credential_file -> cli. When set to env, the credentials will be read from the environment variables When set to credential_file, it will read the profile from ~/.azure/credentials. When set to cli, the credentials will be sources from the Azure CLI profile. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if more than one is present otherwise the default az cli subscription is used. When set to msi, the host machine must be an azure resource with an enabled MSI extension. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if the resource is granted access to more than one subscription, otherwise the first subscription is chosen. The msi was added in Ansible 2.6. Choices: \"auto\" ← (default) \"cli\" \"credential_file\" \"env\" \"msi\""
+    },
+    {
+      "name": "cert_validation_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ignore\"",
+        "\"validate\""
+      ],
+      "description": "Controls the certificate validation behavior for Azure endpoints. By default, all modules will validate the server certificate, but when an HTTPS proxy is in use, or against Azure Stack, it may be necessary to disable this behavior by passing ignore. Can also be set via credential file profile or the AZURE_CERT_VALIDATION environment variable. Choices: \"ignore\" \"validate\""
+    },
+    {
+      "name": "check_membership",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The object ID of the contact, group, user, or service principal to check for membership against returned groups."
+    },
+    {
+      "name": "client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client ID. Use when authenticating with a Service Principal or Managed Identity (msi). Can also be set via the AZURE_CLIENT_ID environment variable."
+    },
+    {
+      "name": "cloud_environment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "AzureCloud",
+      "choices": [],
+      "description": "For cloud environments other than the US public cloud, the environment name (as defined by Azure Python SDK, eg, AzureChinaCloud, AzureUSGovernment), or a metadata discovery endpoint URL (required for Azure Stack). Can also be set via credential file profile or the AZURE_CLOUD_ENVIRONMENT environment variable. Default: \"AzureCloud\""
+    },
+    {
+      "name": "disable_instance_discovery",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Determines whether or not instance discovery is performed when attempting to authenticate. Setting this to true will completely disable both instance discovery and authority validation. This functionality is intended for use in scenarios where the metadata endpoint cannot be reached such as in private clouds or Azure Stack. The process of instance discovery entails retrieving authority metadata from https://login.microsoft.com/ to validate the authority. By setting this to **True**, the validation of the authority is disabled. As a result, it is crucial to ensure that the configured authority host is valid and trustworthy. Set via credential file profile or the AZURE_DISABLE_INSTANCE_DISCOVERY environment variable. Choices: false ← (default) true"
+    },
+    {
+      "name": "log_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "log_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "object_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The object id for the ad group. returns the group which has this object ID."
+    },
+    {
+      "name": "odata_filter",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "returns groups based on the the OData filter passed into this parameter."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory user password. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security profile found in ~/.azure/credentials file."
+    },
+    {
+      "name": "raw_membership",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "the",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "By default the group_members return property is flattened and partially filtered of non-User objects before return. This argument disables those transformations. Choices: false ← (default) true"
+    },
+    {
+      "name": "return_group_members",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Indicate whether the members of a group should be returned with the returned groups. Choices: false ← (default) true"
+    },
+    {
+      "name": "return_member_groups",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Indicate whether the groups in which a groups is a member should be returned with the returned groups. Choices: false ← (default) true"
+    },
+    {
+      "name": "return_owners",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Indicate whether the owners of a group should be returned with the returned groups. Choices: false ← (default) true"
+    },
+    {
+      "name": "secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client secret. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "subscription_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Your Azure subscription Id."
+    },
+    {
+      "name": "tenant",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure tenant ID. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "thumbprint",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The thumbprint of the private key specified in x509_certificate_path. Use when authenticating with a Service Principal. Required if x509_certificate_path is defined."
+    },
+    {
+      "name": "x509_certificate_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the X509 certificate used to create the service principal in PEM format. The certificate must be appended to the private key. Use when authenticating with a Service Principal."
+    }
+  ],
+  "examples": [
+    "- name: Return a specific group using object_id\n  azure_rm_adgroup_info:\n    object_id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\n\n- name: Return a specific group using object_id and  return the owners of the group\n  azure_rm_adgroup_info:\n    object_id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\n    return_owners: true\n\n- name: Return a specific group using object_id and return the owners and members of the group\n  azure_rm_adgroup_info:\n    object_id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\n    return_owners: true\n    return_group_members: true\n- name: Return a specific group using object_id and return the owners and members of the group. Return service principals and nested groups.\n  azure_rm_adgroup_info:\n    object_id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\n    return_owners: true\n    return_group_members: true\n    raw_membership: true\n\n- name: Return a specific group using object_id and return the groups the group is a member of\n  azure_rm_adgroup_info:\n    object_id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\n    return_member_groups: true\n\n- name: Return a specific group using object_id and check an ID for membership\n  azure_rm_adgroup_info:\n    object_id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\n    check_membership: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\n\n- name: Return a specific group using displayName for attribute_name\n  azure_rm_adgroup_info:\n    attribute_name: \"displayName\"\n    attribute_value: \"Display-Name-Of-AD-Group\"\n\n- name: Return groups matching odata_filter\n  azure_rm_adgroup_info:\n    odata_filter: \"mailNickname eq 'Mail-Nickname-Of-AD-Group'\"\n\n- name: Return all groups\n  azure_rm_adgroup_info:\n    all: true"
+  ],
+  "return_values": [
+    {
+      "name": "description",
+      "type": "string",
+      "description": "An optional description for the group. Returned: always Sample: \"fortest\"",
+      "returned": "always"
+    },
+    {
+      "name": "display_name",
+      "type": "string",
+      "description": "The display name of the group. Returned: always Sample: \"GroupName\"",
+      "returned": "always"
+    },
+    {
+      "name": "group_members",
+      "type": "list",
+      "description": "The members of the group. If raw_membership is set, this field may contain non-user objects (groups, service principals, etc) Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "group_owners",
+      "type": "list",
+      "description": "The owners of the group. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "mail",
+      "type": "string",
+      "description": "The primary email address of the group. Returned: always Sample: \"group@contoso.com\"",
+      "returned": "always"
+    },
+    {
+      "name": "mail_enabled",
+      "type": "boolean",
+      "description": "Whether the group is mail-enabled. Must be false. This is because only pure security groups can be created using the Graph API. Returned: always Sample: false",
+      "returned": "always"
+    },
+    {
+      "name": "mail_nickname",
+      "type": "string",
+      "description": "The mail alias for the group. Returned: always Sample: \"groupname\"",
+      "returned": "always"
+    },
+    {
+      "name": "object_id",
+      "type": "string",
+      "description": "The object_id for the group. Returned: always Sample: \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\"",
+      "returned": "always"
+    },
+    {
+      "name": "security_enabled",
+      "type": "boolean",
+      "description": "Whether the group is security-enable. Returned: always Sample: false",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_adgroup_info_module#ansible-collections-azure-azcollection-azure-rm-adgroup-info-module.html",
+  "parsed_at": "2026-04-11T13:52:53.436604"
+}

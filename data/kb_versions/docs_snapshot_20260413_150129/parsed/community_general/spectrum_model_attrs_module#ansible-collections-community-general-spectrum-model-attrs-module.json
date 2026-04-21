@@ -1,0 +1,119 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.spectrum_model_attrs",
+  "slug": "spectrum_model_attrs_module#ansible-collections-community-general-spectrum-model-attrs-module",
+  "description": "This module can be used to enforce a model’s attributes in CA Spectrum.",
+  "parameters": [
+    {
+      "name": "attributes",
+      "aliases": [],
+      "type": "list",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "A list of attribute names and values to enforce. All values and parameters are case sensitive and must be provided as strings only."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Attribute name OR hex ID. Currently defined names are: App_Manufacturer (0x230683); CollectionsModelNameString (0x12adb); Condition (0x1000a); Criticality (0x1290c); DeviceType (0x23000e); isManaged (0x1295d); Model_Class (0x11ee8); Model_Handle (0x129fa); Model_Name (0x1006e); Modeltype_Handle (0x10001); Modeltype_Name (0x10000); Network_Address (0x12d7f); Notes (0x11564); ServiceDesk_Asset_ID (0x12db9); TopologyModelNameString (0x129e7); sysDescr (0x10052); sysName (0x10b5b); Vendor_Name (0x11570); Description (0x230017). Hex IDs are the direct identifiers in Spectrum and always work. To lookup hex IDs go to the UI: Locator -> Devices -> By Model Name -> <enter any model> -> Attributes tab."
+    },
+    {
+      "name": "value",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Attribute value. Empty strings should be \"\" or null."
+    },
+    {
+      "name": "type",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Model type."
+    },
+    {
+      "name": "url",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "URL of OneClick server."
+    },
+    {
+      "name": "url_password",
+      "aliases": [
+        "password"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "OneClick password."
+    },
+    {
+      "name": "url_username",
+      "aliases": [
+        "username"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "OneClick username."
+    },
+    {
+      "name": "use_proxy",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If false, it does not use a proxy, even if one is defined in an environment variable on the target hosts. Choices: false true ← (default)"
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Validate SSL certificates. Only change this to false if you can guarantee that you are talking to the correct endpoint and there is no man-in-the-middle attack happening. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Enforce maintenance mode for modelxyz01 with a note about why\n  community.general.spectrum_model_attrs:\n    url: \"http://oneclick.url.com\"\n    username: \"{{ oneclick_username }}\"\n    password: \"{{ oneclick_password }}\"\n    name: \"modelxyz01\"\n    type: \"Host_Device\"\n    validate_certs: true\n    attributes:\n      - name: \"isManaged\"\n        value: \"false\"\n      - name: \"Notes\"\n        value: >-\n          MM set on {{ ansible_date_time.iso8601 }} via CO {{ CO }}\n          by {{ tower_user_name | default(ansible_user_id) }}\n  delegate_to: localhost\n  register: spectrum_model_attrs_status"
+  ],
+  "return_values": [
+    {
+      "name": "changed_attrs",
+      "type": "dictionary",
+      "description": "Dictionary of changed name or hex IDs (whichever was specified) to their new corresponding values. Returned: always Sample: {\"Notes\": \"MM set on 2021-02-03T22:04:02Z via CO CO9999 by tgates\", \"isManaged\": \"true\"}",
+      "returned": "always"
+    },
+    {
+      "name": "msg",
+      "type": "string",
+      "description": "Informational message on the job result. Returned: always Sample: \"Success\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/spectrum_model_attrs_module#ansible-collections-community-general-spectrum-model-attrs-module.html",
+  "parsed_at": "2026-04-11T13:53:26.856217"
+}

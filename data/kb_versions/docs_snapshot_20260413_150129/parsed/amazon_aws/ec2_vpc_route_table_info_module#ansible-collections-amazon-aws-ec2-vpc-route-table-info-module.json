@@ -1,0 +1,273 @@
+{
+  "collection_ns": "amazon_aws",
+  "collection": "amazon.aws",
+  "module": "amazon.aws.ec2_vpc_route_table_info",
+  "slug": "ec2_vpc_route_table_info_module#ansible-collections-amazon-aws-ec2-vpc-route-table-info-module",
+  "description": "Gather information about EC2 VPC route tables in AWS.",
+  "parameters": [
+    {
+      "name": "access_key",
+      "aliases": [
+        "aws_access_key_id",
+        "aws_access_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS access key ID. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY environment variables may also be used in decreasing order of preference. The aws_access_key and profile options are mutually exclusive. The aws_access_key_id alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "aws_ca_bundle",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The location of a CA Bundle to use when validating SSL certificates. The AWS_CA_BUNDLE environment variable may also be used."
+    },
+    {
+      "name": "aws_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary to modify the botocore configuration. Parameters can be found in the AWS documentation https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html#botocore.config.Config."
+    },
+    {
+      "name": "debug_botocore_endpoint_logs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use a botocore.endpoint logger to parse the unique (rather than total) \"resource:action\" API calls made during a task, outputing the set to the resource_actions key in the task results. Use the aws_resource_action callback to output to total list made during a playbook. The ANSIBLE_DEBUG_BOTOCORE_LOGS environment variable may also be used. Choices: false ← (default) true"
+    },
+    {
+      "name": "endpoint_url",
+      "aliases": [
+        "aws_endpoint_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "AWS",
+      "choices": [],
+      "description": "URL to connect to instead of the default AWS endpoints. While this can be used to connection to other AWS-compatible services the amazon.aws and community.aws collections are only tested against AWS. The AWS_URL environment variable may also be used."
+    },
+    {
+      "name": "filters",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "A dict of filters to apply. Each dict item consists of a filter key and a filter value. See https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeRouteTables.html for possible filters. Default: {}"
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "aws_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A named AWS profile to use for authentication. See the AWS documentation for more information about named profiles https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html. The AWS_PROFILE environment variable may also be used. The profile option is mutually exclusive with the aws_access_key, aws_secret_key and session_token options."
+    },
+    {
+      "name": "region",
+      "aliases": [
+        "aws_region"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The AWS region to use. For global services such as IAM, Route53 and CloudFront, region is ignored. The AWS_REGION environment variable may also be used. See the Amazon AWS documentation for more information http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region."
+    },
+    {
+      "name": "secret_key",
+      "aliases": [
+        "aws_secret_access_key",
+        "aws_secret_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS secret access key. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SECRET_ACCESS_KEY or AWS_SECRET_KEY environment variables may also be used in decreasing order of preference. The secret_key and profile options are mutually exclusive. The aws_secret_access_key alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "session_token",
+      "aliases": [
+        "aws_session_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS STS session token for use with temporary credentials. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SESSION_TOKEN environment variable may also be used. The session_token and profile options are mutually exclusive."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to false, SSL certificates will not be validated for communication with the AWS APIs. Setting validate_certs=false is strongly discouraged, as an alternative, consider setting aws_ca_bundle instead. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "# Note: These examples do not set authentication details, see the AWS Guide for details.\n\n- name: Gather information about all VPC route tables\n  amazon.aws.ec2_vpc_route_table_info:\n\n- name: Gather information about a particular VPC route table using route table ID\n  amazon.aws.ec2_vpc_route_table_info:\n    filters:\n      route-table-id: rtb-00112233\n\n- name: Gather information about any VPC route table with a tag key Name and value Example\n  amazon.aws.ec2_vpc_route_table_info:\n    filters:\n      \"tag:Name\": Example\n\n- name: Gather information about any VPC route table within VPC with ID vpc-abcdef00\n  amazon.aws.ec2_vpc_route_table_info:\n    filters:\n      vpc-id: vpc-abcdef00"
+  ],
+  "return_values": [
+    {
+      "name": "route_tables",
+      "type": "complex",
+      "description": "A list of dictionarys describing route tables. See also https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2.html#EC2.Client.describe_route_tables. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "associations",
+      "type": "complex",
+      "description": "List of associations between the route table and one or more subnets or a gateway. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "association_state",
+      "type": "complex",
+      "description": "The state of the association. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "state",
+      "type": "string",
+      "description": "The state of the association. Returned: always Sample: \"associated\"",
+      "returned": "always"
+    },
+    {
+      "name": "state_message",
+      "type": "string",
+      "description": "Additional information about the state of the association. Returned: when available Sample: \"Creating association\"",
+      "returned": "when"
+    },
+    {
+      "name": "gateway_id",
+      "type": "string",
+      "description": "ID of the internet gateway or virtual private gateway. Returned: when route table is a gateway route table Sample: \"igw-03312309\"",
+      "returned": "when"
+    },
+    {
+      "name": "main",
+      "type": "boolean",
+      "description": "Whether this is the main route table. Returned: always Sample: false",
+      "returned": "always"
+    },
+    {
+      "name": "route_table_association_id",
+      "type": "string",
+      "description": "ID of association between route table and subnet. Returned: always Sample: \"rtbassoc-ab47cfc3\"",
+      "returned": "always"
+    },
+    {
+      "name": "route_table_id",
+      "type": "string",
+      "description": "ID of the route table. Returned: always Sample: \"rtb-bf779ed7\"",
+      "returned": "always"
+    },
+    {
+      "name": "subnet_id",
+      "type": "string",
+      "description": "ID of the subnet. Returned: when route table is a subnet route table Sample: \"subnet-82055af9\"",
+      "returned": "when"
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "description": "ID of the route table (same as route_tables.route_table_id for backwards compatibility). Returned: always Sample: \"rtb-bf779ed7\"",
+      "returned": "always"
+    },
+    {
+      "name": "owner_id",
+      "type": "string",
+      "description": "ID of the account which owns the route table. Returned: always Sample: \"012345678912\"",
+      "returned": "always"
+    },
+    {
+      "name": "propagating_vgws",
+      "type": "list",
+      "description": "List of Virtual Private Gateways propagating routes. Returned: always Sample: []",
+      "returned": "always"
+    },
+    {
+      "name": "routes",
+      "type": "complex",
+      "description": "List of routes in the route table. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "destination_cidr_block",
+      "type": "string",
+      "description": "CIDR block of destination. Returned: always Sample: \"10.228.228.0/22\"",
+      "returned": "always"
+    },
+    {
+      "name": "instance_id",
+      "type": "string",
+      "description": "ID of a NAT instance. Empty unless the route is via an EC2 instance. Returned: always Sample: \"i-abcd123456789\"",
+      "returned": "always"
+    },
+    {
+      "name": "instance_owner_id",
+      "type": "string",
+      "description": "AWS account owning the NAT instance. Empty unless the route is via an EC2 instance. Returned: always Sample: \"123456789012\"",
+      "returned": "always"
+    },
+    {
+      "name": "nat_gateway_id",
+      "type": "string",
+      "description": "ID of the NAT gateway. Returned: when the route is via a NAT gateway. Sample: \"local\"",
+      "returned": "when"
+    },
+    {
+      "name": "network_interface_id",
+      "type": "string",
+      "description": "The ID of the network interface. Empty unless the route is via an EC2 instance. Returned: always Sample: \"123456789012\"",
+      "returned": "always"
+    },
+    {
+      "name": "origin",
+      "type": "string",
+      "description": "mechanism through which the route is in the table. Returned: always Sample: \"CreateRouteTable\"",
+      "returned": "always"
+    },
+    {
+      "name": "transit_gateway_id",
+      "type": "string",
+      "description": "ID of the Transit gateway. Returned: when the route is via a Transit gateway. Sample: \"tgw-123456789012\"",
+      "returned": "when"
+    },
+    {
+      "name": "tags",
+      "type": "dictionary",
+      "description": "Tags applied to the route table. Returned: always Sample: {\"Name\": \"Public route table\", \"Public\": \"true\"}",
+      "returned": "always"
+    },
+    {
+      "name": "vpc_id",
+      "type": "string",
+      "description": "ID for the VPC in which the route lives. Returned: always Sample: \"vpc-6e2d2407\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_vpc_route_table_info_module#ansible-collections-amazon-aws-ec2-vpc-route-table-info-module.html",
+  "parsed_at": "2026-04-11T13:52:48.100842"
+}

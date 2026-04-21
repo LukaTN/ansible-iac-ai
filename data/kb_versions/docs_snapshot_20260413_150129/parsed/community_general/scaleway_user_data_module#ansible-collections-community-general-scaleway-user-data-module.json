@@ -1,0 +1,121 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.scaleway_user_data",
+  "slug": "scaleway_user_data_module#ansible-collections-community-general-scaleway-user-data-module",
+  "description": "This module manages user_data on compute instances on Scaleway.",
+  "parameters": [
+    {
+      "name": "api_timeout",
+      "aliases": [
+        "timeout"
+      ],
+      "type": "integer",
+      "required": false,
+      "default": "30",
+      "choices": [],
+      "description": "HTTP timeout to Scaleway API in seconds. Default: 30"
+    },
+    {
+      "name": "api_token",
+      "aliases": [
+        "oauth_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Scaleway OAuth token. This is required if profile is not specified."
+    },
+    {
+      "name": "api_url",
+      "aliases": [
+        "base_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "https://api.scaleway.com",
+      "choices": [],
+      "description": "Scaleway API URL. Default: \"https://api.scaleway.com\""
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "scw_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The config profile in config file to load the Scaleway OAuth token from, use instead of api_token. It is also possible to set SCW_PROFILE to use a SCW CLI config profile."
+    },
+    {
+      "name": "query_parameters",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "List of parameters passed to the query string. Default: {}"
+    },
+    {
+      "name": "region",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [
+        "\"ams1\"",
+        "\"EMEA-NL-EVS\"",
+        "\"ams2\"",
+        "\"ams3\"",
+        "\"par1\"",
+        "\"EMEA-FR-PAR1\"",
+        "\"par2\"",
+        "\"EMEA-FR-PAR2\"",
+        "\"par3\"",
+        "\"waw1\"",
+        "\"EMEA-PL-WAW1\"",
+        "\"waw2\"",
+        "\"waw3\""
+      ],
+      "description": "Scaleway compute zone. Choices: \"ams1\" \"EMEA-NL-EVS\" \"ams2\" \"ams3\" \"par1\" \"EMEA-FR-PAR1\" \"par2\" \"EMEA-FR-PAR2\" \"par3\" \"waw1\" \"EMEA-PL-WAW1\" \"waw2\" \"waw3\""
+    },
+    {
+      "name": "server_id",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Scaleway Compute instance ID of the server."
+    },
+    {
+      "name": "user_data",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "User defined data. Typically used with cloud-init. Pass your cloud-init script here as a string."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Validate SSL certs of the Scaleway API. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Update the cloud-init\n  community.general.scaleway_user_data:\n    server_id: '5a33b4ab-57dd-4eb6-8b0a-d95eb63492ce'\n    region: ams1\n    user_data:\n      cloud-init: 'final_message: \"Hello World!\"'"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/scaleway_user_data_module#ansible-collections-community-general-scaleway-user-data-module.html",
+  "parsed_at": "2026-04-11T13:53:26.047835"
+}

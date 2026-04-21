@@ -1,0 +1,602 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.gitlab_project",
+  "slug": "gitlab_project_module#ansible-collections-community-general-gitlab-project-module",
+  "description": "When the project does not exist in GitLab, it is created.",
+  "parameters": [
+    {
+      "name": "allow_merge_on_skipped_pipeline",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Allow merge when skipped pipelines exist. Choices: false true"
+    },
+    {
+      "name": "api_job_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "GitLab CI job token for logging in."
+    },
+    {
+      "name": "api_oauth_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "GitLab OAuth token for logging in."
+    },
+    {
+      "name": "api_password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The password to use for authentication against the API."
+    },
+    {
+      "name": "api_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "GitLab access token with API permissions."
+    },
+    {
+      "name": "api_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The resolvable endpoint for the API."
+    },
+    {
+      "name": "api_username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The username to use for authentication against the API."
+    },
+    {
+      "name": "avatar_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Absolute path image to configure avatar. File size should not exceed 200 kb. This option is only used on creation, not for updates."
+    },
+    {
+      "name": "build_timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "value.",
+      "choices": [],
+      "description": "Maximum number of seconds a CI job can run. If not specified on creation, GitLab imposes a default value."
+    },
+    {
+      "name": "builds_access_level",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"private\"",
+        "\"disabled\"",
+        "\"enabled\""
+      ],
+      "description": "private means that repository CI/CD is allowed only to project members. disabled means that repository CI/CD is disabled. enabled means that repository CI/CD is enabled. Choices: \"private\" \"disabled\" \"enabled\""
+    },
+    {
+      "name": "ca_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The CA certificates bundle to use to verify GitLab server certificate."
+    },
+    {
+      "name": "ci_config_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Custom path to the CI configuration file for this project."
+    },
+    {
+      "name": "container_expiration_policy",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Project cleanup policy for its container registry."
+    },
+    {
+      "name": "container_registry_access_level",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"private\"",
+        "\"disabled\"",
+        "\"enabled\""
+      ],
+      "description": "private means that container registry is allowed only to project members. disabled means that container registry is disabled. enabled means that container registry is enabled. Choices: \"private\" \"disabled\" \"enabled\""
+    },
+    {
+      "name": "default_branch",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "branch",
+      "choices": [],
+      "description": "The default branch name for this project. For project creation, this option requires initialize_with_readme=true. For project update, the branch must exist. Supports project’s default branch update since community.general 8.0.0."
+    },
+    {
+      "name": "description",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "An description for the project."
+    },
+    {
+      "name": "environments_access_level",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"private\"",
+        "\"disabled\"",
+        "\"enabled\""
+      ],
+      "description": "private means that deployment to environment is allowed only to project members. disabled means that deployment to environment is disabled. enabled means that deployment to environment is enabled. Choices: \"private\" \"disabled\" \"enabled\""
+    },
+    {
+      "name": "feature_flags_access_level",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"private\"",
+        "\"disabled\"",
+        "\"enabled\""
+      ],
+      "description": "private means that feature rollout is allowed only to project members. disabled means that feature rollout is disabled. enabled means that feature rollout is enabled. Choices: \"private\" \"disabled\" \"enabled\""
+    },
+    {
+      "name": "forking_access_level",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"private\"",
+        "\"disabled\"",
+        "\"enabled\""
+      ],
+      "description": "private means that repository forks is allowed only to project members. disabled means that repository forks are disabled. enabled means that repository forks are enabled. Choices: \"private\" \"disabled\" \"enabled\""
+    },
+    {
+      "name": "group",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "ID or the full path of the group of which this projects belongs to."
+    },
+    {
+      "name": "import_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Git repository which is imported into gitlab. GitLab server needs read access to this git repository."
+    },
+    {
+      "name": "infrastructure_access_level",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"private\"",
+        "\"disabled\"",
+        "\"enabled\""
+      ],
+      "description": "private means that configuring infrastructure is allowed only to project members. disabled means that configuring infrastructure is disabled. enabled means that configuring infrastructure is enabled. Choices: \"private\" \"disabled\" \"enabled\""
+    },
+    {
+      "name": "initialize_with_readme",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "README.md.",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Initializes the project with a default README.md. Is only used when the project is created, and ignored otherwise. Choices: false ← (default) true"
+    },
+    {
+      "name": "issues_access_level",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"private\"",
+        "\"disabled\"",
+        "\"enabled\""
+      ],
+      "description": "private means that accessing issues tab is allowed only to project members. disabled means that accessing issues tab is disabled. enabled means that accessing issues tab is enabled. issues_access_level and issues_enabled are mutually exclusive. Choices: \"private\" \"disabled\" \"enabled\""
+    },
+    {
+      "name": "issues_enabled",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether you want to create issues or not. issues_access_level and issues_enabled are mutually exclusive. Choices: false true ← (default)"
+    },
+    {
+      "name": "lfs_enabled",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Enable Git large file systems to manages large files such as audio, video, and graphics files. Choices: false ← (default) true"
+    },
+    {
+      "name": "merge_method",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ff\"",
+        "\"merge\" ← (default)",
+        "\"rebase_merge\""
+      ],
+      "description": "What requirements are placed upon merges. Possible values are merge, rebase_merge merge commit with semi-linear history, ff fast-forward merges only. Choices: \"ff\" \"merge\" ← (default) \"rebase_merge\""
+    },
+    {
+      "name": "merge_requests_enabled",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If merge requests can be made or not. Choices: false true ← (default)"
+    },
+    {
+      "name": "model_registry_access_level",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"private\"",
+        "\"disabled\"",
+        "\"enabled\""
+      ],
+      "description": "private means that accessing model registry tab is allowed only to project members. disabled means that accessing model registry tab is disabled. enabled means that accessing model registry tab is enabled. Choices: \"private\" \"disabled\" \"enabled\""
+    },
+    {
+      "name": "monitor_access_level",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"private\"",
+        "\"disabled\"",
+        "\"enabled\""
+      ],
+      "description": "private means that monitoring health is allowed only to project members. disabled means that monitoring health is disabled. enabled means that monitoring health is enabled. Choices: \"private\" \"disabled\" \"enabled\""
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the project."
+    },
+    {
+      "name": "only_allow_merge_if_all_discussions_are_resolved",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "All discussions on a merge request (MR) have to be resolved. Choices: false true"
+    },
+    {
+      "name": "only_allow_merge_if_pipeline_succeeds",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Only allow merges if pipeline succeeded. Choices: false true"
+    },
+    {
+      "name": "packages_enabled",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Enable GitLab package repository. Choices: false true"
+    },
+    {
+      "name": "pages_access_level",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"private\"",
+        "\"disabled\"",
+        "\"enabled\""
+      ],
+      "description": "private means that accessing pages tab is allowed only to project members. disabled means that accessing pages tab is disabled. enabled means that accessing pages tab is enabled. Choices: \"private\" \"disabled\" \"enabled\""
+    },
+    {
+      "name": "path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The path of the project you want to create, this is server_url/group/path. If not supplied, name is used."
+    },
+    {
+      "name": "releases_access_level",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"private\"",
+        "\"disabled\"",
+        "\"enabled\""
+      ],
+      "description": "private means that accessing release is allowed only to project members. disabled means that accessing release is disabled. enabled means that accessing release is enabled. Choices: \"private\" \"disabled\" \"enabled\""
+    },
+    {
+      "name": "remove_source_branch_after_merge",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Remove the source branch after merge. Choices: false true"
+    },
+    {
+      "name": "repository_access_level",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"private\"",
+        "\"disabled\"",
+        "\"enabled\""
+      ],
+      "description": "private means that accessing repository is allowed only to project members. disabled means that accessing repository is disabled. enabled means that accessing repository is enabled. Choices: \"private\" \"disabled\" \"enabled\""
+    },
+    {
+      "name": "security_and_compliance_access_level",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"private\"",
+        "\"disabled\"",
+        "\"enabled\""
+      ],
+      "description": "private means that accessing security and complicance tab is allowed only to project members. disabled means that accessing security and complicance tab is disabled. enabled means that accessing security and complicance tab is enabled. Choices: \"private\" \"disabled\" \"enabled\""
+    },
+    {
+      "name": "service_desk_enabled",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Enable Service Desk. Choices: false true"
+    },
+    {
+      "name": "shared_runners_enabled",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Enable shared runners for this project. Choices: false true"
+    },
+    {
+      "name": "snippets_enabled",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If creating snippets should be available or not. Choices: false true ← (default)"
+    },
+    {
+      "name": "squash_option",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"never\"",
+        "\"always\"",
+        "\"default_off\"",
+        "\"default_on\""
+      ],
+      "description": "Squash commits when merging. Choices: \"never\" \"always\" \"default_off\" \"default_on\""
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Create or delete project. Possible values are present and absent. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "topics",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A topic or list of topics to be assigned to a project. It is compatible with old GitLab server releases (versions before 14, correspond to tag_list)."
+    },
+    {
+      "name": "username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Used to create a personal project under a user’s name."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether or not to validate SSL certs when supplying a HTTPS endpoint. Choices: false true ← (default)"
+    },
+    {
+      "name": "visibility",
+      "aliases": [
+        "visibility_level"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"private\" ← (default)",
+        "\"internal\"",
+        "\"public\""
+      ],
+      "description": "private Project access must be granted explicitly for each user. internal The project can be cloned by any logged in user. public The project can be cloned without any authentication. Choices: \"private\" ← (default) \"internal\" \"public\""
+    },
+    {
+      "name": "wiki_enabled",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If an wiki for this project should be available or not. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Create GitLab Project\n  community.general.gitlab_project:\n    api_url: https://gitlab.example.com/\n    api_token: \"{{ api_token }}\"\n    name: my_first_project\n    group: \"10481470\"\n\n- name: Delete GitLab Project\n  community.general.gitlab_project:\n    api_url: https://gitlab.example.com/\n    api_token: \"{{ access_token }}\"\n    name: my_first_project\n    state: absent\n  delegate_to: localhost\n\n- name: Create GitLab Project in group Ansible\n  community.general.gitlab_project:\n    api_url: https://gitlab.example.com/\n    validate_certs: true\n    api_username: dj-wasabi\n    api_password: \"MySecretPassword\"\n    name: my_first_project\n    group: ansible\n    issues_enabled: false\n    merge_method: rebase_merge\n    wiki_enabled: true\n    snippets_enabled: true\n    import_url: http://git.example.com/example/lab.git\n    initialize_with_readme: true\n    state: present\n  delegate_to: localhost\n\n- name: get the initial root password\n  ansible.builtin.shell: |\n    grep 'Password:' /etc/gitlab/initial_root_password | sed -e 's/Password\\: \\(.*\\)/\\1/'\n  register: initial_root_password\n\n- name: Create a GitLab Project using a username/password via oauth_token\n  community.general.gitlab_project:\n    api_url: https://gitlab.example.com/\n    api_username: root\n    api_password: \"{{ initial_root_password }}\"\n    name: my_second_project\n    group: \"10481470\""
+  ],
+  "return_values": [
+    {
+      "name": "error",
+      "type": "string",
+      "description": "The error message returned by the GitLab API. Returned: failed Sample: \"400: path is already in use\"",
+      "returned": "failed"
+    },
+    {
+      "name": "msg",
+      "type": "string",
+      "description": "Success or failure message. Returned: always Sample: \"Success\"",
+      "returned": "always"
+    },
+    {
+      "name": "project",
+      "type": "dictionary",
+      "description": "API object. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "result",
+      "type": "dictionary",
+      "description": "JSON-parsed response from the server. Returned: always",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/gitlab_project_module.html",
+  "parsed_at": "2026-04-13T16:29:46.714594"
+}

@@ -1,0 +1,34 @@
+# ============================================================
+# AnsibleAI RAG Generator — LangChain + ChromaDB
+# Date        : 2026-04-11 11:41:28
+# Request     : create an Azure resource group named rg-production in East US
+# Module      : None
+# Collection  : None
+# RAG score   : 0.0
+# Chunks used : 0
+# Source URL  : 
+# LLM model   : MISTRAL
+# ============================================================
+
+---
+- name: Create Azure Resource Group rg-production in East US
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - azure.azcollection
+
+  tasks:
+    - name: Login to Azure account
+      azure.core.auth.login:
+        client_id: <your_client_id>
+        subscription_id: <your_subscription_id>
+        service_principal_password: <your_service_principal_password>
+
+    - name: Create Resource Group rg-production in East US
+      azure.mgmt.resource.resources:
+        location: eastus
+        resource_group_name: rg-production
+        body:
+          properties:
+            provisioningState: Succeeded

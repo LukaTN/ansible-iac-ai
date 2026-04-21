@@ -1,0 +1,33 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.lvg_rename",
+  "slug": "lvg_rename_module#ansible-collections-community-general-lvg-rename-module",
+  "description": "This module renames volume groups using the vgchange command.",
+  "parameters": [
+    {
+      "name": "vg",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name or UUID of the source VG. See vgrename(8) for valid values."
+    },
+    {
+      "name": "vg_new",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The new name of the VG. See lvm(8) for valid names."
+    }
+  ],
+  "examples": [
+    "- name: Rename a VG by name\n  community.general.lvg_rename:\n    vg: vg_orig_name\n    vg_new: vg_new_name\n\n- name: Rename a VG by UUID\n  community.general.lvg_rename:\n    vg_uuid: SNgd0Q-rPYa-dPB8-U1g6-4WZI-qHID-N7y9Vj\n    vg_new: vg_new_name"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/lvg_rename_module.html",
+  "parsed_at": "2026-04-13T16:29:52.066405"
+}

@@ -1,0 +1,461 @@
+{
+  "collection_ns": "amazon_aws",
+  "collection": "amazon.aws",
+  "module": "amazon.aws.ec2_dedicated_host",
+  "slug": "ec2_dedicated_host_module#ansible-collections-amazon-aws-ec2-dedicated-host-module",
+  "description": "Create, update or delete (release) EC2 dedicated host.",
+  "parameters": [
+    {
+      "name": "access_key",
+      "aliases": [
+        "aws_access_key_id",
+        "aws_access_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS access key ID. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY environment variables may also be used in decreasing order of preference. The aws_access_key and profile options are mutually exclusive. The aws_access_key_id alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "asset_ids",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The IDs of the Outpost hardware assets on which to allocate the Dedicated Hosts. Targeting specific hardware assets on an Outpost can help to minimize latency between your workloads. This parameter is supported only if you specify outpost_arn. If you specify this parameter, you can omit quantity. If you specify both asset_ids and quantity, then the value for quantity must be equal to the number of asset_ids specified."
+    },
+    {
+      "name": "auto_placement",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"on\"",
+        "\"off\" ← (default)"
+      ],
+      "description": "Indicates whether the host accepts any untargeted instance launches that match its instance type configuration, or if it only accepts Host tenancy instance launches that specify its unique host ID. Choices: \"on\" \"off\" ← (default)"
+    },
+    {
+      "name": "availability_zone",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The Availability Zone in which to allocate the Dedicated Host. Required if state=present."
+    },
+    {
+      "name": "aws_ca_bundle",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The location of a CA Bundle to use when validating SSL certificates. The AWS_CA_BUNDLE environment variable may also be used."
+    },
+    {
+      "name": "aws_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary to modify the botocore configuration. Parameters can be found in the AWS documentation https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html#botocore.config.Config."
+    },
+    {
+      "name": "client_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "case-sensitive identifier that you provide to ensure the idempotency of the request."
+    },
+    {
+      "name": "debug_botocore_endpoint_logs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use a botocore.endpoint logger to parse the unique (rather than total) \"resource:action\" API calls made during a task, outputing the set to the resource_actions key in the task results. Use the aws_resource_action callback to output to total list made during a playbook. The ANSIBLE_DEBUG_BOTOCORE_LOGS environment variable may also be used. Choices: false ← (default) true"
+    },
+    {
+      "name": "endpoint_url",
+      "aliases": [
+        "aws_endpoint_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "AWS",
+      "choices": [],
+      "description": "URL to connect to instead of the default AWS endpoints. While this can be used to connection to other AWS-compatible services the amazon.aws and community.aws collections are only tested against AWS. The AWS_URL environment variable may also be used."
+    },
+    {
+      "name": "host_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The IDs of the Dedicated Hosts to release or modify"
+    },
+    {
+      "name": "host_maintenance",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"on\"",
+        "\"off\" ← (default)"
+      ],
+      "description": "Indicates whether to enable or disable host maintenance for the Dedicated Host. Choices: \"on\" \"off\" ← (default)"
+    },
+    {
+      "name": "host_recovery",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"on\"",
+        "\"off\" ← (default)"
+      ],
+      "description": "Indicates whether to enable or disable host recovery for the Dedicated Host. Host recovery is disabled by default. Choices: \"on\" \"off\" ← (default)"
+    },
+    {
+      "name": "instance_family",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies the instance family to be supported by the Dedicated Hosts. If you specify an instance family, the Dedicated Hosts support multiple instance types within that instance family. At least one of instance_family or instance_type must be specified when allocating dedicated host. Mutually exclusive with paramter instance_type."
+    },
+    {
+      "name": "instance_type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies the instance type to be supported by the Dedicated Hosts. If you specify an instance type, the Dedicated Hosts support instances of the specified instance type only. At least one of instance_family or instance_type must be specified when allocating dedicated host. Mutually exclusive with paramter instance_family."
+    },
+    {
+      "name": "lookup",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"tag\" ← (default)",
+        "\"host_id\""
+      ],
+      "description": "Look up EC2 dedicated host by either tags or by host_id. If lookup=tag and tags is not specified then no lookup for an existing dedicated host is performed and a new dedicated host will be created. When using lookup=tag, multiple matches being found will result in a failure and no changes will be made. To change the tags of a dedicated host, use lookup=host_id. Choices: \"tag\" ← (default) \"host_id\""
+    },
+    {
+      "name": "outpost_arn",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The Amazon Resource Name (ARN) of the Amazon Web Services Outpost on which to allocate the Dedicated Host."
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "aws_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A named AWS profile to use for authentication. See the AWS documentation for more information about named profiles https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html. The AWS_PROFILE environment variable may also be used. The profile option is mutually exclusive with the aws_access_key, aws_secret_key and session_token options."
+    },
+    {
+      "name": "purge_tags",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If purge_tags=true and tags is set, existing tags will be purged from the resource to match exactly what is defined by tags parameter. If the tags parameter is not set then tags will not be modified, even if purge_tags=True. Tag keys beginning with aws: are reserved by Amazon and can not be modified. As such they will be ignored for the purposes of the purge_tags parameter. See the Amazon documentation for more information https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html#tag-conventions. Choices: false true ← (default)"
+    },
+    {
+      "name": "quantity",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The number of Dedicated Hosts to allocate to your account with these parameters. Required when state=present. If you are allocating the Dedicated Hosts on an Outpost, and you specify asset_ids, you can omit this parameter. If you specify both asset_ids and quantity, then the value that you specify for quantity must be equal to the number of asset_ids specified."
+    },
+    {
+      "name": "region",
+      "aliases": [
+        "aws_region"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The AWS region to use. For global services such as IAM, Route53 and CloudFront, region is ignored. The AWS_REGION environment variable may also be used. See the Amazon AWS documentation for more information http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region."
+    },
+    {
+      "name": "secret_key",
+      "aliases": [
+        "aws_secret_access_key",
+        "aws_secret_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS secret access key. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SECRET_ACCESS_KEY or AWS_SECRET_KEY environment variables may also be used in decreasing order of preference. The secret_key and profile options are mutually exclusive. The aws_secret_access_key alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "session_token",
+      "aliases": [
+        "aws_session_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS STS session token for use with temporary credentials. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SESSION_TOKEN environment variable may also be used. The session_token and profile options are mutually exclusive."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Create or delete dedicated host. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "tags",
+      "aliases": [
+        "resource_tags"
+      ],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary representing the tags to be applied to the resource. If the tags parameter is not set then tags will not be modified."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to false, SSL certificates will not be validated for communication with the AWS APIs. Setting validate_certs=false is strongly discouraged, as an alternative, consider setting aws_ca_bundle instead. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "# Note: These examples do not set authentication details, see the AWS Guide for details.\n\n# Release dedicated hosts\n- name: Release dedicated host\n  amazon.aws.ec2_dedicated_host:\n    host_id: \"h-0123456789abcdef0\"\n\n# Allocate dedicated host using instance type\n- name: Allocate dedicated host using instance_type\n  amazon.aws.ec2_dedicated_host:\n    availability_zone: us-east-1a\n    quantity: 1\n    instance_type: mac2.metal\n    tags:\n      Scope: Mac"
+  ],
+  "return_values": [
+    {
+      "name": "host",
+      "type": "complex",
+      "description": "Information about the dedicated host created/updated. Returned: When state=present",
+      "returned": "When"
+    },
+    {
+      "name": "allocation_time",
+      "type": "string",
+      "description": "The time that the Dedicated Host was allocated. Returned: always Sample: \"2025-02-12T12:09:22+00:00\"",
+      "returned": "always"
+    },
+    {
+      "name": "allows_multiple_instance_types",
+      "type": "string",
+      "description": "Indicates whether the Dedicated Host supports multiple instance types of the same instance family. Returned: always Sample: \"off\"",
+      "returned": "always"
+    },
+    {
+      "name": "asset_id",
+      "type": "string",
+      "description": "The ID of the Outpost hardware asset on which the Dedicated Host is allocated. Returned: always Sample: \"abcdefgh\"",
+      "returned": "always"
+    },
+    {
+      "name": "auto_placement",
+      "type": "string",
+      "description": "Whether auto-placement is on or off. Returned: always Sample: \"off\"",
+      "returned": "always"
+    },
+    {
+      "name": "availability_zone",
+      "type": "string",
+      "description": "The Availability Zone of the Dedicated Host. Returned: always Sample: \"us-east-1b\"",
+      "returned": "always"
+    },
+    {
+      "name": "availability_zone_id",
+      "type": "string",
+      "description": "The ID of the Availability Zone in which the Dedicated Host is allocated. Returned: always Sample: \"use1-az6\"",
+      "returned": "always"
+    },
+    {
+      "name": "available_capacity",
+      "type": "dictionary",
+      "description": "Information about the instances running on the Dedicated Host. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "available_instance_capacity",
+      "type": "complex",
+      "description": "The number of instances that can be launched onto the Dedicated Host. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "instance_type",
+      "type": "string",
+      "description": "The instance type supported by the Dedicated Host. Returned: always Sample: \"mac2.metal\"",
+      "returned": "always"
+    },
+    {
+      "name": "total_capacity",
+      "type": "dictionary",
+      "description": "The total number of instances that can be launched onto the Dedicated Host if there are no instances running on it. Returned: always Sample: 1",
+      "returned": "always"
+    },
+    {
+      "name": "available_v_cpus",
+      "type": "integer",
+      "description": "The number of vCPUs available for launching instances onto the Dedicated Host. Returned: always Sample: 8",
+      "returned": "always"
+    },
+    {
+      "name": "client_token",
+      "type": "string",
+      "description": "Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. Returned: always Sample: \"token-0123456789a\"",
+      "returned": "always"
+    },
+    {
+      "name": "host_id",
+      "type": "string",
+      "description": "The ID of the Dedicated Host. Returned: always Sample: \"h-03f51341e6e39f848\"",
+      "returned": "always"
+    },
+    {
+      "name": "host_maintenance",
+      "type": "string",
+      "description": "Indicates whether host maintenance is enabled or disabled for the Dedicated Host. Returned: always Sample: \"off\"",
+      "returned": "always"
+    },
+    {
+      "name": "host_properties",
+      "type": "dictionary",
+      "description": "The hardware specifications of the Dedicated Host. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "cores",
+      "type": "integer",
+      "description": "The number of cores on the Dedicated Host. Returned: always Sample: 8",
+      "returned": "always"
+    },
+    {
+      "name": "instance_family",
+      "type": "string",
+      "description": "The instance family supported by the Dedicated Host. Returned: if defined Sample: \"mac2\"",
+      "returned": "if"
+    },
+    {
+      "name": "sockets",
+      "type": "integer",
+      "description": "The number of sockets on the Dedicated Host. Returned: always Sample: 1",
+      "returned": "always"
+    },
+    {
+      "name": "total_v_cpus",
+      "type": "integer",
+      "description": "The total number of vCPUs on the Dedicated Host. Returned: always Sample: 8",
+      "returned": "always"
+    },
+    {
+      "name": "host_recovery",
+      "type": "string",
+      "description": "Indicates whether host recovery is enabled or disabled for the Dedicated Host. Returned: always Sample: \"off\"",
+      "returned": "always"
+    },
+    {
+      "name": "host_reservation_id",
+      "type": "string",
+      "description": "The reservation ID of the Dedicated Host. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "instances",
+      "type": "complex",
+      "description": "The IDs and instance type that are currently running on the Dedicated Host. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "instance_id",
+      "type": "string",
+      "description": "The ID of instance that is running on the Dedicated Host. Returned: always Sample: \"i-0123456789abcd\"",
+      "returned": "always"
+    },
+    {
+      "name": "owner_id",
+      "type": "string",
+      "description": "The ID of the Amazon Web Services account that owns the instance. Returned: always Sample: \"0123456789\"",
+      "returned": "always"
+    },
+    {
+      "name": "member_of_service_linked_resource_group",
+      "type": "boolean",
+      "description": "Indicates whether the Dedicated Host is in a host resource group. Returned: always Sample: false",
+      "returned": "always"
+    },
+    {
+      "name": "outpost_arn",
+      "type": "string",
+      "description": "The Amazon Resource Name (ARN) of the Amazon Web Services Outpost on which the Dedicated Host is allocated. Returned: always Sample: \"arn:aws:outposts:us-east-1:0123012301230123:outpost/op-0123456789abcdef0\"",
+      "returned": "always"
+    },
+    {
+      "name": "release_time",
+      "type": "string",
+      "description": "The time that the Dedicated Host was released. Returned: always Sample: \"2025-02-12T12:09:22+00:00\"",
+      "returned": "always"
+    },
+    {
+      "name": "state",
+      "type": "string",
+      "description": "The state of the Dedicated Host. Returned: always Sample: \"available\"",
+      "returned": "always"
+    },
+    {
+      "name": "tags",
+      "type": "dictionary",
+      "description": "Dictionary of tags added to the dedicated host. Returned: always Sample: {}",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_dedicated_host_module.html",
+  "parsed_at": "2026-04-13T16:29:19.695081"
+}

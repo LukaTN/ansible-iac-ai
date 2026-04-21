@@ -1,0 +1,138 @@
+{
+  "collection_ns": "ansible_builtin",
+  "collection": "ansible.builtin",
+  "module": "ansible.builtin.apt_repository",
+  "slug": "apt_repository_module#ansible-collections-ansible-builtin-apt-repository-module",
+  "description": "Add or remove an APT repositories in Ubuntu and Debian.",
+  "parameters": [
+    {
+      "name": "codename",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Override the distribution codename to use for PPA repositories. Should usually only be set when working with a PPA on a non-Ubuntu target (for example, Debian or Mint)."
+    },
+    {
+      "name": "filename",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Sets the name of the source list file in sources.list.d. Defaults to a file name based on the repository source url. The .list extension will be automatically added."
+    },
+    {
+      "name": "install_python_apt",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether to automatically try to install the Python apt library or not, if it is not already installed. Without this library, the module does not work. Runs apt-get install python3-apt. Only works with the system Python. If you are using a Python on the remote that is not the system Python, set install_python_apt=false and ensure that the Python apt library for your Python version is installed some other way. Choices: false true ← (default)"
+    },
+    {
+      "name": "mode",
+      "aliases": [],
+      "type": "any",
+      "required": false,
+      "default": "is",
+      "choices": [],
+      "description": "The octal mode for newly created files in sources.list.d. Default is what system uses (probably 0644)."
+    },
+    {
+      "name": "repo",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "A source string for the repository."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)"
+      ],
+      "description": "A source string state. Choices: \"absent\" \"present\" ← (default)"
+    },
+    {
+      "name": "update_cache",
+      "aliases": [
+        "update-cache"
+      ],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Run the equivalent of apt-get update when a change occurs. Cache updates are run after making changes. Choices: false true ← (default)"
+    },
+    {
+      "name": "update_cache_retries",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "5",
+      "choices": [],
+      "description": "Amount of retries if the cache update fails. Also see update_cache_retry_max_delay. Default: 5"
+    },
+    {
+      "name": "update_cache_retry_max_delay",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "12",
+      "choices": [],
+      "description": "Use an exponential backoff delay for each retry (see update_cache_retries) up to this max delay in seconds. Default: 12"
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If false, SSL certificates for the target repo will not be validated. This should only be used on personally controlled sites using self-signed certificates. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Add specified repository into sources list\n  ansible.builtin.apt_repository:\n    repo: deb http://archive.canonical.com/ubuntu hardy partner\n    state: present\n\n- name: Add specified repository into sources list using specified filename\n  ansible.builtin.apt_repository:\n    repo: deb http://dl.google.com/linux/chrome/deb/ stable main\n    state: present\n    filename: google-chrome\n\n- name: Add source repository into sources list\n  ansible.builtin.apt_repository:\n    repo: deb-src http://archive.canonical.com/ubuntu hardy partner\n    state: present\n\n- name: Remove specified repository from sources list\n  ansible.builtin.apt_repository:\n    repo: deb http://archive.canonical.com/ubuntu hardy partner\n    state: absent\n\n- name: Add nginx stable repository from PPA and install its signing key on Ubuntu target\n  ansible.builtin.apt_repository:\n    repo: ppa:nginx/stable\n\n- name: Add nginx stable repository from PPA and install its signing key on Debian target\n  ansible.builtin.apt_repository:\n    repo: 'ppa:nginx/stable'\n    codename: trusty\n\n- name: One way to avoid apt_key once it is removed from your distro\n  block:\n    - name: somerepo |no apt key\n      ansible.builtin.get_url:\n        url: https://download.example.com/linux/ubuntu/gpg\n        dest: /etc/apt/keyrings/somerepo.asc\n\n    - name: somerepo | apt source\n      ansible.builtin.apt_repository:\n        repo: \"deb [arch=amd64 signed-by=/etc/apt/keyrings/somerepo.asc] https://download.example.com/linux/ubuntu {{ ansible_distribution_release }} stable\"\n        state: present"
+  ],
+  "return_values": [
+    {
+      "name": "repo",
+      "type": "string",
+      "description": "A source string for the repository Returned: always Sample: \"deb https://artifacts.elastic.co/packages/6.x/apt stable main\"",
+      "returned": "always"
+    },
+    {
+      "name": "sources_added",
+      "type": "list",
+      "description": "List of sources added Returned: success, sources were added Sample: [\"/etc/apt/sources.list.d/artifacts_elastic_co_packages_6_x_apt.list\"]",
+      "returned": "success"
+    },
+    {
+      "name": "sources_removed",
+      "type": "list",
+      "description": "List of sources removed Returned: success, sources were removed Sample: [\"/etc/apt/sources.list.d/artifacts_elastic_co_packages_6_x_apt.list\"]",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_repository_module#ansible-collections-ansible-builtin-apt-repository-module.html",
+  "parsed_at": "2026-04-11T13:52:51.227303"
+}

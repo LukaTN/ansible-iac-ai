@@ -1,0 +1,60 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.lvm_pv",
+  "slug": "lvm_pv_module#ansible-collections-community-general-lvm-pv-module",
+  "description": "Creates, resizes or removes LVM Physical Volumes.",
+  "parameters": [
+    {
+      "name": "device",
+      "aliases": [],
+      "type": "path",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Path to the block device to manage."
+    },
+    {
+      "name": "force",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Force the operation. When state=present (creating a PV), this uses pvcreate -f to force creation. When state=absent (removing a PV), this uses pvremove -ff to force removal even if part of a volume group. Choices: false ← (default) true"
+    },
+    {
+      "name": "resize",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Resize PV to device size when state=present. Choices: false ← (default) true"
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Control if the physical volume exists. Choices: \"present\" ← (default) \"absent\""
+    }
+  ],
+  "examples": [
+    "- name: Creating physical volume on /dev/sdb\n  community.general.lvm_pv:\n    device: /dev/sdb\n\n- name: Creating and resizing (if needed) physical volume\n  community.general.lvm_pv:\n    device: /dev/sdb\n    resize: true\n\n- name: Removing physical volume that is not part of any volume group\n  community.general.lvm_pv:\n    device: /dev/sdb\n    state: absent\n\n- name: Force removing physical volume that is already part of a volume group\n  community.general.lvm_pv:\n    device: /dev/sdb\n    force: true\n    state: absent"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/lvm_pv_module#ansible-collections-community-general-lvm-pv-module.html",
+  "parsed_at": "2026-04-11T13:53:19.504796"
+}

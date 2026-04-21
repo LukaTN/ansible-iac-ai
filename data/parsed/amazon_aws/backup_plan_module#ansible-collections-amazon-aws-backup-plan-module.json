@@ -1,0 +1,344 @@
+{
+  "collection_ns": "amazon_aws",
+  "collection": "amazon.aws",
+  "module": "amazon.aws.backup_plan",
+  "slug": "backup_plan_module#ansible-collections-amazon-aws-backup-plan-module",
+  "description": "Creates, updates, or deletes AWS Backup Plans.",
+  "parameters": [
+    {
+      "name": "access_key",
+      "aliases": [
+        "aws_access_key_id",
+        "aws_access_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS access key ID. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY environment variables may also be used in decreasing order of preference. The aws_access_key and profile options are mutually exclusive. The aws_access_key_id alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "advanced_backup_settings",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies a list of advanced backup settings for each resource type. These settings are only available for Windows Volume Shadow Copy Service (VSS) backup jobs."
+    },
+    {
+      "name": "aws_ca_bundle",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The location of a CA Bundle to use when validating SSL certificates. The AWS_CA_BUNDLE environment variable may also be used."
+    },
+    {
+      "name": "aws_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary to modify the botocore configuration. Parameters can be found in the AWS documentation https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html#botocore.config.Config."
+    },
+    {
+      "name": "backup_plan_name",
+      "aliases": [
+        "name"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The display name of a backup plan. Must contain 1 to 50 alphanumeric or ‘-_.’ characters."
+    },
+    {
+      "name": "creator_request_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Identifies the request and allows failed requests to be retried without the risk of running the operation twice. If the request includes a CreatorRequestId that matches an existing backup plan, that plan is returned."
+    },
+    {
+      "name": "debug_botocore_endpoint_logs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use a botocore.endpoint logger to parse the unique (rather than total) \"resource:action\" API calls made during a task, outputing the set to the resource_actions key in the task results. Use the aws_resource_action callback to output to total list made during a playbook. The ANSIBLE_DEBUG_BOTOCORE_LOGS environment variable may also be used. Choices: false ← (default) true"
+    },
+    {
+      "name": "endpoint_url",
+      "aliases": [
+        "aws_endpoint_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "AWS",
+      "choices": [],
+      "description": "URL to connect to instead of the default AWS endpoints. While this can be used to connection to other AWS-compatible services the amazon.aws and community.aws collections are only tested against AWS. The AWS_URL environment variable may also be used."
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "aws_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A named AWS profile to use for authentication. See the AWS documentation for more information about named profiles https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html. The AWS_PROFILE environment variable may also be used. The profile option is mutually exclusive with the aws_access_key, aws_secret_key and session_token options."
+    },
+    {
+      "name": "purge_tags",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If purge_tags=true and tags is set, existing tags will be purged from the resource to match exactly what is defined by tags parameter. If the tags parameter is not set then tags will not be modified, even if purge_tags=True. Tag keys beginning with aws: are reserved by Amazon and can not be modified. As such they will be ignored for the purposes of the purge_tags parameter. See the Amazon documentation for more information https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html#tag-conventions. Choices: false true ← (default)"
+    },
+    {
+      "name": "region",
+      "aliases": [
+        "aws_region"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The AWS region to use. For global services such as IAM, Route53 and CloudFront, region is ignored. The AWS_REGION environment variable may also be used. See the Amazon AWS documentation for more information http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region."
+    },
+    {
+      "name": "rules",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "An array of BackupRule objects, each of which specifies a scheduled task that is used to back up a selection of resources. Required when state=present."
+    },
+    {
+      "name": "secret_key",
+      "aliases": [
+        "aws_secret_access_key",
+        "aws_secret_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS secret access key. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SECRET_ACCESS_KEY or AWS_SECRET_KEY environment variables may also be used in decreasing order of preference. The secret_key and profile options are mutually exclusive. The aws_secret_access_key alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "session_token",
+      "aliases": [
+        "aws_session_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS STS session token for use with temporary credentials. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SESSION_TOKEN environment variable may also be used. The session_token and profile options are mutually exclusive."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Create/update or delete a backup plan. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "tags",
+      "aliases": [
+        "resource_tags",
+        "backup_plan_tags"
+      ],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "To help organize your resources, you can assign your own metadata to the resources that you create. Each tag is a key-value pair. The specified tags are assigned to all backups created with this plan."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to false, SSL certificates will not be validated for communication with the AWS APIs. Setting validate_certs=false is strongly discouraged, as an alternative, consider setting aws_ca_bundle instead. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Create an AWSbackup plan\n  amazon.aws.backup_plan:\n    state: present\n    backup_plan_name: elastic\n    rules:\n      - rule_name: daily\n        advanced_backup_settings:\n          - resource_type: \"EC2\"\n            backup_options:\n              WindowsVSS: enabled\n        target_backup_vault_name: \"{{ backup_vault_name }}\"\n        schedule_expression: 'cron(0 5 ? * * *)'\n        start_window_minutes: 60\n        completion_window_minutes: 1440\n- name: Delete an AWS Backup plan\n  amazon.aws.backup_plan:\n    backup_plan_name: elastic\n    state: absent"
+  ],
+  "return_values": [
+    {
+      "name": "backup_plan",
+      "type": "dictionary",
+      "description": "Backup plan details. Returned: on create/update",
+      "returned": "on"
+    },
+    {
+      "name": "advanced_backup_settings",
+      "type": "list",
+      "description": "Advanced backup settings of the backup plan. Returned: when configured. Sample: [{\"backup_options\": {\"windows_vss\": \"enabled\"}, \"resource_type\": \"EC2\"}]",
+      "returned": "when"
+    },
+    {
+      "name": "backup_options",
+      "type": "dictionary",
+      "description": "Backup options of the advanced settings. Returned: success Sample: {\"windows_vss\": \"enabled\"}",
+      "returned": "success"
+    },
+    {
+      "name": "resource_type",
+      "type": "string",
+      "description": "Resource type of the advanced settings. Returned: success Sample: \"EC2\"",
+      "returned": "success"
+    },
+    {
+      "name": "backup_plan_name",
+      "type": "string",
+      "description": "The display name of a backup plan. Returned: always Sample: \"elastic\"",
+      "returned": "always"
+    },
+    {
+      "name": "rules",
+      "type": "list",
+      "description": "An array of BackupRule objects, each of which specifies a scheduled task that is used to back up a selection of resources. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "completion_window_minutes",
+      "type": "integer",
+      "description": "A value in minutes after a backup job is successfully started before it must be completed or it will be canceled by Backup. Returned: always Sample: 10080",
+      "returned": "always"
+    },
+    {
+      "name": "copy_actions",
+      "type": "list",
+      "description": "An array of CopyAction objects, which contains the details of the copy operation. Returned: when configured. Sample: [{\"destination_backup_vault_arn\": \"arn:aws:backup:us-west-2:123456789012:backup-vault:my-test-vault\", \"lifecycle\": {\"delete_after_days\": 100, \"move_to_cold_storage_after_days\": 10}}]",
+      "returned": "when"
+    },
+    {
+      "name": "enable_continous_backup",
+      "type": "boolean",
+      "description": "Specifies whether Backup creates continuous backups. Returned: always Sample: false",
+      "returned": "always"
+    },
+    {
+      "name": "lifecycle",
+      "type": "dictionary",
+      "description": "Defines when a protected resource is transitioned to cold storage and when it expires. Returned: when configured. Sample: {\"delete_after_days\": 100, \"move_to_cold_storage_after_days\": 10}",
+      "returned": "when"
+    },
+    {
+      "name": "recovery_point_tags",
+      "type": "dictionary",
+      "description": "An array of key-value pair strings that are assigned to resources that are associated with this rule when restored from backup. Returned: when configured. Sample: {\"Tagkey1\": \"TagValue1\", \"Tagkey2\": \"TagValue2\"}",
+      "returned": "when"
+    },
+    {
+      "name": "rule_id",
+      "type": "string",
+      "description": "Uniquely identifies a rule that is used to schedule the backup of a selection of resources. Returned: always Sample: \"973621ef-d863-41ef-b5c3-9e943a64ad0c\"",
+      "returned": "always"
+    },
+    {
+      "name": "rule_name",
+      "type": "string",
+      "description": "A display name for a backup rule. Returned: always Sample: \"daily\"",
+      "returned": "always"
+    },
+    {
+      "name": "schedule_expression",
+      "type": "string",
+      "description": "A cron expression in UTC specifying when Backup initiates a backup job. Returned: always Sample: \"cron(0 5 ? * * *)\"",
+      "returned": "always"
+    },
+    {
+      "name": "schedule_expression_timezone",
+      "type": "string",
+      "description": "This is the timezone in which the schedule expression is set. Returned: when configured Sample: \"Etc/UTC\"",
+      "returned": "when"
+    },
+    {
+      "name": "start_window_minutes",
+      "type": "integer",
+      "description": "A value in minutes after a backup is scheduled before a job will be canceled if it doesn’t start successfully. Returned: always Sample: 480",
+      "returned": "always"
+    },
+    {
+      "name": "target_backup_vault_name",
+      "type": "string",
+      "description": "The name of a logical container where backups are stored. Returned: always Sample: \"09da67966fd5-backup-vault\"",
+      "returned": "always"
+    },
+    {
+      "name": "tags",
+      "type": "string",
+      "description": "Tags of the backup plan. Returned: on create/update Sample: \"{'TagKey1': 'TagValue1', 'TagKey2': 'TagValue2'}\"",
+      "returned": "on"
+    },
+    {
+      "name": "backup_plan_arn",
+      "type": "string",
+      "description": "ARN of the backup plan. Returned: always Sample: \"arn:aws:backup:eu-central-1:111122223333:backup-plan:1111f877-1ecf-4d79-9718-a861cd09df3b\"",
+      "returned": "always"
+    },
+    {
+      "name": "backup_plan_id",
+      "type": "string",
+      "description": "ID of the backup plan. Returned: always Sample: \"1111f877-1ecf-4d79-9718-a861cd09df3b\"",
+      "returned": "always"
+    },
+    {
+      "name": "creation_date",
+      "type": "string",
+      "description": "Creation date of the backup plan. Returned: on create/update Sample: \"2023-01-24T10:08:03.193000+01:00\"",
+      "returned": "on"
+    },
+    {
+      "name": "deletion_date",
+      "type": "string",
+      "description": "Date the backup plan was deleted. Returned: on delete Sample: \"2023-05-05T16:24:51.987000-04:00\"",
+      "returned": "on"
+    },
+    {
+      "name": "exists",
+      "type": "boolean",
+      "description": "Whether the resource exists. Returned: always Sample: true",
+      "returned": "always"
+    },
+    {
+      "name": "version_id",
+      "type": "string",
+      "description": "Version ID of the backup plan. Returned: always Sample: \"ODM3MjVjNjItYWFkOC00NjExLWIwZTYtZDNiNGI5M2I0ZTY1\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/amazon/aws/backup_plan_module.html",
+  "parsed_at": "2026-04-13T16:29:18.825659"
+}

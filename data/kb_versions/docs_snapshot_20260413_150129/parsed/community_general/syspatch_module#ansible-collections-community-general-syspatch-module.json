@@ -1,0 +1,34 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.syspatch",
+  "slug": "syspatch_module#ansible-collections-community-general-syspatch-module",
+  "description": "Manage OpenBSD system patches using syspatch.",
+  "parameters": [
+    {
+      "name": "revert",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"all\"",
+        "\"one\""
+      ],
+      "description": "Revert system patches. Choices: \"all\" \"one\""
+    }
+  ],
+  "examples": [
+    "- name: Apply all available system patches\n  community.general.syspatch:\n\n- name: Revert last patch\n  community.general.syspatch:\n    revert: one\n\n- name: Revert all patches\n  community.general.syspatch:\n    revert: all\n\n# NOTE: You can reboot automatically if a patch requires it:\n- name: Apply all patches and store result\n  community.general.syspatch:\n  register: syspatch\n\n- name: Reboot if patch requires it\n  ansible.builtin.reboot:\n  when: syspatch.reboot_needed"
+  ],
+  "return_values": [
+    {
+      "name": "reboot_needed",
+      "type": "boolean",
+      "description": "Whether or not a reboot is required after an update. Returned: always Sample: true",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/syspatch_module#ansible-collections-community-general-syspatch-module.html",
+  "parsed_at": "2026-04-11T13:53:27.262032"
+}

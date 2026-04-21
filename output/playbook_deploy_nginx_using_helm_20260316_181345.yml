@@ -1,0 +1,20 @@
+---
+- name: Deploy Nginx using Helm
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - kubernetes.core
+    - kubernetes.helm
+  tasks:
+    - name: Install Helm (if not present)
+      kubernetes.helm.helm:
+        binary_path: /usr/local/bin/helm
+        state: present
+
+    - name: Deploy Nginx using Helm
+      kubernetes.helm.helm:
+        release_name: nginx
+        chart_ref: stable/nginx-ingress
+        release_namespace: default
+        create_namespace: yes
