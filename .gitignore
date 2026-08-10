@@ -171,10 +171,9 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
-# Cursor  
-#  Cursor is an AI-powered code editor.`.cursorignore` specifies files/directories to 
-#  exclude from AI features like autocomplete and code analysis. Recommended for sensitive data
-#  refer to https://docs.cursor.com/context/ignore-files
+# Cursor / local agent tooling (plans, settings, project skills)
+.cursor/
+.agents/
 .cursorignore
 .cursorindexingignore
 
@@ -186,18 +185,15 @@ cython_debug/
 .env.*.local
 
 # ── Generated runtime artifacts ───────────────────────────────────
-# The vector index is a binary build artifact: rebuild with
-# `python rag/pipeline.py --build`, never commit it.
-data/chromadb/
-# Knowledge-base backup snapshots written before every rescrape.
-data/kb_versions/
-data/rag_eval/
+# Scraped/parsed KB, chromadb, manifests, and eval artifacts are local
+# rebuilds (`python rag/pipeline.py --build`), never commit them.
+data/
 # Generated playbooks. Phase 2 archives these to MinIO; local copies are scratch.
 output/
 # Scrape/index/e2e reports regenerated on every pipeline or eval run.
 reports/
 report/
-# Raw scraped HTML at the repo root (data/raw_html/ is the tracked copy).
+# Raw scraped HTML at the repo root (legacy; prefer data/raw_html locally).
 /raw_html/
 .snapshot_path.tmp
 
