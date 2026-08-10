@@ -1,0 +1,59 @@
+# ============================================================
+# AnsibleAI RAG Generator — LangChain + ChromaDB
+# Date        : 2026-04-11 11:40:26
+# Request     : deploy an analytics backend deployment with 3 replicas using existing ConfigMap analytics-config and Secret analytics-db-secret
+# Module      : kubernetes.core.k8s
+# Collection  : kubernetes.core
+# RAG score   : 0.548
+# Chunks used : 6
+# Source URL  : https://docs.ansible.com/ansible/latest/collections/kubernetes/core/k8s_module.html
+# LLM model   : MISTRAL
+# ============================================================
+
+---
+- name: Deploy analytics backend deployment with 3 replicas using existing ConfigMap and Secret
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - kubernetes.core
+
+  tasks:
+    - name: Create or update the analytics backend deployment
+      kubernetes.core.k8s:
+        api_version: v1
+        kind: Deployment
+        metadata:
+          name: analytics-backend
+          namespace: myproject
+        spec:
+          replicas: 3
+          selector:
+            matchLabels:
+              app: analytics-backend
+          template:
+            metadata:
+              labels:
+                app: analytics-backend
+            spec:
+              containers:
+                - name: analytics-container
+                  image: <your_image>
+              envFrom:
+                - secretRef:
+                    name: analytics-db-secret
+              volumeClaimTemplates:
+                - metadata:
+                    name: analytics-config-volume
+                  spec:
+                    accessModes: [ReadWriteOnce]
+                    resources:
+                      requests:
+                        storage: 10Mi
+                    selector:
+                      matchLabels:
+                        app: analytics-backend
+              volumes:
+                - name: analytics-config-volume
+                  configMap:
+                    name: analytics-config

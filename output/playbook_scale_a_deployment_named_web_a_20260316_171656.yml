@@ -1,0 +1,15 @@
+---
+- name: Scale Deployment to 3 replicas
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - kubernetes.core
+  tasks:
+    - name: Scale the web-app deployment
+      kubernetes.core.k8s_scale:
+        api_version: apps/v1
+        kind: Deployment
+        name: web-app
+        namespace: default
+        replicas: 3

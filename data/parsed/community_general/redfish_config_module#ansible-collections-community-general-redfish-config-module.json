@@ -1,0 +1,281 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.redfish_config",
+  "slug": "redfish_config_module#ansible-collections-community-general-redfish-config-module",
+  "description": "Builds Redfish URIs locally and sends them to remote OOB controllers to set or update a configuration attribute.",
+  "parameters": [
+    {
+      "name": "auth_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security token for authenticating to OOB controller."
+    },
+    {
+      "name": "baseuri",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Base URI of OOB controller."
+    },
+    {
+      "name": "bios_attributes",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "Dictionary of BIOS attributes to update. Default: {}"
+    },
+    {
+      "name": "boot_order",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "List of BootOptionReference strings specifying the BootOrder. Default: []"
+    },
+    {
+      "name": "ca_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "PEM formatted file that contains a CA certificate to be used for validation. Only used if validate_certs=true."
+    },
+    {
+      "name": "category",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Category to execute on OOB controller."
+    },
+    {
+      "name": "ciphers",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "TLS/SSL Ciphers to use for the request. When a list is provided, all ciphers are joined in order with :. See the OpenSSL Cipher List Format for more details. The available ciphers is dependent on the Python and OpenSSL/LibreSSL versions."
+    },
+    {
+      "name": "command",
+      "aliases": [],
+      "type": "list",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "List of commands to execute on OOB controller."
+    },
+    {
+      "name": "hostinterface_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "Setting dict of HostInterface on OOB controller. Default: {}"
+    },
+    {
+      "name": "hostinterface_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Redfish HostInterface instance ID if multiple HostInterfaces are present."
+    },
+    {
+      "name": "network_protocols",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "Setting dict of manager services to update. Default: {}"
+    },
+    {
+      "name": "nic_addr",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "null",
+      "choices": [],
+      "description": "EthernetInterface Address string on OOB controller. Default: \"null\""
+    },
+    {
+      "name": "nic_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "Setting dict of EthernetInterface on OOB controller. Default: {}"
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Password for authenticating to OOB controller."
+    },
+    {
+      "name": "power_restore_policy",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"AlwaysOn\"",
+        "\"AlwaysOff\"",
+        "\"LastState\""
+      ],
+      "description": "The desired power state of the system when power is restored after a power loss. Choices: \"AlwaysOn\" \"AlwaysOff\" \"LastState\""
+    },
+    {
+      "name": "resource_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "ID of the System, Manager or Chassis to modify."
+    },
+    {
+      "name": "secure_boot_enable",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Setting parameter to enable or disable SecureBoot. Choices: false true ← (default)"
+    },
+    {
+      "name": "service_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "ID of the manager to update."
+    },
+    {
+      "name": "sessions_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "Setting dict of Sessions. Default: {}"
+    },
+    {
+      "name": "storage_none_volume_deletion",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Indicates if all non-RAID volumes are automatically deleted prior to creating the new volume. Choices: false ← (default) true"
+    },
+    {
+      "name": "storage_subsystem_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "ID of the Storage Subsystem on which the volume is to be created. Default: \"\""
+    },
+    {
+      "name": "strip_etag_quotes",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Removes surrounding quotes of etag used in If-Match header of PATCH requests. Only use this option to resolve bad vendor implementation where If-Match only matches the unquoted etag string. Choices: false ← (default) true"
+    },
+    {
+      "name": "timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "Timeout in seconds for HTTP requests to OOB controller. The default value for this parameter changed from 10 to 60 in community.general 9.0.0. Default: 60"
+    },
+    {
+      "name": "username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Username for authenticating to OOB controller."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If false, TLS/SSL certificates are not validated. Set this to true to enable certificate checking. Should be used together with ca_path. Choices: false ← (default) true"
+    },
+    {
+      "name": "volume_details",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "Setting dictionary of volume to be created. If CapacityBytes key is not specified in this dictionary, the size of the volume is determined by the Redfish service. It is possible the size is not the maximum available size. Default: {}"
+    },
+    {
+      "name": "volume_ids",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "List of IDs of volumes to be deleted. Default: []"
+    }
+  ],
+  "examples": [
+    "- name: Set BootMode to UEFI\n  community.general.redfish_config:\n    category: Systems\n    command: SetBiosAttributes\n    resource_id: 437XR1138R2\n    bios_attributes:\n      BootMode: \"Uefi\"\n    baseuri: \"{{ baseuri }}\"\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n\n- name: Set multiple BootMode attributes\n  community.general.redfish_config:\n    category: Systems\n    command: SetBiosAttributes\n    resource_id: 437XR1138R2\n    bios_attributes:\n      BootMode: \"Bios\"\n      OneTimeBootMode: \"Enabled\"\n      BootSeqRetry: \"Enabled\"\n    baseuri: \"{{ baseuri }}\"\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n\n- name: Enable PXE Boot for NIC1\n  community.general.redfish_config:\n    category: Systems\n    command: SetBiosAttributes\n    resource_id: 437XR1138R2\n    bios_attributes:\n      PxeDev1EnDis: Enabled\n    baseuri: \"{{ baseuri }}\"\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n\n- name: Set BIOS default settings with a timeout of 20 seconds\n  community.general.redfish_config:\n    category: Systems\n    command: SetBiosDefaultSettings\n    resource_id: 437XR1138R2\n    baseuri: \"{{ baseuri }}\"\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n    timeout: 20\n\n- name: Set boot order\n  community.general.redfish_config:\n    category: Systems\n    command: SetBootOrder\n    boot_order:\n      - Boot0002\n      - Boot0001\n      - Boot0000\n      - Boot0003\n      - Boot0004\n    baseuri: \"{{ baseuri }}\"\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n\n- name: Set boot order to the default\n  community.general.redfish_config:\n    category: Systems\n    command: SetDefaultBootOrder\n    baseuri: \"{{ baseuri }}\"\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n\n- name: Set Manager Network Protocols\n  community.general.redfish_config:\n    category: Manager\n    command: SetNetworkProtocols\n    network_protocols:\n      SNMP:\n        ProtocolEnabled: true\n        Port: 161\n      HTTP:\n        ProtocolEnabled: false\n        Port: 8080\n    baseuri: \"{{ baseuri }}\"\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n\n- name: Set Manager NIC\n  community.general.redfish_config:\n    category: Manager\n    command: SetManagerNic\n    nic_config:\n      DHCPv4:\n        DHCPEnabled: false\n      IPv4StaticAddresses:\n        Address: 192.168.1.3\n        Gateway: 192.168.1.1\n        SubnetMask: 255.255.255.0\n    baseuri: \"{{ baseuri }}\"\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n\n- name: Disable Host Interface\n  community.general.redfish_config:\n    category: Manager\n    command: SetHostInterface\n    hostinterface_config:\n      InterfaceEnabled: false\n    baseuri: \"{{ baseuri }}\"\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n\n- name: Enable Host Interface for HostInterface resource ID '2'\n  community.general.redfish_config:\n    category: Manager\n    command: SetHostInterface\n    hostinterface_config:\n      InterfaceEnabled: true\n    hostinterface_id: \"2\"\n    baseuri: \"{{ baseuri }}\"\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n\n- name: Set SessionService Session Timeout to 30 minutes\n  community.general.redfish_config:\n    category: Sessions\n    command: SetSessionService\n    sessions_config:\n      SessionTimeout: 1800\n    baseuri: \"{{ baseuri }}\"\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n\n- name: Enable SecureBoot\n  community.general.redfish_config:\n    category: Systems\n    command: EnableSecureBoot\n    baseuri: \"{{ baseuri }}\"\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n\n- name: Set SecureBoot\n  community.general.redfish_config:\n    category: Systems\n    command: SetSecureBoot\n    baseuri: \"{{ baseuri }}\"\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n    secure_boot_enable: true\n\n- name: Delete All Volumes\n  community.general.redfish_config:\n    category: Systems\n    command: DeleteVolumes\n    baseuri: \"{{ baseuri }}\"\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n    storage_subsystem_id: \"DExxxxxx\"\n    volume_ids: [\"volume1\", \"volume2\"]\n\n- name: Create Volume\n  community.general.redfish_config:\n    category: Systems\n    command: CreateVolume\n    baseuri: \"{{ baseuri }}\"\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n    storage_subsystem_id: \"DExxxxxx\"\n    volume_details:\n      Name: \"MR Volume\"\n      RAIDType: \"RAID0\"\n      Drives:\n        - \"/redfish/v1/Systems/1/Storage/DE00B000/Drives/1\"\n\n- name: Set PowerRestorePolicy\n  community.general.redfish_config:\n    category: Systems\n    command: SetPowerRestorePolicy\n    baseuri: \"{{ baseuri }}\"\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n    power_restore_policy: \"AlwaysOff\"\n\n- name: Set service identification to {{ service_id }}\n  community.general.redfish_config:\n    category: Manager\n    command: SetServiceIdentification\n    service_id: \"{{ service_id }}\"\n    baseuri: \"{{ baseuri }}\"\n    username: \"{{ username }}\"\n    password: \"{{ password }}\""
+  ],
+  "return_values": [
+    {
+      "name": "msg",
+      "type": "string",
+      "description": "Message with action result or error description. Returned: always Sample: \"Action was successful\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/redfish_config_module.html",
+  "parsed_at": "2026-04-13T16:29:56.773318"
+}

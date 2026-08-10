@@ -1,0 +1,10 @@
+{
+  "plugins": {
+    "fullstack-dev-skills/fullstack-dev-skills": {
+      "enabled": true
+    },
+    "claude-plugins-official/frontend-design": {
+      "enabled": true
+    }
+  }
+}

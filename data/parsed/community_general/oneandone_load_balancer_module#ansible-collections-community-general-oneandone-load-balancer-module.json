@@ -1,0 +1,243 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.oneandone_load_balancer",
+  "slug": "oneandone_load_balancer_module#ansible-collections-community-general-oneandone-load-balancer-module",
+  "description": "Create, remove, update load balancers. This module has a dependency on 1and1 >= 1.0.",
+  "parameters": [
+    {
+      "name": "add_rules",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "A list of rules that are added to an existing load balancer. It is syntax is the same as the one used for rules parameter. Used in combination with state=update. Default: []"
+    },
+    {
+      "name": "add_server_ips",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "A list of server identifiers (id or name) to be assigned to a load balancer. Used in combination with state=update. Default: []"
+    },
+    {
+      "name": "api_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Custom API URL. Overrides the ONEANDONE_API_URL environment variable."
+    },
+    {
+      "name": "auth_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Authenticating API token provided by 1&1."
+    },
+    {
+      "name": "datacenter",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"US\"",
+        "\"ES\"",
+        "\"DE\"",
+        "\"GB\""
+      ],
+      "description": "ID or country code of the datacenter where the load balancer is created. If not specified, it defaults to US. Choices: \"US\" \"ES\" \"DE\" \"GB\""
+    },
+    {
+      "name": "description",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Description of the load balancer. maxLength=256."
+    },
+    {
+      "name": "health_check_interval",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Health check period in seconds. minimum=5, maximum=300, multipleOf=1."
+    },
+    {
+      "name": "health_check_parse",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Regular expression to check. Required for HTTP health check. maxLength=64."
+    },
+    {
+      "name": "health_check_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "URL to call for checking. Required for HTTP health check. maxLength=1000."
+    },
+    {
+      "name": "health_check_test",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"NONE\"",
+        "\"TCP\"",
+        "\"HTTP\"",
+        "\"ICMP\""
+      ],
+      "description": "Type of the health check. At the moment, HTTP is not allowed. Choices: \"NONE\" \"TCP\" \"HTTP\" \"ICMP\""
+    },
+    {
+      "name": "load_balancer",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The identifier (id or name) of the load balancer used with update state."
+    },
+    {
+      "name": "method",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ROUND_ROBIN\"",
+        "\"LEAST_CONNECTIONS\""
+      ],
+      "description": "Balancing procedure. Choices: \"ROUND_ROBIN\" \"LEAST_CONNECTIONS\""
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Load balancer name used with present state. Used as identifier (ID or name) when used with absent state. maxLength=128."
+    },
+    {
+      "name": "persistence",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Persistence. Choices: false true"
+    },
+    {
+      "name": "persistence_time",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Persistence time in seconds. Required if persistence is enabled. minimum=30, maximum=1200, multipleOf=1."
+    },
+    {
+      "name": "remove_rules",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "A list of rule IDs that are removed from an existing load balancer. Used in combination with state=update. Default: []"
+    },
+    {
+      "name": "remove_server_ips",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "A list of server IP IDs to be unassigned from a load balancer. Used in combination with state=update. Default: []"
+    },
+    {
+      "name": "rules",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "A list of rule objects that are set for the load balancer. Each rule must contain protocol, port_balancer, and port_server parameters, in addition to source parameter, which is optional. Default: []"
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\"",
+        "\"update\""
+      ],
+      "description": "Define a load balancer state to create, remove, or update. Choices: \"present\" ← (default) \"absent\" \"update\""
+    },
+    {
+      "name": "wait",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Wait for the instance to be in state ‘running’ before returning. Choices: false true ← (default)"
+    },
+    {
+      "name": "wait_interval",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "5",
+      "choices": [],
+      "description": "Defines the number of seconds to wait when using the _wait_for methods. Default: 5"
+    },
+    {
+      "name": "wait_timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "600",
+      "choices": [],
+      "description": "How long before wait gives up, in seconds. Default: 600"
+    }
+  ],
+  "examples": [
+    "- name: Create a load balancer\n  community.general.oneandone_load_balancer:\n    auth_token: oneandone_private_api_key\n    name: ansible load balancer\n    description: Testing creation of load balancer with ansible\n    health_check_test: TCP\n    health_check_interval: 40\n    persistence: true\n    persistence_time: 1200\n    method: ROUND_ROBIN\n    datacenter: US\n    rules:\n      - protocol: TCP\n        port_balancer: 80\n        port_server: 80\n        source: 0.0.0.0\n    wait: true\n    wait_timeout: 500\n\n- name: Destroy a load balancer\n  community.general.oneandone_load_balancer:\n    auth_token: oneandone_private_api_key\n    name: ansible load balancer\n    wait: true\n    wait_timeout: 500\n    state: absent\n\n- name: Update a load balancer\n  community.general.oneandone_load_balancer:\n    auth_token: oneandone_private_api_key\n    load_balancer: ansible load balancer\n    name: ansible load balancer updated\n    description: Testing the update of a load balancer with ansible\n    wait: true\n    wait_timeout: 500\n    state: update\n\n- name: Add server to a load balancer\n  community.general.oneandone_load_balancer:\n    auth_token: oneandone_private_api_key\n    load_balancer: ansible load balancer updated\n    description: Adding server to a load balancer with ansible\n    add_server_ips:\n      - server identifier (id or name)\n    wait: true\n    wait_timeout: 500\n    state: update\n\n- name: Remove server from a load balancer\n  community.general.oneandone_load_balancer:\n    auth_token: oneandone_private_api_key\n    load_balancer: ansible load balancer updated\n    description: Removing server from a load balancer with ansible\n    remove_server_ips:\n      - B2504878540DBC5F7634EB00A07C1EBD (server's ip id)\n    wait: true\n    wait_timeout: 500\n    state: update\n\n- name: Add rules to a load balancer\n  community.general.oneandone_load_balancer:\n    auth_token: oneandone_private_api_key\n    load_balancer: ansible load balancer updated\n    description: Adding rules to a load balancer with ansible\n    add_rules:\n      - protocol: TCP\n        port_balancer: 70\n        port_server: 70\n        source: 0.0.0.0\n      - protocol: TCP\n        port_balancer: 60\n        port_server: 60\n        source: 0.0.0.0\n    wait: true\n    wait_timeout: 500\n    state: update\n\n- name: Remove rules from a load balancer\n  community.general.oneandone_load_balancer:\n    auth_token: oneandone_private_api_key\n    load_balancer: ansible load balancer updated\n    description: Adding rules to a load balancer with ansible\n    remove_rules:\n      - \"rule_id #1\"\n      - \"rule_id #2\"\n      - '...'\n    wait: true\n    wait_timeout: 500\n    state: update"
+  ],
+  "return_values": [
+    {
+      "name": "load_balancer",
+      "type": "dictionary",
+      "description": "Information about the load balancer that was processed. Returned: always Sample: {\"id\": \"92B74394A397ECC3359825C1656D67A6\", \"name\": \"Default Balancer\"}",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/oneandone_load_balancer_module.html",
+  "parsed_at": "2026-04-13T16:29:54.527563"
+}

@@ -1,0 +1,28 @@
+# ============================================================
+# AnsibleAI RAG Generator — LangChain + ChromaDB
+# Date        : 2026-04-11 11:42:32
+# Request     : get cluster information including kubernetes version and available APIs
+# Module      : kubernetes.core.k8s_cluster_info
+# Collection  : kubernetes.core
+# RAG score   : 0.669
+# Chunks used : 6
+# Source URL  : https://docs.ansible.com/ansible/latest/collections/kubernetes/core/k8s_cluster_info_module.html
+# LLM model   : MISTRAL
+# ============================================================
+
+---
+- name: Get Cluster information including Kubernetes version and available APIs
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - kubernetes.core
+  tasks:
+    - name: Get Cluster information
+      kubernetes.core.k8s_cluster_info:
+        persist_config: false
+      register: api_status
+
+    - name: Output cluster information and Kubernetes version
+      debug:
+        var: api_status.ansible_facts.kubernetes_cluster_info.server_version

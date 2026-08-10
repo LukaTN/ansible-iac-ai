@@ -1,0 +1,38 @@
+{
+  "collection_ns": "ansible_builtin",
+  "collection": "ansible.builtin",
+  "module": "ansible.builtin.dpkg_selections",
+  "slug": "dpkg_selections_module#ansible-collections-ansible-builtin-dpkg-selections-module",
+  "description": "Change dpkg package selection state via --get-selections and --set-selections.",
+  "parameters": [
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the package."
+    },
+    {
+      "name": "selection",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [
+        "\"install\"",
+        "\"hold\"",
+        "\"deinstall\"",
+        "\"purge\""
+      ],
+      "description": "The selection state to set the package to. Choices: \"install\" \"hold\" \"deinstall\" \"purge\""
+    }
+  ],
+  "examples": [
+    "- name: Prevent python from being upgraded\n  ansible.builtin.dpkg_selections:\n    name: python\n    selection: hold\n\n- name: Allow python to be upgraded\n  ansible.builtin.dpkg_selections:\n    name: python\n    selection: install"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/dpkg_selections_module.html",
+  "parsed_at": "2026-04-13T16:29:25.117534"
+}

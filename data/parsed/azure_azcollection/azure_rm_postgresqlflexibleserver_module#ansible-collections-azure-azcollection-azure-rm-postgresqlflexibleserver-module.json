@@ -1,0 +1,695 @@
+{
+  "collection_ns": "azure_azcollection",
+  "collection": "azure.azcollection",
+  "module": "azure.azcollection.azure_rm_postgresqlflexibleserver",
+  "slug": "azure_rm_postgresqlflexibleserver_module#ansible-collections-azure-azcollection-azure-rm-postgresqlflexibleserver-module",
+  "description": "Create, update and delete instance of PostgreSQL Flexible Server.",
+  "parameters": [
+    {
+      "name": "ad_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory username. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "adfs_authority_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure AD authority url. Use when authenticating with Username/password, and has your own ADFS authority."
+    },
+    {
+      "name": "administrator_login",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The administrator’s login name of a server. Can only be specified when the server is being created (and is required for creation)."
+    },
+    {
+      "name": "administrator_login_password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The administrator login password (required for server creation)."
+    },
+    {
+      "name": "api_profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "Selects an API profile to use when communicating with Azure services. Default value of latest is appropriate for public clouds; future values will allow use with Azure Stack. Default: \"latest\""
+    },
+    {
+      "name": "append_tags",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Use to control if tags field is canonical or just appends to existing tags. When canonical, any tags not found in the tags parameter will be removed from the object’s metadata. Choices: false true ← (default)"
+    },
+    {
+      "name": "auth_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AuthConfig properties of a server."
+    },
+    {
+      "name": "auth_source",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "az",
+      "choices": [
+        "\"auto\" ← (default)",
+        "\"cli\"",
+        "\"credential_file\"",
+        "\"env\"",
+        "\"msi\""
+      ],
+      "description": "Controls the source of the credentials to use for authentication. Can also be set via the ANSIBLE_AZURE_AUTH_SOURCE environment variable. When set to auto (the default) the precedence is module parameters -> env -> credential_file -> cli. When set to env, the credentials will be read from the environment variables When set to credential_file, it will read the profile from ~/.azure/credentials. When set to cli, the credentials will be sources from the Azure CLI profile. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if more than one is present otherwise the default az cli subscription is used. When set to msi, the host machine must be an azure resource with an enabled MSI extension. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if the resource is granted access to more than one subscription, otherwise the first subscription is chosen. The msi was added in Ansible 2.6. Choices: \"auto\" ← (default) \"cli\" \"credential_file\" \"env\" \"msi\""
+    },
+    {
+      "name": "availability_zone",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Availability zone information of the server"
+    },
+    {
+      "name": "backup",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Backup properties of a server."
+    },
+    {
+      "name": "cert_validation_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ignore\"",
+        "\"validate\""
+      ],
+      "description": "Controls the certificate validation behavior for Azure endpoints. By default, all modules will validate the server certificate, but when an HTTPS proxy is in use, or against Azure Stack, it may be necessary to disable this behavior by passing ignore. Can also be set via credential file profile or the AZURE_CERT_VALIDATION environment variable. Choices: \"ignore\" \"validate\""
+    },
+    {
+      "name": "client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client ID. Use when authenticating with a Service Principal or Managed Identity (msi). Can also be set via the AZURE_CLIENT_ID environment variable."
+    },
+    {
+      "name": "cloud_environment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "AzureCloud",
+      "choices": [],
+      "description": "For cloud environments other than the US public cloud, the environment name (as defined by Azure Python SDK, eg, AzureChinaCloud, AzureUSGovernment), or a metadata discovery endpoint URL (required for Azure Stack). Can also be set via credential file profile or the AZURE_CLOUD_ENVIRONMENT environment variable. Default: \"AzureCloud\""
+    },
+    {
+      "name": "cluster",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The elastic cluster properties of a server."
+    },
+    {
+      "name": "create_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"Default\"",
+        "\"Create\"",
+        "\"Update\"",
+        "\"PointInTimeRestore\""
+      ],
+      "description": "The mode to create a new PostgreSQL server. Choices: \"Default\" \"Create\" \"Update\" \"PointInTimeRestore\""
+    },
+    {
+      "name": "disable_instance_discovery",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Determines whether or not instance discovery is performed when attempting to authenticate. Setting this to true will completely disable both instance discovery and authority validation. This functionality is intended for use in scenarios where the metadata endpoint cannot be reached such as in private clouds or Azure Stack. The process of instance discovery entails retrieving authority metadata from https://login.microsoft.com/ to validate the authority. By setting this to **True**, the validation of the authority is disabled. As a result, it is crucial to ensure that the configured authority host is valid and trustworthy. Set via credential file profile or the AZURE_DISABLE_INSTANCE_DISCOVERY environment variable. Choices: false ← (default) true"
+    },
+    {
+      "name": "fully_qualified_domain_name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The fully qualified domain name of a server."
+    },
+    {
+      "name": "high_availability",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "High availability properties of a server."
+    },
+    {
+      "name": "identity",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Identity for the Server."
+    },
+    {
+      "name": "is_restart",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Whether to restart the Post gresql server. Choices: false ← (default) true"
+    },
+    {
+      "name": "is_start",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Whether to start the Post gresql server. Choices: false ← (default) true"
+    },
+    {
+      "name": "is_stop",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Whether to stop the Post gresql server. Choices: false ← (default) true"
+    },
+    {
+      "name": "location",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Resource location. If not set, location from the resource group will be used as default."
+    },
+    {
+      "name": "log_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "log_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "maintenance_window",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Maintenance window properties of a server."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the flexible server."
+    },
+    {
+      "name": "network",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Network properties of a server."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory user password. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "point_in_time_utc",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Restore point creation time (ISO8601 format), specifying the time to restore from. It’s required when create_mode=PointInTimeRestore."
+    },
+    {
+      "name": "profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security profile found in ~/.azure/credentials file."
+    },
+    {
+      "name": "resource_group",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the resource group that contains the resource. You can obtain this value from the Azure Resource Manager API or the portal."
+    },
+    {
+      "name": "secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client secret. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "sku",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The SKU (pricing tier) of the server."
+    },
+    {
+      "name": "source_server_resource_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The source server resource ID to restore from. It’s required when create_mode=PointInTimeRestore"
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Assert the state of the PostgreSQL Flexible server. Use present to create or update a server and absent to delete it. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "storage",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Storage properties of a server."
+    },
+    {
+      "name": "subscription_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Your Azure subscription Id."
+    },
+    {
+      "name": "tags",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Dictionary of string:string pairs to assign as metadata to the object. Metadata tags on the object will be updated with any provided values. To remove tags set append_tags option to false. Currently, Azure DNS zones and Traffic Manager services also don’t allow the use of spaces in the tag. Azure Front Door doesn’t support the use of Azure Automation and Azure CDN only support 15 tags on resources."
+    },
+    {
+      "name": "tenant",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure tenant ID. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "thumbprint",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The thumbprint of the private key specified in x509_certificate_path. Use when authenticating with a Service Principal. Required if x509_certificate_path is defined."
+    },
+    {
+      "name": "version",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"11\"",
+        "\"12\"",
+        "\"13\"",
+        "\"14\"",
+        "\"15\"",
+        "\"16\"",
+        "\"17\""
+      ],
+      "description": "PostgreSQL Server version. Choices: \"11\" \"12\" \"13\" \"14\" \"15\" \"16\" \"17\""
+    },
+    {
+      "name": "x509_certificate_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the X509 certificate used to create the service principal in PEM format. The certificate must be appended to the private key. Use when authenticating with a Service Principal."
+    }
+  ],
+  "examples": [
+    "- name: Create (or update) PostgreSQL Flexible Server\n  azure_rm_postgresqlflexibleserver:\n    resource_group: myResourceGroup\n    name: testserver\n    sku:\n      name: Standard_B1ms\n      tier: Burstable\n    administrator_login: azureuser\n    administrator_login_password: \"{{ password }}\"\n    version: 12\n    storage:\n      storage_size_gb: 128\n    fully_qualified_domain_name: st-private-dns-zone.postgres.database.azure.com\n    backup:\n      backup_retention_days: 7\n      geo_redundant_backup: Disabled\n    maintenance_window:\n      custom_window: Enabled\n      start_hour: 8\n      start_minute: 0\n      day_of_week: 0\n    point_in_time_utc: 2023-05-31T00:28:17.7279547+00:00\n    availability_zone: 1\n    create_mode: Default\n\n- name: Create (or update) PostgreSQL Elastic Cluster with 3 nodes\n  azure_rm_postgresqlflexibleserver:\n    resource_group: myResourceGroup\n    name: testserver\n    sku:\n      name: Standard_B1ms\n      tier: Burstable\n    administrator_login: azureuser\n    administrator_login_password: \"{{ password }}\"\n    version: 17  # PostgreSQL version 17 for flexible server\n    storage:\n      storage_size_gb: 128\n    fully_qualified_domain_name: st-private-dns-zone.postgres.database.azure.com\n    backup:\n      backup_retention_days: 7\n      geo_redundant_backup: Disabled\n    maintenance_window:\n      custom_window: Enabled\n      start_hour: 8\n      start_minute: 0\n      day_of_week: 0\n    cluster:\n      cluster_size: 3\n      default_database_name: \"myclusterdb\"\n    point_in_time_utc: 2023-05-31T00:28:17.7279547+00:00\n    availability_zone: 1\n    create_mode: Default\n\n- name: Delete PostgreSQL Flexible Server\n  azure_rm_postgresqlflexibleserver:\n    resource_group: myResourceGroup\n    name: testserver\n    state: absent"
+  ],
+  "return_values": [
+    {
+      "name": "servers",
+      "type": "complex",
+      "description": "A list of dictionaries containing facts for PostgreSQL Flexible servers. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "administrator_login",
+      "type": "string",
+      "description": "The administrator’s login name of a server. Returned: always Sample: \"azureuser\"",
+      "returned": "always"
+    },
+    {
+      "name": "auth_config",
+      "type": "dictionary",
+      "description": "AuthConfig properties of a server. Returned: always Sample: {\"active_directory_auth\": \"Disabled\", \"password_auth\": \"Enabled\", \"tenant_id\": null}",
+      "returned": "always"
+    },
+    {
+      "name": "availability_zone",
+      "type": "string",
+      "description": "Availability zone information of the server. Returned: always Sample: \"1\"",
+      "returned": "always"
+    },
+    {
+      "name": "backup",
+      "type": "complex",
+      "description": "Backup properties of a server. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "backup_retention_days",
+      "type": "integer",
+      "description": "Backup retention days for the server. Returned: always Sample: 7",
+      "returned": "always"
+    },
+    {
+      "name": "geo_redundant_backup",
+      "type": "string",
+      "description": "A value indicating whether Geo-Redundant backup is enabled on the server. Returned: always Sample: \"Disabled\"",
+      "returned": "always"
+    },
+    {
+      "name": "cluster",
+      "type": "complex",
+      "description": "The elastic cluster properties of a server. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "cluster_size",
+      "type": "integer",
+      "description": "The number of instances in the cluster. Returned: always Sample: 3",
+      "returned": "always"
+    },
+    {
+      "name": "default_database_name",
+      "type": "string",
+      "description": "The default database name for the cluster. Returned: always Sample: \"mydb\"",
+      "returned": "always"
+    },
+    {
+      "name": "fully_qualified_domain_name",
+      "type": "string",
+      "description": "The fully qualified domain name of the flexible server. Returned: always Sample: \"postflexiblefredpgsqlflexible.postgres.database.azure.com\"",
+      "returned": "always"
+    },
+    {
+      "name": "high_availability",
+      "type": "complex",
+      "description": "High availability properties of a server. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "mode",
+      "type": "string",
+      "description": "The HA mode for the server. Returned: always Sample: \"Disabled\"",
+      "returned": "always"
+    },
+    {
+      "name": "standby_availability_zone",
+      "type": "string",
+      "description": "availability zone information of the standby. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "description": "Resource ID of the postgresql flexible server. Returned: always Sample: \"/subscriptions/xxx/resourceGroups/myResourceGroup/providers/Microsoft.DBforPostgreSQL/flexibleservers/postgresql3\"",
+      "returned": "always"
+    },
+    {
+      "name": "location",
+      "type": "string",
+      "description": "The location the resource resides in. Returned: always Sample: \"eastus\"",
+      "returned": "always"
+    },
+    {
+      "name": "maintenance_window",
+      "type": "complex",
+      "description": "Maintenance window properties of a server. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "custom_window",
+      "type": "string",
+      "description": "Indicates whether custom window is enabled or disabled. Returned: always Sample: \"Enabled\"",
+      "returned": "always"
+    },
+    {
+      "name": "day_of_week",
+      "type": "integer",
+      "description": "Day of week for maintenance window. Returned: always Sample: 0",
+      "returned": "always"
+    },
+    {
+      "name": "start_hour",
+      "type": "integer",
+      "description": "Start hour for maintenance window. Returned: always Sample: 8",
+      "returned": "always"
+    },
+    {
+      "name": "start_minute",
+      "type": "integer",
+      "description": "Start minute for maintenance window. Returned: always Sample: 0",
+      "returned": "always"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "Resource name. Returned: always Sample: \"postgreabdud1223\"",
+      "returned": "always"
+    },
+    {
+      "name": "network",
+      "type": "complex",
+      "description": "Network properties of a server. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "delegated_subnet_resource_id",
+      "type": "string",
+      "description": "Delegated subnet arm resource id. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "private_dns_zone_arm_resource_id",
+      "type": "string",
+      "description": "Private dns zone arm resource id. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "public_network_access",
+      "type": "string",
+      "description": "Public network access is enabled or not. Returned: always Sample: \"Enabled\"",
+      "returned": "always"
+    },
+    {
+      "name": "point_in_time_utc",
+      "type": "string",
+      "description": "Restore point creation time (ISO8601 format). Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "resource_group",
+      "type": "string",
+      "description": "Resource group name. Returned: always Sample: \"myResourceGroup\"",
+      "returned": "always"
+    },
+    {
+      "name": "sku",
+      "type": "complex",
+      "description": "The SKU of the server. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "tier",
+      "type": "string",
+      "description": "The tier of the particular SKU. Returned: always Sample: \"Burstable\"",
+      "returned": "always"
+    },
+    {
+      "name": "source_server_resource_id",
+      "type": "string",
+      "description": "The source server resource ID to restore from. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "storage",
+      "type": "complex",
+      "description": "The maximum storage allowed for a server. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "storage_size_gb",
+      "type": "integer",
+      "description": "ax storage allowed for a server. Returned: always Sample: 128",
+      "returned": "always"
+    },
+    {
+      "name": "system_data",
+      "type": "complex",
+      "description": "The system metadata relating to this resource. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "created_at",
+      "type": "string",
+      "description": "The timestamp of resource creation (UTC). Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "created_by",
+      "type": "string",
+      "description": "The identity that created the resource. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "created_by_type",
+      "type": "string",
+      "description": "The type of identity that created the resource. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "last_modified_at",
+      "type": "string",
+      "description": "The timestamp of resource last modification (UTC). Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "last_modified_by",
+      "type": "string",
+      "description": "The identity that last modified the resource. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "last_modified_by_type",
+      "type": "string",
+      "description": "The type of identity that last modified the resource. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "tags",
+      "type": "dictionary",
+      "description": "Tags assigned to the resource. Dictionary of string:string pairs. Returned: always Sample: {\"tag1\": \"abc\"}",
+      "returned": "always"
+    },
+    {
+      "name": "version",
+      "type": "string",
+      "description": "Flexible Server version. Returned: always Can only return: \"11\" \"12\" \"13\" Sample: \"12\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_postgresqlflexibleserver_module.html",
+  "parsed_at": "2026-04-13T16:29:37.049290"
+}

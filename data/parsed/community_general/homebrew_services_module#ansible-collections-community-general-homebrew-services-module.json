@@ -1,0 +1,61 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.homebrew_services",
+  "slug": "homebrew_services_module#ansible-collections-community-general-homebrew-services-module",
+  "description": "Manages daemons and services using Homebrew.",
+  "parameters": [
+    {
+      "name": "name",
+      "aliases": [
+        "formula"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "An installed homebrew package whose service is to be updated."
+    },
+    {
+      "name": "path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "/usr/local/bin:/opt/homebrew/bin:/home/linuxbrew/.linuxbrew/bin",
+      "choices": [],
+      "description": "A : separated list of paths to search for brew executable. Since a package (formula in homebrew parlance) location is prefixed relative to the actual path of brew command, providing an alternative brew path enables managing different set of packages in an alternative location in the system. Default: \"/usr/local/bin:/opt/homebrew/bin:/home/linuxbrew/.linuxbrew/bin\""
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\"",
+        "\"restarted\""
+      ],
+      "description": "State of the package’s service. Choices: \"present\" ← (default) \"absent\" \"restarted\""
+    }
+  ],
+  "examples": [
+    "- name: Install foo package\n  community.general.homebrew:\n    name: foo\n    state: present\n\n- name: Start the foo service (equivalent to `brew services start foo`)\n  community.general.homebrew_services:\n    name: foo\n    state: present\n\n- name: Restart the foo service (equivalent to `brew services restart foo`)\n  community.general.homebrew_services:\n    name: foo\n    state: restarted\n\n- name: Remove the foo service (equivalent to `brew services stop foo`)\n  community.general.homebrew_services:\n    name: foo\n    state: absent"
+  ],
+  "return_values": [
+    {
+      "name": "pid",
+      "type": "integer",
+      "description": "If the service is now running, this is the PID of the service, otherwise -1. Returned: success Sample: 1234",
+      "returned": "success"
+    },
+    {
+      "name": "running",
+      "type": "boolean",
+      "description": "Whether the service is running after running this command. Returned: success Sample: true",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/homebrew_services_module.html",
+  "parsed_at": "2026-04-13T16:29:47.149663"
+}

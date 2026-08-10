@@ -1,0 +1,25 @@
+# ============================================================
+# AnsibleAI RAG Generator — LangChain + ChromaDB
+# Date        : 2026-04-11 12:11:47
+# Request     : execute a shell command inside a running kubernetes pod
+# Module      : kubernetes.core.k8s_exec
+# Collection  : kubernetes.core
+# RAG score   : 0.691
+# Chunks used : 6
+# Source URL  : https://docs.ansible.com/ansible/latest/collections/kubernetes/core/k8s_exec_module.html
+# LLM model   : MISTRAL
+# ============================================================
+
+---
+- name: Execute a shell command inside a running Kubernetes pod
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - kubernetes.core
+  tasks:
+    - name: Execute a command
+      kubernetes.core.k8s_exec:
+        namespace: <your_namespace>
+        pod: <your_pod>
+        command: <your_command>

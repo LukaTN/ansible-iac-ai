@@ -1,0 +1,388 @@
+{
+  "collection_ns": "amazon_aws",
+  "collection": "amazon.aws",
+  "module": "amazon.aws.rds_cluster_info",
+  "slug": "rds_cluster_info_module#ansible-collections-amazon-aws-rds-cluster-info-module",
+  "description": "Obtain information about one or more RDS clusters.",
+  "parameters": [
+    {
+      "name": "access_key",
+      "aliases": [
+        "aws_access_key_id",
+        "aws_access_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS access key ID. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY environment variables may also be used in decreasing order of preference. The aws_access_key and profile options are mutually exclusive. The aws_access_key_id alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "aws_ca_bundle",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The location of a CA Bundle to use when validating SSL certificates. The AWS_CA_BUNDLE environment variable may also be used."
+    },
+    {
+      "name": "aws_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary to modify the botocore configuration. Parameters can be found in the AWS documentation https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html#botocore.config.Config."
+    },
+    {
+      "name": "db_cluster_identifier",
+      "aliases": [
+        "cluster_id",
+        "id",
+        "cluster_name"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The user-supplied DB cluster identifier. If this parameter is specified, information from only the specific DB cluster is returned."
+    },
+    {
+      "name": "debug_botocore_endpoint_logs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use a botocore.endpoint logger to parse the unique (rather than total) \"resource:action\" API calls made during a task, outputing the set to the resource_actions key in the task results. Use the aws_resource_action callback to output to total list made during a playbook. The ANSIBLE_DEBUG_BOTOCORE_LOGS environment variable may also be used. Choices: false ← (default) true"
+    },
+    {
+      "name": "endpoint_url",
+      "aliases": [
+        "aws_endpoint_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "AWS",
+      "choices": [],
+      "description": "URL to connect to instead of the default AWS endpoints. While this can be used to connection to other AWS-compatible services the amazon.aws and community.aws collections are only tested against AWS. The AWS_URL environment variable may also be used."
+    },
+    {
+      "name": "filters",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A filter that specifies one or more DB clusters to describe. See https://docs.aws.amazon.com/AmazonRDS/latest/APIReference/API_DescribeDBClusters.html."
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "aws_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A named AWS profile to use for authentication. See the AWS documentation for more information about named profiles https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html. The AWS_PROFILE environment variable may also be used. The profile option is mutually exclusive with the aws_access_key, aws_secret_key and session_token options."
+    },
+    {
+      "name": "region",
+      "aliases": [
+        "aws_region"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The AWS region to use. For global services such as IAM, Route53 and CloudFront, region is ignored. The AWS_REGION environment variable may also be used. See the Amazon AWS documentation for more information http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region."
+    },
+    {
+      "name": "secret_key",
+      "aliases": [
+        "aws_secret_access_key",
+        "aws_secret_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS secret access key. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SECRET_ACCESS_KEY or AWS_SECRET_KEY environment variables may also be used in decreasing order of preference. The secret_key and profile options are mutually exclusive. The aws_secret_access_key alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "session_token",
+      "aliases": [
+        "aws_session_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS STS session token for use with temporary credentials. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SESSION_TOKEN environment variable may also be used. The session_token and profile options are mutually exclusive."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to false, SSL certificates will not be validated for communication with the AWS APIs. Setting validate_certs=false is strongly discouraged, as an alternative, consider setting aws_ca_bundle instead. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Get info of all existing DB clusters\n  amazon.aws.rds_cluster_info:\n  register: _result_cluster_info\n\n- name: Get info on a specific DB cluster\n  amazon.aws.rds_cluster_info:\n    cluster_id: \"{{ cluster_id }}\"\n  register: _result_cluster_info\n\n- name: Get info all DB clusters with specific engine\n  amazon.aws.rds_cluster_info:\n    engine: \"aurora\"\n  register: _result_cluster_info"
+  ],
+  "return_values": [
+    {
+      "name": "clusters",
+      "type": "list",
+      "description": "List of RDS clusters. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "activity_stream_status",
+      "type": "string",
+      "description": "The status of the database activity stream. Returned: success Sample: \"stopped\"",
+      "returned": "success"
+    },
+    {
+      "name": "allocated_storage",
+      "type": "integer",
+      "description": "The allocated storage size in gigabytes. Since aurora storage size is not fixed this is always 1 for aurora database engines. Returned: success Sample: 1",
+      "returned": "success"
+    },
+    {
+      "name": "associated_roles",
+      "type": "list",
+      "description": "A list of dictionaries of the AWS Identity and Access Management (IAM) roles that are associated with the DB cluster. Each dictionary contains the role_arn and the status of the role. Returned: success Sample: []",
+      "returned": "success"
+    },
+    {
+      "name": "auto_minor_version_upgrade",
+      "type": "boolean",
+      "description": "Specifies whether minor engine upgrades are applied automatically to the DB cluster during the maintenance window. Returned: always Sample: true",
+      "returned": "always"
+    },
+    {
+      "name": "availability_zones",
+      "type": "list",
+      "description": "The list of availability zones that instances in the DB cluster can be created in. Returned: success Sample: [\"us-east-1c\", \"us-east-1a\", \"us-east-1e\"]",
+      "returned": "success"
+    },
+    {
+      "name": "backup_retention_period",
+      "type": "integer",
+      "description": "The number of days for which automatic DB snapshots are retained. Returned: success Sample: 1",
+      "returned": "success"
+    },
+    {
+      "name": "cluster_create_time",
+      "type": "string",
+      "description": "The time in UTC when the DB cluster was created. Returned: success Sample: \"2018-06-29T14:08:58.491000+00:00\"",
+      "returned": "success"
+    },
+    {
+      "name": "copy_tags_to_snapshot",
+      "type": "boolean",
+      "description": "Specifies whether tags are copied from the DB cluster to snapshots of the DB cluster. Returned: success Sample: false",
+      "returned": "success"
+    },
+    {
+      "name": "cross_account_clone",
+      "type": "boolean",
+      "description": "Specifies whether the DB cluster is a clone of a DB cluster owned by a different Amazon Web Services account. Returned: success Sample: false",
+      "returned": "success"
+    },
+    {
+      "name": "db_cluster_arn",
+      "type": "string",
+      "description": "The Amazon Resource Name (ARN) for the DB cluster. Returned: success Sample: \"arn:aws:rds:us-east-1:123456789012:cluster:rds-cluster-demo\"",
+      "returned": "success"
+    },
+    {
+      "name": "db_cluster_identifier",
+      "type": "string",
+      "description": "The lowercase user-supplied DB cluster identifier. Returned: success Sample: \"rds-cluster-demo\"",
+      "returned": "success"
+    },
+    {
+      "name": "db_cluster_members",
+      "type": "list",
+      "description": "A list of dictionaries containing information about the instances in the cluster. Each dictionary contains the db_instance_identifier, is_cluster_writer (bool), db_cluster_parameter_group_status, and promotion_tier (int). Returned: success Sample: []",
+      "returned": "success"
+    },
+    {
+      "name": "db_cluster_parameter_group",
+      "type": "string",
+      "description": "The parameter group associated with the DB cluster. Returned: success Sample: \"default.aurora5.6\"",
+      "returned": "success"
+    },
+    {
+      "name": "db_cluster_resource_id",
+      "type": "string",
+      "description": "The AWS Region-unique, immutable identifier for the DB cluster. Returned: success Sample: \"cluster-D2MEQDN3BQNXDF74K6DQJTHASU\"",
+      "returned": "success"
+    },
+    {
+      "name": "db_subnet_group",
+      "type": "string",
+      "description": "The name of the subnet group associated with the DB Cluster. Returned: success Sample: \"default\"",
+      "returned": "success"
+    },
+    {
+      "name": "deletion_protection",
+      "type": "boolean",
+      "description": "Indicates if the DB cluster has deletion protection enabled. The database can’t be deleted when deletion protection is enabled. Returned: success Sample: false",
+      "returned": "success"
+    },
+    {
+      "name": "domain_memberships",
+      "type": "list",
+      "description": "The Active Directory Domain membership records associated with the DB cluster. Returned: success Sample: []",
+      "returned": "success"
+    },
+    {
+      "name": "earliest_restorable_time",
+      "type": "string",
+      "description": "The earliest time to which a database can be restored with point-in-time restore. Returned: success Sample: \"2018-06-29T14:09:34.797000+00:00\"",
+      "returned": "success"
+    },
+    {
+      "name": "endpoint",
+      "type": "string",
+      "description": "The connection endpoint for the primary instance of the DB cluster. Returned: success Sample: \"rds-cluster-demo.cluster-cvlrtwiennww.us-east-1.rds.amazonaws.com\"",
+      "returned": "success"
+    },
+    {
+      "name": "engine",
+      "type": "string",
+      "description": "The database engine of the DB cluster. Returned: success Sample: \"aurora\"",
+      "returned": "success"
+    },
+    {
+      "name": "engine_mode",
+      "type": "string",
+      "description": "The DB engine mode of the DB cluster. Returned: success Sample: \"provisioned\"",
+      "returned": "success"
+    },
+    {
+      "name": "engine_version",
+      "type": "string",
+      "description": "The database engine version. Returned: success Sample: \"5.6.10a\"",
+      "returned": "success"
+    },
+    {
+      "name": "hosted_zone_id",
+      "type": "string",
+      "description": "The ID that Amazon Route 53 assigns when you create a hosted zone. Returned: success Sample: \"Z2R2ITUGPM61AM\"",
+      "returned": "success"
+    },
+    {
+      "name": "http_endpoint_enabled",
+      "type": "boolean",
+      "description": "A value that indicates whether the HTTP endpoint for an Aurora Serverless DB cluster is enabled. Returned: success Sample: false",
+      "returned": "success"
+    },
+    {
+      "name": "iam_database_authentication_enabled",
+      "type": "boolean",
+      "description": "Whether IAM accounts may be mapped to database accounts. Returned: success Sample: false",
+      "returned": "success"
+    },
+    {
+      "name": "latest_restorable_time",
+      "type": "string",
+      "description": "The latest time to which a database can be restored with point-in-time restore. Returned: success Sample: \"2018-06-29T14:09:34.797000+00:00\"",
+      "returned": "success"
+    },
+    {
+      "name": "master_username",
+      "type": "string",
+      "description": "The master username for the DB cluster. Returned: success Sample: \"username\"",
+      "returned": "success"
+    },
+    {
+      "name": "multi_az",
+      "type": "boolean",
+      "description": "Whether the DB cluster has instances in multiple availability zones. Returned: success Sample: false",
+      "returned": "success"
+    },
+    {
+      "name": "port",
+      "type": "integer",
+      "description": "The port that the database engine is listening on. Returned: success Sample: 3306",
+      "returned": "success"
+    },
+    {
+      "name": "preferred_backup_window",
+      "type": "string",
+      "description": "The UTC weekly time range during which system maintenance can occur. Returned: success Sample: \"10:18-10:48\"",
+      "returned": "success"
+    },
+    {
+      "name": "preferred_maintenance_window",
+      "type": "string",
+      "description": "The UTC weekly time range during which system maintenance can occur. Returned: success Sample: \"tue:03:23-tue:03:53\"",
+      "returned": "success"
+    },
+    {
+      "name": "read_replica_identifiers",
+      "type": "list",
+      "description": "A list of read replica ID strings associated with the DB cluster. Returned: success Sample: []",
+      "returned": "success"
+    },
+    {
+      "name": "reader_endpoint",
+      "type": "string",
+      "description": "The reader endpoint for the DB cluster. Returned: success Sample: \"rds-cluster-demo.cluster-ro-cvlrtwiennww.us-east-1.rds.amazonaws.com\"",
+      "returned": "success"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "description": "The status of the DB cluster. Returned: success Sample: \"available\"",
+      "returned": "success"
+    },
+    {
+      "name": "storage_encrypted",
+      "type": "boolean",
+      "description": "Whether the DB cluster is storage encrypted. Returned: success Sample: false",
+      "returned": "success"
+    },
+    {
+      "name": "tag_list",
+      "type": "list",
+      "description": "A list of tags consisting of key-value pairs. Returned: success Sample: [{\"key\": \"Created_By\", \"value\": \"Ansible_rds_cluster_integration_test\"}]",
+      "returned": "success"
+    },
+    {
+      "name": "tags",
+      "type": "dictionary",
+      "description": "A dictionary of key value pairs. Returned: success Sample: {\"Name\": \"rds-cluster-demo\"}",
+      "returned": "success"
+    },
+    {
+      "name": "vpc_security_groups",
+      "type": "complex",
+      "description": "A list of the DB cluster’s security groups and their status. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "vpc_security_group_id",
+      "type": "string",
+      "description": "Security group of the cluster. Returned: success Sample: \"sg-12345678\"",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/amazon/aws/rds_cluster_info_module.html",
+  "parsed_at": "2026-04-13T16:29:23.312058"
+}

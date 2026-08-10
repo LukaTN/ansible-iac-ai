@@ -1,0 +1,273 @@
+# =================================================================
+#  AnsibleAI — local parity stack
+#
+#    cp .env.docker.example .env.docker    # then edit the secrets
+#    docker compose --env-file .env.docker up --build
+#    open http://localhost:5000
+#
+#  The --env-file flag is required, not optional. Compose resolves the
+#  ${...} placeholders below from the shell environment and from its
+#  default env file (.env) only; a file named in a service's `env_file:`
+#  is passed to the container but is invisible to interpolation. Without
+#  the flag, .env — which points DATABASE_URL at localhost for host-based
+#  development — would be read instead, and POSTGRES_PASSWORD would resolve
+#  to nothing. The `:?` defaults below turn that into a named error
+#  rather than a confusing connection failure.
+#
+#  Other roles from the same image:
+#    docker compose --env-file .env.docker run --rm api smoke
+#    docker compose --env-file .env.docker run --rm api exec python rag/pipeline.py --build
+#
+#  Generations run in the `worker` service, not in the API request. To
+#  watch one happen:
+#    docker compose --env-file .env.docker logs -f worker
+#  To add capacity (each replica is interchangeable — no turn state lives
+#  in the process):
+#    docker compose --env-file .env.docker up -d --scale worker=3
+#
+#  Scope note. This mirrors what the application actually talks to
+#  today: PostgreSQL+pgvector, Redis, MinIO and Ollama. Keycloak and
+#  vLLM arrive with the phases that migrate onto them (5 and 4).
+#
+#  Ollama runs on the host rather than in a container so it keeps direct
+#  GPU access; Phase 4 replaces it with vLLM on GPU nodes.
+# =================================================================
+
+name: ansibleai
+
+x-app-image: &app-image
+  build:
+    context: .
+    target: runtime
+  image: ansibleai/app:dev
+
+x-app-env: &app-env
+  # Service names resolve on the compose network, so localhost from the
+  # host .env would point the container at itself.
+  DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER:-ansibleai}:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env.docker}@db:5432/${POSTGRES_DB:-ansibleai}
+  REDIS_URL: redis://redis:6379/0
+  # The Phase 0 work wired both of these but had no Redis to point at.
+  SESSION_BACKEND: redis
+  RATE_LIMIT_BACKEND: redis
+  # Must agree with the gunicorn worker class (see gunicorn.conf.py).
+  SOCKETIO_ASYNC_MODE: gevent
+  # The SPA is served from the API on :5000. Without these origins
+  # Socket.IO returns 400 to the browser and the UI sits on
+  # "Reconnecting..." / frozen progress forever.
+  CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173,http://127.0.0.1:5173,http://localhost:5000,http://127.0.0.1:5000}
+
+  # ── Phase 2: nothing per-request stays in a process ──────────
+  # Carries emits from the worker to whichever API process holds the
+  # client's socket. Without it the browser would sit on "thinking"
+  # until the answer was already in the database.
+  SOCKETIO_MESSAGE_QUEUE: redis://redis:6379/1
+  # Separate database from sessions: `celery purge` and a stuck queue
+  # should never be one FLUSHDB away from signing everyone out.
+  CELERY_BROKER_URL: redis://redis:6379/2
+  CELERY_RESULT_BACKEND: redis://redis:6379/2
+  # The whole point of this stack: the agent runs in the worker, not in
+  # the request. Eager mode would put it back inline.
+  CELERY_TASK_ALWAYS_EAGER: "false"
+  # Stop and scrape-log tailing both have to work no matter which
+  # process serves them.
+  CANCEL_BACKEND: redis
+  LOG_STREAM_BACKEND: redis
+
+  # Generated playbooks outlive the container that produced them.
+  ARTIFACT_BACKEND: s3
+  S3_ENDPOINT_URL: http://minio:9000
+  S3_BUCKET: ${S3_BUCKET:-ansibleai-playbooks}
+  S3_ACCESS_KEY: ${MINIO_ROOT_USER:-ansibleai}
+  S3_SECRET_KEY: ${MINIO_ROOT_PASSWORD:?set MINIO_ROOT_PASSWORD in .env.docker}
+
+  # Reaches the Ollama daemon on the developer's machine.
+  OLLAMA_BASE_URL: ${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+
+  # ── Phase 6a: Langfuse (optional; no-op until keys + ENABLED) ──
+  # Langfuse runs in a separate compose project on host :3000, so
+  # containers reach it via host.docker.internal (not langfuse-web).
+  LANGFUSE_ENABLED: ${LANGFUSE_ENABLED:-false}
+  LANGFUSE_PUBLIC_KEY: ${LANGFUSE_PUBLIC_KEY:-}
+  LANGFUSE_SECRET_KEY: ${LANGFUSE_SECRET_KEY:-}
+  LANGFUSE_HOST: ${LANGFUSE_HOST:-http://host.docker.internal:3000}
+  # SDK v3+ canonical URL (mirrors HOST when BASE_URL unset in app config).
+  LANGFUSE_BASE_URL: ${LANGFUSE_BASE_URL:-${LANGFUSE_HOST:-http://host.docker.internal:3000}}
+  LANGFUSE_TRACING_ENVIRONMENT: ${LANGFUSE_TRACING_ENVIRONMENT:-development}
+
+  # ── Phase 3: embeddings via TEI or Ollama /v1/embeddings ─────
+  EMBEDDING_BASE_URL: ${EMBEDDING_BASE_URL:-http://host.docker.internal:11434/v1}
+  EMBEDDING_MODEL: ${EMBEDDING_MODEL:-nomic-embed-text}
+  EMBEDDING_DIMENSIONS: ${EMBEDDING_DIMENSIONS:-768}
+
+x-app-security: &app-security
+  read_only: true
+  cap_drop: [ALL]
+  security_opt:
+    - no-new-privileges:true
+
+x-app-tmpfs: &app-tmpfs
+  # Everything the process writes outside its volumes. Sized so a
+  # runaway temp file cannot fill the host disk.
+  - /tmp:size=512m,mode=1777
+  - /home/app:size=64m,uid=10001,gid=10001,mode=0700
+
+services:
+
+  # ── Application database (Postgres 16 + pgvector) ──────────────
+  db:
+    image: pgvector/pgvector:pg16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-ansibleai}
+      POSTGRES_USER: ${POSTGRES_USER:-ansibleai}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env.docker}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-ansibleai} -d ${POSTGRES_DB:-ansibleai}"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+    # Not published: only the app needs it. Uncomment to inspect with a
+    # local client.
+    # ports: ["5432:5432"]
+
+  # ── Sessions and rate-limit counters ───────────────────────────
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    # AOF on: sessions live here, so a restart would otherwise sign
+    # every user out. maxmemory-policy stays noeviction because silently
+    # dropping a session key is indistinguishable from a forged one.
+    command:
+      - redis-server
+      - --appendonly
+      - "yes"
+      - --maxmemory-policy
+      - noeviction
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  # ── Playbook artifact store ────────────────────────────────────
+  minio:
+    image: minio/minio:RELEASE.2025-09-07T16-13-09Z
+    restart: unless-stopped
+    command: ["server", "/data", "--console-address", ":9001"]
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-ansibleai}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?set MINIO_ROOT_PASSWORD in .env.docker}
+    volumes:
+      - minio-data:/data
+    ports:
+      # Console only. The S3 API is reached over the compose network, so
+      # publishing 9000 is not needed to make the app work — it is here
+      # for `aws s3 ls` from the host while debugging.
+      - "${MINIO_CONSOLE_PORT:-9001}:9001"
+      - "${MINIO_API_PORT:-9000}:9000"
+    healthcheck:
+      test: ["CMD", "mc", "ready", "local"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+
+  # ── Schema migration + admin seed (runs to completion, then exits) ──
+  migrate:
+    <<: [*app-image, *app-security]
+    command: ["migrate"]
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env.docker
+    environment:
+      <<: *app-env
+    tmpfs: *app-tmpfs
+    restart: "no"
+
+  # ── API + SPA ──────────────────────────────────────────────────
+  api:
+    <<: [*app-image, *app-security]
+    command: ["api"]
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      migrate:
+        # The API refuses to boot against an un-migrated schema, so this
+        # ordering is load-bearing rather than cosmetic.
+        condition: service_completed_successfully
+    env_file:
+      - .env.docker
+    environment:
+      <<: *app-env
+    ports:
+      - "${API_PORT:-5000}:5000"
+    tmpfs: *app-tmpfs
+    volumes:
+      # Bind mounts, not named volumes, and only for the mutable
+      # directories. This reuses the vector index the developer has
+      # Phase 3: vectors live in pgvector, no shared SQLite file.
+      - ./data/kb_versions:/app/data/kb_versions
+      - ./data/raw_html:/app/data/raw_html
+      - ./output:/app/output
+      - ./reports:/app/reports
+    extra_hosts:
+      # Docker Desktop provides this automatically; the explicit mapping
+      # is what makes the same file work on a Linux host.
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+
+  # ── Agent worker ───────────────────────────────────────────────
+  # Same image, different role. This is where a generation actually
+  # runs, which is why it needs Ollama and the vector index but not a
+  # published port: it serves no HTTP and is reached only through the
+  # broker.
+  worker:
+    <<: [*app-image, *app-security]
+    command: ["worker"]
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    env_file:
+      - .env.docker
+    environment:
+      <<: *app-env
+      # The worker emits over the message queue rather than serving
+      # sockets, so it has no gunicorn worker class to agree with.
+      SOCKETIO_ASYNC_MODE: threading
+      CELERY_WORKER_CONCURRENCY: ${CELERY_WORKER_CONCURRENCY:-2}
+      # Read by the image HEALTHCHECK, which runs as its own process and
+      # therefore cannot infer the role from the running command.
+      APP_ROLE: worker
+    tmpfs: *app-tmpfs
+    volumes:
+      # Phase 3: vectors live in pgvector; raw_html only needed for
+      # rescrape, which runs in the worker.
+      - ./data/raw_html:/app/data/raw_html:ro
+      # No output/ mount: generated playbooks go to MinIO, and the
+      # scratch files the linter needs live in the tmpfs at /tmp.
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    # Scale with `docker compose --env-file .env.docker up -d --scale worker=3`.
+    # Nothing about a turn lives in this process, so replicas are
+    # interchangeable.
+    restart: unless-stopped
+
+volumes:
+  db-data:
+  redis-data:
+  minio-data:

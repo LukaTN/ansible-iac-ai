@@ -1,0 +1,155 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.consul_kv",
+  "slug": "consul_kv_module#ansible-collections-community-general-consul-kv-module",
+  "description": "Allows the retrieval, addition, modification and deletion of key/value entries in a Consul cluster using the agent. The entire contents of the record, including the indices, flags and session are returned as value.",
+  "parameters": [
+    {
+      "name": "cas",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Used when acquiring a lock with a session. If the cas is 0, then Consul only puts the key if it does not already exist. If the cas value is non-zero, then the key is only set if the index matches the ModifyIndex of that key."
+    },
+    {
+      "name": "datacenter",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The name of the datacenter to query. If unspecified, the query defaults to the datacenter of the Consul agent on host."
+    },
+    {
+      "name": "flags",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Opaque positive integer value that can be passed when setting a value."
+    },
+    {
+      "name": "host",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "localhost",
+      "choices": [],
+      "description": "Host of the Consul agent. Default: \"localhost\""
+    },
+    {
+      "name": "key",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The key at which the value should be stored."
+    },
+    {
+      "name": "port",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "8500",
+      "choices": [],
+      "description": "The port on which the Consul agent is running. Default: 8500"
+    },
+    {
+      "name": "recurse",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "If the key represents a prefix, each entry with the prefix can be retrieved by setting this to true. Choices: false true"
+    },
+    {
+      "name": "retrieve",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If the state is present and value is set, perform a read after setting the value and return this value. Choices: false true ← (default)"
+    },
+    {
+      "name": "scheme",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "http",
+      "choices": [],
+      "description": "The protocol scheme on which the Consul agent is running. Default: \"http\""
+    },
+    {
+      "name": "session",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The session that should be used to acquire or release a lock associated with a key/value pair."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"acquire\"",
+        "\"present\" ← (default)",
+        "\"release\""
+      ],
+      "description": "The action to take with the supplied key and value. If the state is present and value is set, the key contents is set to the value supplied and changed is set to true only if the value was different to the current contents. If the state is present and value is not set, the existing value associated to the key is returned. The state absent is used to remove the key/value pair, again changed is set to true only if the key actually existed prior to the removal. An attempt can be made to obtain or free the lock associated with a key/value pair with the states acquire or release respectively. A valid session must be supplied to make the attempt changed is true if the attempt is successful, false otherwise. Choices: \"absent\" \"acquire\" \"present\" ← (default) \"release\""
+    },
+    {
+      "name": "token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The token key identifying an ACL rule set that controls access to the key value pair."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether to verify the tls certificate of the Consul agent. Choices: false true ← (default)"
+    },
+    {
+      "name": "value",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The value should be associated with the given key, required if state is present."
+    }
+  ],
+  "examples": [
+    "# If the key does not exist, the value associated to the \"data\" property in `retrieved_key` will be `None`\n# If the key value is empty string, `retrieved_key[\"data\"][\"Value\"]` will be `None`\n- name: Retrieve a value from the key/value store\n  community.general.consul_kv:\n    key: somekey\n  register: retrieved_key\n\n- name: Add or update the value associated with a key in the key/value store\n  community.general.consul_kv:\n    key: somekey\n    value: somevalue\n\n- name: Remove a key from the store\n  community.general.consul_kv:\n    key: somekey\n    state: absent\n\n- name: Add a node to an arbitrary group using Consul inventory (see consul.ini)\n  community.general.consul_kv:\n    key: ansible/groups/dc1/somenode\n    value: top_secret\n\n- name: Register a key/value pair with an associated session\n  community.general.consul_kv:\n    key: stg/node/server_birthday\n    value: 20160509\n    session: \"{{ sessionid }}\"\n    state: acquire"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/consul_kv_module.html",
+  "parsed_at": "2026-04-13T16:29:44.327455"
+}

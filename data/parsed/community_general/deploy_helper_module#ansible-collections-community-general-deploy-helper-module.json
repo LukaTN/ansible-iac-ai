@@ -1,0 +1,193 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.deploy_helper",
+  "slug": "deploy_helper_module#ansible-collections-community-general-deploy-helper-module",
+  "description": "The Deploy Helper manages some of the steps common in deploying software. It creates a folder structure, manages a symlink for the current release and cleans up old releases.",
+  "parameters": [
+    {
+      "name": "attributes",
+      "aliases": [
+        "attr"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The attributes the resulting filesystem object should have. To get supported flags look at the man page for chattr on the target system. This string should contain the attributes in the same order as the one displayed by lsattr. The = operator is assumed as default, otherwise + or - operators need to be included in the string."
+    },
+    {
+      "name": "clean",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether to run the clean procedure in case of state=finalize. Choices: false true ← (default)"
+    },
+    {
+      "name": "current_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "current",
+      "choices": [],
+      "description": "The name of the symlink that is created when the deploy is finalized. Used in state=finalize and state=clean. Returned in the deploy_helper.current_path fact. Default: \"current\""
+    },
+    {
+      "name": "group",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of the group that should own the filesystem object, as would be fed to chown. When left unspecified, it uses the current group of the current user unless you are root, in which case it can preserve the previous ownership."
+    },
+    {
+      "name": "keep_releases",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "5",
+      "choices": [],
+      "description": "The number of old releases to keep when cleaning. Used in state=finalize and state=clean. Any unfinished builds are deleted first, so only correct releases count. The current version does not count. Default: 5"
+    },
+    {
+      "name": "mode",
+      "aliases": [],
+      "type": "any",
+      "required": false,
+      "default": "umask",
+      "choices": [],
+      "description": "The permissions the resulting filesystem object should have. For those used to /usr/bin/chmod remember that modes are actually octal numbers. You must give Ansible enough information to parse them correctly. For consistent results, quote octal numbers (for example, '644' or '1777') so Ansible receives a string and can do its own conversion from string into number. Adding a leading zero (for example, 0755) works sometimes, but can fail in loops and some other circumstances. Giving Ansible a number without following either of these rules will end up with a decimal number which will have unexpected results. As of Ansible 1.8, the mode may be specified as a symbolic mode (for example, u+rwx or u=rw,g=r,o=r). If mode is not specified and the destination filesystem object does not exist, the default umask on the system will be used when setting the mode for the newly created filesystem object. If mode is not specified and the destination filesystem object does exist, the mode of the existing filesystem object will be used. Specifying mode is the best way to ensure filesystem objects are created with the correct permissions. See CVE-2020-1736 for further details."
+    },
+    {
+      "name": "owner",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of the user that should own the filesystem object, as would be fed to chown. When left unspecified, it uses the current user unless you are root, in which case it can preserve the previous ownership. Specifying a numeric username will be assumed to be a user ID and not a username. Avoid numeric usernames to avoid this confusion."
+    },
+    {
+      "name": "path",
+      "aliases": [
+        "dest"
+      ],
+      "type": "path",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The root path of the project. Returned in the deploy_helper.project_path fact."
+    },
+    {
+      "name": "release",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The release version that is being deployed. Defaults to a timestamp format %Y%m%d%H%M%S (for example 20141119223359). This parameter is optional during state=present, but needs to be set explicitly for state=finalize. You can use the generated fact release={{ deploy_helper.new_release }}."
+    },
+    {
+      "name": "releases_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "releases",
+      "choices": [],
+      "description": "The name of the folder that holds the releases. This can be relative to path or absolute. Returned in the deploy_helper.releases_path fact. Default: \"releases\""
+    },
+    {
+      "name": "selevel",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The level part of the SELinux filesystem object context. This is the MLS/MCS attribute, sometimes known as the range. When set to _default, it will use the level portion of the policy if available."
+    },
+    {
+      "name": "serole",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The role part of the SELinux filesystem object context. When set to _default, it will use the role portion of the policy if available."
+    },
+    {
+      "name": "setype",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The type part of the SELinux filesystem object context. When set to _default, it will use the type portion of the policy if available."
+    },
+    {
+      "name": "seuser",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "it",
+      "choices": [],
+      "description": "The user part of the SELinux filesystem object context. By default it uses the system policy, where applicable. When set to _default, it will use the user portion of the policy if available."
+    },
+    {
+      "name": "shared_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "shared",
+      "choices": [],
+      "description": "The name of the folder that holds the shared resources. This can be relative to path or absolute. If this is set to an empty string, no shared folder is created. Returned in the deploy_helper.shared_path fact. Default: \"shared\""
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"finalize\"",
+        "\"absent\"",
+        "\"clean\"",
+        "\"query\""
+      ],
+      "description": "The state of the project. query gathers facts. present creates the project root folder, and in it the releases and shared folders. finalize removes the unfinished_filename file, creates a symlink to the newly deployed release and optionally cleans old releases. clean removes failed & old releases. absent removes the project folder (synonymous to the ansible.builtin.file module with state=absent). Choices: \"present\" ← (default) \"finalize\" \"absent\" \"clean\" \"query\""
+    },
+    {
+      "name": "unfinished_filename",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "DEPLOY_UNFINISHED",
+      "choices": [],
+      "description": "The name of the file that indicates a deploy has not finished. All folders in the releases_path that contain this file are deleted on state=finalize with clean=true, or state=clean. This file is automatically deleted from the new_release_path during state=finalize. Default: \"DEPLOY_UNFINISHED\""
+    },
+    {
+      "name": "unsafe_writes",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "this",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Influence when to use atomic operation to prevent data corruption or inconsistent reads from the target filesystem object. By default this module uses atomic operations to prevent data corruption or inconsistent reads from the target filesystem objects, but sometimes systems are configured or just broken in ways that prevent this. One example is docker mounted filesystem objects, which cannot be updated atomically from inside the container and can only be written in an unsafe manner. This option allows Ansible to fall back to unsafe methods of updating filesystem objects when atomic operations fail (however, it doesn’t force Ansible to perform unsafe writes). IMPORTANT! Unsafe writes are subject to race conditions and can lead to data corruption. Choices: false ← (default) true"
+    }
+  ],
+  "examples": [
+    "# General explanation, starting with an example folder structure for a project:\n\n# root:\n#     releases:\n#         - 20140415234508\n#         - 20140415235146\n#         - 20140416082818\n#\n#     shared:\n#         - sessions\n#         - uploads\n#\n#     current: releases/20140416082818\n\n\n# The 'releases' folder holds all the available releases. A release is a complete build of the application being\n# deployed. This can be a clone of a repository for example, or a sync of a local folder on your filesystem.\n# Having timestamped folders is one way of having distinct releases, but you could choose your own strategy like\n# git tags or commit hashes.\n#\n# During a deploy, a new folder should be created in the releases folder and any build steps required should be\n# performed. Once the new build is ready, the deploy procedure is 'finalized' by replacing the 'current' symlink\n# with a link to this build.\n#\n# The 'shared' folder holds any resource that is shared between releases. Examples of this are web-server\n# session files, or files uploaded by users of your application. It's quite common to have symlinks from a release\n# folder pointing to a shared/subfolder, and creating these links would be automated as part of the build steps.\n#\n# The 'current' symlink points to one of the releases. Probably the latest one, unless a deploy is in progress.\n# The web-server's root for the project will go through this symlink, so the 'downtime' when switching to a new\n# release is reduced to the time it takes to switch the link.\n#\n# To distinguish between successful builds and unfinished ones, a file can be placed in the folder of the release\n# that is currently in progress. The existence of this file will mark it as unfinished, and allow an automated\n# procedure to remove it during cleanup.\n\n\n# Typical usage\n- name: Initialize the deploy root and gather facts\n  community.general.deploy_helper:\n    path: /path/to/root\n- name: Clone the project to the new release folder\n  ansible.builtin.git:\n    repo: ansible.builtin.git://foosball.example.org/path/to/repo.git\n    dest: '{{ deploy_helper.new_release_path }}'\n    version: v1.1.1\n- name: Add an unfinished file, to allow cleanup on successful finalize\n  ansible.builtin.file:\n    path: '{{ deploy_helper.new_release_path }}/{{ deploy_helper.unfinished_filename }}'\n    state: touch\n- name: Perform some build steps, like running your dependency manager for example\n  composer:\n    command: install\n    working_dir: '{{ deploy_helper.new_release_path }}'\n- name: Create some folders in the shared folder\n  ansible.builtin.file:\n    path: '{{ deploy_helper.shared_path }}/{{ item }}'\n    state: directory\n  with_items:\n    - sessions\n    - uploads\n- name: Add symlinks from the new release to the shared folder\n  ansible.builtin.file:\n    path: '{{ deploy_helper.new_release_path }}/{{ item.path }}'\n    src: '{{ deploy_helper.shared_path }}/{{ item.src }}'\n    state: link\n  with_items:\n    - path: app/sessions\n      src: sessions\n    - path: web/uploads\n      src: uploads\n- name: Finalize the deploy, removing the unfinished file and switching the symlink\n  community.general.deploy_helper:\n    path: /path/to/root\n    release: '{{ deploy_helper.new_release }}'\n    state: finalize\n\n# Retrieving facts before running a deploy\n- name: Run 'state=query' to gather facts without changing anything\n  community.general.deploy_helper:\n    path: /path/to/root\n    state: query\n# Remember to set the 'release' parameter when you actually call 'state=present' later\n- name: Initialize the deploy root\n  community.general.deploy_helper:\n    path: /path/to/root\n    release: '{{ deploy_helper.new_release }}'\n    state: present\n\n# all paths can be absolute or relative (to the 'path' parameter)\n- community.general.deploy_helper:\n    path: /path/to/root\n    releases_path: /var/www/project/releases\n    shared_path: /var/www/shared\n    current_path: /var/www/active\n\n# Using your own naming strategy for releases (a version tag in this case):\n- community.general.deploy_helper:\n    path: /path/to/root\n    release: v1.1.1\n    state: present\n- community.general.deploy_helper:\n    path: /path/to/root\n    release: '{{ deploy_helper.new_release }}'\n    state: finalize\n\n# Using a different unfinished_filename:\n- community.general.deploy_helper:\n    path: /path/to/root\n    unfinished_filename: README.md\n    release: '{{ deploy_helper.new_release }}'\n    state: finalize\n\n# Postponing the cleanup of older builds:\n- community.general.deploy_helper:\n    path: /path/to/root\n    release: '{{ deploy_helper.new_release }}'\n    state: finalize\n    clean: false\n- community.general.deploy_helper:\n    path: /path/to/root\n    state: clean\n# Or running the cleanup ahead of the new deploy\n- community.general.deploy_helper:\n    path: /path/to/root\n    state: clean\n- community.general.deploy_helper:\n    path: /path/to/root\n    state: present\n\n# Keeping more old releases:\n- community.general.deploy_helper:\n    path: /path/to/root\n    release: '{{ deploy_helper.new_release }}'\n    state: finalize\n    keep_releases: 10\n# Or, if you use 'clean=false' on finalize:\n- community.general.deploy_helper:\n    path: /path/to/root\n    state: clean\n    keep_releases: 10\n\n# Removing the entire project root folder\n- community.general.deploy_helper:\n    path: /path/to/root\n    state: absent\n\n# Debugging the facts returned by the module\n- community.general.deploy_helper:\n    path: /path/to/root\n- ansible.builtin.debug:\n    var: deploy_helper"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/deploy_helper_module.html",
+  "parsed_at": "2026-04-13T16:29:44.898069"
+}

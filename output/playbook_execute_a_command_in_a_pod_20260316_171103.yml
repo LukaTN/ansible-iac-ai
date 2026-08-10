@@ -1,0 +1,14 @@
+---
+- name: Execute a command in a pod
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - kubernetes.core
+
+  tasks:
+    - name: Execute command on the specified pod
+      kubernetes.core.k8s_exec:
+        namespace: myproject
+        pod: zuul-scheduler
+        command: zuul-scheduler full-reconfigure

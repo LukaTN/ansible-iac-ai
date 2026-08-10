@@ -1,0 +1,97 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.python_requirements_info",
+  "slug": "python_requirements_info_module#ansible-collections-community-general-python-requirements-info-module",
+  "description": "Get info about available Python requirements on the target host, including listing required libraries and gathering versions.",
+  "parameters": [
+    {
+      "name": "dependencies",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "A list of version-likes or module names to check for installation. Supported operators: <, >, <=, >=, or ==. The bare module name like ansible, the module with a specific version like boto3==1.6.1, or a partial version like requests>2 are all valid specifications. Default: []"
+    }
+  ],
+  "examples": [
+    "- name: Show python lib/site paths\n  community.general.python_requirements_info:\n\n- name: Check for modern boto3 and botocore versions\n  community.general.python_requirements_info:\n    dependencies:\n      - boto3>1.6\n      - botocore<2"
+  ],
+  "return_values": [
+    {
+      "name": "mismatched",
+      "type": "dictionary",
+      "description": "A dictionary of dependencies that did not satisfy the desired version. Returned: always Sample: {\"botocore\": {\"desired\": \"botocore>2\", \"installed\": \"1.10.60\"}}",
+      "returned": "always"
+    },
+    {
+      "name": "not_found",
+      "type": "list",
+      "description": "A list of packages that could not be imported at all, and are not installed. Returned: always Sample: [\"boto4\", \"requests\"]",
+      "returned": "always"
+    },
+    {
+      "name": "python",
+      "type": "string",
+      "description": "Path to the Python interpreter used. Returned: always Sample: \"/usr/local/opt/python@2/bin/python2.7\"",
+      "returned": "always"
+    },
+    {
+      "name": "python_system_path",
+      "type": "list",
+      "description": "List of paths Python is looking for modules in. Returned: always Sample: [\"/usr/local/opt/python@2/site-packages/\", \"/usr/lib/python/site-packages/\"]",
+      "returned": "always"
+    },
+    {
+      "name": "python_version",
+      "type": "string",
+      "description": "Version of Python. Returned: always Sample: \"2.7.15 (default, May 1 2018, 16:44:08)\\n[GCC 4.2.1 Compatible Apple LLVM 9.1.0 (clang-902.0.39.1)]\"",
+      "returned": "always"
+    },
+    {
+      "name": "python_version_info",
+      "type": "dictionary",
+      "description": "Breakdown version of Python. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "major",
+      "type": "integer",
+      "description": "The major component of the python interpreter version. Returned: always Sample: 3",
+      "returned": "always"
+    },
+    {
+      "name": "micro",
+      "type": "integer",
+      "description": "The micro component of the python interpreter version. Returned: always Sample: 10",
+      "returned": "always"
+    },
+    {
+      "name": "minor",
+      "type": "integer",
+      "description": "The minor component of the python interpreter version. Returned: always Sample: 8",
+      "returned": "always"
+    },
+    {
+      "name": "releaselevel",
+      "type": "string",
+      "description": "The releaselevel component of the python interpreter version. Returned: always Sample: \"final\"",
+      "returned": "always"
+    },
+    {
+      "name": "serial",
+      "type": "integer",
+      "description": "The serial component of the python interpreter version. Returned: always Sample: 0",
+      "returned": "always"
+    },
+    {
+      "name": "valid",
+      "type": "dictionary",
+      "description": "A dictionary of dependencies that matched their desired versions. If no version was specified, then desired is null. Returned: always Sample: {\"boto3\": {\"desired\": null, \"installed\": \"1.7.60\"}, \"botocore\": {\"desired\": \"botocore<2\", \"installed\": \"1.10.60\"}}",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/python_requirements_info_module.html",
+  "parsed_at": "2026-04-13T16:29:56.593714"
+}

@@ -1,0 +1,343 @@
+{
+  "collection_ns": "amazon_aws",
+  "collection": "amazon.aws",
+  "module": "amazon.aws.route53_key_signing_key",
+  "slug": "route53_key_signing_key_module#ansible-collections-amazon-aws-route53-key-signing-key-module",
+  "description": "Creates a new key-signing key (KSK) associated with a hosted zone. You can only have two KSKs per hosted zone.",
+  "parameters": [
+    {
+      "name": "access_key",
+      "aliases": [
+        "aws_access_key_id",
+        "aws_access_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS access key ID. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY environment variables may also be used in decreasing order of preference. The aws_access_key and profile options are mutually exclusive. The aws_access_key_id alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "aws_ca_bundle",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The location of a CA Bundle to use when validating SSL certificates. The AWS_CA_BUNDLE environment variable may also be used."
+    },
+    {
+      "name": "aws_config",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A dictionary to modify the botocore configuration. Parameters can be found in the AWS documentation https://botocore.amazonaws.com/v1/documentation/api/latest/reference/config.html#botocore.config.Config."
+    },
+    {
+      "name": "caller_reference",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A unique string that identifies the request. Required when state=present."
+    },
+    {
+      "name": "debug_botocore_endpoint_logs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Use a botocore.endpoint logger to parse the unique (rather than total) \"resource:action\" API calls made during a task, outputing the set to the resource_actions key in the task results. Use the aws_resource_action callback to output to total list made during a playbook. The ANSIBLE_DEBUG_BOTOCORE_LOGS environment variable may also be used. Choices: false ← (default) true"
+    },
+    {
+      "name": "endpoint_url",
+      "aliases": [
+        "aws_endpoint_url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "AWS",
+      "choices": [],
+      "description": "URL to connect to instead of the default AWS endpoints. While this can be used to connection to other AWS-compatible services the amazon.aws and community.aws collections are only tested against AWS. The AWS_URL environment variable may also be used."
+    },
+    {
+      "name": "hosted_zone_id",
+      "aliases": [
+        "zone_id"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The unique string (ID) used to identify a hosted zone."
+    },
+    {
+      "name": "key_management_service_arn",
+      "aliases": [
+        "kms_arn"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The Amazon resource name (ARN) for a customer managed key in Key Management Service (KMS). Required when state=present."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "A string used to identify a key-signing key (KSK)."
+    },
+    {
+      "name": "profile",
+      "aliases": [
+        "aws_profile"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A named AWS profile to use for authentication. See the AWS documentation for more information about named profiles https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html. The AWS_PROFILE environment variable may also be used. The profile option is mutually exclusive with the aws_access_key, aws_secret_key and session_token options."
+    },
+    {
+      "name": "region",
+      "aliases": [
+        "aws_region"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The AWS region to use. For global services such as IAM, Route53 and CloudFront, region is ignored. The AWS_REGION environment variable may also be used. See the Amazon AWS documentation for more information http://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region."
+    },
+    {
+      "name": "secret_key",
+      "aliases": [
+        "aws_secret_access_key",
+        "aws_secret_key"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS secret access key. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SECRET_ACCESS_KEY or AWS_SECRET_KEY environment variables may also be used in decreasing order of preference. The secret_key and profile options are mutually exclusive. The aws_secret_access_key alias was added in release 5.1.0 for consistency with the AWS botocore SDK."
+    },
+    {
+      "name": "session_token",
+      "aliases": [
+        "aws_session_token"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "AWS STS session token for use with temporary credentials. See the AWS documentation for more information about access tokens https://docs.aws.amazon.com/general/latest/gr/aws-sec-cred-types.html#access-keys-and-secret-access-keys. The AWS_SESSION_TOKEN environment variable may also be used. The session_token and profile options are mutually exclusive."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Whether or not the zone should exist. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "status",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ACTIVE\" ← (default)",
+        "\"INACTIVE\""
+      ],
+      "description": "A string specifying the initial status of the key-signing key (KSK). When state=presnent, you can set the value to ACTIVE or INACTIVE. Choices: \"ACTIVE\" ← (default) \"INACTIVE\""
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "When set to false, SSL certificates will not be validated for communication with the AWS APIs. Setting validate_certs=false is strongly discouraged, as an alternative, consider setting aws_ca_bundle instead. Choices: false true ← (default)"
+    },
+    {
+      "name": "wait",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Wait until the changes have been replicated. Choices: false ← (default) true"
+    },
+    {
+      "name": "wait_timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "300",
+      "choices": [],
+      "description": "How long to wait for the changes to be replicated, in seconds. Default: 300"
+    }
+  ],
+  "examples": [
+    "- name: Create a Key Signing Key Request\n  amazon.aws.route53_ksk:\n    name: \"{{ resource_prefix }}-ksk\"\n    hosted_zone_id: \"ZZZ1111112222\"\n    key_management_service_arn: \"arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab\"\n    caller_reference: \"arn:aws:iam::123456789012:user/SomeUser\"\n    status: \"INACTIVE\"\n    state: present\n\n- name: Activate a Key Signing Key Request\n  amazon.aws.route53_ksk:\n    name: \"{{ resource_prefix }}-ksk\"\n    hosted_zone_id: \"ZZZ1111112222\"\n    key_management_service_arn: \"arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab\"\n    caller_reference: \"arn:aws:iam::123456789012:user/SomeUser\"\n    status: \"ACTIVE\"\n    state: present\n\n- name: Delete a Key Signing Key Request and deactivate it\n  amazon.aws.route53_ksk:\n    name: \"{{ resource_prefix }}-ksk\"\n    hosted_zone_id: \"ZZZ1111112222\"\n    state: absent"
+  ],
+  "return_values": [
+    {
+      "name": "change_info",
+      "type": "dictionary",
+      "description": "A dictionary that describes change information about changes made to the hosted zone. Returned: when a Key Signing Key is created or it exists and is updated/deleted Sample: {\"id\": \"/change/C090307813XORZJ5J3U4\", \"status\": \"PENDING\", \"submitted_at\": \"2024-12-04T15:15:36.743000+00:00\"}",
+      "returned": "when"
+    },
+    {
+      "name": "comment",
+      "type": "string",
+      "description": "A comment you can provide. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "description": "Change ID. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "description": "The current state of the request. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "submitted_at",
+      "type": "string",
+      "description": "The date and time that the change request was submitted in ISO 8601 format and Coordinated Universal Time (UTC). Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "key_signing_key",
+      "type": "dictionary",
+      "description": "The key-signing key (KSK) that the request creates. Returned: always Sample: {\"created_date\": \"2024-12-04T15:15:36.715000+00:00\", \"digest_algorithm_mnemonic\": \"SHA-256\", \"digest_algorithm_type\": 2, \"digest_value\": \"xxx\", \"dnskey_record\": \"xxx\", \"ds_record\": \"xxx\", \"flag\": 257, \"key_tag\": 18948, \"kms_arn\": \"arn:aws:kms:us-east-1:xxx:key/xxx\", \"last_modified_date\": \"2024-12-04T15:15:36.715000+00:00\", \"name\": \"ansible-test-44230979--ksk\", \"public_key\": \"xxxx\", \"signing_algorithm_mnemonic\": \"ECDSAP256SHA256\", \"signing_algorithm_type\": 13, \"status\": \"INACTIVE\"}",
+      "returned": "always"
+    },
+    {
+      "name": "created_date",
+      "type": "string",
+      "description": "The date when the key-signing key (KSK) was created. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "digest_algorithm_mnemonic",
+      "type": "string",
+      "description": "A string used to represent the delegation signer digest algorithm. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "digest_algorithm_type",
+      "type": "integer",
+      "description": "An integer used to represent the delegation signer digest algorithm. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "digest_value",
+      "type": "string",
+      "description": "A cryptographic digest of a DNSKEY resource record (RR). Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "dnskey_record",
+      "type": "string",
+      "description": "A string that represents a DNSKEY record. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "ds_record",
+      "type": "string",
+      "description": "A string that represents a delegation signer (DS) record. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "flag",
+      "type": "integer",
+      "description": "An integer that specifies how the key is used. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "key_tag",
+      "type": "integer",
+      "description": "An integer used to identify the DNSSEC record for the domain name. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "kms_arn",
+      "type": "string",
+      "description": "The Amazon resource name (ARN) used to identify the customer managed key in Key Management Service (KMS). Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "last_modified_date",
+      "type": "string",
+      "description": "The last time that the key-signing key (KSK) was changed. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "A string used to identify a key-signing key (KSK). Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "public_key",
+      "type": "string",
+      "description": "The public key, represented as a Base64 encoding. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "signing_algorithm_mnemonic",
+      "type": "string",
+      "description": "A string used to represent the signing algorithm. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "signing_algorithm_type",
+      "type": "integer",
+      "description": "An integer used to represent the signing algorithm. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "status_message",
+      "type": "string",
+      "description": "The status message provided for ACTION_NEEDED or INTERNAL_FAILURE statuses. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "location",
+      "type": "string",
+      "description": "The unique URL representing the new key-signing key (KSK). Returned: when only a new Key Signing Key is created Sample: \"https://route53.amazonaws.com/2013-04-01/keysigningkey/xxx/ansible-test-ksk\"",
+      "returned": "when"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/amazon/aws/route53_key_signing_key_module.html",
+  "parsed_at": "2026-04-13T16:29:24.189747"
+}

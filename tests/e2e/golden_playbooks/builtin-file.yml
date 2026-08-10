@@ -1,0 +1,10 @@
+---
+- name: Ensure application directory
+  hosts: all
+  become: true
+  tasks:
+    - name: Create /opt/myapp
+      ansible.builtin.file:
+        path: /opt/myapp
+        state: directory
+        mode: "0755"

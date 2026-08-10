@@ -1,0 +1,112 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.ipmi_power",
+  "slug": "ipmi_power_module#ansible-collections-community-general-ipmi-power-module",
+  "description": "Use this module for power management.",
+  "parameters": [
+    {
+      "name": "key",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Encryption key to connect to the BMC in hex format."
+    },
+    {
+      "name": "machine",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Provide a list of the remote target address for the bridge IPMI request, and the power status. Either this option or state is required."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Hostname or IP address of the BMC."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Password to connect to the BMC."
+    },
+    {
+      "name": "port",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "623",
+      "choices": [],
+      "description": "Remote RMCP port. Default: 623"
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"on\"",
+        "\"off\"",
+        "\"shutdown\"",
+        "\"reset\"",
+        "\"boot\""
+      ],
+      "description": "Whether to ensure that the machine in desired state. The choices for state are: on -- Request system turn on. off -- Request system turn off without waiting for OS to shutdown. shutdown -- Have system request OS proper shutdown. reset -- Request system reset without waiting for OS. boot -- If system is off, then on, else reset. Either this option or machine is required. Choices: \"on\" \"off\" \"shutdown\" \"reset\" \"boot\""
+    },
+    {
+      "name": "timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "300",
+      "choices": [],
+      "description": "Maximum number of seconds before interrupt request. Default: 300"
+    },
+    {
+      "name": "user",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Username to use to connect to the BMC."
+    }
+  ],
+  "examples": [
+    "- name: Ensure machine is powered on\n  community.general.ipmi_power:\n    name: test.testdomain.com\n    user: admin\n    password: password\n    state: 'on'\n\n- name: Ensure machines of which remote target address is 48 and 50 are powered off\n  community.general.ipmi_power:\n    name: test.testdomain.com\n    user: admin\n    password: password\n    state: 'off'\n    machine:\n      - targetAddress: 48\n      - targetAddress: 50\n\n- name: Ensure machine of which remote target address is 48 is powered on, and 50 is powered off\n  community.general.ipmi_power:\n    name: test.testdomain.com\n    user: admin\n    password: password\n    machine:\n      - targetAddress: 48\n        state: 'on'\n      - targetAddress: 50\n        state: 'off'"
+  ],
+  "return_values": [
+    {
+      "name": "powerstate",
+      "type": "string",
+      "description": "The current power state of the machine. Returned: success and machine is not provided Sample: \"on\"",
+      "returned": "success"
+    },
+    {
+      "name": "status",
+      "type": "list",
+      "description": "The current power state of the machine when the machine option is set. Returned: success and machine is provided Sample: [{\"powerstate\": \"on\", \"targetAddress\": 48}, {\"powerstate\": \"on\", \"targetAddress\": 50}]",
+      "returned": "success"
+    },
+    {
+      "name": "targetAddress",
+      "type": "integer",
+      "description": "The remote target address. Returned: success",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/ipmi_power_module.html",
+  "parsed_at": "2026-04-13T16:29:49.214224"
+}

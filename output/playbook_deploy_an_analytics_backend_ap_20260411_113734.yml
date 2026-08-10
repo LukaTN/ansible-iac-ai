@@ -1,0 +1,39 @@
+---
+- name: Deploy analytics-backend application
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - kubernetes.core
+
+  tasks:
+    - name: Create analytics-backend deployment
+      kubernetes.core.k8s:
+        api_version: apps/v1
+        kind: Deployment
+        metadata:
+          name: analytics-backend
+          namespace: default
+        spec:
+          replicas: 3
+          selector:
+            matchLabels:
+              app: analytics-backend
+          template:
+            metadata:
+              labels:
+                app: analytics-backend
+            spec:
+              containers:
+                - name: analytics-backend
+                  image: myregistry/analytics-api:latest
+                  ports:
+                    - containerPort: 8080
+                  envFrom:
+                    - configMapRef:
+                        name: analytics-config
+                    - secretRef:
+                        name: analytics-db-secret
+                  env:
+                    - name: DB_HOST
+                      value: postgres-service

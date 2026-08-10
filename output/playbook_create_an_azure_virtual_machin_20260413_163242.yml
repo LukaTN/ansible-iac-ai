@@ -1,0 +1,20 @@
+---
+- name: Create Azure Virtual Machine
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - azure.azcollection
+  tasks:
+    - name: Create virtual machine vm-api in rg-production resource group
+      azure.azcollection.azure_rm_virtualmachine:
+        name: vm-api
+        resource_group: rg-production
+        vm_size: Standard_DS1_v2
+        image: UbuntuLTS
+        admin_username: azureuser
+        admin_password: "{{ lookup('env', 'ADMIN_PASSWORD') }}"
+        network_interfaces:
+          - nic-vm-api
+        os_disk_name: osdisk-vm-api
+        os_type: Linux

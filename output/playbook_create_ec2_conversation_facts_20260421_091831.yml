@@ -1,0 +1,40 @@
+# ============================================================
+# AnsibleAI — ChromaDB retrieval + agent LLM playbook
+# Date        : 2026-04-21 09:18:31
+# Request     : create ec2
+
+Conversation facts:
+- name: web01
+# Module      : amazon.aws.ec2_eip
+# Collection  : amazon.aws
+# RAG score   : 0.624
+# Chunks used : 6
+# Source URL  : https://docs.ansible.com/ansible/latest/collections/amazon/aws/ec2_eip_module#ansible-collections-amazon-aws-ec2-eip-module.html
+# LLM model   : gemma3:12b
+# ============================================================
+
+---
+- name: create ec2
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - amazon.aws
+  tasks:
+    - name: provision new instances with ec2
+      amazon.aws.ec2:
+        keypair: mykey
+        instance_type: c1.medium
+        image: ami-40603AD1
+        wait: true
+        group: webserver
+        count: 3
+      register: ec2
+
+    - name: allocate a new elastic IP and associate it with an instance
+      amazon.aws.ec2_eip:
+        device_id: i-1212f003
+
+    - name: output the IP
+      ansible.builtin.debug:
+        msg: "Allocated IP is {{ eip.public_ip }}"

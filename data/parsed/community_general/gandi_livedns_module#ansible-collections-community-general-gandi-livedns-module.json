@@ -1,0 +1,121 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.gandi_livedns",
+  "slug": "gandi_livedns_module#ansible-collections-community-general-gandi-livedns-module",
+  "description": "Manages DNS records by the Gandi LiveDNS API, see the docs: https://doc.livedns.gandi.net/.",
+  "parameters": [
+    {
+      "name": "api_key",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Account API token. Note that these type of keys are deprecated and might stop working at some point. Use personal access tokens instead. One of personal_access_token and api_key must be specified."
+    },
+    {
+      "name": "domain",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the Domain to work with (for example, example.com)."
+    },
+    {
+      "name": "personal_access_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Scoped API token. One of personal_access_token and api_key must be specified."
+    },
+    {
+      "name": "record",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Record to add."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)"
+      ],
+      "description": "Whether the record(s) should exist or not. Choices: \"absent\" \"present\" ← (default)"
+    },
+    {
+      "name": "ttl",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The TTL to give the new record. Required when state=present."
+    },
+    {
+      "name": "type",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The type of DNS record to create."
+    },
+    {
+      "name": "values",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The record values. Required when state=present."
+    }
+  ],
+  "examples": [
+    "- name: Create a test A record to point to 127.0.0.1 in the my.com domain\n  community.general.gandi_livedns:\n    domain: my.com\n    record: test\n    type: A\n    values:\n      - 127.0.0.1\n    ttl: 7200\n    personal_access_token: dummytoken\n  register: record\n\n- name: Create a mail CNAME record to www.my.com domain\n  community.general.gandi_livedns:\n    domain: my.com\n    type: CNAME\n    record: mail\n    values:\n      - www\n    ttl: 7200\n    personal_access_token: dummytoken\n    state: present\n\n- name: Change its TTL\n  community.general.gandi_livedns:\n    domain: my.com\n    type: CNAME\n    record: mail\n    values:\n      - www\n    ttl: 10800\n    personal_access_token: dummytoken\n    state: present\n\n- name: Delete the record\n  community.general.gandi_livedns:\n    domain: my.com\n    type: CNAME\n    record: mail\n    personal_access_token: dummytoken\n    state: absent\n\n- name: Use a (deprecated) API Key\n  community.general.gandi_livedns:\n    domain: my.com\n    record: test\n    type: A\n    values:\n      - 127.0.0.1\n    ttl: 7200\n    api_key: dummyapikey"
+  ],
+  "return_values": [
+    {
+      "name": "record",
+      "type": "dictionary",
+      "description": "A dictionary containing the record data. Returned: success, except on record deletion",
+      "returned": "success"
+    },
+    {
+      "name": "domain",
+      "type": "string",
+      "description": "The domain associated with the record. Returned: success Sample: \"my.com\"",
+      "returned": "success"
+    },
+    {
+      "name": "ttl",
+      "type": "integer",
+      "description": "The time-to-live for the record. Returned: success Sample: 300",
+      "returned": "success"
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "description": "The record type. Returned: success Sample: \"A\"",
+      "returned": "success"
+    },
+    {
+      "name": "values",
+      "type": "list",
+      "description": "The record content (details depend on record type). Returned: success Sample: [\"192.0.2.91\", \"192.0.2.92\"]",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/gandi_livedns_module.html",
+  "parsed_at": "2026-04-13T16:29:45.689174"
+}

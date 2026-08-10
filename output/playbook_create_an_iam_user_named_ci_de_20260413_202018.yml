@@ -1,0 +1,12 @@
+---
+- name: Create IAM User
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - amazon.aws
+  tasks:
+    - name: Create IAM user ci-deployer
+      amazon.aws.iam_user:
+        name: ci-deployer
+        state: present

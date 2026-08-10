@@ -1,0 +1,94 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.oneview_logical_interconnect_group_info",
+  "slug": "oneview_logical_interconnect_group_info_module#ansible-collections-community-general-oneview-logical-interconnect-group-info-module",
+  "description": "Retrieve information about one or more of the Logical Interconnect Groups from OneView.",
+  "parameters": [
+    {
+      "name": "api_version",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "OneView API Version."
+    },
+    {
+      "name": "config",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to a JSON configuration file containing the OneView client configuration. The configuration file is optional and when used should be present in the host running the ansible commands. If the file path is not provided, the configuration is loaded from environment variables. For links to example configuration files or how to use the environment variables verify the notes section."
+    },
+    {
+      "name": "hostname",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "IP address or hostname for the appliance."
+    },
+    {
+      "name": "image_streamer_hostname",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "IP address or hostname for the HPE Image Streamer REST API."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Logical Interconnect Group name."
+    },
+    {
+      "name": "params",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of parameters to delimit, filter and sort the list of resources. Parameter keys allowed are: start: The first item to return, using 0-based indexing. count: The number of resources to return. filter: A general filter/query string to narrow the list of items returned. sort: The sort order of the returned data set."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Password for API authentication."
+    },
+    {
+      "name": "username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Username for API authentication."
+    }
+  ],
+  "examples": [
+    "- name: Gather information about all Logical Interconnect Groups\n  community.general.oneview_logical_interconnect_group_info:\n    hostname: 172.16.101.48\n    username: administrator\n    password: my_password\n    api_version: 500\n  no_log: true\n  delegate_to: localhost\n  register: result\n\n- name: Print fetched information about Logical Interconnect Groups\n  ansible.builtin.debug:\n    msg: \"{{ result.logical_interconnect_groups }}\"\n\n- name: Gather paginated, filtered and sorted information about Logical Interconnect Groups\n  community.general.oneview_logical_interconnect_group_info:\n    params:\n      start: 0\n      count: 3\n      sort: name:descending\n      filter: name=LIGName\n    hostname: 172.16.101.48\n    username: administrator\n    password: my_password\n    api_version: 500\n  no_log: true\n  delegate_to: localhost\n  register: result\n\n- name: Print fetched information about paginated, filtered and sorted list of Logical Interconnect Groups\n  ansible.builtin.debug:\n    msg: \"{{ result.logical_interconnect_groups }}\"\n\n- name: Gather information about a Logical Interconnect Group by name\n  community.general.oneview_logical_interconnect_group_info:\n    name: logical interconnect group name\n    hostname: 172.16.101.48\n    username: administrator\n    password: my_password\n    api_version: 500\n  no_log: true\n  delegate_to: localhost\n  register: result\n\n- name: Print fetched information about Logical Interconnect Group found by name\n  ansible.builtin.debug:\n    msg: \"{{ result.logical_interconnect_groups }}\""
+  ],
+  "return_values": [
+    {
+      "name": "logical_interconnect_groups",
+      "type": "dictionary",
+      "description": "Has all the OneView information about the Logical Interconnect Groups. Returned: Always, but can be null.",
+      "returned": "Always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/oneview_logical_interconnect_group_info_module.html",
+  "parsed_at": "2026-04-13T16:29:54.993376"
+}

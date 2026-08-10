@@ -1,0 +1,31 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.facter_facts",
+  "slug": "facter_facts_module#ansible-collections-community-general-facter-facts-module",
+  "description": "Runs the facter discovery program (https://github.com/puppetlabs/facter) on the remote system, returning Ansible facts from the JSON data that can be useful for inventory purposes.",
+  "parameters": [
+    {
+      "name": "arguments",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies arguments for facter."
+    }
+  ],
+  "examples": [
+    "- name: Execute facter no arguments\n  community.general.facter_facts:\n\n- name: Execute facter with arguments\n  community.general.facter_facts:\n    arguments:\n      - -p\n      - system_uptime\n      - timezone\n      - is_virtual"
+  ],
+  "return_values": [
+    {
+      "name": "arguments",
+      "type": "list",
+      "description": "Specifies arguments for facter.",
+      "returned": ""
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/facter_facts_module.html",
+  "parsed_at": "2026-04-13T16:29:45.495176"
+}

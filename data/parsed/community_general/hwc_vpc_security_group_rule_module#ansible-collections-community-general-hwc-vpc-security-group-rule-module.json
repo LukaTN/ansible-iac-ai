@@ -1,0 +1,226 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.hwc_vpc_security_group_rule",
+  "slug": "hwc_vpc_security_group_rule_module#ansible-collections-community-general-hwc-vpc-security-group-rule-module",
+  "description": "VPC security group management.",
+  "parameters": [
+    {
+      "name": "description",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Provides supplementary information about the security group rule. The value is a string of no more than 255 characters that can contain letters and digits."
+    },
+    {
+      "name": "direction",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Specifies the direction of access control. The value can be egress or ingress."
+    },
+    {
+      "name": "domain",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the Domain to scope to (Identity v3). Currently only domain names are supported, and not domain IDs."
+    },
+    {
+      "name": "ethertype",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies the IP protocol version. The value can be IPv4 or IPv6. If you do not set this parameter, IPv4 is used by default."
+    },
+    {
+      "name": "id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The ID of resource to be managed."
+    },
+    {
+      "name": "identity_endpoint",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The Identity authentication URL."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The password to login with."
+    },
+    {
+      "name": "port_range_max",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies the end port number. The value ranges from 1 to 65535. If the protocol is not icmp, the value cannot be smaller than the port_range_min value. An empty value indicates all ports."
+    },
+    {
+      "name": "port_range_min",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies the start port number. The value ranges from 1 to 65535. The value cannot be greater than the port_range_max value. An empty value indicates all ports."
+    },
+    {
+      "name": "project",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the Tenant (Identity v2) or Project (Identity v3). Currently only project names are supported, and not project IDs."
+    },
+    {
+      "name": "protocol",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies the protocol type. The value can be icmp, tcp, or udp. If the parameter is left blank, the security group supports all protocols."
+    },
+    {
+      "name": "region",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The region to which the project belongs."
+    },
+    {
+      "name": "remote_group_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies the ID of the peer security group. The value is exclusive with parameter remote_ip_prefix."
+    },
+    {
+      "name": "remote_ip_prefix",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies the remote IP address. If the access control direction is set to egress, the parameter specifies the source IP address. If the access control direction is set to ingress, the parameter specifies the destination IP address. The value can be in the CIDR format or IP addresses. The parameter is exclusive with parameter remote_group_id."
+    },
+    {
+      "name": "security_group_id",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Specifies the security group rule ID, which uniquely identifies the security group rule."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Whether the given object should exist in Huawei Cloud. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "user",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The user name to login with. Currently only user names are supported, and not user IDs."
+    }
+  ],
+  "examples": [
+    "# create a security group rule\n- name: Create a security group\n  hwc_vpc_security_group:\n    name: \"ansible_network_security_group_test\"\n  register: sg\n- name: Create a security group rule\n  community.general.hwc_vpc_security_group_rule:\n    direction: \"ingress\"\n    protocol: \"tcp\"\n    ethertype: \"IPv4\"\n    port_range_max: 22\n    security_group_id: \"{{ sg.id }}\"\n    port_range_min: 22\n    remote_ip_prefix: \"0.0.0.0/0\""
+  ],
+  "return_values": [
+    {
+      "name": "description",
+      "type": "string",
+      "description": "Provides supplementary information about the security group rule. The value is a string of no more than 255 characters that can contain letters and digits. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "direction",
+      "type": "string",
+      "description": "Specifies the direction of access control. The value can be egress or ingress. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "ethertype",
+      "type": "string",
+      "description": "Specifies the IP protocol version. The value can be IPv4 or IPv6. If you do not set this parameter, IPv4 is used by default. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "port_range_max",
+      "type": "integer",
+      "description": "Specifies the end port number. The value ranges from 1 to 65535. If the protocol is not icmp, the value cannot be smaller than the port_range_min value. An empty value indicates all ports. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "port_range_min",
+      "type": "integer",
+      "description": "Specifies the start port number. The value ranges from 1 to 65535. The value cannot be greater than the port_range_max value. An empty value indicates all ports. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "protocol",
+      "type": "string",
+      "description": "Specifies the protocol type. The value can be icmp, tcp, or udp. If the parameter is left blank, the security group supports all protocols. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "remote_group_id",
+      "type": "string",
+      "description": "Specifies the ID of the peer security group. The value is exclusive with parameter remote_ip_prefix. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "remote_ip_prefix",
+      "type": "string",
+      "description": "Specifies the remote IP address. If the access control direction is set to egress, the parameter specifies the source IP address. If the access control direction is set to ingress, the parameter specifies the destination IP address. The value can be in the CIDR format or IP addresses. The parameter is exclusive with parameter remote_group_id. Returned: success",
+      "returned": "success"
+    },
+    {
+      "name": "security_group_id",
+      "type": "string",
+      "description": "Specifies the security group rule ID, which uniquely identifies the security group rule. Returned: success",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/hwc_vpc_security_group_rule_module.html",
+  "parsed_at": "2026-04-13T16:29:47.655695"
+}

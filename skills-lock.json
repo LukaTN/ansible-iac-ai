@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "skills": {
+    "flask-api-development": {
+      "source": "midudev/autoskills",
+      "sourceType": "github",
+      "skillPath": "packages/autoskills/skills-registry/flask-api-development/SKILL.md",
+      "computedHash": "9e5213f9fa4bde4175b717ab679d5a46497bd9edfff6673724a05320c741c6a9"
+    },
+    "langfuse": {
+      "source": "langfuse/skills",
+      "sourceType": "github",
+      "skillPath": "skills/langfuse/SKILL.md",
+      "computedHash": "792c91a3df079f66aa5b90a1f094ad530c0698056bdec500b4096a894690e8ae"
+    }
+  }
+}

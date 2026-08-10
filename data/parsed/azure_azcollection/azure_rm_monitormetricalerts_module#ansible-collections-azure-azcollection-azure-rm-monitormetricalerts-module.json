@@ -1,0 +1,352 @@
+{
+  "collection_ns": "azure_azcollection",
+  "collection": "azure.azcollection",
+  "module": "azure.azcollection.azure_rm_monitormetricalerts",
+  "slug": "azure_rm_monitormetricalerts_module#ansible-collections-azure-azcollection-azure-rm-monitormetricalerts-module",
+  "description": "Create, update and delete metric alerts.",
+  "parameters": [
+    {
+      "name": "actions",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The actions that will activate when the condition is met. https://learn.microsoft.com/en-us/rest/api/monitor/metric-alerts/create-or-update?view=rest-monitor-2018-03-01&tabs=HTTP#metricalertaction"
+    },
+    {
+      "name": "ad_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory username. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "adfs_authority_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure AD authority url. Use when authenticating with Username/password, and has your own ADFS authority."
+    },
+    {
+      "name": "api_profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "Selects an API profile to use when communicating with Azure services. Default value of latest is appropriate for public clouds; future values will allow use with Azure Stack. Default: \"latest\""
+    },
+    {
+      "name": "append_tags",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Use to control if tags field is canonical or just appends to existing tags. When canonical, any tags not found in the tags parameter will be removed from the object’s metadata. Choices: false true ← (default)"
+    },
+    {
+      "name": "auth_source",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "az",
+      "choices": [
+        "\"auto\" ← (default)",
+        "\"cli\"",
+        "\"credential_file\"",
+        "\"env\"",
+        "\"msi\""
+      ],
+      "description": "Controls the source of the credentials to use for authentication. Can also be set via the ANSIBLE_AZURE_AUTH_SOURCE environment variable. When set to auto (the default) the precedence is module parameters -> env -> credential_file -> cli. When set to env, the credentials will be read from the environment variables When set to credential_file, it will read the profile from ~/.azure/credentials. When set to cli, the credentials will be sources from the Azure CLI profile. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if more than one is present otherwise the default az cli subscription is used. When set to msi, the host machine must be an azure resource with an enabled MSI extension. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if the resource is granted access to more than one subscription, otherwise the first subscription is chosen. The msi was added in Ansible 2.6. Choices: \"auto\" ← (default) \"cli\" \"credential_file\" \"env\" \"msi\""
+    },
+    {
+      "name": "auto_mitigate",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "is",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "the flag that indicates whether the alert should be auto resolved or not. The default is true. Choices: false true"
+    },
+    {
+      "name": "cert_validation_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ignore\"",
+        "\"validate\""
+      ],
+      "description": "Controls the certificate validation behavior for Azure endpoints. By default, all modules will validate the server certificate, but when an HTTPS proxy is in use, or against Azure Stack, it may be necessary to disable this behavior by passing ignore. Can also be set via credential file profile or the AZURE_CERT_VALIDATION environment variable. Choices: \"ignore\" \"validate\""
+    },
+    {
+      "name": "client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client ID. Use when authenticating with a Service Principal or Managed Identity (msi). Can also be set via the AZURE_CLIENT_ID environment variable."
+    },
+    {
+      "name": "cloud_environment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "AzureCloud",
+      "choices": [],
+      "description": "For cloud environments other than the US public cloud, the environment name (as defined by Azure Python SDK, eg, AzureChinaCloud, AzureUSGovernment), or a metadata discovery endpoint URL (required for Azure Stack). Can also be set via credential file profile or the AZURE_CLOUD_ENVIRONMENT environment variable. Default: \"AzureCloud\""
+    },
+    {
+      "name": "criteria",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Defines the specific alert criteria information. Required for creation."
+    },
+    {
+      "name": "description",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A description of this metric alert rule."
+    },
+    {
+      "name": "disable_instance_discovery",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Determines whether or not instance discovery is performed when attempting to authenticate. Setting this to true will completely disable both instance discovery and authority validation. This functionality is intended for use in scenarios where the metadata endpoint cannot be reached such as in private clouds or Azure Stack. The process of instance discovery entails retrieving authority metadata from https://login.microsoft.com/ to validate the authority. By setting this to **True**, the validation of the authority is disabled. As a result, it is crucial to ensure that the configured authority host is valid and trustworthy. Set via credential file profile or the AZURE_DISABLE_INSTANCE_DISCOVERY environment variable. Choices: false ← (default) true"
+    },
+    {
+      "name": "enabled",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Indicates whether this metric alert is enabled. If an metric alert is not enabled, then none of its receivers will receive communications. Required on creation. Choices: false true"
+    },
+    {
+      "name": "evaluation_frequency",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "How often the metric alert is evaluated represented in ISO 8601 duration format. https://en.wikipedia.org/wiki/ISO_8601#Durations Required for creation."
+    },
+    {
+      "name": "location",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "to",
+      "choices": [],
+      "description": "Location of the metric alert. Metric alerts are usually ‘Global’. If unspecified will default to ‘Global’ on creation."
+    },
+    {
+      "name": "log_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "log_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the metric alert you’re creating, updateing or deleting."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory user password. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security profile found in ~/.azure/credentials file."
+    },
+    {
+      "name": "resource_group",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of the resource group."
+    },
+    {
+      "name": "scopes",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A list of resource IDs that will be used as prefixes. The alert will only apply to Metric events with resource IDs that fall under one of these prefixes. This list must include at least one item for creation."
+    },
+    {
+      "name": "secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client secret. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "severity",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Severity 1-4 of the alert. Required on creation."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "State of the metric alert Use present for creating/updating a metric alert. Use absent for deleting a metric alert. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "subscription_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Your Azure subscription Id."
+    },
+    {
+      "name": "tags",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Dictionary of string:string pairs to assign as metadata to the object. Metadata tags on the object will be updated with any provided values. To remove tags set append_tags option to false. Currently, Azure DNS zones and Traffic Manager services also don’t allow the use of spaces in the tag. Azure Front Door doesn’t support the use of Azure Automation and Azure CDN only support 15 tags on resources."
+    },
+    {
+      "name": "target_resource_region",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The region of the target resource(s) on which the alert is created/updated. Mandatory (for creation) if the scope contains a subscription, resource group, or more than one resource."
+    },
+    {
+      "name": "target_resource_type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The resource type of the target resource(s) on which the alert is created/updated. Mandatory (for creation) if the scope contains a subscription, resource group, or more than one resource."
+    },
+    {
+      "name": "tenant",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure tenant ID. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "thumbprint",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The thumbprint of the private key specified in x509_certificate_path. Use when authenticating with a Service Principal. Required if x509_certificate_path is defined."
+    },
+    {
+      "name": "window_size",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The period of time (in ISO 8601 duration format) that is used to monitor alert activity based on the threshold. https://en.wikipedia.org/wiki/ISO_8601#Durations Required for creation."
+    },
+    {
+      "name": "x509_certificate_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the X509 certificate used to create the service principal in PEM format. The certificate must be appended to the private key. Use when authenticating with a Service Principal."
+    }
+  ],
+  "examples": [
+    "- name: Add a metric alert\n  azure.azcollection.azure_rm_monitormetricalerts:\n    state: present\n    resource_group: resource_group_name\n    location: Global\n    name: metric_alert_name\n    actions:\n      - action_group_id: /subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/resource_group_name/providers/microsoft.insights/actionGroups/action_group_name\n    auto_mitigate: true\n    criteria:\n      all_of:\n        - criterion_type: StaticThresholdCriterion\n          dimensions:\n            - name: dataSourceURL\n              operator: Include\n              values:\n                - '*'\n            - name: healthStatus\n              operator: Exclude\n              values:\n                - Healthy\n          metric_name: BackupHealthEvent\n          metric_namespace: Microsoft.RecoveryServices/vaults\n          name: Metric1\n          operator: GreaterThan\n          skip_metric_validation: false\n          threshold: 0.0\n          time_aggregation: Count\n      odata_type: Microsoft.Azure.Monitor.MultipleResourceMultipleMetricCriteria\n    description: Alert on Backup Health Events\n    enabled: true\n    evaluation_frequency: PT1H\n    scopes:\n      - /subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/resource_group_name/providers/Microsoft.RecoveryServices/vaults/recovery_vault_name\n    severity: 3\n    tags:\n      TestTag1: TestValue1\n    target_resource_type: Microsoft.RecoveryServices/vaults\n    window_size: P1D\n\n- name: Add tag to existing metric alert\n  azure.azcollection.azure_rm_monitormetricalerts:\n    state: present\n    name: metric_alert_name\n    resource_group: resource_group_name\n    append_tags: true\n    tags:\n      ThisIsAnAddedExampleTag: ExampleValue\n\n- name: Delete a metric alert\n  azure.azcollection.azure_rm_monitormetricalerts:\n    state: absent\n    name: metric_alert_name\n    resource_group: resource_group_name"
+  ],
+  "return_values": [
+    {
+      "name": "metricalert",
+      "type": "dictionary",
+      "description": "Details of the metric alert Is null on state==absent (metric alert does not exist or will be deleted) Assumes you make legal changes in check mode Returned: always Sample: {\"actions\": [{\"action_group_id\": \"/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/resource_group_name/providers/microsoft.insights/actionGroups/action_group_name\"}], \"auto_mitigate\": true, \"criteria\": {\"all_of\": [{\"criterion_type\": \"StaticThresholdCriterion\", \"dimensions\": [{\"name\": \"dataSourceURL\", \"operator\": \"Include\", \"values\": [\"*\"]}, {\"name\": \"healthStatus\", \"operator\": \"Exclude\", \"values\": [\"Healthy\"]}], \"metric_name\": \"BackupHealthEvent\", \"metric_namespace\": \"Microsoft.RecoveryServices/vaults\", \"name\": \"Metric1\", \"operator\": \"GreaterThan\", \"skip_metric_validation\": false, \"threshold\": 0.0, \"time_aggregation\": \"Count\"}], \"odata_type\": \"Microsoft.Azure.Monitor.MultipleResourceMultipleMetricCriteria\"}, \"description\": \"Alert on Backup Health Events\", \"enabled\": true, \"evaluation_frequency\": \"PT1H\", \"id\": \"/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/resource_group_name/providers/Microsoft.Insights/metricAlerts/metric_alert_name\", \"location\": \"Global\", \"name\": \"metric_alert_name\", \"scopes\": [\"/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/resource_group_name/providers/Microsoft.RecoveryServices/vaults/recovery_vault_name\"], \"severity\": 3, \"tags\": {\"TestTag1\": \"TestValue1\"}, \"target_resource_type\": \"Microsoft.RecoveryServices/vaults\", \"type\": \"Microsoft.Insights/metricAlerts\", \"window_size\": \"P1D\"}",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_monitormetricalerts_module.html",
+  "parsed_at": "2026-04-13T16:29:35.260276"
+}

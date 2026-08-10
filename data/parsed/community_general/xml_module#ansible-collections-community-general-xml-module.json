@@ -1,0 +1,237 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.xml",
+  "slug": "xml_module#ansible-collections-community-general-xml-module",
+  "description": "A CRUD-like interface to managing bits of XML files.",
+  "parameters": [
+    {
+      "name": "add_children",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Add additional child-element(s) to a selected element for a given xpath. Child elements must be given in a list and each item may be either a string (for example children=ansible to add an empty <ansible/> child element), or a hash where the key is an element name and the value is the element value. This parameter requires xpath to be set."
+    },
+    {
+      "name": "attribute",
+      "aliases": [],
+      "type": "any",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The attribute to select when using parameter value. This is a string, not prepended with @."
+    },
+    {
+      "name": "backup",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Create a backup file including the timestamp information so you can get the original file back if you somehow clobbered it incorrectly. Choices: false ← (default) true"
+    },
+    {
+      "name": "content",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"attribute\"",
+        "\"text\""
+      ],
+      "description": "Search for a given xpath and get content. This parameter requires xpath to be set. Choices: \"attribute\" \"text\""
+    },
+    {
+      "name": "count",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Search for a given xpath and provide the count of any matches. This parameter requires xpath to be set. Choices: false ← (default) true"
+    },
+    {
+      "name": "input_type",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"xml\"",
+        "\"yaml\" ← (default)"
+      ],
+      "description": "Type of input for add_children and set_children. Choices: \"xml\" \"yaml\" ← (default)"
+    },
+    {
+      "name": "insertafter",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Add additional child-element(s) after the last selected element for a given xpath. Child elements must be given in a list and each item may be either a string (for example children=ansible to add an empty <ansible/> child element), or a hash where the key is an element name and the value is the element value. This parameter requires xpath to be set. Choices: false ← (default) true"
+    },
+    {
+      "name": "insertbefore",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Add additional child-element(s) before the first selected element for a given xpath. Child elements must be given in a list and each item may be either a string (for example children=ansible to add an empty <ansible/> child element), or a hash where the key is an element name and the value is the element value. This parameter requires xpath to be set. Choices: false ← (default) true"
+    },
+    {
+      "name": "namespaces",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "{}",
+      "choices": [],
+      "description": "The namespace prefix:uri mapping for the XPath expression. Needs to be a dict, not a list of items. Default: {}"
+    },
+    {
+      "name": "path",
+      "aliases": [
+        "dest",
+        "file"
+      ],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the file to operate on. This file must exist ahead of time. This parameter is required, unless xmlstring is given."
+    },
+    {
+      "name": "pretty_print",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Pretty print XML output. Choices: false ← (default) true"
+    },
+    {
+      "name": "print_match",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Search for a given xpath and print out any matches. This parameter requires xpath to be set. Choices: false ← (default) true"
+    },
+    {
+      "name": "set_children",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Set the child-element(s) of a selected element for a given xpath. Removes any existing children. Child elements must be specified as in add_children. This parameter requires xpath to be set."
+    },
+    {
+      "name": "state",
+      "aliases": [
+        "ensure"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)"
+      ],
+      "description": "Set or remove an xpath selection (node(s), attribute(s)). Choices: \"absent\" \"present\" ← (default)"
+    },
+    {
+      "name": "strip_cdata_tags",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Remove CDATA tags surrounding text values. Note that this might break your XML file if text values contain characters that could be interpreted as XML. Choices: false ← (default) true"
+    },
+    {
+      "name": "value",
+      "aliases": [],
+      "type": "any",
+      "required": false,
+      "default": "to",
+      "choices": [],
+      "description": "Desired state of the selected attribute. Either a string, or to unset a value, the Python None keyword (YAML Equivalent, null). Elements default to no value (but present). Attributes default to an empty string."
+    },
+    {
+      "name": "xmlstring",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A string containing XML on which to operate. This parameter is required, unless path is given."
+    },
+    {
+      "name": "xpath",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A valid XPath expression describing the item(s) you want to manipulate. Operates on the document root, /, by default."
+    }
+  ],
+  "examples": [
+    "# Consider the following XML file:\n#\n# <business type=\"bar\">\n#   <name>Tasty Beverage Co.</name>\n#     <beers>\n#       <beer>Rochefort 10</beer>\n#       <beer>St. Bernardus Abbot 12</beer>\n#       <beer>Schlitz</beer>\n#    </beers>\n#   <rating subjective=\"true\">10</rating>\n#   <website>\n#     <mobilefriendly/>\n#     <address>http://tastybeverageco.com</address>\n#   </website>\n# </business>\n\n- name: Remove the 'subjective' attribute of the 'rating' element\n  community.general.xml:\n    path: /foo/bar.xml\n    xpath: /business/rating/@subjective\n    state: absent\n\n- name: Set the rating to '11'\n  community.general.xml:\n    path: /foo/bar.xml\n    xpath: /business/rating\n    value: 11\n\n# Retrieve and display the number of nodes\n- name: Get count of 'beers' nodes\n  community.general.xml:\n    path: /foo/bar.xml\n    xpath: /business/beers/beer\n    count: true\n  register: hits\n\n- ansible.builtin.debug:\n    var: hits.count\n\n# Example where parent XML nodes are created automatically\n- name: Add a 'phonenumber' element to the 'business' element\n  community.general.xml:\n    path: /foo/bar.xml\n    xpath: /business/phonenumber\n    value: 555-555-1234\n\n- name: Add several more beers to the 'beers' element\n  community.general.xml:\n    path: /foo/bar.xml\n    xpath: /business/beers\n    add_children:\n      - beer: Old Rasputin\n      - beer: Old Motor Oil\n      - beer: Old Curmudgeon\n\n- name: Add several more beers to the 'beers' element and add them before the 'Rochefort 10' element\n  community.general.xml:\n    path: /foo/bar.xml\n    xpath: '/business/beers/beer[text()=\"Rochefort 10\"]'\n    insertbefore: true\n    add_children:\n      - beer: Old Rasputin\n      - beer: Old Motor Oil\n      - beer: Old Curmudgeon\n\n# NOTE: The 'state' defaults to 'present' and 'value' defaults to 'null' for elements\n- name: Add a 'validxhtml' element to the 'website' element\n  community.general.xml:\n    path: /foo/bar.xml\n    xpath: /business/website/validxhtml\n\n- name: Add an empty 'validatedon' attribute to the 'validxhtml' element\n  community.general.xml:\n    path: /foo/bar.xml\n    xpath: /business/website/validxhtml/@validatedon\n\n- name: Add or modify an attribute, add element if needed\n  community.general.xml:\n    path: /foo/bar.xml\n    xpath: /business/website/validxhtml\n    attribute: validatedon\n    value: 1976-08-05\n\n# How to read an attribute value and access it in Ansible\n- name: Read an element's attribute values\n  community.general.xml:\n    path: /foo/bar.xml\n    xpath: /business/website/validxhtml\n    content: attribute\n  register: xmlresp\n\n- name: Show an attribute value\n  ansible.builtin.debug:\n    var: xmlresp.matches[0].validxhtml.validatedon\n\n- name: Remove all children from the 'website' element (option 1)\n  community.general.xml:\n    path: /foo/bar.xml\n    xpath: /business/website/*\n    state: absent\n\n- name: Remove all children from the 'website' element (option 2)\n  community.general.xml:\n    path: /foo/bar.xml\n    xpath: /business/website\n    set_children: []\n\n# In case of namespaces, like in below XML, they have to be explicitly stated.\n#\n# <foo xmlns=\"http://x.test\" xmlns:attr=\"http://z.test\">\n#   <bar>\n#     <baz xmlns=\"http://y.test\" attr:my_namespaced_attribute=\"true\" />\n#   </bar>\n# </foo>\n\n# NOTE: There is the prefix 'x' in front of the 'bar' element, too.\n- name: Set namespaced '/x:foo/x:bar/y:baz/@z:my_namespaced_attribute' to 'false'\n  community.general.xml:\n    path: foo.xml\n    xpath: /x:foo/x:bar/y:baz\n    namespaces:\n      x: http://x.test\n      y: http://y.test\n      z: http://z.test\n    attribute: z:my_namespaced_attribute\n    value: 'false'\n\n- name: Adding building nodes with floor subnodes from a YAML variable\n  community.general.xml:\n    path: /foo/bar.xml\n    xpath: /business\n    add_children:\n      - building:\n# Attributes\n          name: Scumm bar\n          location: Monkey island\n          # Value\n          +value: unreal\n          # Subnodes\n          _:\n            - floor: Pirate hall\n            - floor: Grog storage\n            - construction_date: \"1990\" # Only strings are valid\n      - building: Grog factory\n\n# Consider this XML for following example -\n#\n# <config>\n#   <element name=\"test1\">\n#     <text>part to remove</text>\n#   </element>\n#   <element name=\"test2\">\n#     <text>part to keep</text>\n#   </element>\n# </config>\n\n- name: Delete element node based upon attribute\n  community.general.xml:\n    path: bar.xml\n    xpath: /config/element[@name='test1']\n    state: absent"
+  ],
+  "return_values": [
+    {
+      "name": "actions",
+      "type": "dictionary",
+      "description": "A dictionary with the original xpath, namespaces and state. Returned: success Sample: {\"namespaces\": [\"namespace1\", \"namespace2\"], \"state\": \"present\", \"xpath\": \"xpath\"}",
+      "returned": "success"
+    },
+    {
+      "name": "count",
+      "type": "integer",
+      "description": "The count of xpath matches. Returned: when parameter count is set Sample: 2",
+      "returned": "when"
+    },
+    {
+      "name": "matches",
+      "type": "list",
+      "description": "The xpath matches found. Returned: when parameter print_match is set",
+      "returned": "when"
+    },
+    {
+      "name": "xmlstring",
+      "type": "string",
+      "description": "An XML string of the resulting output. Returned: when parameter xmlstring is set",
+      "returned": "when"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/xml_module.html",
+  "parsed_at": "2026-04-13T16:30:00.975413"
+}

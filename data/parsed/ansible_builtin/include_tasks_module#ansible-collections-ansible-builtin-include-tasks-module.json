@@ -1,0 +1,42 @@
+{
+  "collection_ns": "ansible_builtin",
+  "collection": "ansible.builtin",
+  "module": "ansible.builtin.include_tasks",
+  "slug": "include_tasks_module#ansible-collections-ansible-builtin-include-tasks-module",
+  "description": "Includes a file with a list of tasks to be executed in the current playbook.",
+  "parameters": [
+    {
+      "name": "apply",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Accepts a hash of task keywords (for example tags, become) that will be applied to the tasks within the include."
+    },
+    {
+      "name": "file",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies the name of the file that lists tasks to add to the current playbook."
+    },
+    {
+      "name": "free-form",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies the name of the imported file directly without any other option - include_tasks: file.yml. Is the equivalent of specifying an argument for the file parameter. Most keywords, including loop, with_items, and conditionals, apply to this statement unlike ansible.builtin.import_tasks. The do-until loop is not supported."
+    }
+  ],
+  "examples": [
+    "- hosts: all\n  tasks:\n    - ansible.builtin.debug:\n        msg: task1\n\n    - name: Include task list in play\n      ansible.builtin.include_tasks:\n        file: stuff.yaml\n\n    - ansible.builtin.debug:\n        msg: task10\n\n- hosts: all\n  tasks:\n    - ansible.builtin.debug:\n        msg: task1\n\n    - name: Include task list in play only if the condition is true\n      ansible.builtin.include_tasks: \"{{ hostvar }}.yaml\"\n      when: hostvar is defined\n\n- name: Apply tags to tasks within included file\n  ansible.builtin.include_tasks:\n    file: install.yml\n    apply:\n      tags:\n        - install\n  tags:\n    - always\n\n- name: Apply tags to tasks within included file when using free-form\n  ansible.builtin.include_tasks: install.yml\n  args:\n    apply:\n      tags:\n        - install\n  tags:\n    - always"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/include_tasks_module.html",
+  "parsed_at": "2026-04-13T16:29:25.524719"
+}

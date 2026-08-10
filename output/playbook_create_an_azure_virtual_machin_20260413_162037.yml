@@ -1,0 +1,24 @@
+---
+- name: Create Azure Virtual Machine
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - azure.azcollection
+  tasks:
+    - name: Create virtual machine vm-api in rg-production resource group
+      azure.azcollection.azure_rm_virtualmachine:
+        resource_group: rg-production
+        name: vm-api
+        vm_size: Standard_DS1_v2
+        image:
+          publisher: Canonical
+          offer: UbuntuServer
+          sku: 20.04-LTS
+          version: latest
+        admin_username: azureuser
+        admin_password: "{{ lookup('env', 'ADMIN_PASSWORD') }}"
+        network_interfaces:
+          - name: vm-api-nic
+            subnet: default
+            public_ip_name: vm-api-pip

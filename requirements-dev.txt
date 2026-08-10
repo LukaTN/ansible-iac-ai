@@ -1,0 +1,20 @@
+# Install on top of requirements.txt for development and CI.
+
+-r requirements.txt
+
+# Unit / integration tests
+pytest>=8.0.0
+
+# Lint, type-check, and commit hooks
+ruff>=0.8.0
+mypy>=1.13.0
+pre-commit>=4.0.0
+types-requests
+types-PyYAML
+
+# RAG evaluation (rag/evaluator.py, rag/pipeline.py --evaluate)
+ragas>=0.2.0
+datasets>=2.14.0
+
+# Optional: matplotlib used by gantt.py project timeline script
+matplotlib>=3.8.0

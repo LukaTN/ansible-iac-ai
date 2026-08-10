@@ -1,0 +1,267 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.ufw",
+  "slug": "ufw_module#ansible-collections-community-general-ufw-module",
+  "description": "Manage firewall with UFW.",
+  "parameters": [
+    {
+      "name": "comment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Add a comment to the rule. Requires UFW version >=0.35."
+    },
+    {
+      "name": "default",
+      "aliases": [
+        "policy"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "policy",
+      "choices": [
+        "\"allow\"",
+        "\"deny\"",
+        "\"reject\""
+      ],
+      "description": "Change the default policy for incoming or outgoing traffic. Choices: \"allow\" \"deny\" \"reject\""
+    },
+    {
+      "name": "delete",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Delete rule. If delete=true and a value is provided for insert, then insert is ignored. Choices: false ← (default) true"
+    },
+    {
+      "name": "direction",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "policy",
+      "choices": [
+        "\"in\"",
+        "\"incoming\"",
+        "\"out\"",
+        "\"outgoing\"",
+        "\"routed\""
+      ],
+      "description": "Select direction for a rule or default policy command. Mutually exclusive with interface_in and interface_out. Choices: \"in\" \"incoming\" \"out\" \"outgoing\" \"routed\""
+    },
+    {
+      "name": "from_ip",
+      "aliases": [
+        "from",
+        "src"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "any",
+      "choices": [],
+      "description": "Source IP address. Default: \"any\""
+    },
+    {
+      "name": "from_port",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Source port."
+    },
+    {
+      "name": "insert",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Insert the corresponding rule as rule number NUM. Note that ufw numbers rules starting with 1. If delete=true and a value is provided for insert, then insert is ignored."
+    },
+    {
+      "name": "insert_relative_to",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"first-ipv4\"",
+        "\"first-ipv6\"",
+        "\"last-ipv4\"",
+        "\"last-ipv6\"",
+        "\"zero\" ← (default)"
+      ],
+      "description": "Allows to interpret the index in insert relative to a position. zero interprets the rule number as an absolute index (that is, 1 is the first rule). first-ipv4 interprets the rule number relative to the index of the first IPv4 rule, or relative to the position where the first IPv4 rule would be if there is currently none. last-ipv4 interprets the rule number relative to the index of the last IPv4 rule, or relative to the position where the last IPv4 rule would be if there is currently none. first-ipv6 interprets the rule number relative to the index of the first IPv6 rule, or relative to the position where the first IPv6 rule would be if there is currently none. last-ipv6 interprets the rule number relative to the index of the last IPv6 rule, or relative to the position where the last IPv6 rule would be if there is currently none. Choices: \"first-ipv4\" \"first-ipv6\" \"last-ipv4\" \"last-ipv6\" \"zero\" ← (default)"
+    },
+    {
+      "name": "interface",
+      "aliases": [
+        "if"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specify interface for the rule. The direction (in or out) used for the interface depends on the value of direction. See interface_in and interface_out for routed rules that needs to supply both an input and output interface. Mutually exclusive with interface_in and interface_out."
+    },
+    {
+      "name": "interface_in",
+      "aliases": [
+        "if_in"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specify input interface for the rule. This is mutually exclusive with direction and interface. However, it is compatible with interface_out for routed rules."
+    },
+    {
+      "name": "interface_out",
+      "aliases": [
+        "if_out"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specify output interface for the rule. This is mutually exclusive with direction and interface. However, it is compatible with interface_in for routed rules."
+    },
+    {
+      "name": "log",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Log new connections matched to this rule. Choices: false ← (default) true"
+    },
+    {
+      "name": "logging",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"on\"",
+        "\"off\"",
+        "\"low\"",
+        "\"medium\"",
+        "\"high\"",
+        "\"full\""
+      ],
+      "description": "Toggles logging. Logged packets use the LOG_KERN syslog facility. Choices: \"on\" \"off\" \"low\" \"medium\" \"high\" \"full\""
+    },
+    {
+      "name": "name",
+      "aliases": [
+        "app"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Use profile located in /etc/ufw/applications.d."
+    },
+    {
+      "name": "proto",
+      "aliases": [
+        "protocol"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"any\"",
+        "\"tcp\"",
+        "\"udp\"",
+        "\"ipv6\"",
+        "\"esp\"",
+        "\"ah\"",
+        "\"gre\"",
+        "\"igmp\"",
+        "\"vrrp\""
+      ],
+      "description": "TCP/IP protocol. The value vrrp is supported since community.general 10.3.0. Choices: \"any\" \"tcp\" \"udp\" \"ipv6\" \"esp\" \"ah\" \"gre\" \"igmp\" \"vrrp\""
+    },
+    {
+      "name": "route",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Apply the rule to routed/forwarded packets. Choices: false ← (default) true"
+    },
+    {
+      "name": "rule",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"allow\"",
+        "\"deny\"",
+        "\"limit\"",
+        "\"reject\""
+      ],
+      "description": "Add firewall rule. Choices: \"allow\" \"deny\" \"limit\" \"reject\""
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"disabled\"",
+        "\"enabled\"",
+        "\"reloaded\"",
+        "\"reset\""
+      ],
+      "description": "enabled reloads firewall and enables firewall on boot. disabled unloads firewall and disables firewall on boot. reloaded reloads firewall. reset disables and resets firewall to installation defaults. Choices: \"disabled\" \"enabled\" \"reloaded\" \"reset\""
+    },
+    {
+      "name": "to_ip",
+      "aliases": [
+        "dest",
+        "to"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "any",
+      "choices": [],
+      "description": "Destination IP address. Default: \"any\""
+    },
+    {
+      "name": "to_port",
+      "aliases": [
+        "port"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Destination port."
+    }
+  ],
+  "examples": [
+    "- name: Allow everything and enable UFW\n  community.general.ufw:\n    state: enabled\n    policy: allow\n\n- name: Set logging\n  community.general.ufw:\n    logging: 'on'\n\n# Sometimes it is desirable to let the sender know when traffic is\n# being denied, rather than simply ignoring it. In these cases, use\n# reject instead of deny. In addition, log rejected connections:\n- community.general.ufw:\n    rule: reject\n    port: auth\n    log: true\n\n# ufw supports connection rate limiting, which is useful for protecting\n# against brute-force login attacks. ufw will deny connections if an IP\n# address has attempted to initiate 6 or more connections in the last\n# 30 seconds. See  http://www.debian-administration.org/articles/187\n# for details. Typical usage is:\n- community.general.ufw:\n    rule: limit\n    port: ssh\n    proto: tcp\n\n# Allow OpenSSH. (Note that as ufw manages its own state, simply removing\n# a rule=allow task can leave those ports exposed. Either use delete=true\n# or a separate state=reset task)\n- community.general.ufw:\n    rule: allow\n    name: OpenSSH\n\n- name: Delete OpenSSH rule\n  community.general.ufw:\n    rule: allow\n    name: OpenSSH\n    delete: true\n\n- name: Deny all access to port 53\n  community.general.ufw:\n    rule: deny\n    port: '53'\n\n- name: Allow port range 60000-61000\n  community.general.ufw:\n    rule: allow\n    port: 60000:61000\n    proto: tcp\n\n- name: Allow all access to tcp port 80\n  community.general.ufw:\n    rule: allow\n    port: '80'\n    proto: tcp\n\n- name: Allow all access from RFC1918 networks to this host\n  community.general.ufw:\n    rule: allow\n    src: '{{ item }}'\n  loop:\n    - 10.0.0.0/8\n    - 172.16.0.0/12\n    - 192.168.0.0/16\n\n- name: Deny access to udp port 514 from host 1.2.3.4 and include a comment\n  community.general.ufw:\n    rule: deny\n    proto: udp\n    src: 1.2.3.4\n    port: '514'\n    comment: Block syslog\n\n- name: Allow incoming access to eth0 from 1.2.3.5 port 5469 to 1.2.3.4 port 5469\n  community.general.ufw:\n    rule: allow\n    interface: eth0\n    direction: in\n    proto: udp\n    src: 1.2.3.5\n    from_port: '5469'\n    dest: 1.2.3.4\n    to_port: '5469'\n\n# Note that IPv6 must be enabled in /etc/default/ufw for IPv6 firewalling to work.\n- name: Deny all traffic from the IPv6 2001:db8::/32 to tcp port 25 on this host\n  community.general.ufw:\n    rule: deny\n    proto: tcp\n    src: 2001:db8::/32\n    port: '25'\n\n- name: Deny all IPv6 traffic to tcp port 20 on this host\n  # this should be the first IPv6 rule\n  community.general.ufw:\n    rule: deny\n    proto: tcp\n    port: '20'\n    to_ip: \"::\"\n    insert: 0\n    insert_relative_to: first-ipv6\n\n- name: Deny all IPv4 traffic to tcp port 20 on this host\n  # This should be the third to last IPv4 rule\n  # (insert: -1 addresses the second to last IPv4 rule;\n  #  so the new rule will be inserted before the second\n  #  to last IPv4 rule, and will be come the third to last\n  #  IPv4 rule.)\n  community.general.ufw:\n    rule: deny\n    proto: tcp\n    port: '20'\n    to_ip: \"::\"\n    insert: -1\n    insert_relative_to: last-ipv4\n\n# Can be used to further restrict a global FORWARD policy set to allow\n- name: Deny forwarded/routed traffic from subnet 1.2.3.0/24 to subnet 4.5.6.0/24\n  community.general.ufw:\n    rule: deny\n    route: true\n    src: 192.0.2.0/24\n    dest: 198.51.100.0/24"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/ufw_module.html",
+  "parsed_at": "2026-04-13T16:29:59.820075"
+}

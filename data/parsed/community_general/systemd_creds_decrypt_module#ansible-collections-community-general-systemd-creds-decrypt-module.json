@@ -1,0 +1,84 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.systemd_creds_decrypt",
+  "slug": "systemd_creds_decrypt_module#ansible-collections-community-general-systemd-creds-decrypt-module",
+  "description": "This module decrypts input using systemd‘s systemd-creds decrypt.",
+  "parameters": [
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The credential name to validate the embedded credential name."
+    },
+    {
+      "name": "newline",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Whether to add a trailing newline character to the end of the output, if not present. Choices: false ← (default) true"
+    },
+    {
+      "name": "secret",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The secret to decrypt."
+    },
+    {
+      "name": "timestamp",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The timestamp to use to validate the not-after timestamp that was used during encryption. Takes a timestamp specification in the format described in systemd.time(7)."
+    },
+    {
+      "name": "transcode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"base64\"",
+        "\"unbase64\"",
+        "\"hex\"",
+        "\"unhex\""
+      ],
+      "description": "Whether to transcode the output before returning it. Choices: \"base64\" \"unbase64\" \"hex\" \"unhex\""
+    },
+    {
+      "name": "user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A user name or numeric UID when decrypting from a specific user context. If set to the special string self it sets the user to the user of the calling process. Requires systemd 256 or later."
+    }
+  ],
+  "examples": [
+    "- name: Decrypt secret\n  community.general.systemd_creds_decrypt:\n    name: db\n    secret: \"WhQZht+JQJax1aZemmGLxmAAAA...\"\n  register: decrypted_secret\n\n- name: Print the decrypted secret\n  ansible.builtin.debug:\n    msg: \"{{ decrypted_secret }}\""
+  ],
+  "return_values": [
+    {
+      "name": "value",
+      "type": "string",
+      "description": "The decrypted secret. Note that Ansible only supports returning UTF-8 encoded strings. If the decrypted secret is binary data, or a string encoded in another way, use transcode=base64 or transcode=hex to circument this restriction. You then need to decode the data when using it, for example using the ansible.builtin.b64decode filter. Returned: always Sample: \"access_token\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/systemd_creds_decrypt_module.html",
+  "parsed_at": "2026-04-13T16:29:59.403905"
+}

@@ -1,0 +1,55 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.telegram",
+  "slug": "telegram_module#ansible-collections-community-general-telegram-module",
+  "description": "Send notifications using telegram bot, to a verified group or user.",
+  "parameters": [
+    {
+      "name": "api_args",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "method,",
+      "choices": [],
+      "description": "Any parameters for the method. For reference to default method, SendMessage, see https://core.telegram.org/bots/api#sendmessage."
+    },
+    {
+      "name": "api_method",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "SendMessage",
+      "choices": [],
+      "description": "Bot API method. For reference, see https://core.telegram.org/bots/api. Default: \"SendMessage\""
+    },
+    {
+      "name": "token",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Token identifying your telegram bot."
+    }
+  ],
+  "examples": [
+    "- name: Send notify to Telegram\n  community.general.telegram:\n    token: '9999999:XXXXXXXXXXXXXXXXXXXXXXX'\n    api_args:\n      chat_id: \"000000\"\n      parse_mode: \"markdown\"\n      text: \"Your precious application has been deployed: https://example.com\"\n      disable_web_page_preview: true\n      disable_notification: true\n\n- name: Forward message to someone\n  community.general.telegram:\n    token: '9999999:XXXXXXXXXXXXXXXXXXXXXXX'\n    api_method: forwardMessage\n    api_args:\n      chat_id: \"000000\"\n      from_chat_id: 111111\n      disable_notification: true\n      message_id: '{{ saved_msg_id }}'"
+  ],
+  "return_values": [
+    {
+      "name": "msg",
+      "type": "string",
+      "description": "The message you attempted to send. Returned: success Sample: \"Ansible task finished\"",
+      "returned": "success"
+    },
+    {
+      "name": "telegram_error",
+      "type": "string",
+      "description": "Error message gotten from Telegram API. Returned: failure Sample: \"Bad Request: message text is empty\"",
+      "returned": "failure"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/telegram_module.html",
+  "parsed_at": "2026-04-13T16:29:59.519883"
+}

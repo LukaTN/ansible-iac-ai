@@ -1,0 +1,61 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.ipbase_info",
+  "slug": "ipbase_info_module#ansible-collections-community-general-ipbase-info-module",
+  "description": "Retrieve IP geolocation and other facts of a host’s IP address using the ipbase.com API.",
+  "parameters": [
+    {
+      "name": "apikey",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The API key for the request if you need more requests."
+    },
+    {
+      "name": "hostname",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If the hostname parameter is set to true, the API response contains the hostname of the IP. Choices: false ← (default) true"
+    },
+    {
+      "name": "ip",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The IP you want to get the info for. If not specified the API detects the IP automatically."
+    },
+    {
+      "name": "language",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "en",
+      "choices": [],
+      "description": "An ISO Alpha 2 Language Code for localizing the IP data. Default: \"en\""
+    }
+  ],
+  "examples": [
+    "- name: \"Get IP geolocation information of the primary outgoing IP\"\n  community.general.ipbase_info:\n  register: my_ip_info\n\n- name: \"Get IP geolocation information of a specific IP\"\n  community.general.ipbase_info:\n    ip: \"8.8.8.8\"\n  register: my_ip_info\n\n\n- name: \"Get IP geolocation information of a specific IP with all other possible parameters\"\n  community.general.ipbase_info:\n    ip: \"8.8.8.8\"\n    apikey: \"xxxxxxxxxxxxxxxxxxxxxx\"\n    hostname: true\n    language: \"de\"\n  register: my_ip_info"
+  ],
+  "return_values": [
+    {
+      "name": "data",
+      "type": "dictionary",
+      "description": "JSON parsed response from ipbase.com. Please refer to https://ipbase.com/docs/info for the detailed structure of the response. Returned: success Sample: {\"connection\": {\"asn\": 13335, \"isp\": \"APNIC Research and Development\", \"organization\": \"Cloudflare, Inc.\", \"range\": \"1.1.1.1/32\"}, \"domains\": {\"count\": 10943, \"domains\": [\"eliwise.academy\", \"accountingprose.academy\", \"pistola.academy\", \"1and1-test-ntlds-fr.accountant\", \"omnergy.africa\"]}, \"hostname\": \"one.one.one.one\", \"ip\": \"1.1.1.1\", \"location\": {\"city\": {\"alpha2\": null, \"fips\": \"644000\", \"geonames_id\": 5368753, \"hasc_id\": null, \"name\": \"Los Angeles\", \"name_translated\": \"Los Angeles\", \"wikidata_id\": \"Q65\"}, \"continent\": {\"code\": \"NA\", \"name\": \"North America\", \"name_translated\": \"North America\"}, \"country\": {\"alpha2\": \"US\", \"alpha3\": \"USA\", \"calling_codes\": [\"+1\"], \"currencies\": [{\"code\": \"USD\", \"decimal_digits\": 2, \"name\": \"US Dollar\", \"name_plural\": \"US dollars\", \"rounding\": 0, \"symbol\": \"$\", \"symbol_native\": \"$\"}], \"emoji\": \"...\", \"fips\": \"US\", \"geonames_id\": 6252001, \"hasc_id\": \"US\", \"ioc\": \"USA\", \"is_in_european_union\": false, \"languages\": [{\"name\": \"English\", \"name_native\": \"English\"}], \"name\": \"United States\", \"name_translated\": \"United States\", \"timezones\": [\"America/New_York\", \"America/Detroit\", \"America/Kentucky/Louisville\", \"America/Kentucky/Monticello\", \"America/Indiana/Indianapolis\", \"America/Indiana/Vincennes\", \"America/Indiana/Winamac\", \"America/Indiana/Marengo\", \"America/Indiana/Petersburg\", \"America/Indiana/Vevay\", \"America/Chicago\", \"America/Indiana/Tell_City\", \"America/Indiana/Knox\", \"America/Menominee\", \"America/North_Dakota/Center\", \"America/North_Dakota/New_Salem\", \"America/North_Dakota/Beulah\", \"America/Denver\", \"America/Boise\", \"America/Phoenix\", \"America/Los_Angeles\", \"America/Anchorage\", \"America/Juneau\", \"America/Sitka\", \"America/Metlakatla\", \"America/Yakutat\", \"America/Nome\", \"America/Adak\", \"Pacific/Honolulu\"], \"wikidata_id\": \"Q30\"}, \"geonames_id\": 5332870, \"latitude\": 34.053611755371094, \"longitude\": -118.24549865722656, \"region\": {\"alpha2\": \"US-CA\", \"fips\": \"US06\", \"geonames_id\": 5332921, \"hasc_id\": \"US.CA\", \"name\": \"California\", \"name_translated\": \"California\", \"wikidata_id\": \"Q99\"}, \"zip\": \"90012\"}, \"range_type\": {\"description\": \"Public address\", \"type\": \"PUBLIC\"}, \"security\": {\"is_abuser\": true, \"is_anonymous\": false, \"is_bot\": false, \"is_datacenter\": false, \"is_icloud_relay\": false, \"is_known_attacker\": true, \"is_proxy\": false, \"is_spam\": false, \"is_tor\": false, \"is_vpn\": false, \"threat_score\": 100}, \"timezone\": {\"code\": \"PDT\", \"current_time\": \"2023-05-04T04:30:28-07:00\", \"gmt_offset\": -25200, \"id\": \"America/Los_Angeles\", \"is_daylight_saving\": true}, \"tlds\": [\".us\"], \"type\": \"v4\"}",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/ipbase_info_module.html",
+  "parsed_at": "2026-04-13T16:29:49.092045"
+}

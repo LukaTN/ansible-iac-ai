@@ -1,0 +1,224 @@
+{
+  "collection_ns": "kubernetes_core",
+  "collection": "kubernetes.core",
+  "module": "kubernetes.core.helm_repository",
+  "slug": "helm_repository_module#ansible-collections-kubernetes-core-helm-repository-module",
+  "description": "Manage Helm repositories.",
+  "parameters": [
+    {
+      "name": "api_key",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Token used to authenticate with the API. Can also be specified via K8S_AUTH_API_KEY environment variable."
+    },
+    {
+      "name": "binary_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The path of a helm binary to use."
+    },
+    {
+      "name": "ca_cert",
+      "aliases": [
+        "ssl_ca_cert"
+      ],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to a CA certificate used to authenticate with the API. The full certificate chain must be provided to avoid certificate validation errors. Can also be specified via K8S_AUTH_SSL_CA_CERT environment variable."
+    },
+    {
+      "name": "context",
+      "aliases": [
+        "kube_context"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Helm option to specify which kubeconfig context to use. If the value is not specified in the task, the value of environment variable K8S_AUTH_CONTEXT will be used instead."
+    },
+    {
+      "name": "force_update",
+      "aliases": [
+        "force"
+      ],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Whether or not to replace (overwrite) the repo if it already exists. Choices: false ← (default) true"
+    },
+    {
+      "name": "host",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Provide a URL for accessing the API. Can also be specified via K8S_AUTH_HOST environment variable."
+    },
+    {
+      "name": "insecure_skip_tls_verify",
+      "aliases": [
+        "skip_tls_certs_check"
+      ],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Skip tls certificate checks for the repository url. Choices: false ← (default) true"
+    },
+    {
+      "name": "kubeconfig",
+      "aliases": [
+        "kubeconfig_path"
+      ],
+      "type": "any",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Helm option to specify kubeconfig path to use. If the value is not specified in the task, the value of environment variable K8S_AUTH_KUBECONFIG will be used instead. The configuration can be provided as dictionary."
+    },
+    {
+      "name": "pass_credentials",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Pass credentials to all domains. Choices: false ← (default) true"
+    },
+    {
+      "name": "repo_name",
+      "aliases": [
+        "name"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Chart repository name."
+    },
+    {
+      "name": "repo_password",
+      "aliases": [
+        "password"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Chart repository password for repository with basic auth. Required if chart_repo_username is specified."
+    },
+    {
+      "name": "repo_state",
+      "aliases": [
+        "state"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\""
+      ],
+      "description": "Desired state of repository. Choices: \"present\" ← (default) \"absent\""
+    },
+    {
+      "name": "repo_url",
+      "aliases": [
+        "url"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Chart repository url"
+    },
+    {
+      "name": "repo_username",
+      "aliases": [
+        "username"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Chart repository username for repository with basic auth. Required if chart_repo_password is specified."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [
+        "verify_ssl"
+      ],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether or not to verify the API server’s SSL certificates. Can also be specified via K8S_AUTH_VERIFY_SSL environment variable. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Add a repository\n  kubernetes.core.helm_repository:\n    name: stable\n    repo_url: https://kubernetes.github.io/ingress-nginx\n\n- name: Add Red Hat Helm charts repository\n  kubernetes.core.helm_repository:\n    name: redhat-charts\n    repo_url: https://redhat-developer.github.com/redhat-helm-charts"
+  ],
+  "return_values": [
+    {
+      "name": "command",
+      "type": "string",
+      "description": "Full `helm` command built by this module, in case you want to re-run the command outside the module or debug a problem. Returned: always Sample: \"/usr/local/bin/helm repo add bitnami https://charts.bitnami.com/bitnami\"",
+      "returned": "always"
+    },
+    {
+      "name": "msg",
+      "type": "string",
+      "description": "Error message returned by `helm` command Returned: on failure Sample: \"Repository already have a repository named bitnami\"",
+      "returned": "on"
+    },
+    {
+      "name": "stderr",
+      "type": "string",
+      "description": "Full `helm` command stderr, in case you want to display it or examine the event log Returned: always Sample: \"\"",
+      "returned": "always"
+    },
+    {
+      "name": "stderr_lines",
+      "type": "list",
+      "description": "Full `helm` command stderr in list, in case you want to display it or examine the event log Returned: always Sample: [\"\"]",
+      "returned": "always"
+    },
+    {
+      "name": "stdout",
+      "type": "string",
+      "description": "Full `helm` command stdout, in case you want to display it or examine the event log Returned: always Sample: \"\\\"bitnami\\\" has been added to your repositories\"",
+      "returned": "always"
+    },
+    {
+      "name": "stdout_lines",
+      "type": "list",
+      "description": "Full `helm` command stdout in list, in case you want to display it or examine the event log Returned: always Sample: [\"\\\"bitnami\\\" has been added to your repositories\"]",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/kubernetes/core/helm_repository_module.html",
+  "parsed_at": "2026-04-13T16:30:01.509799"
+}

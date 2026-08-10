@@ -1,0 +1,27 @@
+# ============================================================
+# AnsibleAI RAG Generator — LangChain + ChromaDB
+# Date        : 2026-04-11 11:36:03
+# Request     : scale a deployment named analytics-backend to 3 replicas
+# Module      : kubernetes.core.k8s_scale
+# Collection  : kubernetes.core
+# RAG score   : 0.568
+# Chunks used : 6
+# Source URL  : https://docs.ansible.com/ansible/latest/collections/kubernetes/core/k8s_scale_module.html
+# LLM model   : MISTRAL
+# ============================================================
+
+---
+- name: Scale deployment analytics-backend to 3 replicas
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - kubernetes.core
+  tasks:
+    - name: Scale deployment analytics-backend up
+      kubernetes.core.k8s_scale:
+        api_version: v1
+        kind: Deployment
+        name: analytics-backend
+        namespace: <your_namespace>
+        replicas: 3

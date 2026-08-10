@@ -1,0 +1,13 @@
+---
+- name: Create Azure Resource Group rg-monitoring
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - azure.azcollection
+  tasks:
+    - name: Ensure resource group exists
+      azure.azcollection.azure_rm_resourcegroup:
+        name: rg-monitoring
+        location: westeurope
+        state: present

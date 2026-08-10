@@ -1,0 +1,151 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.wdc_redfish_command",
+  "slug": "wdc_redfish_command_module#ansible-collections-community-general-wdc-redfish-command-module",
+  "description": "Builds Redfish URIs locally and sends them to remote OOB controllers to perform an action.",
+  "parameters": [
+    {
+      "name": "auth_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security token for authentication with OOB controller."
+    },
+    {
+      "name": "baseuri",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Base URI of OOB controller. Must include this or ioms."
+    },
+    {
+      "name": "ca_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "PEM formatted file that contains a CA certificate to be used for validation. Only used if validate_certs=true."
+    },
+    {
+      "name": "category",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Category to execute on OOB controller."
+    },
+    {
+      "name": "ciphers",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "TLS/SSL Ciphers to use for the request. When a list is provided, all ciphers are joined in order with :. See the OpenSSL Cipher List Format for more details. The available ciphers is dependent on the Python and OpenSSL/LibreSSL versions."
+    },
+    {
+      "name": "command",
+      "aliases": [],
+      "type": "list",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "List of commands to execute on OOB controller."
+    },
+    {
+      "name": "ioms",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of IOM FQDNs for the enclosure. Must include this or baseuri."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Password for authentication with OOB controller."
+    },
+    {
+      "name": "resource_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "ID of the component to modify, such as Enclosure, IOModuleAFRU, PowerSupplyBFRU, FanExternalFRU3, or FanInternalFRU."
+    },
+    {
+      "name": "timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "10",
+      "choices": [],
+      "description": "Timeout in seconds for URL requests to OOB controller. Default: 10"
+    },
+    {
+      "name": "update_creds",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The credentials for retrieving the update image."
+    },
+    {
+      "name": "update_image_uri",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The URI of the image for the update."
+    },
+    {
+      "name": "username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "User for authentication with OOB controller."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If false, TLS/SSL certificates are not validated. Set this to true to enable certificate checking. Should be used together with ca_path. Choices: false ← (default) true"
+    }
+  ],
+  "examples": [
+    "- name: Firmware Activate (required after SimpleUpdate to apply the new firmware)\n  community.general.wdc_redfish_command:\n    category: Update\n    command: FWActivate\n    ioms: \"{{ ioms }}\"\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n\n- name: Firmware Activate with individual IOMs specified\n  community.general.wdc_redfish_command:\n    category: Update\n    command: FWActivate\n    ioms:\n      - iom1.wdc.com\n      - iom2.wdc.com\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n\n- name: Firmware Activate with baseuri specified\n  community.general.wdc_redfish_command:\n    category: Update\n    command: FWActivate\n    baseuri: \"iom1.wdc.com\"\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n\n\n- name: Update and Activate (orchestrates firmware update and activation with a single command)\n  community.general.wdc_redfish_command:\n    category: Update\n    command: UpdateAndActivate\n    ioms: \"{{ ioms }}\"\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n    update_image_uri: \"{{ update_image_uri }}\"\n    update_creds:\n      username: operator\n      password: supersecretpwd\n\n- name: Turn on enclosure indicator LED\n  community.general.wdc_redfish_command:\n    category: Chassis\n    resource_id: Enclosure\n    command: IndicatorLedOn\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n\n- name: Turn off IOM A indicator LED\n  community.general.wdc_redfish_command:\n    category: Chassis\n    resource_id: IOModuleAFRU\n    command: IndicatorLedOff\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n\n- name: Turn on Power Supply B indicator LED\n  community.general.wdc_redfish_command:\n    category: Chassis\n    resource_id: PowerSupplyBFRU\n    command: IndicatorLedOn\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n\n- name: Turn on External Fan 3 indicator LED\n  community.general.wdc_redfish_command:\n    category: Chassis\n    resource_id: FanExternalFRU3\n    command: IndicatorLedOn\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n\n- name: Turn on Internal Fan indicator LED\n  community.general.wdc_redfish_command:\n    category: Chassis\n    resource_id: FanInternalFRU\n    command: IndicatorLedOn\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n\n- name: Set chassis to Low Power Mode\n  community.general.wdc_redfish_command:\n    category: Chassis\n    resource_id: Enclosure\n    command: PowerModeLow\n\n- name: Set chassis to Normal Power Mode\n  community.general.wdc_redfish_command:\n    category: Chassis\n    resource_id: Enclosure\n    command: PowerModeNormal"
+  ],
+  "return_values": [
+    {
+      "name": "msg",
+      "type": "string",
+      "description": "Message with action result or error description. Returned: always Sample: \"Action was successful\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/wdc_redfish_command_module.html",
+  "parsed_at": "2026-04-13T16:30:00.604677"
+}

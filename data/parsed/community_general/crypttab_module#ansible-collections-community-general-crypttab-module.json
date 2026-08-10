@@ -1,0 +1,74 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.crypttab",
+  "slug": "crypttab_module#ansible-collections-community-general-crypttab-module",
+  "description": "Control Linux encrypted block devices that are set up during system boot in /etc/crypttab.",
+  "parameters": [
+    {
+      "name": "backing_device",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the underlying block device or file, or the UUID of a block-device prefixed with UUID=."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the encrypted block device as it appears in the /etc/crypttab file, or optionally prefixed with /dev/mapper/, as it appears in the filesystem. /dev/mapper/ is stripped from name."
+    },
+    {
+      "name": "opts",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "A comma-delimited list of options. See crypttab(5) for details."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Encryption password, the path to a file containing the password, or - or unset if the password should be entered at boot."
+    },
+    {
+      "name": "path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "/etc/crypttab",
+      "choices": [],
+      "description": "Path to file to use instead of /etc/crypttab. This might be useful in a chroot environment. Default: \"/etc/crypttab\""
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"opts_absent\"",
+        "\"opts_present\"",
+        "\"present\""
+      ],
+      "description": "Use present to add a line to /etc/crypttab or update its definition if already present. Use absent to remove a line with matching name. Use opts_present to add options to those already present; options with different values are updated. Use opts_absent to remove options from the existing set. Choices: \"absent\" \"opts_absent\" \"opts_present\" \"present\""
+    }
+  ],
+  "examples": [
+    "- name: Set the options explicitly a device which must already exist\n  community.general.crypttab:\n    name: luks-home\n    state: present\n    opts: discard,cipher=aes-cbc-essiv:sha256\n\n- name: Add the 'discard' option to any existing options for all devices\n  community.general.crypttab:\n    name: '{{ item.device }}'\n    state: opts_present\n    opts: discard\n  loop: '{{ ansible_mounts }}'\n  when: \"'/dev/mapper/luks-' in item.device\"\n\n- name: Add entry to /etc/crypttab for luks-home with password file\n  community.general.crypttab:\n    name: luks-home\n    backing_device: UUID=123e4567-e89b-12d3-a456-426614174000\n    password: /root/keys/luks-home.key\n    opts: discard,cipher=aes-cbc-essiv:sha256\n    state: present"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/crypttab_module.html",
+  "parsed_at": "2026-04-13T16:29:44.660612"
+}

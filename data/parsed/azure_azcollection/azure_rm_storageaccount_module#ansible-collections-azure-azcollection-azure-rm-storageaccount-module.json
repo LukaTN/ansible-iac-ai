@@ -1,0 +1,785 @@
+{
+  "collection_ns": "azure_azcollection",
+  "collection": "azure.azcollection",
+  "module": "azure.azcollection.azure_rm_storageaccount",
+  "slug": "azure_rm_storageaccount_module#ansible-collections-azure-azcollection-azure-rm-storageaccount-module",
+  "description": "Create, update or delete a storage account.",
+  "parameters": [
+    {
+      "name": "access_tier",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"Hot\"",
+        "\"Cool\""
+      ],
+      "description": "The access tier for this storage account. Required when kind=BlobStorage. Choices: \"Hot\" \"Cool\""
+    },
+    {
+      "name": "account_type",
+      "aliases": [
+        "type"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"Premium_LRS\"",
+        "\"Standard_GRS\"",
+        "\"Standard_LRS\"",
+        "\"Standard_RAGRS\"",
+        "\"Standard_ZRS\"",
+        "\"Premium_ZRS\"",
+        "\"Standard_RAGZRS\"",
+        "\"Standard_GZRS\""
+      ],
+      "description": "Type of storage account. Required when creating a storage account. Standard_ZRS and Premium_LRS accounts cannot be changed to other account types. Other account types cannot be changed to Standard_ZRS or Premium_LRS. Choices: \"Premium_LRS\" \"Standard_GRS\" \"Standard_LRS\" \"Standard_RAGRS\" \"Standard_ZRS\" \"Premium_ZRS\" \"Standard_RAGZRS\" \"Standard_GZRS\""
+    },
+    {
+      "name": "ad_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory username. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "adfs_authority_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure AD authority url. Use when authenticating with Username/password, and has your own ADFS authority."
+    },
+    {
+      "name": "allow_blob_public_access",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "to",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Allows blob containers in account to be set for anonymous public access. If set to false, no containers in this account will be able to allow anonymous public access. If omitted, new account creation will default to null which is currently interpreted to True. Existing accounts will not be modified. Choices: false true"
+    },
+    {
+      "name": "allow_cross_tenant_replication",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Allow or disallow cross AAD tenant object replication. Choices: false true"
+    },
+    {
+      "name": "allow_shared_key_access",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "value",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Indicates whether the storage account permits requests to be authorized with the account access key via Shared Key. If false, then all requests, including shared access signatures, must be authorized with Azure Active Directory (Azure AD). The default value is null, which is equivalent to true. Choices: false true"
+    },
+    {
+      "name": "api_profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "Selects an API profile to use when communicating with Azure services. Default value of latest is appropriate for public clouds; future values will allow use with Azure Stack. Default: \"latest\""
+    },
+    {
+      "name": "append_tags",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Use to control if tags field is canonical or just appends to existing tags. When canonical, any tags not found in the tags parameter will be removed from the object’s metadata. Choices: false true ← (default)"
+    },
+    {
+      "name": "auth_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"key\" ← (default)",
+        "\"login\""
+      ],
+      "description": "The mode in which to run the command. login mode will directly use your login credentials for the authentication. The legacy key mode will attempt to query for an account key if no authentication parameters for the account are provided. Can also be set via the environment variable AZURE_STORAGE_AUTH_MODE. Choices: \"key\" ← (default) \"login\""
+    },
+    {
+      "name": "auth_source",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "az",
+      "choices": [
+        "\"auto\" ← (default)",
+        "\"cli\"",
+        "\"credential_file\"",
+        "\"env\"",
+        "\"msi\""
+      ],
+      "description": "Controls the source of the credentials to use for authentication. Can also be set via the ANSIBLE_AZURE_AUTH_SOURCE environment variable. When set to auto (the default) the precedence is module parameters -> env -> credential_file -> cli. When set to env, the credentials will be read from the environment variables When set to credential_file, it will read the profile from ~/.azure/credentials. When set to cli, the credentials will be sources from the Azure CLI profile. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if more than one is present otherwise the default az cli subscription is used. When set to msi, the host machine must be an azure resource with an enabled MSI extension. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if the resource is granted access to more than one subscription, otherwise the first subscription is chosen. The msi was added in Ansible 2.6. Choices: \"auto\" ← (default) \"cli\" \"credential_file\" \"env\" \"msi\""
+    },
+    {
+      "name": "blob_cors",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Specifies CORS rules for the Blob service. You can include up to five CorsRule elements in the request. If no blob_cors elements are included in the argument list, nothing about CORS will be changed. If you want to delete all CORS rules and disable CORS for the Blob service, explicitly set blob_cors=[]."
+    },
+    {
+      "name": "cert_validation_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ignore\"",
+        "\"validate\""
+      ],
+      "description": "Controls the certificate validation behavior for Azure endpoints. By default, all modules will validate the server certificate, but when an HTTPS proxy is in use, or against Azure Stack, it may be necessary to disable this behavior by passing ignore. Can also be set via credential file profile or the AZURE_CERT_VALIDATION environment variable. Choices: \"ignore\" \"validate\""
+    },
+    {
+      "name": "client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client ID. Use when authenticating with a Service Principal or Managed Identity (msi). Can also be set via the AZURE_CLIENT_ID environment variable."
+    },
+    {
+      "name": "cloud_environment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "AzureCloud",
+      "choices": [],
+      "description": "For cloud environments other than the US public cloud, the environment name (as defined by Azure Python SDK, eg, AzureChinaCloud, AzureUSGovernment), or a metadata discovery endpoint URL (required for Azure Stack). Can also be set via credential file profile or the AZURE_CLOUD_ENVIRONMENT environment variable. Default: \"AzureCloud\""
+    },
+    {
+      "name": "custom_domain",
+      "aliases": [
+        "custom_dns_domain_suffix"
+      ],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "User domain assigned to the storage account. Must be a dictionary with name and use_sub_domain keys where name is the CNAME source. Only one custom domain is supported per storage account at this time. To clear the existing custom domain, use an empty string for the custom domain name property. Can be added to an existing storage account. Will be ignored during storage account creation."
+    },
+    {
+      "name": "default_to_o_auth_authentication",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "authentication",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "A boolean flag which indicates whether the default authentication is OAuth or not. The default interpretation is false for this property. Choices: false true"
+    },
+    {
+      "name": "disable_instance_discovery",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Determines whether or not instance discovery is performed when attempting to authenticate. Setting this to true will completely disable both instance discovery and authority validation. This functionality is intended for use in scenarios where the metadata endpoint cannot be reached such as in private clouds or Azure Stack. The process of instance discovery entails retrieving authority metadata from https://login.microsoft.com/ to validate the authority. By setting this to **True**, the validation of the authority is disabled. As a result, it is crucial to ensure that the configured authority host is valid and trustworthy. Set via credential file profile or the AZURE_DISABLE_INSTANCE_DISCOVERY environment variable. Choices: false ← (default) true"
+    },
+    {
+      "name": "enable_nfs_v3",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "NFS 3.0 protocol. Choices: false true"
+    },
+    {
+      "name": "encryption",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The encryption settings on the storage account."
+    },
+    {
+      "name": "force_delete_nonempty",
+      "aliases": [
+        "force"
+      ],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Attempt deletion if resource already exists and cannot be updated. Choices: false ← (default) true"
+    },
+    {
+      "name": "https_only",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "to",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Allows https traffic only to storage service when set to True. If omitted, new account creation will default to True, while existing accounts will not be change. Choices: false true"
+    },
+    {
+      "name": "identity",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Identity for this resource."
+    },
+    {
+      "name": "immutable_storage_with_versioning",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The property is immutable and can only be set to true at the account creation time. When set to true, it enables object level immutability for all the containers in the account by default."
+    },
+    {
+      "name": "is_hns_enabled",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Account HierarchicalNamespace enabled if sets to true. When is_hns_enabled=True, kind cannot be Storage. Choices: false true"
+    },
+    {
+      "name": "kind",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"Storage\" ← (default)",
+        "\"StorageV2\"",
+        "\"BlobStorage\"",
+        "\"BlockBlobStorage\"",
+        "\"FileStorage\""
+      ],
+      "description": "The kind of storage. The FileStorage and (BlockBlobStorage) only used when account_type=Premium_LRS or account_type=Premium_ZRS. Choices: \"Storage\" ← (default) \"StorageV2\" \"BlobStorage\" \"BlockBlobStorage\" \"FileStorage\""
+    },
+    {
+      "name": "large_file_shares_state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"Enabled\"",
+        "\"Disabled\""
+      ],
+      "description": "Allow large file shares if sets to Enabled. Choices: \"Enabled\" \"Disabled\""
+    },
+    {
+      "name": "location",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Valid Azure location. Defaults to location of the resource group."
+    },
+    {
+      "name": "log_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "log_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "minimum_tls_version",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "to",
+      "choices": [
+        "\"TLS1_0\"",
+        "\"TLS1_1\"",
+        "\"TLS1_2\""
+      ],
+      "description": "The minimum required version of Transport Layer Security (TLS) for requests to a storage account. If omitted, new account creation will default to null which is currently interpreted to TLS1_0. Existing accounts will not be modified. Choices: \"TLS1_0\" \"TLS1_1\" \"TLS1_2\""
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the storage account to update or create."
+    },
+    {
+      "name": "network_acls",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Manages the Firewall and virtual networks settings of the storage account."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory user password. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security profile found in ~/.azure/credentials file."
+    },
+    {
+      "name": "public_network_access",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"Enabled\"",
+        "\"Disabled\""
+      ],
+      "description": "Allow or disallow public network access to Storage Account. Choices: \"Enabled\" \"Disabled\""
+    },
+    {
+      "name": "resource_group",
+      "aliases": [
+        "resource_group_name"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the resource group to use."
+    },
+    {
+      "name": "secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client secret. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)",
+        "\"failover\""
+      ],
+      "description": "State of the storage account. Use present to create or update a storage account and use absent to delete an account. failover is used to failover the storage account to its secondary. This process can take up to a hour. Choices: \"absent\" \"present\" ← (default) \"failover\""
+    },
+    {
+      "name": "static_website",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Manage static website configuration for the storage account."
+    },
+    {
+      "name": "subscription_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Your Azure subscription Id."
+    },
+    {
+      "name": "tags",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Dictionary of string:string pairs to assign as metadata to the object. Metadata tags on the object will be updated with any provided values. To remove tags set append_tags option to false. Currently, Azure DNS zones and Traffic Manager services also don’t allow the use of spaces in the tag. Azure Front Door doesn’t support the use of Azure Automation and Azure CDN only support 15 tags on resources."
+    },
+    {
+      "name": "tenant",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure tenant ID. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "thumbprint",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The thumbprint of the private key specified in x509_certificate_path. Use when authenticating with a Service Principal. Required if x509_certificate_path is defined."
+    },
+    {
+      "name": "x509_certificate_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the X509 certificate used to create the service principal in PEM format. The certificate must be appended to the private key. Use when authenticating with a Service Principal."
+    }
+  ],
+  "examples": [
+    "- name: remove account, if it exists\n  azure_rm_storageaccount:\n    resource_group: myResourceGroup\n    name: clh0002\n    state: absent\n\n- name: create an account\n  azure_rm_storageaccount:\n    resource_group: myResourceGroup\n    name: clh0002\n    type: Standard_RAGRS\n    tags:\n      testing: testing\n      delete: on-exit\n\n- name: Create an account with kind of FileStorage\n  azure_rm_storageaccount:\n    resource_group: myResourceGroup\n    name: c1h0002\n    type: Premium_LRS\n    kind: FileStorage\n    tags:\n      testing: testing\n\n- name: Create storage account with I(enable_nfs_v3=false)\n  azure_rm_storageaccount:\n    resource_group: myResourceGroup\n    name: c1h0002\n    account_type: Premium_LRS\n    kind: FileStorage\n    enable_nfs_v3: false\n    static_website:\n      enabled: true\n\n- name: configure firewall and virtual networks\n  azure_rm_storageaccount:\n    resource_group: myResourceGroup\n    name: clh0002\n    type: Standard_RAGRS\n    network_acls:\n      bypass: AzureServices,Metrics\n      default_action: Deny\n      virtual_network_rules:\n        - id: /subscriptions/mySubscriptionId/resourceGroups/myResourceGroup/providers/Microsoft.Network/virtualNetworks/myVnet/subnets/mySubnet\n          action: Allow\n      ip_rules:\n        - value: 1.2.3.4\n          action: Allow\n        - value: 123.234.123.0/24\n          action: Allow\n\n- name: create an account with blob CORS\n  azure_rm_storageaccount:\n    resource_group: myResourceGroup\n    name: clh002\n    type: Standard_RAGRS\n    blob_cors:\n      - allowed_origins:\n          - http://www.example.com/\n        allowed_methods:\n          - GET\n          - POST\n        allowed_headers:\n          - x-ms-meta-data*\n          - x-ms-meta-target*\n          - x-ms-meta-abc\n        exposed_headers:\n          - x-ms-meta-*\n        max_age_in_seconds: 200\n\n- name: Create new storage account with (key_source=Microsoft.Keyvault)\n  azure.azcollection.azure_rm_storageaccount:\n    resource_group: \"{{ resource_group }}\"\n    name: \"{{ storage_account_name }}\"\n    account_type: Standard_RAGRS\n    kind: StorageV2\n    identity:\n      type: UserAssigned\n      user_assigned_identity: \"{{ managed_identity_ids[0] }}\"\n    encryption:\n      services:\n        blob:\n          enabled: true\n        file:\n          enabled: true\n      require_infrastructure_encryption: false\n      key_source: Microsoft.Keyvault\n      key_vault_properties:\n        key_vault_uri: \"https://vaultestfred001.vault.azure.net/\"\n        key_name: testkey\n        key_version: 0bd2556671c64fc998095603878beb12\n      encryption_identity:\n        encryption_user_assigned_identity: \"{{ managed_identity_ids[0] }}\"\n\n- name: Configure resource instance rules for Backup Vault and Synapse\n  azure_rm_storageaccount:\n    resource_group: myResourceGroup\n    name: mystorageacct\n    account_type: Standard_LRS\n    kind: StorageV2\n    public_network_access: Enabled\n    network_acls:\n      default_action: Deny\n      bypass: AzureServices\n      resource_access_rules:\n        - resource_id: \"/subscriptions/mySubscriptionId/resourceGroups/myResourceGroup/providers/Microsoft.DataProtection/BackupVaults/myBackupVault\"\n          tenant_id: \"myTenantId\"\n        - resource_id: \"/subscriptions/mySubscriptionId/resourceGroups/myResourceGroup/providers/Microsoft.Synapse/workspaces/mySynapseWorkspace\"\n          tenant_id: \"myTenantId\"\n\n- name: Remove all resource instance rules\n  azure_rm_storageaccount:\n    resource_group: myResourceGroup\n    name: mystorageacct\n    network_acls:\n      default_action: Deny\n      bypass: AzureServices\n      resource_access_rules: []"
+  ],
+  "return_values": [
+    {
+      "name": "state",
+      "type": "complex",
+      "description": "Current state of the storage account. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "account_type",
+      "type": "string",
+      "description": "Type of storage account. Returned: always Sample: \"Standard_RAGRS\"",
+      "returned": "always"
+    },
+    {
+      "name": "allow_blob_public_access",
+      "type": "boolean",
+      "description": "Public access to all blobs or containers in the storage account allowed or disallowed. Returned: always Sample: true",
+      "returned": "always"
+    },
+    {
+      "name": "allow_cross_tenant_replication",
+      "type": "boolean",
+      "description": "Allow or disallow cross AAD tenant object replication. Returned: always Sample: true",
+      "returned": "always"
+    },
+    {
+      "name": "allow_shared_key_access",
+      "type": "boolean",
+      "description": "Indicates whether the storage account permits requests to be authorized with the account access key via Shared Key. Returned: always Sample: true",
+      "returned": "always"
+    },
+    {
+      "name": "custom_domain",
+      "type": "complex",
+      "description": "User domain assigned to the storage account. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "CNAME source. Returned: always Sample: \"testaccount\"",
+      "returned": "always"
+    },
+    {
+      "name": "use_sub_domain",
+      "type": "boolean",
+      "description": "Whether to use sub domain. Returned: always Sample: true",
+      "returned": "always"
+    },
+    {
+      "name": "default_to_o_auth_authentication",
+      "type": "boolean",
+      "description": "A boolean flag which indicates whether the default authentication is OAuth or not. The default interpretation is false for this property. Returned: always Sample: true",
+      "returned": "always"
+    },
+    {
+      "name": "enable_nfs_v3",
+      "type": "boolean",
+      "description": "NFS 3.0 protocol. Returned: always Sample: false",
+      "returned": "always"
+    },
+    {
+      "name": "encryption",
+      "type": "complex",
+      "description": "The encryption settings on the storage account. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "encryption_identity",
+      "type": "dictionary",
+      "description": "The identity to be used with service-side encryption at rest. Returned: always Sample: {\"encryption_user_assigned_identity\": \"/subscriptions/xxxx/resourcegroups/testRG/providers/Microsoft.ManagedIdentity/userAssignedIdentities/identity-11\"}",
+      "returned": "always"
+    },
+    {
+      "name": "key_source",
+      "type": "string",
+      "description": "The encryption keySource (provider). Returned: always Sample: \"Microsoft.Storage\"",
+      "returned": "always"
+    },
+    {
+      "name": "key_vault_properties",
+      "type": "dictionary",
+      "description": "Dict of Microsoft Keyvault properties. Create the Storage account with encryption enabled with Microsoft KeyVault for CMK. Returned: always Sample: {\"key_name\": \"testkey\", \"key_vault_uri\": \"https://vxxxxxxx01.vault.azure.net/\", \"key_version\": \"0bd2556671c64fc998xxxxeb12\"}",
+      "returned": "always"
+    },
+    {
+      "name": "require_infrastructure_encryption",
+      "type": "boolean",
+      "description": "A boolean indicating whether or not the service applies a secondary layer of encryption with platform managed keys for data at rest. Returned: always Sample: false",
+      "returned": "always"
+    },
+    {
+      "name": "services",
+      "type": "dictionary",
+      "description": "List of services which support encryption. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "blob",
+      "type": "dictionary",
+      "description": "The encryption function of the blob storage service. Returned: always Sample: {\"enabled\": true}",
+      "returned": "always"
+    },
+    {
+      "name": "file",
+      "type": "dictionary",
+      "description": "The encryption function of the file storage service. Returned: always Sample: {\"enabled\": true}",
+      "returned": "always"
+    },
+    {
+      "name": "queue",
+      "type": "dictionary",
+      "description": "The encryption function of the queue storage service. Returned: always Sample: {\"enabled\": true}",
+      "returned": "always"
+    },
+    {
+      "name": "table",
+      "type": "dictionary",
+      "description": "The encryption function of the table storage service. Returned: always Sample: {\"enabled\": true}",
+      "returned": "always"
+    },
+    {
+      "name": "failover_in_progress",
+      "type": "boolean",
+      "description": "Status indicating the storage account is currently failing over to its secondary location. Returned: always Sample: false",
+      "returned": "always"
+    },
+    {
+      "name": "https_only",
+      "type": "boolean",
+      "description": "Allows https traffic only to storage service when set to true. Returned: always Sample: false",
+      "returned": "always"
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "description": "Resource ID. Returned: always Sample: \"/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/myResourceGroup/providers/Microsoft.Storage/storageAccounts/clh0003\"",
+      "returned": "always"
+    },
+    {
+      "name": "immutable_storage_with_versioning",
+      "type": "complex",
+      "description": "The property is immutable and can only be set to true at the account creation time. When set to true, it enables object level immutability for all the containers in the account by default. Returned: when-used",
+      "returned": "when"
+    },
+    {
+      "name": "enabled",
+      "type": "boolean",
+      "description": "A boolean flag which enables account-level immutability. All the containers under such an account have object-level immutability enabled by default. Returned: when-used Sample: true",
+      "returned": "when"
+    },
+    {
+      "name": "immutability_policy",
+      "type": "dictionary",
+      "description": "Specifies the default account-level immutability policy which is inherited and applied to objects that do not possess an explicit immutability policy at the object level. The object-level immutability policy has higher precedence than the container-level immutability policy, which has a higher precedence than the account-level immutability policy. Returned: when-used",
+      "returned": "when"
+    },
+    {
+      "name": "allow_protected_append_writes",
+      "type": "boolean",
+      "description": "This property can only be changed for disabled and unlocked time-based retention policies. When enabled, new blocks can be written to an append blob while maintaining immutability protection and compliance. Only new blocks can be added and any existing blocks cannot be modified or deleted. Returned: when-used Sample: true",
+      "returned": "when"
+    },
+    {
+      "name": "immutability_period_since_creation_in_days",
+      "type": "integer",
+      "description": "The immutability period for the blobs in the container since the policy creation, in days. Returned: when-used Sample: true",
+      "returned": "when"
+    },
+    {
+      "name": "is_hns_enabled",
+      "type": "boolean",
+      "description": "Account HierarchicalNamespace enabled if sets to true. Returned: always Sample: true",
+      "returned": "always"
+    },
+    {
+      "name": "large_file_shares_state",
+      "type": "string",
+      "description": "Allow large file shares if sets to Enabled. Returned: always Sample: \"Enabled\"",
+      "returned": "always"
+    },
+    {
+      "name": "location",
+      "type": "string",
+      "description": "Valid Azure location. Defaults to location of the resource group. Returned: always Sample: \"eastus2\"",
+      "returned": "always"
+    },
+    {
+      "name": "minimum_tls_version",
+      "type": "string",
+      "description": "The minimum TLS version permitted on requests to storage. Returned: always Sample: \"TLS1_2\"",
+      "returned": "always"
+    },
+    {
+      "name": "network_acls",
+      "type": "dictionary",
+      "description": "A set of firewall and virtual network rules Returned: always Sample: {\"bypass\": \"AzureServices\", \"default_action\": \"Deny\", \"ip_rules\": [{\"action\": \"Allow\", \"value\": \"1.2.3.4\"}, {\"action\": \"Allow\", \"value\": \"123.234.123.0/24\"}], \"resource_access_rules\": [{\"resource_id\": \"/subscriptions/mySubscriptionId/resourceGroups/myResourceGroup/ providers/Microsoft.DataProtection/BackupVaults/myBackupVault\", \"tenant_id\": \"myTenantId\"}], \"virtual_network_rules\": [{\"action\": \"Allow\", \"id\": \"/subscriptions/mySubscriptionId/resourceGroups/myResourceGroup/ providers/Microsoft.Network/virtualNetworks/myVnet/subnets/mySubnet\"}]}",
+      "returned": "always"
+    },
+    {
+      "name": "primary_endpoints",
+      "type": "dictionary",
+      "description": "The URLs to retrieve the public blob, queue, or table object from the primary location. Returned: always Sample: {\"blob\": \"https://clh0003.blob.core.windows.net/\", \"queue\": \"https://clh0003.queue.core.windows.net/\", \"table\": \"https://clh0003.table.core.windows.net/\"}",
+      "returned": "always"
+    },
+    {
+      "name": "primary_location",
+      "type": "string",
+      "description": "The location of the primary data center for the storage account. Returned: always Sample: \"eastus2\"",
+      "returned": "always"
+    },
+    {
+      "name": "provisioning_state",
+      "type": "string",
+      "description": "The status of the storage account. Possible values include Creating, ResolvingDNS, Succeeded. Returned: always Sample: \"Succeeded\"",
+      "returned": "always"
+    },
+    {
+      "name": "public_network_access",
+      "type": "string",
+      "description": "Public network access to Storage Account allowed or disallowed. Returned: always Sample: \"Enabled\"",
+      "returned": "always"
+    },
+    {
+      "name": "resource_group",
+      "type": "string",
+      "description": "The resource group’s name. Returned: always Sample: \"Testing\"",
+      "returned": "always"
+    },
+    {
+      "name": "secondary_endpoints",
+      "type": "dictionary",
+      "description": "The URLs to retrieve the public blob, queue, or table object from the secondary location. Returned: always Sample: {\"blob\": \"https://clh0003-secondary.blob.core.windows.net/\", \"queue\": \"https://clh0003-secondary.queue.core.windows.net/\", \"table\": \"https://clh0003-secondary.table.core.windows.net/\"}",
+      "returned": "always"
+    },
+    {
+      "name": "secondary_location",
+      "type": "string",
+      "description": "The location of the geo-replicated secondary for the storage account. Returned: always Sample: \"centralus\"",
+      "returned": "always"
+    },
+    {
+      "name": "static_website",
+      "type": "complex",
+      "description": "Static website configuration for the storage account. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "error_document404_path",
+      "type": "string",
+      "description": "The absolute path of the custom 404 page. Returned: always Sample: \"error.html\"",
+      "returned": "always"
+    },
+    {
+      "name": "index_document",
+      "type": "string",
+      "description": "The default name of the index page under each directory. Returned: always Sample: \"index.html\"",
+      "returned": "always"
+    },
+    {
+      "name": "status_of_primary",
+      "type": "string",
+      "description": "The status of the primary location of the storage account; either available or unavailable. Returned: always Sample: \"available\"",
+      "returned": "always"
+    },
+    {
+      "name": "status_of_secondary",
+      "type": "string",
+      "description": "The status of the secondary location of the storage account; either available or unavailable. Returned: always Sample: \"available\"",
+      "returned": "always"
+    },
+    {
+      "name": "tags",
+      "type": "dictionary",
+      "description": "Resource tags. Returned: always Sample: {\"tags1\": \"value1\"}",
+      "returned": "always"
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "description": "The storage account type. Returned: always Sample: \"Microsoft.Storage/storageAccounts\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_storageaccount_module.html",
+  "parsed_at": "2026-04-13T16:29:40.307464"
+}

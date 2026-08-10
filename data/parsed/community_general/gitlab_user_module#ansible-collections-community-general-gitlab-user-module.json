@@ -1,0 +1,286 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.gitlab_user",
+  "slug": "gitlab_user_module#ansible-collections-community-general-gitlab-user-module",
+  "description": "When the user does not exist in GitLab, it is created.",
+  "parameters": [
+    {
+      "name": "access_level",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"guest\" ← (default)",
+        "\"reporter\"",
+        "\"developer\"",
+        "\"master\"",
+        "\"maintainer\"",
+        "\"owner\""
+      ],
+      "description": "The access level to the group. The value master is an alias for maintainer. Choices: \"guest\" ← (default) \"reporter\" \"developer\" \"master\" \"maintainer\" \"owner\""
+    },
+    {
+      "name": "api_job_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "GitLab CI job token for logging in."
+    },
+    {
+      "name": "api_oauth_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "GitLab OAuth token for logging in."
+    },
+    {
+      "name": "api_password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The password to use for authentication against the API."
+    },
+    {
+      "name": "api_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "GitLab access token with API permissions."
+    },
+    {
+      "name": "api_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The resolvable endpoint for the API."
+    },
+    {
+      "name": "api_username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The username to use for authentication against the API."
+    },
+    {
+      "name": "ca_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The CA certificates bundle to use to verify GitLab server certificate."
+    },
+    {
+      "name": "confirm",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Require confirmation. Choices: false true ← (default)"
+    },
+    {
+      "name": "email",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The email that belongs to the user. Required only if state=present."
+    },
+    {
+      "name": "external",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Define external parameter for this user. Choices: false ← (default) true"
+    },
+    {
+      "name": "group",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "ID or Full path of parent group in the form of group/name. Add user as a member to this group."
+    },
+    {
+      "name": "identities",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of identities to be added/updated for this user. To remove all other identities from this user, set overwrite_identities=true."
+    },
+    {
+      "name": "isadmin",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Grant admin privileges to the user. Choices: false ← (default) true"
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of the user you want to create. Required only if state=present."
+    },
+    {
+      "name": "overwrite_identities",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Overwrite identities with identities added in this module. This means that all identities that the user has and that are not listed in identities are removed from the user. This is only done if a list is provided for identities. To remove all identities, provide an empty list. Choices: false ← (default) true"
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The password of the user. GitLab server enforces minimum password length to 8, set this value with 8 or more characters."
+    },
+    {
+      "name": "reset_password",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Whether the user can change its password or not. Choices: false ← (default) true"
+    },
+    {
+      "name": "sshkey_expires_at",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The expiration date of the SSH public key in ISO 8601 format YYYY-MM-DDTHH:MM:SSZ. This is only used when adding new SSH public keys."
+    },
+    {
+      "name": "sshkey_file",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The SSH public key itself."
+    },
+    {
+      "name": "sshkey_name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The name of the SSH public key."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"present\" ← (default)",
+        "\"absent\"",
+        "\"blocked\"",
+        "\"unblocked\""
+      ],
+      "description": "Create, delete or block a user. Choices: \"present\" ← (default) \"absent\" \"blocked\" \"unblocked\""
+    },
+    {
+      "name": "username",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The username of the user."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Whether or not to validate SSL certs when supplying a HTTPS endpoint. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: \"Delete GitLab User\"\n  community.general.gitlab_user:\n    api_url: https://gitlab.example.com/\n    api_token: \"{{ access_token }}\"\n    username: myusername\n    state: absent\n\n- name: \"Create GitLab User\"\n  community.general.gitlab_user:\n    api_url: https://gitlab.example.com/\n    validate_certs: true\n    api_username: dj-wasabi\n    api_password: \"MySecretPassword\"\n    name: My Name\n    username: myusername\n    password: mysecretpassword\n    email: me@example.com\n    sshkey_name: MySSH\n    sshkey_file: ssh-rsa AAAAB3NzaC1yc...\n    state: present\n    group: super_group/mon_group\n    access_level: owner\n\n- name: \"Create GitLab User using external identity provider\"\n  community.general.gitlab_user:\n    api_url: https://gitlab.example.com/\n    validate_certs: true\n    api_token: \"{{ access_token }}\"\n    name: My Name\n    username: myusername\n    password: mysecretpassword\n    email: me@example.com\n    identities:\n      - provider: Keycloak\n        extern_uid: f278f95c-12c7-4d51-996f-758cc2eb11bc\n    state: present\n    group: super_group/mon_group\n    access_level: owner\n\n- name: \"Block GitLab User\"\n  community.general.gitlab_user:\n    api_url: https://gitlab.example.com/\n    api_token: \"{{ access_token }}\"\n    username: myusername\n    state: blocked\n\n- name: \"Unblock GitLab User\"\n  community.general.gitlab_user:\n    api_url: https://gitlab.example.com/\n    api_token: \"{{ access_token }}\"\n    username: myusername\n    state: unblocked"
+  ],
+  "return_values": [
+    {
+      "name": "error",
+      "type": "string",
+      "description": "The error message returned by the GitLab API. Returned: failed Sample: \"400: path is already in use\"",
+      "returned": "failed"
+    },
+    {
+      "name": "msg",
+      "type": "string",
+      "description": "Success or failure message. Returned: always Sample: \"Success\"",
+      "returned": "always"
+    },
+    {
+      "name": "result",
+      "type": "dictionary",
+      "description": "JSON-parsed response from the server. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "user",
+      "type": "dictionary",
+      "description": "API object. Returned: always",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/gitlab_user_module.html",
+  "parsed_at": "2026-04-13T16:29:46.867221"
+}

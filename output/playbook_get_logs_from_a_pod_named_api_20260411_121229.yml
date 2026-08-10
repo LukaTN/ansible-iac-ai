@@ -1,0 +1,25 @@
+# ============================================================
+# AnsibleAI RAG Generator — LangChain + ChromaDB
+# Date        : 2026-04-11 12:12:29
+# Request     : get logs from a pod named api-server in the backend namespace
+# Module      : kubernetes.core.k8s_log
+# Collection  : kubernetes.core
+# RAG score   : 0.588
+# Chunks used : 6
+# Source URL  : https://docs.ansible.com/ansible/latest/collections/kubernetes/core/k8s_log_module.html
+# LLM model   : MISTRAL
+# ============================================================
+
+---
+- name: Get logs from api-server pod in backend namespace
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - kubernetes.core
+  tasks:
+    - name: Get logs from api-server pod
+      kubernetes.core.k8s_log:
+        api_version: v1
+        container: api-server
+        namespace: backend

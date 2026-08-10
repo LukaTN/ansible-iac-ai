@@ -1,0 +1,45 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.uptimerobot",
+  "slug": "uptimerobot_module#ansible-collections-community-general-uptimerobot-module",
+  "description": "This module lets you start and pause Uptime Robot Monitoring.",
+  "parameters": [
+    {
+      "name": "apikey",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Uptime Robot API key."
+    },
+    {
+      "name": "monitorid",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "ID of the monitor to check."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [
+        "\"started\"",
+        "\"paused\""
+      ],
+      "description": "Define whether or not the monitor should be running or paused. Choices: \"started\" \"paused\""
+    }
+  ],
+  "examples": [
+    "- name: Pause the monitor with an ID of 12345\n  community.general.uptimerobot:\n    monitorid: 12345\n    apikey: 12345-1234512345\n    state: paused\n\n- name: Start the monitor with an ID of 12345\n  community.general.uptimerobot:\n    monitorid: 12345\n    apikey: 12345-1234512345\n    state: started"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/uptimerobot_module.html",
+  "parsed_at": "2026-04-13T16:29:59.837084"
+}

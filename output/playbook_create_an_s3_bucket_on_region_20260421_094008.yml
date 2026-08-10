@@ -1,0 +1,34 @@
+---
+- name: Create an S3 bucket on region us-east-2
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - amazon.aws
+  tasks:
+    - name: Create S3 bucket
+      amazon.aws.s3_bucket:
+        name: var_name
+        state: present
+        region: us-east-2
+        mode: GOVERNANCE
+        bucket: var_bucket
+        format: ORC
+        id: var_id
+        included_object_versions: All
+        schedule: Daily
+        destination: var_destination
+        tags:
+          example: tag1
+          another: tag2
+        ceph: false
+        copy_src:
+          bucket: srcbucket
+          object: /source/key.txt
+        endpoint_url: http://your-ceph-rados-gateway-server.xxx
+        policy: "{{ lookup('file','policy.json') }}"
+        requester_pays: true
+        versioning: true
+        force: false
+        object: /my/desired/key.txt
+        prefix: 'ansible_'

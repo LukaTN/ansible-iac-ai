@@ -1,0 +1,26 @@
+# ============================================================
+# AnsibleAI RAG Generator — LangChain + ChromaDB
+# Date        : 2026-04-13 15:41:02
+# Request     : drain a kubernetes node named worker-01 for maintenance ignoring daemonsets
+# Module      : kubernetes.core.k8s_drain
+# Collection  : kubernetes.core
+# RAG score   : 0.746
+# Chunks used : 6
+# Source URL  : https://docs.ansible.com/ansible/latest/collections/kubernetes/core/k8s_drain_module#ansible-collections-kubernetes-core-k8s-drain-module.html
+# LLM model   : qwen2.5-coder:7b
+# ============================================================
+
+---
+- name: Drain Kubernetes node for maintenance
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - kubernetes.core
+  tasks:
+    - name: Drain node worker-01
+      kubernetes.core.k8s_drain:
+        state: drain
+        name: worker-01
+        delete_options:
+          force: yes

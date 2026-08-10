@@ -1,0 +1,142 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.wdc_redfish_info",
+  "slug": "wdc_redfish_info_module#ansible-collections-community-general-wdc-redfish-info-module",
+  "description": "Builds Redfish URIs locally and sends them to remote OOB controllers to get information back.",
+  "parameters": [
+    {
+      "name": "auth_token",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security token for authentication with OOB controller."
+    },
+    {
+      "name": "baseuri",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Base URI of OOB controller. Must include this or ioms."
+    },
+    {
+      "name": "ca_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "PEM formatted file that contains a CA certificate to be used for validation. Only used if validate_certs=true."
+    },
+    {
+      "name": "category",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Category to execute on OOB controller."
+    },
+    {
+      "name": "ciphers",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "TLS/SSL Ciphers to use for the request. When a list is provided, all ciphers are joined in order with :. See the OpenSSL Cipher List Format for more details. The available ciphers is dependent on the Python and OpenSSL/LibreSSL versions."
+    },
+    {
+      "name": "command",
+      "aliases": [],
+      "type": "list",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "List of commands to execute on OOB controller."
+    },
+    {
+      "name": "ioms",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of IOM FQDNs for the enclosure. Must include this or baseuri."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Password for authentication with OOB controller."
+    },
+    {
+      "name": "timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "10",
+      "choices": [],
+      "description": "Timeout in seconds for URL requests to OOB controller. Default: 10"
+    },
+    {
+      "name": "username",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "User for authentication with OOB controller."
+    },
+    {
+      "name": "validate_certs",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "If false, TLS/SSL certificates are not validated. Set this to true to enable certificate checking. Should be used together with ca_path. Choices: false ← (default) true"
+    }
+  ],
+  "examples": [
+    "- name: Get Simple Update Status with individual IOMs specified\n  community.general.wdc_redfish_info:\n    category: Update\n    command: SimpleUpdateStatus\n    ioms:\n      - iom1.wdc.com\n      - iom2.wdc.com\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n  register: result\n\n- name: Print fetched information\n  ansible.builtin.debug:\n    msg: \"{{ result.redfish_facts.simple_update_status.entries | to_nice_json }}\"\n\n- name: Get Simple Update Status with baseuri specified\n  community.general.wdc_redfish_info:\n    category: Update\n    command: SimpleUpdateStatus\n    baseuri: \"iom1.wdc.com\"\n    username: \"{{ username }}\"\n    password: \"{{ password }}\"\n  register: result\n\n- name: Print fetched information\n  ansible.builtin.debug:\n    msg: \"{{ result.redfish_facts.simple_update_status.entries | to_nice_json }}\""
+  ],
+  "return_values": [
+    {
+      "name": "Description",
+      "type": "string",
+      "description": "Firmware update status description. Returned: always Sample: \"Ready for FW update\"",
+      "returned": "always"
+    },
+    {
+      "name": "ErrorCode",
+      "type": "integer",
+      "description": "Numeric error code for firmware update status. Non-zero indicates an error condition. Returned: always Sample: 0",
+      "returned": "always"
+    },
+    {
+      "name": "EstimatedRemainingMinutes",
+      "type": "integer",
+      "description": "Estimated number of minutes remaining in firmware update operation. Returned: always Sample: 20",
+      "returned": "always"
+    },
+    {
+      "name": "StatusCode",
+      "type": "integer",
+      "description": "Firmware update status code. Returned: always Sample: 2",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/wdc_redfish_info_module.html",
+  "parsed_at": "2026-04-13T16:30:00.627835"
+}

@@ -1,0 +1,323 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.linode",
+  "slug": "linode_module#ansible-collections-community-general-linode-module",
+  "description": "Manage Linode Public Cloud instances and optionally wait for it to be ‘running’.",
+  "parameters": [
+    {
+      "name": "additional_disks",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "List of dictionaries for creating additional disks that are added to the Linode configuration settings. Dictionary takes Size, Label, Type. Size is in MB."
+    },
+    {
+      "name": "alert_bwin_enabled",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Set status of bandwidth in alerts. Choices: false true"
+    },
+    {
+      "name": "alert_bwin_threshold",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Set threshold in MB of bandwidth in alerts."
+    },
+    {
+      "name": "alert_bwout_enabled",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Set status of bandwidth out alerts. Choices: false true"
+    },
+    {
+      "name": "alert_bwout_threshold",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Set threshold in MB of bandwidth out alerts."
+    },
+    {
+      "name": "alert_bwquota_enabled",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Set status of bandwidth quota alerts as percentage of network transfer quota. Choices: false true"
+    },
+    {
+      "name": "alert_bwquota_threshold",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Set threshold in MB of bandwidth quota alerts."
+    },
+    {
+      "name": "alert_cpu_enabled",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Set status of receiving CPU usage alerts. Choices: false true"
+    },
+    {
+      "name": "alert_cpu_threshold",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Set percentage threshold for receiving CPU usage alerts. Each CPU core adds 100% to total."
+    },
+    {
+      "name": "alert_diskio_enabled",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Set status of receiving disk IO alerts. Choices: false true"
+    },
+    {
+      "name": "alert_diskio_threshold",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Set threshold for average IO ops/sec over 2 hour period."
+    },
+    {
+      "name": "api_key",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Linode API key. LINODE_API_KEY environment variable can be used instead."
+    },
+    {
+      "name": "backupweeklyday",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Day of the week to take backups."
+    },
+    {
+      "name": "backupwindow",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The time window in which backups are taken."
+    },
+    {
+      "name": "datacenter",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Datacenter to create an instance in (Linode Datacenter)."
+    },
+    {
+      "name": "displaygroup",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Add the instance to a Display Group in Linode Manager. Default: \"\""
+    },
+    {
+      "name": "distribution",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Distribution to use for the instance (Linode Distribution)."
+    },
+    {
+      "name": "kernel_id",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Kernel to use for the instance (Linode Kernel)."
+    },
+    {
+      "name": "linode_id",
+      "aliases": [
+        "lid"
+      ],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Unique ID of a Linode server. This value is read-only in the sense that if you specify it on creation of a Linode it is not used. The Linode API generates these IDs and we can those generated value here to reference a Linode more specifically. This is useful for idempotency."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name to give the instance (alphanumeric, dashes, underscore). To keep sanity on the Linode Web Console, name is prepended with LinodeID-."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Root password to apply to a new server (auto generated if missing)."
+    },
+    {
+      "name": "payment_term",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [
+        "1 ← (default)",
+        "12",
+        "24"
+      ],
+      "description": "Payment term to use for the instance (payment term in months). Choices: 1 ← (default) 12 24"
+    },
+    {
+      "name": "plan",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Plan to use for the instance (Linode plan)."
+    },
+    {
+      "name": "private_ip",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "is",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "Add private IPv4 address when Linode is created. Default is false. Choices: false true"
+    },
+    {
+      "name": "ssh_pub_key",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "SSH public key applied to root user."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"active\"",
+        "\"deleted\"",
+        "\"present\" ← (default)",
+        "\"restarted\"",
+        "\"started\"",
+        "\"stopped\""
+      ],
+      "description": "Indicate desired state of the resource. Choices: \"absent\" \"active\" \"deleted\" \"present\" ← (default) \"restarted\" \"started\" \"stopped\""
+    },
+    {
+      "name": "swap",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "512",
+      "choices": [],
+      "description": "Swap size in MB. Default: 512"
+    },
+    {
+      "name": "wait",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Wait for the instance to be in state running before returning. Choices: false true ← (default)"
+    },
+    {
+      "name": "wait_timeout",
+      "aliases": [],
+      "type": "integer",
+      "required": false,
+      "default": "300",
+      "choices": [],
+      "description": "How long before wait gives up, in seconds. Default: 300"
+    },
+    {
+      "name": "watchdog",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Set status of Lassie watchdog. Choices: false true ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Create a new Linode\n  community.general.linode:\n    name: linode-test1\n    plan: 1\n    datacenter: 7\n    distribution: 129\n    state: present\n  register: linode_creation\n\n- name: Create a server with a private IP Address\n  community.general.linode:\n    module: linode\n    api_key: 'longStringFromLinodeApi'\n    name: linode-test1\n    plan: 1\n    datacenter: 2\n    distribution: 99\n    password: 'superSecureRootPassword'\n    private_ip: true\n    ssh_pub_key: 'ssh-rsa qwerty'\n    swap: 768\n    wait: true\n    wait_timeout: 600\n    state: present\n  delegate_to: localhost\n  register: linode_creation\n\n- name: Fully configure new server\n  community.general.linode:\n    api_key: 'longStringFromLinodeApi'\n    name: linode-test1\n    plan: 4\n    datacenter: 2\n    distribution: 99\n    kernel_id: 138\n    password: 'superSecureRootPassword'\n    private_ip: true\n    ssh_pub_key: 'ssh-rsa qwerty'\n    swap: 768\n    wait: true\n    wait_timeout: 600\n    state: present\n    alert_bwquota_enabled: true\n    alert_bwquota_threshold: 80\n    alert_bwin_enabled: true\n    alert_bwin_threshold: 10\n    alert_cpu_enabled: true\n    alert_cpu_threshold: 210\n    alert_bwout_enabled: true\n    alert_bwout_threshold: 10\n    alert_diskio_enabled: true\n    alert_diskio_threshold: 10000\n    backupweeklyday: 1\n    backupwindow: 2\n    displaygroup: 'test'\n    additional_disks:\n      - {Label: 'disk1', Size: 2500, Type: 'raw'}\n      - {Label: 'newdisk', Size: 2000}\n    watchdog: true\n  delegate_to: localhost\n  register: linode_creation\n\n- name: Ensure a running server (create if missing)\n  community.general.linode:\n    api_key: 'longStringFromLinodeApi'\n    name: linode-test1\n    plan: 1\n    datacenter: 2\n    distribution: 99\n    password: 'superSecureRootPassword'\n    ssh_pub_key: 'ssh-rsa qwerty'\n    swap: 768\n    wait: true\n    wait_timeout: 600\n    state: present\n  delegate_to: localhost\n  register: linode_creation\n\n- name: Delete a server\n  community.general.linode:\n    api_key: 'longStringFromLinodeApi'\n    name: linode-test1\n    linode_id: \"{{ linode_creation.instance.id }}\"\n    state: absent\n  delegate_to: localhost\n\n- name: Stop a server\n  community.general.linode:\n    api_key: 'longStringFromLinodeApi'\n    name: linode-test1\n    linode_id: \"{{ linode_creation.instance.id }}\"\n    state: stopped\n  delegate_to: localhost\n\n- name: Reboot a server\n  community.general.linode:\n    api_key: 'longStringFromLinodeApi'\n    name: linode-test1\n    linode_id: \"{{ linode_creation.instance.id }}\"\n    state: restarted\n  delegate_to: localhost"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/linode_module.html",
+  "parsed_at": "2026-04-13T16:29:51.715217"
+}

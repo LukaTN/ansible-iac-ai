@@ -1,0 +1,48 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.swdepot",
+  "slug": "swdepot_module#ansible-collections-community-general-swdepot-module",
+  "description": "Installs, upgrades, and removes packages with swdepot package manager (HP-UX).",
+  "parameters": [
+    {
+      "name": "depot",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The source repository from which install or upgrade a package."
+    },
+    {
+      "name": "name",
+      "aliases": [
+        "pkg"
+      ],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Package name."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [
+        "\"present\"",
+        "\"latest\"",
+        "\"absent\""
+      ],
+      "description": "Whether to install (present, latest), or remove (absent) a package. Choices: \"present\" \"latest\" \"absent\""
+    }
+  ],
+  "examples": [
+    "- name: Install a package\n  community.general.swdepot:\n    name: unzip-6.0\n    state: present\n    depot: 'repository:/path'\n\n- name: Install the latest version of a package\n  community.general.swdepot:\n    name: unzip\n    state: latest\n    depot: 'repository:/path'\n\n- name: Remove a package\n  community.general.swdepot:\n    name: unzip\n    state: absent"
+  ],
+  "return_values": [],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/swdepot_module.html",
+  "parsed_at": "2026-04-13T16:29:59.294136"
+}

@@ -1,0 +1,490 @@
+{
+  "collection_ns": "azure_azcollection",
+  "collection": "azure.azcollection",
+  "module": "azure.azcollection.azure_rm_virtualmachine_info",
+  "slug": "azure_rm_virtualmachine_info_module#ansible-collections-azure-azcollection-azure-rm-virtualmachine-info-module",
+  "description": "Get facts for one or all virtual machines in a resource group.",
+  "parameters": [
+    {
+      "name": "ad_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory username. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "adfs_authority_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure AD authority url. Use when authenticating with Username/password, and has your own ADFS authority."
+    },
+    {
+      "name": "api_profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "Selects an API profile to use when communicating with Azure services. Default value of latest is appropriate for public clouds; future values will allow use with Azure Stack. Default: \"latest\""
+    },
+    {
+      "name": "auth_source",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "az",
+      "choices": [
+        "\"auto\" ← (default)",
+        "\"cli\"",
+        "\"credential_file\"",
+        "\"env\"",
+        "\"msi\""
+      ],
+      "description": "Controls the source of the credentials to use for authentication. Can also be set via the ANSIBLE_AZURE_AUTH_SOURCE environment variable. When set to auto (the default) the precedence is module parameters -> env -> credential_file -> cli. When set to env, the credentials will be read from the environment variables When set to credential_file, it will read the profile from ~/.azure/credentials. When set to cli, the credentials will be sources from the Azure CLI profile. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if more than one is present otherwise the default az cli subscription is used. When set to msi, the host machine must be an azure resource with an enabled MSI extension. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if the resource is granted access to more than one subscription, otherwise the first subscription is chosen. The msi was added in Ansible 2.6. Choices: \"auto\" ← (default) \"cli\" \"credential_file\" \"env\" \"msi\""
+    },
+    {
+      "name": "cert_validation_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ignore\"",
+        "\"validate\""
+      ],
+      "description": "Controls the certificate validation behavior for Azure endpoints. By default, all modules will validate the server certificate, but when an HTTPS proxy is in use, or against Azure Stack, it may be necessary to disable this behavior by passing ignore. Can also be set via credential file profile or the AZURE_CERT_VALIDATION environment variable. Choices: \"ignore\" \"validate\""
+    },
+    {
+      "name": "client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client ID. Use when authenticating with a Service Principal or Managed Identity (msi). Can also be set via the AZURE_CLIENT_ID environment variable."
+    },
+    {
+      "name": "cloud_environment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "AzureCloud",
+      "choices": [],
+      "description": "For cloud environments other than the US public cloud, the environment name (as defined by Azure Python SDK, eg, AzureChinaCloud, AzureUSGovernment), or a metadata discovery endpoint URL (required for Azure Stack). Can also be set via credential file profile or the AZURE_CLOUD_ENVIRONMENT environment variable. Default: \"AzureCloud\""
+    },
+    {
+      "name": "disable_instance_discovery",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Determines whether or not instance discovery is performed when attempting to authenticate. Setting this to true will completely disable both instance discovery and authority validation. This functionality is intended for use in scenarios where the metadata endpoint cannot be reached such as in private clouds or Azure Stack. The process of instance discovery entails retrieving authority metadata from https://login.microsoft.com/ to validate the authority. By setting this to **True**, the validation of the authority is disabled. As a result, it is crucial to ensure that the configured authority host is valid and trustworthy. Set via credential file profile or the AZURE_DISABLE_INSTANCE_DISCOVERY environment variable. Choices: false ← (default) true"
+    },
+    {
+      "name": "log_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "log_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of the virtual machine."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory user password. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security profile found in ~/.azure/credentials file."
+    },
+    {
+      "name": "resource_group",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of the resource group containing the virtual machines (required when filtering by vm name)."
+    },
+    {
+      "name": "secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client secret. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "subscription_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Your Azure subscription Id."
+    },
+    {
+      "name": "tags",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Limit results by providing a list of tags. Format tags as ‘key’ or ‘key:value’."
+    },
+    {
+      "name": "tenant",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure tenant ID. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "thumbprint",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The thumbprint of the private key specified in x509_certificate_path. Use when authenticating with a Service Principal. Required if x509_certificate_path is defined."
+    },
+    {
+      "name": "x509_certificate_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the X509 certificate used to create the service principal in PEM format. The certificate must be appended to the private key. Use when authenticating with a Service Principal."
+    }
+  ],
+  "examples": [
+    "- name: Get facts for all virtual machines of a resource group\n  azure_rm_virtualmachine_info:\n    resource_group: myResourceGroup\n\n- name: Get facts by name\n  azure_rm_virtualmachine_info:\n    resource_group: myResourceGroup\n    name: myVm\n\n- name: Get facts by tags\n  azure_rm_virtualmachine_info:\n    resource_group: myResourceGroup\n    tags:\n      - testing\n      - foo:bar"
+  ],
+  "return_values": [
+    {
+      "name": "vms",
+      "type": "complex",
+      "description": "List of virtual machines. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "additional_capabilities",
+      "type": "dictionary",
+      "description": "Enables or disables a capability on the virtual machine. Returned: always Sample: {\"ultra_ssd_enabled\": false}",
+      "returned": "always"
+    },
+    {
+      "name": "admin_username",
+      "type": "string",
+      "description": "Administrator user name. Returned: always Sample: \"admin\"",
+      "returned": "always"
+    },
+    {
+      "name": "boot_diagnostics",
+      "type": "complex",
+      "description": "Information about the boot diagnostics settings. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "console_screenshot_uri",
+      "type": "string",
+      "description": "Contains a URI to grab a console screenshot. Only present if enabled. Returned: always Sample: \"https://mystorageaccountname.blob.core.windows.net/bootdiagnostics-myvm01-a4db09a6-ab7f-4d80-9da8-fbceaef9288a/ myVm.a4db09a6-ab7f-4d80-9da8-fbceaef9288a.screenshot.bmp\"",
+      "returned": "always"
+    },
+    {
+      "name": "enabled",
+      "type": "boolean",
+      "description": "Indicates if boot diagnostics are enabled. Returned: always Sample: true",
+      "returned": "always"
+    },
+    {
+      "name": "serial_console_log_uri",
+      "type": "string",
+      "description": "Contains a URI to grab the serial console log. Only present if enabled. Returned: always Sample: \"https://mystorageaccountname.blob.core.windows.net/bootdiagnostics-myvm01-a4db09a6-ab7f-4d80-9da8-fbceaef9288a/ myVm.a4db09a6-ab7f-4d80-9da8-fbceaef9288a.serialconsole.log\"",
+      "returned": "always"
+    },
+    {
+      "name": "storage_uri",
+      "type": "string",
+      "description": "Indicates the storage account used by boot diagnostics. Returned: always Sample: \"https://mystorageaccountname.blob.core.windows.net/\"",
+      "returned": "always"
+    },
+    {
+      "name": "CapacityReservation",
+      "type": "dictionary",
+      "description": "The name or ID of the capacity reservation group to be associated with. Returned: always Sample: {}",
+      "returned": "always"
+    },
+    {
+      "name": "data_disks",
+      "type": "complex",
+      "description": "List of attached data disks. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "caching",
+      "type": "string",
+      "description": "Type of data disk caching. Returned: always Sample: \"ReadOnly\"",
+      "returned": "always"
+    },
+    {
+      "name": "disk_size_gb",
+      "type": "integer",
+      "description": "The initial disk size in GB for blank data disks. Returned: always Sample: 64",
+      "returned": "always"
+    },
+    {
+      "name": "lun",
+      "type": "integer",
+      "description": "The logical unit number for data disk. Returned: always Sample: 0",
+      "returned": "always"
+    },
+    {
+      "name": "managed_disk_id",
+      "type": "string",
+      "description": "Managed data disk ID. Returned: always Sample: \"/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/myResourceGroup/Microsoft.Compute/disks/diskName\"",
+      "returned": "always"
+    },
+    {
+      "name": "managed_disk_type",
+      "type": "string",
+      "description": "Managed data disk type. Returned: always Sample: \"Standard_LRS\"",
+      "returned": "always"
+    },
+    {
+      "name": "write_accelerator_enabled",
+      "type": "boolean",
+      "description": "Specifies whether writeAccelerator should be enabled or disabled on the disk. Returned: always Sample: false",
+      "returned": "always"
+    },
+    {
+      "name": "display_status",
+      "type": "string",
+      "description": "The short localizable label for the status. Returned: always Sample: \"VM running\"",
+      "returned": "always"
+    },
+    {
+      "name": "id",
+      "type": "string",
+      "description": "Resource ID. Returned: always Sample: \"/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/myResourceGroup/providers/Microsoft.Compute/virtualMachines/myVm\"",
+      "returned": "always"
+    },
+    {
+      "name": "identity",
+      "type": "dictionary",
+      "description": "The identity of the virtual machine. Returned: always Sample: {\"principal_id\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\", \"tenant_id\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\", \"type\": \"SystemAssigned, UserAssigned\", \"user_assigned_identities\": {\"/subscriptions/xxx/resourceGroups/testRG/providers/Microsoft.ManagedIdentity/userAssignedIdentities/test\": {\"client_id\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\", \"principal_id\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\"}}}",
+      "returned": "always"
+    },
+    {
+      "name": "image",
+      "type": "complex",
+      "description": "Image specification. Returned: always",
+      "returned": "always"
+    },
+    {
+      "name": "community_gallery_image_id",
+      "type": "string",
+      "description": "The community gallery image unique id for vm deployment. Returned: when created from community gallery image Sample: \"/CommunityGalleries/yellowbrick-fc7e81f1-87dd-4989-9ca8-03743762e873/Images/Ubuntu-5.15.0-1035-azure_22.04\"",
+      "returned": "when"
+    },
+    {
+      "name": "offer",
+      "type": "string",
+      "description": "The offer of the platform image or marketplace image used to create the virtual machine. Returned: when created from marketplace image Sample: \"RHEL\"",
+      "returned": "when"
+    },
+    {
+      "name": "publisher",
+      "type": "string",
+      "description": "Publisher name. Returned: when created from marketplace image Sample: \"RedHat\"",
+      "returned": "when"
+    },
+    {
+      "name": "sku",
+      "type": "string",
+      "description": "SKU name. Returned: when created from marketplace image Sample: \"7-RAW\"",
+      "returned": "when"
+    },
+    {
+      "name": "version",
+      "type": "string",
+      "description": "Image version. Returned: when created from marketplace image Sample: \"7.5.2018050901\"",
+      "returned": "when"
+    },
+    {
+      "name": "location",
+      "type": "string",
+      "description": "Resource location. Returned: always Sample: \"japaneast\"",
+      "returned": "always"
+    },
+    {
+      "name": "maintenance_redeploy_status",
+      "type": "dictionary",
+      "description": "If maintenance is scheduled for this server set to something like example, otherwise empty dict Returned: always Sample: {\"is_customer_initiated_maintenance_allowed\": true, \"last_operation_result_code\": \"None\", \"maintenance_window_end_time\": \"2025-06-18T23:59:00.000Z\", \"maintenance_window_start_time\": \"2025-06-12T00:00:00.000Z\", \"pre_maintenance_window_end_time\": \"2025-06-11T23:30:00.000Z\", \"pre_maintenance_window_start_time\": \"2025-01-30T00:00:00.000Z\"}",
+      "returned": "always"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "description": "Resource name. Returned: always Sample: \"myVm\"",
+      "returned": "always"
+    },
+    {
+      "name": "network_interface_names",
+      "type": "list",
+      "description": "List of attached network interfaces. Returned: always Sample: [\"myNetworkInterface\"]",
+      "returned": "always"
+    },
+    {
+      "name": "os_disk_caching",
+      "type": "string",
+      "description": "Type of OS disk caching. Returned: always Sample: \"ReadOnly\"",
+      "returned": "always"
+    },
+    {
+      "name": "os_type",
+      "type": "string",
+      "description": "Base type of operating system. Returned: always Sample: \"Linux\"",
+      "returned": "always"
+    },
+    {
+      "name": "power_state",
+      "type": "string",
+      "description": "Power state of the virtual machine. Returned: always Sample: \"running\"",
+      "returned": "always"
+    },
+    {
+      "name": "provisioning_state",
+      "type": "string",
+      "description": "The provisioning state, which only appears in the response. Returned: always Sample: \"running\"",
+      "returned": "always"
+    },
+    {
+      "name": "proximityPlacementGroup",
+      "type": "dictionary",
+      "description": "The name or ID of the proximity placement group the VM should be associated with. Returned: always Sample: {\"id\": \"/subscriptions/xxx/resourceGroups/xxx/providers/Microsoft.Compute/proximityPlacementGroups/testid13\"}",
+      "returned": "always"
+    },
+    {
+      "name": "resource_group",
+      "type": "string",
+      "description": "Resource group. Returned: always Sample: \"myResourceGroup\"",
+      "returned": "always"
+    },
+    {
+      "name": "security_profile",
+      "type": "complex",
+      "description": "Specifies the Security related profile settings for the virtual machine. Returned: when-used",
+      "returned": "when"
+    },
+    {
+      "name": "encryption_at_host",
+      "type": "boolean",
+      "description": "This property can be used by user in the request to enable or disable the Host Encryption for the virtual machine. This will enable the encryption for all the disks including Resource/Temp disk at host itself. Returned: when-enabled Sample: true",
+      "returned": "when"
+    },
+    {
+      "name": "security_type",
+      "type": "string",
+      "description": "Specifies the SecurityType of the virtual machine. It is set as TrustedLaunch to enable UefiSettings. Returned: when-enabled Sample: \"TrustedLaunch\"",
+      "returned": "when"
+    },
+    {
+      "name": "uefi_settings",
+      "type": "complex",
+      "description": "Specifies the security settings like secure boot and vTPM used while creating the virtual machine. Returned: when-enabled",
+      "returned": "when"
+    },
+    {
+      "name": "secure_boot_enabled",
+      "type": "boolean",
+      "description": "Specifies whether secure boot should be enabled on the virtual machine. Returned: when-enabled Sample: true",
+      "returned": "when"
+    },
+    {
+      "name": "v_tpm_enabled",
+      "type": "boolean",
+      "description": "Specifies whether vTPM should be enabled on the virtual machine. Returned: when-enabled Sample: true",
+      "returned": "when"
+    },
+    {
+      "name": "state",
+      "type": "string",
+      "description": "State of the resource. Returned: always Sample: \"present\"",
+      "returned": "always"
+    },
+    {
+      "name": "tags",
+      "type": "dictionary",
+      "description": "Resource tags. Returned: always Sample: {\"key1\": \"value1\"}",
+      "returned": "always"
+    },
+    {
+      "name": "user_data",
+      "type": "string",
+      "description": "UserData for the VM, which must be base-64 encoded. Returned: always Sample: \"None\"",
+      "returned": "always"
+    },
+    {
+      "name": "vm_agent_version",
+      "type": "string",
+      "description": "Version of the Azure VM Agent (waagent) running inside the VM. Returned: always Sample: \"2.9.1.1\"",
+      "returned": "always"
+    },
+    {
+      "name": "vm_size",
+      "type": "string",
+      "description": "Virtual machine size. Returned: always Sample: \"Standard_D4\"",
+      "returned": "always"
+    },
+    {
+      "name": "zones",
+      "type": "list",
+      "description": "A list of Availability Zones for your VM. Returned: success Sample: [1]",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_virtualmachine_info_module.html",
+  "parsed_at": "2026-04-13T16:29:41.270994"
+}

@@ -1,0 +1,15 @@
+---
+- name: Drain node "my_node" for maintenance
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - kubernetes.core
+
+  tasks:
+    - name: Drain node my_node
+      kubernetes.core.k8s_drain:
+        state: drain
+        name: my_node
+        delete_options:
+          force: yes

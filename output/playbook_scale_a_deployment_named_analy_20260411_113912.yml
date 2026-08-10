@@ -1,0 +1,28 @@
+# ============================================================
+# AnsibleAI RAG Generator — LangChain + ChromaDB
+# Date        : 2026-04-11 11:39:12
+# Request     : scale a deployment named analytics-backend to 3 replicas in the production namespace
+# Module      : kubernetes.core.k8s_scale
+# Collection  : kubernetes.core
+# RAG score   : 0.579
+# Chunks used : 6
+# Source URL  : https://docs.ansible.com/ansible/latest/collections/kubernetes/core/k8s_scale_module.html
+# LLM model   : MISTRAL
+# ============================================================
+
+---
+- name: Scale analytics-backend deployment to 3 replicas in production namespace
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - kubernetes.core
+  tasks:
+    - name: Scale analytics-backend deployment up, and extend timeout
+      kubernetes.core.k8s_scale:
+        api_version: v1
+        kind: Deployment
+        name: analytics-backend
+        namespace: production
+        replicas: 3
+        wait_timeout: 60

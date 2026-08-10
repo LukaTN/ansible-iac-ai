@@ -1,0 +1,26 @@
+# ============================================================
+# AnsibleAI RAG Generator — LangChain + ChromaDB
+# Date        : 2026-04-11 11:39:33
+# Request     : copy a configuration file from local machine to a kubernetes pod in the default namespace
+# Module      : kubernetes.core.k8s_cp
+# Collection  : kubernetes.core
+# RAG score   : 0.692
+# Chunks used : 6
+# Source URL  : https://docs.ansible.com/ansible/latest/collections/kubernetes/core/k8s_cp_module.html
+# LLM model   : MISTRAL
+# ============================================================
+
+---
+- name: Copy a configuration file from local machine to a Kubernetes pod in the default namespace
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - kubernetes.core
+  tasks:
+    - name: Copy local configuration file to Kubernetes pod
+      kubernetes.core.k8s_cp:
+        namespace: default
+        pod: <pod_name>
+        remote_path: /path/to/remote/config/file
+        local_path: /path/to/local/config/file

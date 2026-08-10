@@ -1,0 +1,70 @@
+{
+  "collection_ns": "ansible_builtin",
+  "collection": "ansible.builtin",
+  "module": "ansible.builtin.getent",
+  "slug": "getent_module#ansible-collections-ansible-builtin-getent-module",
+  "description": "Runs getent against one of its various databases and returns information into the host’s facts, in a getent_<database> prefixed variable.",
+  "parameters": [
+    {
+      "name": "database",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "The name of a getent database supported by the target system (passwd, group, hosts, etc)."
+    },
+    {
+      "name": "fail_key",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "If a supplied key is missing this will make the task fail if true. Choices: false true ← (default)"
+    },
+    {
+      "name": "key",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Key from which to return values from the specified database, otherwise the full contents are returned."
+    },
+    {
+      "name": "service",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Override all databases with the specified service The underlying system must support the service flag which is not always available."
+    },
+    {
+      "name": "split",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Character used to split the database values into lists/arrays such as : or \\t, otherwise it will try to pick one depending on the database."
+    }
+  ],
+  "examples": [
+    "- name: Get root user info\n  ansible.builtin.getent:\n    database: passwd\n    key: root\n- ansible.builtin.debug:\n    var: ansible_facts.getent_passwd\n\n- name: Get all groups\n  ansible.builtin.getent:\n    database: group\n    split: ':'\n- ansible.builtin.debug:\n    var: ansible_facts.getent_group\n\n- name: Get all hosts, split by tab\n  ansible.builtin.getent:\n    database: hosts\n- ansible.builtin.debug:\n    var: ansible_facts.getent_hosts\n\n- name: Get http service info, no error if missing\n  ansible.builtin.getent:\n    database: services\n    key: http\n    fail_key: False\n- ansible.builtin.debug:\n    var: ansible_facts.getent_services\n\n- name: Get user password hash (requires sudo/root)\n  ansible.builtin.getent:\n    database: shadow\n    key: www-data\n    split: ':'\n- ansible.builtin.debug:\n    var: ansible_facts.getent_shadow"
+  ],
+  "return_values": [
+    {
+      "name": "getent_<database>",
+      "type": "list",
+      "description": "A list of results or a single result as a list of the fields the db provides The list elements depend on the database queried, see getent man page for the structure Starting at 2.11 it now returns multiple duplicate entries, previously it only returned the last one Returned: always",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/ansible/builtin/getent_module.html",
+  "parsed_at": "2026-04-13T16:29:25.327477"
+}

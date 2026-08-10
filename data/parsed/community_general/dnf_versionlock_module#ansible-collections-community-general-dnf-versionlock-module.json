@@ -1,0 +1,75 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.dnf_versionlock",
+  "slug": "dnf_versionlock_module#ansible-collections-community-general-dnf-versionlock-module",
+  "description": "Locks package versions using the versionlock plugin in dnf based systems. This plugin takes a set of name and versions for packages and excludes all other versions of those packages. This allows you to for example protect packages from being updated by newer versions. The state of the plugin that reflects locking of packages is the locklist.",
+  "parameters": [
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "[]",
+      "choices": [],
+      "description": "Package name spec to add or exclude to or delete from the locklist using the format expected by the dnf repoquery command. This parameter is mutually exclusive with state=clean. Default: []"
+    },
+    {
+      "name": "raw",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Do not resolve package name specs to NEVRAs to find specific version to lock to. Instead the package name specs are used as they are. This enables locking to not yet available versions of the package. Choices: false ← (default) true"
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"clean\"",
+        "\"excluded\"",
+        "\"present\" ← (default)"
+      ],
+      "description": "Whether to add (present or excluded) to or remove (absent or clean) from the locklist. present adds a package name spec to the locklist. If there is a installed package that matches, then only that version is added. Otherwise, all available package versions are added. excluded adds a package name spec as excluded to the locklist. It means that packages represented by the package name spec are excluded from transaction operations. All available package versions are added. absent deletes entries in the locklist that match the package name spec. clean deletes all entries in the locklist. This option is mutually exclusive with name. Choices: \"absent\" \"clean\" \"excluded\" \"present\" ← (default)"
+    }
+  ],
+  "examples": [
+    "- name: Prevent installed nginx from being updated\n  community.general.dnf_versionlock:\n    name: nginx\n    state: present\n\n- name: Prevent multiple packages from being updated\n  community.general.dnf_versionlock:\n    name:\n      - nginx\n      - haproxy\n    state: present\n\n- name: Remove lock from nginx to be updated again\n  community.general.dnf_versionlock:\n    name: nginx\n    state: absent\n\n- name: Exclude bind 32:9.11 from installs or updates\n  community.general.dnf_versionlock:\n    name: bind-32:9.11*\n    state: excluded\n\n- name: Keep bash package in major version 4\n  community.general.dnf_versionlock:\n    name: bash-0:4.*\n    raw: true\n    state: present\n\n- name: Delete all entries in the locklist of versionlock\n  community.general.dnf_versionlock:\n    state: clean"
+  ],
+  "return_values": [
+    {
+      "name": "locklist_post",
+      "type": "list",
+      "description": "Locklist after module execution. Returned: success and (not check mode or state is clean) Sample: [\"bash-0:4.4.20-1.el8_4.*\"]",
+      "returned": "success"
+    },
+    {
+      "name": "locklist_pre",
+      "type": "list",
+      "description": "Locklist before module execution. Returned: success Sample: [\"bash-0:4.4.20-1.el8_4.*\", \"!bind-32:9.11.26-4.el8_4.*\"]",
+      "returned": "success"
+    },
+    {
+      "name": "specs_toadd",
+      "type": "list",
+      "description": "Package name specs meant to be added by versionlock. Returned: success Sample: [\"bash\"]",
+      "returned": "success"
+    },
+    {
+      "name": "specs_todelete",
+      "type": "list",
+      "description": "Package name specs meant to be deleted by versionlock. Returned: success Sample: [\"bind\"]",
+      "returned": "success"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/dnf_versionlock_module.html",
+  "parsed_at": "2026-04-13T16:29:45.207371"
+}

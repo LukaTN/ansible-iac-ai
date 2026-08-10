@@ -1,0 +1,162 @@
+[project]
+name = "ansibleai"
+version = "0.1.0"
+description = "AI-powered Ansible playbook generation with RAG and a LangGraph agent"
+requires-python = ">=3.11"
+
+# ─────────────────────────────────────────────
+#  Ruff — linting + formatting
+# ─────────────────────────────────────────────
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = [
+    "data",
+    "output",
+    "reports",
+    "raw_html",
+    ".venv",
+    "frontend",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # import sorting
+    "B",    # bugbear (likely bugs)
+    "C4",   # comprehension simplification
+    "UP",   # pyupgrade
+    "S",    # bandit security checks
+    "T20",  # flake8-print — no stray print() in application code
+    "RUF",
+]
+ignore = [
+    # The codebase aligns assignment blocks for readability (models.py,
+    # app.py); reflowing those would hurt more than it helps.
+    "E501",
+    # `assert` is idiomatic in tests.
+    "S101",
+    # subprocess use is intentional and reviewed (ansible-lint runner).
+    "S603",
+    "S607",
+    # Several modules must call load_dotenv() or extend sys.path before
+    # importing anything that reads configuration at import time, so
+    # imports legitimately appear below executable statements.
+    "E402",
+]
+
+[tool.ruff.lint.per-file-ignores]
+# The pipeline and RAG entry points are operator-facing CLI scripts where
+# printing to stdout is the interface, not a logging shortcut.
+"pipeline/*" = ["T20"]
+"rag/*" = ["T20"]
+"scripts/*" = ["T20"]
+"tests/*" = ["T20", "S105", "S106", "S108"]
+# Alembic revisions are generated from a template.
+"migrations/versions/*" = ["E402"]
+
+# ── Legacy debt, scoped per file so new code cannot inherit it ──
+# These are pre-existing patterns from before linting was introduced.
+# Each entry is a candidate for cleanup; keeping them file-scoped means
+# the rules still apply everywhere else.
+# One-off authoring scripts, not part of the application.
+"build_deck.py" = ["T20", "E701", "E702", "E401", "F841", "B007", "B008", "UP031"]
+"docs/_convert_pdf.py" = ["T20", "E701", "E702", "S110"]
+# `zip()` call sites are equal-length by construction; `l` is used as a
+# short loop variable; defensive `except: pass` blocks are intentional.
+"agent/graph.py" = ["S110"]
+"agent/playbook_generator.py" = ["B905"]
+"agent/tools.py" = ["B905", "E741"]
+"app.py" = ["S110"]
+"rag/evaluator.py" = ["B905", "E741", "RUF059"]
+"rag/generator.py" = ["B905", "E741"]
+"rag/indexer.py" = ["B905", "S110", "RUF013"]
+"rag/pipeline.py" = ["RUF013", "RUF059"]
+"rag/retrieval_utils.py" = ["B905"]
+"rag/retriever.py" = ["RUF046"]
+"pipeline/phase2_parser.py" = ["RUF001"]
+"pipeline/validator.py" = ["RUF005", "RUF013"]
+"tests/e2e/layers.py" = ["RUF046", "B905"]
+"scripts/trace_query.py" = ["B905", "S110"]
+
+[tool.ruff.lint.isort]
+known-first-party = [
+    "agent",
+    "auth",
+    "config",
+    "logging_setup",
+    "models",
+    "pipeline",
+    "rag",
+    "scripts",
+]
+
+# ─────────────────────────────────────────────
+#  mypy — gradual typing
+# ─────────────────────────────────────────────
+[tool.mypy]
+python_version = "3.11"
+warn_unused_configs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+no_implicit_optional = true
+check_untyped_defs = true
+ignore_missing_imports = true
+exclude = [
+    "^data/",
+    "^output/",
+    "^frontend/",
+    "^migrations/versions/",
+    "^\\.venv/",
+]
+
+# The newly written modules are fully typed and held to a higher bar.
+# The pre-existing pipeline/RAG code is checked loosely for now; tightening
+# it is incremental work, not a Phase 0 blocker.
+[[tool.mypy.overrides]]
+module = ["config", "logging_setup", "auth.*"]
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+
+# `follow_imports = silent` means these are still analysed well enough to
+# type the modules that import them, but their own errors are not reported.
+# Cleaning them up is tracked work; failing the commit hook on inherited
+# errors would just teach everyone to pass --no-verify.
+[[tool.mypy.overrides]]
+module = ["pipeline.*", "rag.*", "agent.*", "tests.*", "scripts.*"]
+check_untyped_defs = false
+follow_imports = "silent"
+
+# Flask-SQLAlchemy builds `db.Model` at runtime, so mypy cannot see it as a
+# base class. Declarative models are exercised by the test suite instead.
+[[tool.mypy.overrides]]
+module = ["models"]
+disable_error_code = ["name-defined", "attr-defined", "var-annotated"]
+
+# Installed but unstubbed; only touched through Flask-Session's backend.
+[[tool.mypy.overrides]]
+module = ["redis", "redis.*"]
+ignore_missing_imports = true
+
+# mypy crashes serializing polars._utils.constants ("Integer exceeds 64-bit
+# range") while writing its cache, which takes down any run that reaches
+# polars transitively. Nothing here is typed against polars, so skip it.
+[[tool.mypy.overrides]]
+module = ["polars", "polars.*"]
+follow_imports = "skip"
+
+# ─────────────────────────────────────────────
+#  pytest
+# ─────────────────────────────────────────────
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+markers = [
+    "e2e: end-to-end test requiring a running app and LLM (opt in with E2E_RUN=1)",
+    "slow: takes more than a few seconds",
+]
+filterwarnings = [
+    "ignore::DeprecationWarning:pkg_resources.*",
+]

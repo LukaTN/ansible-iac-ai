@@ -1,0 +1,33 @@
+{
+  "collection_ns": "community_general",
+  "collection": "community.general",
+  "module": "community.general.atomic_host",
+  "slug": "atomic_host_module#ansible-collections-community-general-atomic-host-module",
+  "description": "Manage the atomic host platform.",
+  "parameters": [
+    {
+      "name": "revision",
+      "aliases": [
+        "version"
+      ],
+      "type": "string",
+      "required": false,
+      "default": "latest",
+      "choices": [],
+      "description": "The version number of the atomic host to be deployed. Providing latest will upgrade to the latest available version. Default: \"latest\""
+    }
+  ],
+  "examples": [
+    "- name: Upgrade the atomic host platform to the latest version (atomic host upgrade)\n  community.general.atomic_host:\n    revision: latest\n\n- name: Deploy a specific revision as the atomic host (atomic host deploy 23.130)\n  community.general.atomic_host:\n    revision: 23.130"
+  ],
+  "return_values": [
+    {
+      "name": "msg",
+      "type": "string",
+      "description": "The command standard output. Returned: always Sample: \"Already on latest\"",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/community/general/atomic_host_module.html",
+  "parsed_at": "2026-04-13T16:29:43.522263"
+}

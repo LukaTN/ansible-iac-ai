@@ -1,0 +1,406 @@
+{
+  "collection_ns": "azure_azcollection",
+  "collection": "azure.azcollection",
+  "module": "azure.azcollection.azure_rm_aks",
+  "slug": "azure_rm_aks_module#ansible-collections-azure-azcollection-azure-rm-aks-module",
+  "description": "Create, update and delete a managed Azure Container Service (AKS) instance.",
+  "parameters": [
+    {
+      "name": "aad_profile",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Profile of Azure Active Directory configuration."
+    },
+    {
+      "name": "ad_user",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory username. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "addon",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Profile of managed cluster add-on. Key can be http_application_routing, monitoring, virtual_node and azure_keyvault_secrets_provider. Value must be a dict contains a bool variable enabled."
+    },
+    {
+      "name": "adfs_authority_url",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure AD authority url. Use when authenticating with Username/password, and has your own ADFS authority."
+    },
+    {
+      "name": "agent_pool_profiles",
+      "aliases": [],
+      "type": "list",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The agent pool profile suboptions."
+    },
+    {
+      "name": "api_profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "value",
+      "choices": [],
+      "description": "Selects an API profile to use when communicating with Azure services. Default value of latest is appropriate for public clouds; future values will allow use with Azure Stack. Default: \"latest\""
+    },
+    {
+      "name": "api_server_access_profile",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Profile of API Access configuration."
+    },
+    {
+      "name": "append_tags",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true ← (default)"
+      ],
+      "description": "Use to control if tags field is canonical or just appends to existing tags. When canonical, any tags not found in the tags parameter will be removed from the object’s metadata. Choices: false true ← (default)"
+    },
+    {
+      "name": "auth_source",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "az",
+      "choices": [
+        "\"auto\" ← (default)",
+        "\"cli\"",
+        "\"credential_file\"",
+        "\"env\"",
+        "\"msi\""
+      ],
+      "description": "Controls the source of the credentials to use for authentication. Can also be set via the ANSIBLE_AZURE_AUTH_SOURCE environment variable. When set to auto (the default) the precedence is module parameters -> env -> credential_file -> cli. When set to env, the credentials will be read from the environment variables When set to credential_file, it will read the profile from ~/.azure/credentials. When set to cli, the credentials will be sources from the Azure CLI profile. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if more than one is present otherwise the default az cli subscription is used. When set to msi, the host machine must be an azure resource with an enabled MSI extension. subscription_id or the environment variable AZURE_SUBSCRIPTION_ID can be used to identify the subscription ID if the resource is granted access to more than one subscription, otherwise the first subscription is chosen. The msi was added in Ansible 2.6. Choices: \"auto\" ← (default) \"cli\" \"credential_file\" \"env\" \"msi\""
+    },
+    {
+      "name": "auto_upgrade_profile",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Auto upgrade profile for a managed cluster."
+    },
+    {
+      "name": "cert_validation_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"ignore\"",
+        "\"validate\""
+      ],
+      "description": "Controls the certificate validation behavior for Azure endpoints. By default, all modules will validate the server certificate, but when an HTTPS proxy is in use, or against Azure Stack, it may be necessary to disable this behavior by passing ignore. Can also be set via credential file profile or the AZURE_CERT_VALIDATION environment variable. Choices: \"ignore\" \"validate\""
+    },
+    {
+      "name": "client_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client ID. Use when authenticating with a Service Principal or Managed Identity (msi). Can also be set via the AZURE_CLIENT_ID environment variable."
+    },
+    {
+      "name": "cloud_environment",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "AzureCloud",
+      "choices": [],
+      "description": "For cloud environments other than the US public cloud, the environment name (as defined by Azure Python SDK, eg, AzureChinaCloud, AzureUSGovernment), or a metadata discovery endpoint URL (required for Azure Stack). Can also be set via credential file profile or the AZURE_CLOUD_ENVIRONMENT environment variable. Default: \"AzureCloud\""
+    },
+    {
+      "name": "disable_instance_discovery",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Determines whether or not instance discovery is performed when attempting to authenticate. Setting this to true will completely disable both instance discovery and authority validation. This functionality is intended for use in scenarios where the metadata endpoint cannot be reached such as in private clouds or Azure Stack. The process of instance discovery entails retrieving authority metadata from https://login.microsoft.com/ to validate the authority. By setting this to **True**, the validation of the authority is disabled. As a result, it is crucial to ensure that the configured authority host is valid and trustworthy. Set via credential file profile or the AZURE_DISABLE_INSTANCE_DISCOVERY environment variable. Choices: false ← (default) true"
+    },
+    {
+      "name": "disable_local_accounts",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false",
+        "true"
+      ],
+      "description": "If set to true, getting static credentials will be disabled for this cluster. This must only be used on Managed Clusters that are AAD enabled. Choices: false true"
+    },
+    {
+      "name": "dns_prefix",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "DNS prefix specified when creating the managed cluster."
+    },
+    {
+      "name": "enable_rbac",
+      "aliases": [],
+      "type": "boolean",
+      "required": false,
+      "default": "",
+      "choices": [
+        "false ← (default)",
+        "true"
+      ],
+      "description": "Enable RBAC. Existing non-RBAC enabled AKS clusters cannot currently be updated for RBAC use. Choices: false ← (default) true"
+    },
+    {
+      "name": "identity",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Identity for the Server."
+    },
+    {
+      "name": "kubernetes_version",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Version of Kubernetes specified when creating the managed cluster."
+    },
+    {
+      "name": "linux_profile",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The Linux profile suboptions. Optional, provide if you need an ssh access to the cluster nodes."
+    },
+    {
+      "name": "location",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Valid azure location. Defaults to location of the resource group."
+    },
+    {
+      "name": "log_mode",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "log_path",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Parent argument."
+    },
+    {
+      "name": "name",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of the managed Azure Container Services (AKS) instance."
+    },
+    {
+      "name": "network_profile",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Profile of network configuration."
+    },
+    {
+      "name": "node_resource_group",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Name of the resource group containing agent pool nodes. Unable to update."
+    },
+    {
+      "name": "password",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Active Directory user password. Use when authenticating with an Active Directory user rather than service principal."
+    },
+    {
+      "name": "pod_identity_profile",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Config pod identities in managed Kubernetes cluster."
+    },
+    {
+      "name": "profile",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security profile found in ~/.azure/credentials file."
+    },
+    {
+      "name": "resource_group",
+      "aliases": [],
+      "type": "string",
+      "required": true,
+      "default": "",
+      "choices": [],
+      "description": "Name of a resource group where the managed Azure Container Services (AKS) exists or will be created."
+    },
+    {
+      "name": "secret",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure client secret. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "security_profile",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Security profile for the container service cluster."
+    },
+    {
+      "name": "service_principal",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The service principal suboptions."
+    },
+    {
+      "name": "state",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [
+        "\"absent\"",
+        "\"present\" ← (default)"
+      ],
+      "description": "Assert the state of the AKS. Use present to create or update an AKS and absent to delete it. Choices: \"absent\" \"present\" ← (default)"
+    },
+    {
+      "name": "subscription_id",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Your Azure subscription Id."
+    },
+    {
+      "name": "tags",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Dictionary of string:string pairs to assign as metadata to the object. Metadata tags on the object will be updated with any provided values. To remove tags set append_tags option to false. Currently, Azure DNS zones and Traffic Manager services also don’t allow the use of spaces in the tag. Azure Front Door doesn’t support the use of Azure Automation and Azure CDN only support 15 tags on resources."
+    },
+    {
+      "name": "tenant",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Azure tenant ID. Use when authenticating with a Service Principal."
+    },
+    {
+      "name": "thumbprint",
+      "aliases": [],
+      "type": "string",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The thumbprint of the private key specified in x509_certificate_path. Use when authenticating with a Service Principal. Required if x509_certificate_path is defined."
+    },
+    {
+      "name": "windows_profile",
+      "aliases": [],
+      "type": "dictionary",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "The Windows profile suboptions."
+    },
+    {
+      "name": "x509_certificate_path",
+      "aliases": [],
+      "type": "path",
+      "required": false,
+      "default": "",
+      "choices": [],
+      "description": "Path to the X509 certificate used to create the service principal in PEM format. The certificate must be appended to the private key. Use when authenticating with a Service Principal."
+    }
+  ],
+  "examples": [
+    "- name: Create an AKS instance With A System Node Pool & A User Node Pool\n  azure_rm_aks:\n    name: myAKS\n    resource_group: myResourceGroup\n    location: eastus\n    dns_prefix: akstest\n    kubernetes_version: 1.14.6\n    linux_profile:\n      admin_username: azureuser\n      ssh_key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAA...\n    service_principal:\n      client_id: \"cf72ca99-f6b9-4004-b0e0-bee10c521948\"\n      client_secret: \"Password1234!\"\n    agent_pool_profiles:\n      - name: default\n        count: 1\n        vm_size: Standard_B2s\n        enable_auto_scaling: true\n        type: VirtualMachineScaleSets\n        mode: System\n        max_count: 3\n        min_count: 1\n        enable_rbac: true\n        tags:\n          key1: value1\n      - name: user\n        count: 1\n        vm_size: Standard_D2_v2\n        enable_auto_scaling: true\n        type: VirtualMachineScaleSets\n        mode: User\n        max_count: 3\n        min_count: 1\n        enable_rbac: true\n\n- name: Create a managed Azure Container Services (AKS) instance\n  azure_rm_aks:\n    name: myAKS\n    location: eastus\n    resource_group: myResourceGroup\n    dns_prefix: akstest\n    kubernetes_version: 1.14.6\n    linux_profile:\n      admin_username: azureuser\n      ssh_key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAA...\n    service_principal:\n      client_id: \"cf72ca99-f6b9-4004-b0e0-bee10c521948\"\n      client_secret: \"Password123!\"\n    agent_pool_profiles:\n      - name: default\n        count: 5\n        mode: System\n        vm_size: Standard_B2s\n    tags:\n      Environment: Production\n\n- name: Use minimal parameters and system-assigned identity\n  azure_rm_aks:\n    name: myMinimalCluster\n    location: eastus\n    resource_group: myExistingResourceGroup\n    dns_prefix: akstest\n    agent_pool_profiles:\n      - name: default\n        count: 1\n        vm_size: Standard_D2_v2\n\n- name: Create AKS with userDefinedRouting \"Link:https://docs.microsoft.com/en-us/azure/aks/limit-egress-traffic#add-a-dnat-rule-to-azure-firewall\"\n  azure_rm_aks:\n    name: \"minimal{{ rpfx }}\"\n    location: eastus\n    resource_group: \"{{ resource_group }}\"\n    kubernetes_version: \"{{ versions.azure_aks_versions[0] }}\"\n    dns_prefix: \"aks{{ rpfx }}\"\n    service_principal:\n      client_id: \"{{ client_id }}\"\n      client_secret: \"{{ client_secret }}\"\n    network_profile:\n      network_plugin: azure\n      load_balancer_sku: standard\n      outbound_type: userDefinedRouting\n      service_cidr: \"10.41.0.0/16\"\n      dns_service_ip: \"10.41.0.10\"\n    api_server_access_profile:\n      authorized_ip_ranges:\n        - \"20.106.246.252/32\"\n      enable_private_cluster: false\n    agent_pool_profiles:\n      - name: default\n        count: 1\n        vm_size: Standard_B2s\n        mode: System\n        vnet_subnet_id: \"{{ output.subnets[0].id }}\"\n        type: VirtualMachineScaleSets\n        enable_auto_scaling: false\n\n- name: Create an AKS instance wit pod_identity_profile settings\n  azure_rm_aks:\n    name: \"aks{{ rpfx }}\"\n    resource_group: \"{{ resource_group }}\"\n    location: eastus\n    dns_prefix: \"aks{{ rpfx }}\"\n    kubernetes_version: \"{{ versions.azure_aks_versions[0] }}\"\n    service_principal:\n      client_id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\n      client_secret: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\n    linux_profile:\n      admin_username: azureuser\n      ssh_key: ssh-rsa AAAAB3Ip6***************\n    agent_pool_profiles:\n      - name: default\n        count: 1\n        vm_size: Standard_B2s\n        type: VirtualMachineScaleSets\n        mode: System\n        node_labels: {\"release\":\"stable\"}\n        max_pods: 42\n        availability_zones:\n          - 1\n          - 2\n    node_resource_group: \"node{{ noderpfx }}\"\n    enable_rbac: true\n    network_profile:\n      load_balancer_sku: standard\n    pod_identity_profile:\n      enabled: false\n      allow_network_plugin_kubenet: false\n      user_assigned_identities:\n        - name: fredtest\n          namespace: fredtest\n          binding_selector: test\n          identity:\n            client_id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\n            object_id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\n\n- name: Create a kubernet service with I(os_type=Windows)\n  azure_rm_aks:\n    name: myaks02\n    location: eastus\n    resource_group: \"{{ resource_group }}\"\n    kubernetes_version: \"{{ versions }}\"\n    dns_prefix: \"aks_dns\"\n    enable_rbac: true\n    windows_profile:\n      admin_username: azureuser\n      admin_password: Password@0329\n      gmsa_profile:\n        enabled: true\n    aad_profile:\n      managed: true\n    agent_pool_profiles:\n      - name: default\n        count: 1\n        vm_size: Standard_D8ds_v5\n        mode: System\n        os_type: Linux\n        os_sku: Ubuntu\n      - name: def\n        count: 1\n        vm_size: Standard_D2as_v4\n        mode: User\n        os_type: Windows\n        os_sku: Windows2022\n    api_server_access_profile:\n      authorized_ip_ranges:\n        - \"192.0.2.0\"\n        - \"198.51.100.0\"\n        - \"203.0.113.0\"\n      enable_private_cluster: false\n    network_profile:\n      load_balancer_sku: standard\n      network_plugin: azure\n      outbound_type: loadBalancer\n\n- name: Create an AKS instance with a Spot user node pool\n  azure_rm_aks:\n    name: myAKSWithSpot\n    resource_group: myResourceGroup\n    location: eastus\n    dns_prefix: aksspot\n    kubernetes_version: 1.28.5\n    linux_profile:\n      admin_username: azureuser\n      ssh_key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAA...\n    service_principal:\n      client_id: \"cf72ca99-f6b9-4004-b0e0-bee10c521948\"\n      client_secret: \"Password1234!\"\n    enable_rbac: true\n    agent_pool_profiles:\n      - name: systempool\n        count: 1\n        vm_size: Standard_B2s\n        mode: System\n      - name: spotpool\n        count: 2\n        vm_size: Standard_D2_v2\n        mode: User\n        scale_set_priority: Spot\n        scale_set_eviction_policy: Deallocate\n        spot_max_price: -1\n        enable_auto_scaling: true\n        min_count: 1\n        max_count: 5\n\n- name: Remove a managed Azure Container Services (AKS) instance\n  azure_rm_aks:\n    name: myAKS\n    resource_group: myResourceGroup\n    state: absent"
+  ],
+  "return_values": [
+    {
+      "name": "state",
+      "type": "dictionary",
+      "description": "Current state of the Azure Container Service (AKS). Returned: always Sample: {\"addon\": {\"azure_keyvault_secrets_provider\": {\"enabled\": true}, \"http_application_routing\": {\"enabled\": false}, \"monitoring\": null, \"virtual_node\": null}, \"agent_pool_profiles\": [{\"count\": 1, \"dns_prefix\": null, \"moode\": \"System\", \"name\": \"default\", \"node_labels\": {\"environment\": \"dev\", \"release\": \"stable\"}, \"os_disk_size_gb\": null, \"os_sku\": \"Ubuntu\", \"os_type\": \"Linux\", \"ports\": null, \"security_profile\": {\"enable_secure_boot\": true, \"enable_vtpm\": false}, \"storage_profile\": \"ManagedDisks\", \"vm_size\": \"Standard_B2s\", \"vnet_subnet_id\": null}], \"auto_upgrade_profile\": {\"node_os_upgrade_channel\": \"NodeImage\", \"upgrade_channel\": \"patch\"}, \"changed\": false, \"disable_local_accounts\": true, \"dns_prefix\": \"aks9860bdcd89\", \"id\": \"/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourcegroups/myResourceGroup/providers/Microsoft.ContainerService/managedClusters/aks9860bdc\", \"identity\": {\"type\": \"UserAssigned\", \"user_assigned_identities\": {}}, \"kube_config\": [\"......\"], \"kubernetes_version\": \"1.14.6\", \"linux_profile\": {\"admin_username\": \"azureuser\", \"ssh_key\": \"ssh-rsa AAAAB3NzaC1yc2EAAAADA.....\"}, \"location\": \"eastus\", \"name\": \"aks9860bdc\", \"pod_identity_profile\": {\"allow_network_plugin_kubenet\": false, \"user_assigned_identities\": [{\"binding_selector\": \"test\", \"identity\": {\"client_id\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\", \"object_id\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\\\"\"}, \"name\": \"fredtest\", \"namespace\": \"fredtest\", \"provisioning_state\": \"Updating\"}]}, \"provisioning_state\": \"Succeeded\", \"security_profile\": {\"defender\": {\"log_analytics_workspace_resource_id\": \"/subscriptions/xxx/resourceGroups/rg/providers/Microsoft.OperationalInsights/workspaces/fred01\", \"security_monitoring\": {\"enabled\": true}}, \"image_cleaner\": {\"enabled\": false, \"interval_hours\": 38}}, \"service_principal_profile\": {\"client_id\": \"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx\"}, \"tags\": {}, \"type\": \"Microsoft.ContainerService/ManagedClusters\", \"windows_profile\": \"None\"}",
+      "returned": "always"
+    }
+  ],
+  "source_url": "https://docs.ansible.com/ansible/latest/collections/azure/azcollection/azure_rm_aks_module.html",
+  "parsed_at": "2026-04-13T16:29:27.640450"
+}

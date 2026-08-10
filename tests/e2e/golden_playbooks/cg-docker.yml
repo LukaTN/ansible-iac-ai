@@ -1,0 +1,13 @@
+---
+- name: Run nginx container on port 8080
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Ensure nginx container is running
+      community.general.docker_container:
+        name: nginx
+        image: nginx:stable
+        state: started
+        published_ports:
+          - "8080:80"
