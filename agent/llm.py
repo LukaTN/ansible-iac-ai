@@ -28,12 +28,16 @@ from __future__ import annotations
 
 import os
 import time
-import json
+
 import requests
 from dotenv import load_dotenv
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 load_dotenv(os.path.join(PROJECT_ROOT, ".env"))
+
+from logging_setup import get_logger
+
+log = get_logger(__name__)
 
 
 # ─────────────────────────────────────────────
@@ -48,13 +52,18 @@ OPENROUTER_BASE_URL = os.getenv("OPENROUTER_BASE_URL", "https://openrouter.ai/ap
 
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434").rstrip("/")
 
+# How long Ollama holds the weights in memory after a call. The default of
+# 5 minutes means an idle user pays a full cold load (45 s for a 12B on a
+# 6 GB card) on their next message. Use "-1" to pin the model permanently.
+OLLAMA_KEEP_ALIVE = (os.getenv("OLLAMA_KEEP_ALIVE") or "30m").strip()
+
 REFERER  = os.getenv("OPENROUTER_REFERER",  "http://localhost:5000")
 APP_NAME = os.getenv("OPENROUTER_APP_NAME", "AnsibleAI")
 
 # Ask responses to be shorter by default; planner/synthesizer override this as needed.
 DEFAULT_MAX_TOKENS = 900
 
-REQUEST_TIMEOUT = 120
+REQUEST_TIMEOUT = int(os.getenv("AGENT_REQUEST_TIMEOUT", "300"))
 
 # ── Fallback chain for OpenRouter ──────────────────────────────────
 #
@@ -111,27 +120,73 @@ def chat(
     `system` : optional system message.
     `expect_json` : hints the provider to return JSON (when supported).
     """
+    # Cooperative cancel: stop before starting a long LLM round-trip.
+    from .cancel import check as check_cancelled
+    check_cancelled()
+
     provider = PROVIDER
     model    = (model or AGENT_MODEL).strip()
+    t0 = time.perf_counter()
+    status = "ok"
+    content: str | None = None
+    usage: dict[str, int | None] | None = None
 
-    if provider == "openrouter":
-        if not OPENROUTER_API_KEY:
-            raise LLMError(
-                "OPENROUTER_API_KEY is not set. Add it to your .env or set "
-                "AGENT_LLM_PROVIDER=ollama to use a local model instead."
+    try:
+        if provider == "openrouter":
+            if not OPENROUTER_API_KEY:
+                raise LLMError(
+                    "OPENROUTER_API_KEY is not set. Add it to your .env or set "
+                    "AGENT_LLM_PROVIDER=ollama to use a local model instead."
+                )
+            content, usage = _call_openrouter_with_fallback(
+                prompt, system=system, temperature=temperature,
+                max_tokens=max_tokens, primary_model=model, expect_json=expect_json,
             )
-        return _call_openrouter_with_fallback(
-            prompt, system=system, temperature=temperature,
-            max_tokens=max_tokens, primary_model=model, expect_json=expect_json,
-        )
+            return content
 
-    if provider == "ollama":
-        return _call_ollama(
-            prompt, system=system, temperature=temperature,
-            max_tokens=max_tokens, model=model,
-        )
+        if provider == "ollama":
+            content, usage = _call_ollama(
+                prompt, system=system, temperature=temperature,
+                max_tokens=max_tokens, model=model,
+            )
+            return content
 
-    raise LLMError(f"Unknown AGENT_LLM_PROVIDER: {provider!r}")
+        raise LLMError(f"Unknown AGENT_LLM_PROVIDER: {provider!r}")
+    except Exception:
+        status = "error"
+        raise
+    finally:
+        duration_s = time.perf_counter() - t0
+        try:
+            from observability.metrics import record_llm_call
+            from observability.tracing import observe_llm_call
+
+            prompt_tokens = (usage or {}).get("input") if usage else None
+            completion_tokens = (usage or {}).get("output") if usage else None
+            record_llm_call(
+                provider=provider,
+                model=model,
+                status=status,
+                duration_s=duration_s,
+                prompt_tokens=prompt_tokens,
+                completion_tokens=completion_tokens,
+            )
+            observe_llm_call(
+                model=model,
+                provider=provider,
+                prompt=prompt,
+                system=system,
+                output=content,
+                duration_s=duration_s,
+                status=status,
+                usage={
+                    k: int(v)
+                    for k, v in (usage or {}).items()
+                    if v is not None
+                } or None,
+            )
+        except Exception:  # noqa: BLE001
+            pass
 
 
 # ─────────────────────────────────────────────
@@ -154,7 +209,7 @@ def _build_model_chain(primary: str) -> list[str]:
 def _call_openrouter_with_fallback(
     prompt: str, *, system: str | None, temperature: float,
     max_tokens: int, primary_model: str, expect_json: bool,
-) -> str:
+) -> tuple[str, dict[str, int | None]]:
     """
     Try the primary model first. On transient failure (429 / 5xx / network),
     walk the configured fallback chain. If EVERY model fails, raise LLMError
@@ -168,14 +223,14 @@ def _call_openrouter_with_fallback(
             if idx > 0:
                 # Brief backoff between provider switches.
                 time.sleep(min(1.0 * idx, 3.0))
-                print(f"  [Agent] LLM fallback -> {model}")
+                log.warning("agent.llm.fallback", model=model, attempt=idx + 1)
             return _call_openrouter_once(
                 prompt, system=system, temperature=temperature,
                 max_tokens=max_tokens, model=model, expect_json=expect_json,
             )
         except _TransientLLMError as e:
             last_error = str(e)
-            print(f"  [Agent] LLM model {model} transient error: {e}")
+            log.warning("agent.llm.transient_error", model=model, error=str(e))
             continue
         except LLMError:
             # Non-transient (auth, bad request, etc.) — don't retry elsewhere.
@@ -211,7 +266,7 @@ def _supports_system_message(model: str) -> bool:
 def _call_openrouter_once(
     prompt: str, *, system: str | None, temperature: float,
     max_tokens: int, model: str, expect_json: bool,
-) -> str:
+) -> tuple[str, dict[str, int | None]]:
     messages: list[dict] = []
     if system and _supports_system_message(model):
         messages.append({"role": "system", "content": system})
@@ -273,7 +328,12 @@ def _call_openrouter_once(
     if not content:
         raise _TransientLLMError("empty response body")
 
-    return content
+    usage = data.get("usage") or {}
+    return content, {
+        "input": usage.get("prompt_tokens"),
+        "output": usage.get("completion_tokens"),
+        "total": usage.get("total_tokens"),
+    }
 
 
 # ─────────────────────────────────────────────
@@ -283,32 +343,58 @@ def _call_openrouter_once(
 def _call_ollama(
     prompt: str, *, system: str | None, temperature: float,
     max_tokens: int, model: str,
-) -> str:
+) -> tuple[str, dict[str, int | None]]:
     payload = {
-        "model"  : model,
-        "prompt" : prompt,
-        "system" : system or "",
-        "stream" : False,
-        "options": {
+        "model"     : model,
+        "prompt"    : prompt,
+        "system"    : system or "",
+        "stream"    : False,
+        "keep_alive": OLLAMA_KEEP_ALIVE,
+        "options"   : {
             "temperature": temperature,
             "num_predict": max_tokens,
         },
     }
     try:
+        log.info(
+            "agent.llm.ollama.request",
+            model=model,
+            max_tokens=max_tokens,
+            timeout=REQUEST_TIMEOUT,
+            prompt_chars=len(prompt),
+        )
+        # Celery prefork children often hide structlog; this line is what
+        # shows up in `docker compose logs worker` while a call is in flight.
+        print(
+            f"[ollama] calling {model} (timeout={REQUEST_TIMEOUT}s) …",
+            flush=True,
+        )
+        started = time.perf_counter()
         r = requests.post(
             f"{OLLAMA_BASE_URL}/api/generate",
             json=payload, timeout=REQUEST_TIMEOUT,
         )
+        print(
+            f"[ollama] {model} -> HTTP {r.status_code} in {time.perf_counter() - started:.1f}s",
+            flush=True,
+        )
     except requests.RequestException as e:
+        print(f"[ollama] {model} FAILED: {e}", flush=True)
         raise LLMError(f"Ollama request failed: {e}") from e
 
     if r.status_code >= 400:
         raise LLMError(f"Ollama {r.status_code}: {r.text[:300]}")
 
     try:
-        return (r.json().get("response") or "").strip()
+        data = r.json()
+        content = (data.get("response") or "").strip()
     except ValueError as e:
         raise LLMError(f"Ollama returned invalid JSON: {e}") from e
+
+    return content, {
+        "input": data.get("prompt_eval_count"),
+        "output": data.get("eval_count"),
+    }
 
 
 # ─────────────────────────────────────────────
@@ -323,4 +409,43 @@ def current_config() -> dict:
         "fallbacks": list(AGENT_FALLBACK_MODELS) if PROVIDER == "openrouter" else [],
         "has_key"  : bool(OPENROUTER_API_KEY) if PROVIDER == "openrouter" else True,
         "base_url" : OPENROUTER_BASE_URL if PROVIDER == "openrouter" else OLLAMA_BASE_URL,
+        "keep_alive": OLLAMA_KEEP_ALIVE if PROVIDER == "ollama" else None,
     }
+
+
+def warm_up(timeout: float = 120.0) -> dict:
+    """
+    Load the agent + playbook models into memory ahead of the first request.
+
+    Ollama loads weights lazily, so without this the first user of the day
+    waits out the cold load inside their own request. No-op for remote
+    providers, and never raises — a failed warm-up just means the first
+    request pays the usual price.
+    """
+    if PROVIDER != "ollama":
+        return {"warmed": [], "skipped": "provider is not ollama"}
+
+    models: list[str] = []
+    for m in (AGENT_MODEL, (os.getenv("PLAYBOOK_MODEL") or "").strip()):
+        if m and m not in models:
+            models.append(m)
+
+    warmed: list[str] = []
+    for m in models:
+        started = time.perf_counter()
+        try:
+            # num_predict=0 loads the weights without generating anything.
+            r = requests.post(
+                f"{OLLAMA_BASE_URL}/api/generate",
+                json={"model": m, "prompt": "", "stream": False,
+                      "keep_alive": OLLAMA_KEEP_ALIVE, "options": {"num_predict": 0}},
+                timeout=timeout,
+            )
+            r.raise_for_status()
+        except Exception as e:
+            log.warning("agent.llm.warm_up.failed", model=m, error=str(e))
+            continue
+        warmed.append(m)
+        log.info("agent.llm.warm_up.ok", model=m, seconds=round(time.perf_counter() - started, 1))
+
+    return {"warmed": warmed}

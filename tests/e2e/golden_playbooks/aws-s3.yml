@@ -1,0 +1,15 @@
+---
+- name: Create private S3 bucket
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  collections:
+    - amazon.aws
+  tasks:
+    - name: Create bucket with versioning and encryption
+      amazon.aws.s3_bucket:
+        name: "{{ var_bucket_name }}"
+        state: present
+        region: "{{ var_aws_region }}"
+        versioning: true
+        encryption: AES256

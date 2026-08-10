@@ -1,11 +1,12 @@
 # pipeline/phase2_parser.py
 # Replace the whole file with this content.
 
-import os
 import json
+import os
 import re
 import sys
 from datetime import datetime
+
 from bs4 import BeautifulSoup
 
 os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -26,6 +27,21 @@ def clean_text(text):
 def collection_ns_to_dotted(ns: str) -> str:
     # Example: kubernetes_core -> kubernetes.core
     return ns.replace("_", ".", 1) if "_" in ns else ns
+
+
+def normalize_source_url(url: str) -> str:
+    """
+    Normalize Ansible docs module URLs.
+    Fix malformed pattern:
+      .../<module>_module#anchor.html
+    to:
+      .../<module>_module.html#anchor
+    """
+    u = (url or "").strip()
+    m = re.match(r"^(https?://[^#]+?_module)#([^#]+)\.html$", u)
+    if m:
+        return f"{m.group(1)}.html#{m.group(2)}"
+    return u
 
 def extract_module_name(soup, slug, collection_name):
     h1 = soup.find("h1")
@@ -216,7 +232,7 @@ def extract_examples(soup):
     return examples
 
 def parse_module_html(filepath, slug, collection_ns):
-    with open(filepath, "r", encoding="utf-8") as f:
+    with open(filepath, encoding="utf-8") as f:
         html = f.read()
     soup = BeautifulSoup(html, "html.parser")
     collection_name = collection_ns_to_dotted(collection_ns)
@@ -233,7 +249,7 @@ def parse_module_html(filepath, slug, collection_ns):
         "parameters": extract_parameters(soup),
         "examples": extract_examples(soup),
         "return_values": extract_return_values(soup),
-        "source_url": (
+        "source_url": normalize_source_url(
             "https://docs.ansible.com/ansible/latest/"
             f"collections/{collection_name.replace('.', '/')}/{module_short}_module.html"
         ),

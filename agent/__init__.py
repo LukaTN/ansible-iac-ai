@@ -8,6 +8,7 @@ playbooks by retrieving Ansible docs (RAG) and generating YAML with the agent LL
 then validating.
 """
 
-from .orchestrator import handle_message, AgentResponse
+from .cancel import GenerationCancelled
+from .orchestrator import AgentResponse, handle_message
 
-__all__ = ["handle_message", "AgentResponse"]
+__all__ = ["AgentResponse", "GenerationCancelled", "handle_message"]

@@ -1,0 +1,10 @@
+---
+- name: Backup hosts file
+  hosts: all
+  become: true
+  tasks:
+    - name: Copy hosts to backup
+      ansible.builtin.copy:
+        src: /etc/hosts
+        dest: /tmp/hosts.backup
+        remote_src: true

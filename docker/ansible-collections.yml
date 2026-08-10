@@ -1,0 +1,16 @@
+# Collections installed into the application image so ansible-lint's
+# syntax-check can resolve every module the agent generates playbooks for.
+#
+# This list must cover the scraped RAG corpus (data/parsed/): a collection
+# the agent can cite but lint cannot resolve fails every generation with
+# syntax-check[unknown-module] — amazon.aws.kms_key was the first casualty.
+# ansible.builtin needs no entry (it ships with ansible-core).
+#
+# ansible-galaxy installs collection content only, not Python runtime deps
+# (boto3, azure-sdk, kubernetes). That is fine: lint resolves modules from
+# the collection metadata; nothing in the image ever *executes* these tasks.
+collections:
+  - name: amazon.aws
+  - name: azure.azcollection
+  - name: community.general
+  - name: kubernetes.core

@@ -1,0 +1,111 @@
+// Ansible IaC AI — Full Agent-Mode Workflow (Eraser / DiagramGPT)
+// Paste at: https://app.eraser.io/ai
+// Choose: flowchart-diagram
+
+colorMode bold
+styleMode shadow
+typeface clean
+direction down
+
+User [shape: oval, icon: user, color: "#5b9bd5"]
+ChatUI [label: "Chat UI · React + Socket.IO", icon: message-square, color: "#5b9bd5"]
+ChatAPI [label: "Chat API · agent mode only", icon: server, color: "#ee8923"]
+
+User > ChatUI: Plain-English request
+ChatUI > ChatAPI: POST message + thread history
+ChatAPI > Plan: handle_message()
+
+// ── ORCHESTRATOR (4 phases) ───────────────────────────────────────────
+
+AgentOrchestrator [label: "Agent Orchestrator", icon: cpu, color: "#ee8923"] {
+  Plan [label: "1 · PLAN", shape: diamond, icon: target]
+  Execute [label: "2 · EXECUTE", icon: play]
+  Generate [label: "3 · GENERATE", icon: code]
+  Synthesize [label: "4 · SYNTHESIZE", icon: sparkles]
+  Plan > Execute
+  Execute > Generate: generate or edit intent
+  Execute > Synthesize: explain · troubleshoot · compare · chat
+  Generate > Synthesize
+}
+
+Plan > PlannerLLM [label: "Planner LLM · OpenRouter or Ollama", icon: brain, color: "#5b9bd5"]
+PlannerLLM > PlanIntent [label: "Intent + tool action plan (JSON)", shape: document, color: "#5b9bd5"]
+PlanIntent > Execute
+
+// ── EXECUTE: tools (generation happens in phase 3, not here) ───────────
+
+Execute > Tools [label: "Tool registry", icon: tool, color: "#5cb88a"] {
+  SearchDocs [label: "search_docs", icon: search]
+  GetModule [label: "get_module_info", icon: book-open]
+  ValidateInline [label: "validate_yaml", icon: check-circle]
+}
+
+Execute > ClarifyGate [label: "Ambiguous request?", shape: diamond, icon: help-circle, color: "#e8a838"]
+ClarifyGate > ChatUI: Ask clarifying questions
+ClarifyGate > Generate: Enough context
+
+Execute > FallbackSearch [label: "No primary module?", shape: diamond, icon: search, color: "#e8a838"]
+FallbackSearch > SearchDocs: Broaden retrieval
+FallbackSearch > Generate: Module identified
+
+// ── RAG funnel (inside search_docs) ─────────────────────────────────────
+
+SearchDocs > RAG [label: "RAG retrieval · ChromaDB + LangChain", icon: database, color: "#5b9bd5"] {
+  Q1 [label: "Query analysis"]
+  Q2 [label: "Ecosystem routing · pin · pivot · vote"]
+  Q3 [label: "Hybrid search · embedding + lexical"]
+  Q4 [label: "Query-aware rerank"]
+  Q5 [label: "Diversity + coverage"]
+  Q6 [label: "Top-K evidence chunks"]
+  Q1 > Q2 > Q3 > Q4 > Q5 > Q6
+}
+
+RAG > Generate: primary_module + rag_meta + module_params
+
+// ── GENERATE ────────────────────────────────────────────────────────────
+
+Generate > GenTool [label: "generate_playbook", icon: file-code, color: "#ee8923"]
+GenTool > PlaybookLLM [label: "Playbook LLM · qwen2.5-coder", icon: code, color: "#ee8923"]
+PlaybookLLM > DraftYAML [label: "Draft Ansible YAML from evidence", shape: document, color: "#ee8923"]
+
+DraftYAML > ConfidenceCheck [label: "Confident module match?", shape: diamond, icon: alert-triangle, color: "#e85555"]
+ConfidenceCheck > Synthesize: Low score · no playbook
+ConfidenceCheck > Validate: Proceed
+
+Validate [label: "Validation gate · 9 checks", icon: shield, color: "#5cb88a"] {
+  C1 [label: "YAML syntax"]
+  C2 [label: "Structure + layout"]
+  C3 [label: "Module exists in KB"]
+  C4 [label: "Required params + hosts"]
+  C5 [label: "No placeholders or secrets"]
+  C6 [label: "ansible-lint"]
+  C1 > C2 > C3 > C4 > C5 > C6
+}
+
+Validate > ModuleRefOut [label: "Module reference + stats", icon: book, color: "#5cb88a"]
+ModuleRefOut > Synthesize
+
+// ── SYNTHESIZE + RESPONSE ───────────────────────────────────────────────
+
+Synthesize > SynthLLM [label: "Synthesizer LLM", icon: message-circle, color: "#ee8923"]
+SynthLLM > AgentResponse [label: "AgentResponse", shape: document, color: "#5cb88a"]
+AgentResponse > ChatUI: text · playbook · validation · sources · tool_trace
+ChatUI > User
+
+// ── OFFLINE KNOWLEDGE (feeds RAG) ───────────────────────────────────────
+
+KnowledgeLayer [label: "Offline knowledge layer", icon: layers, color: "#031b47"] {
+  Docs [label: "Official Ansible docs"]
+  KB [label: "Structured KB · ~1,230 modules"]
+  Vectors [label: "Embeddings · nomic-embed-text"]
+  Chroma [label: "ChromaDB index"]
+  Docs > KB > Vectors > Chroma
+}
+
+Chroma > RAG: Indexed at query time
+
+// ── LIVE PROGRESS (streamed to UI) ──────────────────────────────────────
+
+Progress [label: "UI progress stream", icon: activity, color: "#5b9bd5"]
+AgentOrchestrator > Progress: planning → retrieving → generating → validating → synthesizing
+Progress > ChatUI

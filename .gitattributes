@@ -1,2 +1,14 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Files that are executed inside a Linux container must keep LF endings
+# regardless of the checkout platform. With `text=auto` alone, a Windows
+# clone gets CRLF, and the kernel then reads the shebang as
+# "/usr/bin/env bash\r" and fails with "no such file or directory".
+*.sh text eol=lf
+docker/** text eol=lf
+Dockerfile text eol=lf
+Dockerfile.* text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+.dockerignore text eol=lf

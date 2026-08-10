@@ -5,7 +5,7 @@
 =============================================================
   Quick start:
     # 1. Install dependencies
-    pip install langchain langchain-community chromadb ragas datasets
+    pip install langchain langchain-community pgvector psycopg2-binary ragas datasets
 
     # 2. Pull embedding model
     ollama pull nomic-embed-text
@@ -24,11 +24,10 @@
 =============================================================
 """
 
+import argparse
+import json
 import os
 import sys
-import json
-import argparse
-from datetime import datetime
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
@@ -61,7 +60,7 @@ def cmd_generate(query: str) -> tuple[str, dict]:
     print("═" * 60)
 
     from agent.playbook_generator import generate_playbook_from_retrieval
-    from rag.indexer   import load_vectorstore
+    from rag.indexer import load_vectorstore
     from rag.retriever import get_retrieval_metadata
 
     vectorstore    = load_vectorstore()
@@ -92,20 +91,17 @@ def cmd_status():
     print("  AnsibleAI RAG — System Status")
     print("═" * 60)
 
-    # ChromaDB
+    # Vector store (pgvector)
     try:
-        import chromadb
-        from chromadb.config import Settings
-        client = chromadb.PersistentClient(
-            path="data/chromadb",
-            settings=Settings(anonymized_telemetry=False)
-        )
-        col   = client.get_collection("ansible_docs")
-        count = col.count()
-        print(f"  ✅ ChromaDB   : {count:,} chunks indexed")
+        from app import app
+        from rag.vectorstore import count as vec_count
+
+        with app.app_context():
+            n = vec_count()
+        print(f"  {'✅' if n > 0 else '❌'} pgvector    : {n:,} chunks indexed")
     except Exception as e:
-        print(f"  ❌ ChromaDB   : {e}")
-        print(f"     → Run: python rag/pipeline.py --build")
+        print(f"  ❌ pgvector    : {e}")
+        print("     → Run: python rag/indexer.py")
 
     # Ollama models
     try:
@@ -129,7 +125,7 @@ def cmd_status():
         )
         print(f"  ✅ Parsed data: {len(collections)} collections, {total_mods} modules")
     else:
-        print(f"  ❌ Parsed data: not found — run scraper first")
+        print("  ❌ Parsed data: not found — run scraper first")
 
     # Evaluation report
     eval_report = "reports/ragas_evaluation_report.json"
@@ -142,8 +138,8 @@ def cmd_status():
             bar = "█" * int(v * 20)
             print(f"    {k:<25} {v:.4f}  {bar}")
     else:
-        print(f"\n  No evaluation report yet.")
-        print(f"  → Run: python rag/pipeline.py --evaluate")
+        print("\n  No evaluation report yet.")
+        print("  → Run: python rag/pipeline.py --evaluate")
 
     print("═" * 60)
 
@@ -157,9 +153,12 @@ def generate_playbook_rag_v2(user_input: str) -> tuple[str, dict]:
     Drop-in replacement for the old generate_playbook_rag().
     Used by app.py Flask routes.
     Returns (output_path, retrieval_meta).
+
+    Retrieval uses multi-collection search by default (see get_retrieval_metadata).
+    Set RAG_APPLY_AUTO_COLLECTION_FILTER=1 to restore single-collection keyword filtering.
     """
     from agent.playbook_generator import generate_playbook_from_retrieval
-    from rag.indexer   import load_vectorstore
+    from rag.indexer import load_vectorstore
     from rag.retriever import get_retrieval_metadata
 
     vectorstore    = load_vectorstore()

@@ -16,15 +16,14 @@
 =============================================================
 """
 
-import os
-import sys
+import argparse
 import json
 import math
+import os
+import sys
 import traceback
-import argparse
 import warnings
 from datetime import datetime
-from typing import List
 
 # RAGAS 0.4.x has two metric hierarchies: ragas.metrics (old, works with
 # evaluate()) and ragas.metrics.collections (new, only works with @experiment).
@@ -60,16 +59,16 @@ EMBED_MODEL  = "nomic-embed-text"
 
 def _build_ragas_llm():
     """Build RAGAS-compatible LLM wrapper using Ollama."""
-    from ragas.llms import LangchainLLMWrapper
     from langchain_ollama import OllamaLLM
+    from ragas.llms import LangchainLLMWrapper
     llm = OllamaLLM(model=JUDGE_MODEL, base_url=OLLAMA_URL, temperature=0)
     return LangchainLLMWrapper(llm)
 
 
 def _build_ragas_embeddings():
     """Build RAGAS-compatible embeddings using Ollama nomic-embed-text."""
-    from ragas.embeddings import LangchainEmbeddingsWrapper
     from langchain_ollama import OllamaEmbeddings
+    from ragas.embeddings import LangchainEmbeddingsWrapper
     emb = OllamaEmbeddings(model=EMBED_MODEL, base_url=OLLAMA_URL)
     return LangchainEmbeddingsWrapper(emb)
 
@@ -81,10 +80,10 @@ def get_ragas_components():
     """
     from ragas import evaluate
     from ragas.metrics import (
-        Faithfulness,
         AnswerRelevancy,
         ContextPrecision,
         ContextRecall,
+        Faithfulness,
     )
 
     print(f"\n  [RAGAS] Configuring LLM judge: {JUDGE_MODEL} via Ollama")
@@ -135,8 +134,10 @@ def run_classic_pipeline(question: str) -> dict:
     """Run classic keyword-based pipeline for comparison."""
     sys.path.insert(0, "pipeline")
     from phase4_generator import (
-        generate_playbook, load_knowledge_base,
-        find_best_module, build_module_context
+        build_module_context,
+        find_best_module,
+        generate_playbook,
+        load_knowledge_base,
     )
 
     kb      = load_knowledge_base()
@@ -177,8 +178,8 @@ def _safe_mean(values) -> float:
 
 
 def evaluate_pipeline(
-    results: List[dict],
-    ground_truths: List[str],
+    results: list[dict],
+    ground_truths: list[str],
     label: str = "RAG"
 ) -> dict:
     """Run RAGAS evaluation on pipeline results using Ollama as judge."""
@@ -251,7 +252,7 @@ def evaluate_pipeline(
 def run_evaluation(quick: bool = False, compare: bool = False):
     """Full evaluation pipeline."""
     print(f"\n{'='*60}")
-    print(f"  AnsibleAI — RAGAS Evaluation (Ollama judge)")
+    print("  AnsibleAI — RAGAS Evaluation (Ollama judge)")
     print(f"  Judge model : {JUDGE_MODEL}")
     print(f"  Embed model : {EMBED_MODEL}")
     print(f"  Started     : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
@@ -306,7 +307,7 @@ def run_evaluation(quick: bool = False, compare: bool = False):
     # ── Classic comparison ──
     classic_metrics = None
     if compare:
-        print(f"\n  [2] Running CLASSIC pipeline for comparison...")
+        print("\n  [2] Running CLASSIC pipeline for comparison...")
         classic_results = []
         for i, q in enumerate(questions, 1):
             print(f"  [{i}/{len(questions)}] {q[:65]}...")
@@ -346,7 +347,7 @@ def run_evaluation(quick: bool = False, compare: bool = False):
 
     # ── Summary ──
     print(f"\n{'='*60}")
-    print(f"  EVALUATION COMPLETE")
+    print("  EVALUATION COMPLETE")
     if classic_metrics:
         print(f"\n  {'Metric':<25} {'Classic':>10} {'RAG':>10} {'Δ':>10}")
         print(f"  {'─'*58}")

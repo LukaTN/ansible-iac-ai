@@ -1,0 +1,11 @@
+---
+- name: Daily backup cron job
+  hosts: all
+  become: true
+  tasks:
+    - name: Schedule backup at 2am
+      community.general.cron:
+        name: daily_backup
+        minute: "0"
+        hour: "2"
+        job: "{{ var_backup_script }}"

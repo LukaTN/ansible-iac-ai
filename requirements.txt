@@ -1,9 +1,105 @@
+# AnsibleAI — runtime dependencies
+#
+# Direct dependencies are pinned exactly. The previous loose pins had
+# drifted so far from the installed environment that
+# `pip install -r requirements.txt` could not resolve at all.
+# Versions below are the ones this project is verified to run on.
+#
+# Transitive dependencies are intentionally not listed here; Phase 1 adds
+# a pip-compile / uv lockfile for the container build.
+
+# ── Web application ──────────────────────────────────────────────
 flask==3.0.3
 flask-sqlalchemy==3.1.1
-pymysql==1.1.1
-sqlalchemy==2.0.36
-pyyaml==6.0.2
-requests==2.31.0
-beautifulsoup4==4.12.3
-ollama==0.2.1
+flask-socketio==5.6.1
 python-dotenv==1.0.1
+requests==2.33.1
+
+# ── Production WSGI server ───────────────────────────────────────
+# app.py refuses to start the Werkzeug dev server outside development,
+# so this is how the container serves traffic. SOCKETIO_ASYNC_MODE must
+# agree with the worker class in use: "gevent" for `-k gevent`,
+# "threading" for `-k gthread` and the dev server.
+#
+# simple-websocket, not gevent-websocket: python-engineio uses the former
+# to serve the WebSocket upgrade. gevent-websocket has been unmaintained
+# since 2017 and, with current Flask-SocketIO, installing it actively
+# breaks connections — the handshake returns 101 and the socket is then
+# closed immediately (miguelgrinberg/flask-socketio#2122).
+gunicorn==23.0.0
+gevent==24.11.1
+simple-websocket==1.1.0
+
+# ── Configuration & structured logging ───────────────────────────
+pydantic==2.11.4
+pydantic-settings==2.13.1
+structlog==24.4.0
+
+# ── Authentication, sessions & application security ──────────────
+# argon2id is the password hashing choice; bcrypt's 72-byte silent
+# truncation makes it a footgun for long passphrases.
+argon2-cffi==23.1.0
+flask-login==0.6.3
+# Server-side sessions: real logout, and revoke-all on password change.
+# Backend is configurable — sqlalchemy for dev, redis for production.
+flask-session==0.8.0
+flask-wtf==1.2.2
+flask-limiter==3.8.0
+flask-talisman==1.1.0
+email-validator==2.2.0
+# Only required when SESSION_BACKEND or RATE_LIMIT_BACKEND is "redis".
+redis==5.2.1
+
+# ── Background generation ────────────────────────────────────────
+# An agent turn takes minutes, so it runs in a Celery worker rather than
+# inside the HTTP request. Redis is both broker and result backend; the
+# result is only a status dict, since the answer travels over Socket.IO.
+celery==5.6.3
+
+# ── Playbook artifact storage ────────────────────────────────────
+# S3 API client, pointed at MinIO in the compose stack. Generated
+# playbooks cannot stay on a pod's local disk once more than one replica
+# can serve the download.
+boto3==1.43.63
+
+# ── Database ─────────────────────────────────────────────────────
+# Phase 3: Postgres 16 + pgvector replaces MySQL. psycopg2-binary avoids
+# needing libpq-dev in the image (a wheel is published for every platform).
+psycopg2-binary==2.9.9
+pgvector==0.3.6
+sqlalchemy==2.0.36
+alembic==1.14.0
+
+# ── Knowledge base pipeline (scrape, parse, validate) ────────────
+pyyaml==6.0.2
+beautifulsoup4==4.12.3
+
+# ── Playbook linting (the production gate shells out to these) ───
+# ansible-lint imports Unix-only stdlib modules (grp), so it cannot run
+# on native Windows at all. The marker keeps `pip install -r` working
+# for Windows developers, whose lint runner hops through WSL instead
+# (ANSIBLE_LINT_MODE=wsl); the container installs and uses them natively.
+ansible-core==2.18.1 ; sys_platform != "win32"
+ansible-lint==24.12.2 ; sys_platform != "win32"
+
+# ── LLM client ───────────────────────────────────────────────────
+ollama==0.6.1
+
+# ── RAG (retrieval + pgvector index) ──────────────────────────────
+# Phase 3: ChromaDB removed; vectors stored in Postgres via pgvector.
+# Embeddings come from a TEI server (OpenAI-compatible /v1/embeddings).
+langchain-core==1.2.28
+langchain-community==0.4.1
+httpx==0.28.1
+numpy>=1.26,<3
+
+# ── Observability (Phase 6a) ─────────────────────────────────────
+# Prometheus text exposition for /metrics; Langfuse for LLM traces.
+# SDK 3.x matches self-hosted Langfuse server v3 (compose image :3).
+# Observation types (agent/retriever/…) need langfuse>=3.3.1.
+# Do not jump to SDK 4.x until the self-hosted server is on Langfuse v4.
+prometheus-client==0.21.1
+langfuse==3.15.0
+
+# ── Agent (LangGraph state machine: reason → draft → gate loop) ──
+langgraph==1.1.6
