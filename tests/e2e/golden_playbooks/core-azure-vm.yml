@@ -1,0 +1,40 @@
+---
+- name: Create Ubuntu Azure VM with public IP and SSH
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  collections:
+    - azure.azcollection
+  tasks:
+    - name: Create public IP
+      azure.azcollection.azure_rm_publicipaddress:
+        resource_group: "{{ var_resource_group }}"
+        name: "{{ var_public_ip_name }}"
+        allocation_method: Static
+        sku: Standard
+
+    - name: Create network interface
+      azure.azcollection.azure_rm_networkinterface:
+        resource_group: "{{ var_resource_group }}"
+        name: "{{ var_nic_name }}"
+        virtual_network: "{{ var_vnet_name }}"
+        subnet: "{{ var_subnet_name }}"
+        public_ip: true
+        public_ip_address_name: "{{ var_public_ip_name }}"
+
+    - name: Create Ubuntu virtual machine
+      azure.azcollection.azure_rm_virtualmachine:
+        resource_group: "{{ var_resource_group }}"
+        name: "{{ var_vm_name }}"
+        vm_size: "{{ var_vm_size }}"
+        admin_username: "{{ var_admin_username }}"
+        ssh_password_enabled: false
+        ssh_public_keys:
+          - path: "/home/{{ var_admin_username }}/.ssh/authorized_keys"
+            key_data: "{{ var_ssh_public_key }}"
+        network_interfaces: "{{ var_nic_name }}"
+        image:
+          offer: UbuntuServer
+          publisher: Canonical
+          sku: 22_04-lts
+          version: latest

@@ -6,10 +6,11 @@
 =============================================================
 """
 
-import os
 import json
+import os
 import re
 from datetime import datetime
+
 from kb_store import write_manifest
 
 os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -195,7 +196,7 @@ def build_knowledge_base(parsed_dir):
     collections_seen = set()
 
     for filepath in json_paths:
-        with open(filepath, "r", encoding="utf-8") as f:
+        with open(filepath, encoding="utf-8") as f:
             data = json.load(f)
 
         slug = data.get("slug") or os.path.basename(filepath).replace(".json", "")

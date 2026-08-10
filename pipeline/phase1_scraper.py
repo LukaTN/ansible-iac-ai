@@ -17,15 +17,16 @@
 =============================================================
 """
 
+import argparse
+import json
 import os
 import sys
-import json
 import time
-import argparse
-import requests
 from datetime import datetime
-from bs4 import BeautifulSoup
 from urllib.parse import urljoin
+
+import requests
+from bs4 import BeautifulSoup
 
 os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -173,7 +174,7 @@ def scrape_collection(collection_name: str) -> dict:
     os.makedirs(REPORT_DIR, exist_ok=True)
 
     # Discover modules
-    print(f"\n  Discovering modules...")
+    print("\n  Discovering modules...")
     modules = get_module_links(
         cfg["index_url"],
         cfg["base_url"],
@@ -216,7 +217,7 @@ def scrape_collection(collection_name: str) -> dict:
     with open(report_path, "w", encoding="utf-8") as f:
         json.dump(report, f, indent=2, ensure_ascii=False)
 
-    print(f"\n  ─────────────────────────────────────────")
+    print("\n  ─────────────────────────────────────────")
     print(f"  Collection : {collection_name}")
     print(f"  Total      : {len(modules)}")
     print(f"  ✓ OK       : {ok}")
@@ -230,7 +231,7 @@ def scrape_collection(collection_name: str) -> dict:
 def scrape_all():
     """Scrape all registered collections."""
     print(f"\n{'='*60}")
-    print(f"  AnsibleAI — Multi-Collection Scraper")
+    print("  AnsibleAI — Multi-Collection Scraper")
     print(f"  Collections: {len(COLLECTIONS)}")
     print(f"  Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print(f"{'='*60}")
@@ -246,7 +247,7 @@ def scrape_all():
 
     # Global summary
     print(f"\n{'='*60}")
-    print(f"  GLOBAL SUMMARY")
+    print("  GLOBAL SUMMARY")
     total_modules = sum(r.get("total", 0) for r in global_report)
     total_ok      = sum(r.get("ok", 0) + r.get("skipped", 0) for r in global_report)
     print(f"  Collections scraped : {len(global_report)}")

@@ -17,12 +17,15 @@
 
 from __future__ import annotations
 
-import os
 import json
+import os
 from functools import lru_cache
 
+from logging_setup import get_logger
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+log = get_logger(__name__)
 
 
 @lru_cache(maxsize=1)
@@ -34,10 +37,10 @@ def get_collection_allowlist() -> frozenset[str]:
     """
     try:
         kb_path = os.path.join(PROJECT_ROOT, "data", "knowledge_base.json")
-        with open(kb_path, "r", encoding="utf-8") as f:
+        with open(kb_path, encoding="utf-8") as f:
             kb = json.load(f) or {}
     except Exception as exc:
-        print(f"  [Agent] Could not load KB for allow-list: {exc}")
+        log.warning("agent.kb.allowlist_load_failed", error=str(exc))
         return frozenset()
 
     modules = (kb.get("modules") or {}) if isinstance(kb, dict) else {}

@@ -1,8 +1,10 @@
 """
 =============================================================
-  AnsibleAI RAG — Step 2 : Indexer
-  Embeds documents and stores in ChromaDB via LangChain.
-=============================================================
+  AnsibleAI RAG — Step 2: Indexer (pgvector)
+
+  Embeds documents and upserts into Postgres via pgvector.
+  Replaces the ChromaDB-based indexer from Phase 0–2.
+
   Usage:
     python rag/indexer.py                  # index all collections
     python rag/indexer.py --reset          # wipe and rebuild
@@ -10,10 +12,13 @@
 =============================================================
 """
 
-import os
+from __future__ import annotations
+
 import argparse
+import contextlib
 import hashlib
 import json
+import os
 import sys
 from datetime import datetime
 
@@ -23,68 +28,24 @@ os.chdir(PROJECT_ROOT)
 if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
-try:
-    from langchain_chroma import Chroma
-except ImportError:
-    from langchain_community.vectorstores import Chroma
-
-try:
-    from langchain_ollama import OllamaEmbeddings
-except ImportError:
-    from langchain_community.embeddings import OllamaEmbeddings
-
 from langchain_core.documents import Document
 
 try:
-    from rag.ingestion import load_all_collections, load_collection, CHUNK_SCHEMA_VERSION
+    from rag.ingestion import CHUNK_SCHEMA_VERSION, load_all_collections, load_collection
 except ImportError:
-    from ingestion import load_all_collections, load_collection, CHUNK_SCHEMA_VERSION
+    from ingestion import CHUNK_SCHEMA_VERSION, load_all_collections, load_collection
 
-CHROMA_DIR   = "data/chromadb"
-COLLECTION   = "ansible_docs"
-EMBED_MODEL  = "nomic-embed-text"
-OLLAMA_URL   = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
-BATCH_SIZE   = 100   # docs per ChromaDB batch
-INDEX_SCHEMA_VERSION = "v2"
-INDEX_META_FILE = os.path.join(CHROMA_DIR, "index_meta.json")
+from config import settings
 
-
-# ─────────────────────────────────────────────
-#  EMBEDDINGS
-# ─────────────────────────────────────────────
-
-def get_embeddings() -> OllamaEmbeddings:
-    """Return LangChain OllamaEmbeddings for nomic-embed-text."""
-    return OllamaEmbeddings(
-        model=EMBED_MODEL,
-        base_url=OLLAMA_URL,
-    )
+EMBED_MODEL = settings.embedding_model
+BATCH_SIZE = 100
+INDEX_SCHEMA_VERSION = settings.vector_index_version
+COLLECTION_NAME = settings.vector_collection
 
 
 # ─────────────────────────────────────────────
-#  VECTOR STORE
+#  Document ID generation (deterministic, same logic as before)
 # ─────────────────────────────────────────────
-
-def get_vectorstore(embeddings: OllamaEmbeddings, reset: bool = False) -> Chroma:
-    """
-    Initialize or load the ChromaDB vector store.
-    If reset=True, delete and recreate the collection.
-    """
-    if reset and os.path.exists(CHROMA_DIR):
-        import shutil
-        shutil.rmtree(CHROMA_DIR)
-        print("  [ChromaDB] Collection wiped.")
-
-    os.makedirs(CHROMA_DIR, exist_ok=True)
-
-    vectorstore = Chroma(
-        collection_name=COLLECTION,
-        embedding_function=embeddings,
-        persist_directory=CHROMA_DIR,
-        collection_metadata={"hnsw:space": "cosine"},
-    )
-    return vectorstore
-
 
 def _build_doc_id(doc: Document, fallback_index: int) -> str:
     """Build a deterministic and unique ID for each document chunk."""
@@ -93,7 +54,6 @@ def _build_doc_id(doc: Document, fallback_index: int) -> str:
     slug = str(meta.get("slug", f"doc_{fallback_index}"))
     ctype = str(meta.get("chunk_type", "chunk"))
 
-    # Prefer explicit chunk indexes when available.
     if "example_index" in meta:
         suffix = f"example_{meta.get('example_index')}_{meta.get('example_part', '0')}"
     elif "optional_group_index" in meta:
@@ -102,200 +62,221 @@ def _build_doc_id(doc: Document, fallback_index: int) -> str:
         suffix = f"required_{meta.get('required_part')}"
     elif "overview_part" in meta and ctype == "overview":
         suffix = f"overview_{meta.get('overview_part')}"
+    elif "purpose_part" in meta and ctype == "purpose":
+        suffix = f"purpose_{meta.get('purpose_part')}"
     elif "required_params_list" in meta and ctype == "required_params":
         suffix = "required"
     else:
-        digest = hashlib.md5(doc.page_content.encode("utf-8")).hexdigest()[:10]
+        digest = hashlib.md5(
+            doc.page_content.encode("utf-8"), usedforsecurity=False
+        ).hexdigest()[:10]
         suffix = digest
 
     return f"{coll}::{slug}::{ctype}::{suffix}"
 
 
-def _read_index_meta() -> dict | None:
-    if not os.path.exists(INDEX_META_FILE):
-        return None
-    with open(INDEX_META_FILE, "r", encoding="utf-8") as f:
-        return json.load(f)
+# ─────────────────────────────────────────────
+#  Schema compatibility gate
+# ─────────────────────────────────────────────
 
+def _validate_index_compatibility(reset: bool) -> None:
+    """Refuse to index if schema versions don't match (unless --reset)."""
+    from rag.vectorstore import check_schema_compatibility
 
-def _write_index_meta(collection_name: str | None, total_docs: int):
-    meta = {
-        "indexed_at": datetime.now().isoformat(),
-        "index_schema_version": INDEX_SCHEMA_VERSION,
-        "chunk_schema_version": CHUNK_SCHEMA_VERSION,
-        "embed_model": EMBED_MODEL,
-        "collection": collection_name or "all",
-        "total_docs": total_docs,
-    }
-    with open(INDEX_META_FILE, "w", encoding="utf-8") as f:
-        json.dump(meta, f, indent=2, ensure_ascii=False)
-
-
-def _validate_index_compatibility(reset: bool):
-    existing = _read_index_meta()
-    if not existing:
-        return
-
-    mismatches = []
-    if existing.get("embed_model") != EMBED_MODEL:
-        mismatches.append(f"embed_model: {existing.get('embed_model')} -> {EMBED_MODEL}")
-    if existing.get("chunk_schema_version") != CHUNK_SCHEMA_VERSION:
-        mismatches.append(
-            f"chunk_schema_version: {existing.get('chunk_schema_version')} -> {CHUNK_SCHEMA_VERSION}"
-        )
-    if existing.get("index_schema_version") != INDEX_SCHEMA_VERSION:
-        mismatches.append(
-            f"index_schema_version: {existing.get('index_schema_version')} -> {INDEX_SCHEMA_VERSION}"
-        )
-
+    mismatches = check_schema_compatibility()
     if mismatches and not reset:
         raise ValueError(
             "Index compatibility mismatch detected:\n"
-            + "\n".join(f"- {m}" for m in mismatches)
-            + "\nRun with --reset to rebuild ChromaDB with consistent embeddings/chunk schema."
+            + "\n".join(f"  - {m}" for m in mismatches)
+            + "\nRun with --reset to rebuild with consistent embeddings/chunk schema."
         )
 
 
-def index_documents(
-    docs: list[Document],
-    vectorstore: Chroma,
-    batch_size: int = BATCH_SIZE
-) -> int:
+# ─────────────────────────────────────────────
+#  Indexing
+# ─────────────────────────────────────────────
+
+def index_documents(docs: list[Document], batch_size: int = BATCH_SIZE) -> int:
     """
-    Add documents to ChromaDB in batches.
-    Skips documents already indexed (by ID).
-    Returns count of new documents added.
+    Embed and upsert documents into pgvector in batches.
+    Returns count of new/updated documents.
     """
-    # Build deterministic unique IDs from metadata/content
+    from rag.embeddings import embed_texts
+    from rag.vectorstore import upsert_documents
+
     ids = [_build_doc_id(doc, i) for i, doc in enumerate(docs)]
 
-    # Check which IDs already exist
-    existing = set()
-    try:
-        result = vectorstore._collection.get(ids=ids)
-        existing = set(result["ids"])
-    except Exception:
-        pass
+    total = 0
+    for i in range(0, len(docs), batch_size):
+        batch_docs = docs[i : i + batch_size]
+        batch_ids = ids[i : i + batch_size]
 
-    new_docs = [(doc, id_) for doc, id_ in zip(docs, ids) if id_ not in existing]
+        texts = [d.page_content for d in batch_docs]
+        embeddings = embed_texts(texts)
 
-    if not new_docs:
-        print(f"  All {len(docs)} documents already indexed.")
-        return 0
-
-    print(f"  Indexing {len(new_docs)} new documents ({len(existing)} already exist)...")
-
-    added = 0
-    for i in range(0, len(new_docs), batch_size):
-        batch = new_docs[i:i + batch_size]
-        b_docs, b_ids = zip(*batch)
-
-        # Ensure all metadata values are strings (ChromaDB requirement)
-        clean_docs = []
-        for doc in b_docs:
-            clean_meta = {k: str(v) for k, v in doc.metadata.items()}
-            clean_docs.append(Document(
-                page_content=doc.page_content,
-                metadata=clean_meta
-            ))
-
-        vectorstore.add_documents(documents=clean_docs, ids=list(b_ids))
-        added += len(batch)
-        pct = round(added / len(new_docs) * 100)
-        print(f"    [{pct:>3}%] {added}/{len(new_docs)} indexed", end="\r")
-
-    print(f"\n  ✓ {added} new documents added to ChromaDB.")
-    return added
-
-
-# ─────────────────────────────────────────────
-#  MAIN
-# ─────────────────────────────────────────────
-
-def build_index(collection_name: str = None, reset: bool = False) -> Chroma:
-    """
-    Full indexing pipeline.
-    Returns the initialized vectorstore.
-    """
-    print(f"\n{'='*60}")
-    print(f"  AnsibleAI RAG — Indexer")
-    print(f"  Embed model : {EMBED_MODEL}")
-    print(f"  Vector store: ChromaDB @ {CHROMA_DIR}")
-    print(f"  Started     : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print(f"{'='*60}")
-
-    if not reset:
-        _validate_index_compatibility(reset=False)
-
-    # 1. Load documents
-    print(f"\n  [1/3] Loading documents...")
-    if collection_name:
-        docs = load_collection(collection_name)
-    else:
-        docs = load_all_collections()
-
-    if not docs:
-        raise ValueError("No documents to index.")
-
-    # 2. Init embeddings + vectorstore
-    print(f"\n  [2/3] Initializing ChromaDB + OllamaEmbeddings...")
-    print(f"  → Pulling {EMBED_MODEL} if needed (first time ~274MB)...")
-    embeddings  = get_embeddings()
-    vectorstore = get_vectorstore(embeddings, reset=reset)
-
-    current_count = vectorstore._collection.count()
-    print(f"  → Current DB size: {current_count} documents")
-
-    # 3. Index
-    print(f"\n  [3/3] Indexing {len(docs)} documents...")
-    added = index_documents(docs, vectorstore)
-
-    final_count = vectorstore._collection.count()
-    print(f"\n{'='*60}")
-    print(f"  INDEXING COMPLETE")
-    print(f"  New docs added : {added}")
-    print(f"  Total in DB    : {final_count}")
-    print(f"{'='*60}")
-
-    # Save report
-    os.makedirs("reports", exist_ok=True)
-    report = {
-        "indexed_at"    : datetime.now().isoformat(),
-        "embed_model"   : EMBED_MODEL,
-        "chunk_schema_version": CHUNK_SCHEMA_VERSION,
-        "index_schema_version": INDEX_SCHEMA_VERSION,
-        "collection"    : collection_name or "all",
-        "new_docs"      : added,
-        "total_in_db"   : final_count,
-        "chroma_dir"    : CHROMA_DIR,
-    }
-    with open("reports/indexing_report.json", "w") as f:
-        json.dump(report, f, indent=2)
-    print(f"  Report → reports/indexing_report.json")
-    _write_index_meta(collection_name=collection_name, total_docs=final_count)
-
-    return vectorstore
-
-
-def load_vectorstore() -> Chroma:
-    """Load existing vectorstore (no re-indexing)."""
-    if not os.path.exists(CHROMA_DIR):
-        raise FileNotFoundError(
-            f"ChromaDB not found at '{CHROMA_DIR}'.\n"
-            "→ Run: python rag/indexer.py"
+        affected = upsert_documents(
+            doc_ids=batch_ids,
+            documents=batch_docs,
+            embeddings=embeddings,
+            collection=COLLECTION_NAME,
         )
-    embeddings = get_embeddings()
-    return Chroma(
-        collection_name=COLLECTION,
-        embedding_function=embeddings,
-        persist_directory=CHROMA_DIR,
-        collection_metadata={"hnsw:space": "cosine"},
-    )
+        total += affected
+
+        pct = round(min(i + batch_size, len(docs)) / len(docs) * 100)
+        print(f"    [{pct:>3}%] {min(i + batch_size, len(docs))}/{len(docs)} indexed", end="\r")
+
+    print(f"\n  Done: {total} documents upserted.")
+    return total
+
+
+def build_index(
+    collection_name: str | None = None,
+    reset: bool = False,
+    parsed_dir: str | None = None,
+) -> int:
+    """
+    Full indexing pipeline — embed and store in pgvector.
+    Returns total document count in the store.
+    """
+    from app import app
+    from rag.vectorstore import count, delete_collection, set_index_meta
+
+    with app.app_context():
+        print(f"\n{'=' * 60}")
+        print("  AnsibleAI RAG — Indexer (pgvector)")
+        print(f"  Embed model : {EMBED_MODEL}")
+        print(f"  Vector store: Postgres pgvector")
+        print(f"  Parsed root : {parsed_dir or settings.rag_parsed_dir}")
+        print(f"  Started     : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        print(f"{'=' * 60}")
+
+        if not reset:
+            _validate_index_compatibility(reset=False)
+
+        if reset:
+            deleted = delete_collection(COLLECTION_NAME)
+            print(f"  [pgvector] Deleted {deleted} existing chunks.")
+
+        # 1. Load documents
+        print("\n  [1/3] Loading documents...")
+        if collection_name:
+            docs = load_collection(collection_name, parsed_dir=parsed_dir)
+        else:
+            docs = load_all_collections(parsed_dir=parsed_dir)
+
+        if not docs:
+            raise ValueError("No documents to index.")
+
+        current = count(COLLECTION_NAME)
+        print(f"  → Current DB size: {current} chunks")
+
+        # 2. Embed and index
+        print(f"\n  [2/3] Embedding + indexing {len(docs)} documents...")
+        added = index_documents(docs)
+
+        # 3. Write meta
+        print("\n  [3/3] Updating index metadata...")
+        set_index_meta("index_schema_version", INDEX_SCHEMA_VERSION)
+        set_index_meta("chunk_schema_version", CHUNK_SCHEMA_VERSION)
+        set_index_meta("embed_model", EMBED_MODEL)
+        set_index_meta("embedding_dimensions", str(settings.embedding_dimensions))
+        set_index_meta("indexed_at", datetime.now().isoformat())
+        set_index_meta("collection", collection_name or "all")
+
+        final = count(COLLECTION_NAME)
+        print(f"\n{'=' * 60}")
+        print("  INDEXING COMPLETE")
+        print(f"  Docs upserted : {added}")
+        print(f"  Total in DB   : {final}")
+        print(f"{'=' * 60}")
+
+        # Notify all pods to refresh their caches
+        from rag.invalidation import publish_invalidation
+        publish_invalidation()
+
+        # Save report
+        os.makedirs("reports", exist_ok=True)
+        report = {
+            "indexed_at": datetime.now().isoformat(),
+            "embed_model": EMBED_MODEL,
+            "chunk_schema_version": CHUNK_SCHEMA_VERSION,
+            "index_schema_version": INDEX_SCHEMA_VERSION,
+            "collection": collection_name or "all",
+            "docs_upserted": added,
+            "total_in_db": final,
+            "backend": "pgvector",
+        }
+        with open("reports/indexing_report.json", "w") as f:
+            json.dump(report, f, indent=2)
+        print("  Report → reports/indexing_report.json")
+
+        return final
+
+
+# ─────────────────────────────────────────────
+#  Legacy compatibility
+# ─────────────────────────────────────────────
+
+def load_vectorstore():
+    """
+    Legacy entry point used by agent/tools.py.
+
+    Returns a lightweight proxy that the retriever can call
+    similarity_search_with_relevance_scores on.
+    """
+    return _PgVectorProxy()
+
+
+class _PgVectorProxy:
+    """
+    Drop-in shim so the retriever's existing interface keeps working.
+
+    Provides .similarity_search_with_relevance_scores() and .get()
+    to match what the retriever and sparse_index expect from Chroma.
+    """
+
+    def similarity_search_with_relevance_scores(
+        self,
+        query: str,
+        k: int = 8,
+        *,
+        filter: dict | None = None,
+        **kwargs,
+    ) -> list[tuple[Document, float]]:
+        from rag.embeddings import embed_query
+        from rag.vectorstore import similarity_search_with_scores
+
+        query_vec = embed_query(query)
+        return similarity_search_with_scores(query_vec, k=k, filter=filter)
+
+    def get(self, include: list[str] | None = None) -> dict:
+        """Fetch all documents (for BM25 sparse index construction)."""
+        from rag.vectorstore import get_all_documents
+
+        docs = get_all_documents()
+        return {
+            "documents": [d.page_content for d in docs],
+            "metadatas": [d.metadata for d in docs],
+            "ids": [str(i) for i in range(len(docs))],
+        }
+
+    class _collection_shim:
+        @staticmethod
+        def count() -> int:
+            from rag.vectorstore import count
+            return count()
+
+    _collection = _collection_shim()
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="AnsibleAI RAG Indexer")
+    for _stream in (sys.stdout, sys.stderr):
+        with contextlib.suppress(AttributeError, ValueError):
+            _stream.reconfigure(encoding="utf-8", errors="replace")
+
+    parser = argparse.ArgumentParser(description="AnsibleAI RAG Indexer (pgvector)")
     parser.add_argument("--collection", type=str, default=None)
     parser.add_argument("--reset", action="store_true")
+    parser.add_argument("--parsed-dir", type=str, default=None)
     args = parser.parse_args()
-    build_index(collection_name=args.collection, reset=args.reset)
+    build_index(collection_name=args.collection, reset=args.reset, parsed_dir=args.parsed_dir)

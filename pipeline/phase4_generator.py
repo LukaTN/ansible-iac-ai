@@ -16,11 +16,11 @@
 """
 
 import os
-import json
 import re
 import sys
-import requests
 from datetime import datetime
+
+import requests
 from dotenv import load_dotenv
 from kb_store import load_knowledge_base as load_kb_store
 

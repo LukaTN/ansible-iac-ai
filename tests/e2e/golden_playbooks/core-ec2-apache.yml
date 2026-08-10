@@ -1,0 +1,39 @@
+---
+- name: Launch two EC2 instances and install Apache
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  collections:
+    - amazon.aws
+  tasks:
+    - name: Create first EC2 instance
+      amazon.aws.ec2_instance:
+        state: present
+        name: "{{ var_instance_name_1 }}"
+        instance_type: "{{ var_instance_type }}"
+        image_id: "{{ var_ami_id }}"
+        key_name: "{{ var_key_name }}"
+        vpc_subnet_id: "{{ var_vpc_subnet_id }}"
+        security_groups: ["{{ var_security_group }}"]
+
+    - name: Create second EC2 instance
+      amazon.aws.ec2_instance:
+        state: present
+        name: "{{ var_instance_name_2 }}"
+        instance_type: "{{ var_instance_type }}"
+        image_id: "{{ var_ami_id }}"
+        key_name: "{{ var_key_name }}"
+        vpc_subnet_id: "{{ var_vpc_subnet_id }}"
+        security_groups: ["{{ var_security_group }}"]
+
+    - name: Install Apache on instance 1
+      ansible.builtin.dnf:
+        name: httpd
+        state: present
+      delegate_to: "{{ var_instance_name_1 }}"
+
+    - name: Install Apache on instance 2
+      ansible.builtin.dnf:
+        name: httpd
+        state: present
+      delegate_to: "{{ var_instance_name_2 }}"

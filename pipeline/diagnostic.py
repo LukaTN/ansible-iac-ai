@@ -6,13 +6,14 @@
 """
 
 import os
+
 from bs4 import BeautifulSoup
 
 os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 filepath = "data/raw_html/k8s_exec_module.html"
 
-with open(filepath, "r", encoding="utf-8") as f:
+with open(filepath, encoding="utf-8") as f:
     html = f.read()
 
 soup = BeautifulSoup(html, "html.parser")

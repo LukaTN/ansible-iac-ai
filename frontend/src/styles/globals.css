@@ -1,0 +1,6 @@
+@import './app.css';
+@import './onboarding.css';
+
+#root {
+  height: 100%;
+}

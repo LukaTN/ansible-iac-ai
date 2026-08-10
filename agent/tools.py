@@ -2,13 +2,13 @@
 =============================================================
   AnsibleAI Agent — Tools layer
 
-  Thin, callable wrappers around the existing pipeline:
+  Thin, callable wrappers around the existing pipeline, invoked
+  directly by the LangGraph nodes (agent/graph.py):
     - search_docs        : semantic search over ChromaDB (RAG retriever)
-    - generate_playbook  : RAG retrieval + agent LLM YAML generation
-    - validate_yaml      : run the validator on a YAML string or file
+    - draft_playbook     : ONE draft/repair YAML pass (agent LLM)
+    - validate_playbook_file : full validator + ansible-lint on a file
+    - validate_yaml      : validator on a YAML string or file
     - get_module_info    : structured info about an Ansible module
-
-  The agent's orchestrator calls these by name; the LLM never imports Python.
 =============================================================
 """
 
@@ -17,8 +17,11 @@ from __future__ import annotations
 import os
 import re
 import tempfile
-from datetime import datetime
-from typing import Any
+
+from logging_setup import get_logger
+from rag.retrieval_utils import build_retrieval_meta as _meta_from_ranked
+
+log = get_logger(__name__)
 
 
 # ─────────────────────────────────────────────
@@ -56,7 +59,7 @@ def invalidate_caches() -> None:
 #  Collection resolution (RAG-driven)
 # ─────────────────────────────────────────────
 #
-#  The planner LLM's free-form `collection` field is unreliable; it often
+#  The reasoning LLM's free-form `collection` field is unreliable; it often
 #  picks the wrong cloud or hallucinates a name. This helper lets the
 #  *retriever* (the RAG system) decide which collection to use, by voting
 #  with the actual embeddings, and falls back to sanitized hints.
@@ -85,59 +88,6 @@ def _majority_collection_from_docs(
     return winner if votes >= threshold else None
 
 
-def _meta_from_ranked(top_items: list[tuple], collection_filter: str | None) -> dict:
-    """Build retrieval metadata dict from ranked (doc, score) items."""
-    docs = [d for d, _ in top_items]
-    scores = [s for _, s in top_items]
-
-    primary_module = primary_collection = None
-    primary_score  = 0.0
-    for doc, score in zip(docs, scores):
-        if doc.metadata.get("chunk_type") == "overview" and score > primary_score:
-            primary_module     = doc.metadata.get("module")
-            primary_collection = doc.metadata.get("collection")
-            primary_score      = score
-    if not primary_module and docs:
-        primary_module     = docs[0].metadata.get("module")
-        primary_collection = docs[0].metadata.get("collection")
-        primary_score      = scores[0]
-
-    module_candidates = []
-    for d in docs:
-        mod = d.metadata.get("module")
-        if mod and mod not in module_candidates:
-            module_candidates.append(mod)
-
-    required_params = []
-    for d in docs:
-        if d.metadata.get("module") != primary_module:
-            continue
-        if d.metadata.get("chunk_type") != "required_params":
-            continue
-        raw = d.metadata.get("required_params_list", "")
-        if not raw:
-            continue
-        for p in [x.strip() for x in raw.split(",") if x.strip()]:
-            if p not in required_params:
-                required_params.append(p)
-
-    return {
-        "docs"               : docs,
-        "scores"             : scores,
-        "primary_module"     : primary_module,
-        "primary_collection" : primary_collection,
-        "primary_score"      : round(primary_score, 3),
-        "collection_filter"  : collection_filter,
-        "module_candidates"  : module_candidates,
-        "source_url"         : next(
-            (d.metadata.get("source_url") for d in docs
-             if d.metadata.get("module") == primary_module and d.metadata.get("source_url")),
-            ""
-        ),
-        "required_params"    : required_params,
-    }
-
-
 def _search_result_from_meta(query: str, meta: dict) -> dict:
     """Convert retrieval metadata into the public search_docs tool payload."""
     docs    = meta.get("docs", [])
@@ -162,16 +112,11 @@ def _search_result_from_meta(query: str, meta: dict) -> dict:
             if p not in required_params:
                 required_params.append(p)
 
-    print(
-        f"  [Agent][Debug] search_docs primary_module={primary_module} "
-        f"required_params={required_params or []}"
+    log.debug(
+        "agent.search_docs.resolved",
+        primary_module=primary_module,
+        required_params=required_params or [],
     )
-    chunks_dbg = []
-    for c in chunks[:5]:
-        chunks_dbg.append(
-            f"{c.get('module')}[{c.get('chunk_type')}@{c.get('score')}]"
-        )
-    print(f"  [Agent][Debug] top_chunks={chunks_dbg or ['(none)']}")
 
     return {
         "query"             : query,
@@ -181,28 +126,12 @@ def _search_result_from_meta(query: str, meta: dict) -> dict:
         "source_url"        : meta.get("source_url"),
         "required_params"   : required_params,
         "required_params_detailed": _required_params_detailed(primary_module),
-        "module_params"     : _module_params_for_clarifier(primary_module),
         "module_candidates" : meta.get("module_candidates", []),
+        "ranked_modules"    : meta.get("ranked_modules", []),
+        "required_params_by_module": meta.get("required_params_by_module", {}),
         "chunks"            : chunks,
         "_retrieval_meta"   : meta,
     }
-
-
-def resolve_collection(
-    query: str,
-    planner_hint: str | None,
-    pinned: str | None,
-    pivot: bool,
-    top_k: int = 3,
-) -> tuple[str | None, str]:
-    resolved, source, _prefetch = resolve_collection_with_prefetch(
-        query=query,
-        planner_hint=planner_hint,
-        pinned=pinned,
-        pivot=pivot,
-        top_k=top_k,
-    )
-    return resolved, source
 
 
 def resolve_collection_with_prefetch(
@@ -210,7 +139,7 @@ def resolve_collection_with_prefetch(
     planner_hint: str | None,
     pinned: str | None,
     pivot: bool,
-    top_k: int = 3,
+    top_k: int = 8,
 ) -> tuple[str | None, str, dict | None]:
     """
     Decide which collection filter to pass to the RAG retriever.
@@ -222,17 +151,14 @@ def resolve_collection_with_prefetch(
          accept the result ONLY IF:
            - >= 4 of the top 5 chunks are from the same collection, AND
            - the primary module's collection matches that winner
-         (This is your "supermajority" choice.)
-      3. If there is no safe vote, fall back to planner hint only if
+      3. If there is no safe vote, fall back to the LLM hint only if
          the hint is in the allow-list.
-      4. If neither a safe vote nor a safe hint is available, return
-         None (unfiltered search).
+      4. Otherwise return None (unfiltered search).
 
     Returns (resolved_collection_or_None, source_tag, prefetched_search_result)
-    where source_tag
-    is one of: "pin", "planner", "vote", "none".
+    where source_tag is one of: "pin", "planner", "vote", "none".
     """
-    from .collections import sanitize_collection, is_known_collection
+    from .collections import is_known_collection, sanitize_collection
 
     if pinned and not pivot and is_known_collection(pinned):
         return pinned, "pin", None
@@ -240,13 +166,17 @@ def resolve_collection_with_prefetch(
     try:
         from rag.retriever import _retrieve_ranked
         vs = _get_vectorstore()
-        top_items, _ = _retrieve_ranked(
-            query=query, vectorstore=vs, top_k=top_k, collection_filter=None
+        top_items, _, _route = _retrieve_ranked(
+            query=query,
+            vectorstore=vs,
+            top_k=top_k,
+            collection_filter=None,
+            apply_auto_collection_filter=False,
         )
         prefetched_meta = _meta_from_ranked(top_items, collection_filter=None)
         prefetched = _search_result_from_meta(query, prefetched_meta)
     except Exception as exc:
-        print(f"  [Agent] resolve_collection: unfiltered search failed: {exc}")
+        log.warning("agent.resolve_collection.search_failed", error=str(exc))
         hint = sanitize_collection(planner_hint)
         if hint:
             return hint, "planner", None
@@ -282,32 +212,59 @@ def resolve_collection_with_prefetch(
 #  Tool: search_docs
 # ─────────────────────────────────────────────
 
-def search_docs(query: str, collection: str | None = None, top_k: int = 3) -> dict:
+def _coerce_retrieval_meta_for_prefetch(raw: dict | None) -> dict | None:
+    """Accept either a bare retrieval meta dict or a search_docs payload with _retrieval_meta."""
+    if not raw or not isinstance(raw, dict):
+        return None
+    inner = raw.get("_retrieval_meta")
+    if isinstance(inner, dict) and inner.get("docs") is not None:
+        return inner
+    if raw.get("docs") is not None:
+        return raw
+    return None
+
+
+def search_docs(
+    query: str,
+    collection: str | None = None,
+    top_k: int = 8,
+    _prefetched_meta: dict | None = None,
+) -> dict:
     """
     Semantic search over the Ansible documentation index.
 
-    Returns a compact summary suitable for feeding back to the LLM:
-      {
-        "query"        : str,
-        "primary_module": "kubernetes.core.helm",
-        "collection"   : "kubernetes.core",
-        "score"        : 0.82,
-        "required_params": [...],
-        "chunks"       : [ {module, type, score, text}, ... ],
-        "module_candidates": [...],
-        "source_url"   : "...",
-      }
+    Pass _prefetched_meta to reuse an already-computed retrieval result
+    (avoids a second vector search when resolve_collection_with_prefetch
+    already ran an unfiltered search).
     """
-    from rag.retriever import get_retrieval_metadata, _retrieve_ranked
+    from rag.retriever import _retrieve_ranked, get_retrieval_metadata
+
+    meta_in = _coerce_retrieval_meta_for_prefetch(_prefetched_meta)
+    if meta_in and meta_in.get("docs"):
+        cf = meta_in.get("collection_filter")
+        primary_coll = meta_in.get("primary_collection")
+        if (
+            cf == collection
+            or (collection is None and cf is None)
+            or (cf is None and collection and primary_coll == collection)
+        ):
+            log.debug("agent.search_docs.reused_prefetch", collection=collection)
+            return _search_result_from_meta(query, meta_in)
 
     vs = _get_vectorstore()
 
     if collection:
-        top_items, _ = _retrieve_ranked(
-            query=query, vectorstore=vs, top_k=top_k, collection_filter=collection
+        # Explicit collection: single-collection Chroma filter (hint / pin).
+        top_items, _, _route = _retrieve_ranked(
+            query=query,
+            vectorstore=vs,
+            top_k=top_k,
+            collection_filter=collection,
+            apply_auto_collection_filter=True,
         )
         meta = _meta_from_ranked(top_items, collection_filter=collection)
     else:
+        # Unscoped search: multi-collection by default (see get_retrieval_metadata).
         meta = get_retrieval_metadata(query, vs, top_k=top_k)
 
     return _search_result_from_meta(query, meta)
@@ -334,11 +291,9 @@ def _required_params_from_kb(module_name: str) -> list[str]:
     entry = _find_kb_entry(module_name)
     if not entry:
         return []
-    # Prefer the pre-computed list if present.
     names = list(entry.get("required_params") or [])
     if names:
         return names
-    # Otherwise derive from the parameter list.
     return [p["name"] for p in (entry.get("parameters") or []) if p.get("required") and p.get("name")]
 
 
@@ -359,83 +314,6 @@ def _required_params_detailed(module_name: str) -> list[dict]:
     return out
 
 
-# Heuristic priority order for parameters when truncating large modules
-# down to a manageable list for the clarify decider. Names that match any
-# of these patterns are considered "essential-ish" and surfaced first.
-_ESSENTIAL_NAME_HINTS = (
-    "name", "id", "image", "ami", "instance_type", "type", "size",
-    "region", "zone", "namespace", "host", "hosts", "url", "endpoint",
-    "path", "src", "dest", "state", "kind", "api_version",
-    "cluster", "vpc", "subnet", "key_name", "security_group",
-    "user", "username", "password", "owner", "group", "mode",
-    "command", "cmd", "shell", "script", "repo", "repository",
-    "version", "branch", "tag", "release", "chart", "package",
-    "port", "protocol", "rule", "tags",
-)
-
-
-def _is_essential_hint(name: str) -> bool:
-    if not name:
-        return False
-    n = name.lower()
-    return any(h in n for h in _ESSENTIAL_NAME_HINTS)
-
-
-def _module_params_for_clarifier(
-    module_name: str, *, max_params: int = 30,
-) -> list[dict]:
-    """
-    Return a curated, prompt-safe list of parameters for the clarify
-    decider. Strategy:
-      1. Always include any param flagged required=True in the docs.
-      2. Then add params whose name looks essential (image_id, region,
-         host, namespace, ...) until we have `max_params` items.
-      3. Finally, fill remaining slots with the rest in original order.
-    Each entry is {name, type, required, description}, descriptions are
-    truncated to keep the prompt small.
-    """
-    entry = _find_kb_entry(module_name)
-    if not entry:
-        return []
-    raw_params = entry.get("parameters") or []
-    if not raw_params:
-        return []
-
-    def shape(p: dict) -> dict:
-        return {
-            "name"       : p.get("name") or "",
-            "type"       : p.get("type", "any"),
-            "required"   : bool(p.get("required")),
-            "description": (p.get("description") or "").strip()[:140],
-        }
-
-    by_name = {p.get("name"): shape(p) for p in raw_params if p.get("name")}
-    ordered: list[dict] = []
-    seen = set()
-
-    for name, p in by_name.items():
-        if p["required"]:
-            ordered.append(p); seen.add(name)
-
-    for name, p in by_name.items():
-        if name in seen:
-            continue
-        if _is_essential_hint(name):
-            ordered.append(p); seen.add(name)
-            if len(ordered) >= max_params:
-                break
-
-    if len(ordered) < max_params:
-        for name, p in by_name.items():
-            if name in seen:
-                continue
-            ordered.append(p); seen.add(name)
-            if len(ordered) >= max_params:
-                break
-
-    return ordered[:max_params]
-
-
 # ─────────────────────────────────────────────
 #  Tool: get_module_info
 # ─────────────────────────────────────────────
@@ -452,7 +330,7 @@ def get_module_info(module: str) -> dict:
 
 
 # ─────────────────────────────────────────────
-#  Tool: validate_yaml
+#  Tool: validate_yaml / validate_playbook_file
 # ─────────────────────────────────────────────
 
 def _write_temp_yaml(yaml_content: str) -> str:
@@ -464,31 +342,11 @@ def _write_temp_yaml(yaml_content: str) -> str:
     return tmp.name
 
 
-def validate_yaml(yaml_content: str | None = None, filepath: str | None = None) -> dict:
-    """
-    Validate a playbook, either from raw YAML text or an existing file.
-    Returns a JSON-safe summary (is_valid, passed, warnings, errors, ansible_lint).
-    """
+def validate_playbook_file(filepath: str) -> dict:
+    """Full validator (structure, KB params, secrets, ansible-lint) on a file."""
     from validator import validate_playbook
     kb = _get_kb()
-
-    created_temp = False
-    path = filepath
-    if path is None:
-        if not yaml_content:
-            return {"error": "No YAML provided"}
-        path = _write_temp_yaml(yaml_content)
-        created_temp = True
-
-    try:
-        result = validate_playbook(path, kb.get("modules", {}))
-    finally:
-        if created_temp:
-            try:
-                os.unlink(path)
-            except OSError:
-                pass
-
+    result = validate_playbook(filepath, kb.get("modules", {}))
     return {
         "is_valid"    : bool(result.is_valid),
         "passed"      : len(result.passed),
@@ -500,14 +358,56 @@ def validate_yaml(yaml_content: str | None = None, filepath: str | None = None) 
     }
 
 
+def validate_yaml(yaml_content: str | None = None, filepath: str | None = None) -> dict:
+    """
+    Validate a playbook, either from raw YAML text or an existing file.
+    Returns a JSON-safe summary (is_valid, passed, warnings, errors, ansible_lint).
+    """
+    created_temp = False
+    path = filepath
+    if path is None:
+        if not yaml_content:
+            return {"error": "No YAML provided"}
+        path = _write_temp_yaml(yaml_content)
+        created_temp = True
+
+    try:
+        return validate_playbook_file(path)
+    finally:
+        if created_temp:
+            try:
+                os.unlink(path)
+            except OSError:
+                pass
+
+
 # ─────────────────────────────────────────────
-#  Tool: generate_playbook
+#  Tool: draft_playbook (one draft/repair pass)
 # ─────────────────────────────────────────────
 
-def _clean_yaml_from_path(path: str) -> str:
+LOW_CONFIDENCE_THRESHOLD = 0.38
+
+
+def check_retrieval_confidence(retrieval_meta: dict | None) -> tuple[bool, str]:
+    """
+    True when retrieval identified a module confidently enough to ground
+    YAML generation. Returns (confident, reason_when_not).
+    """
+    meta = retrieval_meta or {}
+    primary_module = meta.get("primary_module")
+    primary_score = float(meta.get("primary_score") or 0.0)
+    if primary_module and primary_score >= LOW_CONFIDENCE_THRESHOLD:
+        return True, ""
+    candidates = list(meta.get("module_candidates") or [])
+    return False, (
+        f"Retrieval score {primary_score:.3f} is below threshold {LOW_CONFIDENCE_THRESHOLD}. "
+        f"Candidates: {candidates[:3]}. "
+        "The requested module may not be indexed — run the scraper to add it."
+    )
+
+
+def _strip_header_comments(raw: str) -> str:
     """Strip header comments + anything before the first `---`."""
-    with open(path, "r", encoding="utf-8") as f:
-        raw = f.read()
     lines = [l for l in raw.splitlines() if not l.startswith("#")]
     start = next((i for i, l in enumerate(lines) if l.strip() == "---"), None)
     if start is not None:
@@ -515,93 +415,53 @@ def _clean_yaml_from_path(path: str) -> str:
     return "\n".join(lines).strip()
 
 
-def generate_playbook(
+def draft_playbook(
     user_request: str,
-    retrieval_meta: dict | None = None,
+    retrieval_meta: dict,
+    *,
     conversation_facts: dict | None = None,
-    db_session=None,
+    feedback: str = "none",
+    fix_plan: str = "none",
+    existing_path: str | None = None,
 ) -> dict:
     """
-    Produce a full Ansible playbook for `user_request`.
+    ONE draft (or repair) pass over `user_request`.
 
-    - Uses the provided RAG `retrieval_meta` if given (from an earlier
-      `search_docs` call), otherwise runs a fresh retrieval.
-    - Generates YAML with the agent LLM and retrieved docs as context
-      (`agent.playbook_generator`), not the legacy RAG LangChain generator.
-    - Validates the generated YAML.
-    - Builds a module reference.
-    - Persists a `Generation` row when `db_session` is provided, so the
-      Stats dashboard stays in sync with every playbook the agent produces.
+    The file this writes is scratch, not a deliverable: ansible-lint takes
+    a path rather than a string, so each pass has to materialise the YAML
+    somewhere. Repair calls pass `existing_path` to overwrite the same
+    file, so a four-iteration repair loop leaves one file behind, not
+    four. The durable copy is archived to object storage once the turn
+    settles (see storage.store_playbook).
+
+    Returns {yaml, path, filename, issues}.
     """
-    from agent.playbook_generator import generate_playbook_from_retrieval
-    from rag.retriever import get_retrieval_metadata
-    from rag.generator import _extract_constraints
+    import storage
+    from agent.playbook_generator import draft_playbook_from_retrieval
 
-    if not retrieval_meta or not retrieval_meta.get("docs"):
-        retrieval_meta = get_retrieval_metadata(user_request, _get_vectorstore())
-
-    conversation_facts = dict(conversation_facts or {})
-    merged_context = user_request
-    if conversation_facts:
-        facts_blob = "\n".join(f"- {k}: {v}" for k, v in conversation_facts.items() if v is not None and str(v).strip())
-        if facts_blob:
-            merged_context = f"{user_request}\n\nConversation facts:\n{facts_blob}"
-    # No-clarify mode: never block generation for missing parameters.
-    # The playbook generator is instructed to auto-fill unspecified params.
-    _ = _extract_constraints(merged_context)
-
-    output_path, _yaml = generate_playbook_from_retrieval(
-        merged_context,
+    yaml_content, issues = draft_playbook_from_retrieval(
+        user_request,
         retrieval_meta,
         conversation_facts=conversation_facts,
-        missing_required_params=[],
+        feedback=feedback,
+        fix_plan=fix_plan,
     )
-    playbook_clean = _clean_yaml_from_path(output_path)
+    # The generator's informational header is stripped so that ansible-lint
+    # and the UI both see nothing but the playbook.
+    yaml_clean = _strip_header_comments(yaml_content)
 
-    # Rewrite the file with the cleaned YAML (matches behavior of old /generate route).
-    with open(output_path, "w", encoding="utf-8") as f:
-        f.write(playbook_clean)
-
-    validation = validate_yaml(filepath=output_path)
-    detected   = validation.get("module") or retrieval_meta.get("primary_module") or "unknown"
-    module_ref = get_module_info(detected)
-
-    filename = os.path.basename(output_path)
-
-    gen_id = None
-    if db_session is not None:
-        try:
-            from models import Generation
-            entry = Generation(
-                request    = user_request,
-                module     = detected,
-                filename   = filename,
-                playbook   = playbook_clean,
-                is_valid   = validation["is_valid"],
-                warnings   = len(validation["warnings"]),
-                errors     = len(validation["errors"]),
-                module_ref = module_ref,
-            )
-            db_session.add(entry)
-            db_session.commit()
-            gen_id = entry.id
-        except Exception:
-            db_session.rollback()
+    filename = (
+        os.path.basename(existing_path)
+        if existing_path
+        else storage.playbook_filename(user_request)
+    )
+    path = storage.write_working_file(filename, yaml_clean)
 
     return {
-        "playbook"    : playbook_clean,
-        "filename"    : filename,
-        "module"      : detected,
-        "module_ref"  : module_ref,
-        "validation"  : validation,
-        "generation_id": gen_id,
-        "rag_meta"    : {
-            "primary_module"    : retrieval_meta.get("primary_module"),
-            "primary_collection": retrieval_meta.get("primary_collection"),
-            "primary_score"     : retrieval_meta.get("primary_score"),
-            "chunks"            : len(retrieval_meta.get("docs", [])),
-            "source_url"        : retrieval_meta.get("source_url"),
-        },
+        "yaml"    : yaml_clean,
+        "path"    : path,
+        "filename": os.path.basename(path),
+        "issues"  : issues,
     }
 
 
@@ -619,56 +479,7 @@ def extract_embedded_yaml(message: str) -> str | None:
     m = YAML_FENCE_RE.search(message)
     if m:
         return m.group(1).strip()
-    # Inline: starts with `---` or list of plays.
     stripped = message.strip()
     if stripped.startswith("---") or re.match(r"^-\s+name:", stripped):
         return stripped
     return None
-
-
-# ─────────────────────────────────────────────
-#  Tool dispatch
-# ─────────────────────────────────────────────
-
-TOOL_REGISTRY = {
-    "search_docs"      : search_docs,
-    "get_module_info"  : get_module_info,
-    "validate_yaml"    : validate_yaml,
-    "generate_playbook": generate_playbook,
-}
-
-
-def run_tool(name: str, args: dict[str, Any] | None = None, **extra) -> dict:
-    """
-    Safe dispatcher used by the orchestrator.
-    Unknown tools return an error payload instead of raising.
-    """
-    args = dict(args or {})
-    fn = TOOL_REGISTRY.get(name)
-    if fn is None:
-        return {"error": f"Unknown tool: {name}"}
-
-    try:
-        if name == "generate_playbook":
-            return fn(
-                user_request = args.get("user_request") or args.get("request") or extra.get("user_request", ""),
-                retrieval_meta = args.get("retrieval_meta") or extra.get("retrieval_meta"),
-                conversation_facts = args.get("conversation_facts") or extra.get("conversation_facts"),
-                db_session   = extra.get("db_session"),
-            )
-        if name == "validate_yaml":
-            return fn(
-                yaml_content = args.get("yaml") or args.get("yaml_content"),
-                filepath     = args.get("filepath"),
-            )
-        if name == "get_module_info":
-            return fn(module=args.get("module") or args.get("name") or "")
-        if name == "search_docs":
-            return fn(
-                query      = args.get("query", ""),
-                collection = args.get("collection"),
-                top_k      = int(args.get("top_k", 3)),
-            )
-        return fn(**args)
-    except Exception as e:
-        return {"error": f"{name} failed: {e}"}

@@ -1,0 +1,216 @@
+# Golden E2E cases for AnsibleAI playbook generation.
+# Each case defines the user query and expected outcomes (not a full golden YAML —
+# LLM output is non-deterministic; we score structural + semantic expectations).
+
+version: 1
+layer_weights:
+  intent_understanding: 0.20
+  retrieval_quality: 0.20
+  module_correctness: 0.25
+  playbook_quality: 0.25
+  runtime_behavior: 0.10
+
+# ── Core platform scenarios (cross-collection) ─────────────────────────────
+core_cases:
+  - id: core-ec2-apache
+    query: |
+      Launch EC2 instances (AWS). Create an Ansible playbook that provisions two EC2 instances in AWS and installs Apache on them.
+    expected_collection: amazon.aws
+    expected_modules:
+      - amazon.aws.ec2_instance
+    intent_signals: [ec2, aws, apache, instance]
+    yaml_contains: [ec2_instance, "{{ var_"]
+    min_tasks: 1
+
+  - id: core-s3-encrypted
+    query: |
+      Create S3 bucket. Generate a playbook that creates an encrypted S3 bucket with versioning enabled.
+    expected_collection: amazon.aws
+    expected_modules:
+      - amazon.aws.s3_bucket
+    intent_signals: [s3, bucket, encrypt, version]
+    yaml_contains: [s3_bucket]
+
+  - id: core-azure-vm
+    query: |
+      Create Azure VM. Generate an Ansible playbook that creates an Ubuntu virtual machine in Azure with a public IP and SSH access.
+    expected_collection: azure.azcollection
+    expected_modules:
+      - azure.azcollection.azure_rm_virtualmachine
+    intent_signals: [azure, ubuntu, vm, ssh, public]
+    yaml_contains_any: [azure_rm_virtualmachine, azure_rm_networkinterface, azure_rm_publicipaddress]
+
+  - id: core-k8s-namespace
+    query: |
+      Create a Kubernetes namespace named staging with label env=staging using an Ansible playbook on localhost.
+    expected_collection: kubernetes.core
+    expected_modules:
+      - kubernetes.core.k8s
+    intent_signals: [kubernetes, namespace, staging]
+    yaml_contains: [kubernetes.core.k8s, definition]
+
+  - id: core-builtin-debug
+    query: |
+      Write a minimal Ansible playbook for localhost that uses the debug module to print Hello from AnsibleAI.
+    expected_collection: ansible.builtin
+    expected_modules:
+      - ansible.builtin.debug
+    intent_signals: [debug, localhost, hello]
+    yaml_contains: [debug, msg]
+
+# ── Per-collection suites (5 prompts each) ───────────────────────────────────
+collections:
+  amazon.aws:
+    - id: aws-ec2
+      query: Create an EC2 instance t3.micro in AWS using variables for subnet, security group, and AMI.
+      expected_modules: [amazon.aws.ec2_instance]
+      intent_signals: [ec2, aws, instance]
+      yaml_contains: [ec2_instance]
+
+    - id: aws-s3
+      query: Create a private S3 bucket with versioning and encryption in AWS.
+      expected_modules: [amazon.aws.s3_bucket]
+      intent_signals: [s3, aws, bucket]
+      yaml_contains: [s3_bucket]
+
+    - id: aws-vpc
+      query: Create an AWS VPC with CIDR 10.0.0.0/16 and an internet gateway attached.
+      expected_modules: [amazon.aws.ec2_vpc]
+      intent_signals: [vpc, aws]
+      yaml_contains_any: [ec2_vpc, ec2_vpc_net]
+
+    - id: aws-sg
+      query: Create an AWS security group allowing SSH port 22 and HTTP port 80.
+      expected_modules: [amazon.aws.ec2_security_group]
+      intent_signals: [security group, aws, ssh]
+      yaml_contains_any: [ec2_security_group, ec2_group]
+
+    - id: aws-rds
+      query: Create a small RDS MySQL instance in AWS with encrypted storage; use variables for credentials.
+      expected_modules: [amazon.aws.rds_instance]
+      intent_signals: [rds, mysql, aws]
+      yaml_contains: [rds_instance]
+
+  azure.azcollection:
+    - id: azure-rg
+      query: Create an Azure resource group named rg-demo in eastus.
+      expected_modules: [azure.azcollection.azure_rm_resourcegroup]
+      intent_signals: [azure, resource group]
+      yaml_contains: [azure_rm_resourcegroup]
+
+    - id: azure-storage
+      query: Create an Azure storage account in resource group rg-demo with standard LRS replication.
+      expected_modules: [azure.azcollection.azure_rm_storageaccount]
+      intent_signals: [azure, storage]
+      yaml_contains: [azure_rm_storageaccount]
+
+    - id: azure-vnet
+      query: Create an Azure virtual network vnet-demo with address space 10.1.0.0/16 in rg-demo.
+      expected_modules: [azure.azcollection.azure_rm_virtualnetwork]
+      intent_signals: [azure, virtual network, vnet]
+      yaml_contains: [azure_rm_virtualnetwork]
+
+    - id: azure-vm
+      query: Provision an Ubuntu Azure Linux VM with a public IP in rg-demo; use variables for admin and SSH key.
+      expected_modules: [azure.azcollection.azure_rm_virtualmachine]
+      intent_signals: [azure, vm, ubuntu]
+      yaml_contains_any: [azure_rm_virtualmachine, azure_rm_networkinterface]
+
+    - id: azure-aks
+      query: Create an AKS cluster with 2 nodes in Azure resource group rg-demo with RBAC enabled.
+      expected_modules: [azure.azcollection.azure_rm_aks]
+      intent_signals: [aks, azure, kubernetes]
+      yaml_contains: [azure_rm_aks]
+
+  kubernetes.core:
+    - id: k8s-namespace
+      query: Ensure Kubernetes namespace app-prod exists with label tier=production.
+      expected_modules: [kubernetes.core.k8s]
+      intent_signals: [namespace, kubernetes]
+      yaml_contains: [kubernetes.core.k8s, Namespace]
+
+    - id: k8s-deployment
+      query: Deploy nginx Deployment with 2 replicas in namespace app-prod using kubernetes.core.k8s.
+      expected_modules: [kubernetes.core.k8s]
+      intent_signals: [deployment, nginx, replicas]
+      yaml_contains: [kubernetes.core.k8s, Deployment]
+
+    - id: k8s-service
+      query: Create a ClusterIP Service for app nginx on port 80 in namespace app-prod.
+      expected_modules: [kubernetes.core.k8s]
+      intent_signals: [service, clusterip, nginx]
+      yaml_contains: [kubernetes.core.k8s, Service]
+
+    - id: k8s-configmap
+      query: Create a ConfigMap app-config in namespace app-prod with key app_mode set to production.
+      expected_modules: [kubernetes.core.k8s]
+      intent_signals: [configmap, kubernetes]
+      yaml_contains: [kubernetes.core.k8s, ConfigMap]
+
+    - id: k8s-secret
+      query: Create a Secret db-credentials in namespace app-prod using kubernetes.core.k8s (use variables, no literal passwords).
+      expected_modules: [kubernetes.core.k8s]
+      intent_signals: [secret, kubernetes]
+      yaml_contains: [kubernetes.core.k8s, Secret]
+
+  community.general:
+    - id: cg-timezone
+      query: Set system timezone to UTC on Linux hosts using Ansible.
+      expected_modules: [community.general.timezone]
+      intent_signals: [timezone, utc]
+      yaml_contains_any: [community.general.timezone, timezone]
+
+    - id: cg-cron
+      query: Add a cron job that runs a backup script every day at 2am using Ansible.
+      expected_modules: [community.general.cron]
+      intent_signals: [cron, backup]
+      yaml_contains_any: [community.general.cron, cron]
+
+    - id: cg-gitlab-runner
+      query: Register a GitLab Runner on a host using Ansible (use variables for tokens).
+      expected_modules: [community.general.gitlab_runner]
+      intent_signals: [gitlab, runner]
+      yaml_contains_any: [gitlab_runner, community.general.gitlab_runner]
+
+    - id: cg-ufw
+      query: Allow TCP port 443 through UFW firewall on Ubuntu using Ansible.
+      expected_modules: [community.general.ufw]
+      intent_signals: [ufw, firewall, 443]
+      yaml_contains_any: [community.general.ufw, ufw]
+
+    - id: cg-docker
+      query: Ensure a Docker container nginx is running and published on port 8080 using Ansible.
+      expected_modules: [community.general.docker_container]
+      intent_signals: [docker, container, nginx]
+      yaml_contains_any: [docker_container, community.general.docker_container]
+
+  ansible.builtin:
+    - id: builtin-debug
+      query: Ansible playbook on localhost that prints the current date with the debug module.
+      expected_modules: [ansible.builtin.debug]
+      intent_signals: [debug, localhost]
+      yaml_contains: [debug]
+
+    - id: builtin-copy
+      query: Copy file /etc/hosts to /tmp/hosts.backup on remote hosts using Ansible copy module.
+      expected_modules: [ansible.builtin.copy]
+      intent_signals: [copy, file]
+      yaml_contains: [copy]
+
+    - id: builtin-file
+      query: Ensure directory /opt/myapp exists with mode 0755 using Ansible.
+      expected_modules: [ansible.builtin.file]
+      intent_signals: [directory, file]
+      yaml_contains: [file, state]
+
+    - id: builtin-service
+      query: Ensure service nginx is started and enabled on boot using Ansible.
+      expected_modules: [ansible.builtin.service]
+      intent_signals: [service, nginx, started]
+      yaml_contains: [service]
+
+    - id: builtin-lineinfile
+      query: Add line "PermitRootLogin no" to /etc/ssh/sshd_config using Ansible lineinfile.
+      expected_modules: [ansible.builtin.lineinfile]
+      intent_signals: [lineinfile, sshd]
+      yaml_contains: [lineinfile]

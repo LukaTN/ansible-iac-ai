@@ -1,0 +1,9 @@
+---
+- name: Print current date
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Show date
+      ansible.builtin.debug:
+        msg: "{{ ansible_date_time.iso8601 }}"

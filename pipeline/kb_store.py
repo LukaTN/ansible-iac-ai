@@ -86,7 +86,7 @@ def load_kb_from_parsed(parsed_dir: str = PARSED_DIR) -> dict:
         return {"metadata": {"generated_at": datetime.utcnow().isoformat(), "total_modules": 0, "collections": []}, "modules": {}}
 
     for filepath in _iter_parsed_json_files(parsed_dir):
-        with open(filepath, "r", encoding="utf-8") as f:
+        with open(filepath, encoding="utf-8") as f:
             data = json.load(f)
 
         slug = data.get("slug") or os.path.basename(filepath).replace(".json", "")
@@ -113,7 +113,7 @@ def load_knowledge_base(prefer_parsed: bool = True) -> dict:
             return kb
 
     if os.path.exists(LEGACY_KB_FILE):
-        with open(LEGACY_KB_FILE, "r", encoding="utf-8") as f:
+        with open(LEGACY_KB_FILE, encoding="utf-8") as f:
             return json.load(f)
 
     return {"metadata": {"generated_at": datetime.utcnow().isoformat(), "total_modules": 0, "collections": []}, "modules": {}}
