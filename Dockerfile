@@ -83,8 +83,8 @@ ENV PYTHONUNBUFFERED=1 \
     # Celery's prefork children do not reliably keep the image WORKDIR on
     # sys.path (the empty '' entry tracks cwd, which billiard can change).
     # Without this, `from agent import ...` inside a task raises
-    # ModuleNotFoundError even though the package is at /app/agent.
-    PYTHONPATH=/app \
+    # ModuleNotFoundError even though the package is at /app/backend/agent.
+    PYTHONPATH=/app/backend \
     APP_ROLE=api \
     PORT=5000 \
     # ansible-lint is installed here, so no WSL hop as on Windows.
@@ -115,10 +115,11 @@ COPY --from=deps /opt/ansible/collections /opt/ansible/collections
 
 WORKDIR /app
 
-# Application source. .dockerignore keeps .env, the vector index, the
-# scrape cache and generated playbooks out; data/parsed (the parsed
-# knowledge base) is deliberately included so the image is usable on
-# its own. Files stay root-owned and are read-only to the app user.
+# Application source (backend/ holds Python packages; scripts/, docker/,
+# alembic.ini, data/parsed stay at the repo root). .dockerignore keeps
+# .env, the vector index, the scrape cache and generated playbooks out;
+# data/parsed is deliberately included so the image is usable on its own.
+# Files stay root-owned and are read-only to the app user.
 COPY --chown=root:root . .
 
 # The freshly built SPA. static/dist is excluded from the build context

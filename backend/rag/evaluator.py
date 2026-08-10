@@ -35,10 +35,11 @@ warnings.filterwarnings("ignore", message=".*Importing.*from 'ragas.metrics'.*de
 
 
 FILE_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.dirname(FILE_DIR)
+BACKEND_ROOT = os.path.dirname(FILE_DIR)
+PROJECT_ROOT = os.path.dirname(BACKEND_ROOT)
 os.chdir(PROJECT_ROOT)
-if PROJECT_ROOT not in sys.path:
-    sys.path.insert(0, PROJECT_ROOT)
+if BACKEND_ROOT not in sys.path:
+    sys.path.insert(0, BACKEND_ROOT)
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 if hasattr(sys.stderr, "reconfigure"):
@@ -46,7 +47,7 @@ if hasattr(sys.stderr, "reconfigure"):
 
 REPORT_DIR   = "reports"
 EVAL_DIR     = "data/rag_eval"
-DATASET_FILE = "rag/test_dataset.json"
+DATASET_FILE = "backend/rag/test_dataset.json"
 
 OLLAMA_URL   = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 JUDGE_MODEL  = os.getenv("RAGAS_JUDGE_MODEL", "qwen2.5-coder:14b")
@@ -132,7 +133,7 @@ def run_rag_pipeline(question: str, vectorstore) -> dict:
 
 def run_classic_pipeline(question: str) -> dict:
     """Run classic keyword-based pipeline for comparison."""
-    sys.path.insert(0, "pipeline")
+    sys.path.insert(0, os.path.join(BACKEND_ROOT, "pipeline"))
     from phase4_generator import (
         build_module_context,
         find_best_module,
@@ -261,7 +262,7 @@ def run_evaluation(quick: bool = False, compare: bool = False):
     if not os.path.exists(DATASET_FILE):
         raise FileNotFoundError(
             f"Test dataset not found: {DATASET_FILE}\n"
-            "→ Make sure rag/test_dataset.json exists."
+            "→ Make sure backend/rag/test_dataset.json exists."
         )
 
     with open(DATASET_FILE, encoding="utf-8") as f:

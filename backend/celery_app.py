@@ -20,13 +20,15 @@ import os
 import sys
 from pathlib import Path
 
-# Guarantee the project root is importable even when Celery's prefork
+# Guarantee backend packages are importable even when Celery's prefork
 # pool has moved the process cwd away from /app (empty '' on sys.path
 # tracks cwd, which is how ForkPoolWorker lost `agent` in production).
-_ROOT = Path(__file__).resolve().parent
-if str(_ROOT) not in sys.path:
-    sys.path.insert(0, str(_ROOT))
-os.chdir(_ROOT)
+# cwd stays at the repository root so relative paths like data/ resolve.
+_BACKEND_ROOT = Path(__file__).resolve().parent
+_REPO_ROOT = _BACKEND_ROOT.parent
+if str(_BACKEND_ROOT) not in sys.path:
+    sys.path.insert(0, str(_BACKEND_ROOT))
+os.chdir(_REPO_ROOT)
 
 from celery import Celery
 

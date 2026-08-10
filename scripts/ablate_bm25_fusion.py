@@ -27,12 +27,13 @@ from collections import Counter
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(PROJECT_ROOT))
+BACKEND_ROOT = PROJECT_ROOT / "backend"
+sys.path.insert(0, str(BACKEND_ROOT))
 
 from rag.indexer import load_vectorstore  # noqa: E402
 from rag.ingestion import SKIP_PARAMS  # noqa: E402
 
-DATASET = PROJECT_ROOT / "rag" / "retrieval_benchmark.json"
+DATASET = BACKEND_ROOT / "rag" / "retrieval_benchmark.json"
 K1, B = 1.5, 0.75
 RRF_K = 60
 

@@ -50,12 +50,12 @@ ignore = [
 [tool.ruff.lint.per-file-ignores]
 # The pipeline and RAG entry points are operator-facing CLI scripts where
 # printing to stdout is the interface, not a logging shortcut.
-"pipeline/*" = ["T20"]
-"rag/*" = ["T20"]
+"backend/pipeline/*" = ["T20"]
+"backend/rag/*" = ["T20"]
 "scripts/*" = ["T20"]
 "tests/*" = ["T20", "S105", "S106", "S108"]
 # Alembic revisions are generated from a template.
-"migrations/versions/*" = ["E402"]
+"backend/migrations/versions/*" = ["E402"]
 
 # ── Legacy debt, scoped per file so new code cannot inherit it ──
 # These are pre-existing patterns from before linting was introduced.
@@ -66,18 +66,18 @@ ignore = [
 "docs/_convert_pdf.py" = ["T20", "E701", "E702", "S110"]
 # `zip()` call sites are equal-length by construction; `l` is used as a
 # short loop variable; defensive `except: pass` blocks are intentional.
-"agent/graph.py" = ["S110"]
-"agent/playbook_generator.py" = ["B905"]
-"agent/tools.py" = ["B905", "E741"]
-"app.py" = ["S110"]
-"rag/evaluator.py" = ["B905", "E741", "RUF059"]
-"rag/generator.py" = ["B905", "E741"]
-"rag/indexer.py" = ["B905", "S110", "RUF013"]
-"rag/pipeline.py" = ["RUF013", "RUF059"]
-"rag/retrieval_utils.py" = ["B905"]
-"rag/retriever.py" = ["RUF046"]
-"pipeline/phase2_parser.py" = ["RUF001"]
-"pipeline/validator.py" = ["RUF005", "RUF013"]
+"backend/agent/graph.py" = ["S110"]
+"backend/agent/playbook_generator.py" = ["B905"]
+"backend/agent/tools.py" = ["B905", "E741"]
+"backend/app.py" = ["S110"]
+"backend/rag/evaluator.py" = ["B905", "E741", "RUF059"]
+"backend/rag/generator.py" = ["B905", "E741"]
+"backend/rag/indexer.py" = ["B905", "S110", "RUF013"]
+"backend/rag/pipeline.py" = ["RUF013", "RUF059"]
+"backend/rag/retrieval_utils.py" = ["B905"]
+"backend/rag/retriever.py" = ["RUF046"]
+"backend/pipeline/phase2_parser.py" = ["RUF001"]
+"backend/pipeline/validator.py" = ["RUF005", "RUF013"]
 "tests/e2e/layers.py" = ["RUF046", "B905"]
 "scripts/trace_query.py" = ["B905", "S110"]
 
@@ -98,6 +98,7 @@ known-first-party = [
 # ─────────────────────────────────────────────
 [tool.mypy]
 python_version = "3.11"
+mypy_path = "backend"
 warn_unused_configs = true
 warn_redundant_casts = true
 warn_unused_ignores = true
@@ -108,7 +109,7 @@ exclude = [
     "^data/",
     "^output/",
     "^frontend/",
-    "^migrations/versions/",
+    "^backend/migrations/versions/",
     "^\\.venv/",
 ]
 
@@ -152,7 +153,7 @@ follow_imports = "skip"
 # ─────────────────────────────────────────────
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["."]
+pythonpath = ["backend"]
 markers = [
     "e2e: end-to-end test requiring a running app and LLM (opt in with E2E_RUN=1)",
     "slow: takes more than a few seconds",

@@ -26,10 +26,11 @@ from typing import Any
 
 # Same bootstrap as celery_app.py: the task body does lazy imports of
 # `agent`, `app`, `models`, and those must resolve after fork.
-_ROOT = Path(__file__).resolve().parent
-if str(_ROOT) not in sys.path:
-    sys.path.insert(0, str(_ROOT))
-os.chdir(_ROOT)
+_BACKEND_ROOT = Path(__file__).resolve().parent
+_REPO_ROOT = _BACKEND_ROOT.parent
+if str(_BACKEND_ROOT) not in sys.path:
+    sys.path.insert(0, str(_BACKEND_ROOT))
+os.chdir(_REPO_ROOT)
 
 import structlog
 from celery.exceptions import SoftTimeLimitExceeded

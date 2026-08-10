@@ -39,7 +39,7 @@ def _requirement_names(path: Path) -> set[str]:
 @pytest.fixture(scope="module")
 def gunicorn_conf() -> dict[str, Any]:
     """Execute gunicorn.conf.py the way gunicorn does and return its globals."""
-    return runpy.run_path(str(ROOT / "gunicorn.conf.py"))
+    return runpy.run_path(str(ROOT / "backend" / "gunicorn.conf.py"))
 
 
 # ── gunicorn ─────────────────────────────────────────────────────
@@ -106,13 +106,13 @@ def test_image_sets_pythonpath_for_celery_forks() -> None:
     Without this, worker tasks raise ModuleNotFoundError: agent.
     """
     body = (ROOT / "Dockerfile").read_text(encoding="utf-8")
-    assert "PYTHONPATH=/app" in body
+    assert "PYTHONPATH=/app/backend" in body
 
 
 def test_celery_modules_bootstrap_sys_path() -> None:
     """Belt-and-braces: tasks.py and celery_app.py insert their own root."""
     for name in ("celery_app.py", "tasks.py"):
-        body = (ROOT / name).read_text(encoding="utf-8")
+        body = (ROOT / "backend" / name).read_text(encoding="utf-8")
         assert "sys.path.insert" in body
         assert "Path(__file__)" in body
 
@@ -121,6 +121,7 @@ def test_worker_entrypoint_exports_pythonpath() -> None:
     body = (ROOT / "docker" / "entrypoint.sh").read_text(encoding="utf-8")
     worker_block = body.split("worker)", 1)[1].split(";;", 1)[0]
     assert "PYTHONPATH" in worker_block
+    assert "/app/backend" in worker_block
     assert "cd /app" in worker_block
 
 
@@ -231,7 +232,7 @@ def test_dockerignore_keeps_files_the_image_needs() -> None:
         for line in (ROOT / ".dockerignore").read_text(encoding="utf-8").splitlines()
         if line.strip() and not line.startswith("#")
     }
-    for needed in ("migrations/", "scripts/", "alembic.ini", "gunicorn.conf.py", "docker/"):
+    for needed in ("backend/", "scripts/", "alembic.ini", "docker/"):
         assert needed not in patterns
 
 

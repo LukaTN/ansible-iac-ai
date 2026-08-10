@@ -25,12 +25,13 @@ from langchain_chroma import Chroma
 from langchain_core.documents import Document
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(PROJECT_ROOT))
+BACKEND_ROOT = PROJECT_ROOT / "backend"
+sys.path.insert(0, str(BACKEND_ROOT))
 
 from rag.indexer import get_embeddings  # noqa: E402
 from rag.ingestion import build_overview_doc  # noqa: E402
 
-DATASET = PROJECT_ROOT / "rag" / "retrieval_benchmark.json"
+DATASET = BACKEND_ROOT / "rag" / "retrieval_benchmark.json"
 
 
 def legacy_overview(module: dict, collection: str) -> Document:

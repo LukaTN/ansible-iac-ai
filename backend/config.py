@@ -26,7 +26,10 @@ from typing import Literal
 from pydantic import Field, ValidationError, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-PROJECT_ROOT = Path(__file__).resolve().parent
+# Application package root (…/backend) and repository root (parent).
+# Runtime data (data/, output/, .env) lives at the repository root.
+BACKEND_ROOT = Path(__file__).resolve().parent
+PROJECT_ROOT = BACKEND_ROOT.parent
 
 Environment = Literal["development", "staging", "production"]
 SessionBackend = Literal["sqlalchemy", "redis", "filesystem"]
@@ -487,6 +490,7 @@ def env_summary() -> dict[str, object]:
 
 
 __all__ = [
+    "BACKEND_ROOT",
     "PROJECT_ROOT",
     "ConfigError",
     "Settings",

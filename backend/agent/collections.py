@@ -23,7 +23,8 @@ from functools import lru_cache
 
 from logging_setup import get_logger
 
-PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# backend/agent/… → repository root (data/ lives next to backend/)
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 log = get_logger(__name__)
 

@@ -23,10 +23,11 @@ import sys
 from datetime import datetime
 
 FILE_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.dirname(FILE_DIR)
+BACKEND_ROOT = os.path.dirname(FILE_DIR)
+PROJECT_ROOT = os.path.dirname(BACKEND_ROOT)
 os.chdir(PROJECT_ROOT)
-if PROJECT_ROOT not in sys.path:
-    sys.path.insert(0, PROJECT_ROOT)
+if BACKEND_ROOT not in sys.path:
+    sys.path.insert(0, BACKEND_ROOT)
 
 from langchain_core.documents import Document
 
