@@ -6,7 +6,7 @@ import os
 import sys
 
 _BASE = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-sys.path.insert(0, os.path.join(_BASE, "pipeline"))
+sys.path.insert(0, os.path.join(_BASE, "backend", "pipeline"))
 
 from validator import ValidationResult, check_module_present
 

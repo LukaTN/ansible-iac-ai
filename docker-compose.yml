@@ -16,7 +16,7 @@
 #
 #  Other roles from the same image:
 #    docker compose --env-file .env.docker run --rm api smoke
-#    docker compose --env-file .env.docker run --rm api exec python rag/pipeline.py --build
+#    docker compose --env-file .env.docker run --rm api exec python backend/rag/pipeline.py --build
 #
 #  Generations run in the `worker` service, not in the API request. To
 #  watch one happen:

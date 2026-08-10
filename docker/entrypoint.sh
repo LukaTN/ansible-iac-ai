@@ -34,7 +34,7 @@ api)
     # the `migrate` role's job, never the API's — concurrent replicas
     # running Alembic would race.
     log "starting gunicorn (workers=${GUNICORN_WORKERS:-1}, class=${GUNICORN_WORKER_CLASS:-gevent})"
-    exec gunicorn --config /app/gunicorn.conf.py "$@" app:app
+    exec gunicorn --config /app/backend/gunicorn.conf.py "$@" app:app
     ;;
 
 migrate)
@@ -69,7 +69,7 @@ worker)
     # cwd + PYTHONPATH: billiard's prefork children do not inherit a
     # reliable empty-string sys.path entry for WORKDIR. See Dockerfile.
     cd /app
-    export PYTHONPATH="/app${PYTHONPATH:+:$PYTHONPATH}"
+    export PYTHONPATH="/app/backend${PYTHONPATH:+:$PYTHONPATH}"
     exec celery -A tasks worker \
         --loglevel="${CELERY_LOG_LEVEL:-info}" \
         --concurrency="${CELERY_WORKER_CONCURRENCY:-2}" \
@@ -114,7 +114,7 @@ exec)
     # Escape hatch for one-off maintenance (shell, alembic revision, the
     # RAG index build) without a second image or a mutated entrypoint.
     if [ "$#" -eq 0 ]; then
-        log "ERROR: 'exec' needs a command, e.g. exec python rag/pipeline.py --build"
+        log "ERROR: 'exec' needs a command, e.g. exec python backend/rag/pipeline.py --build"
         exit 64
     fi
     exec "$@"

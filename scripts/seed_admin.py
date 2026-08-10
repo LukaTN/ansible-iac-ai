@@ -21,7 +21,8 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+_REPO = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(_REPO / "backend"))
 
 from config import settings
 from logging_setup import configure_logging, get_logger

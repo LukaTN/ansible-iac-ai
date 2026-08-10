@@ -18,6 +18,9 @@ from typing import Any
 import requests
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+BACKEND = os.path.join(ROOT, "backend")
+if BACKEND not in sys.path:
+    sys.path.insert(0, BACKEND)
 if ROOT not in sys.path:
     sys.path.insert(0, ROOT)
 os.chdir(ROOT)
@@ -25,7 +28,7 @@ os.chdir(ROOT)
 from tests.e2e.dataset import GoldenCase, iter_cases, layer_weights, load_dataset
 from tests.e2e.layers import evaluate_case
 
-sys.path.insert(0, os.path.join(ROOT, "pipeline"))
+sys.path.insert(0, os.path.join(BACKEND, "pipeline"))
 
 
 def _utc_now() -> str:

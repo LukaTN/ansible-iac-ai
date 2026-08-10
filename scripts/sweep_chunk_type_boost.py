@@ -33,7 +33,8 @@ import sys
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(PROJECT_ROOT))
+BACKEND_ROOT = PROJECT_ROOT / "backend"
+sys.path.insert(0, str(BACKEND_ROOT))
 
 import rag.retriever as R  # noqa: E402
 from rag.indexer import load_vectorstore  # noqa: E402
@@ -59,8 +60,8 @@ def main() -> int:
         vs = load_vectorstore()
 
     datasets = {
-        "benchmark (56 q)": load_samples(PROJECT_ROOT / "rag" / "retrieval_benchmark.json"),
-        "project (20 q)": load_samples(PROJECT_ROOT / "rag" / "test_dataset.json"),
+        "benchmark (56 q)": load_samples(BACKEND_ROOT / "rag" / "retrieval_benchmark.json"),
+        "project (20 q)": load_samples(BACKEND_ROOT / "rag" / "test_dataset.json"),
     }
     original = dict(R.CHUNK_TYPE_BOOST)
 

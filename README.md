@@ -22,7 +22,7 @@ Phases **0–3** of the production LLMOps plan are complete (auth, containers, a
              │ Redis                         │
              ▼                               ▼
 ┌────────────────────────────┐   ┌──────────────────────────────────────────┐
-│  Celery worker             │   │  pipeline/ + rag/                        │
+│  Celery worker             │   │  backend/pipeline + backend/rag          │
 │  LangGraph agent loop      │◄──│  KB scrape/parse, pgvector indexer,      │
 │  ansible-lint gate         │   │  hybrid retriever (dense + BM25)         │
 │  MinIO playbook archive    │   └──────────────────┬───────────────────────┘
@@ -41,8 +41,8 @@ Phases **0–3** of the production LLMOps plan are complete (auth, containers, a
 | Frontend | React 19, TypeScript, Vite, Tailwind v4, Radix UI | Chat UI, stats, docs admin, auth pages |
 | Backend | Flask 3, SQLAlchemy, psycopg2, Flask-SocketIO, Celery | REST API, WebSocket, SSE, async generation |
 | Worker | Celery + Redis | LangGraph runs, cancel, realtime emits |
-| **Agent** | LangGraph (`agent/graph.py`), tools, LLM client | CoT reasoning, draft → validate → repair |
-| RAG | LangChain, pgvector, BM25, `rag/embeddings.py` | Hybrid retrieval over Ansible module docs |
+| **Agent** | LangGraph (`backend/agent/graph.py`), tools, LLM client | CoT reasoning, draft → validate → repair |
+| RAG | LangChain, pgvector, BM25, `backend/rag/embeddings.py` | Hybrid retrieval over Ansible module docs |
 | Artifacts | MinIO (S3) | Durable playbook archive |
 | Auth | Flask-Login, argon2id, Redis sessions | Users, CSRF, rate limits, audit log |
 
@@ -62,14 +62,14 @@ ollama pull qwen2.5-coder:14b
 docker compose --env-file .env.docker up --build -d
 
 # First-time vector index (into Postgres via pgvector)
-docker compose --env-file .env.docker exec api python rag/indexer.py --reset
+docker compose --env-file .env.docker exec api python backend/rag/indexer.py --reset
 ```
 
 Open **http://localhost:5000** and sign in with the bootstrap admin from `.env.docker`.
 
 The image installs Galaxy collections (`amazon.aws`, `azure.azcollection`, `community.general`, `kubernetes.core`) so ansible-lint can resolve modules the agent generates. If you see `syntax-check[unknown-module]` for those collections, rebuild the image: `docker compose --env-file .env.docker build --no-cache api`.
 
-## The agent (`agent/`)
+## The agent (`backend/agent/`)
 
 One LangGraph state machine: several nodes, one shared state. It decides *when* to retrieve docs and **loops** on YAML until the production gate passes (or the iteration budget is exhausted).
 
@@ -174,14 +174,17 @@ python scripts/seed_admin.py
 ```bash
 ollama pull nomic-embed-text
 ollama pull qwen2.5-coder:14b   # optional dedicated codegen
-python rag/indexer.py --reset  # embeds into Postgres
+# PYTHONPATH so short imports (config, agent, rag, …) resolve
+set PYTHONPATH=backend          # Windows PowerShell: $env:PYTHONPATH="backend"
+python backend/rag/indexer.py --reset  # embeds into Postgres
 ```
 
 ### 4. Frontend + run
 
 ```bash
 npm install && npm run build
-python app.py                  # http://localhost:5000
+set PYTHONPATH=backend          # Windows PowerShell: $env:PYTHONPATH="backend"
+python backend/app.py           # http://localhost:5000
 ```
 
 Without Redis/Celery, `CELERY_TASK_ALWAYS_EAGER=true` (dev default) runs generation in-process. Prefer Compose for realistic async + lint behavior.
@@ -190,7 +193,8 @@ Without Redis/Celery, `CELERY_TASK_ALWAYS_EAGER=true` (dev default) runs generat
 
 ```bash
 # Terminal 1
-python app.py
+set PYTHONPATH=backend          # Windows PowerShell: $env:PYTHONPATH="backend"
+python backend/app.py
 
 # Terminal 2
 npm run dev                    # http://localhost:5173 (proxies API)
@@ -248,13 +252,14 @@ docker compose --env-file .env.docker exec api \
 python scripts/compare_eval_runs.py reports/retrieval_baseline.json reports/retrieval_final.json
 ```
 
-Dataset: `rag/retrieval_benchmark.json`. Recent baseline → tuned numbers and decisions are in [docs/production_progress_report.md](docs/production_progress_report.md) (post–Phase 3 section).
+Dataset: `backend/rag/retrieval_benchmark.json`. Recent baseline → tuned numbers and decisions are in [docs/production_progress_report.md](docs/production_progress_report.md) (post–Phase 3 section).
 
 ## CLI utilities
 
 ```bash
-python rag/indexer.py --reset
-python rag/pipeline.py --status
+set PYTHONPATH=backend          # Windows PowerShell: $env:PYTHONPATH="backend"
+python backend/rag/indexer.py --reset
+python backend/rag/pipeline.py --status
 python scripts/trace_query.py "scale deployment to 3 replicas"
 python scripts/eval_retrieval.py
 python scripts/run_e2e_eval.py --mode api
@@ -267,23 +272,25 @@ E2E details: [tests/e2e/README.md](tests/e2e/README.md).
 
 ```
 ansible-iac-ai/
-├── app.py                 # Flask API
-├── config.py              # pydantic-settings
-├── celery_app.py / tasks.py / realtime.py / storage.py / logstream.py
-├── auth/                  # Login, CSRF, sessions, audit
-├── agent/                 # LangGraph agent
+├── backend/               # All Python app code
+│   ├── app.py             # Flask API
+│   ├── config.py / models.py / celery_app.py / tasks.py / …
+│   ├── auth/              # Login, CSRF, sessions, audit
+│   ├── agent/             # LangGraph agent
+│   ├── rag/               # Embeddings, pgvector, indexer, retriever
+│   ├── pipeline/          # KB scrape, parse, validate, ansible-lint
+│   ├── observability/     # Metrics + tracing
+│   └── migrations/        # Alembic (incl. pgvector)
 ├── frontend/              # React SPA
-├── pipeline/              # KB scrape, parse, validate, ansible-lint runner
-├── rag/                   # Embeddings, pgvector store, indexer, retriever
-├── migrations/            # Alembic (incl. pgvector)
-├── docker/                # entrypoint + ansible-collections.yml
-├── deploy/observability/  # Phase 6a Prometheus / Grafana / Langfuse
-├── data/parsed/           # Parsed module JSON (RAG source)
-├── docs/                  # Progress report, layout, presentations
+├── static/dist/           # Vite build output
 ├── scripts/               # seed_admin, smoke_auth, eval runners
 ├── tests/
-├── Dockerfile / docker-compose.yml / docker-compose.observability.yml
-└── reports/               # Indexing / retrieval benchmarks (gitignored)
+├── docker/                # entrypoint + ansible-collections.yml
+├── deploy/observability/  # Prometheus / Grafana / Langfuse
+├── docs/
+├── data/                  # Local KB / scrape artifacts (gitignored)
+├── Dockerfile / docker-compose*.yml
+└── reports/               # Eval reports (gitignored)
 ```
 
 Full tree: [docs/REPOSITORY_LAYOUT.md](docs/REPOSITORY_LAYOUT.md).
@@ -333,7 +340,7 @@ pytest tests/test_e2e_platform.py -v -s
 |---------|-----|
 | Blank page at `:5000` | Rebuild UI (`npm run build`) or use Compose image build |
 | `DATABASE_URL` / `SECRET_KEY` errors | Copy `.env` / `.env.docker` from the `*.example` files |
-| RAG status: 0 chunks | `python rag/indexer.py --reset` (or via `docker compose exec api …`) |
+| RAG status: 0 chunks | `python backend/rag/indexer.py --reset` (or via `docker compose exec api …`) |
 | `syntax-check[unknown-module]` for `amazon.aws.*` | Rebuild image so Galaxy collections are installed |
 | Chat stuck / “Reconnecting…” | Ensure `CORS_ORIGINS` includes your UI origin; check `worker` logs |
 | Compose fails on `MINIO_ROOT_PASSWORD` | Set it in `.env.docker` (min 8 chars) |

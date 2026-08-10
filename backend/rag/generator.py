@@ -17,8 +17,9 @@ import yaml
 from dotenv import load_dotenv
 from langchain_core.documents import Document
 
-# Get the project root directory (parent of the rag directory)
-PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Repository root (parent of backend/); data/ and .env live there.
+BACKEND_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PROJECT_ROOT = os.path.dirname(BACKEND_ROOT)
 os.chdir(PROJECT_ROOT)
 
 # Load .env file from project root

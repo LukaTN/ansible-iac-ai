@@ -25,13 +25,17 @@ from flask import Flask, Response, jsonify, request, send_from_directory, stream
 from flask_login import current_user
 from flask_socketio import SocketIO, join_room
 
-os.chdir(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "pipeline"))
+_BACKEND_ROOT = os.path.dirname(os.path.abspath(__file__))
+_REPO_ROOT = os.path.dirname(_BACKEND_ROOT)
+os.chdir(_REPO_ROOT)
+if _BACKEND_ROOT not in sys.path:
+    sys.path.insert(0, _BACKEND_ROOT)
+sys.path.insert(0, os.path.join(_BACKEND_ROOT, "pipeline"))
 
 # pydantic-settings reads .env for its own model but does not export into
 # os.environ, and the agent/rag/pipeline modules still read os.getenv.
 # Keep this until those are migrated onto `config.settings`.
-load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env"))
+load_dotenv(os.path.join(_REPO_ROOT, ".env"))
 
 # Windows default console is cp1252, which crashes on non-ASCII output
 # (arrows, box-drawing chars, model names with em-dashes, etc.). Force
@@ -214,7 +218,7 @@ def _get_owned_thread_or_404(thread_id: int):
     return thread
 
 
-_DIST_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static", "dist")
+_DIST_DIR = os.path.join(_REPO_ROOT, "static", "dist")
 
 
 @app.before_request

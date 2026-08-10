@@ -1,7 +1,7 @@
 # Keep the build context small and free of secrets. Anything listed here
 # is invisible to `docker build`, so a path that the image genuinely needs
-# must NOT be added — notably docker/, gunicorn.conf.py, migrations/,
-# alembic.ini, scripts/, and the Python packages.
+# must NOT be added — notably docker/, backend/ (app + migrations +
+# gunicorn.conf.py), alembic.ini, scripts/, and related Python packages.
 
 # ── Secrets: never bake credentials into a layer ─────────────────
 .env
@@ -53,8 +53,8 @@ static/dist/
 
 # ── Generated runtime artifacts (volumes at runtime) ─────────────
 # The vector index is a build artifact: rebuild with
-# `python rag/pipeline.py --build`. Committing or copying it would add
-# hundreds of MB to every layer.
+# `python backend/rag/pipeline.py --build`. Committing or copying it
+# would add hundreds of MB to every layer.
 data/chromadb/
 data/kb_versions/
 data/rag_eval/

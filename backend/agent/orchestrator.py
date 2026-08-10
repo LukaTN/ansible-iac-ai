@@ -21,7 +21,7 @@ from typing import Any
 
 from dotenv import load_dotenv
 
-PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 load_dotenv(os.path.join(PROJECT_ROOT, ".env"))
 
 from logging_setup import get_logger

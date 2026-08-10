@@ -15,7 +15,7 @@
 
   Usage
     python scripts/eval_retrieval.py
-    python scripts/eval_retrieval.py --dataset rag/test_dataset.json
+    python scripts/eval_retrieval.py --dataset backend/rag/test_dataset.json
     python scripts/eval_retrieval.py --no-routing --json out.json
 =============================================================
 """
@@ -31,12 +31,13 @@ import sys
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(PROJECT_ROOT))
+BACKEND_ROOT = PROJECT_ROOT / "backend"
+sys.path.insert(0, str(BACKEND_ROOT))
 
 from rag.indexer import load_vectorstore  # noqa: E402
 from rag.retriever import TOP_K, get_retrieval_metadata  # noqa: E402
 
-DEFAULT_DATASET = PROJECT_ROOT / "rag" / "retrieval_benchmark.json"
+DEFAULT_DATASET = BACKEND_ROOT / "rag" / "retrieval_benchmark.json"
 
 
 def load_samples(path: Path) -> list[dict]:
