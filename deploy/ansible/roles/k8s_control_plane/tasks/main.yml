@@ -12,6 +12,16 @@
   register: k8s_admin_conf
   tags: [k8s, control-plane]
 
+- name: Ensure kubeadm config directory exists
+  ansible.builtin.file:
+    path: "{{ k8s_kubeadm_config_path | dirname }}"
+    state: directory
+    mode: "0755"
+    owner: root
+    group: root
+  when: not k8s_admin_conf.stat.exists
+  tags: [k8s, control-plane]
+
 - name: Write kubeadm config
   ansible.builtin.template:
     src: kubeadm-config.yaml.j2

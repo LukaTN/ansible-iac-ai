@@ -54,13 +54,6 @@
   roles:
     - role: k8s_control_plane
 
-- name: Install Calico CNI
-  hosts: "{{ groups['k8s_control_plane'][0] }}"
-  gather_facts: false
-  tags: [k8s, cni]
-  roles:
-    - role: k8s_cni
-
 - name: Fetch kubeconfig to the Ansible control node
   hosts: "{{ groups['k8s_control_plane'][0] }}"
   gather_facts: false
@@ -78,6 +71,13 @@
     k8s_control_plane_host: "{{ groups['k8s_control_plane'][0] }}"
   roles:
     - role: k8s_worker
+
+- name: Install Calico CNI
+  hosts: "{{ groups['k8s_control_plane'][0] }}"
+  gather_facts: false
+  tags: [k8s, cni]
+  roles:
+    - role: k8s_cni
 
 - name: Wait until control plane and worker are Ready
   hosts: "{{ groups['k8s_control_plane'][0] }}"
@@ -103,4 +103,4 @@
   tags: [addons]
   roles:
     - role: k8s_addons
-  when: k8s_install_addons | bool
+      when: k8s_install_addons | bool

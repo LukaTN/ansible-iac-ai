@@ -15,8 +15,9 @@ k8s_service_subnet: 10.96.0.0/12
 # Extra names/IPs on the API server certificate (public DNS, floating IP).
 k8s_api_server_cert_sans: []
 
-# Calico CNI (must match podSubnet).
+# Calico CNI (must match podSubnet). Tune if your lab LAN is not 192.168.1.0/24.
 calico_version: v3.29.2
+calico_ip_autodetection_method: "cidr=192.168.1.0/24"
 
 # Written on the Ansible control node (192.168.1.19) when you run site.yml there.
 k8s_kubeconfig_local_path: "{{ playbook_dir }}/../artifacts/kubeconfig"
