@@ -205,6 +205,12 @@ static/dist/
 # ansible-lint / ansible-core scratch dir
 .ansible/
 
+# Cluster bootstrap (Phase 4): Galaxy collections, kubeconfig, fact cache
+deploy/ansible/collections/
+deploy/ansible/artifacts/*
+!deploy/ansible/artifacts/.gitkeep
+deploy/ansible/**/*.retry
+
 # Presentation and report binaries (sources live under docs/)
 *.pptx
 *.docx

@@ -31,6 +31,7 @@ traces for every chat generation.
 - LangGraph `CallbackHandler` for node structure
 - Truncated I/O — never full playbook YAML or secrets
 - Opt-in via `LANGFUSE_ENABLED` + keys (no-op when disabled)
+- Operator-only UI (`:3000`). Members see token spend in AnsibleAI Account; the SPA does not link to Langfuse
 
 ### Grafana
 

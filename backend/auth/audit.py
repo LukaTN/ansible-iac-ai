@@ -30,6 +30,9 @@ LOGOUT = "auth.logout"
 REGISTER = "auth.register"
 PASSWORD_CHANGED = "auth.password.changed"  # noqa: S105 — event name, not a credential
 SESSION_REVOKED = "auth.session.revoked"
+OIDC_SUCCESS = "auth.oidc.success"
+OIDC_FAILURE = "auth.oidc.failure"
+OIDC_LINKED = "auth.oidc.linked"
 
 # ── Authorization ──
 ACCESS_DENIED = "authz.denied"
@@ -133,6 +136,9 @@ __all__ = [
     "LOGIN_FAILURE",
     "LOGIN_SUCCESS",
     "LOGOUT",
+    "OIDC_FAILURE",
+    "OIDC_LINKED",
+    "OIDC_SUCCESS",
     "OUTCOME_FAILURE",
     "OUTCOME_SUCCESS",
     "PASSWORD_CHANGED",

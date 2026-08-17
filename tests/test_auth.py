@@ -111,6 +111,7 @@ def test_login_succeeds_and_returns_the_user(client, make_user):
     body = resp.get_json()
     assert body["authenticated"] is True
     assert body["user"]["email"] == "member@example.com"
+    assert body["user"]["has_password"] is True
     # The hash must never cross the wire.
     assert "password_hash" not in body["user"]
 
@@ -399,3 +400,19 @@ def test_pending_approval_account_cannot_log_in(monkeypatch, client, make_user):
         json={"email": "waiting@example.com", "password": GOOD_PASSWORD},
     )
     assert login.status_code == 403
+
+
+def test_profile_includes_usage_and_activity(client, make_user):
+    make_user("member@example.com", GOOD_PASSWORD)
+    client.post(
+        "/api/auth/login",
+        json={"email": "member@example.com", "password": GOOD_PASSWORD},
+    )
+    resp = client.get("/api/auth/profile")
+    assert resp.status_code == 200
+    body = resp.get_json()
+    assert body["user"]["email"] == "member@example.com"
+    assert body["usage"]["unlimited"] is True
+    assert body["usage"]["token_budget_used"] == 0
+    assert body["activity"]["thread_count"] == 0
+    assert "observability" not in body

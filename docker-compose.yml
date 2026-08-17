@@ -26,8 +26,9 @@
 #    docker compose --env-file .env.docker up -d --scale worker=3
 #
 #  Scope note. This mirrors what the application actually talks to
-#  today: PostgreSQL+pgvector, Redis, MinIO and Ollama. Keycloak and
-#  vLLM arrive with the phases that migrate onto them (5 and 4).
+#  today: PostgreSQL+pgvector, Redis, MinIO and Ollama. Keycloak is
+#  opt-in (`--profile sso`; see deploy/keycloak/README.md). vLLM
+#  arrives with Phase 4.
 #
 #  Ollama runs on the host rather than in a container so it keeps direct
 #  GPU access; Phase 4 replaces it with vLLM on GPU nodes.
@@ -93,6 +94,20 @@ x-app-env: &app-env
   # SDK v3+ canonical URL (mirrors HOST when BASE_URL unset in app config).
   LANGFUSE_BASE_URL: ${LANGFUSE_BASE_URL:-${LANGFUSE_HOST:-http://host.docker.internal:3000}}
   LANGFUSE_TRACING_ENVIRONMENT: ${LANGFUSE_TRACING_ENVIRONMENT:-development}
+
+  # ── Phase 5: Keycloak SSO (no-op until AUTH_MODE=hybrid|oidc) ──
+  AUTH_MODE: ${AUTH_MODE:-local}
+  OIDC_ISSUER: ${OIDC_ISSUER:-http://localhost:8080/realms/ansibleai}
+  OIDC_INTERNAL_BASE_URL: ${OIDC_INTERNAL_BASE_URL:-http://keycloak:8080}
+  OIDC_CLIENT_ID: ${OIDC_CLIENT_ID:-ansibleai-web}
+  OIDC_CLIENT_SECRET: ${OIDC_CLIENT_SECRET:-}
+  OIDC_REDIRECT_URI: ${OIDC_REDIRECT_URI:-http://localhost:5000/api/auth/oidc/callback}
+  OIDC_BROWSER_REDIRECT: ${OIDC_BROWSER_REDIRECT:-false}
+  OIDC_MAP_APP_ADMIN: ${OIDC_MAP_APP_ADMIN:-false}
+  AUTH_BREAK_GLASS_EMAILS: ${AUTH_BREAK_GLASS_EMAILS:-}
+  KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-}
+  KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-}
+  USER_DAILY_TOKEN_BUDGET: ${USER_DAILY_TOKEN_BUDGET:-0}
 
   # ── Phase 3: embeddings via TEI or Ollama /v1/embeddings ─────
   EMBEDDING_BASE_URL: ${EMBEDDING_BASE_URL:-http://host.docker.internal:11434/v1}
@@ -265,6 +280,59 @@ services:
     # Scale with `docker compose --env-file .env.docker up -d --scale worker=3`.
     # Nothing about a turn lives in this process, so replicas are
     # interchangeable.
+    restart: unless-stopped
+
+  # ── Keycloak (Phase 5; `docker compose --profile sso …`) ────────
+  # Not on the default stack: a laptop already runs Postgres, Redis,
+  # MinIO and the app. Enable SSO with:
+  #   docker compose --env-file .env.docker --profile sso up --build
+  # and set AUTH_MODE=hybrid plus OIDC_CLIENT_SECRET in .env.docker.
+  keycloak-db-init:
+    image: pgvector/pgvector:pg16
+    profiles: ["sso"]
+    restart: "no"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PGPASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env.docker}
+      PGUSER: ${POSTGRES_USER:-ansibleai}
+      PGHOST: db
+    command:
+      - /bin/bash
+      - -c
+      - |
+        set -euo pipefail
+        until pg_isready; do sleep 1; done
+        if ! psql -d postgres -tc "SELECT 1 FROM pg_database WHERE datname='keycloak'" | grep -q 1; then
+          psql -d postgres -c "CREATE DATABASE keycloak;"
+        fi
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.2
+    profiles: ["sso"]
+    command: ["start-dev", "--import-realm"]
+    depends_on:
+      db:
+        condition: service_healthy
+      keycloak-db-init:
+        condition: service_completed_successfully
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN:-admin}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-CHANGE_ME_keycloak_admin}
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://db:5432/keycloak
+      KC_DB_USERNAME: ${POSTGRES_USER:-ansibleai}
+      KC_DB_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env.docker}
+      KC_HTTP_ENABLED: "true"
+      KC_HOSTNAME: ${KEYCLOAK_HOSTNAME:-http://localhost:8080}
+      KC_HOSTNAME_STRICT: "false"
+      KC_HEALTH_ENABLED: "true"
+      JAVA_OPTS_APPEND: "-Xms256m -Xmx512m"
+    volumes:
+      - ./deploy/keycloak/realm-ansibleai.json:/opt/keycloak/data/import/realm-ansibleai.json:ro
+    ports:
+      - "${KEYCLOAK_PORT:-8080}:8080"
     restart: unless-stopped
 
 volumes:

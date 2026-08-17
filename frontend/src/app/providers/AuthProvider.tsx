@@ -9,25 +9,38 @@ import {
 } from 'react';
 import { api, primeCsrf, setUnauthorizedHandler } from '@/lib/api';
 import { disconnectSocket } from '@/lib/socket';
-import type { AuthUser } from '@/lib/types';
+import type { AuthConfig, AuthUser } from '@/lib/types';
 
 interface AuthContextValue {
   /** True until the initial session probe resolves; render nothing user-visible before then. */
   initializing: boolean;
   user: AuthUser | null;
   isAdmin: boolean;
+  /** Public auth capabilities (SSO vs password). Safe defaults if the probe fails. */
+  authConfig: AuthConfig;
   /** Set when a previously valid session was rejected mid-session. */
   sessionExpired: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, displayName?: string) => Promise<string | null>;
   logout: () => Promise<void>;
+  applyUser: (user: AuthUser | null) => void;
 }
+
+const DEFAULT_AUTH_CONFIG: AuthConfig = {
+  auth_mode: 'local',
+  oidc_enabled: false,
+  local_login_enabled: true,
+  registration_enabled: true,
+  app_admin_ui: true,
+  oidc_login_url: null,
+};
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState<AuthUser | null>(null);
+  const [authConfig, setAuthConfig] = useState<AuthConfig>(DEFAULT_AUTH_CONFIG);
   const [sessionExpired, setSessionExpired] = useState(false);
 
   /* The session can die server-side at any moment (logout in another tab,
@@ -48,8 +61,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     let cancelled = false;
     (async () => {
       try {
-        const state = await api.auth.me();
-        if (!cancelled) setUser(state.user);
+        const [state, config] = await Promise.all([
+          api.auth.me(),
+          api.auth.config().catch(() => DEFAULT_AUTH_CONFIG),
+        ]);
+        if (!cancelled) {
+          setUser(state.user);
+          setAuthConfig(config);
+        }
       } catch {
         if (!cancelled) setUser(null);
       } finally {
@@ -97,17 +116,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  const applyUser = useCallback((next: AuthUser | null) => {
+    setUser(next);
+  }, []);
+
   const value = useMemo<AuthContextValue>(
     () => ({
       initializing,
       user,
-      isAdmin: user?.role === 'admin',
+      isAdmin: Boolean(user?.role === 'admin' && (authConfig.app_admin_ui ?? authConfig.auth_mode === 'local')),
+      authConfig,
       sessionExpired,
       login,
       register,
       logout,
+      applyUser,
     }),
-    [initializing, user, sessionExpired, login, register, logout],
+    [initializing, user, authConfig, sessionExpired, login, register, logout, applyUser],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

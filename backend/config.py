@@ -34,6 +34,7 @@ PROJECT_ROOT = BACKEND_ROOT.parent
 Environment = Literal["development", "staging", "production"]
 SessionBackend = Literal["sqlalchemy", "redis", "filesystem"]
 RegistrationMode = Literal["closed", "domain", "open"]
+AuthMode = Literal["local", "hybrid", "oidc"]
 LogFormat = Literal["json", "console"]
 SocketIOAsyncMode = Literal["threading", "gevent", "eventlet"]
 # Subsystems that keep per-request state. "memory" confines that state to
@@ -109,6 +110,39 @@ class Settings(BaseSettings):
     # Consecutive failures before an account is temporarily locked.
     account_lockout_threshold: int = 8
     account_lockout_minutes: int = 15
+
+    # ── Identity (Phase 5 / 5b) ──────────────────────────────────
+    # local: password only (default; tests and host `python app.py`).
+    # hybrid / oidc: members type email+password on AnsibleAI; the API
+    # authenticates against Keycloak (ROPC). No browser redirect.
+    auth_mode: AuthMode = "local"
+    oidc_issuer: str = ""
+    # In-cluster origin used to fetch tokens/JWKS (e.g. http://keycloak:8080).
+    # Token `iss` still has to match oidc_issuer (the browser-facing URL).
+    oidc_internal_base_url: str = ""
+    oidc_client_id: str = "ansibleai-web"
+    oidc_client_secret: str = ""
+    oidc_redirect_uri: str = "http://localhost:5000/api/auth/oidc/callback"
+    oidc_scopes: str = "openid email profile"
+    oidc_admin_group: str = "ansibleai-admins"
+    oidc_admin_role: str = "ansibleai-admin"
+    auth_break_glass_emails: str = ""
+    # After a successful SSO link, drop the local hash except break-glass.
+    oidc_retire_local_password: bool = True
+    # Require Keycloak email_verified=true. Local Compose has no SMTP, so
+    # leave this false there; keep true in real deployments.
+    oidc_require_email_verified: bool = True
+    # Advertise GET /api/auth/oidc/login (Keycloak hosted UI). Default off.
+    oidc_browser_redirect: bool = False
+    # Map Keycloak ansibleai-admins → users.role=admin. Default off: identity
+    # admins stay in the Keycloak console and do not get AnsibleAI admin UI.
+    oidc_map_app_admin: bool = False
+    # Optional master-realm admin for Admin API (temp password / in-app change).
+    # Prefer the confidential client's service account when it has manage-users.
+    keycloak_admin: str = Field(default="", alias="KEYCLOAK_ADMIN")
+    keycloak_admin_password: str = Field(default="", alias="KEYCLOAK_ADMIN_PASSWORD")
+    # Daily LLM token budget per user. 0 = unlimited.
+    user_daily_token_budget: int = 0
 
     # ── Logging ──────────────────────────────────────────────────
     log_level: str = "DEBUG"
@@ -363,6 +397,15 @@ class Settings(BaseSettings):
                 "BOOTSTRAP_ADMIN_EMAIL and BOOTSTRAP_ADMIN_PASSWORD must be set together."
             )
 
+        if self.auth_mode in ("hybrid", "oidc") and not self.oidc_configured:
+            raise ConfigError(
+                f"AUTH_MODE={self.auth_mode} requires OIDC_ISSUER, "
+                "OIDC_CLIENT_ID, OIDC_CLIENT_SECRET, and OIDC_REDIRECT_URI."
+            )
+
+        if self.user_daily_token_budget < 0:
+            raise ConfigError("USER_DAILY_TOKEN_BUDGET must be >= 0 (0 disables the cap).")
+
         return self
 
     # ─────────────────────────────────────────────────────────────
@@ -388,6 +431,53 @@ class Settings(BaseSettings):
     @property
     def fallback_models(self) -> list[str]:
         return [m.strip() for m in self.agent_fallback_models.split(",") if m.strip()]
+
+    @property
+    def oidc_configured(self) -> bool:
+        return bool(
+            self.oidc_issuer.strip()
+            and self.oidc_client_id.strip()
+            and self.oidc_client_secret.strip()
+            and self.oidc_redirect_uri.strip()
+        )
+
+    @property
+    def oidc_enabled(self) -> bool:
+        return self.auth_mode in ("hybrid", "oidc") and self.oidc_configured
+
+    @property
+    def break_glass_emails(self) -> set[str]:
+        return {
+            e.strip().lower()
+            for e in self.auth_break_glass_emails.split(",")
+            if e.strip()
+        }
+
+    @property
+    def local_login_enabled(self) -> bool:
+        """Whether the SPA should show the email/password form."""
+        if self.auth_mode in ("local", "hybrid"):
+            return True
+        # oidc: members still type a password on AnsibleAI (ROPC).
+        return self.oidc_configured or bool(self.break_glass_emails)
+
+    @property
+    def registration_enabled(self) -> bool:
+        if self.auth_mode in ("hybrid", "oidc"):
+            return False
+        return self.registration_mode != "closed"
+
+    @property
+    def app_admin_ui(self) -> bool:
+        """KB mutation chrome belongs in local mode only (Keycloak is the admin plane)."""
+        return self.auth_mode == "local"
+
+    @property
+    def oidc_scope_list(self) -> list[str]:
+        scopes = [s.strip() for s in self.oidc_scopes.split() if s.strip()]
+        if "openid" not in scopes:
+            scopes.insert(0, "openid")
+        return scopes
 
     @property
     def broker_url(self) -> str:
@@ -478,6 +568,9 @@ def env_summary() -> dict[str, object]:
         "playbook_model": s.playbook_model,
         "log_format": s.log_format,
         "cookie_secure": s.session_cookie_secure,
+        "auth_mode": s.auth_mode,
+        "oidc_enabled": s.oidc_enabled,
+        "token_budget": s.user_daily_token_budget,
         "socketio_async_mode": s.socketio_async_mode,
         "socketio_message_queue": bool(s.socketio_message_queue),
         "celery_eager": s.celery_task_always_eager,

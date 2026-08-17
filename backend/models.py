@@ -24,7 +24,7 @@ def utcnow() -> datetime:
     return datetime.now(UTC).replace(tzinfo=None)
 
 
-def _iso_utc(dt: datetime | None) -> str | None:
+def iso_utc(dt: datetime | None) -> str | None:
     """
     Serialize a naive UTC datetime as an ISO 8601 string with the explicit
     'Z' suffix so JavaScript's `new Date(...)` parses it as UTC instead of
@@ -36,6 +36,9 @@ def _iso_utc(dt: datetime | None) -> str | None:
     return dt.isoformat(timespec="seconds") + "Z"
 
 
+_iso_utc = iso_utc
+
+
 # ─────────────────────────────────────────────
 #  Identity
 # ─────────────────────────────────────────────
@@ -45,6 +48,7 @@ ROLE_ADMIN = "admin"
 VALID_ROLES = (ROLE_USER, ROLE_ADMIN)
 
 PROVIDER_LOCAL = "local"
+PROVIDER_KEYCLOAK = "keycloak"
 
 
 class User(db.Model):
@@ -162,6 +166,9 @@ class User(db.Model):
             "role": self.role,
             "is_active": self.is_active,
             "provider": self.provider,
+            "has_password": bool(self.password_hash),
+            "can_change_password": bool(self.password_hash)
+            or self.provider == PROVIDER_KEYCLOAK,
             "created_at": _iso_utc(self.created_at),
             "last_login_at": _iso_utc(self.last_login_at),
         }

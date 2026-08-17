@@ -1,0 +1,47 @@
+---
+# Tear down kubeadm on every node. Cluster data and etcd state are removed.
+#   ansible-playbook playbooks/reset.yml
+
+- name: Reset Kubernetes nodes
+  hosts: k8s_cluster
+  gather_facts: false
+  serial: 1
+  tasks:
+    - name: Check whether kubeadm is installed
+      ansible.builtin.stat:
+        path: /usr/bin/kubeadm
+      register: k8s_kubeadm_bin
+
+    - name: Reset kubeadm state
+      ansible.builtin.command:
+        cmd: kubeadm reset -f
+      when: k8s_kubeadm_bin.stat.exists
+      changed_when: true
+
+    - name: Stop kubelet
+      ansible.builtin.service:
+        name: kubelet
+        state: stopped
+      failed_when: false
+
+    - name: Remove Kubernetes configuration directories
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - /etc/kubernetes
+        - /var/lib/etcd
+        - /etc/cni/net.d
+        - /var/lib/cni
+        - /var/lib/kubelet
+
+    - name: Flush iptables rules (Kubernetes chains)
+      ansible.builtin.command:
+        cmd: "{{ item }}"
+      loop:
+        - iptables -F
+        - iptables -t nat -F
+        - iptables -t mangle -F
+        - iptables -X
+      changed_when: true
+      failed_when: false

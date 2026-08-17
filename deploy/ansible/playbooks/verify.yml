@@ -1,0 +1,46 @@
+---
+# Confirm the API answers after a successful site.yml run.
+#   ansible-playbook playbooks/verify.yml
+
+- name: Verify kubeadm cluster
+  hosts: "{{ groups['k8s_control_plane'][0] }}"
+  gather_facts: false
+  tasks:
+    - name: Kubernetes API is ready
+      ansible.builtin.uri:
+        url: https://127.0.0.1:6443/readyz
+        method: GET
+        validate_certs: false
+        status_code: [200]
+
+    - name: List nodes
+      ansible.builtin.command:
+        cmd: kubectl get nodes -o wide
+      environment:
+        KUBECONFIG: /etc/kubernetes/admin.conf
+      register: k8s_nodes
+      changed_when: false
+
+    - name: Show nodes
+      ansible.builtin.debug:
+        msg: "{{ k8s_nodes.stdout_lines }}"
+
+    - name: Fail unless both VMs are Ready
+      ansible.builtin.assert:
+        that:
+          - (k8s_nodes.stdout_lines | length) >= 2
+          - k8s_nodes.stdout is search(' Ready')
+          - "'NotReady' not in k8s_nodes.stdout"
+        fail_msg: "Expected two Ready nodes (control plane + worker). Got: {{ k8s_nodes.stdout }}"
+
+    - name: List core system pods
+      ansible.builtin.command:
+        cmd: kubectl get pods -n kube-system
+      environment:
+        KUBECONFIG: /etc/kubernetes/admin.conf
+      register: k8s_system_pods
+      changed_when: false
+
+    - name: Show kube-system pods
+      ansible.builtin.debug:
+        msg: "{{ k8s_system_pods.stdout_lines }}"

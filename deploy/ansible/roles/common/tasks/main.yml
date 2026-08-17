@@ -1,0 +1,70 @@
+---
+- name: Install baseline packages
+  ansible.builtin.package:
+    name: "{{ common_packages }}"
+    state: present
+  tags: [common, packages]
+
+- name: Persist overlay and br_netfilter
+  ansible.builtin.copy:
+    dest: /etc/modules-load.d/k8s.conf
+    mode: "0644"
+    owner: root
+    group: root
+    content: |
+      overlay
+      br_netfilter
+  tags: [common, kernel]
+
+- name: Load overlay
+  community.general.modprobe:
+    name: overlay
+    state: present
+  tags: [common, kernel]
+
+- name: Load br_netfilter
+  community.general.modprobe:
+    name: br_netfilter
+    state: present
+  tags: [common, kernel]
+
+- name: Enable IPv4 forwarding
+  ansible.posix.sysctl:
+    name: net.ipv4.ip_forward
+    value: "1"
+    sysctl_set: true
+    state: present
+    reload: true
+  tags: [common, sysctl]
+
+- name: Bridge iptables for IPv4
+  ansible.posix.sysctl:
+    name: net.bridge.bridge-nf-call-iptables
+    value: "1"
+    sysctl_set: true
+    state: present
+    reload: true
+  tags: [common, sysctl]
+
+- name: Bridge iptables for IPv6
+  ansible.posix.sysctl:
+    name: net.bridge.bridge-nf-call-ip6tables
+    value: "1"
+    sysctl_set: true
+    state: present
+    reload: true
+  tags: [common, sysctl]
+
+- name: Comment out swap entries in fstab
+  ansible.builtin.replace:
+    path: /etc/fstab
+    regexp: '^([^#].*\s+swap\s+)'
+    replace: '# \1'
+  tags: [common, swap]
+
+- name: Disable swap for this boot
+  ansible.builtin.command:
+    cmd: swapoff -a
+  when: (ansible_facts['memory_mb']['swap']['total'] | default(0) | int) > 0
+  changed_when: true
+  tags: [common, swap]

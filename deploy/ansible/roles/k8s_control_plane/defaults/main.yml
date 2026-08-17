@@ -1,0 +1,8 @@
+---
+k8s_cluster_name: ansibleai-lab
+k8s_control_plane_endpoint: ""
+k8s_pod_subnet: 192.168.0.0/16
+k8s_service_subnet: 10.96.0.0/12
+k8s_api_server_cert_sans: []
+k8s_kubeadm_config_path: /etc/kubernetes/kubeadm-config.yaml
+k8s_admin_kubeconfig: /etc/kubernetes/admin.conf

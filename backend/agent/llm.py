@@ -185,6 +185,15 @@ def chat(
                     if v is not None
                 } or None,
             )
+            total_tokens = 0
+            if usage:
+                total_tokens = int(usage.get("total") or 0)
+                if not total_tokens:
+                    total_tokens = int(usage.get("input") or 0) + int(usage.get("output") or 0)
+            if total_tokens:
+                from auth.budgets import add_usage
+
+                add_usage(total_tokens)
         except Exception:  # noqa: BLE001
             pass
 

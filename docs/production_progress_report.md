@@ -1,8 +1,9 @@
 # AnsibleAI — Production Deployment Progress Report
 
-> **Last updated:** Phase 6a (August 2026)
-> **Next phase:** Phase 6b (prompt management / alerts) or Phase 4 when GPU
-> hardware is available — see [Phases remaining](#phases-remaining)
+> **Last updated:** Phase 5b (August 2026); remaining roadmap retargeted to
+> Kubernetes **without GPU nodes** (Phase 4 = cluster hosting).
+> **Next phase:** Phase 4 (Helm chart on kubeadm lab cluster, host Ollama) —
+> see [Phases remaining](#phases-remaining)
 >
 > This report is the living record of every production-readiness phase.
 > Each phase adds a section describing what changed, why it changed, and
@@ -495,6 +496,7 @@ developer Compose stack.
 3. **No full playbook YAML in traces** — truncated prompts/outputs only.
 4. **Grafana provisioned as code** — dashboards live under `deploy/observability/grafana/` and load on Grafana recreate.
 5. **GPU / Loki / Tempo deferred** — need a real cluster (and GPU nodes for vLLM/DCGM panels). Prompt management and alert rules are Phase **6b**.
+6. **Langfuse is operator-only** (locked in Phase 5b). Members see today’s token spend in Account. Traces stay in Langfuse (`:3000`); the SPA never links there or copies a user id.
 
 ### Verify
 
@@ -522,28 +524,38 @@ Details: [deploy/observability/README.md](../deploy/observability/README.md).
 | Phase 3 | 28 | 232 |
 | RAG tuning | 8 | 240 |
 | Phase 6a | ~7 | ~247 |
+| Phase 5 / 5b | ~40 | **287** |
 
 ---
 
-## Current architecture (post–Phase 6a)
+## Current architecture (post–Phase 5b)
 
 ```
-Browser
+Browser (members stay on AnsibleAI)
   │
   ├─ HTTP ──► Flask API (gunicorn/gevent)
+  │              ├─ POST /api/auth/login → Keycloak ROPC (hybrid/oidc)
+  │              ├─ GET /api/auth/profile → tokens spent + activity
   │              ├─ POST /api/chat → 202 + enqueue
   │              ├─ GET /metrics → Prometheus scrape
   │              └─ Socket.IO (Redis message queue)
   │
+Admin browser ──► Keycloak (:8080)  — users, temp passwords, SMTP
+Ops browser   ──► Langfuse (:3000)  — traces (not linked from the SPA)
+
 Celery worker
   ├─ LangGraph + LLM + gate
-  ├─ Langfuse traces (generate-playbook tree)
+  ├─ Redis daily token counter (shown in Account)
+  ├─ Langfuse traces (generate-playbook tree, operator-only UI)
   └─ Prometheus domain metrics (generation / LLM / gate)
 
 Observability (Compose)
   ├─ Prometheus (:9090) ← scrapes api:5000/metrics
   ├─ Grafana (:3001) ← AnsibleAI overview dashboard
   └─ Langfuse (:3000) ← worker SDK (host.docker.internal)
+
+Identity (Compose --profile sso)
+  └─ Keycloak 26 (:8080) realm ansibleai
 
 Data plane
   ├─ Postgres 16 + pgvector
@@ -553,17 +565,111 @@ Data plane
 
 ---
 
+## Phase 5 — Keycloak identity
+
+**Status: complete** (August 2026), in two slices. Identity still uses
+the Phase 0 `User` row, Flask-Login session, CSRF, and default-deny
+hook. Credentials can come from Keycloak or a local argon2id password.
+
+### 5a — OIDC BFF (authorization code)
+
+The first slice wired Keycloak as an IdP without changing the login
+page’s product shape yet.
+
+| Area | Delivered | Notes |
+| --- | --- | --- |
+| Modes | `AUTH_MODE=local` (default) / `hybrid` / `oidc` | Tests and `python app.py` stay password-only (`AUTH_MODE=local` in pytest) |
+| BFF OIDC | `GET /api/auth/oidc/login` + `/callback` | Authorization code + PKCE; confidential client; SPA never sees the secret |
+| Account link | verified email → existing `users.email`; `provider=keycloak`, `external_id=sub` | Local hash retired except `AUTH_BREAK_GLASS_EMAILS` |
+| JWT | `Authorization: Bearer` + Socket.IO `auth.token` | JWKS from `OIDC_INTERNAL_BASE_URL`; `iss` is the public issuer |
+| Roles | Keycloak group `ansibleai-admins` / realm role `ansibleai-admin` | Mapping **off** by default after 5b (`OIDC_MAP_APP_ADMIN=false`) |
+| Token budgets | `USER_DAILY_TOKEN_BUDGET` in the worker | Redis counter; Langfuse metadata `token_budget_*` for operators |
+| Compose | `--profile sso` Keycloak 26 + realm import | Default stack does not start Keycloak |
+| K8s | `deploy/keycloak/k8s/oauth2-proxy.yaml` | Placeholder for ingress; Compose never puts oauth2-proxy in front of gunicorn |
+
+Design (5a): [specs/phase5_keycloak_sso_design.md](../specs/phase5_keycloak_sso_design.md).
+
+Deviations from the original Phase 5 bullets:
+
+- **oauth2-proxy is not in Compose.** It would fight Flask-Login cookies,
+  CSRF, and Socket.IO. The cluster ingress is the right place.
+- **Local passwords are not deleted globally.** They are retired per
+  account on first successful IdP link, with break-glass addresses kept.
+
+### 5b — In-app login, Keycloak-only admins, member account
+
+**Locked product:** members never leave AnsibleAI. Keycloak is the
+identity store and the **only** admin console (create users, temporary
+passwords, SMTP). AnsibleAI has no invite screen and no operator chrome
+when `AUTH_MODE` is `hybrid` or `oidc`.
+
+| Area | Delivered | Notes |
+| --- | --- | --- |
+| Login | Single email + password card | SPA posts `POST /api/auth/login`; no “Sign in with SSO” |
+| IdP grant | Keycloak resource-owner password credentials | BFF holds the confidential client; `OIDC_BROWSER_REDIRECT` defaults false |
+| Invites | Keycloak console only | No `POST /api/admin/users`, no Team UI |
+| First password | Temporary credential in Keycloak, change **in AnsibleAI** | Admin API briefly clears `UPDATE_PASSWORD`, retries the grant, restores until in-app change |
+| App admins | Hidden when Keycloak is the IdP | `app_admin_ui` true only in `AUTH_MODE=local`; KB scrape/restore is an ops procedure |
+| Account | Identity, tokens spent today, threads, password | No Langfuse URL, no user-id copy |
+| Token spend | Always counted in Redis | Cap still optional (`USER_DAILY_TOKEN_BUDGET=0` = unlimited, used still increments) |
+| SMTP | Keycloak realm Email | Test connection mails the logged-in Keycloak admin; Credential Reset is the member path |
+
+Design: [specs/phase5b_embedded_login_design.md](../specs/phase5b_embedded_login_design.md).
+Runbook: [deploy/keycloak/README.md](../deploy/keycloak/README.md).
+
+ADRs:
+
+1. **Password grant (ROPC)** instead of browser redirect — one AnsibleAI
+   login page. Authorization-code + PKCE remains in the API as an escape
+   hatch (`OIDC_BROWSER_REDIRECT=true`).
+2. **Admins stay in Keycloak** — do not auto-promote Keycloak groups to
+   `users.role=admin`.
+3. **Temporary password, then in-app change** — members never open the
+   Keycloak account console for first login.
+
+Operational notes from the live Compose stack:
+
+- Keycloak console `admin` ≠ `sso-admin@ansibleai.local` ≠ break-glass
+  `admin@ansibleai.local`.
+- Gmail SMTP works once From is saved on realm **ansibleai** (StartTLS
+  587). School inboxes (e.g. Esprit Outlook/M365) may quarantine Gmail
+  senders even when Keycloak reports “Email sent”.
+- Execute-actions email links use `http://localhost:8080` and only work
+  on this PC; the intended member path is temporary password + AnsibleAI
+  change, not that link.
+
+```
+Member browser ──► AnsibleAI login (email + password)
+                     POST /api/auth/login
+                       ├─ break-glass → local argon2id
+                       └─ hybrid/oidc → Keycloak password grant
+                            └─ temp password → Admin API + must_change_password
+
+Admin browser  ──► Keycloak :8080 (users, SMTP, disable)
+
+Celery worker
+  └─ daily Redis token counter (always) + Langfuse metadata (operators)
+```
+
+**Verification:** 287 tests collected (auth, OIDC/ROPC, budgets, authz).
+Pytest forces `AUTH_MODE=local` so a developer hybrid `.env` cannot send
+the suite to a live Keycloak.
+
+---
+
 ## Phases remaining
 
 | Phase | Summary | Status |
 |-------|---------|--------|
-| 4 | vLLM on GPU nodes, TEI, KEDA, model cache PVC — needs real NVIDIA GPU nodes (not laptop VMware emulation) | Pending |
-| 5 | Keycloak SSO migration | Pending |
-| 6b | Langfuse prompt management, Celery exporter, alert rules | Pending |
-| 6c | Loki/Tempo; vLLM/DCGM dashboards (after Phase 4) | Pending |
-| 7 | CI/CD with eval gate, Harbor, Trivy, ArgoCD, canary | Pending |
-| 8 | NetworkPolicies, Pod Security, Vault, CNPG backups, DR | Pending |
+| 4 | Kubernetes hosting **without GPU nodes** — Ansible kubeadm on **192.168.1.11** (master) + **192.168.1.12** (worker) from control **192.168.1.19**; then Helm | Bootstrap project ready; Helm app still pending |
+| 4-gpu | Optional: vLLM + TEI + NVIDIA GPU Operator + DCGM — only if NVIDIA GPU nodes appear | Deferred |
+| 5 / 5b | Keycloak identity — in-app login, Keycloak-only admins, tokens spent in Account | **Complete** (cluster Keycloak install is Phase 4; no oauth2-proxy on members) |
+| 6a | Prometheus + Grafana + Langfuse (operator UI) on Compose | **Complete** |
+| 6b | Langfuse prompt management, Celery exporter, CPU-cluster alert rules | Pending (after 4) |
+| 6c | Loki/Tempo on the cluster (GPU panels only with 4-gpu) | Pending (after 7) |
+| 7 | GitHub Actions, SHA tags, Trivy, ArgoCD GitOps, eval gate, rolling + documented rollback | Pending |
+| 8 | Default-deny NetworkPolicies, restricted PSS, Kyverno, ESO/Sealed Secrets, CNPG PITR, Velero, k6 | Pending |
 
-**Recommended next on a laptop:** Phase **6b** (prompts + alerts).  
-**When a GPU-capable host/cluster exists:** Phase **4**, then 6c GPU panels.  
-**Before trusting vLLM in “prod”:** Phase **7** eval gate.
+**Recommended next:** Phase **4** — put the running Compose app on the lab Kubernetes cluster. Inference stays on host Ollama.  
+**Do not wait for GPUs.** vLLM/TEI is an optional add-on.  
+**Then:** 6b (alerts) → 7 (GitOps + eval gate) → 6c (Loki/Tempo) → 8 (hardening).

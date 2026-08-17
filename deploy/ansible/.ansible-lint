@@ -1,0 +1,12 @@
+---
+profile: production
+offline: true
+exclude_paths:
+  - collections/
+  - artifacts/
+  - inventories/lab/host_vars/
+skip_list:
+  - experimental
+  - name[casing]
+warn_list:
+  - yaml[line-length]

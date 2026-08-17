@@ -36,11 +36,18 @@ _TEST_ENV = {
     "LOG_FORMAT": "console",
     "BOOTSTRAP_ADMIN_EMAIL": "",
     "BOOTSTRAP_ADMIN_PASSWORD": "",
+    # Developer .env is often AUTH_MODE=hybrid. The suite authenticates
+    # against local hashes and must not call Keycloak.
+    "AUTH_MODE": "local",
 }
 
 # setdefault so a caller can still override, e.g. to run against MySQL.
 for _key, _value in _TEST_ENV.items():
     os.environ.setdefault(_key, _value)
+
+# AUTH_MODE is forced: a hybrid .env would send every login to Keycloak.
+if not os.environ.get("ANSIBLEAI_TEST_AUTH_MODE"):
+    os.environ["AUTH_MODE"] = "local"
 
 # Flask fixtures (app, client, make_user, login, admin_client). Registered
 # as a plugin rather than imported so the environment above is already in

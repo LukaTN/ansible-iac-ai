@@ -1,4 +1,6 @@
 import type {
+  AuthConfig,
+  AuthProfile,
   AuthState,
   ChatAcceptedResponse,
   ChatJobStatus,
@@ -139,6 +141,7 @@ function postJson<T>(url: string, payload?: unknown, init?: RequestInit): Promis
 
 export const api = {
   auth: {
+    config: () => json<AuthConfig>('/api/auth/config'),
     me: () => json<AuthState>('/api/auth/me'),
     login: (email: string, password: string) =>
       postJson<AuthState>('/api/auth/login', { email, password }),
@@ -149,6 +152,7 @@ export const api = {
         display_name: displayName,
       }),
     logout: () => postJson<AuthState>('/api/auth/logout'),
+    profile: () => json<AuthProfile>('/api/auth/profile'),
     changePassword: (currentPassword: string, newPassword: string) =>
       postJson<AuthState & { message?: string }>('/api/auth/password/change', {
         current_password: currentPassword,

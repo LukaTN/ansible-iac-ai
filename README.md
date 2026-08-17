@@ -4,7 +4,7 @@ AI-powered Infrastructure-as-Code assistant that generates Ansible playbooks gro
 
 The stack combines a **React 19** web UI, a **Flask + PostgreSQL** API, a **Celery worker** running a **LangGraph agent** (reason → tools → draft → production gate → repair loop), and a **hybrid RAG pipeline** (pgvector dense search + BM25, OpenAI-compatible embeddings).
 
-Phases **0–3** of the production LLMOps plan are complete (auth, containers, async workers, Postgres+pgvector). See [docs/production_progress_report.md](docs/production_progress_report.md).
+Phases **0–3**, **5/5b**, and **6a** of the production LLMOps plan are complete (auth, containers, async workers, Postgres+pgvector, Keycloak in-app login, Prometheus/Grafana/Langfuse). See [docs/production_progress_report.md](docs/production_progress_report.md).
 
 ## Architecture
 
@@ -287,6 +287,7 @@ ansible-iac-ai/
 ├── tests/
 ├── docker/                # entrypoint + ansible-collections.yml
 ├── deploy/observability/  # Prometheus / Grafana / Langfuse
+├── deploy/ansible/            # kubeadm Kubernetes cluster bootstrap (Phase 4)
 ├── docs/
 ├── data/                  # Local KB / scrape artifacts (gitignored)
 ├── Dockerfile / docker-compose*.yml
@@ -303,12 +304,12 @@ Full tree: [docs/REPOSITORY_LAYOUT.md](docs/REPOSITORY_LAYOUT.md).
 | 1 | Done | Multi-stage Dockerfile, Compose |
 | 2 | Done | Celery, Redis cancel/logs, MinIO, 202 chat |
 | 3 | Done | Postgres + pgvector, TEI-ready embeddings client |
-| 4 | Pending | vLLM + TEI on GPU nodes (K8s) |
-| 5 | Pending | Keycloak SSO |
-| 6 | 6a done | Metrics + Langfuse + Grafana dashboard — [deploy/observability/README.md](deploy/observability/README.md); 6b/6c remaining |
+| 4 | Pending | Kubernetes hosting (no GPU) — Ansible kubeadm bootstrap, then Helm; host Ollama |
+| 5 | Done | Keycloak identity — in-app login, Keycloak-only admins ([deploy/keycloak/README.md](deploy/keycloak/README.md), [specs/phase5b_embedded_login_design.md](specs/phase5b_embedded_login_design.md)) |
+| 6 | 6a done | Metrics + Langfuse + Grafana — [deploy/observability/README.md](deploy/observability/README.md); 6b/6c after cluster |
 
-| 7 | Pending | CI eval gate, ArgoCD |
-| 8 | Pending | Hardening, Vault, DR |
+| 7 | Pending | CI eval gate, ArgoCD GitOps |
+| 8 | Pending | Hardening, secrets, DR |
 
 ### Observability (Phase 6a)
 
@@ -322,7 +323,7 @@ docker compose --env-file .env.docker \
   -f deploy/observability/docker-compose.langfuse.yml up -d
 ```
 
-`/metrics` is public on the API. Langfuse is opt-in via `LANGFUSE_*`. Grafana loads the provisioned **AnsibleAI overview** dashboard. Full runbook: [deploy/observability/README.md](deploy/observability/README.md). Progress write-up: [docs/production_progress_report.md](docs/production_progress_report.md).
+`/metrics` is public on the API. Langfuse is opt-in via `LANGFUSE_*` and is an **operator** console (not linked from the member Account UI). Grafana loads the provisioned **AnsibleAI overview** dashboard. Full runbook: [deploy/observability/README.md](deploy/observability/README.md). Progress write-up: [docs/production_progress_report.md](docs/production_progress_report.md).
 
 ## Testing
 

@@ -142,6 +142,7 @@ def generation_trace(
     user_id: int,
     message: str,
     task_id: str | None = None,
+    extra_metadata: dict[str, Any] | None = None,
 ) -> Iterator[Any | None]:
     """
     Root observation for one chat turn (Celery generation).
@@ -166,6 +167,7 @@ def generation_trace(
                 "thread_id": thread_id,
                 "task_id": task_id or "",
                 "feature": "chat",
+                **(extra_metadata or {}),
             }),
         ) as root:
             with propagate_attributes(
@@ -193,6 +195,7 @@ def finish_generation_trace(
     *,
     status: str,
     output_preview: str | None = None,
+    extra_metadata: dict[str, Any] | None = None,
 ) -> None:
     """Set root observation output (becomes the readable trace summary)."""
     if root is None:
@@ -203,8 +206,8 @@ def finish_generation_trace(
                 "status": status,
                 "preview": _clip(output_preview, 500),
             },
-            metadata=_str_meta({"status": status}),
-            level="ERROR" if status in {"failed", "timeout"} else "DEFAULT",
+            metadata=_str_meta({"status": status, **(extra_metadata or {})}),
+            level="ERROR" if status in {"failed", "timeout", "budget"} else "DEFAULT",
         )
     except Exception as exc:  # noqa: BLE001
         log.debug("langfuse.finish_trace_failed", error=str(exc))

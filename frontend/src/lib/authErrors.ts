@@ -8,6 +8,15 @@ import { ApiError } from './api';
 const BY_CODE: Record<string, string> = {
   csrf:
     'Your session security token expired. Please try again — if it keeps failing, refresh the page.',
+  no_local_password:
+    'This account signs in with SSO and has no local password.',
+  idp_unavailable:
+    'Sign-in is temporarily unavailable. Try again in a moment.',
+  idp_admin_unavailable:
+    'This account still needs a first password, but the identity service cannot finish setup. Ask an administrator.',
+  email_unverified:
+    'Verify your email with your administrator, then sign in again.',
+  password_change_required: 'Set a new password before using the workspace.',
   invalid_credentials: 'Email or password is incorrect. Check both and try again.',
   account_locked:
     'Too many failed sign-in attempts. This account is temporarily locked — wait a few minutes, then try again.',
