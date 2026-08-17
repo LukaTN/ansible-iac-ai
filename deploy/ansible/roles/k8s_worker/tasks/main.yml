@@ -1,0 +1,38 @@
+---
+- name: Require control plane host for join command lookup
+  ansible.builtin.assert:
+    that:
+      - k8s_control_plane_host | length > 0
+    fail_msg: k8s_control_plane_host must be set to the first control-plane inventory hostname.
+  tags: [k8s, worker]
+
+- name: Require join command from control plane
+  ansible.builtin.assert:
+    that:
+      - hostvars[k8s_control_plane_host]['k8s_join_command'] is defined
+      - hostvars[k8s_control_plane_host]['k8s_join_command'] | length > 0
+    fail_msg: >-
+      Join command missing. Run the control-plane play first or re-run site.yml
+      so kubeadm token create runs on {{ k8s_control_plane_host }}.
+  tags: [k8s, worker]
+
+- name: Check whether node is already joined
+  ansible.builtin.stat:
+    path: "{{ k8s_kubelet_conf }}"
+  register: k8s_kubelet_conf_stat
+  tags: [k8s, worker]
+
+- name: Join worker to cluster
+  ansible.builtin.command:
+    cmd: "{{ hostvars[k8s_control_plane_host]['k8s_join_command'] }}"
+  when: not k8s_kubelet_conf_stat.stat.exists
+  register: k8s_worker_join
+  changed_when: k8s_worker_join.rc == 0
+  tags: [k8s, worker]
+
+- name: Ensure kubelet is enabled and started
+  ansible.builtin.service:
+    name: kubelet
+    state: started
+    enabled: true
+  tags: [k8s, worker]

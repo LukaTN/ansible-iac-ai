@@ -1,0 +1,14 @@
+---
+# Quick connectivity check from the Ansible control node (192.168.1.19).
+#   ansible-playbook playbooks/ping.yml
+
+- name: Verify SSH to cluster nodes
+  hosts: k8s_cluster
+  gather_facts: false
+  tasks:
+    - name: Ping master and worker
+      ansible.builtin.ping:
+
+    - name: Show target
+      ansible.builtin.debug:
+        msg: "{{ inventory_hostname }} reachable at {{ ansible_host }}"

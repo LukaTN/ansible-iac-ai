@@ -6,7 +6,7 @@ import { CodeBracketsIcon } from '@/components/ui/Icons';
 type Mode = 'login' | 'register';
 
 export function LoginPage() {
-  const { login, register, sessionExpired } = useAuth();
+  const { login, register, sessionExpired, authConfig } = useAuth();
   const [mode, setMode] = useState<Mode>('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -15,6 +15,10 @@ export function LoginPage() {
   const [notice, setNotice] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const emailRef = useRef<HTMLInputElement>(null);
+
+  const showPassword = authConfig.local_login_enabled;
+  const showRegister = authConfig.registration_enabled;
+  const inviteOnly = !showRegister;
 
   useEffect(() => {
     emailRef.current?.focus();
@@ -91,88 +95,103 @@ export function LoginPage() {
           </div>
         ) : null}
 
-        <form className="auth-form" onSubmit={submit} noValidate>
-          {isRegister ? (
+        {showPassword || isRegister ? (
+          <form className="auth-form" onSubmit={submit} noValidate>
+            {isRegister ? (
+              <label className="auth-field">
+                <span>Display name</span>
+                <input
+                  type="text"
+                  value={displayName}
+                  onChange={(e) => setDisplayName(e.target.value)}
+                  placeholder="Optional"
+                  autoComplete="name"
+                  maxLength={120}
+                  disabled={busy}
+                />
+              </label>
+            ) : null}
+
             <label className="auth-field">
-              <span>Display name</span>
+              <span>Email</span>
               <input
-                type="text"
-                value={displayName}
-                onChange={(e) => setDisplayName(e.target.value)}
-                placeholder="Optional"
-                autoComplete="name"
-                maxLength={120}
+                ref={emailRef}
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                autoComplete="username"
+                required
+                maxLength={255}
                 disabled={busy}
               />
             </label>
-          ) : null}
 
-          <label className="auth-field">
-            <span>Email</span>
-            <input
-              ref={emailRef}
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              autoComplete="username"
-              required
-              maxLength={255}
-              disabled={busy}
-            />
-          </label>
+            <label className="auth-field">
+              <span>Password</span>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder={isRegister ? 'At least 12 characters' : '••••••••••••'}
+                autoComplete={isRegister ? 'new-password' : 'current-password'}
+                required
+                disabled={busy}
+              />
+            </label>
 
-          <label className="auth-field">
-            <span>Password</span>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder={isRegister ? 'At least 12 characters' : '••••••••••••'}
-              autoComplete={isRegister ? 'new-password' : 'current-password'}
-              required
-              disabled={busy}
-            />
-          </label>
+            {isRegister ? (
+              <p className="auth-hint">
+                Use a long passphrase. Common passwords and anything based on your email
+                are rejected.
+              </p>
+            ) : null}
 
-          {isRegister ? (
-            <p className="auth-hint">
-              Use a long passphrase. Common passwords and anything based on your email
-              are rejected.
-            </p>
-          ) : null}
+            <button type="submit" className="auth-submit" disabled={busy}>
+              {busy ? (
+                <>
+                  <span className="auth-spinner" aria-hidden="true" />
+                  {isRegister ? 'Creating account...' : 'Signing in...'}
+                </>
+              ) : isRegister ? (
+                'Create account'
+              ) : (
+                'Sign in'
+              )}
+            </button>
+          </form>
+        ) : (
+          <div className="auth-alert warn" role="status">
+            Password sign-in is not enabled on this server.
+          </div>
+        )}
 
-          <button type="submit" className="auth-submit" disabled={busy}>
-            {busy ? (
+        {showRegister ? (
+          <div className="auth-switch">
+            {isRegister ? (
               <>
-                <span className="auth-spinner" aria-hidden="true" />
-                {isRegister ? 'Creating account...' : 'Signing in...'}
+                Already have an account?{' '}
+                <button type="button" onClick={() => switchMode('login')} disabled={busy}>
+                  Sign in
+                </button>
               </>
-            ) : isRegister ? (
-              'Create account'
             ) : (
-              'Sign in'
+              <>
+                No account yet?{' '}
+                <button type="button" onClick={() => switchMode('register')} disabled={busy}>
+                  Create one
+                </button>
+              </>
             )}
-          </button>
-        </form>
+          </div>
+        ) : null}
 
-        <div className="auth-switch">
-          {isRegister ? (
-            <>
-              Already have an account?{' '}
-              <button type="button" onClick={() => switchMode('login')} disabled={busy}>
-                Sign in
-              </button>
-            </>
-          ) : (
-            <>
-              No account yet?{' '}
-              <button type="button" onClick={() => switchMode('register')} disabled={busy}>
-                Create one
-              </button>
-            </>
-          )}
-        </div>
+        {inviteOnly && !isRegister ? (
+          <p className="auth-switch">
+            Access is by invitation. An administrator creates your account and sends you a
+            temporary password.
+          </p>
+        ) : null}
       </div>
     </div>
   );

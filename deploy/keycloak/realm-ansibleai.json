@@ -1,0 +1,159 @@
+{
+  "id": "ansibleai",
+  "realm": "ansibleai",
+  "displayName": "AnsibleAI",
+  "enabled": true,
+  "sslRequired": "none",
+      "registrationAllowed": false,
+  "registrationEmailAsUsername": true,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": true,
+  "editUsernameAllowed": false,
+  "bruteForceProtected": true,
+  "permanentLockout": false,
+  "maxFailureWaitSeconds": 900,
+  "failureFactor": 8,
+  "passwordPolicy": "length(12)",
+  "loginTheme": "keycloak",
+  "verifyEmail": false,
+  "smtpServer": {},
+  "eventsEnabled": true,
+  "eventsListeners": ["jboss-logging"],
+  "enabledEventTypes": [
+    "LOGIN",
+    "LOGIN_ERROR",
+    "LOGOUT",
+    "REGISTER",
+    "UPDATE_PASSWORD",
+    "CODE_TO_TOKEN",
+    "CODE_TO_TOKEN_ERROR"
+  ],
+  "adminEventsEnabled": true,
+  "adminEventsDetailsEnabled": false,
+  "roles": {
+    "realm": [
+      {
+        "name": "ansibleai-admin",
+        "description": "AnsibleAI administrator (maps to users.role=admin)"
+      },
+      {
+        "name": "ansibleai-user",
+        "description": "AnsibleAI member"
+      }
+    ]
+  },
+  "groups": [
+    {
+      "name": "ansibleai-admins",
+      "path": "/ansibleai-admins",
+      "realmRoles": ["ansibleai-admin"]
+    },
+    {
+      "name": "ansibleai-users",
+      "path": "/ansibleai-users",
+      "realmRoles": ["ansibleai-user"]
+    }
+  ],
+  "clients": [
+    {
+      "clientId": "ansibleai-web",
+      "name": "AnsibleAI web (confidential BFF)",
+      "description": "Flask API is the OIDC client. The SPA never sees this secret.",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "bearerOnly": false,
+      "secret": "ansibleai-dev-oidc-secret",
+      "clientAuthenticatorType": "client-secret",
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": true,
+      "fullScopeAllowed": true,
+      "rootUrl": "http://localhost:5000",
+      "baseUrl": "/",
+      "redirectUris": [
+        "http://localhost:5000/api/auth/oidc/callback",
+        "http://127.0.0.1:5000/api/auth/oidc/callback"
+      ],
+      "webOrigins": [
+        "http://localhost:5000",
+        "http://127.0.0.1:5000",
+        "http://localhost:5173",
+        "http://127.0.0.1:5173"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://localhost:5000##http://127.0.0.1:5000",
+        "oauth2.device.authorization.grant.enabled": "false"
+      },
+      "defaultClientScopes": [
+        "web-origins",
+        "acr",
+        "profile",
+        "roles",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "address",
+        "phone",
+        "offline_access"
+      ],
+      "protocolMappers": [
+        {
+          "name": "groups",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-group-membership-mapper",
+          "consentRequired": false,
+          "config": {
+            "full.path": "false",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "groups",
+            "userinfo.token.claim": "true"
+          }
+        },
+        {
+          "name": "ansibleai-audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "consentRequired": false,
+          "config": {
+            "included.client.audience": "ansibleai-web",
+            "id.token.claim": "false",
+            "access.token.claim": "true",
+            "introspection.token.claim": "true"
+          }
+        }
+      ]
+    }
+  ],
+  "users": [
+    {
+      "username": "sso-admin",
+      "email": "sso-admin@ansibleai.local",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "SSO",
+      "lastName": "Admin",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "ansibleai-sso-dev-only",
+          "temporary": false
+        }
+      ],
+      "groups": ["/ansibleai-admins"],
+      "realmRoles": ["ansibleai-admin"]
+    },
+    {
+      "username": "service-account-ansibleai-web",
+      "enabled": true,
+      "serviceAccountClientId": "ansibleai-web",
+      "clientRoles": {
+        "realm-management": ["manage-users", "view-users", "query-users"]
+      }
+    }
+  ]
+}

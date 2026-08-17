@@ -33,7 +33,7 @@ const CAPABILITIES = [
   'Self-repair loop',
   'Live agent trace',
   'Multi-turn threads',
-  'Docs admin',
+  'Docs index',
 ] as const;
 
 function WelcomeStep() {
@@ -272,8 +272,8 @@ const TOUR_SPOTS = [
   },
   {
     id: 5,
-    title: 'Analytics & docs admin',
-    desc: 'The right panel tracks generation stats and validation breakdowns, and admins manage the knowledge base — scrape, inspect, roll back.',
+    title: 'Analytics & docs',
+    desc: 'The right panel tracks generation stats and validation breakdowns, and shows the documentation index the assistant retrieves from.',
   },
   {
     id: 6,

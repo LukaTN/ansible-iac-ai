@@ -1,0 +1,80 @@
+# Placeholder: oauth2-proxy at ingress (Phase 5 / cluster).
+# Not applied by Docker Compose. The laptop stack uses the in-app OIDC BFF
+# (GET /api/auth/oidc/login) so Flask-Login cookies and CSRF stay intact.
+#
+# When a real ingress exists:
+#   1. Deploy oauth2-proxy with OIDC against Keycloak realm `ansibleai`.
+#   2. Annotate the ansibleai Ingress:
+#        nginx.ingress.kubernetes.io/auth-url: http://oauth2-proxy.identity.svc.cluster.local:4180/oauth2/auth
+#        nginx.ingress.kubernetes.io/auth-signin: https://<app>/oauth2/start?rd=$escaped_request_uri
+#   3. Keep in-app JWT verification (Authorization: Bearer) for API clients
+#      and Socket.IO — oauth2-proxy does not replace that.
+#
+# Secrets (client-secret, cookie-secret) come from External Secrets + Vault
+# in Phase 8. Do not commit real values here.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oauth2-proxy
+  namespace: identity
+  labels:
+    app: oauth2-proxy
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: oauth2-proxy
+  template:
+    metadata:
+      labels:
+        app: oauth2-proxy
+    spec:
+      containers:
+        - name: oauth2-proxy
+          image: quay.io/oauth2-proxy/oauth2-proxy:v7.8.1
+          args:
+            - --provider=oidc
+            - --oidc-issuer-url=https://keycloak.example.internal/realms/ansibleai
+            - --client-id=ansibleai-web
+            - --email-domain=*
+            - --http-address=0.0.0.0:4180
+            - --upstream=static://202
+            - --skip-provider-button=true
+            - --code-challenge-method=S256
+            - --cookie-secure=true
+            - --cookie-samesite=lax
+            - --set-authorization-header=true
+            - --pass-access-token=true
+          env:
+            - name: OAUTH2_PROXY_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: ansibleai-oidc
+                  key: client-secret
+            - name: OAUTH2_PROXY_COOKIE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: ansibleai-oidc
+                  key: cookie-secret
+          ports:
+            - containerPort: 4180
+              name: http
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            capabilities:
+              drop: ["ALL"]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: oauth2-proxy
+  namespace: identity
+spec:
+  selector:
+    app: oauth2-proxy
+  ports:
+    - name: http
+      port: 4180
+      targetPort: http

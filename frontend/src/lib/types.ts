@@ -7,8 +7,22 @@ export interface AuthUser {
   role: UserRole;
   is_active: boolean;
   provider: string;
+  has_password: boolean;
+  can_change_password?: boolean;
+  must_change_password?: boolean;
   created_at: string | null;
   last_login_at: string | null;
+}
+
+export type AuthMode = 'local' | 'hybrid' | 'oidc';
+
+export interface AuthConfig {
+  auth_mode: AuthMode;
+  oidc_enabled: boolean;
+  local_login_enabled: boolean;
+  registration_enabled: boolean;
+  app_admin_ui?: boolean;
+  oidc_login_url: string | null;
 }
 
 export interface AuthState {
@@ -17,6 +31,20 @@ export interface AuthState {
   /** Set when signup succeeded but an admin must activate the account. */
   pending_approval?: boolean;
   message?: string;
+}
+
+export interface AuthProfile {
+  user: AuthUser;
+  usage: {
+    token_budget_limit: number;
+    token_budget_used: number;
+    token_budget_remaining: number;
+    unlimited: boolean;
+  };
+  activity: {
+    thread_count: number;
+    last_activity_at: string | null;
+  };
 }
 
 export interface Thread {

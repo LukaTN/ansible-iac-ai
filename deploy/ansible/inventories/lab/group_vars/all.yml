@@ -1,0 +1,35 @@
+---
+# Shared cluster defaults. Per-host overrides: inventories/lab/host_vars/
+
+ansible_control_ip: 192.168.1.19
+
+# Pinned Kubernetes stack (pkgs.k8s.io kubeadm/kubelet/kubectl).
+kubernetes_version: "1.32.4"
+kubernetes_apt_channel: v1.32
+
+k8s_cluster_name: ansibleai-lab
+k8s_control_plane_endpoint: "192.168.1.11:6443"
+k8s_pod_subnet: 192.168.0.0/16
+k8s_service_subnet: 10.96.0.0/12
+
+# Extra names/IPs on the API server certificate (public DNS, floating IP).
+k8s_api_server_cert_sans: []
+
+# Calico CNI (must match podSubnet).
+calico_version: v3.29.2
+
+# Written on the Ansible control node (192.168.1.19) when you run site.yml there.
+k8s_kubeconfig_local_path: "{{ playbook_dir }}/../artifacts/kubeconfig"
+
+k8s_install_addons: true
+ingress_nginx_chart_version: 4.12.1
+cert_manager_chart_version: v1.17.2
+
+common_packages:
+  - curl
+  - ca-certificates
+  - apt-transport-https
+  - gnupg
+  - iptables
+  - conntrack
+  - socat

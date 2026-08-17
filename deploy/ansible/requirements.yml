@@ -1,0 +1,10 @@
+---
+# Install on the control node (WSL or Linux), not on Windows Python:
+#   ansible-galaxy collection install -r requirements.yml -p collections
+collections:
+  - name: ansible.posix
+    version: ">=1.5.4,<3.0.0"
+  - name: community.general
+    version: ">=8.0.0,<12.0.0"
+  - name: kubernetes.core
+    version: ">=3.2.0,<7.0.0"

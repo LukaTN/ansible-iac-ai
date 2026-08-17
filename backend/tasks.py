@@ -71,6 +71,10 @@ TIMEOUT_TEXT = (
     "a single playbook for one task usually completes well within the limit."
 )
 FAILED_TEXT = "Generation failed before an answer could be produced. Please try again."
+BUDGET_TEXT = (
+    "Daily generation budget reached. Try again tomorrow, or ask an administrator "
+    "to raise the limit."
+)
 
 
 def _flask_app():
@@ -208,6 +212,7 @@ def run_generation(self, thread_id: int, user_id: int, message: str) -> dict[str
         def _on_progress(step: str, text: str, detail: str | None = None) -> None:
             emit_generation_progress(thread_id, step, text, detail, user_id)
 
+        from auth.budgets import BudgetExceeded, bind_user, check_budget, reset_user, snapshot
         from observability.metrics import record_generation
         from observability.tracing import finish_generation_trace, generation_trace
 
@@ -215,17 +220,20 @@ def run_generation(self, thread_id: int, user_id: int, message: str) -> dict[str
         gen_t0 = time.perf_counter()
         status = "ok"
         output_preview: str | None = None
+        budget_token = bind_user(user_id)
 
         with generation_trace(
             thread_id=thread_id,
             user_id=user_id,
             message=message,
             task_id=self.request.id,
+            extra_metadata=snapshot(user_id),
         ) as lf_root:
             try:
                 # A Stop pressed while this job sat in the queue is already
                 # recorded; surface it before spending anything on the LLM.
                 cancel_mod.check(thread_id)
+                check_budget(user_id)
 
                 emit_generation_progress(
                     thread_id,
@@ -279,6 +287,29 @@ def run_generation(self, thread_id: int, user_id: int, message: str) -> dict[str
                 emit_generation_failed(thread_id, "Generation timed out.", user_id)
                 log.warning("generation.timeout", thread_id=thread_id)
 
+            except BudgetExceeded as exc:
+                status = "budget"
+                db.session.rollback()
+                _persist_note(
+                    thread,
+                    BUDGET_TEXT,
+                    {
+                        "budget_exceeded": True,
+                        "intent": "chat",
+                        "used": exc.used,
+                        "limit": exc.limit,
+                    },
+                    [{"tool": "budget", "args": {}, "result": {"exceeded": True}}],
+                )
+                emit_generation_failed(thread_id, BUDGET_TEXT, user_id)
+                log.info(
+                    "generation.budget_exceeded",
+                    thread_id=thread_id,
+                    user_id=user_id,
+                    used=exc.used,
+                    limit=exc.limit,
+                )
+
             except Exception as exc:
                 status = "failed"
                 db.session.rollback()
@@ -310,6 +341,7 @@ def run_generation(self, thread_id: int, user_id: int, message: str) -> dict[str
                         lf_root,
                         status=status,
                         output_preview=output_preview,
+                        extra_metadata=snapshot(user_id),
                     )
                     record_generation(
                         status=status,
@@ -317,6 +349,10 @@ def run_generation(self, thread_id: int, user_id: int, message: str) -> dict[str
                     )
                 except Exception:  # noqa: BLE001
                     pass
+                try:
+                    reset_user(budget_token)
+                except Exception:
+                    log.debug("generation.budget_unbind_failed", exc_info=True)
                 cancel_mod.end(thread_id)
                 # Always the last word: the client clears its pending state on
                 # this event and refetches the thread, whatever the outcome.

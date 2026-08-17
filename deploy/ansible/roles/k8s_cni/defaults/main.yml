@@ -1,0 +1,4 @@
+---
+calico_version: v3.29.2
+calico_manifest_url: "https://raw.githubusercontent.com/projectcalico/calico/{{ calico_version }}/manifests/calico.yaml"
+k8s_admin_kubeconfig: /etc/kubernetes/admin.conf

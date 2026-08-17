@@ -129,20 +129,27 @@ _user_room = realtime.user_room
 
 
 @socketio.on("connect")
-def _on_connect(_auth=None):
+def _on_connect(auth=None):
     """
     Reject unauthenticated sockets and put each client in its own room.
 
     Flask-SocketIO shares the HTTP session, so `current_user` resolves
-    from the same cookie the REST API uses. Returning False refuses the
-    connection. Without this, generation events would be broadcast to
-    every connected browser.
+    from the same cookie the REST API uses. Machine clients may instead
+    pass `{ token }` (a Keycloak access token) on connect. Returning
+    False refuses the connection.
     """
-    if not current_user.is_authenticated:
+    user = current_user if current_user.is_authenticated else None
+    if (user is None or not user.is_authenticated) and isinstance(auth, dict):
+        token = auth.get("token")
+        if token:
+            from auth.oidc import user_from_access_token
+
+            user = user_from_access_token(str(token))
+    if user is None or not getattr(user, "is_authenticated", False):
         log.info("socket.connect.rejected", reason="unauthenticated")
         return False
-    join_room(_user_room(current_user.id))
-    log.info("socket.connect", user_id=current_user.id)
+    join_room(_user_room(user.id))
+    log.info("socket.connect", user_id=user.id)
     return None
 
 

@@ -1,4 +1,4 @@
-﻿/* =============================================================
+/* =============================================================
    AnsibleAI ΓÇö Chat UI
    ============================================================= */
 
@@ -361,6 +361,23 @@ body::before{
 .auth-submit:hover:not(:disabled){ filter:brightness(1.07);transform:translateY(-1px); }
 .auth-submit:disabled{ opacity:.65;cursor:progress;box-shadow:none; }
 .auth-submit.compact{ margin-top:0;padding:.55rem .9rem;font-size:.8rem; }
+a.auth-sso{
+  text-decoration:none;
+  background:transparent;
+  color:var(--txt);
+  border:1px solid var(--border2);
+  box-shadow:none;
+}
+a.auth-sso:hover{ filter:none;transform:translateY(-1px);border-color:var(--a1);color:var(--a2); }
+.auth-divider{
+  display:flex;align-items:center;gap:.75rem;
+  margin:1rem 0 .2rem;
+  color:var(--muted);font-size:.72rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.06em;
+}
+.auth-divider::before,.auth-divider::after{
+  content:"";flex:1;height:1px;background:var(--border);
+}
 
 .auth-spinner{
   width:13px;height:13px;flex:0 0 auto;
@@ -384,6 +401,70 @@ body::before{
 .pw-dialog .confirm-dialog-title{ margin-bottom:.3rem; }
 .pw-dialog .confirm-dialog-desc{ margin-bottom:1rem; }
 .pw-dialog .confirm-dialog-actions{ margin-top:.4rem; }
+
+.dossier-overlay{
+  place-items:stretch end;
+  padding:0;
+}
+.dossier{
+  width:min(440px, 100%);
+  max-height:100vh;
+  overflow-y:auto;
+  background:linear-gradient(180deg, var(--s1) 0%, var(--navy-deep) 100%);
+  border-left:1px solid var(--border2);
+  box-shadow:-24px 0 60px rgba(2,8,20,.55);
+  padding:1.35rem 1.3rem 2rem;
+  position:relative;
+}
+.dossier::before{
+  content:'';
+  position:absolute;inset:0 auto 0 0;width:3px;
+  background:linear-gradient(180deg, var(--a1), transparent 70%);
+}
+.dossier-head{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;
+  margin-bottom:1.15rem;
+}
+.dossier-kicker{
+  font-size:.62rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--a1);margin-bottom:.2rem;
+}
+.dossier h2{
+  font-size:1.28rem;font-weight:800;letter-spacing:-.03em;
+}
+.dossier-close{
+  background:transparent;border:1px solid var(--border);color:var(--muted);
+  border-radius:8px;padding:.35rem .65rem;cursor:pointer;
+  font-family:inherit;font-size:.75rem;font-weight:700;
+}
+.dossier-close:hover{ color:var(--txt);border-color:var(--a1); }
+.dossier-block{
+  border-top:1px solid var(--border);
+  padding:1rem 0 .35rem;
+}
+.dossier-block h3{
+  font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:.65rem;
+}
+.dossier-copy{ font-size:.8rem;color:var(--muted);line-height:1.5;margin-bottom:.75rem; }
+.dossier-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:.7rem .85rem;
+}
+.dossier-grid dt{
+  font-size:.65rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+}
+.dossier-grid dd{ font-size:.86rem;font-weight:600;margin-top:.15rem;word-break:break-word; }
+.dossier-grid dd.mono,.dossier .mono{ font-family:var(--mono);font-size:.78rem;font-weight:500; }
+.dossier-meter{
+  height:7px;border-radius:999px;background:rgba(120,155,195,.16);
+  overflow:hidden;margin-bottom:.85rem;
+}
+.dossier-meter > span{
+  display:block;height:100%;
+  background:linear-gradient(90deg, var(--a1), #f0a04a);
+}
+.dossier-actions{ display:flex;flex-wrap:wrap;gap:.5rem;align-items:center; }
+a.dossier-link{ text-decoration:none;margin-top:0; }
 
 /* ─── CHAT COLUMN ─── */
 .chat{

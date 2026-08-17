@@ -8,6 +8,7 @@ import { ThreadSidebar } from '@/components/threads/ThreadSidebar';
 import { ChatMain } from '@/components/chat/ChatMain';
 import { SidePanel } from '@/components/panel/SidePanel';
 import { LoginPage } from '@/components/auth/LoginPage';
+import { ForcePasswordChange } from '@/components/auth/AccountPanel';
 import { OnboardingPage } from '@/components/onboarding/OnboardingPage';
 
 /**
@@ -53,6 +54,8 @@ function AuthGate() {
   }
 
   if (!user) return <LoginPage />;
+
+  if (user.must_change_password) return <ForcePasswordChange />;
 
   return (
     <AppProvider key={user.id}>

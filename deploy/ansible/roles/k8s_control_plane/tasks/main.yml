@@ -1,0 +1,55 @@
+---
+- name: Require control plane endpoint
+  ansible.builtin.assert:
+    that:
+      - k8s_control_plane_endpoint | length > 0
+    fail_msg: k8s_control_plane_endpoint must be set (e.g. 192.168.1.11:6443).
+  tags: [k8s, control-plane]
+
+- name: Check whether cluster is already initialized
+  ansible.builtin.stat:
+    path: "{{ k8s_admin_kubeconfig }}"
+  register: k8s_admin_conf
+  tags: [k8s, control-plane]
+
+- name: Write kubeadm config
+  ansible.builtin.template:
+    src: kubeadm-config.yaml.j2
+    dest: "{{ k8s_kubeadm_config_path }}"
+    mode: "0600"
+    owner: root
+    group: root
+  when: not k8s_admin_conf.stat.exists
+  tags: [k8s, control-plane]
+
+- name: Initialize Kubernetes control plane
+  ansible.builtin.command:
+    cmd: kubeadm init --config {{ k8s_kubeadm_config_path }}
+  when: not k8s_admin_conf.stat.exists
+  register: k8s_kubeadm_init
+  changed_when: k8s_kubeadm_init.rc == 0
+  tags: [k8s, control-plane]
+
+- name: Wait for Kubernetes API
+  ansible.builtin.uri:
+    url: https://127.0.0.1:6443/readyz
+    method: GET
+    validate_certs: false
+    status_code: [200]
+  register: k8s_readyz
+  until: k8s_readyz.status | default(0) == 200
+  retries: 36
+  delay: 5
+  tags: [k8s, control-plane]
+
+- name: Create join token for worker nodes
+  ansible.builtin.command:
+    cmd: kubeadm token create --print-join-command --ttl 24h
+  register: k8s_join_command
+  changed_when: false
+  tags: [k8s, control-plane]
+
+- name: Publish join command for worker plays
+  ansible.builtin.set_fact:
+    k8s_join_command: "{{ k8s_join_command.stdout }}"
+  tags: [k8s, control-plane]

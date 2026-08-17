@@ -23,8 +23,9 @@ from functools import wraps
 from typing import Any
 
 from flask import Flask, jsonify, request
+from flask import session as flask_session
 from flask_login import LoginManager, current_user
-from flask_wtf.csrf import CSRFProtect, generate_csrf
+from flask_wtf.csrf import CSRFError, CSRFProtect, generate_csrf
 
 from config import settings
 from logging_setup import get_logger
@@ -59,9 +60,27 @@ PUBLIC_ENDPOINTS: set[str] = {
     "auth.login",
     "auth.register",
     "auth.csrf_token",
+    "auth.auth_config",
+    "auth.oidc_login",
+    "auth.oidc_callback",
     # Returns {"authenticated": false} instead of 401 so the SPA can
     # bootstrap without tripping its own 401 redirect.
     "auth.me",
+}
+
+PASSWORD_CHANGE_ALLOWED_ENDPOINTS: set[str] = {
+    "index",
+    "vite_assets",
+    "static",
+    "healthz",
+    "readyz",
+    "metrics",
+    "auth.csrf_token",
+    "auth.me",
+    "auth.auth_config",
+    "auth.logout",
+    "auth.change_password",
+    "auth.profile",
 }
 
 # Endpoints that mutate shared state (the scraped knowledge base every
@@ -104,6 +123,29 @@ def _load_user(session_id: str) -> User | None:
         log.info("auth.session.stale_epoch", user_id=user.id)
         return None
 
+    return user
+
+
+@login_manager.request_loader
+def _load_user_from_request(request: Any) -> User | None:
+    """
+    Authenticate machine clients with a Keycloak access token.
+
+    Cookie sessions still win when present (Flask-Login tries the session
+    first). A Bearer token never writes a session, so there is no CSRF
+    cookie to forge — CSRF is skipped for these requests in `_init_csrf`.
+    """
+    header = request.headers.get("Authorization") or ""
+    if not header.startswith("Bearer "):
+        return None
+    token = header[7:].strip()
+    if not token:
+        return None
+    from .oidc import user_from_access_token
+
+    user = user_from_access_token(token)
+    if user is None:
+        log.info("auth.bearer.rejected")
     return user
 
 
@@ -192,7 +234,27 @@ def _init_csrf(app: Flask) -> None:
     value in the session, so a cross-site form post cannot forge it.
     """
     app.config.setdefault("WTF_CSRF_HEADERS", ["X-CSRFToken", "X-CSRF-Token"])
+    # Cookie sessions still need CSRF. Bearer JWT requests have no session
+    # cookie to forge, so they skip the check (see `_csrf_protect`).
+    app.config["WTF_CSRF_CHECK_DEFAULT"] = False
     csrf.init_app(app)
+
+    @app.before_request
+    def _csrf_protect_cookie_sessions() -> Any:
+        if not app.config.get("WTF_CSRF_ENABLED", True):
+            return None
+        if request.method in ("GET", "HEAD", "OPTIONS", "TRACE"):
+            return None
+        auth = request.headers.get("Authorization") or ""
+        # Skip CSRF only for bearer-only callers. A browser that already
+        # has a session cookie must still send the token — otherwise an
+        # attacker could add a dummy Bearer header to bypass CSRF.
+        from flask import session as flask_session
+
+        if auth.startswith("Bearer ") and not flask_session.get("_user_id"):
+            return None
+        csrf.protect()
+        return None
 
     @app.after_request
     def _refresh_csrf_cookie(response: Any) -> Any:
@@ -214,22 +276,26 @@ def _init_csrf(app: Flask) -> None:
             log.exception("auth.csrf.cookie_failed")
         return response
 
-    @app.errorhandler(400)
+    @app.errorhandler(CSRFError)
     def _csrf_error(error: Any) -> Any:
+        return (
+            jsonify(
+                {
+                    "error": (
+                        "Your session security token expired. "
+                        "Refresh the page and try again."
+                    ),
+                    "code": "csrf",
+                }
+            ),
+            403,
+        )
+
+    @app.errorhandler(400)
+    def _bad_request(error: Any) -> Any:
         description = getattr(error, "description", "") or ""
         if "CSRF" in str(description):
-            return (
-                jsonify(
-                    {
-                        "error": (
-                            "Your session security token expired. "
-                            "Refresh the page and try again."
-                        ),
-                        "code": "csrf",
-                    }
-                ),
-                403,
-            )
+            return _csrf_error(error)
         return (
             jsonify(
                 {
@@ -253,6 +319,19 @@ def _init_headers(app: Flask) -> None:
         connect_src += ["ws:", "wss:", "http://localhost:5173", "http://127.0.0.1:5173"]
     else:
         connect_src += ["wss:"]
+    if settings.oidc_enabled and settings.oidc_issuer:
+        from urllib.parse import urlparse
+
+        origin = f"{urlparse(settings.oidc_issuer).scheme}://{urlparse(settings.oidc_issuer).netloc}"
+        if origin not in connect_src:
+            connect_src.append(origin)
+
+    form_action = ["'self'"]
+    if settings.oidc_enabled and settings.oidc_issuer:
+        from urllib.parse import urlparse
+
+        origin = f"{urlparse(settings.oidc_issuer).scheme}://{urlparse(settings.oidc_issuer).netloc}"
+        form_action.append(origin)
 
     csp = {
         "default-src": "'self'",
@@ -263,7 +342,7 @@ def _init_headers(app: Flask) -> None:
         "connect-src": connect_src,
         "frame-ancestors": "'none'",
         "base-uri": "'self'",
-        "form-action": "'self'",
+        "form-action": form_action,
         "object-src": "'none'",
     }
 
@@ -360,6 +439,19 @@ def _install_default_deny(app: Flask) -> None:
                 403,
             )
 
+        if flask_session.get("_must_change_password") and endpoint not in (
+            PASSWORD_CHANGE_ALLOWED_ENDPOINTS
+        ):
+            return (
+                jsonify(
+                    {
+                        "error": "Set a new password before using the workspace.",
+                        "code": "password_change_required",
+                    }
+                ),
+                403,
+            )
+
         return None
 
 
@@ -375,6 +467,7 @@ def audit_admin_action(event: str, **detail: Any) -> None:
 
 __all__ = [
     "ADMIN_ENDPOINTS",
+    "PASSWORD_CHANGE_ALLOWED_ENDPOINTS",
     "PUBLIC_ENDPOINTS",
     "ROLE_ADMIN",
     "admin_required",

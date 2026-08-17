@@ -47,6 +47,9 @@ flask-wtf==1.2.2
 flask-limiter==3.8.0
 flask-talisman==1.1.0
 email-validator==2.2.0
+# OIDC / JWT (Phase 5). cryptography is the RS256 backend for PyJWT.
+PyJWT==2.10.1
+cryptography==44.0.2
 # Only required when SESSION_BACKEND or RATE_LIMIT_BACKEND is "redis".
 redis==5.2.1
 

@@ -95,6 +95,8 @@ def test_gevent_websocket_stays_uninstalled() -> None:
     specs = _requirement_names(ROOT / "requirements.txt")
     assert "gevent-websocket" not in specs
     assert "simple-websocket" in specs
+    assert "pyjwt" in specs
+    assert "cryptography" in specs
 
 
 # ── lint toolchain ───────────────────────────────────────────────
@@ -342,6 +344,16 @@ def test_celery_hard_limit_exceeds_the_soft_limit() -> None:
     from config import settings
 
     assert settings.celery_time_limit > settings.celery_soft_time_limit
+
+
+def test_keycloak_is_profile_gated(compose: dict[str, Any]) -> None:
+    """Default `compose up` must not pull Keycloak; SSO is `--profile sso`."""
+    keycloak = compose["services"]["keycloak"]
+    assert "sso" in keycloak["profiles"]
+    assert compose["services"]["api"]["environment"]["AUTH_MODE"] == "${AUTH_MODE:-local}"
+    assert keycloak["command"] == ["start-dev", "--import-realm"]
+    mounts = keycloak["volumes"]
+    assert any("realm-ansibleai.json" in str(entry) for entry in mounts)
 
 
 def test_read_only_rootfs_has_writable_mounts_for_every_written_path(

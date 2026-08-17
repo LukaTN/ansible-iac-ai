@@ -1,0 +1,27 @@
+---
+- name: Check whether Calico is already installed
+  ansible.builtin.command:
+    cmd: kubectl get daemonset -n kube-system calico-node
+  environment:
+    KUBECONFIG: "{{ k8s_admin_kubeconfig }}"
+  register: k8s_calico_ds
+  changed_when: false
+  failed_when: false
+  tags: [k8s, cni, calico]
+
+- name: Install Calico manifest
+  ansible.builtin.command:
+    cmd: kubectl apply -f {{ calico_manifest_url }}
+  environment:
+    KUBECONFIG: "{{ k8s_admin_kubeconfig }}"
+  when: k8s_calico_ds.rc != 0
+  changed_when: true
+  tags: [k8s, cni, calico]
+
+- name: Wait for Calico node DaemonSet
+  ansible.builtin.command:
+    cmd: kubectl rollout status daemonset/calico-node -n kube-system --timeout=300s
+  environment:
+    KUBECONFIG: "{{ k8s_admin_kubeconfig }}"
+  changed_when: false
+  tags: [k8s, cni, calico]

@@ -274,6 +274,11 @@ def test_state_changing_request_without_csrf_token_is_rejected(app, make_user):
         no_token = c.delete("/api/threads")
         assert no_token.status_code == 403
         assert no_token.get_json()["code"] == "csrf"
+
+        # A dummy Bearer header must not disable CSRF while a session cookie exists.
+        spoofed = c.delete("/api/threads", headers={"Authorization": "Bearer not-a-jwt"})
+        assert spoofed.status_code == 403
+        assert spoofed.get_json()["code"] == "csrf"
     finally:
         app.config["WTF_CSRF_ENABLED"] = False
 

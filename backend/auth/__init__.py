@@ -2,11 +2,10 @@
 =============================================================
   AnsibleAI — Authentication and authorization
 
-  Phase 0 authenticates against a local argon2id password. The
-  User model, session layer, and authorization hooks are kept
-  independent of that choice so Phase 5 can add a Keycloak OIDC
-  provider by filling `User.provider` / `User.external_id`, without
-  touching the models or the route guards.
+  Phase 0 authenticates against a local argon2id password. Phase 5b
+  authenticates members against Keycloak from the AnsibleAI login page
+  (resource-owner password grant). Default remains local so the test
+  suite and host `python app.py` need no identity provider.
 =============================================================
 """
 
