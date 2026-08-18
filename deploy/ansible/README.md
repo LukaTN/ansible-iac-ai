@@ -141,7 +141,7 @@ ansible-playbook playbooks/reset.yml
 | kubeadm control plane | 192.168.1.11 | API on `:6443` |
 | Calico CNI | `.11` + `.12` | Pod network `10.244.0.0/16` (does not overlap `192.168.1.0/24`) |
 | kubeadm worker join | 192.168.1.12 | Joins `https://192.168.1.11:6443` |
-| ingress-nginx | `.11` | Pinned chart version |
+| ingress-nginx | `.11` / `.12` | NodePort **30080** (HTTP) and **30443** (HTTPS); no cloud LoadBalancer |
 | cert-manager | `.11` | Pinned chart version |
 | kubeconfig | 192.168.1.19 | `artifacts/kubeconfig` |
 
