@@ -38,7 +38,7 @@ def test_lab_inventory_is_two_node_cluster() -> None:
     children = inventory["all"]["children"]["k8s_cluster"]["children"]
     master = children["k8s_control_plane"]["hosts"]["k8s-master"]
     worker = children["k8s_workers"]["hosts"]["k8s-worker"]
-    assert master["ansible_host"] == "192.168.1.11"
+    assert master["ansible_host"] == "192.168.1.18"
     assert worker["ansible_host"] == "192.168.1.12"
     assert master["ansible_host"] != worker["ansible_host"]
     assert inventory["all"]["vars"]["ansible_control_ip"] == "192.168.1.19"

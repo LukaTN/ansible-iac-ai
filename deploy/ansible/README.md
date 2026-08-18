@@ -8,11 +8,11 @@ control VM**. It does **not** deploy AnsibleAI (Helm comes in Phase 4).
 | IP | Host | Role |
 |----|------|------|
 | **192.168.1.19** | `ansible-control` | Run `ansible-playbook` here (not a K8s node) |
-| **192.168.1.11** | `k8s-master` | Control plane (`kubeadm init`) |
+| **192.168.1.18** | `k8s-master` | Control plane (`kubeadm init`) |
 | **192.168.1.12** | `k8s-worker` | Worker (`kubeadm join`) |
 
 ```
- 192.168.1.19                    192.168.1.11              192.168.1.12
+ 192.168.1.19                    192.168.1.18              192.168.1.12
 ┌──────────────────┐   SSH    ┌─────────────────┐  6443  ┌─────────────────┐
 │ ansible-control  │────────►│   k8s-master    │◄───────│   k8s-worker    │
 │ (this repo)      │         │  control plane  │        │  worker         │
@@ -30,7 +30,7 @@ Ollama stays **off** the cluster (host or another URL), per the production plan.
 | Layer | Component |
 |-------|-----------|
 | CRI | containerd (SystemdCgroup) |
-| Control plane | kubeadm init on `.11` |
+| Control plane | kubeadm init on `.18` |
 | Node agent | kubelet |
 | CNI | Calico (pinned manifest) |
 | Ingress | ingress-nginx (Helm) |
@@ -43,7 +43,7 @@ deploy/ansible/
 ├── ansible.cfg
 ├── requirements.yml
 ├── inventories/lab/
-│   ├── hosts.yml              # master .11 + worker .12
+│   ├── hosts.yml              # master .18 + worker .12
 │   ├── group_vars/all.yml
 │   └── host_vars/
 ├── playbooks/
@@ -74,7 +74,7 @@ ansible-galaxy collection install -r requirements.yml -p collections
 
 Clone this repo on **192.168.1.19**, then work in `deploy/ansible`.
 
-## Prerequisites on .11 and .12 (cluster nodes)
+## Prerequisites on .18 and .12 (cluster nodes)
 
 - Ubuntu 22.04/24.04 or Debian 12
 - SSH access from **192.168.1.19** as a sudo user (`ubuntu` by default in inventory)
@@ -87,7 +87,7 @@ Passwordless SSH from .19 (example):
 
 ```bash
 # On 192.168.1.19
-ssh-copy-id ubuntu@192.168.1.11
+ssh-copy-id ubuntu@192.168.1.18
 ssh-copy-id ubuntu@192.168.1.12
 ```
 
@@ -96,7 +96,7 @@ Override `ansible_user` or `ansible_ssh_private_key_file` in
 
 ## Configure
 
-1. IPs are already set in `inventories/lab/hosts.yml` (`.11` master, `.12` worker).
+1. IPs are already set in `inventories/lab/hosts.yml` (`.18` master, `.12` worker).
 2. Pin versions in `inventories/lab/group_vars/all.yml` (`kubernetes_version`, `calico_version`).
 3. Keep `k8s_pod_subnet` off the lab LAN. `10.244.0.0/16` is the lab default; do **not** use Calico's `192.168.0.0/16` on a `192.168.1.0/24` network.
 4. Optional: add extra API names to `k8s_api_server_cert_sans`.
@@ -127,7 +127,7 @@ Skip ingress-nginx / cert-manager:
 ansible-playbook playbooks/site.yml --skip-tags addons
 ```
 
-Tear down kubeadm on `.11` and `.12`:
+Tear down kubeadm on `.18` and `.12`:
 
 ```bash
 ansible-playbook playbooks/reset.yml
@@ -137,12 +137,12 @@ ansible-playbook playbooks/reset.yml
 
 | Component | Where | Notes |
 |-----------|--------|--------|
-| containerd + kubelet | `.11`, `.12` | Pinned from pkgs.k8s.io |
-| kubeadm control plane | 192.168.1.11 | API on `:6443` |
-| Calico CNI | `.11` + `.12` | Pod network `10.244.0.0/16` (does not overlap `192.168.1.0/24`) |
-| kubeadm worker join | 192.168.1.12 | Joins `https://192.168.1.11:6443` |
-| ingress-nginx | `.11` / `.12` | NodePort **30080** (HTTP) and **30443** (HTTPS); no cloud LoadBalancer |
-| cert-manager | `.11` | Pinned chart version |
+| containerd + kubelet | `.18`, `.12` | Pinned from pkgs.k8s.io |
+| kubeadm control plane | 192.168.1.18 | API on `:6443` |
+| Calico CNI | `.18` + `.12` | Pod network `10.244.0.0/16` (does not overlap `192.168.1.0/24`) |
+| kubeadm worker join | 192.168.1.12 | Joins `https://192.168.1.18:6443` |
+| ingress-nginx | `.18` / `.12` | NodePort **30080** (HTTP) and **30443** (HTTPS); no cloud LoadBalancer |
+| cert-manager | `.18` | Pinned chart version |
 | kubeconfig | 192.168.1.19 | `artifacts/kubeconfig` |
 
 ## Windows laptop
