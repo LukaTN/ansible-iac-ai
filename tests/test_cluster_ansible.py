@@ -50,7 +50,8 @@ def test_kubernetes_version_is_pinned() -> None:
     )
     assert group_vars["kubernetes_version"].startswith("1.")
     assert "latest" not in group_vars["kubernetes_version"]
-    assert group_vars["k8s_pod_subnet"] == "192.168.0.0/16"
+    assert group_vars["k8s_pod_subnet"] == "10.244.0.0/16"
+    assert not group_vars["k8s_pod_subnet"].startswith("192.168.")
     assert group_vars["calico_version"].startswith("v")
 
 

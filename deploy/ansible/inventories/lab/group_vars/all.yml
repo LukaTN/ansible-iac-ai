@@ -9,7 +9,9 @@ kubernetes_apt_channel: v1.32
 
 k8s_cluster_name: ansibleai-lab
 k8s_control_plane_endpoint: "192.168.1.11:6443"
-k8s_pod_subnet: 192.168.0.0/16
+# Must NOT overlap the lab LAN 192.168.1.0/24. Calico's default 192.168.0.0/16
+# would swallow 192.168.1.11/12 and leave the worker NotReady.
+k8s_pod_subnet: 10.244.0.0/16
 k8s_service_subnet: 10.96.0.0/12
 
 # Extra names/IPs on the API server certificate (public DNS, floating IP).
