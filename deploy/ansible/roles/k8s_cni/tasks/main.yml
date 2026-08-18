@@ -21,13 +21,10 @@
   tags: [k8s, cni, calico]
 
 - name: Configure Calico IP autodetection for the lab network
-  ansible.builtin.blockinfile:
+  ansible.builtin.replace:
     path: "{{ calico_manifest_local }}"
-    marker: "# {mark} ANSIBLE MANAGED IP AUTODETECTION"
-    insertafter: 'value: "autodetect"'
-    block: |2
-     - name: IP_AUTODETECTION_METHOD
-     value: "{{ calico_ip_autodetection_method }}"
+    regexp: '(?m)^(\s*)- name: IP\n\1  value: "autodetect"(?:\n\1- name: IP_AUTODETECTION_METHOD\n\1  value: "[^"]*")?'
+    replace: '\1- name: IP\n\1  value: "autodetect"\n\1- name: IP_AUTODETECTION_METHOD\n\1  value: "{{ calico_ip_autodetection_method }}"'
   tags: [k8s, cni, calico]
 
 - name: Apply Calico manifest
