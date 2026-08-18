@@ -98,7 +98,8 @@ Override `ansible_user` or `ansible_ssh_private_key_file` in
 
 1. IPs are already set in `inventories/lab/hosts.yml` (`.11` master, `.12` worker).
 2. Pin versions in `inventories/lab/group_vars/all.yml` (`kubernetes_version`, `calico_version`).
-3. Optional: add extra API names to `k8s_api_server_cert_sans`.
+3. Keep `k8s_pod_subnet` off the lab LAN. `10.244.0.0/16` is the lab default; do **not** use Calico's `192.168.0.0/16` on a `192.168.1.0/24` network.
+4. Optional: add extra API names to `k8s_api_server_cert_sans`.
 
 ## Run (on 192.168.1.19)
 
@@ -138,7 +139,7 @@ ansible-playbook playbooks/reset.yml
 |-----------|--------|--------|
 | containerd + kubelet | `.11`, `.12` | Pinned from pkgs.k8s.io |
 | kubeadm control plane | 192.168.1.11 | API on `:6443` |
-| Calico CNI | `.11` | Pod network `192.168.0.0/16` |
+| Calico CNI | `.11` + `.12` | Pod network `10.244.0.0/16` (does not overlap `192.168.1.0/24`) |
 | kubeadm worker join | 192.168.1.12 | Joins `https://192.168.1.11:6443` |
 | ingress-nginx | `.11` | Pinned chart version |
 | cert-manager | `.11` | Pinned chart version |

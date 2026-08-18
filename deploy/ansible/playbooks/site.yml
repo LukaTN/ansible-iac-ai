@@ -91,11 +91,45 @@
         KUBECONFIG: /etc/kubernetes/admin.conf
       register: k8s_nodes
       changed_when: false
+      failed_when: false
       until:
         - (k8s_nodes.stdout_lines | default([]) | length) >= (groups['k8s_cluster'] | length)
         - "'NotReady' not in (k8s_nodes.stdout | default(''))"
-      retries: 36
+      retries: 60
       delay: 5
+
+    - name: Collect node diagnostics when a node stays NotReady
+      when: k8s_nodes.rc != 0 or "'NotReady' in (k8s_nodes.stdout | default(''))"
+      block:
+        - name: Describe nodes
+          ansible.builtin.command:
+            cmd: kubectl describe nodes
+          environment:
+            KUBECONFIG: /etc/kubernetes/admin.conf
+          register: k8s_node_describe
+          changed_when: false
+
+        - name: List kube-system pods
+          ansible.builtin.command:
+            cmd: kubectl get pods -n kube-system -o wide
+          environment:
+            KUBECONFIG: /etc/kubernetes/admin.conf
+          register: k8s_system_pods
+          changed_when: false
+
+        - name: Show node describe
+          ansible.builtin.debug:
+            var: k8s_node_describe.stdout_lines
+
+        - name: Show kube-system pods
+          ansible.builtin.debug:
+            var: k8s_system_pods.stdout_lines
+
+        - name: Fail after node diagnostics
+          ansible.builtin.fail:
+            msg: >-
+              Expected every inventoried node Ready. Got:
+              {{ k8s_nodes.stdout | default('') }}
 
 - name: Install ingress-nginx and cert-manager
   hosts: "{{ groups['k8s_control_plane'][0] }}"
