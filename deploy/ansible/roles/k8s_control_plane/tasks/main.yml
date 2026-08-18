@@ -3,7 +3,7 @@
   ansible.builtin.assert:
     that:
       - k8s_control_plane_endpoint | length > 0
-    fail_msg: k8s_control_plane_endpoint must be set (e.g. 192.168.1.11:6443).
+    fail_msg: k8s_control_plane_endpoint must be set (e.g. 192.168.1.18:6443).
   tags: [k8s, control-plane]
 
 - name: Check whether cluster is already initialized
