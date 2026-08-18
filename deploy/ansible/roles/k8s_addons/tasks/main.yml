@@ -1,4 +1,3 @@
----
 - name: Check whether Helm is already installed
   ansible.builtin.command: which helm
   register: helm_present
@@ -16,19 +15,28 @@
   ansible.builtin.command: /tmp/get-helm-3.sh
   when: helm_present.rc != 0
 
+- name: Wait for Kubernetes API server
+  ansible.builtin.command:
+    cmd: kubectl --kubeconfig=/etc/kubernetes/admin.conf get --raw=/readyz
+  register: apiserver_ready
+  changed_when: false
+  retries: 30
+  delay: 5
+  until:
+    - apiserver_ready.rc == 0
+    - apiserver_ready.stdout == "ok"
+
 - name: Add ingress-nginx Helm repo
   kubernetes.core.helm_repository:
     name: ingress-nginx
     repo_url: "{{ ingress_nginx_repo_url }}"
-    kubeconfig: /etc/kubernetes/admin.conf
 
-- name: Add jetstack (cert-manager) Helm repo
+- name: Add jetstack Helm repo
   kubernetes.core.helm_repository:
     name: jetstack
     repo_url: "{{ cert_manager_repo_url }}"
-    kubeconfig: /etc/kubernetes/admin.conf
 
-- name: Install ingress-nginx (NodePort, no cloud LoadBalancer)
+- name: Install ingress-nginx
   kubernetes.core.helm:
     name: ingress-nginx
     chart_ref: ingress-nginx/ingress-nginx
@@ -36,15 +44,44 @@
     release_namespace: "{{ ingress_nginx_namespace }}"
     create_namespace: true
     kubeconfig: /etc/kubernetes/admin.conf
+    wait: true
+    timeout: 10m0s
     values:
       controller:
+        replicaCount: 1
         service:
           type: NodePort
           nodePorts:
             http: "{{ ingress_nodeport_http }}"
             https: "{{ ingress_nodeport_https }}"
 
-- name: Install cert-manager (with CRDs)
+- name: Wait for ingress-nginx controller
+  kubernetes.core.k8s_info:
+    api_version: apps/v1
+    kind: Deployment
+    name: ingress-nginx-controller
+    namespace: "{{ ingress_nginx_namespace }}"
+    kubeconfig: /etc/kubernetes/admin.conf
+  register: ingress_deploy
+  until:
+    - ingress_deploy.resources | length > 0
+    - (ingress_deploy.resources[0].status.readyReplicas | default(0)) >=
+      (ingress_deploy.resources[0].status.replicas | default(1))
+  retries: 30
+  delay: 10
+
+- name: Wait for Kubernetes API server after ingress
+  ansible.builtin.command:
+    cmd: kubectl --kubeconfig=/etc/kubernetes/admin.conf get --raw=/readyz
+  register: apiserver_ready_after_ingress
+  changed_when: false
+  retries: 30
+  delay: 5
+  until:
+    - apiserver_ready_after_ingress.rc == 0
+    - apiserver_ready_after_ingress.stdout == "ok"
+
+- name: Install cert-manager
   kubernetes.core.helm:
     name: cert-manager
     chart_ref: jetstack/cert-manager
@@ -52,33 +89,22 @@
     release_namespace: "{{ cert_manager_namespace }}"
     create_namespace: true
     kubeconfig: /etc/kubernetes/admin.conf
+    wait: true
+    timeout: 10m0s
     values:
       installCRDs: true
 
-- name: Wait for ingress-nginx controller to be Ready
+- name: Wait for cert-manager deployment
   kubernetes.core.k8s_info:
-    kind: Deployment
-    name: ingress-nginx-controller
-    namespace: "{{ ingress_nginx_namespace }}"
-    kubeconfig: /etc/kubernetes/admin.conf
-  register: ingress_deploy
-  until: >
-    ingress_deploy.resources | length > 0 and
-    (ingress_deploy.resources[0].status.readyReplicas | default(0)) >=
-    (ingress_deploy.resources[0].status.replicas | default(1))
-  retries: 30
-  delay: 10
-
-- name: Wait for cert-manager deployment to be Ready
-  kubernetes.core.k8s_info:
+    api_version: apps/v1
     kind: Deployment
     name: cert-manager
     namespace: "{{ cert_manager_namespace }}"
     kubeconfig: /etc/kubernetes/admin.conf
   register: cert_manager_deploy
-  until: >
-    cert_manager_deploy.resources | length > 0 and
-    (cert_manager_deploy.resources[0].status.readyReplicas | default(0)) >=
-    (cert_manager_deploy.resources[0].status.replicas | default(1))
+  until:
+    - cert_manager_deploy.resources | length > 0
+    - (cert_manager_deploy.resources[0].status.readyReplicas | default(0)) >=
+      (cert_manager_deploy.resources[0].status.replicas | default(1))
   retries: 30
   delay: 10

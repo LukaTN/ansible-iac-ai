@@ -81,7 +81,7 @@ Clone this repo on **192.168.1.19**, then work in `deploy/ansible`.
 - Python 3
 - Worker must reach master on TCP **6443**
 - No GPU required
-- **2 GB+ RAM** on control plane recommended for kubeadm + Calico
+- **4 GB+ RAM** on control plane recommended for kubeadm + Calico
 
 Passwordless SSH from .19 (example):
 
