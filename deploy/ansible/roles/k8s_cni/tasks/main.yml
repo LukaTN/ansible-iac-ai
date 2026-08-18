@@ -1,87 +1,40 @@
 ---
-- name: Download Calico manifest
+- name: Download pinned Calico manifest
   ansible.builtin.get_url:
     url: "{{ calico_manifest_url }}"
-    dest: "{{ calico_manifest_local }}"
+    dest: /tmp/calico-{{ calico_version }}.yaml
     mode: "0644"
-  tags: [k8s, cni, calico]
 
-- name: Enable Calico IPv4 pool CIDR matching kubeadm podSubnet
-  ansible.builtin.replace:
-    path: "{{ calico_manifest_local }}"
-    regexp: '^(\s*)# - name: CALICO_IPV4POOL_CIDR$'
-    replace: '\1- name: CALICO_IPV4POOL_CIDR'
-  tags: [k8s, cni, calico]
+- name: Apply Calico CNI manifest
+  kubernetes.core.k8s:
+    state: present
+    src: /tmp/calico-{{ calico_version }}.yaml
+    kubeconfig: /etc/kubernetes/admin.conf
 
-- name: Set Calico IPv4 pool CIDR value
-  ansible.builtin.replace:
-    path: "{{ calico_manifest_local }}"
-    regexp: '^(\s*)# value: "192\.168\.0\.0/16"$'
-    replace: '\1value: "{{ k8s_pod_subnet }}"'
-  tags: [k8s, cni, calico]
+- name: Wait for all Calico pods to be Ready
+  kubernetes.core.k8s_info:
+    kind: Pod
+    namespace: kube-system
+    label_selectors:
+      - "k8s-app=calico-node"
+    kubeconfig: /etc/kubernetes/admin.conf
+  register: calico_pods
+  until: >
+    calico_pods.resources | length > 0 and
+    calico_pods.resources | map(attribute='status.phase') | list | unique == ['Running']
+  retries: 30
+  delay: 10
 
-- name: Configure Calico IP autodetection for the lab network
-  ansible.builtin.replace:
-    path: "{{ calico_manifest_local }}"
-    regexp: '(?m)^(\s*)- name: IP\n\1  value: "autodetect"(?:\n\1- name: IP_AUTODETECTION_METHOD\n\1  value: "[^"]*")?'
-    replace: '\1- name: IP\n\1  value: "autodetect"\n\1- name: IP_AUTODETECTION_METHOD\n\1  value: "{{ calico_ip_autodetection_method }}"'
-  tags: [k8s, cni, calico]
-
-- name: Apply Calico manifest
-  ansible.builtin.command:
-    cmd: kubectl apply -f {{ calico_manifest_local }}
-  environment:
-    KUBECONFIG: "{{ k8s_admin_kubeconfig }}"
-  register: k8s_calico_apply
-  changed_when: "'created' in k8s_calico_apply.stdout or 'configured' in k8s_calico_apply.stdout"
-  tags: [k8s, cni, calico]
-
-- name: Wait for Calico kube-controllers
-  ansible.builtin.command:
-    cmd: kubectl rollout status deployment/calico-kube-controllers -n kube-system --timeout={{ calico_rollout_timeout }}
-  environment:
-    KUBECONFIG: "{{ k8s_admin_kubeconfig }}"
-  changed_when: false
-  tags: [k8s, cni, calico]
-
-- name: Wait for Calico node DaemonSet
-  ansible.builtin.command:
-    cmd: kubectl rollout status daemonset/calico-node -n kube-system --timeout={{ calico_rollout_timeout }}
-  environment:
-    KUBECONFIG: "{{ k8s_admin_kubeconfig }}"
-  register: k8s_calico_rollout
-  changed_when: false
-  failed_when: false
-  tags: [k8s, cni, calico]
-
-- name: Collect Calico diagnostics after rollout failure
-  when: k8s_calico_rollout.rc != 0
-  block:
-    - name: List Calico node pods
-      ansible.builtin.command:
-        cmd: kubectl get pods -n kube-system -l k8s-app=calico-node -o wide
-      environment:
-        KUBECONFIG: "{{ k8s_admin_kubeconfig }}"
-      register: k8s_calico_pods
-      changed_when: false
-
-    - name: Show Calico node pod status
-      ansible.builtin.debug:
-        var: k8s_calico_pods.stdout_lines
-
-    - name: Describe failing Calico node pods
-      ansible.builtin.command:
-        cmd: kubectl describe pods -n kube-system -l k8s-app=calico-node
-      environment:
-        KUBECONFIG: "{{ k8s_admin_kubeconfig }}"
-      register: k8s_calico_describe
-      changed_when: false
-
-    - name: Show Calico pod events
-      ansible.builtin.debug:
-        var: k8s_calico_describe.stdout_lines
-
-    - name: Fail after Calico diagnostics
-      ansible.builtin.fail:
-        msg: calico-node DaemonSet did not become ready within {{ calico_rollout_timeout }}.
-  tags: [k8s, cni, calico]
+- name: Wait for the control-plane node to report Ready
+  kubernetes.core.k8s_info:
+    kind: Node
+    name: "{{ inventory_hostname }}"
+    kubeconfig: /etc/kubernetes/admin.conf
+  register: master_node_status
+  until: >
+    master_node_status.resources[0].status.conditions
+    | selectattr('type', 'equalto', 'Ready')
+    | map(attribute='status')
+    | first == 'True'
+  retries: 30
+  delay: 10

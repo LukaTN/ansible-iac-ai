@@ -1,3 +1,6 @@
 ---
-containerd_config_path: /etc/containerd/config.toml
-containerd_pause_image: "registry.k8s.io/pause:3.10"
+# containerd_version comes from inventories/lab/group_vars/all.yml.
+# Leave it empty there to install the latest containerd.io from the repo,
+# or pin e.g. "1.7.20-1" for a reproducible build.
+containerd_docker_repo_gpg_url: "https://download.docker.com/linux/ubuntu/gpg"
+containerd_docker_repo_keyring: "/etc/apt/keyrings/docker.gpg"

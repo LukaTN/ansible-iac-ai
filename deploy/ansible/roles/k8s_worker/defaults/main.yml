@@ -1,3 +1,0 @@
----
-k8s_kubelet_conf: /etc/kubernetes/kubelet.conf
-k8s_control_plane_host: ""

@@ -1,38 +1,42 @@
 ---
-- name: Require control plane host for join command lookup
-  ansible.builtin.assert:
-    that:
-      - k8s_control_plane_host | length > 0
-    fail_msg: k8s_control_plane_host must be set to the first control-plane inventory hostname.
-  tags: [k8s, worker]
-
-- name: Require join command from control plane
-  ansible.builtin.assert:
-    that:
-      - hostvars[k8s_control_plane_host]['k8s_join_command'] is defined
-      - hostvars[k8s_control_plane_host]['k8s_join_command'] | length > 0
-    fail_msg: >-
-      Join command missing. Run the control-plane play first or re-run site.yml
-      so kubeadm token create runs on {{ k8s_control_plane_host }}.
-  tags: [k8s, worker]
-
-- name: Check whether node is already joined
+- name: Check whether this node has already joined the cluster
   ansible.builtin.stat:
-    path: "{{ k8s_kubelet_conf }}"
-  register: k8s_kubelet_conf_stat
-  tags: [k8s, worker]
+    path: /etc/kubernetes/kubelet.conf
+  register: kubelet_conf
 
-- name: Join worker to cluster
-  ansible.builtin.command:
-    cmd: "{{ hostvars[k8s_control_plane_host]['k8s_join_command'] }}"
-  when: not k8s_kubelet_conf_stat.stat.exists
-  register: k8s_worker_join
-  changed_when: k8s_worker_join.rc == 0
-  tags: [k8s, worker]
+- name: Read the join command saved by k8s_control_plane
+  ansible.builtin.slurp:
+    src: "{{ join_command_local_path }}"
+  register: join_command_file
+  delegate_to: localhost
+  become: false
+  when: not kubelet_conf.stat.exists
 
-- name: Ensure kubelet is enabled and started
-  ansible.builtin.service:
+- name: Run kubeadm join
+  ansible.builtin.command: "{{ (join_command_file.content | b64decode).strip() }}"
+  when: not kubelet_conf.stat.exists
+
+- name: Wait for kubelet to be active on the worker
+  ansible.builtin.systemd:
     name: kubelet
     state: started
-    enabled: true
-  tags: [k8s, worker]
+  register: kubelet_status
+  until: kubelet_status.status.ActiveState == 'active'
+  retries: 10
+  delay: 5
+
+- name: Wait for this worker to register as Ready in the cluster
+  kubernetes.core.k8s_info:
+    kind: Node
+    name: "{{ inventory_hostname }}"
+    kubeconfig: /etc/kubernetes/admin.conf
+  register: worker_node_status
+  delegate_to: "{{ groups['k8s_master'][0] }}"
+  until: >
+    worker_node_status.resources | length > 0 and
+    worker_node_status.resources[0].status.conditions
+    | selectattr('type', 'equalto', 'Ready')
+    | map(attribute='status')
+    | first == 'True'
+  retries: 30
+  delay: 10

@@ -1,43 +1,26 @@
 ---
-# Tear down kubeadm on every node. Cluster data and etcd state are removed.
-#   ansible-playbook playbooks/reset.yml
-
-- name: Reset Kubernetes nodes
+# Tears down kubeadm on .18 and .12. Does NOT remove containerd/kubelet
+# packages or touch the ansible-control node (.19). Re-run site.yml
+# afterwards to rebuild the cluster.
+- name: Reset kubeadm on all cluster nodes
   hosts: k8s_cluster
-  gather_facts: false
-  serial: 1
+  become: true
   tasks:
-    - name: Check whether kubeadm is installed
-      ansible.builtin.stat:
-        path: /usr/bin/kubeadm
-      register: k8s_kubeadm_bin
-
-    - name: Reset kubeadm state
-      ansible.builtin.command:
-        cmd: kubeadm reset -f
-      when: k8s_kubeadm_bin.stat.exists
+    - name: kubeadm reset (force, no confirmation prompt)
+      ansible.builtin.command: kubeadm reset -f
       changed_when: true
 
-    - name: Stop kubelet
-      ansible.builtin.service:
-        name: kubelet
-        state: stopped
-      failed_when: false
-
-    - name: Remove Kubernetes configuration directories
+    - name: Remove Kubernetes config directories
       ansible.builtin.file:
         path: "{{ item }}"
         state: absent
       loop:
         - /etc/kubernetes
-        - /var/lib/etcd
         - /etc/cni/net.d
-        - /var/lib/cni
-        - /var/lib/kubelet
+        - "/home/{{ ansible_user }}/.kube"
 
-    - name: Flush iptables rules (Kubernetes chains)
-      ansible.builtin.command:
-        cmd: "{{ item }}"
+    - name: Flush iptables rules left by kube-proxy/Calico
+      ansible.builtin.command: "{{ item }}"
       loop:
         - iptables -F
         - iptables -t nat -F
@@ -45,3 +28,31 @@
         - iptables -X
       changed_when: true
       failed_when: false
+
+    - name: Restart containerd
+      ansible.builtin.systemd:
+        name: containerd
+        state: restarted
+      failed_when: false
+
+    - name: Restart kubelet
+      ansible.builtin.systemd:
+        name: kubelet
+        state: restarted
+      failed_when: false
+
+- name: Clean up local artifacts on the control node
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    kubeconfig_local_path: "{{ playbook_dir }}/../artifacts/kubeconfig"
+    join_command_local_path: "{{ playbook_dir }}/../artifacts/kubeadm_join.sh"
+  tasks:
+    - name: Remove stale kubeconfig and join command
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - "{{ kubeconfig_local_path }}"
+        - "{{ join_command_local_path }}"

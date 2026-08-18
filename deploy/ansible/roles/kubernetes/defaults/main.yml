@@ -1,13 +1,8 @@
 ---
-kubernetes_version: "1.32.4"
-kubernetes_apt_channel: v1.32
-kubernetes_apt_key_path: /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-kubernetes_apt_repo: "deb [signed-by={{ kubernetes_apt_key_path }}] https://pkgs.k8s.io/core:/stable:/{{ kubernetes_apt_channel }}/deb/ /"
-kubernetes_packages:
-  - kubelet={{ kubernetes_version }}-1.1
-  - kubeadm={{ kubernetes_version }}-1.1
-  - kubectl={{ kubernetes_version }}-1.1
-kubernetes_package_hold:
+k8s_repo_gpg_url: "https://pkgs.k8s.io/core:/stable:/v{{ kubernetes_version }}/deb/Release.key"
+k8s_repo_url: "https://pkgs.k8s.io/core:/stable:/v{{ kubernetes_version }}/deb/"
+k8s_repo_keyring: "/etc/apt/keyrings/kubernetes-apt-keyring.gpg"
+k8s_packages:
   - kubelet
   - kubeadm
   - kubectl

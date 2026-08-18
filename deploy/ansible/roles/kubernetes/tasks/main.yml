@@ -1,59 +1,60 @@
 ---
-- name: Install Kubernetes apt prerequisites
-  ansible.builtin.apt:
-    name:
-      - apt-transport-https
-      - ca-certificates
-      - curl
-      - gnupg
-    state: present
-    update_cache: true
-  tags: [kubernetes, packages]
-
-- name: Ensure apt keyrings directory exists
+- name: Ensure keyrings directory exists
   ansible.builtin.file:
-    path: "{{ kubernetes_apt_key_path | dirname }}"
+    path: /etc/apt/keyrings
     state: directory
     mode: "0755"
-  tags: [kubernetes, repo]
 
-- name: Add Kubernetes apt signing key
+- name: Download Kubernetes apt GPG key
   ansible.builtin.get_url:
-    url: "https://pkgs.k8s.io/core:/stable:/{{ kubernetes_apt_channel }}/deb/Release.key"
-    dest: /tmp/kubernetes-apt-release.key
+    url: "{{ k8s_repo_gpg_url }}"
+    dest: /tmp/kubernetes-release.key
     mode: "0644"
-  tags: [kubernetes, repo]
 
-- name: Dearmor Kubernetes apt key
-  ansible.builtin.command:
-    cmd: gpg --dearmor --yes --output {{ kubernetes_apt_key_path }} /tmp/kubernetes-apt-release.key
+- name: Dearmor Kubernetes GPG key
+  ansible.builtin.command: >
+    gpg --batch --yes --dearmor
+    -o {{ k8s_repo_keyring }} /tmp/kubernetes-release.key
   args:
-    creates: "{{ kubernetes_apt_key_path }}"
-  tags: [kubernetes, repo]
+    creates: "{{ k8s_repo_keyring }}"
 
-- name: Add Kubernetes apt repository
+- name: Add pkgs.k8s.io apt repository
   ansible.builtin.apt_repository:
-    repo: "{{ kubernetes_apt_repo }}"
+    repo: "deb [signed-by={{ k8s_repo_keyring }}] {{ k8s_repo_url }} /"
     filename: kubernetes
     state: present
-  tags: [kubernetes, repo]
 
-- name: Install Kubernetes packages
+- name: Install kubelet, kubeadm, kubectl
   ansible.builtin.apt:
-    name: "{{ kubernetes_packages }}"
+    name: >-
+      {{ k8s_packages | map('regex_replace', '$', '=' + kubernetes_package_version) | list }}
     state: present
     update_cache: true
-  tags: [kubernetes, packages]
+  when: kubernetes_package_version is defined and kubernetes_package_version | length > 0
 
-- name: Hold Kubernetes package versions
+- name: Install kubelet, kubeadm, kubectl (unpinned)
+  ansible.builtin.apt:
+    name: "{{ k8s_packages }}"
+    state: present
+    update_cache: true
+  when: kubernetes_package_version is not defined or kubernetes_package_version | length == 0
+
+- name: Hold kubelet, kubeadm, kubectl at installed version
   ansible.builtin.dpkg_selections:
     name: "{{ item }}"
     selection: hold
-  loop: "{{ kubernetes_package_hold }}"
-  tags: [kubernetes, packages]
+  loop: "{{ k8s_packages }}"
 
-- name: Enable kubelet
-  ansible.builtin.service:
+- name: Enable and start kubelet
+  ansible.builtin.systemd:
     name: kubelet
     enabled: true
-  tags: [kubernetes, kubelet]
+    state: started
+    daemon_reload: true
+
+- name: Disable UFW/firewall interference (lab-only convenience)
+  ansible.builtin.systemd:
+    name: ufw
+    enabled: false
+    state: stopped
+  failed_when: false

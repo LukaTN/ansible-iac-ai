@@ -1,65 +1,72 @@
 ---
-- name: Require control plane endpoint
-  ansible.builtin.assert:
-    that:
-      - k8s_control_plane_endpoint | length > 0
-    fail_msg: k8s_control_plane_endpoint must be set (e.g. 192.168.1.18:6443).
-  tags: [k8s, control-plane]
-
-- name: Check whether cluster is already initialized
+- name: Check whether this node is already an initialized control plane
   ansible.builtin.stat:
-    path: "{{ k8s_admin_kubeconfig }}"
-  register: k8s_admin_conf
-  tags: [k8s, control-plane]
+    path: /etc/kubernetes/admin.conf
+  register: admin_conf
 
-- name: Ensure kubeadm config directory exists
+- name: Run kubeadm init
+  ansible.builtin.command:
+    cmd: >
+      kubeadm init
+      --apiserver-advertise-address={{ ansible_host }}
+      --control-plane-endpoint={{ k8s_control_plane_endpoint }}
+      --pod-network-cidr={{ k8s_pod_subnet }}
+      {{ '--apiserver-cert-extra-sans=' + (k8s_api_server_cert_sans | join(',')) if k8s_api_server_cert_sans | length > 0 else '' }}
+      --upload-certs
+  when: not admin_conf.stat.exists
+  register: kubeadm_init_result
+
+- name: Save raw kubeadm init output for troubleshooting
+  ansible.builtin.copy:
+    content: "{{ kubeadm_init_result.stdout }}"
+    dest: /root/kubeadm-init.log
+    mode: "0600"
+  when: kubeadm_init_result is changed
+
+- name: Create .kube directory for the ansible_user
   ansible.builtin.file:
-    path: "{{ k8s_kubeadm_config_path | dirname }}"
+    path: "/home/{{ ansible_user }}/.kube"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0755"
+
+- name: Copy admin.conf to ansible_user's kube config
+  ansible.builtin.copy:
+    src: /etc/kubernetes/admin.conf
+    dest: "/home/{{ ansible_user }}/.kube/config"
+    remote_src: true
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0600"
+
+- name: Wait for the API server to answer locally
+  ansible.builtin.command: kubectl --kubeconfig=/etc/kubernetes/admin.conf get --raw=/healthz
+  register: api_health
+  until: api_health.rc == 0
+  retries: 12
+  delay: 5
+  changed_when: false
+
+- name: Generate a fresh kubeadm join command for workers
+  ansible.builtin.command: kubeadm token create --print-join-command
+  register: kubeadm_join_command
+  changed_when: false
+
+- name: Ensure local artifacts directory exists on the control node
+  ansible.builtin.file:
+    path: "{{ join_command_local_path | dirname }}"
     state: directory
     mode: "0755"
-    owner: root
-    group: root
-  when: not k8s_admin_conf.stat.exists
-  tags: [k8s, control-plane]
+  delegate_to: localhost
+  become: false
+  run_once: true
 
-- name: Write kubeadm config
-  ansible.builtin.template:
-    src: kubeadm-config.yaml.j2
-    dest: "{{ k8s_kubeadm_config_path }}"
+- name: Persist the join command locally so the worker play can read it
+  ansible.builtin.copy:
+    content: "{{ kubeadm_join_command.stdout }}\n"
+    dest: "{{ join_command_local_path }}"
     mode: "0600"
-    owner: root
-    group: root
-  when: not k8s_admin_conf.stat.exists
-  tags: [k8s, control-plane]
-
-- name: Initialize Kubernetes control plane
-  ansible.builtin.command:
-    cmd: kubeadm init --config {{ k8s_kubeadm_config_path }}
-  when: not k8s_admin_conf.stat.exists
-  register: k8s_kubeadm_init
-  changed_when: k8s_kubeadm_init.rc == 0
-  tags: [k8s, control-plane]
-
-- name: Wait for Kubernetes API
-  ansible.builtin.uri:
-    url: https://127.0.0.1:6443/readyz
-    method: GET
-    validate_certs: false
-    status_code: [200]
-  register: k8s_readyz
-  until: k8s_readyz.status | default(0) == 200
-  retries: 36
-  delay: 5
-  tags: [k8s, control-plane]
-
-- name: Create join token for worker nodes
-  ansible.builtin.command:
-    cmd: kubeadm token create --print-join-command --ttl 24h
-  register: k8s_join_command
-  changed_when: false
-  tags: [k8s, control-plane]
-
-- name: Publish join command for worker plays
-  ansible.builtin.set_fact:
-    k8s_join_command: "{{ k8s_join_command.stdout }}"
-  tags: [k8s, control-plane]
+  delegate_to: localhost
+  become: false
+  run_once: true

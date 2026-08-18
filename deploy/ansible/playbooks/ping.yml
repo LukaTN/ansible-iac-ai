@@ -1,14 +1,19 @@
 ---
-# Quick connectivity check from the Ansible control node (192.168.1.19).
-#   ansible-playbook playbooks/ping.yml
-
-- name: Verify SSH to cluster nodes
+# Sanity check: confirms SSH + sudo work from 192.168.1.19 to .18 and .12
+# before running anything else.
+- name: Verify SSH connectivity to cluster nodes
   hosts: k8s_cluster
   gather_facts: false
   tasks:
-    - name: Ping master and worker
+    - name: Ping (no privilege escalation)
       ansible.builtin.ping:
 
-    - name: Show target
+    - name: Ping with sudo (privilege escalation check)
+      ansible.builtin.command: whoami
+      become: true
+      register: whoami_result
+      changed_when: false
+
+    - name: Show effective privileged user
       ansible.builtin.debug:
-        msg: "{{ inventory_hostname }} reachable at {{ ansible_host }}"
+        msg: "{{ inventory_hostname }} ({{ ansible_host }}): become -> {{ whoami_result.stdout }}"

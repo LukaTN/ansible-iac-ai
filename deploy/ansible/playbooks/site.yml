@@ -1,140 +1,45 @@
 ---
-# Provision the AnsibleAI lab Kubernetes cluster (kubeadm).
-#
-# From deploy/ansible on 192.168.1.19:
-#   ansible-galaxy collection install -r requirements.yml -p collections
-#   ansible-playbook playbooks/site.yml
-#
-# Skip ingress-nginx / cert-manager:
-#   ansible-playbook playbooks/site.yml --skip-tags addons
+# Full cluster bootstrap:
+#   common + containerd + kubernetes  -> all nodes
+#   k8s_control_plane + k8s_cni       -> master only (kubeadm init, Calico)
+#   k8s_worker                        -> worker only (kubeadm join)
+#   k8s_kubeconfig                    -> fetch admin.conf to this control node
+#   k8s_addons                        -> ingress-nginx + cert-manager (tag: addons)
 
-- name: Require two VMs (one control plane, one worker)
-  hosts: localhost
-  connection: local
-  gather_facts: false
-  become: false
-  tags: [always]
-  tasks:
-    - name: Inventory must list a control plane and a worker with different IPs
-      ansible.builtin.assert:
-        that:
-          - groups['k8s_control_plane'] | default([]) | length >= 1
-          - groups['k8s_workers'] | default([]) | length >= 1
-          - hostvars[groups['k8s_control_plane'][0]].ansible_host != hostvars[groups['k8s_workers'][0]].ansible_host
-        fail_msg: >-
-          inventories/lab/hosts.yml must define k8s-master (control plane) and
-          k8s-worker with different ansible_host values. The Ansible control
-          machine (192.168.1.19) is not a cluster node — run playbooks from it.
-
-- name: Prepare every Kubernetes node
+- name: Prepare all cluster nodes (OS, containerd, kubeadm/kubelet/kubectl)
   hosts: k8s_cluster
-  gather_facts: true
-  tags: [common]
+  become: true
+  tags: [prepare]
   roles:
-    - role: common
+    - common
+    - containerd
+    - kubernetes
 
-- name: Install containerd on every node
-  hosts: k8s_cluster
-  gather_facts: false
-  tags: [containerd]
+- name: Initialize the Kubernetes control plane
+  hosts: k8s_master
+  become: true
+  tags: [control_plane]
   roles:
-    - role: containerd
+    - k8s_control_plane
+    - k8s_cni
 
-- name: Install Kubernetes packages on every node
-  hosts: k8s_cluster
-  gather_facts: false
-  tags: [kubernetes]
+- name: Join worker node(s) to the cluster
+  hosts: k8s_worker
+  become: true
+  tags: [worker]
   roles:
-    - role: kubernetes
-
-- name: Initialize kubeadm control plane
-  hosts: k8s_control_plane
-  gather_facts: true
-  tags: [k8s, control-plane]
-  roles:
-    - role: k8s_control_plane
+    - k8s_worker
 
 - name: Fetch kubeconfig to the Ansible control node
-  hosts: "{{ groups['k8s_control_plane'][0] }}"
-  gather_facts: false
-  tags: [k8s, kubeconfig]
+  hosts: k8s_master
+  become: true
+  tags: [kubeconfig]
   roles:
-    - role: k8s_kubeconfig
-      vars:
-        k8s_kubeconfig_api_server: "https://{{ hostvars[groups['k8s_control_plane'][0]].ansible_host }}:6443"
+    - k8s_kubeconfig
 
-- name: Join worker nodes
-  hosts: k8s_workers
-  gather_facts: false
-  tags: [k8s, worker]
-  vars:
-    k8s_control_plane_host: "{{ groups['k8s_control_plane'][0] }}"
-  roles:
-    - role: k8s_worker
-
-- name: Install Calico CNI
-  hosts: "{{ groups['k8s_control_plane'][0] }}"
-  gather_facts: false
-  tags: [k8s, cni]
-  roles:
-    - role: k8s_cni
-
-- name: Wait until control plane and worker are Ready
-  hosts: "{{ groups['k8s_control_plane'][0] }}"
-  gather_facts: false
-  tags: [k8s]
-  tasks:
-    - name: Wait for every inventoried node to be Ready
-      ansible.builtin.command:
-        cmd: kubectl get nodes --no-headers
-      environment:
-        KUBECONFIG: /etc/kubernetes/admin.conf
-      register: k8s_nodes
-      changed_when: false
-      failed_when: false
-      until:
-        - (k8s_nodes.stdout_lines | default([]) | length) >= (groups['k8s_cluster'] | length)
-        - "'NotReady' not in (k8s_nodes.stdout | default(''))"
-      retries: 60
-      delay: 5
-
-    - name: Collect node diagnostics when a node stays NotReady
-      when: k8s_nodes.rc != 0 or "'NotReady' in (k8s_nodes.stdout | default(''))"
-      block:
-        - name: Describe nodes
-          ansible.builtin.command:
-            cmd: kubectl describe nodes
-          environment:
-            KUBECONFIG: /etc/kubernetes/admin.conf
-          register: k8s_node_describe
-          changed_when: false
-
-        - name: List kube-system pods
-          ansible.builtin.command:
-            cmd: kubectl get pods -n kube-system -o wide
-          environment:
-            KUBECONFIG: /etc/kubernetes/admin.conf
-          register: k8s_system_pods
-          changed_when: false
-
-        - name: Show node describe
-          ansible.builtin.debug:
-            var: k8s_node_describe.stdout_lines
-
-        - name: Show kube-system pods
-          ansible.builtin.debug:
-            var: k8s_system_pods.stdout_lines
-
-        - name: Fail after node diagnostics
-          ansible.builtin.fail:
-            msg: >-
-              Expected every inventoried node Ready. Got:
-              {{ k8s_nodes.stdout | default('') }}
-
-- name: Install ingress-nginx and cert-manager
-  hosts: "{{ groups['k8s_control_plane'][0] }}"
-  gather_facts: true
+- name: Install cluster addons (ingress-nginx, cert-manager)
+  hosts: k8s_master
+  become: true
   tags: [addons]
   roles:
-    - role: k8s_addons
-      when: k8s_install_addons | bool
+    - k8s_addons

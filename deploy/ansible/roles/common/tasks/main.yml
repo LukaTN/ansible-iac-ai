@@ -1,70 +1,57 @@
 ---
-- name: Install baseline packages
-  ansible.builtin.package:
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Install prerequisite packages
+  ansible.builtin.apt:
     name: "{{ common_packages }}"
     state: present
-  tags: [common, packages]
 
-- name: Persist overlay and br_netfilter
-  ansible.builtin.copy:
-    dest: /etc/modules-load.d/k8s.conf
-    mode: "0644"
-    owner: root
-    group: root
-    content: |
-      overlay
-      br_netfilter
-  tags: [common, kernel]
+- name: Disable swap immediately
+  ansible.builtin.command: swapoff -a
+  changed_when: false
 
-- name: Load overlay
-  community.general.modprobe:
-    name: overlay
-    state: present
-  tags: [common, kernel]
-
-- name: Load br_netfilter
-  community.general.modprobe:
-    name: br_netfilter
-    state: present
-  tags: [common, kernel]
-
-- name: Enable IPv4 forwarding
-  ansible.posix.sysctl:
-    name: net.ipv4.ip_forward
-    value: "1"
-    sysctl_set: true
-    state: present
-    reload: true
-  tags: [common, sysctl]
-
-- name: Bridge iptables for IPv4
-  ansible.posix.sysctl:
-    name: net.bridge.bridge-nf-call-iptables
-    value: "1"
-    sysctl_set: true
-    state: present
-    reload: true
-  tags: [common, sysctl]
-
-- name: Bridge iptables for IPv6
-  ansible.posix.sysctl:
-    name: net.bridge.bridge-nf-call-ip6tables
-    value: "1"
-    sysctl_set: true
-    state: present
-    reload: true
-  tags: [common, sysctl]
-
-- name: Comment out swap entries in fstab
+- name: Remove swap entries from /etc/fstab
   ansible.builtin.replace:
     path: /etc/fstab
-    regexp: '^([^#].*\s+swap\s+)'
+    regexp: '^([^#].*\sswap\s.*)$'
     replace: '# \1'
-  tags: [common, swap]
 
-- name: Disable swap for this boot
-  ansible.builtin.command:
-    cmd: swapoff -a
-  when: (ansible_facts['memory_mb']['swap']['total'] | default(0) | int) > 0
-  changed_when: true
-  tags: [common, swap]
+- name: Load required kernel modules on boot
+  ansible.builtin.copy:
+    dest: /etc/modules-load.d/k8s.conf
+    content: "{{ common_kernel_modules | join('\n') }}\n"
+    mode: "0644"
+
+- name: Load required kernel modules now
+  community.general.modprobe:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ common_kernel_modules }}"
+
+- name: Configure sysctl params for Kubernetes networking
+  ansible.builtin.copy:
+    dest: /etc/sysctl.d/99-kubernetes-cri.conf
+    content: |
+      {% for key, value in common_sysctl_params.items() %}
+      {{ key }} = {{ value }}
+      {% endfor %}
+    mode: "0644"
+  notify: Reload sysctl
+
+- name: Set hostname to inventory hostname
+  ansible.builtin.hostname:
+    name: "{{ inventory_hostname }}"
+
+- name: Ensure hosts entries for cluster members
+  ansible.builtin.lineinfile:
+    path: /etc/hosts
+    regexp: '.*\s{{ item }}$'
+    line: "{{ hostvars[item].ansible_host }} {{ item }}"
+    state: present
+  loop: "{{ groups['k8s_cluster'] }}"
+
+- name: Flush handlers so sysctl is active before later roles
+  ansible.builtin.meta: flush_handlers

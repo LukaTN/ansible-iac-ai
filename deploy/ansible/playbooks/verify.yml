@@ -1,46 +1,67 @@
 ---
-# Confirm the API answers after a successful site.yml run.
-#   ansible-playbook playbooks/verify.yml
-
-- name: Verify kubeadm cluster
-  hosts: "{{ groups['k8s_control_plane'][0] }}"
+# Runs from the Ansible control node (192.168.1.19) against the kubeconfig
+# fetched by k8s_kubeconfig (artifacts/kubeconfig). No SSH needed here.
+- name: Verify cluster health
+  hosts: localhost
+  connection: local
   gather_facts: false
+  vars:
+    kubeconfig_local_path: "{{ playbook_dir }}/../artifacts/kubeconfig"
   tasks:
-    - name: Kubernetes API is ready
-      ansible.builtin.uri:
-        url: https://127.0.0.1:6443/readyz
-        method: GET
-        validate_certs: false
-        status_code: [200]
+    - name: Confirm kubeconfig exists
+      ansible.builtin.stat:
+        path: "{{ kubeconfig_local_path }}"
+      register: kubeconfig_stat
+      failed_when: not kubeconfig_stat.stat.exists
 
-    - name: List nodes
-      ansible.builtin.command:
-        cmd: kubectl get nodes -o wide
-      environment:
-        KUBECONFIG: /etc/kubernetes/admin.conf
-      register: k8s_nodes
-      changed_when: false
+    - name: Get all nodes
+      kubernetes.core.k8s_info:
+        kind: Node
+        kubeconfig: "{{ kubeconfig_local_path }}"
+      register: nodes
 
-    - name: Show nodes
-      ansible.builtin.debug:
-        msg: "{{ k8s_nodes.stdout_lines }}"
-
-    - name: Fail unless both VMs are Ready
+    - name: Assert exactly two nodes are registered
       ansible.builtin.assert:
         that:
-          - (k8s_nodes.stdout_lines | length) >= 2
-          - k8s_nodes.stdout is search(' Ready')
-          - "'NotReady' not in k8s_nodes.stdout"
-        fail_msg: "Expected two Ready nodes (control plane + worker). Got: {{ k8s_nodes.stdout }}"
+          - nodes.resources | length == 2
+        fail_msg: >-
+          Expected 2 nodes, found {{ nodes.resources | length }}.
+          Check `kubectl get nodes` for details.
 
-    - name: List core system pods
-      ansible.builtin.command:
-        cmd: kubectl get pods -n kube-system
-      environment:
-        KUBECONFIG: /etc/kubernetes/admin.conf
-      register: k8s_system_pods
-      changed_when: false
+    - name: Assert all nodes are Ready
+      ansible.builtin.assert:
+        that:
+          - >-
+            nodes.resources
+            | map(attribute='status.conditions')
+            | map('selectattr', 'type', 'equalto', 'Ready')
+            | map('map', attribute='status')
+            | map('first')
+            | unique == ['True']
+        fail_msg: "One or more nodes are not Ready. Check `kubectl get nodes` for details."
 
-    - name: Show kube-system pods
+    - name: Show node summary
       ansible.builtin.debug:
-        msg: "{{ k8s_system_pods.stdout_lines }}"
+        msg: >-
+          {{ item.metadata.name }}:
+          Ready={{ item.status.conditions | selectattr('type', 'equalto', 'Ready') | map(attribute='status') | first }}
+          role={{ 'control-plane' if 'node-role.kubernetes.io/control-plane' in item.metadata.labels else 'worker' }}
+      loop: "{{ nodes.resources }}"
+      loop_control:
+        label: "{{ item.metadata.name }}"
+
+    - name: Get kube-system pods to spot-check Calico
+      kubernetes.core.k8s_info:
+        kind: Pod
+        namespace: kube-system
+        label_selectors:
+          - "k8s-app=calico-node"
+        kubeconfig: "{{ kubeconfig_local_path }}"
+      register: calico_pods
+
+    - name: Assert Calico pods are Running
+      ansible.builtin.assert:
+        that:
+          - calico_pods.resources | length > 0
+          - calico_pods.resources | map(attribute='status.phase') | unique == ['Running']
+        fail_msg: "Calico is not fully Running yet."
