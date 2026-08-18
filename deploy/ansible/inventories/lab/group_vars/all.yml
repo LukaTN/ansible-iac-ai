@@ -26,6 +26,11 @@ k8s_kubeconfig_local_path: "{{ playbook_dir }}/../artifacts/kubeconfig"
 
 k8s_install_addons: true
 ingress_nginx_chart_version: 4.12.1
+# Bare-metal kubeadm has no cloud LoadBalancer. Helm --wait hangs 10m on
+# EXTERNAL-IP unless the Service is NodePort (or you install MetalLB).
+ingress_nginx_service_type: NodePort
+ingress_nginx_http_nodeport: 30080
+ingress_nginx_https_nodeport: 30443
 cert_manager_chart_version: v1.17.2
 
 common_packages:

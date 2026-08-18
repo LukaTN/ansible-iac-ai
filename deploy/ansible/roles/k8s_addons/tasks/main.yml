@@ -49,19 +49,51 @@
   tags: [addons, ingress]
 
 - name: Install ingress-nginx
-  kubernetes.core.helm:
-    name: ingress-nginx
-    chart_ref: ingress-nginx/ingress-nginx
-    chart_version: "{{ ingress_nginx_chart_version }}"
-    release_namespace: ingress-nginx
-    create_namespace: true
-    kubeconfig: "{{ k8s_admin_kubeconfig }}"
-    binary_path: "{{ helm_binary }}"
-    wait: true
-    timeout: 10m0s
-    values:
-      controller:
-        allowSnippetAnnotations: false
+  block:
+    - name: Install ingress-nginx Helm release
+      kubernetes.core.helm:
+        name: ingress-nginx
+        chart_ref: ingress-nginx/ingress-nginx
+        chart_version: "{{ ingress_nginx_chart_version }}"
+        release_namespace: ingress-nginx
+        create_namespace: true
+        kubeconfig: "{{ k8s_admin_kubeconfig }}"
+        binary_path: "{{ helm_binary }}"
+        wait: true
+        timeout: 10m0s
+        values:
+          controller:
+            allowSnippetAnnotations: false
+            # Tolerate the control-plane taint so the controller can run on
+            # the master if the worker is busy or still coming up.
+            tolerations:
+              - key: node-role.kubernetes.io/control-plane
+                operator: Exists
+                effect: NoSchedule
+            service:
+              type: "{{ ingress_nginx_service_type }}"
+              nodePorts:
+                http: "{{ ingress_nginx_http_nodeport | int }}"
+                https: "{{ ingress_nginx_https_nodeport | int }}"
+  rescue:
+    - name: List ingress-nginx pods
+      ansible.builtin.command:
+        cmd: kubectl get pods,svc -n ingress-nginx -o wide
+      environment:
+        KUBECONFIG: "{{ k8s_admin_kubeconfig }}"
+      register: ingress_nginx_status
+      changed_when: false
+      failed_when: false
+
+    - name: Show ingress-nginx status
+      ansible.builtin.debug:
+        var: ingress_nginx_status.stdout_lines
+
+    - name: Fail after ingress-nginx diagnostics
+      ansible.builtin.fail:
+        msg: >-
+          ingress-nginx Helm wait timed out. On this kubeadm lab the Service
+          must be NodePort (not LoadBalancer). Check pods/svc above.
   tags: [addons, ingress]
 
 - name: Add jetstack Helm repository
