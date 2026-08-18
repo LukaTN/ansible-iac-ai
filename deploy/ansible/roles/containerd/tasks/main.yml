@@ -1,31 +1,71 @@
 ---
-- name: Install containerd
+- name: Gather OS release codename
+  ansible.builtin.command: lsb_release -cs
+  register: os_codename
+  changed_when: false
+
+- name: Ensure keyrings directory exists
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: "0755"
+
+- name: Add Docker apt GPG key (provides containerd.io packages)
+  ansible.builtin.get_url:
+    url: "{{ containerd_docker_repo_gpg_url }}"
+    dest: /tmp/docker.gpg
+    mode: "0644"
+
+- name: Dearmor Docker GPG key
+  ansible.builtin.command: >
+    gpg --batch --yes --dearmor
+    -o {{ containerd_docker_repo_keyring }} /tmp/docker.gpg
+  args:
+    creates: "{{ containerd_docker_repo_keyring }}"
+
+- name: Add Docker apt repository (containerd.io source)
+  ansible.builtin.apt_repository:
+    repo: >-
+      deb [arch={{ 'amd64' if ansible_architecture == 'x86_64' else ansible_architecture }}
+      signed-by={{ containerd_docker_repo_keyring }}]
+      https://download.docker.com/linux/ubuntu {{ os_codename.stdout }} stable
+    filename: docker
+    state: present
+
+- name: Install containerd.io
   ansible.builtin.apt:
-    name: containerd
+    name: "containerd.io{{ (containerd_version | default('') | length > 0) | ternary('=' + containerd_version, '') }}"
     state: present
     update_cache: true
-  tags: [containerd, packages]
 
 - name: Ensure containerd config directory exists
   ansible.builtin.file:
-    path: "{{ containerd_config_path | dirname }}"
+    path: /etc/containerd
     state: directory
     mode: "0755"
-  tags: [containerd, config]
 
-- name: Write containerd config
-  ansible.builtin.template:
-    src: config.toml.j2
-    dest: "{{ containerd_config_path }}"
+- name: Generate default containerd config
+  ansible.builtin.command: containerd config default
+  register: containerd_default_config
+  changed_when: false
+
+- name: Write containerd config with SystemdCgroup enabled
+  ansible.builtin.copy:
+    dest: /etc/containerd/config.toml
     mode: "0644"
-    owner: root
-    group: root
+    content: >-
+      {{
+        containerd_default_config.stdout
+        | regex_replace('SystemdCgroup = false', 'SystemdCgroup = true')
+      }}
   notify: Restart containerd
-  tags: [containerd, config]
 
-- name: Ensure containerd is enabled and started
-  ansible.builtin.service:
+- name: Enable and start containerd
+  ansible.builtin.systemd:
     name: containerd
-    state: started
     enabled: true
-  tags: [containerd, service]
+    state: started
+    daemon_reload: true
+
+- name: Flush handlers so containerd is running before kubeadm
+  ansible.builtin.meta: flush_handlers

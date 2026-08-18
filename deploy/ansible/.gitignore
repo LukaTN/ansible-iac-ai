@@ -1,0 +1,5 @@
+collections/
+artifacts/*
+!artifacts/.gitkeep
+*.retry
+*.log

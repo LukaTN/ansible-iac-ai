@@ -1,122 +1,84 @@
 ---
-- name: Detect CPU architecture for Helm
-  ansible.builtin.set_fact:
-    helm_arch: "{{ 'amd64' if ansible_facts['architecture'] in ['x86_64', 'amd64'] else 'arm64' }}"
-  tags: [addons, helm]
-
-- name: Check installed Helm version
-  ansible.builtin.command:
-    cmd: "{{ helm_binary }} version --short"
-  register: helm_installed
+- name: Check whether Helm is already installed
+  ansible.builtin.command: which helm
+  register: helm_present
   changed_when: false
   failed_when: false
-  tags: [addons, helm]
 
-- name: Create Helm extract directory
-  ansible.builtin.file:
-    path: "/tmp/helm-{{ helm_version }}"
-    state: directory
+- name: Download Helm install script
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+    dest: /tmp/get-helm-3.sh
     mode: "0755"
-  when: helm_installed.rc != 0 or helm_version not in (helm_installed.stdout | default(''))
-  tags: [addons, helm]
+  when: helm_present.rc != 0
 
-- name: Download and extract Helm
-  ansible.builtin.unarchive:
-    src: "https://get.helm.sh/helm-{{ helm_version }}-linux-{{ helm_arch }}.tar.gz"
-    dest: "/tmp/helm-{{ helm_version }}"
-    remote_src: true
-  when: helm_installed.rc != 0 or helm_version not in (helm_installed.stdout | default(''))
-  tags: [addons, helm]
+- name: Run Helm install script
+  ansible.builtin.command: /tmp/get-helm-3.sh
+  when: helm_present.rc != 0
 
-- name: Install Helm binary
-  ansible.builtin.copy:
-    src: "/tmp/helm-{{ helm_version }}/linux-{{ helm_arch }}/helm"
-    dest: "{{ helm_binary }}"
-    mode: "0755"
-    owner: root
-    group: root
-    remote_src: true
-  when: helm_installed.rc != 0 or helm_version not in (helm_installed.stdout | default(''))
-  tags: [addons, helm]
-
-- name: Add ingress-nginx Helm repository
+- name: Add ingress-nginx Helm repo
   kubernetes.core.helm_repository:
     name: ingress-nginx
-    repo_url: https://kubernetes.github.io/ingress-nginx
-    binary_path: "{{ helm_binary }}"
-  environment:
-    KUBECONFIG: "{{ k8s_admin_kubeconfig }}"
-  tags: [addons, ingress]
+    repo_url: "{{ ingress_nginx_repo_url }}"
+    kubeconfig: /etc/kubernetes/admin.conf
 
-- name: Install ingress-nginx
-  block:
-    - name: Install ingress-nginx Helm release
-      kubernetes.core.helm:
-        name: ingress-nginx
-        chart_ref: ingress-nginx/ingress-nginx
-        chart_version: "{{ ingress_nginx_chart_version }}"
-        release_namespace: ingress-nginx
-        create_namespace: true
-        kubeconfig: "{{ k8s_admin_kubeconfig }}"
-        binary_path: "{{ helm_binary }}"
-        wait: true
-        timeout: 10m0s
-        values:
-          controller:
-            allowSnippetAnnotations: false
-            # Tolerate the control-plane taint so the controller can run on
-            # the master if the worker is busy or still coming up.
-            tolerations:
-              - key: node-role.kubernetes.io/control-plane
-                operator: Exists
-                effect: NoSchedule
-            service:
-              type: "{{ ingress_nginx_service_type }}"
-              nodePorts:
-                http: "{{ ingress_nginx_http_nodeport | int }}"
-                https: "{{ ingress_nginx_https_nodeport | int }}"
-  rescue:
-    - name: List ingress-nginx pods
-      ansible.builtin.command:
-        cmd: kubectl get pods,svc -n ingress-nginx -o wide
-      environment:
-        KUBECONFIG: "{{ k8s_admin_kubeconfig }}"
-      register: ingress_nginx_status
-      changed_when: false
-      failed_when: false
-
-    - name: Show ingress-nginx status
-      ansible.builtin.debug:
-        var: ingress_nginx_status.stdout_lines
-
-    - name: Fail after ingress-nginx diagnostics
-      ansible.builtin.fail:
-        msg: >-
-          ingress-nginx Helm wait timed out. On this kubeadm lab the Service
-          must be NodePort (not LoadBalancer). Check pods/svc above.
-  tags: [addons, ingress]
-
-- name: Add jetstack Helm repository
+- name: Add jetstack (cert-manager) Helm repo
   kubernetes.core.helm_repository:
     name: jetstack
-    repo_url: https://charts.jetstack.io
-    binary_path: "{{ helm_binary }}"
-  environment:
-    KUBECONFIG: "{{ k8s_admin_kubeconfig }}"
-  tags: [addons, cert-manager]
+    repo_url: "{{ cert_manager_repo_url }}"
+    kubeconfig: /etc/kubernetes/admin.conf
 
-- name: Install cert-manager
+- name: Install ingress-nginx (NodePort, no cloud LoadBalancer)
+  kubernetes.core.helm:
+    name: ingress-nginx
+    chart_ref: ingress-nginx/ingress-nginx
+    chart_version: "{{ ingress_nginx_chart_version }}"
+    release_namespace: "{{ ingress_nginx_namespace }}"
+    create_namespace: true
+    kubeconfig: /etc/kubernetes/admin.conf
+    values:
+      controller:
+        service:
+          type: NodePort
+          nodePorts:
+            http: "{{ ingress_nodeport_http }}"
+            https: "{{ ingress_nodeport_https }}"
+
+- name: Install cert-manager (with CRDs)
   kubernetes.core.helm:
     name: cert-manager
     chart_ref: jetstack/cert-manager
     chart_version: "{{ cert_manager_chart_version }}"
-    release_namespace: cert-manager
+    release_namespace: "{{ cert_manager_namespace }}"
     create_namespace: true
-    kubeconfig: "{{ k8s_admin_kubeconfig }}"
-    binary_path: "{{ helm_binary }}"
-    wait: true
-    timeout: 10m0s
+    kubeconfig: /etc/kubernetes/admin.conf
     values:
-      crds:
-        enabled: true
-  tags: [addons, cert-manager]
+      installCRDs: true
+
+- name: Wait for ingress-nginx controller to be Ready
+  kubernetes.core.k8s_info:
+    kind: Deployment
+    name: ingress-nginx-controller
+    namespace: "{{ ingress_nginx_namespace }}"
+    kubeconfig: /etc/kubernetes/admin.conf
+  register: ingress_deploy
+  until: >
+    ingress_deploy.resources | length > 0 and
+    (ingress_deploy.resources[0].status.readyReplicas | default(0)) >=
+    (ingress_deploy.resources[0].status.replicas | default(1))
+  retries: 30
+  delay: 10
+
+- name: Wait for cert-manager deployment to be Ready
+  kubernetes.core.k8s_info:
+    kind: Deployment
+    name: cert-manager
+    namespace: "{{ cert_manager_namespace }}"
+    kubeconfig: /etc/kubernetes/admin.conf
+  register: cert_manager_deploy
+  until: >
+    cert_manager_deploy.resources | length > 0 and
+    (cert_manager_deploy.resources[0].status.readyReplicas | default(0)) >=
+    (cert_manager_deploy.resources[0].status.replicas | default(1))
+  retries: 30
+  delay: 10

@@ -1,26 +1,29 @@
 ---
-- name: Read admin kubeconfig from control plane
-  ansible.builtin.slurp:
-    src: "{{ k8s_admin_kubeconfig }}"
-  register: k8s_kubeconfig_b64
-  tags: [k8s, kubeconfig]
-
 - name: Ensure local artifacts directory exists
   ansible.builtin.file:
-    path: "{{ k8s_kubeconfig_local_path | dirname }}"
+    path: "{{ kubeconfig_local_path | dirname }}"
     state: directory
-    mode: "0700"
+    mode: "0755"
   delegate_to: localhost
   become: false
-  tags: [k8s, kubeconfig]
 
-- name: Write kubeconfig on Ansible control node
-  ansible.builtin.copy:
-    dest: "{{ k8s_kubeconfig_local_path }}"
+- name: Fetch admin.conf from the control-plane node
+  ansible.builtin.fetch:
+    src: "{{ kubeconfig_remote_path }}"
+    dest: "{{ kubeconfig_local_path }}"
+    flat: true
+
+- name: Restrict permissions on the local kubeconfig
+  ansible.builtin.file:
+    path: "{{ kubeconfig_local_path }}"
     mode: "0600"
-    content: >-
-      {{ k8s_kubeconfig_b64.content | b64decode
-         | regex_replace('server: https://[^\\s]+', 'server: ' ~ k8s_kubeconfig_api_server) }}
   delegate_to: localhost
   become: false
-  tags: [k8s, kubeconfig]
+
+- name: Point the local kubeconfig at the master's advertised IP
+  ansible.builtin.replace:
+    path: "{{ kubeconfig_local_path }}"
+    regexp: 'server: https://.*:{{ k8s_api_server_port }}'
+    replace: "server: https://{{ ansible_host }}:{{ k8s_api_server_port }}"
+  delegate_to: localhost
+  become: false

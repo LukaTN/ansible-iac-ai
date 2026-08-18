@@ -1,8 +1,0 @@
----
-galaxy_info:
-  role_name: k8s_addons
-  author: ansibleai
-  description: Pin and install ingress-nginx plus cert-manager on kubeadm (Phase 4 ingress)
-  license: MIT
-  min_ansible_version: "2.16"
-  galaxy_tags: [kubernetes, helm, ingress, kubeadm]

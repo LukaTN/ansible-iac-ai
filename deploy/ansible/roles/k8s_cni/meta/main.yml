@@ -1,8 +1,0 @@
----
-galaxy_info:
-  role_name: k8s_cni
-  author: ansibleai
-  description: Install Calico CNI on a kubeadm cluster
-  license: MIT
-  min_ansible_version: "2.16"
-  galaxy_tags: [kubernetes, cni, calico]
