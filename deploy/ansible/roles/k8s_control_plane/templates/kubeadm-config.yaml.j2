@@ -23,4 +23,5 @@ localAPIEndpoint:
 nodeRegistration:
   criSocket: unix:///var/run/containerd/containerd.sock
   kubeletExtraArgs:
-    cgroup-driver: systemd
+    - name: cgroup-driver
+      value: systemd

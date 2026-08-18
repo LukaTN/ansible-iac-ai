@@ -65,9 +65,9 @@ def test_site_playbook_declares_roles() -> None:
         "containerd",
         "kubernetes",
         "k8s_control_plane",
-        "k8s_cni",
         "k8s_kubeconfig",
         "k8s_worker",
+        "k8s_cni",
         "k8s_addons",
     ]
 
