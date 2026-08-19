@@ -134,7 +134,11 @@ def test_vendor_images_are_pinned() -> None:
     assert values["postgres"]["image"]["tag"] != "latest"
     assert values["redis"]["image"]["tag"] != "latest"
     assert "RELEASE." in values["minio"]["image"]["tag"]
-    assert "RELEASE." in values["minioBucketJob"]["image"]["tag"]
-    assert values["minioBucketJob"]["image"]["repository"] == "minio/mc"
-    assert values["minioBucketJob"]["image"]["tag"] != "latest"
+    assert values["minioBucketJob"]["enabled"] is True
+    bucket_job = (CHART / "templates" / "job-minio-bucket.yaml").read_text(encoding="utf-8")
+    assert "minio/mc" not in bucket_job
+    assert "boto3" in bucket_job
+    assert "ansibleai.appImage" in bucket_job
+    ollama = (CHART / "templates" / "ollama.yaml").read_text(encoding="utf-8")
+    assert "clusterIP: None" in ollama
     assert str(values["postgres"]["image"]["tag"]).startswith("0.")

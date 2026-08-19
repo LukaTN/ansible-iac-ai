@@ -6,9 +6,9 @@ metadata:
   name: {{ include "ansibleai.fullname" . }}-minio-bucket-{{ .Release.Revision }}
   labels:
     {{- include "ansibleai.labels" . | nindent 4 }}
-    app.kubernetes.io/component: minio
+    app.kubernetes.io/component: minio-bucket
   annotations:
-    ansibleai.io/purpose: "Ensure the playbook bucket exists. New Job per Helm revision."
+    ansibleai.io/purpose: "Ensure the playbook bucket exists. Uses the app image and boto3; no extra MinIO client image."
 spec:
   backoffLimit: 8
   ttlSecondsAfterFinished: 86400
@@ -22,72 +22,67 @@ spec:
       serviceAccountName: {{ include "ansibleai.saMigrate" . }}
       automountServiceAccountToken: false
       securityContext:
-        runAsNonRoot: true
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
-        seccompProfile:
-          type: RuntimeDefault
+        {{- include "ansibleai.podSecurityContext" . | nindent 8 }}
       containers:
-        - name: mc
-          image: {{ include "ansibleai.pinnedImage" (dict "repository" .Values.minioBucketJob.image.repository "tag" .Values.minioBucketJob.image.tag "name" "minio-mc") }}
-          imagePullPolicy: {{ .Values.minioBucketJob.image.pullPolicy }}
-          env:
-            - name: MINIO_ROOT_USER
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "ansibleai.secretName" . }}
-                  key: MINIO_ROOT_USER
-            - name: MINIO_ROOT_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "ansibleai.secretName" . }}
-                  key: MINIO_ROOT_PASSWORD
-            - name: MINIO_HOST
-              value: {{ include "ansibleai.minioHost" . | quote }}
-            - name: S3_BUCKET
-              value: {{ .Values.app.s3Bucket | quote }}
-            - name: HOME
-              value: /tmp
-            - name: MC_CONFIG_DIR
-              value: /tmp/.mc
-          command:
-            - /bin/sh
+        - name: ensure-bucket
+          image: {{ include "ansibleai.appImage" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- include "ansibleai.envFrom" . | nindent 10 }}
+          args:
+            - exec
+            - python
             - -c
             - |
-              set -euo pipefail
-              i=0
-              until mc alias set local "http://${MINIO_HOST}:9000" "$MINIO_ROOT_USER" "$MINIO_ROOT_PASSWORD"; do
-                i=$((i+1))
-                [ "$i" -gt 30 ] && exit 1
-                sleep 2
-              done
-              mc mb --ignore-existing "local/${S3_BUCKET}"
+              import os, sys, time
+              import boto3
+              from botocore.config import Config
+              from botocore.exceptions import ClientError, EndpointConnectionError
+
+              endpoint = os.environ["S3_ENDPOINT_URL"]
+              bucket = os.environ["S3_BUCKET"]
+              client = boto3.client(
+                  "s3",
+                  endpoint_url=endpoint,
+                  aws_access_key_id=os.environ["S3_ACCESS_KEY"],
+                  aws_secret_access_key=os.environ["S3_SECRET_KEY"],
+                  region_name=os.environ.get("S3_REGION", "us-east-1"),
+                  config=Config(
+                      s3={"addressing_style": "path"},
+                      retries={"max_attempts": 1},
+                  ),
+              )
+              last = None
+              for _ in range(30):
+                  try:
+                      client.head_bucket(Bucket=bucket)
+                      print("bucket exists:", bucket, flush=True)
+                      sys.exit(0)
+                  except EndpointConnectionError as exc:
+                      last = exc
+                      time.sleep(2)
+                  except ClientError as exc:
+                      last = exc
+                      code = str(exc.response.get("Error", {}).get("Code", ""))
+                      http = exc.response.get("ResponseMetadata", {}).get("HTTPStatusCode")
+                      if code in {"404", "NoSuchBucket", "NotFound"} or http == 404:
+                          try:
+                              client.create_bucket(Bucket=bucket)
+                              print("bucket created:", bucket, flush=True)
+                              sys.exit(0)
+                          except ClientError as create_exc:
+                              last = create_exc
+                              time.sleep(2)
+                              continue
+                      time.sleep(2)
+              print("failed to ensure bucket", bucket, last, file=sys.stderr, flush=True)
+              sys.exit(1)
           securityContext:
-            allowPrivilegeEscalation: false
-            readOnlyRootFilesystem: true
-            capabilities:
-              drop: ["ALL"]
+            {{- include "ansibleai.containerSecurityContext" . | nindent 12 }}
           resources:
-            requests:
-              cpu: 10m
-              memory: 32Mi
-            limits:
-              cpu: 100m
-              memory: 64Mi
+            {{- toYaml .Values.minioBucketJob.resources | nindent 12 }}
           volumeMounts:
-            - name: tmp
-              mountPath: /tmp
-            - name: mc-config
-              mountPath: /home/app
+            {{- include "ansibleai.tmpVolumeMounts" . | nindent 12 }}
       volumes:
-        - name: tmp
-          emptyDir:
-            medium: Memory
-            sizeLimit: 16Mi
-        - name: mc-config
-          emptyDir:
-            medium: Memory
-            sizeLimit: 16Mi
+        {{- include "ansibleai.tmpVolumes" . | nindent 8 }}
 {{- end }}
 {{- end }}
