@@ -38,7 +38,7 @@ secrets:
   postgresPassword: "lab-only-postgres-password"
   minioRootPassword: "lab-only-minio-password"
   bootstrapAdminEmail: "admin@localhost"
-  bootstrapAdminPassword: "lab-only-Admin-12"
+  bootstrapAdminPassword: "K8s-Lab-Bootstrap!"
 
 ollama:
   enabled: true

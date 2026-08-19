@@ -134,5 +134,7 @@ def test_vendor_images_are_pinned() -> None:
     assert values["postgres"]["image"]["tag"] != "latest"
     assert values["redis"]["image"]["tag"] != "latest"
     assert "RELEASE." in values["minio"]["image"]["tag"]
-    assert values["minio"]["image"]["tag"] == values["minioBucketJob"]["image"]["tag"]
+    assert "RELEASE." in values["minioBucketJob"]["image"]["tag"]
+    assert values["minioBucketJob"]["image"]["repository"] == "minio/mc"
+    assert values["minioBucketJob"]["image"]["tag"] != "latest"
     assert str(values["postgres"]["image"]["tag"]).startswith("0.")
