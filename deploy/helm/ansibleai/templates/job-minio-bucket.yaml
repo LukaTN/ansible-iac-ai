@@ -47,6 +47,10 @@ spec:
               value: {{ include "ansibleai.minioHost" . | quote }}
             - name: S3_BUCKET
               value: {{ .Values.app.s3Bucket | quote }}
+            - name: HOME
+              value: /tmp
+            - name: MC_CONFIG_DIR
+              value: /tmp/.mc
           command:
             - /bin/sh
             - -c
