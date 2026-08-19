@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ include "ansibleai.fullname" . }}-test-connection
+  labels:
+    {{- include "ansibleai.labels" . | nindent 4 }}
+  annotations:
+    helm.sh/hook: test
+spec:
+  restartPolicy: Never
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 10001
+    seccompProfile:
+      type: RuntimeDefault
+  containers:
+    - name: wget
+      image: {{ include "ansibleai.appImage" . }}
+      imagePullPolicy: {{ .Values.image.pullPolicy }}
+      args:
+        - exec
+        - python
+        - -c
+        - |
+          import sys, urllib.request
+          url = "http://{{ include "ansibleai.fullname" . }}-api.{{ .Release.Namespace }}.svc.cluster.local/healthz"
+          raise SystemExit(0 if urllib.request.urlopen(url, timeout=8).status == 200 else 1)
+      securityContext:
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
+        capabilities:
+          drop: ["ALL"]
+      resources:
+        requests:
+          cpu: 10m
+          memory: 32Mi
+        limits:
+          cpu: 100m
+          memory: 64Mi
+      volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: home
+          mountPath: /home/app
+  volumes:
+    - name: tmp
+      emptyDir:
+        medium: Memory
+        sizeLimit: 16Mi
+    - name: home
+      emptyDir:
+        medium: Memory
+        sizeLimit: 16Mi

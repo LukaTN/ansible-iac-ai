@@ -37,7 +37,8 @@ ansible-iac-ai/
 ├── tests/                     # pytest (+ tests/e2e golden dataset)
 ├── docker/                    # entrypoint.sh, ansible-collections.yml
 ├── deploy/observability/      # prometheus, Grafana, Langfuse compose
-├── deploy/ansible/            # kubeadm Kubernetes cluster bootstrap (Phase 4)
+├── deploy/ansible/            # kubeadm lab bootstrap (Phase 4a complete)
+├── deploy/helm/ansibleai/     # Phase 4b application chart (install still pending)
 ├── docs/                      # Reports, presentations, internship materials
 ├── data/                      # Local KB / scrape artifacts (gitignored)
 ├── output/                    # Local playbook scratch (gitignored)

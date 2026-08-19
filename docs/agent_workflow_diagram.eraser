@@ -28,7 +28,7 @@ AgentOrchestrator [label: "Agent Orchestrator", icon: cpu, color: "#ee8923"] {
   Generate > Synthesize
 }
 
-Plan > PlannerLLM [label: "Planner LLM · OpenRouter or Ollama", icon: brain, color: "#5b9bd5"]
+Plan > PlannerLLM [label: "Planner LLM · Ollama", icon: brain, color: "#5b9bd5"]
 PlannerLLM > PlanIntent [label: "Intent + tool action plan (JSON)", shape: document, color: "#5b9bd5"]
 PlanIntent > Execute
 

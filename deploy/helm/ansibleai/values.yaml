@@ -1,0 +1,342 @@
+# AnsibleAI Helm defaults. Override with values-staging.yaml / values-prod.yaml.
+# Never set any image tag to "latest".
+
+nameOverride: ""
+fullnameOverride: ""
+
+image:
+  repository: ansibleai/app
+  # Pin to a git SHA in CI (Phase 7). Lab loads this tag onto both nodes.
+  tag: "dev"
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
+# Topology for this lab. Templates read these instead of inlining addresses.
+lab:
+  masterIp: "192.168.1.18"
+  workerIp: "192.168.1.12"
+  ansibleControlIp: "192.168.1.19"
+  ingressNodePort: 30080
+
+# Lab HTTP NodePort has no TLS. APP_ENV=staging|production forces
+# SESSION_COOKIE_SECURE and HSTS, which breaks NodePort HTTP.
+# Switch app.env to staging only after Ingress TLS is on.
+app:
+  env: development
+  logLevel: INFO
+  logFormat: json
+  authMode: local
+  registrationMode: closed
+  allowedEmailDomains: ""
+  corsOrigins: ""
+  gunicornWorkers: "1"
+  gunicornWorkerClass: gevent
+  celeryWorkerConcurrency: "2"
+  celeryMaxTasksPerChild: "50"
+  agentModel: "qwen2.5-coder:7b"
+  playbookModel: "qwen2.5-coder:14b"
+  embeddingModel: nomic-embed-text
+  embeddingDimensions: "768"
+  s3Bucket: ansibleai-playbooks
+  s3Region: us-east-1
+  langfuseEnabled: "false"
+  langfuseHost: ""
+  langfuseTracingEnvironment: staging
+
+security:
+  runAsUser: 10001
+  runAsGroup: 10001
+  fsGroup: 10001
+
+tmpfs:
+  tmpSize: 512Mi
+  homeSize: 64Mi
+
+# Credentials are never stored in ConfigMaps. For lab, set these in
+# values-staging.yaml (gitignored secrets belong in --set / existingSecret).
+# On upgrade, an existing Secret is reused unless secrets.rotate is true.
+secrets:
+  existingSecret: ""
+  rotate: false
+  secretKey: ""
+  postgresUser: ansibleai
+  postgresPassword: ""
+  postgresDatabase: ansibleai
+  redisPassword: ""
+  minioRootUser: ansibleai
+  minioRootPassword: ""
+  bootstrapAdminEmail: ""
+  bootstrapAdminPassword: ""
+  oidcClientSecret: ""
+  keycloakAdmin: admin
+  keycloakAdminPassword: ""
+  langfusePublicKey: ""
+  langfuseSecretKey: ""
+
+api:
+  replicas: 1
+  revisionHistoryLimit: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  terminationGracePeriodSeconds: 30
+  pdb:
+    enabled: true
+    minAvailable: 1
+  resources:
+    requests:
+      cpu: 200m
+      memory: 512Mi
+    limits:
+      cpu: "1"
+      memory: 1Gi
+  probes:
+    startup:
+      failureThreshold: 30
+      periodSeconds: 10
+    liveness:
+      periodSeconds: 20
+      timeoutSeconds: 5
+      failureThreshold: 3
+    readiness:
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 3
+  podAntiAffinity: preferred
+
+worker:
+  replicas: 1
+  revisionHistoryLimit: 5
+  # SIGTERM lets in-flight generations finish. Match celery time limit in prod.
+  terminationGracePeriodSeconds: 120
+  pdb:
+    enabled: true
+    minAvailable: 1
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: "1"
+      memory: 2Gi
+  probes:
+    liveness:
+      periodSeconds: 30
+      timeoutSeconds: 15
+      failureThreshold: 3
+    readiness:
+      periodSeconds: 20
+      timeoutSeconds: 15
+      failureThreshold: 3
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 5000
+
+ingress:
+  enabled: true
+  className: nginx
+  host: ansibleai.lab
+  tlsEnabled: false
+  tlsSecretName: ansibleai-tls
+  annotations:
+    nginx.ingress.kubernetes.io/affinity: cookie
+    nginx.ingress.kubernetes.io/session-cookie-name: ansibleai-upstream
+    nginx.ingress.kubernetes.io/session-cookie-max-age: "3600"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-body-size: 16m
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+
+migrate:
+  enabled: true
+  backoffLimit: 6
+  activeDeadlineSeconds: 600
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+reindex:
+  enabled: true
+  schedule: "0 3 * * 0"
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: "1"
+      memory: 2Gi
+
+minioBucketJob:
+  enabled: true
+  image:
+    repository: minio/mc
+    tag: RELEASE.2025-09-07T16-13-09Z
+    pullPolicy: IfNotPresent
+
+postgres:
+  enabled: true
+  image:
+    repository: pgvector/pgvector
+    tag: 0.8.6-pg16
+    pullPolicy: IfNotPresent
+  persistence:
+    enabled: true
+    storageClass: local-path
+    size: 20Gi
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: "1"
+      memory: 2Gi
+  # Official image runs as uid 999 (postgres), not the app user.
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 999
+    fsGroup: 999
+
+redis:
+  enabled: true
+  image:
+    repository: redis
+    tag: 7.4.2-alpine
+    pullPolicy: IfNotPresent
+  auth: false
+  persistence:
+    enabled: true
+    storageClass: local-path
+    size: 5Gi
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 250m
+      memory: 256Mi
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 999
+    fsGroup: 999
+
+minio:
+  enabled: true
+  image:
+    repository: minio/minio
+    tag: RELEASE.2025-09-07T16-13-09Z
+    pullPolicy: IfNotPresent
+  persistence:
+    enabled: true
+    storageClass: local-path
+    size: 20Gi
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    fsGroup: 1000
+
+# Host Ollama is not a pod. Endpoints point at a LAN IP:11434.
+ollama:
+  enabled: true
+  port: 11434
+  endpoint:
+    ip: "192.168.1.14"
+
+external:
+  postgres:
+    host: ""
+    port: 5432
+  redis:
+    host: ""
+    port: 6379
+  minio:
+    host: ""
+    port: 9000
+
+# kubeadm has no default StorageClass. Lab enable this; disable if one exists.
+localPathProvisioner:
+  enabled: false
+  image:
+    repository: rancher/local-path-provisioner
+    tag: v0.0.30
+    pullPolicy: IfNotPresent
+  helperImage:
+    repository: busybox
+    tag: "1.36.1"
+  storageClass:
+    name: local-path
+    default: true
+  nodePath: /opt/local-path-provisioner
+
+identity:
+  enabled: false
+  namespace: identity
+  image:
+    repository: quay.io/keycloak/keycloak
+    tag: "26.2.5"
+    pullPolicy: IfNotPresent
+  replicas: 1
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: "1"
+      memory: 1Gi
+
+namespaces:
+  createExtras: true
+  observability: observability
+
+networkPolicy:
+  enabled: true
+  defaultDeny: true
+  ingressNginxNamespace: ingress-nginx
+  observabilityNamespace: observability
+  # Worker scrape of docs.ansible.com. Pin CIDRs in Phase 8 if required.
+  allowHttpsEgress: true
+
+keda:
+  enabled: false
+  pollingInterval: 15
+  cooldownPeriod: 300
+  minReplicaCount: 1
+  maxReplicaCount: 4
+  listName: celery
+  listLength: "5"
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 4
+  targetCPUUtilizationPercentage: 70
+
+observability:
+  scrape: true
+  prometheusRule:
+    enabled: false
+  slo:
+    # Lab target: ~3.6h/month error budget. Tighten after production traffic.
+    availability: "99.5"
+    fastBurnRate: "0.0072"
+    runbook: "https://github.com/ansible-iac-ai/ansible-iac-ai/blob/main/deploy/helm/ansibleai/README.md#rollback"
+
+serviceAccounts:
+  automountServiceAccountToken: false

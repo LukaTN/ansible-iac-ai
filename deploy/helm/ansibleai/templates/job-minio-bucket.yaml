@@ -1,0 +1,89 @@
+{{- if .Values.minioBucketJob.enabled }}
+{{- if .Values.minio.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "ansibleai.fullname" . }}-minio-bucket-{{ .Release.Revision }}
+  labels:
+    {{- include "ansibleai.labels" . | nindent 4 }}
+    app.kubernetes.io/component: minio
+  annotations:
+    ansibleai.io/purpose: "Ensure the playbook bucket exists. New Job per Helm revision."
+spec:
+  backoffLimit: 8
+  ttlSecondsAfterFinished: 86400
+  template:
+    metadata:
+      labels:
+        {{- include "ansibleai.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: minio-bucket
+    spec:
+      restartPolicy: OnFailure
+      serviceAccountName: {{ include "ansibleai.saMigrate" . }}
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: mc
+          image: {{ include "ansibleai.pinnedImage" (dict "repository" .Values.minioBucketJob.image.repository "tag" .Values.minioBucketJob.image.tag "name" "minio-mc") }}
+          imagePullPolicy: {{ .Values.minioBucketJob.image.pullPolicy }}
+          env:
+            - name: MINIO_ROOT_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "ansibleai.secretName" . }}
+                  key: MINIO_ROOT_USER
+            - name: MINIO_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "ansibleai.secretName" . }}
+                  key: MINIO_ROOT_PASSWORD
+            - name: MINIO_HOST
+              value: {{ include "ansibleai.minioHost" . | quote }}
+            - name: S3_BUCKET
+              value: {{ .Values.app.s3Bucket | quote }}
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -euo pipefail
+              i=0
+              until mc alias set local "http://${MINIO_HOST}:9000" "$MINIO_ROOT_USER" "$MINIO_ROOT_PASSWORD"; do
+                i=$((i+1))
+                [ "$i" -gt 30 ] && exit 1
+                sleep 2
+              done
+              mc mb --ignore-existing "local/${S3_BUCKET}"
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 64Mi
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: mc-config
+              mountPath: /home/app
+      volumes:
+        - name: tmp
+          emptyDir:
+            medium: Memory
+            sizeLimit: 16Mi
+        - name: mc-config
+          emptyDir:
+            medium: Memory
+            sizeLimit: 16Mi
+{{- end }}
+{{- end }}

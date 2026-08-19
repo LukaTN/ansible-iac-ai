@@ -1,9 +1,8 @@
 # AnsibleAI — Production Deployment Progress Report
 
-> **Last updated:** Phase 5b (August 2026); remaining roadmap retargeted to
-> Kubernetes **without GPU nodes** (Phase 4 = cluster hosting).
-> **Next phase:** Phase 4 (Helm chart on kubeadm lab cluster, host Ollama) —
-> see [Phases remaining](#phases-remaining)
+> **Last updated:** August 2026 — Phase **4b Helm chart** is in git
+> (`deploy/helm/ansibleai`). Live `helm upgrade --install` on the kubeadm lab
+> is still required. Phase **6b** LLMOps loop remains parallel on Compose.
 >
 > This report is the living record of every production-readiness phase.
 > Each phase adds a section describing what changed, why it changed, and
@@ -657,19 +656,92 @@ the suite to a live Keycloak.
 
 ---
 
+## Phase 4a — kubeadm lab cluster (complete)
+
+**Goal:** Turn three VMs into a full Kubernetes API the Helm chart can target.
+This does **not** deploy AnsibleAI.
+
+| IP | Role |
+|----|------|
+| **192.168.1.14** | Operator laptop (Ollama `:11434`) |
+| **192.168.1.19** | Ansible control (`ansible-playbook` only) |
+| **192.168.1.18** | Control plane (`kubeadm init`) |
+| **192.168.1.12** | Worker (`kubeadm join`) |
+
+| Before | After |
+|--------|-------|
+| No cluster / k3s sketch | **kubeadm 1.32** + containerd + Calico |
+| Pod CIDR overlapping the LAN (`192.168.0.0/16`) | **`10.244.0.0/16`** so overlay does not swallow `.18` / `.12` |
+| ingress-nginx `LoadBalancer` (Helm wait 10m) | **NodePort 30080 / 30443**; admission webhooks off in the lab |
+| App on Compose only | Cluster empty of the app until `helm upgrade --install` |
+
+Playbooks: [deploy/ansible/](../deploy/ansible/README.md). Inventory lives in
+`deploy/ansible/inventories/lab/`.
+
+---
+
+## Phase 4b — Helm chart (sources in git; live install pending)
+
+**Goal:** Run the Compose app on the kubeadm lab with the same image roles
+(`api` / `worker` / `migrate`), host Ollama, and production-shaped
+security/HA knobs.
+
+Chart: [deploy/helm/ansibleai](../deploy/helm/ansibleai/README.md).
+
+| Concern | What shipped |
+|---------|----------------|
+| Availability | API RollingUpdate `maxUnavailable: 0`; PDB when replicas ≥ 2; sticky Ingress cookie `ansibleai-upstream`; migrate Job per Helm revision; API/worker wait for schema before serving |
+| Scalability | Interchangeable workers; KEDA ScaledObject present but **disabled** (no operator yet) |
+| Performance | Requests **and** limits on every container; Redis AOF + `noeviction`; gunicorn workers = 1 until sticky sessions are proven |
+| Security | SAs `*-api` / `*-worker` / `*-migrate`; uid 10001; drop ALL caps; read-only root + tmpfs; Secrets not ConfigMaps; default-deny NetworkPolicy + explicit DNS/data-plane/Ollama allows |
+| Lab constraints | pgvector **StatefulSet** (not CNPG); local-path provisioner (kubeadm has no StorageClass); Ollama **Endpoints** to `192.168.1.14:11434`; `AUTH_MODE=local`; `APP_ENV=development` because HTTP NodePort cannot set secure cookies |
+
+**Not in this chart:** ArgoCD, Vault, kube-prometheus-stack, oauth2-proxy, vLLM.
+
+**Rollback (from NOTES):** `helm rollback ansibleai -n ansibleai` then
+`kubectl rollout status deployment/ansibleai-api -n ansibleai`.
+
+**Verification (chart):** `pytest tests/test_helm_chart.py`. Cluster verify after
+install: `kubectl rollout status` + `curl http://192.168.1.18:30080/healthz`.
+
+---
+
+## LLMOps loop (Phase 6b, parallel with 4b)
+
+Observability **6a** is already on Compose. 6b is not “alerts only”: it is a
+closed loop that reuses scripts already in the repo.
+
+```
+data curation → prompt design → model selection → agent → gate → evals
+        ↑                                                      |
+        └────────────────── scores / baselines ────────────────┘
+```
+
+| Practice | Exists | 6b work |
+|----------|--------|---------|
+| Data | scrape → KB v5, pgvector, `retrieval_benchmark.json` | coverage report, `evals/baselines/retrieval.json` |
+| Prompts | `prompts.py` v2 | Langfuse prompt registry, fallback to git |
+| Models | `AGENT_MODEL` / `PLAYBOOK_MODEL` / fallbacks | bake-off vs golden; promote on score, not 429 luck |
+| Guardrails | validator + ansible-lint `gate_node` | safety golden cases; Langfuse gate scores |
+| Evals | 5-layer golden + RAGAS + `run_e2e_eval.py` | commit `evals/baselines/golden.json`; Phase 7 CI gate |
+
+---
+
 ## Phases remaining
 
 | Phase | Summary | Status |
 |-------|---------|--------|
-| 4 | Kubernetes hosting **without GPU nodes** — Ansible kubeadm on **192.168.1.11** (master) + **192.168.1.12** (worker) from control **192.168.1.19**; then Helm | Bootstrap project ready; Helm app still pending |
+| **4a** | kubeadm lab: control **.19**, master **.18**, worker **.12**; Calico `10.244.0.0/16`; ingress-nginx NodePort | **Complete** |
+| **4b** | Helm `deploy/helm/ansibleai` — api/worker, pgvector STS, Redis, MinIO, host Ollama Endpoints, NetworkPolicies | Chart **in git**; live `helm upgrade` pending |
 | 4-gpu | Optional: vLLM + TEI + NVIDIA GPU Operator + DCGM — only if NVIDIA GPU nodes appear | Deferred |
-| 5 / 5b | Keycloak identity — in-app login, Keycloak-only admins, tokens spent in Account | **Complete** (cluster Keycloak install is Phase 4; no oauth2-proxy on members) |
+| 5 / 5b | Keycloak identity — in-app login, Keycloak-only admins, tokens spent in Account | **Complete** (cluster Keycloak install is 4b; no oauth2-proxy on members) |
 | 6a | Prometheus + Grafana + Langfuse (operator UI) on Compose | **Complete** |
-| 6b | Langfuse prompt management, Celery exporter, CPU-cluster alert rules | Pending (after 4) |
+| **6b** | LLMOps loop: data curation, prompt design, model selection, guardrails, evals; plus Celery exporter / CPU alerts | Pending (**parallel** on Compose with 4b) |
 | 6c | Loki/Tempo on the cluster (GPU panels only with 4-gpu) | Pending (after 7) |
-| 7 | GitHub Actions, SHA tags, Trivy, ArgoCD GitOps, eval gate, rolling + documented rollback | Pending |
+| 7 | GitHub Actions, SHA tags, Trivy, ArgoCD GitOps, eval gate vs `evals/baselines/golden.json`, rolling + documented rollback | Pending (needs 4b chart + 6b baselines) |
 | 8 | Default-deny NetworkPolicies, restricted PSS, Kyverno, ESO/Sealed Secrets, CNPG PITR, Velero, k6 | Pending |
 
-**Recommended next:** Phase **4** — put the running Compose app on the lab Kubernetes cluster. Inference stays on host Ollama.  
+**Recommended next:** `helm upgrade --install` the chart on the lab (`values-staging.yaml`), then continue **6b** on Compose.  
+**In parallel:** Phase **6b** on Compose (coverage report, Langfuse prompts, model bake-off, golden baselines).  
 **Do not wait for GPUs.** vLLM/TEI is an optional add-on.  
-**Then:** 6b (alerts) → 7 (GitOps + eval gate) → 6c (Loki/Tempo) → 8 (hardening).
+**Then:** 7 (GitOps + eval gate) → 6c (Loki/Tempo) → 8 (hardening).

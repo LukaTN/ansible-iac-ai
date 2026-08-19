@@ -29,10 +29,10 @@ Phases **0–3**, **5/5b**, and **6a** of the production LLMOps plan are complet
 └────────────┬───────────────┘                      │
              ▼                                      ▼
      PostgreSQL 16 + pgvector              Embeddings (/v1/embeddings)
-     (users, chat, vectors)                TEI or Ollama (nomic-embed-text)
+     (users, chat, vectors)                Ollama (nomic-embed-text)
              │
              ▼
-    Ollama and/or OpenRouter
+    Ollama
     (planner + codegen LLMs)
 ```
 
@@ -106,14 +106,9 @@ Loop budget: `AGENT_MAX_ITERATIONS` (default 4). Environment failures (lint back
 | `validate_playbook_file` / `validate_yaml` | KB-aware validator + ansible-lint |
 | `get_module_info` | Structured module reference from the knowledge base |
 
-### LLM providers (`agent/llm.py`)
+### LLM (`agent/llm.py`)
 
-| Provider | Config |
-|----------|--------|
-| **ollama** | `AGENT_LLM_PROVIDER=ollama`, `OLLAMA_BASE_URL`, `AGENT_MODEL` |
-| **openrouter** | `OPENROUTER_API_KEY`, `AGENT_MODEL` (+ optional `AGENT_FALLBACK_MODELS`) |
-
-Playbook YAML uses `PLAYBOOK_MODEL` when set (e.g. `qwen2.5-coder:14b`); otherwise `AGENT_MODEL`.
+Inference runs on **Ollama**. Set `OLLAMA_BASE_URL` (default `http://localhost:11434`) and `AGENT_MODEL`. Playbook YAML uses `PLAYBOOK_MODEL` when set (e.g. `qwen2.5-coder:14b`); otherwise `AGENT_MODEL`.
 
 ### Chat pipeline
 
@@ -128,7 +123,7 @@ agent/
 ├── state.py               # AgentState, production gate
 ├── tools.py               # search_docs, draft_*, validate_*, get_module_info
 ├── playbook_generator.py  # RAG context → YAML draft/repair
-├── llm.py                 # OpenRouter / Ollama client
+├── llm.py                 # Ollama client
 ├── prompts.py             # Reason / repair / respond / playbook prompts
 ├── cancel.py              # Cooperative cancel (memory / Redis)
 └── collections.py         # KB-derived collection allow-list
@@ -139,10 +134,9 @@ agent/
 | Tool | Version | Purpose |
 |------|---------|---------|
 | **Docker Desktop** | recent | Recommended full stack |
-| **Ollama** | ≥ 0.1.26 | Embeddings (`/v1/embeddings`) + optional LLMs |
+| **Ollama** | ≥ 0.1.26 | Embeddings (`/v1/embeddings`) and planner / codegen LLMs |
 | **Python** | 3.11+ | Host-only / test development |
 | **Node.js** | 20+ | Frontend when developing outside Docker |
-| **OpenRouter API key** | optional | Cloud planner instead of Ollama |
 
 ## Host development (optional)
 
@@ -215,8 +209,8 @@ Templates: [`.env.example`](.env.example) (host) and [`.env.docker.example`](.en
 | `EMBEDDING_BASE_URL` | yes* | OpenAI-compatible embeddings (`…/v1`) |
 | `EMBEDDING_MODEL` | no | Default `nomic-embed-text` |
 | `EMBEDDING_DIMENSIONS` | no | Default `768` |
-| `AGENT_LLM_PROVIDER` | no | `ollama` or `openrouter` |
-| `AGENT_MODEL` / `PLAYBOOK_MODEL` | no | Planner / codegen models |
+| `OLLAMA_BASE_URL` | no | Default `http://localhost:11434` |
+| `AGENT_MODEL` / `PLAYBOOK_MODEL` | no | Planner / codegen Ollama tags |
 | `REDIS_URL` | Compose | Sessions, cancel, Socket.IO queue, Celery |
 | `CELERY_BROKER_URL` | Compose | Worker broker |
 | `CORS_ORIGINS` | no | Must include the browser origin (`:5000` and/or `:5173`) |
@@ -287,7 +281,8 @@ ansible-iac-ai/
 ├── tests/
 ├── docker/                # entrypoint + ansible-collections.yml
 ├── deploy/observability/  # Prometheus / Grafana / Langfuse
-├── deploy/ansible/            # kubeadm Kubernetes cluster bootstrap (Phase 4)
+├── deploy/ansible/        # kubeadm lab bootstrap (Phase 4a)
+├── deploy/helm/ansibleai/ # Phase 4b application chart
 ├── docs/
 ├── data/                  # Local KB / scrape artifacts (gitignored)
 ├── Dockerfile / docker-compose*.yml
@@ -304,11 +299,11 @@ Full tree: [docs/REPOSITORY_LAYOUT.md](docs/REPOSITORY_LAYOUT.md).
 | 1 | Done | Multi-stage Dockerfile, Compose |
 | 2 | Done | Celery, Redis cancel/logs, MinIO, 202 chat |
 | 3 | Done | Postgres + pgvector, TEI-ready embeddings client |
-| 4 | Pending | Kubernetes hosting (no GPU) — Ansible kubeadm bootstrap, then Helm; host Ollama |
+| 4 | 4a done; 4b chart in git | kubeadm lab (.19/.18/.12). Helm: [deploy/helm/ansibleai](deploy/helm/ansibleai/README.md). Live install still pending; Ollama on laptop `.14` |
 | 5 | Done | Keycloak identity — in-app login, Keycloak-only admins ([deploy/keycloak/README.md](deploy/keycloak/README.md), [specs/phase5b_embedded_login_design.md](specs/phase5b_embedded_login_design.md)) |
-| 6 | 6a done | Metrics + Langfuse + Grafana — [deploy/observability/README.md](deploy/observability/README.md); 6b/6c after cluster |
+| 6 | 6a done | Metrics + Langfuse + Grafana — [deploy/observability/README.md](deploy/observability/README.md). **6b** LLMOps loop (data, prompts, models, guardrails, evals) on Compose in parallel with 4b |
 
-| 7 | Pending | CI eval gate, ArgoCD GitOps |
+| 7 | Pending | CI eval gate vs `evals/baselines/golden.json`, ArgoCD GitOps |
 | 8 | Pending | Hardening, secrets, DR |
 
 ### Observability (Phase 6a)

@@ -1,0 +1,50 @@
+{{- if .Values.reindex.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "ansibleai.fullname" . }}-reindex
+  labels:
+    {{- include "ansibleai.labels" . | nindent 4 }}
+    app.kubernetes.io/component: reindex
+  annotations:
+    ansibleai.io/purpose: "Rebuild pgvector from data/parsed baked into the image."
+spec:
+  schedule: {{ .Values.reindex.schedule | quote }}
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: {{ .Values.reindex.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.reindex.failedJobsHistoryLimit }}
+  jobTemplate:
+    spec:
+      backoffLimit: 2
+      template:
+        metadata:
+          labels:
+            {{- include "ansibleai.selectorLabels" . | nindent 12 }}
+            app.kubernetes.io/component: reindex
+        spec:
+          restartPolicy: OnFailure
+          serviceAccountName: {{ include "ansibleai.saWorker" . }}
+          automountServiceAccountToken: {{ .Values.serviceAccounts.automountServiceAccountToken }}
+          securityContext:
+            {{- include "ansibleai.podSecurityContext" . | nindent 12 }}
+          initContainers:
+            {{- include "ansibleai.waitPostgres" . | nindent 12 }}
+            {{- include "ansibleai.waitSchema" . | nindent 12 }}
+          containers:
+            - name: reindex
+              image: {{ include "ansibleai.appImage" . }}
+              imagePullPolicy: {{ .Values.image.pullPolicy }}
+              args: ["exec", "python", "backend/rag/pipeline.py", "--build"]
+              {{- include "ansibleai.envFrom" . | nindent 14 }}
+              env:
+                - name: APP_ROLE
+                  value: exec
+              securityContext:
+                {{- include "ansibleai.containerSecurityContext" . | nindent 16 }}
+              resources:
+                {{- toYaml .Values.reindex.resources | nindent 16 }}
+              volumeMounts:
+                {{- include "ansibleai.tmpVolumeMounts" . | nindent 16 }}
+          volumes:
+            {{- include "ansibleai.tmpVolumes" . | nindent 12 }}
+{{- end }}

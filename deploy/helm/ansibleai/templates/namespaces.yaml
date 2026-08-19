@@ -1,0 +1,23 @@
+{{- if .Values.namespaces.createExtras }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.identity.namespace }}
+  labels:
+    {{- include "ansibleai.labels" . | nindent 4 }}
+    pod-security.kubernetes.io/enforce: baseline
+    pod-security.kubernetes.io/audit: restricted
+  annotations:
+    ansibleai.io/purpose: "Keycloak lives here when identity.enabled=true. Empty until then."
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ .Values.namespaces.observability }}
+  labels:
+    {{- include "ansibleai.labels" . | nindent 4 }}
+    pod-security.kubernetes.io/enforce: baseline
+    pod-security.kubernetes.io/audit: restricted
+  annotations:
+    ansibleai.io/purpose: "Placeholder for kube-prometheus-stack / Loki (Phase 6c). Not installed in 4b."
+{{- end }}

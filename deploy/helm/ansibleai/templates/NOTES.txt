@@ -1,0 +1,48 @@
+1. Load the application image onto BOTH kubeadm nodes (no registry in this lab):
+
+   docker save ansibleai/app:{{ .Values.image.tag }} | ssh <node> sudo ctr -n k8s.io images import -
+
+2. Confirm Ollama is reachable at {{ .Values.ollama.endpoint.ip }}:{{ .Values.ollama.port }}
+   ({{ .Values.app.agentModel }} / {{ .Values.app.playbookModel }} pulled).
+
+3. Member UI via ingress-nginx NodePort:
+   http://{{ .Values.lab.masterIp }}:{{ .Values.lab.ingressNodePort }}   (add Host: {{ .Values.ingress.host }} or /etc/hosts)
+   http://{{ .Values.lab.workerIp }}:{{ .Values.lab.ingressNodePort }}
+
+4. Watch the rollout (API is not Ready until migrate has created the schema):
+
+   kubectl rollout status deployment/{{ include "ansibleai.fullname" . }}-api -n {{ .Release.Namespace }} --timeout=10m
+   kubectl get pods -n {{ .Release.Namespace }}
+   kubectl describe pod -n {{ .Release.Namespace }} -l app.kubernetes.io/component=api
+
+5. Optional first index (empty pgvector is a soft /readyz check):
+
+   kubectl create job --from=cronjob/{{ include "ansibleai.fullname" . }}-reindex {{ include "ansibleai.fullname" . }}-reindex-now -n {{ .Release.Namespace }}
+
+================================================================================
+ROLLBACK (do this before you need it)
+================================================================================
+
+Release-level (preferred; restores previous chart + values):
+
+  helm history {{ .Release.Name }} -n {{ .Release.Namespace }}
+  helm rollback {{ .Release.Name }} -n {{ .Release.Namespace }}
+  kubectl rollout status deployment/{{ include "ansibleai.fullname" . }}-api -n {{ .Release.Namespace }}
+
+Workload-level (last ReplicaSet only):
+
+  kubectl rollout undo deployment/{{ include "ansibleai.fullname" . }}-api -n {{ .Release.Namespace }}
+  kubectl rollout undo deployment/{{ include "ansibleai.fullname" . }}-worker -n {{ .Release.Namespace }}
+
+Verify:
+
+  kubectl get pods -n {{ .Release.Namespace }} -l app.kubernetes.io/name={{ include "ansibleai.name" . }}
+  curl -fsS -H "Host: {{ .Values.ingress.host }}" {{ include "ansibleai.memberUrl" . }}/healthz
+
+================================================================================
+SLO (lab)
+================================================================================
+
+Availability target {{ .Values.observability.slo.availability }}% over 30 days.
+Scrape: Service annotations prometheus.io/path=/metrics on the API pods.
+PrometheusRule CRDs are off until kube-prometheus-stack (Phase 6c/7).
