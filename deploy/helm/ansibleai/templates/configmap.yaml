@@ -30,8 +30,8 @@ data:
   PLAYBOOK_MODEL: {{ .Values.app.playbookModel | quote }}
   EMBEDDING_MODEL: {{ .Values.app.embeddingModel | quote }}
   EMBEDDING_DIMENSIONS: {{ .Values.app.embeddingDimensions | quote }}
-  OLLAMA_BASE_URL: {{ printf "http://%s:%v" (include "ansibleai.ollamaHost" .) .Values.ollama.port | quote }}
-  EMBEDDING_BASE_URL: {{ printf "http://%s:%v/v1" (include "ansibleai.ollamaHost" .) .Values.ollama.port | quote }}
+  OLLAMA_BASE_URL: {{ include "ansibleai.ollamaBaseUrl" . | quote }}
+  EMBEDDING_BASE_URL: {{ printf "%s/v1" (include "ansibleai.ollamaBaseUrl" .) | quote }}
   LANGFUSE_ENABLED: {{ .Values.app.langfuseEnabled | quote }}
   LANGFUSE_HOST: {{ .Values.app.langfuseHost | quote }}
   LANGFUSE_BASE_URL: {{ .Values.app.langfuseHost | quote }}

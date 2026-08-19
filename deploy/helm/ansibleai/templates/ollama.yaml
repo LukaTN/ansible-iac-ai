@@ -12,10 +12,10 @@ metadata:
   annotations:
     ansibleai.io/purpose: "Manual Endpoints to a host Ollama daemon. ExternalName cannot target a raw IP."
 spec:
-  # Headless: CoreDNS returns the Endpoints IP (the laptop). A ClusterIP
-  # is policy-checked as 10.96.x, which default-deny drops even when
-  # egress to ollama.endpoint.ip is allowed.
-  clusterIP: None
+  # ClusterIP is immutable once allocated. Do not convert this Service to
+  # headless on an existing release. Pods reach Ollama via ollama.endpoint.ip
+  # (see ConfigMap), which NetworkPolicy already allows.
+  type: ClusterIP
   ports:
     - name: http
       port: {{ .Values.ollama.port }}
