@@ -12,8 +12,7 @@
         "tag": {
           "type": "string",
           "minLength": 1,
-          "not": { "const": "latest" },
-          "pattern": "^(?!latest$).+"
+          "not": { "const": "latest" }
         },
         "pullPolicy": {
           "type": "string",
