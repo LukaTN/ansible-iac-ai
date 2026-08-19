@@ -15,14 +15,15 @@ spec:
   failedJobsHistoryLimit: {{ .Values.reindex.failedJobsHistoryLimit }}
   jobTemplate:
     spec:
-      backoffLimit: 2
+      backoffLimit: 1
+      # Keep the failed pod so `kubectl logs job/...` still works.
       template:
         metadata:
           labels:
             {{- include "ansibleai.selectorLabels" . | nindent 12 }}
             app.kubernetes.io/component: reindex
         spec:
-          restartPolicy: OnFailure
+          restartPolicy: Never
           serviceAccountName: {{ include "ansibleai.saWorker" . }}
           automountServiceAccountToken: {{ .Values.serviceAccounts.automountServiceAccountToken }}
           securityContext:

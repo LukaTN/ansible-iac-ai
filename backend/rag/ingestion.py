@@ -12,11 +12,12 @@ if True:
 
     from langchain_core.documents import Document
 
-    # Always run from project root
-    os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    # backend/rag/ingestion.py → repository root (not backend/, which
+    # made `data/parsed` resolve to a missing path in the container).
+    _PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-    PARSED_DIR  = "data/parsed"
-    KB_FILE     = "data/knowledge_base.json"   # legacy kubernetes.core fallback
+    PARSED_DIR  = os.path.join(_PROJECT_ROOT, "data", "parsed")
+    KB_FILE     = os.path.join(_PROJECT_ROOT, "data", "knowledge_base.json")
 
     CHUNK_SCHEMA_VERSION = "v5_overview_tasks"
     CHUNK_SIZE  = 1100

@@ -78,6 +78,9 @@ def test_staging_pins_lab_image_and_ollama() -> None:
     assert values["keda"]["enabled"] is False
     assert values["networkPolicy"]["enabled"] is True
     assert values["localPathProvisioner"]["enabled"] is True
+    helpers = (CHART / "templates" / "_helpers.tpl").read_text(encoding="utf-8")
+    assert ".Values.ingress.host" in helpers
+    assert "corsOrigins" in helpers
     provisioner = (CHART / "templates" / "local-path-provisioner.yaml").read_text(encoding="utf-8")
     assert "kind: Role" in provisioner
     assert '"create"' in provisioner
@@ -146,4 +149,7 @@ def test_vendor_images_are_pinned() -> None:
     assert "ansibleai.ollamaBaseUrl" in configmap
     helpers = (CHART / "templates" / "_helpers.tpl").read_text(encoding="utf-8")
     assert "ollama.endpoint.ip" in helpers
+    assert "RAG_PARSED_DIR" in configmap
+    reindex = (CHART / "templates" / "cronjob-reindex.yaml").read_text(encoding="utf-8")
+    assert "restartPolicy: Never" in reindex
     assert str(values["postgres"]["image"]["tag"]).startswith("0.")
