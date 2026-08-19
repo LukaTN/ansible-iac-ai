@@ -93,7 +93,7 @@ app.kubernetes.io/component: {{ .component }}
 {{- .Values.app.corsOrigins }}
 {{- else }}
 {{- $p := .Values.lab.ingressNodePort }}
-{{- printf "http://%s:%v,http://%s:%v,http://localhost:%v" .Values.lab.masterIp $p .Values.lab.workerIp $p $p }}
+{{- printf "http://%s:%v,http://%s:%v,http://%s:%v,http://localhost:%v" .Values.ingress.host $p .Values.lab.masterIp $p .Values.lab.workerIp $p $p }}
 {{- end }}
 {{- end }}
 

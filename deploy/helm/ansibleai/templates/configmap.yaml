@@ -32,6 +32,7 @@ data:
   EMBEDDING_DIMENSIONS: {{ .Values.app.embeddingDimensions | quote }}
   OLLAMA_BASE_URL: {{ include "ansibleai.ollamaBaseUrl" . | quote }}
   EMBEDDING_BASE_URL: {{ printf "%s/v1" (include "ansibleai.ollamaBaseUrl" .) | quote }}
+  RAG_PARSED_DIR: "/app/data/parsed"
   LANGFUSE_ENABLED: {{ .Values.app.langfuseEnabled | quote }}
   LANGFUSE_HOST: {{ .Values.app.langfuseHost | quote }}
   LANGFUSE_BASE_URL: {{ .Values.app.langfuseHost | quote }}
