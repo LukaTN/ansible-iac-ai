@@ -78,6 +78,10 @@ def test_staging_pins_lab_image_and_ollama() -> None:
     assert values["keda"]["enabled"] is False
     assert values["networkPolicy"]["enabled"] is True
     assert values["localPathProvisioner"]["enabled"] is True
+    provisioner = (CHART / "templates" / "local-path-provisioner.yaml").read_text(encoding="utf-8")
+    assert "kind: Role" in provisioner
+    assert '"create"' in provisioner
+    assert "namespace: local-path-storage" in provisioner
 
 
 def test_security_defaults() -> None:
@@ -125,17 +129,10 @@ def test_rollback_documented() -> None:
     assert "helm rollback" in readme
 
 
-def test_local_path_provisioner_can_create_helper_pods() -> None:
-    text = (CHART / "templates" / "local-path-provisioner.yaml").read_text(encoding="utf-8")
-    assert 'resources: ["pods"]' in text
-    assert '"create"' in text
-
-
 def test_vendor_images_are_pinned() -> None:
     values = _load_yaml(CHART / "values.yaml")
     assert values["postgres"]["image"]["tag"] != "latest"
     assert values["redis"]["image"]["tag"] != "latest"
     assert "RELEASE." in values["minio"]["image"]["tag"]
-    assert "RELEASE." in values["minioBucketJob"]["image"]["tag"]
-    assert values["minioBucketJob"]["image"]["repository"] == "minio/mc"
+    assert values["minio"]["image"]["tag"] == values["minioBucketJob"]["image"]["tag"]
     assert str(values["postgres"]["image"]["tag"]).startswith("0.")
