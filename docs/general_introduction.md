@@ -130,7 +130,7 @@ This project’s contributions are both **scientific/engineering** (how generati
 
 - **Live apply** on AWS, Azure, or a Kubernetes cluster; Molecule integration tests; “this playbook ran in production”.
 - Generating Terraform, Pulumi, Helm charts, or GitHub Actions as first-class targets.
-- Training or fine-tuning a foundation model; the project *uses* local (Ollama) or routed (OpenRouter) LLMs.
+- Training or fine-tuning a foundation model; the project *uses* local Ollama LLMs.
 - Full Kubernetes production hardening (SSO, Vault, ArgoCD, GPU vLLM) — these are identified on the LLMOps roadmap (Phases 4–8) but are not required to demonstrate the core claim.
 
 Honesty about that boundary matters: a lint-clean playbook is a **necessary** condition for production use, not a **sufficient** one.

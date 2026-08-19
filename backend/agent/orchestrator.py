@@ -170,7 +170,6 @@ def handle_message(
         "agent.llm.config",
         provider=cfg["provider"],
         model=cfg["model"],
-        fallbacks=cfg.get("fallbacks") or [],
     )
 
     initial_state = build_initial_state(thread_id, user_message, history)

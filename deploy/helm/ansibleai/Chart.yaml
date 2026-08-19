@@ -1,0 +1,16 @@
+apiVersion: v2
+name: ansibleai
+description: AnsibleAI API, Celery worker, and lab data plane on kubeadm
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+keywords:
+  - ansible
+  - llmops
+  - rag
+home: https://github.com/ansible-iac-ai/ansible-iac-ai
+sources:
+  - https://github.com/ansible-iac-ai/ansible-iac-ai
+annotations:
+  category: Application
+  ansibleai.io/phase: "4b"

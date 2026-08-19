@@ -131,8 +131,10 @@ App code: `observability/` (`metrics.py`, `tracing.py`), wired from
 
 | Item | When |
 |------|------|
-| Langfuse prompt management (`agent/prompts.py`) | Phase 6b |
-| Celery exporter, richer alert rules | Phase 6b |
+| Langfuse prompt management (`agent/prompts.py`) | Phase 6b (LLMOps loop) |
+| Retrieval / golden baselines (`evals/baselines/`) | Phase 6b |
+| Model bake-off (`scripts/model_bakeoff.py`) | Phase 6b |
+| Celery exporter, richer alert rules | Phase 6b (after 4b scrapes `/metrics`) |
 | Loki / Tempo | Cluster-scale ops |
 | vLLM / DCGM GPU dashboards | After Phase 4 (real GPU nodes) |
 

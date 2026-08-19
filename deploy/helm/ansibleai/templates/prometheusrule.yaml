@@ -1,0 +1,44 @@
+{{- if .Values.observability.prometheusRule.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ include "ansibleai.fullname" . }}-slo
+  labels:
+    {{- include "ansibleai.labels" . | nindent 4 }}
+    app.kubernetes.io/component: api
+  annotations:
+    ansibleai.io/purpose: "SLO burn-rate on ansibleai_http_requests_total. Requires prometheus-operator CRDs (not installed in 4b)."
+spec:
+  groups:
+    - name: ansibleai.slo
+      rules:
+        - alert: AnsibleAIHighErrorBudgetBurn
+          expr: |
+            (
+              sum(rate(ansibleai_http_requests_total{status=~"5.."}[1h]))
+              /
+              sum(rate(ansibleai_http_requests_total[1h]))
+            ) > {{ .Values.observability.slo.fastBurnRate }}
+            and
+            (
+              sum(rate(ansibleai_http_requests_total{status=~"5.."}[5m]))
+              /
+              sum(rate(ansibleai_http_requests_total[5m]))
+            ) > {{ .Values.observability.slo.fastBurnRate }}
+          for: 2m
+          labels:
+            severity: critical
+            slo: availability
+          annotations:
+            summary: "AnsibleAI API is burning the {{ .Values.observability.slo.availability }}% error budget quickly"
+            description: "5xx ratio exceeded {{ .Values.observability.slo.fastBurnRate }} on both 1h and 5m windows."
+            runbook: {{ .Values.observability.slo.runbook | quote }}
+        - alert: AnsibleAIApiNotReady
+          expr: kube_deployment_status_replicas_unavailable{deployment="{{ include "ansibleai.fullname" . }}-api"} > 0
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "AnsibleAI API has unavailable replicas"
+            runbook: {{ .Values.observability.slo.runbook | quote }}
+{{- end }}

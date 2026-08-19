@@ -1,12 +1,14 @@
 # Cluster bootstrap (Ansible)
 
 Provisions a **two-node kubeadm Kubernetes cluster** from a dedicated **Ansible
-control VM**. It does **not** deploy AnsibleAI (Helm comes in Phase 4).
+control VM**. It does **not** deploy AnsibleAI — that is
+[deploy/helm/ansibleai](../helm/ansibleai/README.md).
 
 ## Your lab topology
 
 | IP | Host | Role |
 |----|------|------|
+| **192.168.1.14** | operator laptop | Ollama `:11434` (inference + embeddings) |
 | **192.168.1.19** | `ansible-control` | Run `ansible-playbook` here (not a K8s node) |
 | **192.168.1.18** | `k8s-master` | Control plane (`kubeadm init`) |
 | **192.168.1.12** | `k8s-worker` | Worker (`kubeadm join`) |
@@ -23,7 +25,7 @@ control VM**. It does **not** deploy AnsibleAI (Helm comes in Phase 4).
               artifacts/kubeconfig
 ```
 
-Ollama stays **off** the cluster (host or another URL), per the production plan.
+Ollama runs on the operator laptop at **192.168.1.14:11434**, off the cluster.
 
 ## Stack (full Kubernetes, not k3s)
 
@@ -82,7 +84,7 @@ Clone this repo on **192.168.1.19**, then work in `deploy/ansible`.
 - Worker must reach master on TCP **6443**
 - No GPU required
 - **4 GB+ RAM** on control plane recommended for kubeadm + Calico
-
+- **4 cores+** on control plane recommended for kubeadm + Calico 
 Passwordless SSH from .19 (example):
 
 ```bash
@@ -144,6 +146,7 @@ ansible-playbook playbooks/reset.yml
 | ingress-nginx | `.18` / `.12` | NodePort **30080** (HTTP) and **30443** (HTTPS); no cloud LoadBalancer |
 | cert-manager | `.18` | Pinned chart version |
 | kubeconfig | 192.168.1.19 | `artifacts/kubeconfig` |
+| Ollama | 192.168.1.14 | Inference + embeddings on `:11434`; not a cluster workload |
 
 ## Windows laptop
 

@@ -1,0 +1,57 @@
+# Production-shaped overlay. Do not apply until TLS, a real registry,
+# and a secret manager exist. Image tag must be a git SHA, never "dev".
+
+image:
+  tag: "REPLACE_WITH_GIT_SHA"
+  pullPolicy: IfNotPresent
+
+app:
+  env: production
+  logLevel: INFO
+  gunicornWorkers: "2"
+  corsOrigins: "https://ansibleai.example.com"
+
+api:
+  replicas: 2
+
+worker:
+  replicas: 2
+  terminationGracePeriodSeconds: 1800
+
+ingress:
+  enabled: true
+  host: ansibleai.example.com
+  tlsEnabled: true
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+
+secrets:
+  existingSecret: ansibleai-app
+  secretKey: ""
+  postgresPassword: ""
+  minioRootPassword: ""
+  bootstrapAdminEmail: ""
+  bootstrapAdminPassword: ""
+
+localPathProvisioner:
+  enabled: false
+
+networkPolicy:
+  enabled: true
+  defaultDeny: true
+  allowHttpsEgress: true
+
+keda:
+  enabled: false
+
+observability:
+  scrape: true
+  prometheusRule:
+    enabled: true
+  slo:
+    availability: "99.9"
+    fastBurnRate: "0.0144"
+
+identity:
+  enabled: false

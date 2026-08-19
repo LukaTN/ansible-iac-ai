@@ -1,0 +1,45 @@
+{{- if .Values.migrate.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "ansibleai.fullname" . }}-migrate-{{ .Release.Revision }}
+  labels:
+    {{- include "ansibleai.labels" . | nindent 4 }}
+    app.kubernetes.io/component: migrate
+  annotations:
+    ansibleai.io/purpose: "alembic upgrade head + optional admin seed. New Job per Helm revision so upgrades re-run without immutable-Job conflicts. Not a pre-install hook: Postgres must already exist."
+spec:
+  backoffLimit: {{ .Values.migrate.backoffLimit }}
+  activeDeadlineSeconds: {{ .Values.migrate.activeDeadlineSeconds }}
+  ttlSecondsAfterFinished: 86400
+  template:
+    metadata:
+      labels:
+        {{- include "ansibleai.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: migrate
+    spec:
+      restartPolicy: OnFailure
+      serviceAccountName: {{ include "ansibleai.saMigrate" . }}
+      automountServiceAccountToken: {{ .Values.serviceAccounts.automountServiceAccountToken }}
+      securityContext:
+        {{- include "ansibleai.podSecurityContext" . | nindent 8 }}
+      initContainers:
+        {{- include "ansibleai.waitPostgres" . | nindent 8 }}
+      containers:
+        - name: migrate
+          image: {{ include "ansibleai.appImage" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args: ["migrate"]
+          {{- include "ansibleai.envFrom" . | nindent 10 }}
+          env:
+            - name: APP_ROLE
+              value: migrate
+          securityContext:
+            {{- include "ansibleai.containerSecurityContext" . | nindent 12 }}
+          resources:
+            {{- toYaml .Values.migrate.resources | nindent 12 }}
+          volumeMounts:
+            {{- include "ansibleai.tmpVolumeMounts" . | nindent 12 }}
+      volumes:
+        {{- include "ansibleai.tmpVolumes" . | nindent 8 }}
+{{- end }}

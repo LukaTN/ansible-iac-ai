@@ -1,0 +1,82 @@
+# Lab overlay for the two-node kubeadm cluster.
+
+lab:
+  masterIp: "192.168.1.18"
+  workerIp: "192.168.1.12"
+  ansibleControlIp: "192.168.1.19"
+  ingressNodePort: 30080
+
+image:
+  repository: ansibleai/app
+  tag: "dev"
+  pullPolicy: IfNotPresent
+
+app:
+  env: development
+  authMode: local
+  gunicornWorkers: "1"
+  corsOrigins: ""
+
+api:
+  replicas: 1
+
+worker:
+  replicas: 1
+  terminationGracePeriodSeconds: 120
+
+ingress:
+  enabled: true
+  host: ansibleai.lab
+  tlsEnabled: false
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+
+# Lab-only placeholders so `helm template` / first install work. Rotate
+# before any shared network exposure. Prefer --set or existingSecret.
+secrets:
+  secretKey: "lab-only-change-me-secret-key-32chars-min"
+  postgresPassword: "lab-only-postgres-password"
+  minioRootPassword: "lab-only-minio-password"
+  bootstrapAdminEmail: "admin@localhost"
+  bootstrapAdminPassword: "lab-only-Admin-12"
+
+ollama:
+  enabled: true
+  endpoint:
+    ip: "192.168.1.14"
+
+localPathProvisioner:
+  enabled: true
+  storageClass:
+    name: local-path
+    default: true
+
+postgres:
+  persistence:
+    storageClass: local-path
+    size: 10Gi
+
+redis:
+  persistence:
+    storageClass: local-path
+    size: 2Gi
+
+minio:
+  persistence:
+    storageClass: local-path
+    size: 10Gi
+
+identity:
+  enabled: false
+
+networkPolicy:
+  enabled: true
+  defaultDeny: true
+
+keda:
+  enabled: false
+
+observability:
+  scrape: true
+  prometheusRule:
+    enabled: false

@@ -1,0 +1,25 @@
+{{- if .Values.keda.enabled }}
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: {{ include "ansibleai.fullname" . }}-worker
+  labels:
+    {{- include "ansibleai.labels" . | nindent 4 }}
+    app.kubernetes.io/component: worker
+  annotations:
+    ansibleai.io/purpose: "Scale workers from Celery Redis list depth. Disabled until the KEDA operator is installed."
+spec:
+  scaleTargetRef:
+    name: {{ include "ansibleai.fullname" . }}-worker
+  pollingInterval: {{ .Values.keda.pollingInterval }}
+  cooldownPeriod: {{ .Values.keda.cooldownPeriod }}
+  minReplicaCount: {{ .Values.keda.minReplicaCount }}
+  maxReplicaCount: {{ .Values.keda.maxReplicaCount }}
+  triggers:
+    - type: redis
+      metadata:
+        address: {{ printf "%s:6379" (include "ansibleai.redisHost" .) | quote }}
+        listName: {{ .Values.keda.listName | quote }}
+        listLength: {{ .Values.keda.listLength | quote }}
+        activationListLength: "1"
+{{- end }}

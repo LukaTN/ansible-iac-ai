@@ -219,16 +219,10 @@ class Settings(BaseSettings):
     s3_secret_key: str = ""
     s3_region: str = "us-east-1"
 
-    # ── Agent LLM ────────────────────────────────────────────────
-    agent_llm_provider: str = "openrouter"
-    agent_model: str = "google/gemma-4-31b-it:free"
-    agent_fallback_models: str = ""
+    # ── Agent LLM (Ollama) ───────────────────────────────────────
+    agent_model: str = "qwen2.5-coder:7b"
     agent_max_iterations: int = 4
     agent_request_timeout: int = 300
-    openrouter_api_key: str = ""
-    openrouter_base_url: str = "https://openrouter.ai/api/v1"
-    openrouter_referer: str = "http://localhost:5000"
-    openrouter_app_name: str = "AnsibleAI"
 
     # ── Ollama / playbook generation ─────────────────────────────
     ollama_base_url: str = "http://localhost:11434"
@@ -429,10 +423,6 @@ class Settings(BaseSettings):
         return [o.strip() for o in self.cors_origins.split(",") if o.strip()]
 
     @property
-    def fallback_models(self) -> list[str]:
-        return [m.strip() for m in self.agent_fallback_models.split(",") if m.strip()]
-
-    @property
     def oidc_configured(self) -> bool:
         return bool(
             self.oidc_issuer.strip()
@@ -563,7 +553,7 @@ def env_summary() -> dict[str, object]:
         "registration_mode": s.registration_mode,
         "allowed_email_domains": s.email_domains,
         "rate_limit_backend": s.rate_limit_backend if s.rate_limit_enabled else "disabled",
-        "agent_provider": s.agent_llm_provider,
+        "agent_provider": "ollama",
         "agent_model": s.agent_model,
         "playbook_model": s.playbook_model,
         "log_format": s.log_format,

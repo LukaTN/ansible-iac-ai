@@ -1,0 +1,115 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ansibleai.fullname" . }}-api
+  labels:
+    {{- include "ansibleai.labels" . | nindent 4 }}
+    app.kubernetes.io/component: api
+spec:
+  replicas: {{ .Values.api.replicas }}
+  revisionHistoryLimit: {{ .Values.api.revisionHistoryLimit }}
+  strategy:
+    type: {{ .Values.api.strategy.type }}
+    rollingUpdate:
+      maxUnavailable: {{ .Values.api.strategy.rollingUpdate.maxUnavailable }}
+      maxSurge: {{ .Values.api.strategy.rollingUpdate.maxSurge }}
+  selector:
+    matchLabels:
+      {{- include "ansibleai.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: api
+  template:
+    metadata:
+      labels:
+        {{- include "ansibleai.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: api
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        {{- if .Values.observability.scrape }}
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "5000"
+        prometheus.io/path: /metrics
+        {{- end }}
+    spec:
+      serviceAccountName: {{ include "ansibleai.saApi" . }}
+      automountServiceAccountToken: {{ .Values.serviceAccounts.automountServiceAccountToken }}
+      securityContext:
+        {{- include "ansibleai.podSecurityContext" . | nindent 8 }}
+      terminationGracePeriodSeconds: {{ .Values.api.terminationGracePeriodSeconds }}
+      {{- if eq .Values.api.podAntiAffinity "preferred" }}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    {{- include "ansibleai.selectorLabels" . | nindent 20 }}
+                    app.kubernetes.io/component: api
+                topologyKey: kubernetes.io/hostname
+      {{- end }}
+      initContainers:
+        {{- include "ansibleai.waitPostgres" . | nindent 8 }}
+        {{- include "ansibleai.waitSchema" . | nindent 8 }}
+      containers:
+        - name: api
+          image: {{ include "ansibleai.appImage" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args: ["api"]
+          ports:
+            - name: http
+              containerPort: 5000
+              protocol: TCP
+          {{- include "ansibleai.envFrom" . | nindent 10 }}
+          env:
+            - name: APP_ROLE
+              value: api
+            - name: SOCKETIO_ASYNC_MODE
+              value: gevent
+          securityContext:
+            {{- include "ansibleai.containerSecurityContext" . | nindent 12 }}
+          resources:
+            {{- toYaml .Values.api.resources | nindent 12 }}
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            failureThreshold: {{ .Values.api.probes.startup.failureThreshold }}
+            periodSeconds: {{ .Values.api.probes.startup.periodSeconds }}
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: {{ .Values.api.probes.liveness.periodSeconds }}
+            timeoutSeconds: {{ .Values.api.probes.liveness.timeoutSeconds }}
+            failureThreshold: {{ .Values.api.probes.liveness.failureThreshold }}
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
+            periodSeconds: {{ .Values.api.probes.readiness.periodSeconds }}
+            timeoutSeconds: {{ .Values.api.probes.readiness.timeoutSeconds }}
+            failureThreshold: {{ .Values.api.probes.readiness.failureThreshold }}
+          volumeMounts:
+            {{- include "ansibleai.tmpVolumeMounts" . | nindent 12 }}
+            - name: data
+              mountPath: /app/data/kb_versions
+              subPath: kb_versions
+            - name: data
+              mountPath: /app/data/raw_html
+              subPath: raw_html
+            - name: data
+              mountPath: /app/output
+              subPath: output
+            - name: data
+              mountPath: /app/reports
+              subPath: reports
+      volumes:
+        {{- include "ansibleai.tmpVolumes" . | nindent 8 }}
+        - name: data
+          emptyDir:
+            sizeLimit: 1Gi
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

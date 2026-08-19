@@ -81,7 +81,7 @@ Le gate certifie un **artefact** : YAML propre, FQCN, pas de placeholders suspec
 
 - **RAG** (`rag/retriever.py`, ChromaDB, embeddings) — LangChain reste ici, pas pour l’orchestration agent.
 - **Validator + ansible-lint** (`pipeline/validator.py`, `pipeline/ansible_lint_runner.py`) — inchangés comme moteurs de check ; le *gate* les appelle à chaque draft.
-- **`agent/llm.py`** — OpenRouter / Ollama + fallbacks ; les nœuds appellent `chat()`.
+- **`agent/llm.py`** — client Ollama ; les nœuds appellent `chat()`.
 - **Forme publique `AgentResponse`** — le frontend n’a pas besoin de changer.
 
 ### 3.4 Flux cible
@@ -129,7 +129,7 @@ Ces outils sont des wrappers Python appelés par les nœuds du graphe (pas impor
 | **Chain-of-Thought (JSON `thought` / `fix_plan`)** | Raisonner avant d’agir ; diagnostiquer chaque échec lint | Améliore la qualité des redrafts vs retry aveugle |
 | **ansible-lint** (`-p`) via `ansible_lint_runner` | Règles qualité / FQCN / YAML style | Standard de facto Ansible ; c’était la source principale des « mauvais playbooks » |
 | **Validator maison** | Contraintes KB + k8s + secrets | Complète lint avec la connaissance locale des modules indexés |
-| **OpenRouter / Ollama (`agent/llm.py`)** | LLM reason / repair / respond / draft | Déjà provider-agnostique ; CoT JSON compatible free-tier |
+| **Ollama (`agent/llm.py`)** | LLM reason / repair / respond / draft | Client HTTP vers Ollama ; CoT JSON parsé côté agent |
 | **pytest** | Tests gate + boucle mockée | Valider la logique sans réseau / Chroma / lint réel |
 
 ---
@@ -198,7 +198,7 @@ agent/
 ├── state.py               # AgentState + evaluate_gate
 ├── tools.py               # search_docs, draft_playbook, validate_*, get_module_info
 ├── playbook_generator.py  # une passe draft/repair
-├── llm.py                 # OpenRouter / Ollama
+├── llm.py                 # Ollama
 ├── prompts.py             # CoT reason/repair/respond + playbook
 └── collections.py         # allow-list collections KB
 ```

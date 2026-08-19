@@ -1,0 +1,36 @@
+{{- if .Values.ollama.enabled }}
+{{- if not .Values.ollama.endpoint.ip }}
+{{- fail "ollama.endpoint.ip is required (host that runs Ollama on :11434)" }}
+{{- end }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ansibleai.ollamaHost" . }}
+  labels:
+    {{- include "ansibleai.labels" . | nindent 4 }}
+    app.kubernetes.io/component: ollama
+  annotations:
+    ansibleai.io/purpose: "Manual Endpoints to a host Ollama daemon. ExternalName cannot target a raw IP."
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: {{ .Values.ollama.port }}
+      targetPort: {{ .Values.ollama.port }}
+      protocol: TCP
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: {{ include "ansibleai.ollamaHost" . }}
+  labels:
+    {{- include "ansibleai.labels" . | nindent 4 }}
+    app.kubernetes.io/component: ollama
+subsets:
+  - addresses:
+      - ip: {{ .Values.ollama.endpoint.ip | quote }}
+    ports:
+      - name: http
+        port: {{ .Values.ollama.port }}
+        protocol: TCP
+{{- end }}

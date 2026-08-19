@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "AnsibleAI Helm values",
+  "type": "object",
+  "required": ["image", "app", "api", "worker"],
+  "properties": {
+    "image": {
+      "type": "object",
+      "required": ["repository", "tag", "pullPolicy"],
+      "properties": {
+        "repository": { "type": "string", "minLength": 1 },
+        "tag": {
+          "type": "string",
+          "minLength": 1,
+          "not": { "const": "latest" },
+          "pattern": "^(?!latest$).+"
+        },
+        "pullPolicy": {
+          "type": "string",
+          "enum": ["IfNotPresent", "Never", "Always"]
+        }
+      }
+    },
+    "app": {
+      "type": "object",
+      "properties": {
+        "env": {
+          "type": "string",
+          "enum": ["development", "staging", "production"]
+        },
+        "authMode": {
+          "type": "string",
+          "enum": ["local", "hybrid", "oidc"]
+        },
+        "gunicornWorkers": { "type": "string" }
+      }
+    },
+    "api": {
+      "type": "object",
+      "properties": {
+        "replicas": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "worker": {
+      "type": "object",
+      "properties": {
+        "replicas": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "networkPolicy": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" }
+      }
+    },
+    "lab": {
+      "type": "object",
+      "properties": {
+        "masterIp": { "type": "string" },
+        "workerIp": { "type": "string" },
+        "ansibleControlIp": { "type": "string" },
+        "ingressNodePort": { "type": "integer" }
+      }
+    },
+    "ollama": {
+      "type": "object",
+      "properties": {
+        "endpoint": {
+          "type": "object",
+          "properties": {
+            "ip": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    }
+  }
+}

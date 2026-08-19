@@ -122,7 +122,7 @@ def langchain_callback() -> Any | None:
     LangGraph/LangChain CallbackHandler nested under the current agent span.
 
     Why: captures graph node structure automatically. LLM calls still use
-    manual generations because we call Ollama/OpenRouter via raw HTTP.
+    manual generations because we call Ollama via raw HTTP.
     """
     if get_client() is None:
         return None
