@@ -179,10 +179,14 @@ reindex:
 
 minioBucketJob:
   enabled: true
-  image:
-    repository: minio/mc
-    tag: RELEASE.2025-08-13T08-35-41Z
-    pullPolicy: IfNotPresent
+  # Same app image as migrate/api (boto3). Do not pull an extra MinIO client on air-gapped nodes.
+  resources:
+    requests:
+      cpu: 25m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
 
 postgres:
   enabled: true
@@ -252,7 +256,8 @@ minio:
     runAsUser: 1000
     fsGroup: 1000
 
-# Host Ollama is not a pod. Endpoints point at a LAN IP:11434.
+# Host Ollama is not a pod. Headless Service + Endpoints to a LAN IP:11434.
+# The daemon must bind 0.0.0.0 (OLLAMA_HOST), not 127.0.0.1.
 ollama:
   enabled: true
   port: 11434
