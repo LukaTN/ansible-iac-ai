@@ -84,6 +84,10 @@ app.kubernetes.io/component: {{ .component }}
 {{- printf "%s-ollama" (include "ansibleai.fullname" .) }}
 {{- end }}
 
+{{- define "ansibleai.ollamaBaseUrl" -}}
+{{- printf "http://%s:%v" .Values.ollama.endpoint.ip .Values.ollama.port }}
+{{- end }}
+
 {{- define "ansibleai.corsOrigins" -}}
 {{- if .Values.app.corsOrigins }}
 {{- .Values.app.corsOrigins }}

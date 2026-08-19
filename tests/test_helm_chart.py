@@ -140,5 +140,10 @@ def test_vendor_images_are_pinned() -> None:
     assert "boto3" in bucket_job
     assert "ansibleai.appImage" in bucket_job
     ollama = (CHART / "templates" / "ollama.yaml").read_text(encoding="utf-8")
-    assert "clusterIP: None" in ollama
+    assert "clusterIP: None" not in ollama
+    assert "type: ClusterIP" in ollama
+    configmap = (CHART / "templates" / "configmap.yaml").read_text(encoding="utf-8")
+    assert "ansibleai.ollamaBaseUrl" in configmap
+    helpers = (CHART / "templates" / "_helpers.tpl").read_text(encoding="utf-8")
+    assert "ollama.endpoint.ip" in helpers
     assert str(values["postgres"]["image"]["tag"]).startswith("0.")

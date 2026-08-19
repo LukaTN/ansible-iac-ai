@@ -256,7 +256,8 @@ minio:
     runAsUser: 1000
     fsGroup: 1000
 
-# Host Ollama is not a pod. Headless Service + Endpoints to a LAN IP:11434.
+# Host Ollama is not a pod. Service+Endpoints keep a DNS name; the app
+# uses endpoint.ip so NetworkPolicy matches (ClusterIP is immutable).
 # The daemon must bind 0.0.0.0 (OLLAMA_HOST), not 127.0.0.1.
 ollama:
   enabled: true
