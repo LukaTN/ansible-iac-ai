@@ -41,13 +41,13 @@ export function WelcomeScreen() {
     <div className="welcome">
       <div className="welcome-hero">
         <div className="welcome-orb">
-          <CodeBracketsIcon size={24} />
+            <CodeBracketsIcon size={18} />
         </div>
         <h1>What do you want to automate?</h1>
         <p>Describe an infrastructure task in plain language. AnsibleAI drafts playbooks using your indexed docs.</p>
       </div>
 
-      <div className="welcome-grid">
+      <div className="welcome-grid" aria-label="Suggested prompts">
         {SUGGESTIONS.map((item, i) => (
           <button
             key={item.title}

@@ -1,6 +1,7 @@
 import { AppProvider } from './providers/AppProvider';
 import { AuthProvider, useAuth } from './providers/AuthProvider';
 import { OnboardingProvider } from './providers/OnboardingProvider';
+import { LayoutProvider, useLayout } from './providers/LayoutProvider';
 import { usePanel } from './providers/PanelProvider';
 import { AppHeader } from '@/components/layout/AppHeader';
 import { AppFooter } from '@/components/layout/AppFooter';
@@ -20,15 +21,20 @@ import { DesignModeWorkspace } from '@/design-mode/DesignModeWorkspace';
  */
 function AppShell() {
   const { collapsed } = usePanel();
+  const { threadsOpen, closeOverlays } = useLayout();
+  const showScrim = threadsOpen || !collapsed;
 
   return (
-    <div className={`app${collapsed ? '' : ' panel-open'}`}>
+    <div className={`app${collapsed ? '' : ' panel-open'}${threadsOpen ? ' threads-open' : ''}`}>
       <AppHeader />
       <div className="app-body">
         <ThreadSidebar />
         <ChatMain />
         <SidePanel />
       </div>
+      {showScrim ? (
+        <button type="button" className="nav-scrim" aria-label="Close panel" onClick={closeOverlays} />
+      ) : null}
       <AppFooter />
     </div>
   );
@@ -48,8 +54,8 @@ function AuthGate() {
   if (initializing) {
     return (
       <div className="auth-screen">
-        <div className="auth-boot">
-          <span className="auth-spinner" aria-hidden="true" />
+        <div className="auth-boot" role="status" aria-live="polite">
+          <span className="auth-spinner auth-spinner-muted" aria-hidden="true" />
           <span>Loading workspace...</span>
         </div>
       </div>
@@ -63,9 +69,11 @@ function AuthGate() {
   return (
     <AppProvider key={user.id}>
       <OnboardingProvider>
-        <AppShell />
-        <OnboardingPage />
-        {isDesignMode() ? <DesignModeWorkspace /> : null}
+        <LayoutProvider>
+          <AppShell />
+          <OnboardingPage />
+          {isDesignMode() ? <DesignModeWorkspace /> : null}
+        </LayoutProvider>
       </OnboardingProvider>
     </AppProvider>
   );

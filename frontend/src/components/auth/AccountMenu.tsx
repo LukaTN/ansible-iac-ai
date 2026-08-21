@@ -55,6 +55,7 @@ export function AccountMenu({ placement = 'up' }: { placement?: 'up' | 'down' })
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-haspopup="menu"
+          aria-label={`Account menu, ${user.display_name || user.email}, ${isAdmin ? 'Administrator' : 'Member'}`}
         >
           <span className="account-avatar">{initials(user.display_name || user.email)}</span>
           <span className="account-id">
@@ -90,6 +91,7 @@ export function AccountMenu({ placement = 'up' }: { placement?: 'up' | 'down' })
               <BookIcon />
               App guide &amp; tour
             </button>
+            <div className="account-menu-sep" role="separator" />
             <button
               type="button"
               role="menuitem"

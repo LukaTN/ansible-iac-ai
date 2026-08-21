@@ -219,7 +219,6 @@ export function DocsPane() {
 
   return (
     <>
-      <div className="slabel">Documentation index</div>
       <DocCard
         title="Knowledge base"
         subtitle={
@@ -229,11 +228,16 @@ export function DocsPane() {
         }
       >
         {isAdmin ? (
-          <div className="doc-actions" style={{ marginBottom: '.8rem' }}>
-            <button type="button" className="btn-gen-sm" disabled={checking} onClick={handleCheck}>
+          <div className="doc-actions">
+            <button type="button" className="ui-btn ui-btn-primary btn-sm" disabled={checking} onClick={handleCheck}>
               Check for updates
             </button>
-            <button type="button" className="btn-ghost" disabled={!changedSlugs.length} onClick={handleRescrape}>
+            <button
+              type="button"
+              className="ui-btn ui-btn-danger btn-sm"
+              disabled={!changedSlugs.length}
+              onClick={handleRescrape}
+            >
               Re-scrape changed
             </button>
           </div>
@@ -251,7 +255,7 @@ export function DocsPane() {
         {isAdmin ? (
           <div className="doc-list">
             {!changed.length ? (
-              <div className="no-data">No update check run yet.</div>
+              <div className="ui-empty">No update check run yet.</div>
             ) : (
               changed.map((c) => (
                 <div key={c.slug} className="doc-row">
@@ -271,19 +275,18 @@ export function DocsPane() {
 
       {isAdmin ? (
         <>
-          <div className="slabel">Rollback</div>
           <DocCard
             title="Backups"
             subtitle="Restore a previous KB version."
             actions={
-              <button type="button" className="btn-ghost" onClick={loadRollback}>
+              <button type="button" className="ui-btn ui-btn-ghost btn-sm" onClick={loadRollback}>
                 Refresh
               </button>
             }
           >
             <div className="doc-list">
               {!rollback.length ? (
-                <div className="no-data">No backups yet.</div>
+                <div className="ui-empty">No backups yet.</div>
               ) : (
                 rollback.slice(0, 10).map((v) => (
                   <div key={v.filename} className="doc-row">
@@ -293,7 +296,11 @@ export function DocsPane() {
                         {new Date(v.modified_at).toLocaleString()} · {(v.size / 1024).toFixed(1)} KB
                       </div>
                     </div>
-                    <button type="button" className="btn-ghost" onClick={() => handleRestore(v.filename)}>
+                    <button
+                      type="button"
+                      className="ui-btn btn-sm btn-restore"
+                      onClick={() => handleRestore(v.filename)}
+                    >
                       Restore
                     </button>
                   </div>
@@ -302,14 +309,13 @@ export function DocsPane() {
             </div>
           </DocCard>
 
-          <div className="slabel">Scrape log (live)</div>
           <DocCard
-            title="Terminal feed"
+            title="Scrape log"
             subtitle="Real-time events via SSE."
             actions={
               <div className="doc-actions">
                 <span className={pillClass(liveStatus)}>{liveStatus}</span>
-                <button type="button" className="btn-ghost" onClick={() => setTerminal('')}>
+                <button type="button" className="ui-btn ui-btn-ghost btn-sm" onClick={() => setTerminal('')}>
                   Clear
                 </button>
               </div>
@@ -322,19 +328,18 @@ export function DocsPane() {
         </>
       ) : null}
 
-      <div className="slabel">Module health</div>
       <DocCard
-        title="Scoring"
+        title="Module health"
         subtitle="Based on params, examples, required detection. <70% is flagged."
         actions={
-          <button type="button" className="btn-ghost" onClick={loadStatus}>
+          <button type="button" className="ui-btn ui-btn-ghost btn-sm" onClick={loadStatus}>
             Refresh
           </button>
         }
       >
         <div className="doc-list">
           {!health.length ? (
-            <div className="no-data">No KB loaded.</div>
+            <div className="ui-empty">No KB loaded.</div>
           ) : (
             health.map((r) => (
               <div key={r.slug} className="doc-row">
@@ -352,36 +357,33 @@ export function DocsPane() {
       </DocCard>
 
       {isAdmin ? (
-        <>
-          <div className="slabel">Changelog (latest re-scrape)</div>
-          <DocCard
-            title="Diffs"
-            subtitle="Auto-generated per-module diffs."
-            actions={
-              <button type="button" className="btn-ghost" onClick={loadSessions}>
-                Refresh
-              </button>
-            }
-          >
-            <div className="doc-list">
-              {!changelog.length ? (
-                <div className="no-data">No sessions yet.</div>
-              ) : (
-                changelog.map((d, i) => (
-                  <div key={i} className="doc-row">
-                    <div className="doc-row-left">
-                      <div className="doc-row-title">{d.module_slug || d.slug}</div>
-                      <div className="doc-row-sub">{d.diff_summary || 'changed'}</div>
-                    </div>
-                    {d.health_score != null && (
-                      <div className={`score ${d.health_score < 70 ? 'bad' : 'ok'}`}>{d.health_score}%</div>
-                    )}
+        <DocCard
+          title="Changelog"
+          subtitle="Auto-generated per-module diffs from the latest re-scrape."
+          actions={
+            <button type="button" className="ui-btn ui-btn-ghost btn-sm" onClick={loadSessions}>
+              Refresh
+            </button>
+          }
+        >
+          <div className="doc-list">
+            {!changelog.length ? (
+              <div className="ui-empty">No sessions yet.</div>
+            ) : (
+              changelog.map((d, i) => (
+                <div key={i} className="doc-row">
+                  <div className="doc-row-left">
+                    <div className="doc-row-title">{d.module_slug || d.slug}</div>
+                    <div className="doc-row-sub">{d.diff_summary || 'changed'}</div>
                   </div>
-                ))
-              )}
-            </div>
-          </DocCard>
-        </>
+                  {d.health_score != null && (
+                    <div className={`score ${d.health_score < 70 ? 'bad' : 'ok'}`}>{d.health_score}%</div>
+                  )}
+                </div>
+              ))
+            )}
+          </div>
+        </DocCard>
       ) : null}
     </>
   );

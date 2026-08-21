@@ -78,12 +78,12 @@ export function LoginPage() {
     <div className="auth-screen">
       <div className="auth-card">
         <div className="auth-brand">
-          <div className="threads-logo">
-            <CodeBracketsIcon />
-          </div>
-          <div className="threads-title">
+          <span className="app-header-logo" aria-hidden>
+            <CodeBracketsIcon size={15} />
+          </span>
+          <span className="app-header-name">
             <span>Ansible</span>AI
-          </div>
+          </span>
         </div>
 
         <h1 className="auth-heading">{isRegister ? 'Create your account' : 'Sign in'}</h1>
@@ -106,7 +106,7 @@ export function LoginPage() {
         ) : null}
 
         {showError ? (
-          <div className="auth-alert err" role="alert">
+          <div className="auth-alert err" role="alert" id="auth-form-error">
             {showError}
           </div>
         ) : null}
@@ -137,6 +137,8 @@ export function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
                 autoComplete="username"
+                aria-invalid={Boolean(showError)}
+                aria-describedby={showError ? 'auth-form-error' : undefined}
                 required
                 maxLength={255}
                 disabled={showBusy}
@@ -151,6 +153,8 @@ export function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder={isRegister ? 'At least 12 characters' : '••••••••••••'}
                 autoComplete={isRegister ? 'new-password' : 'current-password'}
+                aria-invalid={Boolean(showError)}
+                aria-describedby={showError ? 'auth-form-error' : undefined}
                 required
                 disabled={showBusy}
               />
@@ -163,7 +167,7 @@ export function LoginPage() {
               </p>
             ) : null}
 
-            <button type="submit" className="auth-submit" disabled={showBusy}>
+            <button type="submit" className="ui-btn ui-btn-primary auth-submit" disabled={showBusy}>
               {showBusy ? (
                 <>
                   <span className="auth-spinner" aria-hidden="true" />

@@ -48,7 +48,10 @@ export function ChatComposer() {
   };
 
   return (
-    <div className={`chat-input-wrap${isPending ? ' is-pending' : ''}`}>
+    <div
+      className={`chat-input-wrap${isPending ? ' is-pending' : ''}`}
+      aria-busy={isPending}
+    >
       {isPending ? (
         <div className="chat-pending-bar" aria-hidden>
           <span />
@@ -100,7 +103,7 @@ export function ChatComposer() {
           {isPending ? (
             <button
               type="button"
-              className="btn-stop"
+              className="ui-btn btn-stop"
               onClick={handleStop}
               disabled={stopping}
               aria-label="Stop generation"
@@ -111,7 +114,7 @@ export function ChatComposer() {
           ) : (
             <button
               type="button"
-              className="btn-send"
+              className="ui-btn ui-btn-primary btn-send"
               disabled={!text.trim()}
               onClick={handleSend}
             >

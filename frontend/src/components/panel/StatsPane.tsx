@@ -21,7 +21,7 @@ export function StatsPane() {
         usage — not shown in the chat header.
       </p>
 
-      <div className="slabel">Playbook outcomes</div>
+      <h3 className="slabel">Playbook outcomes</h3>
       <div className="big-stats">
         <div className="bstat">
           <div className="bstat-val accent">{total}</div>
@@ -42,12 +42,12 @@ export function StatsPane() {
         </div>
       </div>
 
-      <div className="slabel">Outcome breakdown</div>
+      <h3 className="slabel">Outcome breakdown</h3>
       <div className="chart-card">
         <ValidationBreakdown stats={stats} />
       </div>
 
-      <div className="slabel">Most used modules</div>
+      <h3 className="slabel">Most used modules</h3>
       <div className="chart-card">
         <ModuleBarChart stats={stats} />
       </div>

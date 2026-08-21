@@ -65,12 +65,12 @@ export function ConfirmDialog({
           {tone === 'danger' ? <TrashIcon size={18} /> : null}
         </div>
 
-        <div className="confirm-dialog-body">
+        <div className="confirm-dialog-body" id={description || detail ? descId : undefined}>
           <h2 id={titleId} className="confirm-dialog-title">
             {title}
           </h2>
           {description ? (
-            <p id={descId} className="confirm-dialog-desc">
+            <p className="confirm-dialog-desc">
               {description}
             </p>
           ) : null}

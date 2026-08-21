@@ -2,7 +2,8 @@ import { useChat } from '@/app/providers/ChatProvider';
 import { useOnboarding } from '@/app/providers/OnboardingProvider';
 import { usePanel } from '@/app/providers/PanelProvider';
 import { AccountMenu } from '@/components/auth/AccountMenu';
-import { CodeBracketsIcon, HelpIcon, PanelIcon } from '@/components/ui/Icons';
+import { CodeBracketsIcon, HelpIcon, MenuIcon, PanelIcon } from '@/components/ui/Icons';
+import { useLayout } from '@/app/providers/LayoutProvider';
 
 /**
  * Persistent workspace header: brand on the left, the live thread context in
@@ -13,6 +14,7 @@ export function AppHeader() {
   const { title } = useChat();
   const { ragStatus, toggleCollapsed, collapsed } = usePanel();
   const { openGuide } = useOnboarding();
+  const { threadsOpen, toggleThreads } = useLayout();
 
   const ragReady = ragStatus?.available && (ragStatus.chunks ?? 0) > 0;
   const ragLabel = ragReady
@@ -21,31 +23,37 @@ export function AppHeader() {
 
   return (
     <header className="app-header">
+      <button
+        type="button"
+        className={`ui-btn ui-btn-icon app-header-nav${threadsOpen ? ' is-active' : ''}`}
+        onClick={toggleThreads}
+        aria-label={threadsOpen ? 'Hide conversations' : 'Show conversations'}
+        aria-expanded={threadsOpen}
+        aria-controls="threads-drawer"
+      >
+        <MenuIcon />
+      </button>
       <div className="app-header-brand">
-        <span className="app-header-logo">
+        <span className="app-header-logo" aria-hidden>
           <CodeBracketsIcon size={15} />
         </span>
         <span className="app-header-name">
           <span>Ansible</span>AI
         </span>
-        <span className="app-header-tag">IaC Assistant</span>
       </div>
 
       <div className="app-header-context">
         <div className="app-header-title">{title}</div>
-        <div className="app-header-sub">
-          Ansible playbook assistant · grounded on indexed module documentation
-        </div>
       </div>
 
       <div className="app-header-actions">
         <div className={`rag-badge${ragReady ? ' ready' : ''}`} title={ragLabel}>
           <span className="live-dot" aria-hidden />
-          <span>{ragLabel}</span>
+          <span>{ragReady ? `${ragStatus.chunks.toLocaleString()} docs` : 'Docs offline'}</span>
         </div>
         <button
           type="button"
-          className="tb-panel-btn"
+          className="ui-btn ui-btn-icon"
           onClick={openGuide}
           title="Open the app guide"
           aria-label="Open the app guide"
@@ -54,7 +62,7 @@ export function AppHeader() {
         </button>
         <button
           type="button"
-          className={`tb-panel-btn${collapsed ? '' : ' active'}`}
+          className={`ui-btn ui-btn-icon${collapsed ? '' : ' is-active'}`}
           onClick={toggleCollapsed}
           title={collapsed ? 'Show analytics panel' : 'Hide analytics panel'}
           aria-label={collapsed ? 'Show analytics panel' : 'Hide analytics panel'}

@@ -36,13 +36,20 @@ const CAPABILITIES = [
   'Docs index',
 ] as const;
 
+function StepEyebrow({ index }: { index: number }) {
+  const s = STEPS[index];
+  return (
+    <p className="onb-eyebrow onb-anim" style={{ animationDelay: '40ms' }}>
+      Step {index + 1} of {STEPS.length} · {s.label}
+    </p>
+  );
+}
+
 function WelcomeStep() {
   return (
     <div className="onb-welcome">
       <div className="onb-welcome-copy">
-        <p className="onb-eyebrow onb-anim" style={{ animationDelay: '40ms' }}>
-          Mission briefing // 01 — Welcome
-        </p>
+        <StepEyebrow index={0} />
         <h1 className="onb-title onb-anim" style={{ animationDelay: '120ms' }}>
           Describe the task.
           <br />
@@ -65,11 +72,8 @@ function WelcomeStep() {
 
       <div className="onb-term onb-anim" style={{ animationDelay: '260ms' }} aria-hidden>
         <div className="onb-term-bar">
-          <span className="onb-term-dots">
-            <i /> <i /> <i />
-          </span>
-          <span className="onb-term-title">agent session — live trace</span>
-          <span className="onb-term-live">REC</span>
+          <span className="onb-term-title">Agent session</span>
+          <span className="onb-term-live">Live</span>
         </div>
         <div className="onb-term-body">
           {TERM_LINES.map((line, i) => (
@@ -154,7 +158,8 @@ function LoopStep() {
 
   useEffect(() => {
     if (paused) return;
-    const t = window.setInterval(() => setActive((a) => (a + 1) % LOOP_NODES.length), 2400);
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const t = window.setInterval(() => setActive((a) => (a + 1) % LOOP_NODES.length), 3200);
     return () => window.clearInterval(t);
   }, [paused]);
 
@@ -162,9 +167,7 @@ function LoopStep() {
 
   return (
     <div className="onb-loop">
-      <p className="onb-eyebrow onb-anim" style={{ animationDelay: '40ms' }}>
-        Mission briefing // 02 — The agent loop
-      </p>
+      <StepEyebrow index={1} />
       <h2 className="onb-h2 onb-anim" style={{ animationDelay: '120ms' }}>
         One agent. Five stations. <span className="onb-title-accent">A gate that bites.</span>
       </h2>
@@ -294,9 +297,7 @@ function TourStep() {
 
   return (
     <div className="onb-tour">
-      <p className="onb-eyebrow onb-anim" style={{ animationDelay: '40ms' }}>
-        Mission briefing // 03 — Workspace tour
-      </p>
+      <StepEyebrow index={2} />
       <h2 className="onb-h2 onb-anim" style={{ animationDelay: '120ms' }}>
         Six things worth knowing <span className="onb-title-accent">before you type.</span>
       </h2>
@@ -304,9 +305,6 @@ function TourStep() {
       <div className="onb-tour-grid onb-anim" style={{ animationDelay: '240ms' }}>
         <div className="onb-mock" aria-hidden>
           <div className="onb-mock-bar">
-            <span className="onb-term-dots">
-              <i /> <i /> <i />
-            </span>
             <span className="onb-mock-url">ansibleai — workspace</span>
           </div>
           <div className="onb-mock-body">
@@ -439,9 +437,7 @@ function CraftStep({ onLaunch }: { onLaunch: () => void }) {
 
   return (
     <div className="onb-craft">
-      <p className="onb-eyebrow onb-anim" style={{ animationDelay: '40ms' }}>
-        Mission briefing // 04 — Prompt craft
-      </p>
+      <StepEyebrow index={3} />
       <h2 className="onb-h2 onb-anim" style={{ animationDelay: '120ms' }}>
         Brief the agent <span className="onb-title-accent">like an engineer.</span>
       </h2>
@@ -500,7 +496,7 @@ function CraftStep({ onLaunch }: { onLaunch: () => void }) {
             the top bar.
           </p>
         </div>
-        <button type="button" className="onb-cta" onClick={onLaunch}>
+        <button type="button" className="ui-btn ui-btn-primary onb-cta" onClick={onLaunch}>
           Enter the workspace
           <span className="onb-cta-arrow" aria-hidden>
             →
@@ -567,11 +563,11 @@ function OnboardingOverlay({ onClose }: { onClose: () => void }) {
       <div className="onb-frame">
         <header className="onb-head">
           <div className="onb-head-brand">
-            <span className="onb-head-logo">
+            <span className="app-header-logo" aria-hidden>
               <CodeBracketsIcon size={15} />
             </span>
-            <span className="onb-head-name">
-              Ansible<em>AI</em>
+            <span className="app-header-name">
+              <span>Ansible</span>AI
             </span>
             <span className="onb-head-tag">App guide</span>
           </div>
@@ -597,7 +593,7 @@ function OnboardingOverlay({ onClose }: { onClose: () => void }) {
 
           <button
             type="button"
-            className="onb-close"
+            className="ui-btn ui-btn-icon onb-close"
             onClick={close}
             aria-label="Close the guide"
             title="Close (Esc)"
@@ -615,7 +611,7 @@ function OnboardingOverlay({ onClose }: { onClose: () => void }) {
 
         <footer className="onb-nav">
           <span className="onb-nav-count">
-            {STEPS[step].num} <i>/</i> {STEPS[STEPS.length - 1].num}
+            Step {step + 1} of {STEPS.length}
           </span>
           <div className="onb-nav-dots" aria-hidden>
             {STEPS.map((s, i) => (
@@ -626,17 +622,17 @@ function OnboardingOverlay({ onClose }: { onClose: () => void }) {
             ))}
           </div>
           <div className="onb-nav-btns">
-            <button type="button" className="onb-btn-ghost" onClick={close}>
+            <button type="button" className="ui-btn ui-btn-ghost" onClick={close}>
               Skip the tour
             </button>
             {step > 0 ? (
-              <button type="button" className="onb-btn-ghost" onClick={() => setStep(step - 1)}>
+              <button type="button" className="ui-btn ui-btn-ghost" onClick={() => setStep(step - 1)}>
                 Back
               </button>
             ) : null}
             <button
               type="button"
-              className="onb-btn-primary"
+              className="ui-btn ui-btn-primary"
               onClick={() => (last ? close() : setStep(step + 1))}
             >
               {last ? 'Enter the workspace' : 'Continue'}

@@ -10,6 +10,7 @@ import { relTime } from '@/lib/time';
 import { isDesignMode } from '@/lib/designMode';
 import { useDesignModeState } from '@/design-mode/useDesignModeState';
 import { setDesignModeState } from '@/mocks/store';
+import { useLayout } from '@/app/providers/LayoutProvider';
 
 type DeletePrompt =
   | { kind: 'one'; id: number; title: string }
@@ -19,6 +20,7 @@ export function ThreadSidebar() {
   const { currentId, awaitingReplyIds, newThread, openThread } = useChat();
   const { filter, setFilter, filteredItems, items, deleteThread, clearAllThreads } = useThreads();
   const { openPanel, loadOverview } = usePanel();
+  const { threadsOpen, closeThreads } = useLayout();
   const { generationProgress } = useSocket();
   const dm = useDesignModeState();
   const [deletePrompt, setDeletePrompt] = useState<DeletePrompt | null>(null);
@@ -85,9 +87,20 @@ export function ThreadSidebar() {
 
   return (
     <>
-      <aside className="threads">
+      <aside
+        id="threads-drawer"
+        className={`threads${threadsOpen ? ' is-open' : ''}`}
+        aria-label="Conversations"
+      >
         <div className="threads-hdr">
-          <button type="button" className="btn-new" onClick={newThread} title="New chat">
+          <button
+            type="button"
+            className="ui-btn ui-btn-primary btn-new"
+            onClick={() => {
+              newThread();
+              closeThreads();
+            }}
+          >
             <PlusIcon />
             New chat
           </button>
@@ -99,14 +112,26 @@ export function ThreadSidebar() {
             type="search"
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            placeholder="Search chats..."
+            placeholder="Search chats"
             aria-label="Search chats"
           />
         </div>
 
-        <div className="threads-list">
+        <div className="threads-list" role="list">
           {!filteredItems.length ? (
-            <div className="threads-empty">{filter.trim() ? 'No matches' : 'No chats yet'}</div>
+            <div className="ui-empty threads-empty">
+              {filter.trim() ? (
+                <>
+                  <strong>No matching chats</strong>
+                  Nothing matches that search.
+                </>
+              ) : (
+                <>
+                  <strong>No chats yet</strong>
+                  Start a new chat to generate a playbook.
+                </>
+              )}
+            </div>
           ) : (
             filteredItems.map((t) => {
               const progress = generationProgress.get(t.id);
@@ -119,16 +144,24 @@ export function ThreadSidebar() {
                 : awaiting
                   ? AWAITING_REPLY_FALLBACK
                   : '';
+              const title = t.title || 'New chat';
               return (
-                <button
+                <div
                   key={t.id}
-                  type="button"
+                  role="listitem"
                   className={`thread-row${t.id === currentId ? ' active' : ''}${generating ? ' generating' : ''}`}
-                  onClick={() => openThread(t.id)}
                 >
-                  <div className="thread-row-main">
-                    <div className="thread-row-title" title={t.title || 'New chat'}>
-                      {t.title || 'New chat'}
+                  <button
+                    type="button"
+                    className="thread-row-open"
+                    aria-current={t.id === currentId ? 'true' : undefined}
+                    onClick={() => {
+                      openThread(t.id);
+                      closeThreads();
+                    }}
+                  >
+                    <div className="thread-row-title" title={title}>
+                      {title}
                     </div>
                     <div className="thread-row-meta">
                       {generating ? (
@@ -139,33 +172,28 @@ export function ThreadSidebar() {
                         </>
                       )}
                     </div>
-                  </div>
-                  <span
+                  </button>
+                  <button
+                    type="button"
                     className="thread-del"
-                    title="Delete"
-                    role="button"
-                    tabIndex={0}
-                    onClick={(e) => requestDelete(e, t.id, t.title || 'New chat')}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
-                        requestDelete(e as unknown as React.MouseEvent, t.id, t.title || 'New chat');
-                      }
-                    }}
+                    title="Delete chat"
+                    aria-label={`Delete ${title}`}
+                    onClick={(e) => requestDelete(e, t.id, title)}
                   >
-                    <TrashIcon size={12} />
-                  </span>
-                </button>
+                    <TrashIcon size={13} />
+                  </button>
+                </div>
               );
             })
           )}
         </div>
 
         <div className="threads-footer">
-          <button type="button" className="tfoot-btn" onClick={() => openPanel('stats')} title="Analytics">
+          <button type="button" className="tfoot-btn" onClick={() => openPanel('stats')}>
             <StatsIcon />
             Analytics
           </button>
-          <button type="button" className="tfoot-btn" onClick={() => openPanel('docs')} title="Docs">
+          <button type="button" className="tfoot-btn" onClick={() => openPanel('docs')}>
             <BookIcon />
             Docs
           </button>
@@ -174,6 +202,7 @@ export function ThreadSidebar() {
             className="tfoot-btn danger"
             onClick={requestClearAll}
             title="Delete all my chats"
+            aria-label="Delete all chats"
             disabled={!items.length}
           >
             <TrashIcon />

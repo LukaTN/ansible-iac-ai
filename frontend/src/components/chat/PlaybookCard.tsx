@@ -9,18 +9,11 @@ interface PlaybookCardProps {
 export function PlaybookCard({ playbook, filename, module }: PlaybookCardProps) {
   const [copied, setCopied] = useState(false);
   const name = filename || 'playbook.yml';
-  const id = `pb-${name.replace(/\W/g, '-')}`;
 
-  const handleCopy = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleCopy = () => {
     navigator.clipboard.writeText(playbook).then(() => {
       setCopied(true);
-      const btn = e.currentTarget;
-      const prev = btn.textContent;
-      btn.textContent = 'copied!';
-      setTimeout(() => {
-        btn.textContent = prev;
-        setCopied(false);
-      }, 1200);
+      window.setTimeout(() => setCopied(false), 1400);
     });
   };
 
@@ -28,19 +21,19 @@ export function PlaybookCard({ playbook, filename, module }: PlaybookCardProps) 
     <div className="code-card">
       <div className="code-hdr">
         <div className="code-hdr-left">
-          <div className="dots">
-            <div className="dot r" />
-            <div className="dot y" />
-            <div className="dot g" />
-          </div>
           <span className="fname">{name}</span>
-          {module && <span className="mod-tag-inline">{module}</span>}
+          {module ? <span className="mod-tag-inline">{module}</span> : null}
         </div>
-        <button type="button" className="copy-btn" data-target={id} onClick={handleCopy}>
-          {copied ? 'copied!' : 'copy'}
+        <button
+          type="button"
+          className="ui-btn ui-btn-ghost copy-btn"
+          onClick={handleCopy}
+          aria-label={copied ? 'Copied playbook to clipboard' : `Copy ${name}`}
+        >
+          {copied ? 'Copied' : 'Copy'}
         </button>
       </div>
-      <pre id={id}>{playbook}</pre>
+      <pre>{playbook}</pre>
     </div>
   );
 }
