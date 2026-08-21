@@ -81,7 +81,7 @@ export function ConfirmDialog({
           <button
             ref={cancelRef}
             type="button"
-            className="confirm-dialog-cancel"
+            className="ui-btn ui-btn-secondary"
             onClick={onCancel}
             disabled={loading}
           >
@@ -89,7 +89,7 @@ export function ConfirmDialog({
           </button>
           <button
             type="button"
-            className={`confirm-dialog-confirm${tone === 'danger' ? ' danger' : ''}`}
+            className={`ui-btn ${tone === 'danger' ? 'ui-btn-danger' : 'ui-btn-primary'}`}
             onClick={onConfirm}
             disabled={loading}
           >

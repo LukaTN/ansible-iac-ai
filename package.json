@@ -7,6 +7,7 @@
   "scripts": {
     "postinstall": "npm install --prefix frontend",
     "dev": "npm run dev --prefix frontend",
+    "dev:design": "npm run dev:design --prefix frontend",
     "build": "npm run build --prefix frontend",
     "preview": "npm run preview --prefix frontend"
   }

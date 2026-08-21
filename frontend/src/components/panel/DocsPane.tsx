@@ -2,7 +2,10 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useAuth } from '@/app/providers/AuthProvider';
 import { usePanel } from '@/app/providers/PanelProvider';
 import { api } from '@/lib/api';
+import { isDesignMode } from '@/lib/designMode';
 import type { DocsModuleHealth, RollbackVersion } from '@/lib/types';
+import { mockChangedModules, mockFailedScrapeLines, mockScrapeLogLines } from '@/mocks/data';
+import { useDesignModeState } from '@/design-mode/useDesignModeState';
 
 function DocCard({
   title,
@@ -49,6 +52,7 @@ function pillClass(kind: string) {
 export function DocsPane() {
   const { isAdmin } = useAuth();
   const { tab, connectDocsStream, closeDocsStream } = usePanel();
+  const dm = useDesignModeState();
   const [generatedAt, setGeneratedAt] = useState('—');
   const [totalMods, setTotalMods] = useState('—');
   const [health, setHealth] = useState<DocsModuleHealth[]>([]);
@@ -116,6 +120,38 @@ export function DocsPane() {
       loadSessions();
     }
   }, [tab, loadStatus, loadRollback, loadSessions]);
+
+  useEffect(() => {
+    if (!isDesignMode()) return;
+    const apply = () => {
+      const scene = dm.docsScene;
+      void loadStatus();
+      void loadRollback();
+      void loadSessions();
+      if (scene === 'needsUpdate') {
+        setChanged(mockChangedModules);
+        setChangedSlugs(mockChangedModules.map((c) => c.slug));
+        setLiveStatus('idle');
+        setTerminal('');
+      } else if (scene === 'scraping') {
+        setChanged(mockChangedModules);
+        setChangedSlugs(mockChangedModules.map((c) => c.slug));
+        setLiveStatus('streaming');
+        setTerminal(mockScrapeLogLines.filter((line) => line !== 'STREAM_END').join('\n'));
+      } else if (scene === 'failed') {
+        setChanged([]);
+        setChangedSlugs([]);
+        setLiveStatus('failed');
+        setTerminal(mockFailedScrapeLines.filter((line) => line !== 'STREAM_END').join('\n'));
+      } else {
+        setChanged([]);
+        setChangedSlugs([]);
+        setLiveStatus(scene === 'empty' ? 'idle' : 'ok');
+        setTerminal('');
+      }
+    };
+    apply();
+  }, [dm.docsScene, loadStatus, loadRollback, loadSessions]);
 
   useEffect(() => {
     const el = terminalRef.current;

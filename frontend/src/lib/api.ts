@@ -1,3 +1,6 @@
+import { mockApi } from '@/mocks/mockApi';
+import { ApiError } from './apiError';
+import { isDesignMode } from './designMode';
 import type {
   AuthConfig,
   AuthProfile,
@@ -12,19 +15,7 @@ import type {
   Thread,
 } from './types';
 
-class ApiError extends Error {
-  status: number;
-  code?: string;
-  body: unknown;
-
-  constructor(message: string, status: number, body: unknown) {
-    super(message);
-    this.name = 'ApiError';
-    this.status = status;
-    this.code = (body as { code?: string })?.code;
-    this.body = body;
-  }
-}
+export { ApiError };
 
 async function parse(res: Response): Promise<unknown> {
   const txt = await res.text();
@@ -64,6 +55,7 @@ function readCsrfCookie(): string | null {
 
 /** Ensure a CSRF cookie exists (or force-refresh it) before a write. */
 export async function primeCsrf(force = false): Promise<void> {
+  if (isDesignMode()) return;
   if (!force && readCsrfCookie()) return;
   try {
     await fetch('/api/auth/csrf', {
@@ -139,7 +131,7 @@ function postJson<T>(url: string, payload?: unknown, init?: RequestInit): Promis
   });
 }
 
-export const api = {
+const liveApi = {
   auth: {
     config: () => json<AuthConfig>('/api/auth/config'),
     me: () => json<AuthState>('/api/auth/me'),
@@ -205,4 +197,4 @@ export const api = {
   },
 };
 
-export { ApiError };
+export const api = isDesignMode() ? mockApi : liveApi;

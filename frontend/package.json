@@ -8,6 +8,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:design": "vite --mode design",
     "build": "tsc --noEmit && vite build",
     "lint": "eslint src",
     "preview": "vite preview"

@@ -3,6 +3,9 @@ import { useAuth } from '@/app/providers/AuthProvider';
 import { useOnboarding } from '@/app/providers/OnboardingProvider';
 import { AccountPanel } from '@/components/auth/AccountPanel';
 import { BookIcon, ChevronIcon, LogoutIcon, UserIcon } from '@/components/ui/Icons';
+import { isDesignMode } from '@/lib/designMode';
+import { useDesignModeState } from '@/design-mode/useDesignModeState';
+import { setDesignModeState } from '@/mocks/store';
 
 function initials(name: string): string {
   const parts = name.trim().split(/[\s._-]+/).filter(Boolean);
@@ -14,6 +17,7 @@ function initials(name: string): string {
 export function AccountMenu({ placement = 'up' }: { placement?: 'up' | 'down' }) {
   const { user, isAdmin, logout } = useAuth();
   const { openGuide } = useOnboarding();
+  const dm = useDesignModeState();
   const [open, setOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -35,6 +39,12 @@ export function AccountMenu({ placement = 'up' }: { placement?: 'up' | 'down' })
   }, [open]);
 
   if (!user) return null;
+
+  const showAccount = accountOpen || (isDesignMode() && dm.overlay === 'account');
+  const closeAccount = () => {
+    setAccountOpen(false);
+    if (isDesignMode()) setDesignModeState({ overlay: 'none' });
+  };
 
   return (
     <>
@@ -96,7 +106,7 @@ export function AccountMenu({ placement = 'up' }: { placement?: 'up' | 'down' })
         ) : null}
       </div>
 
-      {accountOpen ? <AccountPanel onClose={() => setAccountOpen(false)} /> : null}
+      {showAccount ? <AccountPanel onClose={closeAccount} /> : null}
     </>
   );
 }

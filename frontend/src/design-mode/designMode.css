@@ -1,0 +1,134 @@
+.dm-root {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 10000;
+  width: 292px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #12141a;
+  color: #e8e4d8;
+  border-left: 1px solid #3d3420;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: 12px;
+  line-height: 1.35;
+  box-shadow: -8px 0 24px rgb(0 0 0 / 0.35);
+}
+
+.dm-root.collapsed {
+  width: auto;
+  height: auto;
+  top: 12px;
+  right: 12px;
+  padding: 0;
+  border: 1px solid #c9a227;
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 0.35);
+  cursor: pointer;
+  appearance: none;
+  font: inherit;
+  text-align: left;
+}
+
+.dm-root.collapsed .dm-head {
+  pointer-events: none;
+}
+
+.dm-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: #c9a227;
+  color: #1a1408;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+
+.dm-toggle {
+  margin-left: auto;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0 2px;
+}
+
+.dm-body {
+  overflow: auto;
+  padding: 10px 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dm-section h3 {
+  margin: 0 0 6px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #c9a227;
+}
+
+.dm-section label,
+.dm-hint {
+  display: block;
+  margin: 0 0 4px;
+  color: #9a9488;
+}
+
+.dm-section select,
+.dm-section button.dm-chip {
+  width: 100%;
+  margin-bottom: 4px;
+  padding: 5px 8px;
+  border-radius: 4px;
+  border: 1px solid #3d3a32;
+  background: #1c1f27;
+  color: #e8e4d8;
+  font: inherit;
+}
+
+.dm-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.dm-chips button,
+.dm-section button.dm-chip {
+  width: auto;
+  margin: 0;
+  cursor: pointer;
+}
+
+.dm-chips button.active,
+.dm-section select:focus {
+  border-color: #c9a227;
+  outline: none;
+}
+
+.dm-chips button.active {
+  background: #3d3420;
+  color: #f5e6b8;
+}
+
+.dm-hint {
+  font-size: 11px;
+  color: #7a756c;
+  margin-top: 4px;
+}
+
+html.design-mode {
+  padding-right: 292px;
+}
+
+html.design-mode.dm-inspector-collapsed {
+  padding-right: 0;
+}

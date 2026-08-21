@@ -7,6 +7,9 @@ import { stepLabel } from '@/lib/generationSteps';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { BookIcon, PlusIcon, SearchIcon, StatsIcon, TrashIcon } from '@/components/ui/Icons';
 import { relTime } from '@/lib/time';
+import { isDesignMode } from '@/lib/designMode';
+import { useDesignModeState } from '@/design-mode/useDesignModeState';
+import { setDesignModeState } from '@/mocks/store';
 
 type DeletePrompt =
   | { kind: 'one'; id: number; title: string }
@@ -17,8 +20,17 @@ export function ThreadSidebar() {
   const { filter, setFilter, filteredItems, items, deleteThread, clearAllThreads } = useThreads();
   const { openPanel, loadOverview } = usePanel();
   const { generationProgress } = useSocket();
+  const dm = useDesignModeState();
   const [deletePrompt, setDeletePrompt] = useState<DeletePrompt | null>(null);
   const [deleting, setDeleting] = useState(false);
+
+  const inspectorPrompt: DeletePrompt | null =
+    isDesignMode() && dm.overlay === 'confirmDelete' && items[0]
+      ? { kind: 'one', id: items[0].id, title: items[0].title || 'New chat' }
+      : isDesignMode() && dm.overlay === 'confirmClear' && items.length
+        ? { kind: 'all', count: items.length }
+        : null;
+  const activePrompt = deletePrompt ?? inspectorPrompt;
 
   const requestDelete = (e: React.MouseEvent, id: number, title: string) => {
     e.stopPropagation();
@@ -33,38 +45,40 @@ export function ThreadSidebar() {
   const closeDialog = () => {
     if (deleting) return;
     setDeletePrompt(null);
+    if (isDesignMode()) setDesignModeState({ overlay: 'none' });
   };
 
   const confirmDelete = async () => {
-    if (!deletePrompt || deleting) return;
+    if (!activePrompt || deleting) return;
     setDeleting(true);
     try {
-      if (deletePrompt.kind === 'one') {
-        await deleteThread(deletePrompt.id);
-        if (currentId === deletePrompt.id) newThread();
+      if (activePrompt.kind === 'one') {
+        await deleteThread(activePrompt.id);
+        if (currentId === activePrompt.id) newThread();
       } else {
         await clearAllThreads();
         newThread();
         await loadOverview();
       }
       setDeletePrompt(null);
+      if (isDesignMode()) setDesignModeState({ overlay: 'none' });
     } finally {
       setDeleting(false);
     }
   };
 
   const dialogProps =
-    deletePrompt?.kind === 'one'
+    activePrompt?.kind === 'one'
       ? {
           title: 'Delete this chat?',
           description: 'This conversation and its playbooks will be permanently removed.',
-          detail: deletePrompt.title,
+          detail: activePrompt.title,
           confirmLabel: 'Delete chat',
         }
-      : deletePrompt?.kind === 'all'
+      : activePrompt?.kind === 'all'
         ? {
             title: 'Delete all chats?',
-            description: `You're about to remove ${deletePrompt.count} conversation${deletePrompt.count === 1 ? '' : 's'}. This cannot be undone.`,
+            description: `You're about to remove ${activePrompt.count} conversation${activePrompt.count === 1 ? '' : 's'}. This cannot be undone.`,
             confirmLabel: 'Delete all',
           }
         : null;
@@ -169,7 +183,7 @@ export function ThreadSidebar() {
 
       {dialogProps ? (
         <ConfirmDialog
-          open={Boolean(deletePrompt)}
+          open={Boolean(activePrompt)}
           tone="danger"
           loading={deleting}
           onCancel={closeDialog}

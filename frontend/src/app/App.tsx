@@ -10,6 +10,9 @@ import { SidePanel } from '@/components/panel/SidePanel';
 import { LoginPage } from '@/components/auth/LoginPage';
 import { ForcePasswordChange } from '@/components/auth/AccountPanel';
 import { OnboardingPage } from '@/components/onboarding/OnboardingPage';
+import { isDesignMode } from '@/lib/designMode';
+import { DesignModeToolbar } from '@/design-mode/DesignModeToolbar';
+import { DesignModeWorkspace } from '@/design-mode/DesignModeWorkspace';
 
 /**
  * Persistent shell: the header and footer never change — only the main
@@ -62,6 +65,7 @@ function AuthGate() {
       <OnboardingProvider>
         <AppShell />
         <OnboardingPage />
+        {isDesignMode() ? <DesignModeWorkspace /> : null}
       </OnboardingProvider>
     </AppProvider>
   );
@@ -70,6 +74,7 @@ function AuthGate() {
 export function App() {
   return (
     <AuthProvider>
+      {isDesignMode() ? <DesignModeToolbar /> : null}
       <AuthGate />
     </AuthProvider>
   );

@@ -1,12 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '@/app/providers/AuthProvider';
 import { formatAuthError } from '@/lib/authErrors';
+import { isDesignMode } from '@/lib/designMode';
 import { CodeBracketsIcon } from '@/components/ui/Icons';
+import { useDesignModeState } from '@/design-mode/useDesignModeState';
+import { setDesignModeState } from '@/mocks/store';
 
 type Mode = 'login' | 'register';
 
 export function LoginPage() {
   const { login, register, sessionExpired, authConfig } = useAuth();
+  const dm = useDesignModeState();
   const [mode, setMode] = useState<Mode>('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -22,14 +26,17 @@ export function LoginPage() {
 
   useEffect(() => {
     emailRef.current?.focus();
-  }, [mode]);
+  }, [mode, dm.screen]);
 
   const switchMode = (next: Mode) => {
-    setMode(next);
+    if (isDesignMode()) setDesignModeState({ screen: next, persona: 'anonymous' });
+    else setMode(next);
     setError(null);
     setNotice(null);
     setPassword('');
   };
+
+  const isRegister = isDesignMode() ? dm.screen === 'register' : mode === 'register';
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,13 +45,14 @@ export function LoginPage() {
     setNotice(null);
     setBusy(true);
     try {
-      if (mode === 'login') {
+      if (!isRegister) {
         await login(email.trim(), password);
       } else {
         const pending = await register(email.trim(), password, displayName.trim() || undefined);
         if (pending) {
           setNotice(pending);
           setMode('login');
+          if (isDesignMode()) setDesignModeState({ screen: 'login', persona: 'anonymous' });
           setPassword('');
         }
       }
@@ -56,7 +64,15 @@ export function LoginPage() {
     }
   };
 
-  const isRegister = mode === 'register';
+  const showBusy = busy || (isDesignMode() && dm.loginBusy);
+  const showError =
+    error ||
+    (isDesignMode() && dm.loginError ? 'Email or password is incorrect. Check both and try again.' : null);
+  const showNotice =
+    notice ||
+    (isDesignMode() && dm.loginNotice
+      ? 'Registration received. An administrator must activate the account before it can be used.'
+      : null);
 
   return (
     <div className="auth-screen">
@@ -83,15 +99,15 @@ export function LoginPage() {
           </div>
         ) : null}
 
-        {notice ? (
+        {showNotice ? (
           <div className="auth-alert ok" role="status">
-            {notice}
+            {showNotice}
           </div>
         ) : null}
 
-        {error ? (
+        {showError ? (
           <div className="auth-alert err" role="alert">
-            {error}
+            {showError}
           </div>
         ) : null}
 
@@ -107,7 +123,7 @@ export function LoginPage() {
                   placeholder="Optional"
                   autoComplete="name"
                   maxLength={120}
-                  disabled={busy}
+                  disabled={showBusy}
                 />
               </label>
             ) : null}
@@ -123,7 +139,7 @@ export function LoginPage() {
                 autoComplete="username"
                 required
                 maxLength={255}
-                disabled={busy}
+                disabled={showBusy}
               />
             </label>
 
@@ -136,7 +152,7 @@ export function LoginPage() {
                 placeholder={isRegister ? 'At least 12 characters' : '••••••••••••'}
                 autoComplete={isRegister ? 'new-password' : 'current-password'}
                 required
-                disabled={busy}
+                disabled={showBusy}
               />
             </label>
 
@@ -147,8 +163,8 @@ export function LoginPage() {
               </p>
             ) : null}
 
-            <button type="submit" className="auth-submit" disabled={busy}>
-              {busy ? (
+            <button type="submit" className="auth-submit" disabled={showBusy}>
+              {showBusy ? (
                 <>
                   <span className="auth-spinner" aria-hidden="true" />
                   {isRegister ? 'Creating account...' : 'Signing in...'}
@@ -171,14 +187,14 @@ export function LoginPage() {
             {isRegister ? (
               <>
                 Already have an account?{' '}
-                <button type="button" onClick={() => switchMode('login')} disabled={busy}>
+                <button type="button" onClick={() => switchMode('login')} disabled={showBusy}>
                   Sign in
                 </button>
               </>
             ) : (
               <>
                 No account yet?{' '}
-                <button type="button" onClick={() => switchMode('register')} disabled={busy}>
+                <button type="button" onClick={() => switchMode('register')} disabled={showBusy}>
                   Create one
                 </button>
               </>
