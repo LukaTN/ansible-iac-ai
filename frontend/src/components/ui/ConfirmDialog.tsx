@@ -65,12 +65,12 @@ export function ConfirmDialog({
           {tone === 'danger' ? <TrashIcon size={18} /> : null}
         </div>
 
-        <div className="confirm-dialog-body">
+        <div className="confirm-dialog-body" id={description || detail ? descId : undefined}>
           <h2 id={titleId} className="confirm-dialog-title">
             {title}
           </h2>
           {description ? (
-            <p id={descId} className="confirm-dialog-desc">
+            <p className="confirm-dialog-desc">
               {description}
             </p>
           ) : null}
@@ -81,7 +81,7 @@ export function ConfirmDialog({
           <button
             ref={cancelRef}
             type="button"
-            className="confirm-dialog-cancel"
+            className="ui-btn ui-btn-secondary"
             onClick={onCancel}
             disabled={loading}
           >
@@ -89,7 +89,7 @@ export function ConfirmDialog({
           </button>
           <button
             type="button"
-            className={`confirm-dialog-confirm${tone === 'danger' ? ' danger' : ''}`}
+            className={`ui-btn ${tone === 'danger' ? 'ui-btn-danger' : 'ui-btn-primary'}`}
             onClick={onConfirm}
             disabled={loading}
           >

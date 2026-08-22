@@ -5,7 +5,7 @@ export function ModuleBarChart({ stats }: { stats: StatsPayload | null }) {
   const maxC = mods[0]?.count || 1;
 
   if (!mods.length) {
-    return <div className="no-data">No module usage recorded yet</div>;
+    return <div className="ui-empty">No module usage recorded yet</div>;
   }
 
   return (

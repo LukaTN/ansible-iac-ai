@@ -20,15 +20,15 @@ export function AppFooter() {
           className={`socket-indicator ${connected ? 'connected' : 'disconnected'}`}
           aria-hidden
         />
-        <span>{connected ? 'Live sync' : 'Reconnecting...'}</span>
+        <span role="status">{connected ? 'Live' : 'Reconnecting'}</span>
       </div>
 
       <div className="app-footer-group app-footer-rag" title="Knowledge base index">
         <BookIcon size={11} />
         <span>
           {ragReady
-            ? `${ragStatus.chunks.toLocaleString()} doc chunks indexed`
-            : 'Docs index offline'}
+            ? `${ragStatus.chunks.toLocaleString()} chunks`
+            : 'Index offline'}
         </span>
       </div>
 

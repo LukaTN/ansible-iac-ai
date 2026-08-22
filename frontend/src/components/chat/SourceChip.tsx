@@ -24,6 +24,7 @@ function SourceChipItem({ ref, badge }: { ref: ModuleRefSource; badge?: string }
         className="source-head"
         role="button"
         tabIndex={0}
+        aria-expanded={open}
         onClick={() => setOpen(!open)}
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') setOpen(!open);

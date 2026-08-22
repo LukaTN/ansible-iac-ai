@@ -1,4 +1,6 @@
 import { io, Socket } from 'socket.io-client';
+import { isDesignMode } from './designMode';
+import { getMockSocket, resetMockSocket } from '@/mocks/mockSocket';
 
 export type GenerationStep =
   | 'planning'
@@ -38,6 +40,9 @@ export interface GenerationFailed {
 let socket: Socket | null = null;
 
 export function getSocket(): Socket {
+  if (isDesignMode()) {
+    return getMockSocket() as unknown as Socket;
+  }
   if (!socket) {
     // Same-origin on purpose, in dev via the Vite proxy: the server only
     // accepts authenticated sockets, and a cross-origin connection would
@@ -61,6 +66,10 @@ export function getSocket(): Socket {
  * events.
  */
 export function disconnectSocket(): void {
+  if (isDesignMode()) {
+    resetMockSocket();
+    return;
+  }
   if (socket) {
     socket.removeAllListeners();
     socket.disconnect();

@@ -1,46 +1,27 @@
 import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from 'react';
 import { cn } from '@/lib/cn';
 
-type ButtonVariant = 'primary' | 'ghost' | 'danger' | 'icon';
+type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'icon';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   icon?: ReactNode;
 }
 
-const variantClasses: Record<ButtonVariant, string> = {
-  primary:
-    'bg-[var(--a1)] text-white font-bold hover:bg-[var(--a1-hover)] hover:-translate-y-px disabled:opacity-40',
-  ghost:
-    'bg-transparent border border-[var(--border2)] text-[var(--muted)] font-medium hover:border-[var(--a2)] hover:text-[var(--a2)] disabled:opacity-40',
-  danger:
-    'bg-transparent border border-[var(--border)] text-[var(--muted)] hover:border-[var(--err)] hover:text-[var(--err)]',
-  icon:
-    'bg-transparent border border-[var(--border)] text-[var(--muted)] hover:text-[var(--a1)] hover:border-[var(--a1)]',
+const variantClass: Record<ButtonVariant, string> = {
+  primary: 'ui-btn-primary',
+  secondary: 'ui-btn-secondary',
+  ghost: 'ui-btn-ghost',
+  danger: 'ui-btn-danger',
+  icon: 'ui-btn-icon',
 };
 
 const ButtonRoot = forwardRef<HTMLButtonElement, ButtonProps>(function ButtonRoot(
-  {
-    variant = 'primary',
-    icon,
-    className,
-    children,
-    ...props
-  },
+  { variant = 'primary', icon, className, children, type = 'button', ...props },
   ref,
 ) {
   return (
-    <button
-      ref={ref}
-      type="button"
-      className={cn(
-        'inline-flex items-center justify-center gap-1.5 rounded-lg px-3.5 py-2 text-sm transition-all cursor-pointer disabled:cursor-not-allowed',
-        variant === 'icon' && 'h-7 w-7 rounded-md p-0',
-        variantClasses[variant],
-        className,
-      )}
-      {...props}
-    >
+    <button ref={ref} type={type} className={cn('ui-btn', variantClass[variant], className)} {...props}>
       {icon}
       {children}
     </button>
@@ -55,6 +36,10 @@ const Ghost = forwardRef<HTMLButtonElement, Omit<ButtonProps, 'variant'>>(functi
   return <ButtonRoot ref={ref} variant="ghost" {...props} />;
 });
 
+function Secondary(props: Omit<ButtonProps, 'variant'>) {
+  return <ButtonRoot variant="secondary" {...props} />;
+}
+
 function Danger(props: Omit<ButtonProps, 'variant'>) {
   return <ButtonRoot variant="danger" {...props} />;
 }
@@ -63,4 +48,4 @@ function Icon(props: Omit<ButtonProps, 'variant'>) {
   return <ButtonRoot variant="icon" {...props} />;
 }
 
-export const Button = Object.assign(ButtonRoot, { Primary, Ghost, Danger, Icon });
+export const Button = Object.assign(ButtonRoot, { Primary, Secondary, Ghost, Danger, Icon });

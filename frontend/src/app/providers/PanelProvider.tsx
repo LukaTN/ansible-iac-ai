@@ -10,6 +10,8 @@ import {
 } from 'react';
 import type { PanelTab, RagStatus, StatsPayload } from '@/lib/types';
 import { api } from '@/lib/api';
+import { isDesignMode } from '@/lib/designMode';
+import { startMockDocsStream } from '@/mocks/docsStream';
 
 interface PanelContextValue {
   tab: PanelTab;
@@ -18,6 +20,7 @@ interface PanelContextValue {
   ragStatus: RagStatus | null;
   setTab: (tab: PanelTab) => void;
   toggleCollapsed: () => void;
+  collapsePanel: () => void;
   openPanel: (tab: PanelTab) => void;
   loadOverview: () => Promise<void>;
   checkRagStatus: () => Promise<void>;
@@ -32,7 +35,7 @@ export function PanelProvider({ children }: { children: ReactNode }) {
   const [collapsed, setCollapsed] = useState(true);
   const [stats, setStats] = useState<StatsPayload | null>(null);
   const [ragStatus, setRagStatus] = useState<RagStatus | null>(null);
-  const evtSourceRef = useRef<EventSource | null>(null);
+  const evtSourceRef = useRef<{ close: () => void } | null>(null);
 
   const closeDocsStream = useCallback(() => {
     evtSourceRef.current?.close();
@@ -53,6 +56,11 @@ export function PanelProvider({ children }: { children: ReactNode }) {
       if (next) closeDocsStream();
       return next;
     });
+  }, [closeDocsStream]);
+
+  const collapsePanel = useCallback(() => {
+    setCollapsed(true);
+    closeDocsStream();
   }, [closeDocsStream]);
 
   const openPanel = useCallback(
@@ -84,6 +92,10 @@ export function PanelProvider({ children }: { children: ReactNode }) {
   const connectDocsStream = useCallback(
     (sessionId: number, onLine: (line: string) => void) => {
       closeDocsStream();
+      if (isDesignMode()) {
+        evtSourceRef.current = startMockDocsStream(onLine);
+        return;
+      }
       const es = new EventSource(api.docs.streamUrl(sessionId));
       evtSourceRef.current = es;
       es.onmessage = (ev) => {
@@ -110,6 +122,7 @@ export function PanelProvider({ children }: { children: ReactNode }) {
       ragStatus,
       setTab,
       toggleCollapsed,
+      collapsePanel,
       openPanel,
       loadOverview,
       checkRagStatus,
@@ -123,6 +136,7 @@ export function PanelProvider({ children }: { children: ReactNode }) {
       ragStatus,
       setTab,
       toggleCollapsed,
+      collapsePanel,
       openPanel,
       loadOverview,
       checkRagStatus,

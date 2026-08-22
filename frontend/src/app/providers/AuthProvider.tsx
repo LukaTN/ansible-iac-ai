@@ -10,6 +10,8 @@ import {
 import { api, primeCsrf, setUnauthorizedHandler } from '@/lib/api';
 import { disconnectSocket } from '@/lib/socket';
 import type { AuthConfig, AuthUser } from '@/lib/types';
+import { isDesignMode } from '@/lib/designMode';
+import { getDesignModeState, subscribeDesignMode } from '@/mocks/store';
 
 interface AuthContextValue {
   /** True until the initial session probe resolves; render nothing user-visible before then. */
@@ -78,6 +80,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => {
       cancelled = true;
     };
+  }, []);
+
+  useEffect(() => {
+    if (!isDesignMode()) return;
+    return subscribeDesignMode(() => {
+      void api.auth.config().then(setAuthConfig).catch(() => {});
+      void api.auth
+        .me()
+        .then((next) => {
+          setUser(next.user);
+          setSessionExpired(getDesignModeState().sessionExpired);
+        })
+        .catch(() => setUser(null));
+    });
   }, []);
 
   const login = useCallback(async (email: string, password: string) => {

@@ -40,7 +40,7 @@ export function ValidationBreakdown({ stats }: { stats: StatsPayload | null }) {
   const sum = segments.reduce((acc, s) => acc + s.value, 0);
 
   if (!total) {
-    return <div className="no-data">No playbooks generated yet</div>;
+    return <div className="ui-empty">No playbooks generated yet</div>;
   }
 
   return (

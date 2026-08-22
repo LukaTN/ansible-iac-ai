@@ -118,6 +118,16 @@ export function HelpIcon({ size = 14 }: { size?: number }) {
   );
 }
 
+export function MenuIcon({ size = 14 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+      <line x1="4" y1="7" x2="20" y2="7" />
+      <line x1="4" y1="12" x2="20" y2="12" />
+      <line x1="4" y1="17" x2="20" y2="17" />
+    </svg>
+  );
+}
+
 export function ChevronIcon({ size = 13, open }: { size?: number; open?: boolean }) {
   return (
     <svg

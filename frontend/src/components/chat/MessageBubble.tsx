@@ -17,6 +17,13 @@ const TOOL_LABELS: Record<string, string> = {
   local_observability_guard: 'Guardrail',
 };
 
+function outcomeClass(m: ChatMessage): string {
+  const text = m.content || '';
+  if (/^Generation failed\b/i.test(text)) return ' outcome-failed';
+  if (/^Generation stopped\b/i.test(text)) return ' outcome-cancelled';
+  return '';
+}
+
 function isAwaitingUser(m: ChatMessage): boolean {
   if (m.rag_meta?.awaiting_user) return true;
   return (
@@ -125,7 +132,7 @@ export function MessageBubble({ message }: { message: ChatMessage }) {
         <CodeBracketsIcon />
       </div>
       <div className="msg-body">
-        <div className={`msg-bubble assistant-bubble${awaiting ? ' awaiting' : ''}`}>
+        <div className={`msg-bubble assistant-bubble${awaiting ? ' awaiting' : ''}${outcomeClass(message)}`}>
           {renderMarkdown(message.content || '')}
         </div>
 

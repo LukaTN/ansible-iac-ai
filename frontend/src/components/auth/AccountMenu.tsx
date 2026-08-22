@@ -3,6 +3,9 @@ import { useAuth } from '@/app/providers/AuthProvider';
 import { useOnboarding } from '@/app/providers/OnboardingProvider';
 import { AccountPanel } from '@/components/auth/AccountPanel';
 import { BookIcon, ChevronIcon, LogoutIcon, UserIcon } from '@/components/ui/Icons';
+import { isDesignMode } from '@/lib/designMode';
+import { useDesignModeState } from '@/design-mode/useDesignModeState';
+import { setDesignModeState } from '@/mocks/store';
 
 function initials(name: string): string {
   const parts = name.trim().split(/[\s._-]+/).filter(Boolean);
@@ -14,6 +17,7 @@ function initials(name: string): string {
 export function AccountMenu({ placement = 'up' }: { placement?: 'up' | 'down' }) {
   const { user, isAdmin, logout } = useAuth();
   const { openGuide } = useOnboarding();
+  const dm = useDesignModeState();
   const [open, setOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -36,6 +40,12 @@ export function AccountMenu({ placement = 'up' }: { placement?: 'up' | 'down' })
 
   if (!user) return null;
 
+  const showAccount = accountOpen || (isDesignMode() && dm.overlay === 'account');
+  const closeAccount = () => {
+    setAccountOpen(false);
+    if (isDesignMode()) setDesignModeState({ overlay: 'none' });
+  };
+
   return (
     <>
       <div className={`account${placement === 'down' ? ' below' : ''}`} ref={wrapRef}>
@@ -45,6 +55,7 @@ export function AccountMenu({ placement = 'up' }: { placement?: 'up' | 'down' })
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-haspopup="menu"
+          aria-label={`Account menu, ${user.display_name || user.email}, ${isAdmin ? 'Administrator' : 'Member'}`}
         >
           <span className="account-avatar">{initials(user.display_name || user.email)}</span>
           <span className="account-id">
@@ -80,6 +91,7 @@ export function AccountMenu({ placement = 'up' }: { placement?: 'up' | 'down' })
               <BookIcon />
               App guide &amp; tour
             </button>
+            <div className="account-menu-sep" role="separator" />
             <button
               type="button"
               role="menuitem"
@@ -96,7 +108,7 @@ export function AccountMenu({ placement = 'up' }: { placement?: 'up' | 'down' })
         ) : null}
       </div>
 
-      {accountOpen ? <AccountPanel onClose={() => setAccountOpen(false)} /> : null}
+      {showAccount ? <AccountPanel onClose={closeAccount} /> : null}
     </>
   );
 }

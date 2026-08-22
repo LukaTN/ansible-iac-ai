@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useAuth } from '@/app/providers/AuthProvider';
 import { api } from '@/lib/api';
 import { formatAuthError } from '@/lib/authErrors';
 import type { AuthProfile, AuthUser } from '@/lib/types';
+import { CodeBracketsIcon } from '@/components/ui/Icons';
 
 function formatWhen(iso: string | null | undefined): string {
   if (!iso) return '—';
@@ -20,6 +21,7 @@ export function AccountPanel({ onClose }: { onClose: () => void }) {
   const { user, applyUser, authConfig } = useAuth();
   const [profile, setProfile] = useState<AuthProfile | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const titleId = useId();
 
   useEffect(() => {
     let cancelled = false;
@@ -65,15 +67,12 @@ export function AccountPanel({ onClose }: { onClose: () => void }) {
         className="dossier"
         role="dialog"
         aria-modal="true"
-        aria-label="Account"
+        aria-labelledby={titleId}
         onClick={(e) => e.stopPropagation()}
       >
         <header className="dossier-head">
-          <div>
-            <p className="dossier-kicker">Personnel file</p>
-            <h2>Account</h2>
-          </div>
-          <button type="button" className="dossier-close" onClick={onClose} aria-label="Close">
+          <h2 id={titleId}>Account</h2>
+          <button type="button" className="ui-btn ui-btn-ghost dossier-close" onClick={onClose}>
             Close
           </button>
         </header>
@@ -259,8 +258,17 @@ export function ChangePasswordForm({
           disabled={busy || Boolean(done)}
         />
       </label>
-      <button type="submit" className="auth-submit" disabled={busy || Boolean(done)}>
-        {busy ? 'Updating...' : forced ? 'Set password and continue' : 'Update password'}
+      <button type="submit" className="ui-btn ui-btn-primary auth-submit" disabled={busy || Boolean(done)}>
+        {busy ? (
+          <>
+            <span className="auth-spinner" aria-hidden="true" />
+            Updating...
+          </>
+        ) : forced ? (
+          'Set password and continue'
+        ) : (
+          'Update password'
+        )}
       </button>
     </form>
   );
@@ -272,7 +280,15 @@ export function ForcePasswordChange() {
   return (
     <div className="auth-screen">
       <div className="auth-card">
-        <p className="dossier-kicker">First sign-in</p>
+        <div className="auth-brand">
+          <span className="app-header-logo" aria-hidden>
+            <CodeBracketsIcon size={15} />
+          </span>
+          <span className="app-header-name">
+            <span>Ansible</span>AI
+          </span>
+        </div>
+        <p className="auth-kicker">First sign-in</p>
         <h1 className="auth-heading">Set your password</h1>
         <p className="auth-sub">
           An administrator created this account with a temporary password. Choose a new one

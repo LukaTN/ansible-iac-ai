@@ -104,10 +104,6 @@ export function AgentThinking({ state }: AgentThinkingProps) {
 
       <div className="msg-body">
         <div className="at-card">
-          <div className="at-dots" aria-hidden />
-          <div className="at-shimmer" aria-hidden />
-
-          {/* Header */}
           <div className="at-hdr">
             <div className="at-hdr-left">
               <span className="at-title">AnsibleAI</span>
@@ -131,38 +127,20 @@ export function AgentThinking({ state }: AgentThinkingProps) {
             role="img"
             aria-label={`Pipeline: ${phaseLabel}`}
           >
-            <defs>
-              <filter id="at-glow">
-                <feGaussianBlur in="SourceGraphic" stdDeviation="3" />
-              </filter>
-            </defs>
-
-            {/* Connections */}
             {NODE_X.slice(0, -1).map((x, j) => {
               const x1 = x + NODE_R;
               const x2 = NODE_X[j + 1] - NODE_R;
               const done = j + 1 < activeIdx;
               const active = j + 1 === activeIdx;
               return (
-                <g key={`c${j}`}>
-                  {active && (
-                    <line
-                      x1={x1}
-                      y1={NODE_CY}
-                      x2={x2}
-                      y2={NODE_CY}
-                      className="at-conn-glow"
-                      filter="url(#at-glow)"
-                    />
-                  )}
-                  <line
-                    x1={x1}
-                    y1={NODE_CY}
-                    x2={x2}
-                    y2={NODE_CY}
-                    className={`at-conn${done ? ' done' : active ? ' active' : ''}`}
-                  />
-                </g>
+                <line
+                  key={`c${j}`}
+                  x1={x1}
+                  y1={NODE_CY}
+                  x2={x2}
+                  y2={NODE_CY}
+                  className={`at-conn${done ? ' done' : active ? ' active' : ''}`}
+                />
               );
             })}
 
@@ -176,31 +154,9 @@ export function AgentThinking({ state }: AgentThinkingProps) {
                   key={step.key}
                   className={`at-node${done ? ' done' : active ? ' active' : ' pending'}`}
                 >
-                  {active && (
-                    <>
-                      <circle
-                        cx={cx}
-                        cy={NODE_CY}
-                        r={NODE_R + 5}
-                        className="at-node-glow"
-                        filter="url(#at-glow)"
-                      />
-                      <circle cx={cx} cy={NODE_CY} r={NODE_R + 5} className="at-node-ring">
-                        <animate
-                          attributeName="r"
-                          values={`${NODE_R + 4};${NODE_R + 10};${NODE_R + 4}`}
-                          dur="2.2s"
-                          repeatCount="indefinite"
-                        />
-                        <animate
-                          attributeName="opacity"
-                          values="0.5;0;0.5"
-                          dur="2.2s"
-                          repeatCount="indefinite"
-                        />
-                      </circle>
-                    </>
-                  )}
+                  {active ? (
+                    <circle cx={cx} cy={NODE_CY} r={NODE_R + 5} className="at-node-ring" />
+                  ) : null}
                   <circle cx={cx} cy={NODE_CY} r={NODE_R} className="at-node-bg" />
                   {done ? (
                     <text
@@ -244,8 +200,8 @@ export function AgentThinking({ state }: AgentThinkingProps) {
           {/* Terminal stream */}
           <div className="at-terminal">
             <div className="at-term-bar">
-              <span className="at-term-title">AGENT LOG</span>
-              <span className="at-live">● LIVE</span>
+              <span className="at-term-title">Log</span>
+              <span className="at-live">Live</span>
             </div>
             <div className="at-term-body" ref={termRef}>
               {history.map((t) => (
@@ -261,7 +217,6 @@ export function AgentThinking({ state }: AgentThinkingProps) {
                 <span className="at-term-msg now">{displayThought}</span>
               </div>
             </div>
-            <div className="at-scanline" aria-hidden />
           </div>
         </div>
       </div>
