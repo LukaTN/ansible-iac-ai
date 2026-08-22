@@ -28,6 +28,7 @@ ingress:
   enabled: true
   host: ansibleai.lab
   tlsEnabled: false
+  defaultBackendToApi: true
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
 

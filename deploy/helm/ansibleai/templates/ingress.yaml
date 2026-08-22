@@ -21,6 +21,13 @@ spec:
         - {{ .Values.ingress.host | quote }}
       secretName: {{ .Values.ingress.tlsSecretName }}
   {{- end }}
+  {{- if .Values.ingress.defaultBackendToApi }}
+  defaultBackend:
+    service:
+      name: {{ include "ansibleai.fullname" . }}-api
+      port:
+        name: http
+  {{- end }}
   rules:
     - host: {{ .Values.ingress.host | quote }}
       http:

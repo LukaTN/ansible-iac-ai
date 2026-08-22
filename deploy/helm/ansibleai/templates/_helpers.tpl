@@ -136,6 +136,22 @@ capabilities:
     sizeLimit: {{ .Values.tmpfs.homeSize | quote }}
 {{- end }}
 
+{{/* Writable scratch on a read-only root (API and reindex write reports/). */}}
+{{- define "ansibleai.appScratchVolumeMounts" -}}
+- name: scratch
+  mountPath: /app/output
+  subPath: output
+- name: scratch
+  mountPath: /app/reports
+  subPath: reports
+{{- end }}
+
+{{- define "ansibleai.appScratchVolumes" -}}
+- name: scratch
+  emptyDir:
+    sizeLimit: 1Gi
+{{- end }}
+
 {{- define "ansibleai.appImage" -}}
 {{- include "ansibleai.image" (dict "repository" .Values.image.repository "tag" .Values.image.tag "root" .) }}
 {{- end }}

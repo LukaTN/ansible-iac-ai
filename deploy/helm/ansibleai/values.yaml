@@ -127,10 +127,12 @@ worker:
       periodSeconds: 30
       timeoutSeconds: 15
       failureThreshold: 3
+      initialDelaySeconds: 45
     readiness:
       periodSeconds: 20
       timeoutSeconds: 15
       failureThreshold: 3
+      initialDelaySeconds: 30
 
 service:
   type: ClusterIP
@@ -143,6 +145,8 @@ ingress:
   host: ansibleai.lab
   tlsEnabled: false
   tlsSecretName: ansibleai-tls
+  # Staging NodePort: raw IP has Host 192.168.1.x and would 404. Prod stays false.
+  defaultBackendToApi: false
   annotations:
     nginx.ingress.kubernetes.io/affinity: cookie
     nginx.ingress.kubernetes.io/session-cookie-name: ansibleai-upstream
@@ -265,6 +269,8 @@ ollama:
   port: 11434
   endpoint:
     ip: "192.168.1.14"
+  # helm test pod (needs NetworkPolicy selector labels). Off if the laptop is down.
+  helmTest: true
 
 external:
   postgres:

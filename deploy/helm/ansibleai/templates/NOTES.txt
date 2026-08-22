@@ -6,8 +6,19 @@
    ({{ .Values.app.agentModel }} / {{ .Values.app.playbookModel }} pulled).
 
 3. Member UI via ingress-nginx NodePort:
+{{- if .Values.ingress.defaultBackendToApi }}
+   http://{{ .Values.lab.masterIp }}:{{ .Values.lab.ingressNodePort }}
+   http://{{ .Values.lab.workerIp }}:{{ .Values.lab.ingressNodePort }}
+   http://{{ .Values.ingress.host }}:{{ .Values.lab.ingressNodePort }}  (optional /etc/hosts → {{ .Values.lab.masterIp }})
+{{- else }}
    http://{{ .Values.lab.masterIp }}:{{ .Values.lab.ingressNodePort }}   (add Host: {{ .Values.ingress.host }} or /etc/hosts)
    http://{{ .Values.lab.workerIp }}:{{ .Values.lab.ingressNodePort }}
+{{- end }}
+
+   Ollama on the operator laptop must bind 0.0.0.0:{{ .Values.ollama.port }} (not 127.0.0.1).
+   Keep lab IPs stable (DHCP reservation or static): laptop {{ .Values.ollama.endpoint.ip }},
+   master {{ .Values.lab.masterIp }}, worker {{ .Values.lab.workerIp }}, ansible {{ .Values.lab.ansibleControlIp }}.
+   Image tag {{ .Values.image.repository }}:{{ .Values.image.tag }} must include data/parsed (copy before docker build).
 
 4. Watch the rollout (API is not Ready until migrate has created the schema):
 

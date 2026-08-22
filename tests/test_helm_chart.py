@@ -39,6 +39,7 @@ def test_helm_chart_layout_exists() -> None:
         CHART / "templates" / "statefulset-postgres.yaml",
         CHART / "templates" / "keda-scaledobject.yaml",
         CHART / "templates" / "tests" / "test-connection.yaml",
+        CHART / "templates" / "tests" / "test-ollama.yaml",
     ]
     missing = [str(path.relative_to(ROOT)) for path in required if not path.is_file()]
     assert missing == []
@@ -78,6 +79,7 @@ def test_staging_pins_lab_image_and_ollama() -> None:
     assert values["keda"]["enabled"] is False
     assert values["networkPolicy"]["enabled"] is True
     assert values["localPathProvisioner"]["enabled"] is True
+    assert values["ingress"]["defaultBackendToApi"] is True
     helpers = (CHART / "templates" / "_helpers.tpl").read_text(encoding="utf-8")
     assert ".Values.ingress.host" in helpers
     assert "corsOrigins" in helpers
@@ -152,4 +154,12 @@ def test_vendor_images_are_pinned() -> None:
     assert "RAG_PARSED_DIR" in configmap
     reindex = (CHART / "templates" / "cronjob-reindex.yaml").read_text(encoding="utf-8")
     assert "restartPolicy: Never" in reindex
+    assert "ansibleai.appScratchVolumeMounts" in reindex
+    ingress = (CHART / "templates" / "ingress.yaml").read_text(encoding="utf-8")
+    assert "defaultBackendToApi" in ingress
+    assert "defaultBackend" in ingress
+    ollama_test = (CHART / "templates" / "tests" / "test-ollama.yaml").read_text(encoding="utf-8")
+    assert "ollamaBaseUrl" in ollama_test
+    prod = _load_yaml(CHART / "values-prod.yaml")
+    assert prod["ingress"]["defaultBackendToApi"] is False
     assert str(values["postgres"]["image"]["tag"]).startswith("0.")

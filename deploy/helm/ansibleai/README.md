@@ -49,7 +49,7 @@ kubectl rollout status deployment/ansibleai-api -n ansibleai --timeout=10m
 kubectl get pods -n ansibleai
 ```
 
-Open `http://192.168.1.18:30080` (add `ansibleai.lab` to `/etc/hosts` if the Ingress host must match). Override `lab.*` and `ollama.endpoint.ip` in `values-staging.yaml` if the LAN map differs.
+Open `http://192.168.1.18:30080` (staging sets `ingress.defaultBackendToApi` so a raw IP works). `http://ansibleai.lab:30080` still needs `/etc/hosts`. Override `lab.*` and `ollama.endpoint.ip` if the LAN map differs. Ollama must bind `0.0.0.0:11434`. Reserve `.14` / `.18` / `.12` / `.19` so DHCP cannot steal the API address.
 
 First vector index (optional; empty index does not fail `/readyz`):
 

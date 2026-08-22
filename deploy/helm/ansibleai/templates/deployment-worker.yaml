@@ -56,14 +56,14 @@ spec:
             periodSeconds: {{ .Values.worker.probes.liveness.periodSeconds }}
             timeoutSeconds: {{ .Values.worker.probes.liveness.timeoutSeconds }}
             failureThreshold: {{ .Values.worker.probes.liveness.failureThreshold }}
-            initialDelaySeconds: 40
+            initialDelaySeconds: {{ .Values.worker.probes.liveness.initialDelaySeconds }}
           readinessProbe:
             exec:
               command: ["/app/docker/entrypoint.sh", "healthcheck"]
             periodSeconds: {{ .Values.worker.probes.readiness.periodSeconds }}
             timeoutSeconds: {{ .Values.worker.probes.readiness.timeoutSeconds }}
             failureThreshold: {{ .Values.worker.probes.readiness.failureThreshold }}
-            initialDelaySeconds: 20
+            initialDelaySeconds: {{ .Values.worker.probes.readiness.initialDelaySeconds }}
           volumeMounts:
             {{- include "ansibleai.tmpVolumeMounts" . | nindent 12 }}
             - name: data

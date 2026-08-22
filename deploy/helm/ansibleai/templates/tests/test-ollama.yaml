@@ -1,0 +1,41 @@
+{{- if and .Values.ollama.enabled .Values.ollama.helmTest }}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ include "ansibleai.fullname" . }}-test-ollama
+  labels:
+    {{- include "ansibleai.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: helm-test
+  annotations:
+    helm.sh/hook: test
+    ansibleai.io/purpose: "Fail helm test if host Ollama is not reachable (bind 0.0.0.0, laptop on lab LAN)."
+spec:
+  restartPolicy: Never
+  securityContext:
+    {{- include "ansibleai.podSecurityContext" . | nindent 4 }}
+  containers:
+    - name: ollama
+      image: {{ include "ansibleai.appImage" . }}
+      imagePullPolicy: {{ .Values.image.pullPolicy }}
+      args:
+        - exec
+        - python
+        - -c
+        - |
+          import urllib.request
+          url = {{ include "ansibleai.ollamaBaseUrl" . | quote }} + "/api/tags"
+          urllib.request.urlopen(url, timeout=8)
+      securityContext:
+        {{- include "ansibleai.containerSecurityContext" . | nindent 8 }}
+      resources:
+        requests:
+          cpu: 10m
+          memory: 32Mi
+        limits:
+          cpu: 100m
+          memory: 64Mi
+      volumeMounts:
+        {{- include "ansibleai.tmpVolumeMounts" . | nindent 8 }}
+  volumes:
+    {{- include "ansibleai.tmpVolumes" . | nindent 4 }}
+{{- end }}
