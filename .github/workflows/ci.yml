@@ -45,7 +45,9 @@ jobs:
             tests/test_prompt_registry.py \
             tests/test_observability.py
       - name: Mypy (pre-commit scope)
-        run: mypy backend/config.py backend/logging_setup.py backend/models.py backend/app.py backend/auth
+        # app.py / models.py pull logstream and Flask-SQLAlchemy; those stay
+        # follow_imports=silent in pyproject and are gated by pytest instead.
+        run: mypy backend/config.py backend/logging_setup.py backend/auth
 
   lint-frontend:
     runs-on: ubuntu-latest

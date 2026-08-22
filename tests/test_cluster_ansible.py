@@ -34,14 +34,18 @@ def test_ansible_project_layout_exists() -> None:
 
 
 def test_lab_inventory_is_two_node_cluster() -> None:
-    inventory = yaml.safe_load((ANSIBLE / "inventories" / "lab" / "hosts.yml").read_text(encoding="utf-8"))
+    text = (ANSIBLE / "inventories" / "lab" / "hosts.yml").read_text(encoding="utf-8")
+    inventory = yaml.safe_load(text)
     children = inventory["all"]["children"]["k8s_cluster"]["children"]
-    master = children["k8s_control_plane"]["hosts"]["k8s-master"]
-    worker = children["k8s_workers"]["hosts"]["k8s-worker"]
+    master = children["k8s_master"]["hosts"]["k8s-master"]
+    worker = children["k8s_worker"]["hosts"]["k8s-worker"]
     assert master["ansible_host"] == "192.168.1.18"
     assert worker["ansible_host"] == "192.168.1.12"
     assert master["ansible_host"] != worker["ansible_host"]
-    assert inventory["all"]["vars"]["ansible_control_ip"] == "192.168.1.19"
+    # .19 is the Ansible control host, not a Kubernetes node.
+    assert "192.168.1.19" in text
+    assert "k8s-master" in children["k8s_master"]["hosts"]
+    assert "ansible-control" not in children
 
 
 def test_kubernetes_version_is_pinned() -> None:
@@ -66,9 +70,9 @@ def test_site_playbook_declares_roles() -> None:
         "containerd",
         "kubernetes",
         "k8s_control_plane",
-        "k8s_kubeconfig",
-        "k8s_worker",
         "k8s_cni",
+        "k8s_worker",
+        "k8s_kubeconfig",
         "k8s_addons",
     ]
 

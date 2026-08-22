@@ -86,6 +86,7 @@ def test_workflows_never_tag_latest() -> None:
     assert "type=raw,value=latest" not in image
     assert not any(":latest" in line for line in code_lines)
     assert "github.sha" in image
+    assert "GITHUB_REPOSITORY,," in image
     assert "trivy-action@" in image
     assert "0.31.0" not in image
     assert "sbom-action" in image

@@ -21,7 +21,6 @@ concurrency:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
 
 permissions:
   contents: read
@@ -41,10 +40,17 @@ jobs:
 
       - uses: docker/setup-buildx-action@v3
 
+      - name: Lowercase GHCR image name
+        id: image
+        run: |
+          name="${GITHUB_REPOSITORY,,}"
+          echo "name=${name}" >> "$GITHUB_OUTPUT"
+          echo "ref=ghcr.io/${name}:${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
+
       - id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ghcr.io/${{ steps.image.outputs.name }}
           tags: |
             type=raw,value=${{ github.sha }}
             type=sha,format=long,prefix=sha-
@@ -77,7 +83,7 @@ jobs:
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25
         with:
           scan-type: image
-          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          image-ref: ${{ steps.image.outputs.ref }}
           severity: CRITICAL,HIGH
           exit-code: "0"
           format: sarif
@@ -101,7 +107,7 @@ jobs:
       - name: Syft SBOM
         uses: anchore/sbom-action@v0
         with:
-          image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          image: ${{ steps.image.outputs.ref }}
           format: spdx-json
           artifact-name: ansibleai-sbom.spdx.json
           upload-artifact: true
@@ -134,11 +140,11 @@ jobs:
         run: |
           {
             echo "### Image"
-            echo "\`ghcr.io/${{ github.repository }}:${{ github.sha }}\`"
+            echo "\`${{ steps.image.outputs.ref }}\`"
             echo
             echo "Promote on the lab (never the latest tag):"
             echo "\`\`\`"
-            echo "python scripts/set_gitops_image.py --tag ${{ github.sha }} --repository ghcr.io/${{ github.repository }}"
+            echo "python scripts/set_gitops_image.py --tag ${{ github.sha }} --repository ghcr.io/${{ steps.image.outputs.name }}"
             echo "\`\`\`"
           } >> "$GITHUB_STEP_SUMMARY"
           if [ -z "$COSIGN_PRIVATE_KEY" ]; then
@@ -148,6 +154,6 @@ jobs:
           curl -sSfL https://github.com/sigstore/cosign/releases/download/v2.4.3/cosign-linux-amd64 -o /tmp/cosign
           chmod +x /tmp/cosign
           /tmp/cosign sign --yes --key env://COSIGN_PRIVATE_KEY \
-            "ghcr.io/${{ github.repository }}@${{ steps.push.outputs.digest }}"
+            "ghcr.io/${{ steps.image.outputs.name }}@${{ steps.push.outputs.digest }}"
           echo "Cosign: signed digest ${{ steps.push.outputs.digest }}" >> "$GITHUB_STEP_SUMMARY"
         continue-on-error: true
