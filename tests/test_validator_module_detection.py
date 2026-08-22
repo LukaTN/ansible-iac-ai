@@ -66,3 +66,49 @@ def test_gather_facts_play_key_does_not_override_ec2_module():
     }
     check_module_present(r, kb)
     assert r._detected_module == "amazon.aws.ec2_instance"
+
+
+_AZURE_VM_PLAYBOOK = """
+---
+- name: Create an Azure virtual machine
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    resource_group: "rg-production"
+    vm_name: "vm-api"
+  tasks:
+    - name: Create virtual machine
+      azure.azcollection.azure_rm_virtualmachine:
+        resource_group: "{{ resource_group }}"
+        name: "{{ vm_name }}"
+        state: present
+"""
+
+
+def test_azure_vm_fqcn_detected_from_parsed_kb_even_if_cwd_is_wrong(tmp_path, monkeypatch):
+    """Regression: after the backend/ layout move, validator chdir'd into
+    backend/ and kb_store looked for relative data/parsed there. The gate
+    then failed with "No known collection module detected" on a correct
+    azure.azcollection.azure_rm_virtualmachine playbook (ansible-lint still
+    passed because Galaxy collections were installed).
+    """
+    from kb_store import load_knowledge_base
+
+    monkeypatch.chdir(tmp_path)
+    kb = load_knowledge_base()
+    modules = {
+        entry.get("module")
+        for entry in (kb.get("modules") or {}).values()
+        if entry.get("module")
+    }
+    if "azure.azcollection.azure_rm_virtualmachine" not in modules:
+        import pytest
+
+        pytest.skip("data/parsed does not include azure.azcollection.azure_rm_virtualmachine")
+
+    r = ValidationResult("/tmp/playbook.yml")
+    r.raw_yaml = _AZURE_VM_PLAYBOOK
+    check_module_present(r, kb["modules"])
+    assert r._detected_module == "azure.azcollection.azure_rm_virtualmachine"
+    assert r.errors == []

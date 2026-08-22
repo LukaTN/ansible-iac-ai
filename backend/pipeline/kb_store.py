@@ -1,10 +1,17 @@
 import json
 import os
 from datetime import datetime
+from pathlib import Path
 
-PARSED_DIR = "data/parsed"
-LEGACY_KB_FILE = "data/knowledge_base.json"
-MANIFEST_FILE = "data/kb_manifest.json"
+# backend/pipeline/kb_store.py → repository root. Paths must be absolute:
+# importing validator/retriever used to chdir into backend/, and a relative
+# "data/parsed" then resolved to backend/data/parsed (missing), so the
+# production gate reported "No known collection module detected" for valid
+# FQCNs such as azure.azcollection.azure_rm_virtualmachine.
+_REPO_ROOT = Path(__file__).resolve().parents[2]
+PARSED_DIR = str(_REPO_ROOT / "data" / "parsed")
+LEGACY_KB_FILE = str(_REPO_ROOT / "data" / "knowledge_base.json")
+MANIFEST_FILE = str(_REPO_ROOT / "data" / "kb_manifest.json")
 
 
 def _iter_parsed_json_files(parsed_dir: str):

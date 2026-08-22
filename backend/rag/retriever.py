@@ -28,7 +28,8 @@ from rag.hybrid_search import (
 )
 from rag.retrieval_utils import build_retrieval_meta, extract_primary_module
 
-os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# backend/rag/retriever.py → repository root
+os.chdir(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 from langchain_core.documents import Document
 
