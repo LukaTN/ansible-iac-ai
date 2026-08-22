@@ -26,7 +26,7 @@ jobs:
             requirements.txt
             requirements-dev.txt
       - name: Install lint tools
-        run: pip install ruff mypy types-requests types-PyYAML pydantic pydantic-settings
+        run: pip install ruff "mypy==1.13.0" types-requests types-PyYAML pydantic pydantic-settings
       - name: Ruff (Phase 6b/7 + gate modules)
         # Full-tree ruff is not green yet (legacy agent/RAG scripts).
         # Pre-commit still --fix's whatever you touch.
@@ -45,9 +45,12 @@ jobs:
             tests/test_prompt_registry.py \
             tests/test_observability.py
       - name: Mypy (pre-commit scope)
-        # app.py / models.py pull logstream and Flask-SQLAlchemy; those stay
-        # follow_imports=silent in pyproject and are gated by pytest instead.
-        run: mypy backend/config.py backend/logging_setup.py backend/auth
+        # Pin matches .pre-commit-config.yaml. Do not `pip install mypy` unpinned
+        # (newer mypy + no Flask on this job fails auth/models follow-imports).
+        # app.py / models.py / auth stay pytest-gated.
+        run: >
+          mypy --config-file pyproject.toml --no-warn-unused-configs
+          backend/config.py backend/logging_setup.py
 
   lint-frontend:
     runs-on: ubuntu-latest
