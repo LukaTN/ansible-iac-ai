@@ -60,13 +60,17 @@ def iter_cases(
     suite: str | None = None,
     collection_filter: str | None = None,
 ) -> list[GoldenCase]:
-    """Flatten core_cases + collections.* into a single ordered list."""
+    """Flatten core_cases + safety_cases + collections.* into one list."""
     data = dataset or load_dataset()
     out: list[GoldenCase] = []
 
     if suite in (None, "core"):
         for item in data.get("core_cases") or []:
             out.append(GoldenCase.from_dict(item, suite="core"))
+
+    if suite in (None, "core", "safety"):
+        for item in data.get("safety_cases") or []:
+            out.append(GoldenCase.from_dict(item, suite="safety"))
 
     if suite in (None, "collections"):
         for coll_name, items in (data.get("collections") or {}).items():

@@ -244,6 +244,16 @@ def observe(
         yield None
 
 
+def _prompt_trace_meta() -> dict[str, str]:
+    """Attach prompt_name / version from the last registry fetch (never compile)."""
+    try:
+        from agent.prompt_registry import last_prompt_ref
+
+        return last_prompt_ref() or {}
+    except Exception:
+        return {}
+
+
 def observe_llm_call(
     *,
     model: str,
@@ -292,6 +302,7 @@ def observe_llm_call(
                 "provider": provider,
                 "status": status,
                 "duration_s": f"{duration_s:.3f}",
+                **_prompt_trace_meta(),
             }),
         ) as gen:
             update_kwargs: dict[str, Any] = {

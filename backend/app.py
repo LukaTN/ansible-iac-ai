@@ -427,6 +427,12 @@ def readyz():
     ready = hard_failures == 0
     if not ready:
         log.warning("readyz.not_ready", checks=checks)
+    try:
+        from observability.metrics import record_ready
+
+        record_ready(ready)
+    except Exception:
+        pass
     return jsonify({"ready": ready, "checks": checks}), (200 if ready else 503)
 
 

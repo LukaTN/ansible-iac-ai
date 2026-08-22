@@ -1,0 +1,79 @@
+# Phase 7 — promotion gate vs evals/baselines.
+# GitHub-hosted runners cannot reach the kubeadm Ingress (192.168.1.18).
+# Live E2E belongs on a self-hosted runner labeled "lab" (ansible control .19)
+# or on the operator laptop via scripts/lab_eval_gate.py.
+name: eval-gate
+
+on:
+  workflow_dispatch:
+    inputs:
+      runner:
+        description: "ubuntu-latest (reports only) or self-hosted lab"
+        default: ubuntu-latest
+        type: string
+      run_live:
+        description: Run E2E against E2E_BASE_URL (needs Ollama + app)
+        type: boolean
+        default: false
+      e2e_report:
+        description: Path to an existing run_e2e_eval.py JSON
+        type: string
+        default: ""
+      retrieval_report:
+        description: Path to an existing eval_retrieval.py JSON
+        type: string
+        default: ""
+      base_url:
+        description: Ingress or API URL for --run_live
+        type: string
+        default: http://192.168.1.18:30080
+      suite:
+        description: E2E suite when run_live
+        type: choice
+        options: [core, safety, collections, all]
+        default: core
+
+permissions:
+  contents: read
+
+jobs:
+  gate:
+    runs-on: ${{ inputs.runner }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install eval scripts deps
+        if: ${{ !inputs.run_live }}
+        run: pip install pyyaml
+      - name: Install full tree (live E2E)
+        if: ${{ inputs.run_live }}
+        run: |
+          pip install -r requirements.txt
+          pip install "pytest>=8.0.0"
+      - name: Eval gate
+        shell: bash
+        env:
+          E2E_BASE_URL: ${{ inputs.base_url }}
+          E2E_SUITE: ${{ inputs.suite }}
+          E2E_REPORT: ${{ inputs.e2e_report }}
+          RETRIEVAL_REPORT: ${{ inputs.retrieval_report }}
+          RUN_LIVE: ${{ inputs.run_live }}
+          PYTHONPATH: backend
+        run: |
+          args=()
+          if [ "$RUN_LIVE" = "true" ]; then
+            args+=(--live --mode api --base-url "$E2E_BASE_URL" --suite "$E2E_SUITE")
+          fi
+          if [ -n "$E2E_REPORT" ]; then
+            args+=(--e2e "$E2E_REPORT")
+          fi
+          if [ -n "$RETRIEVAL_REPORT" ]; then
+            args+=(--retrieval "$RETRIEVAL_REPORT")
+          fi
+          if [ "${#args[@]}" -eq 0 ]; then
+            echo "Pass --e2e/--retrieval report paths, or enable run_live on a lab runner."
+            exit 2
+          fi
+          python scripts/lab_eval_gate.py "${args[@]}"

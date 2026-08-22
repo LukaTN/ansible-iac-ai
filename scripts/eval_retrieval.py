@@ -198,7 +198,8 @@ def main() -> int:
         report(result, args.verbose)
 
         if args.json:
-            args.json.write_text(json.dumps(result, indent=2), encoding="utf-8")
+            payload = {**result, "overall": summarise(result["rows"])}
+            args.json.write_text(json.dumps(payload, indent=2), encoding="utf-8")
             print(f"\n  Raw results -> {args.json}")
 
     return 0

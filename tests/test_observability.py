@@ -25,7 +25,11 @@ def test_record_helpers_do_not_raise():
         record_gate_result,
         record_generation,
         record_llm_call,
+        record_ready,
     )
+
+    record_ready(True)
+    record_ready(False)
 
     record_generation(status="ok", started=True)
     record_generation(status="ok", duration_s=1.2)
@@ -107,3 +111,58 @@ def test_generation_trace_sets_output(monkeypatch):
     call_kwargs = fake.start_as_current_observation.call_args.kwargs
     assert call_kwargs["as_type"] == "agent"
     assert call_kwargs["name"] == "generate-playbook"
+
+
+def test_observe_llm_call_includes_prompt_registry_tags(monkeypatch):
+    import observability.tracing as tracing
+
+    from agent.prompt_registry import get_prompt_text
+
+    gen = MagicMock()
+    cm = MagicMock()
+    cm.__enter__.return_value = gen
+    cm.__exit__.return_value = False
+    fake = MagicMock()
+    fake.start_as_current_observation.return_value = cm
+
+    monkeypatch.setattr(tracing.settings, "langfuse_enabled", True)
+    monkeypatch.setattr(tracing.settings, "langfuse_public_key", "pk")
+    monkeypatch.setattr(tracing.settings, "langfuse_secret_key", "sk")
+    monkeypatch.setattr(tracing, "_client", fake)
+    monkeypatch.setattr(tracing, "_client_failed", False)
+
+    import agent.prompt_registry as reg
+
+    monkeypatch.setattr(reg, "get_client", lambda: None)
+    get_prompt_text("ansibleai-agent-system", "GIT TEXT")
+
+    tracing.observe_llm_call(
+        model="m",
+        provider="ollama",
+        prompt="p",
+        system="GIT TEXT",
+        output="o",
+        duration_s=0.1,
+    )
+    meta = fake.start_as_current_observation.call_args.kwargs["metadata"]
+    assert meta["prompt_name"] == "ansibleai-agent-system"
+    assert meta["prompt_source"] == "git"
+
+
+def test_prometheus_rules_and_celery_exporter_are_wired():
+    from pathlib import Path
+
+    import yaml
+
+    root = Path(__file__).resolve().parent.parent
+    prom = (root / "deploy" / "observability" / "prometheus.yml").read_text(encoding="utf-8")
+    assert "rule_files" in prom
+    assert "celery-exporter:9808" in prom
+    rules = yaml.safe_load((root / "deploy" / "observability" / "rules" / "ansibleai.yml").read_text())
+    names = [r["alert"] for g in rules["groups"] for r in g["rules"]]
+    assert "AnsibleAIHigh5xxRatio" in names
+    assert "AnsibleAICeleryQueueBacklog" in names
+    assert "AnsibleAICeleryWorkerDown" in names
+    compose = (root / "docker-compose.observability.yml").read_text(encoding="utf-8")
+    assert "danihodovic/celery-exporter:0.12.2" in compose
+    assert "celery-exporter:latest" not in compose

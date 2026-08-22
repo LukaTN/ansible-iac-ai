@@ -41,4 +41,27 @@ spec:
           annotations:
             summary: "AnsibleAI API has unavailable replicas"
             runbook: {{ .Values.observability.slo.runbook | quote }}
+    - name: ansibleai.app
+      rules:
+        - alert: AnsibleAIReadyzFailed
+          expr: ansibleai_ready == 0
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: "AnsibleAI /readyz last check failed"
+            runbook: {{ .Values.observability.slo.runbook | quote }}
+        - alert: AnsibleAIGatePassRateDrop
+          expr: |
+            (
+              sum(rate(ansibleai_gate_result_total{result="failed"}[15m]))
+              /
+              clamp_min(sum(rate(ansibleai_gate_result_total[15m])), 0.001)
+            ) > 0.50
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Production-gate fail rate is above 50%"
+            runbook: {{ .Values.observability.slo.runbook | quote }}
 {{- end }}

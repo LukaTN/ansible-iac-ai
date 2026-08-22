@@ -42,6 +42,7 @@ Provisioned folder **AnsibleAI** → dashboard **AnsibleAI overview**
 - Generation throughput & duration
 - Gate outcomes & repair iterations
 - LLM call rate, latency, tokens by model
+- Celery queue length, active workers, generation duration
 
 Direct link: http://localhost:3001/d/ansibleai-overview/ansibleai-overview
 
@@ -99,7 +100,7 @@ openssl rand -hex 32      # ENCRYPTION_KEY (64 hex chars)
 |-------|--------|
 | http://localhost:3000 | Langfuse UI |
 | http://localhost:3001 → **AnsibleAI** / **AnsibleAI overview** | Dashboard loads |
-| http://localhost:9090/targets | `ansibleai-api` **UP** |
+| http://localhost:9090/targets | `ansibleai-api` and `celery` **UP** |
 | `curl -s http://localhost:5000/metrics` | `ansibleai_*` series |
 | Chat turn → Langfuse Traces | Nested agent / retriever / generation / evaluator |
 
@@ -116,7 +117,8 @@ docker compose --env-file .env.docker \
 ```
 deploy/observability/
   README.md                          # this file
-  prometheus.yml                     # scrape api:5000/metrics
+  prometheus.yml                     # scrape api:5000/metrics + celery-exporter:9808
+  rules/ansibleai.yml                # 5xx, /readyz, gate fail-rate, Celery backlog
   docker-compose.langfuse.yml        # Langfuse v3 + deps
   grafana/provisioning/
     datasources/datasource.yml       # Prometheus uid=prometheus
@@ -131,11 +133,11 @@ App code: `observability/` (`metrics.py`, `tracing.py`), wired from
 
 | Item | When |
 |------|------|
-| Langfuse prompt management (`agent/prompts.py`) | Phase 6b (LLMOps loop) |
-| Retrieval / golden baselines (`evals/baselines/`) | Phase 6b |
-| Model bake-off (`scripts/model_bakeoff.py`) | Phase 6b |
-| Celery exporter, richer alert rules | Phase 6b (after 4b scrapes `/metrics`) |
-| Loki / Tempo | Cluster-scale ops |
+| Langfuse prompt management + `sync_langfuse_prompts.py` | **6b done** (label `production`, never compile) |
+| Retrieval / golden baselines (`evals/baselines/`) | **6b done** |
+| Model bake-off (`scripts/model_bakeoff.py`) | **6b done** |
+| Celery exporter + Prometheus rules | **6b done** on Compose |
+| Loki / Tempo | Phase 6c (cluster-scale ops) |
 | vLLM / DCGM GPU dashboards | After Phase 4 (real GPU nodes) |
 
 ## Stop

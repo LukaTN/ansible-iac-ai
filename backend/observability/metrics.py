@@ -11,7 +11,7 @@ import time
 from collections.abc import Iterator
 from contextlib import contextmanager
 
-from prometheus_client import CONTENT_TYPE_LATEST, Counter, Histogram, generate_latest
+from prometheus_client import CONTENT_TYPE_LATEST, Counter, Gauge, Histogram, generate_latest
 
 HTTP_REQUESTS = Counter(
     "ansibleai_http_requests_total",
@@ -62,6 +62,11 @@ LLM_DURATION = Histogram(
     ["provider", "model"],
     buckets=(0.5, 1, 2, 5, 10, 30, 60, 120, 300),
 )
+READY = Gauge(
+    "ansibleai_ready",
+    "1 if the last /readyz check passed (hard dependencies only)",
+)
+
 LLM_TOKENS = Counter(
     "ansibleai_llm_tokens_total",
     "Approximate token usage (prompt/completion when reported)",
@@ -97,6 +102,10 @@ def record_gate_result(*, passed: bool, environmental: bool, iteration: int) -> 
 
 def record_repair_iteration(iteration: int) -> None:
     REPAIR_ITERATIONS.observe(max(1, int(iteration or 1)))
+
+
+def record_ready(ready: bool) -> None:
+    READY.set(1 if ready else 0)
 
 
 def record_llm_call(

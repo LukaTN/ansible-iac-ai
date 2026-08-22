@@ -1,0 +1,121 @@
+# Phase 7 — lint, unit tests, Helm render. No image push, no :latest.
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  lint-python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-dev.txt
+      - name: Install lint tools
+        run: pip install ruff mypy types-requests types-PyYAML pydantic pydantic-settings
+      - name: Ruff (Phase 6b/7 + gate modules)
+        # Full-tree ruff is not green yet (legacy agent/RAG scripts).
+        # Pre-commit still --fix's whatever you touch.
+        run: |
+          ruff check \
+            scripts/eval_gate.py \
+            scripts/set_gitops_image.py \
+            scripts/lab_eval_gate.py \
+            scripts/sync_langfuse_prompts.py \
+            scripts/kb_coverage.py \
+            scripts/model_bakeoff.py \
+            tests/test_gitops.py \
+            tests/test_eval_gate.py \
+            tests/test_helm_chart.py \
+            tests/test_model_bakeoff.py \
+            tests/test_prompt_registry.py \
+            tests/test_observability.py
+      - name: Mypy (pre-commit scope)
+        run: mypy backend/config.py backend/logging_setup.py backend/models.py backend/app.py backend/auth
+
+  lint-frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npm run lint
+      - run: npx tsc --noEmit -p tsconfig.json
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-dev.txt
+      - name: Install runtime + pytest (skip ragas)
+        run: |
+          pip install -r requirements.txt
+          pip install "pytest>=8.0.0"
+      - name: Unit tests (no live LLM)
+        run: pytest tests/ -q --ignore=tests/e2e
+        env:
+          PYTHONPATH: backend
+
+  helm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/setup-helm@v4
+        with:
+          version: v3.16.4
+      - name: Lint and render staging
+        run: |
+          helm lint deploy/helm/ansibleai
+          helm template ansibleai deploy/helm/ansibleai \
+            -f deploy/helm/ansibleai/values-staging.yaml \
+            -f deploy/helm/ansibleai/values-gitops-image.yaml \
+            --namespace ansibleai \
+            > /tmp/ansibleai-staging.yaml
+          test -s /tmp/ansibleai-staging.yaml
+          ! grep -E 'image:[[:space:]]*.*:latest([[:space:]]|$)' /tmp/ansibleai-staging.yaml
+
+  eval-gate-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Missing report is not a pass
+        run: |
+          set +e
+          python scripts/eval_gate.py --e2e reports/does-not-exist.json
+          code=$?
+          set -e
+          if [ "$code" -ne 2 ]; then
+            echo "expected exit 2 for a missing report, got $code"
+            exit 1
+          fi
+        shell: bash

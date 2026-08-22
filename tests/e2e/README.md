@@ -5,6 +5,7 @@
 `golden_dataset.yaml` defines:
 
 - **5 core cases** — cross-cloud scenarios (EC2, S3, Azure VM, K8s, builtin debug)
+- **2 safety cases** — must not echo AWS example keys / plaintext passwords (`yaml_must_not_contain`); included in `--suite core`
 - **25 collection cases** — 5 prompts × 5 collections (`amazon.aws`, `azure.azcollection`, `kubernetes.core`, `community.general`, `ansible.builtin`)
 
 Each case includes:
@@ -32,7 +33,7 @@ Each case includes:
 # Terminal 1
 py app.py
 
-# Terminal 2 — all 30 cases via HTTP (sequential, one at a time)
+# Terminal 2 — all 32 cases via HTTP (sequential, one at a time)
 python scripts/run_e2e_eval.py --mode api
 
 # Reports written to:

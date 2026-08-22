@@ -78,6 +78,10 @@ kubectl rollout status deployment/ansibleai-api -n ansibleai
 kubectl rollout undo deployment/ansibleai-api -n ansibleai
 kubectl rollout undo deployment/ansibleai-worker -n ansibleai
 
+# GitOps (once Argo CD owns the release — deploy/gitops/README.md)
+argocd app history ansibleai-staging
+argocd app rollback ansibleai-staging
+
 curl -fsS -H "Host: ansibleai.lab" http://192.168.1.18:30080/healthz
 ```
 
@@ -93,7 +97,7 @@ Do not deploy `values-prod.yaml` without explicit approval, TLS, and a real Secr
 
 ## What this chart does not install
 
-- ArgoCD / GitOps (Phase 7)
+- Argo CD itself (manifests are under `deploy/gitops/`; install is a lab step)
 - Vault / Sealed Secrets / ESO (Phase 8)
 - kube-prometheus-stack, Loki, Tempo (Phase 6c)
 - vLLM / GPU Operator

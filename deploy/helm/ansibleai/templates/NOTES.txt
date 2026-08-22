@@ -45,6 +45,12 @@ Workload-level (last ReplicaSet only):
   kubectl rollout undo deployment/{{ include "ansibleai.fullname" . }}-api -n {{ .Release.Namespace }}
   kubectl rollout undo deployment/{{ include "ansibleai.fullname" . }}-worker -n {{ .Release.Namespace }}
 
+GitOps (once Argo CD owns this release — deploy/gitops/README.md):
+
+  argocd app history ansibleai-staging
+  argocd app rollback ansibleai-staging
+  argocd app wait ansibleai-staging --health
+
 Verify:
 
   kubectl get pods -n {{ .Release.Namespace }} -l app.kubernetes.io/name={{ include "ansibleai.name" . }}

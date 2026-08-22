@@ -1,0 +1,72 @@
+{
+  "generated_at": "2026-08-22T14:10:43.621654+00:00",
+  "suite": "core",
+  "compose": true,
+  "dry_run": false,
+  "pairs": [
+    {
+      "id": "incumbent",
+      "agent": "gemma3:12b",
+      "playbook": "qwen2.5-coder:14b",
+      "reused": true,
+      "report": "reports/e2e_platform_eval_20260822_135845.json",
+      "gate": "passed",
+      "gate_output": "EVAL GATE PASSED",
+      "avg_overall_score": 98.3,
+      "pass_rate_70": 100.0,
+      "total_cases": 7
+    },
+    {
+      "id": "coder7b",
+      "agent": "qwen2.5-coder:7b",
+      "playbook": "qwen2.5-coder:7b",
+      "command": [
+        "docker",
+        "compose",
+        "--env-file",
+        ".env.docker",
+        "run",
+        "--rm",
+        "--no-deps",
+        "-e",
+        "AGENT_MODEL=qwen2.5-coder:7b",
+        "-e",
+        "PLAYBOOK_MODEL=qwen2.5-coder:7b",
+        "-v",
+        "C:\\Users\\ahmed\\OneDrive\\Desktop\\pfe2026\\ansible-iac-ai/scripts:/app/scripts:ro",
+        "-v",
+        "C:\\Users\\ahmed\\OneDrive\\Desktop\\pfe2026\\ansible-iac-ai/evals:/app/evals:ro",
+        "-v",
+        "C:\\Users\\ahmed\\OneDrive\\Desktop\\pfe2026\\ansible-iac-ai/tests:/app/tests:ro",
+        "-v",
+        "C:\\Users\\ahmed\\OneDrive\\Desktop\\pfe2026\\ansible-iac-ai/reports:/app/reports",
+        "api",
+        "exec",
+        "python",
+        "scripts/run_e2e_eval.py",
+        "--mode",
+        "pipeline",
+        "--suite",
+        "core",
+        "--report-prefix",
+        "e2e_bakeoff_coder7b"
+      ],
+      "reused": false,
+      "report": "reports/e2e_bakeoff_coder7b_20260822_141040.json",
+      "exit": 0,
+      "gate": "passed",
+      "gate_output": "EVAL GATE PASSED",
+      "avg_overall_score": 97.0,
+      "pass_rate_70": 100.0,
+      "total_cases": 7
+    }
+  ],
+  "winner": {
+    "id": "incumbent",
+    "agent": "gemma3:12b",
+    "playbook": "qwen2.5-coder:14b",
+    "avg_overall_score": 98.3,
+    "pass_rate_70": 100.0
+  },
+  "promote": "Set AGENT_MODEL / PLAYBOOK_MODEL to the winner only after reviewing the reports. This script does not write .env."
+}

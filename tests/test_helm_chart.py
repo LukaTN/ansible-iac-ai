@@ -20,6 +20,7 @@ def test_helm_chart_layout_exists() -> None:
         CHART / "values.yaml",
         CHART / "values-staging.yaml",
         CHART / "values-prod.yaml",
+        CHART / "values-gitops-image.yaml",
         CHART / "values.schema.json",
         CHART / ".helmignore",
         CHART / "README.md",
@@ -54,7 +55,12 @@ def test_chart_metadata() -> None:
 
 
 def test_values_never_use_latest_tag() -> None:
-    for name in ("values.yaml", "values-staging.yaml", "values-prod.yaml"):
+    for name in (
+        "values.yaml",
+        "values-staging.yaml",
+        "values-prod.yaml",
+        "values-gitops-image.yaml",
+    ):
         text = (CHART / name).read_text(encoding="utf-8")
         for line in text.splitlines():
             stripped = line.split("#", 1)[0]
@@ -131,6 +137,7 @@ def test_rollback_documented() -> None:
     readme = (CHART / "README.md").read_text(encoding="utf-8")
     assert "helm rollback" in notes
     assert "kubectl rollout undo" in notes
+    assert "argocd app rollback" in notes
     assert "helm rollback" in readme
 
 
@@ -162,4 +169,7 @@ def test_vendor_images_are_pinned() -> None:
     assert "ollamaBaseUrl" in ollama_test
     prod = _load_yaml(CHART / "values-prod.yaml")
     assert prod["ingress"]["defaultBackendToApi"] is False
+    rule = (CHART / "templates" / "prometheusrule.yaml").read_text(encoding="utf-8")
+    assert "AnsibleAIGatePassRateDrop" in rule
+    assert "ansibleai_ready" in rule
     assert str(values["postgres"]["image"]["tag"]).startswith("0.")

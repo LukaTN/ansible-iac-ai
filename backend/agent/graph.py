@@ -39,7 +39,7 @@ from .cancel import check as check_cancelled
 from .collections import get_collection_allowlist
 from .llm import LLMError
 from .llm import chat as llm_chat
-from .prompts import AGENT_SYSTEM, REASON_PROMPT, REPAIR_PROMPT, RESPOND_PROMPT
+from .prompts import REASON_PROMPT, REPAIR_PROMPT, RESPOND_PROMPT, agent_system_prompt
 from .state import (
     VALID_INTENTS,
     AgentState,
@@ -334,7 +334,7 @@ def _first_reason_pass(
     try:
         raw = llm_chat(
             prompt,
-            system=AGENT_SYSTEM,
+            system=agent_system_prompt(),
             temperature=0.1,
             max_tokens=600,
             expect_json=True,
@@ -406,7 +406,7 @@ def _repair_reason_pass(
     try:
         raw = llm_chat(
             prompt,
-            system=AGENT_SYSTEM,
+            system=agent_system_prompt(),
             temperature=0.1,
             max_tokens=800,
             expect_json=True,
@@ -820,7 +820,7 @@ def respond_node(state: AgentState, config: RunnableConfig) -> dict:
     )
     try:
         text = llm_chat(
-            prompt, system=AGENT_SYSTEM, temperature=0.25, max_tokens=900,
+            prompt, system=agent_system_prompt(), temperature=0.25, max_tokens=900,
         ).strip()
     except LLMError as e:
         log.warning("agent.respond.llm_error", error=str(e))

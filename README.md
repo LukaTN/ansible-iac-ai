@@ -4,7 +4,7 @@ AI-powered Infrastructure-as-Code assistant that generates Ansible playbooks gro
 
 The stack combines a **React 19** web UI, a **Flask + PostgreSQL** API, a **Celery worker** running a **LangGraph agent** (reason → tools → draft → production gate → repair loop), and a **hybrid RAG pipeline** (pgvector dense search + BM25, OpenAI-compatible embeddings).
 
-This is an academic / PFE (end-of-studies) project in DevOps, IaC, RAG, and LLM agents. Phases **0–3**, **5/5b**, and **6a** of the production LLMOps plan are implemented (auth, containers, async workers, Postgres+pgvector, Keycloak in-app login, Prometheus/Grafana/Langfuse). Phase **4a** (kubeadm lab) is done; the Phase **4b** Helm chart is in the repository. Phases **6b**, **7**, and **8** are not implemented. See [docs/production_progress_report.md](docs/production_progress_report.md) and [docs/general_introduction.md](docs/general_introduction.md).
+This is an academic / PFE (end-of-studies) project in DevOps, IaC, RAG, and LLM agents. Phases **0–3**, **5/5b**, **6a**, **6b**, and **7** (GitHub Actions + Argo CD manifests + eval gate) of the production LLMOps plan are implemented. Phase **4a** (kubeadm lab) is done; the Phase **4b** Helm chart is in the repository. Phases **6c** and **8** are not implemented. See [docs/production_progress_report.md](docs/production_progress_report.md) and [docs/general_introduction.md](docs/general_introduction.md).
 
 ---
 
@@ -262,8 +262,10 @@ ansible-iac-ai/
 ├── deploy/
 │   ├── ansible/                   # kubeadm lab bootstrap (Phase 4a)
 │   ├── helm/ansibleai/            # application chart (Phase 4b)
+│   ├── gitops/                    # Argo CD Applications (Phase 7)
 │   ├── keycloak/                  # realm JSON + oauth2-proxy notes
 │   └── observability/             # Prometheus, Grafana, Langfuse compose
+├── .github/workflows/             # ci, image (SHA + Trivy + Syft), eval-gate
 ├── docs/                          # reports, presentations, internship materials
 ├── specs/                         # Phase 5 / 5b design notes
 ├── data/                          # local KB / scrape artifacts (gitignored)
@@ -1108,14 +1110,22 @@ docker compose --env-file .env.docker \
 
 ## CI/CD
 
-There is **no** GitHub Actions (or other) pipeline in this repository. `.dockerignore` mentions `.github` but that directory is not present. Phase **7** (CI eval gate vs golden baselines, ArgoCD GitOps) is pending.
+Phase **7** workflows live in `.github/workflows/`:
 
-What exists locally instead:
+| Workflow | When | What |
+|----------|------|------|
+| `ci.yml` | push/PR | Ruff, mypy (pre-commit scope), frontend lint/`tsc`, pytest (no live LLM), `helm lint`/`template`, `eval_gate.py` missing-report contract (exit 2) |
+| `image.yml` | push `main` + dispatch (PRs build/scan only) | Multi-stage image, Trivy SARIF, Syft SBOM, push `ghcr.io/<owner>/<repo>:<git-sha>` — never `latest`. Cosign runs only when `COSIGN_PRIVATE_KEY` is set |
+| `eval-gate.yml` | `workflow_dispatch` | `scripts/lab_eval_gate.py` vs `evals/baselines`. Live Ingress E2E needs a self-hosted runner (GitHub-hosted cannot reach `192.168.1.18`) |
+
+GitOps manifests: [deploy/gitops/README.md](deploy/gitops/README.md). Pin the image with `python scripts/set_gitops_image.py --tag <sha>` (refuses `latest`).
+
+Still local:
 
 - `pre-commit`: trailing whitespace, YAML/JSON, private-key detect, Ruff, mypy (scoped), gitleaks, frontend ESLint + tsc
 - Container role `smoke` → `scripts/smoke_auth.py`
 - `helm test` connection test in the chart
-- Pytest suite for unit/integration and chart/playbook lint
+- Pytest suite for unit/integration, chart, and GitOps lint
 
 ---
 
@@ -1217,12 +1227,12 @@ Not claimed: `RATE_LIMIT_CHAT` enforcement; idle session timeout despite `SESSIO
 
 | Status | Item |
 |--------|------|
-| **Implemented** | Auth, async chat, LangGraph gate, hybrid RAG, Compose stack, metrics/Langfuse opt-in, Helm chart in git, Keycloak ROPC, kubeadm playbooks |
+| **Implemented** | Auth, async chat, LangGraph gate, hybrid RAG, Compose stack, metrics/Langfuse opt-in, Helm chart in git, Keycloak ROPC, kubeadm playbooks, GitHub Actions + Argo CD manifests |
 | **Partially implemented** | Helm live install (chart present; production overlay not for casual use). KB scrape on API threads (not Celery). Stats are global `generations`, not per-user. Token budget fail-open if Redis is down |
 | **Configuration-dependent** | OIDC, Langfuse, S3 artifacts, ansible-lint backend, registration policy, daily token cap |
 | **Declared but unused** | `RATE_LIMIT_CHAT` (not on `/api/chat`). `SESSION_IDLE_TIMEOUT_MINUTES` (not enforced). `FLASK_ENV` (use `APP_ENV`). Audit constants `USER_ROLE_CHANGED` / `USER_ACTIVATED` / `USER_DEACTIVATED` with no admin user API |
-| **Planned / TODO (roadmap)** | Phase 6b LLMOps loop; Phase 7 CI eval gate + ArgoCD; Phase 8 Vault/ESO, hardening, DR; vLLM/GPU Operator; `__Host-` cookie prefix (blocked on HTTP) |
-| **Not implemented** | GitHub Actions, LICENSE file, payment/email/upload products, frontend env vars, in-app invite/user-admin UI, oauth2-proxy on laptop |
+| **Planned / TODO (roadmap)** | Phase 6c Loki/Tempo; Phase 8 Vault/ESO, hardening, DR; vLLM/GPU Operator; `__Host-` cookie prefix (blocked on HTTP) |
+| **Not implemented** | LICENSE file, payment/email/upload products, frontend env vars, in-app invite/user-admin UI, oauth2-proxy on laptop |
 
 `tests/e2e/README.md` still mentions Chroma in one sentence; the vector store is pgvector.
 
@@ -1252,7 +1262,9 @@ Roadmap (from existing docs):
 | 4 | 4a done; 4b chart in git | kubeadm lab; Helm install still pending in project notes |
 | 5 / 5b | Done | Keycloak in-app login |
 | 6a | Done | Metrics + Langfuse + Grafana |
-| 6b–8 | Pending | LLMOps loop, CI/GitOps, secrets/DR |
+| 6b | Done on Compose | Eval floors, bake-off, Celery alerts, Langfuse prompts |
+| 7 | Done in git | GitHub Actions, SHA tags, Trivy/Syft, Argo CD apps, eval gate |
+| 6c / 8 | Pending | Loki/Tempo, secrets/DR |
 
 ---
 
@@ -1266,6 +1278,7 @@ Roadmap (from existing docs):
 | [docs/rapport_refactor_langgraph_agent.md](docs/rapport_refactor_langgraph_agent.md) | Agent refactor |
 | [docs/REPOSITORY_LAYOUT.md](docs/REPOSITORY_LAYOUT.md) | Import and path conventions |
 | [deploy/helm/ansibleai/README.md](deploy/helm/ansibleai/README.md) | Helm install, SLO, rollback |
+| [deploy/gitops/README.md](deploy/gitops/README.md) | Argo CD Applications, promote, rollback |
 | [deploy/ansible/README.md](deploy/ansible/README.md) | kubeadm bootstrap |
 | [deploy/keycloak/README.md](deploy/keycloak/README.md) | SSO modes and Compose profile |
 | [deploy/observability/README.md](deploy/observability/README.md) | Metrics and Langfuse |

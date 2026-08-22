@@ -1,8 +1,11 @@
 # AnsibleAI — Production Deployment Progress Report
 
-> **Last updated:** August 2026 — Phase **4b Helm chart** is in git
-> (`deploy/helm/ansibleai`). Live `helm upgrade --install` on the kubeadm lab
-> is still required. Phase **6b** LLMOps loop remains parallel on Compose.
+> **You are here:** Phase **7** is in git. Next is Phase **6c**.
+>
+> **Last updated:** 22 Aug 2026 — Phase **7** workflows (ci / image / eval-gate),
+> SHA-only GHCR tags, Trivy + Syft, Argo CD Applications, and
+> `scripts/lab_eval_gate.py` are in the repository. Argo CD itself is a lab
+> install step on `.19`. Do not start 8 yet. 4-gpu stays deferred.
 >
 > This report is the living record of every production-readiness phase.
 > Each phase adds a section describing what changed, why it changed, and
@@ -719,11 +722,51 @@ data curation → prompt design → model selection → agent → gate → evals
 
 | Practice | Exists | 6b work |
 |----------|--------|---------|
-| Data | scrape → KB v5, pgvector, `retrieval_benchmark.json` | coverage report, `evals/baselines/retrieval.json` |
-| Prompts | `prompts.py` v2 | Langfuse prompt registry, fallback to git |
-| Models | `AGENT_MODEL` / `PLAYBOOK_MODEL` / fallbacks | bake-off vs golden; promote on score, not 429 luck |
-| Guardrails | validator + ansible-lint `gate_node` | safety golden cases; Langfuse gate scores |
-| Evals | 5-layer golden + RAGAS + `run_e2e_eval.py` | commit `evals/baselines/golden.json`; Phase 7 CI gate |
+| Data | scrape → KB v5, pgvector, `retrieval_benchmark.json` | **done:** `scripts/kb_coverage.py` + `evals/baselines/retrieval.json` |
+| Prompts | `prompts.py` v2 | **done:** `prompt_registry.py` (raw blob, no `.compile()`), git fallback |
+| Models | `AGENT_MODEL` / `PLAYBOOK_MODEL` / fallbacks | **done:** `scripts/model_bakeoff.py` — incumbent `gemma3:12b`/`qwen2.5-coder:14b` (98.3) beat `qwen2.5-coder:7b`/`7b` (97.0); both passed the gate. Do not write `.env` automatically. |
+| Guardrails | validator + ansible-lint `gate_node` | **done:** `safety_cases` in `golden_dataset.yaml` |
+| Evals | 5-layer golden + RAGAS + `run_e2e_eval.py` | **done:** `evals/baselines/golden.json` + `scripts/eval_gate.py` (Phase 7 invokes) |
+
+---
+
+## Phase 7 — CI/CD and GitOps
+
+**Goal:** Make delivery GitOps, not kubectl on a laptop. The 5-layer golden
+set and `eval_gate.py` stay the promotion brain.
+
+**Status: sources in git** (22 Aug 2026). GitHub-hosted runners lint, test,
+build, and scan. They cannot reach the kubeadm Ingress. Live E2E stays on
+Compose or a self-hosted runner labeled `lab` (ansible control `.19`).
+
+| Before | After |
+|--------|-------|
+| No `.github/workflows` | `ci.yml`, `image.yml`, `eval-gate.yml` |
+| Image tag `ansibleai/app:dev` only, loaded with `ctr import` | CI tags `ghcr.io/<owner>/<repo>:<git-sha>` — never `latest` |
+| No scanner / SBOM | Trivy filesystem + image (SARIF, does not block the first pipeline) and Syft SPDX |
+| Helm upgrade from the laptop | Argo CD Applications in `deploy/gitops/` (staging auto-sync; prod manual) |
+| Eval floors used by hand | `eval_gate.py` contract in CI (missing report = exit 2); `lab_eval_gate.py` for live runs |
+
+**Key files**
+
+| Path | Role |
+|------|------|
+| `.github/workflows/ci.yml` | Ruff, mypy, frontend `tsc`, pytest (no LLM), Helm render, eval-gate contract |
+| `.github/workflows/image.yml` | Build, Trivy, Syft, push SHA, optional Cosign if `COSIGN_PRIVATE_KEY` is set |
+| `.github/workflows/eval-gate.yml` | `workflow_dispatch` → `lab_eval_gate.py` |
+| `deploy/gitops/applications/*.yaml` | `ansibleai-staging` (prune + selfHeal), `ansibleai-production` (manual) |
+| `deploy/helm/ansibleai/values-gitops-image.yaml` | Image pin; `scripts/set_gitops_image.py` refuses `latest` |
+| Chart `NOTES.txt` | `helm rollback` and `argocd app rollback` |
+
+**Not in this phase:** installing Argo CD on the cluster from this laptop
+(operators apply the pinned v2.14.11 manifest from `.19`); Harbor; Argo
+Rollouts / Image Updater; Cosign keys (recorded gap); blocking Trivy on
+CRITICAL (first pipeline records SARIF only).
+
+**Rollback:** rolling (`maxUnavailable: 0` on API).
+`helm rollback ansibleai -n ansibleai` or `argocd app rollback ansibleai-staging`.
+
+**Verification:** `pytest tests/test_gitops.py tests/test_helm_chart.py tests/test_eval_gate.py`.
 
 ---
 
@@ -732,16 +775,16 @@ data curation → prompt design → model selection → agent → gate → evals
 | Phase | Summary | Status |
 |-------|---------|--------|
 | **4a** | kubeadm lab: control **.19**, master **.18**, worker **.12**; Calico `10.244.0.0/16`; ingress-nginx NodePort | **Complete** |
-| **4b** | Helm `deploy/helm/ansibleai` — api/worker, pgvector STS, Redis, MinIO, host Ollama Endpoints, NetworkPolicies | Chart **in git**; live `helm upgrade` pending |
+| **4b** | Helm `deploy/helm/ansibleai` — api/worker, pgvector STS, Redis, MinIO, host Ollama Endpoints, NetworkPolicies | Chart **in git**; lab install used (`values-staging.yaml`) |
 | 4-gpu | Optional: vLLM + TEI + NVIDIA GPU Operator + DCGM — only if NVIDIA GPU nodes appear | Deferred |
 | 5 / 5b | Keycloak identity — in-app login, Keycloak-only admins, tokens spent in Account | **Complete** (cluster Keycloak install is 4b; no oauth2-proxy on members) |
 | 6a | Prometheus + Grafana + Langfuse (operator UI) on Compose | **Complete** |
-| **6b** | LLMOps loop: data curation, prompt design, model selection, guardrails, evals; plus Celery exporter / CPU alerts | Pending (**parallel** on Compose with 4b) |
+| **6b** | LLMOps loop: data curation, prompt design, model selection, guardrails, evals; plus Celery exporter / alerts | **Complete on Compose** — live scores gated; prompts synced to Langfuse `production`; leftovers are extra safety cases + in-cluster Grafana (6c) |
 | 6c | Loki/Tempo on the cluster (GPU panels only with 4-gpu) | Pending (after 7) |
-| 7 | GitHub Actions, SHA tags, Trivy, ArgoCD GitOps, eval gate vs `evals/baselines/golden.json`, rolling + documented rollback | Pending (needs 4b chart + 6b baselines) |
+| **7** | GitHub Actions, SHA tags, Trivy, Argo CD GitOps, eval gate vs `evals/baselines/golden.json`, rolling + documented rollback | **Complete in git** — Argo install + GHCR pull-secret are lab steps |
 | 8 | Default-deny NetworkPolicies, restricted PSS, Kyverno, ESO/Sealed Secrets, CNPG PITR, Velero, k6 | Pending |
 
-**Recommended next:** `helm upgrade --install` the chart on the lab (`values-staging.yaml`), then continue **6b** on Compose.  
-**In parallel:** Phase **6b** on Compose (coverage report, Langfuse prompts, model bake-off, golden baselines).  
+**Recommended next:** Phase **6c** (Loki/Tempo on the cluster).  
+**Then:** 8 (hardening).  
 **Do not wait for GPUs.** vLLM/TEI is an optional add-on.  
-**Then:** 7 (GitOps + eval gate) → 6c (Loki/Tempo) → 8 (hardening).
+**7 leftovers (lab, not more git):** install Argo CD from `.19`; add a GHCR pull-secret or keep `ctr import`; optional self-hosted runner for live `eval-gate.yml`.

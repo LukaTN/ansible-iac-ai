@@ -1,0 +1,35 @@
+# Argo CD Application — staging (lab namespace ansibleai).
+# Automated sync + prune + selfHeal. Image pin is values-gitops-image.yaml.
+# Edit spec.source.repoURL if this repository is forked.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ansibleai-staging
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: ansibleai
+    ansibleai.io/env: staging
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/LukaTN/ansible-iac-ai.git
+    targetRevision: main
+    path: deploy/helm/ansibleai
+    helm:
+      releaseName: ansibleai
+      valueFiles:
+        - values-staging.yaml
+        - values-gitops-image.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: ansibleai
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+  revisionHistoryLimit: 5

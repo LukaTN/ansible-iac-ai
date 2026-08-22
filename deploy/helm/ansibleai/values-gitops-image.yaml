@@ -1,0 +1,7 @@
+# Phase 7 — image pin for ArgoCD (values-staging / values-prod overlay).
+# Updated by scripts/set_gitops_image.py or after the image workflow.
+# Never set tag to latest.
+image:
+  repository: ansibleai/app
+  tag: "dev"
+  pullPolicy: IfNotPresent

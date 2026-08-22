@@ -28,7 +28,21 @@ services:
       - "9090:9090"
     volumes:
       - ./deploy/observability/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./deploy/observability/rules:/etc/prometheus/rules:ro
       - prometheus-data:/prometheus
+
+  celery-exporter:
+    # Phase 6b — queue length + worker count. Task histograms need worker events
+    # (celery_app.py worker_send_task_events). Pin a digest-era tag, not latest.
+    image: danihodovic/celery-exporter:0.12.2
+    restart: unless-stopped
+    environment:
+      CE_BROKER_URL: redis://redis:6379/2
+      CE_BUCKETS: "1,2.5,5,10,30,60,300,600,900,1800"
+    ports:
+      - "9808:9808"
+    depends_on:
+      - redis
 
   grafana:
     image: grafana/grafana:11.5.2

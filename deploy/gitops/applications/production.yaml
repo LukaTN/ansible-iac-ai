@@ -1,0 +1,29 @@
+# Argo CD Application — production shape. Manual sync only until the
+# eval gate is trusted. Do not sync onto the HTTP NodePort lab.
+# Image tag must be a git SHA from values-gitops-image.yaml, never latest.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ansibleai-production
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: ansibleai
+    ansibleai.io/env: production
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/LukaTN/ansible-iac-ai.git
+    targetRevision: main
+    path: deploy/helm/ansibleai
+    helm:
+      releaseName: ansibleai
+      valueFiles:
+        - values-prod.yaml
+        - values-gitops-image.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: ansibleai-prod
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+  revisionHistoryLimit: 10

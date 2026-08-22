@@ -18,8 +18,9 @@
 #
 #  Python is pinned to 3.12 rather than the 3.13 used for local
 #  development, because gevent and the chromadb/onnxruntime stack have
-#  broader manylinux wheel coverage there. Phase 7 CI runs the test
-#  suite inside this image so the two never drift silently.
+#  broader manylinux wheel coverage there. Phase 7 CI runs pytest on the
+#  source tree with Python 3.12 (tests/ are not in the runtime image;
+#  see .dockerignore). The same requirements.txt is installed here.
 # =================================================================
 
 

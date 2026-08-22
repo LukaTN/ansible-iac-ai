@@ -38,7 +38,9 @@ ansible-iac-ai/
 ├── docker/                    # entrypoint.sh, ansible-collections.yml
 ├── deploy/observability/      # prometheus, Grafana, Langfuse compose
 ├── deploy/ansible/            # kubeadm lab bootstrap (Phase 4a complete)
-├── deploy/helm/ansibleai/     # Phase 4b application chart (install still pending)
+├── deploy/helm/ansibleai/     # Phase 4b application chart
+├── deploy/gitops/             # Phase 7 Argo CD Applications
+├── .github/workflows/         # Phase 7 ci / image / eval-gate
 ├── docs/                      # Reports, presentations, internship materials
 ├── data/                      # Local KB / scrape artifacts (gitignored)
 ├── output/                    # Local playbook scratch (gitignored)

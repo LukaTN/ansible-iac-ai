@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "kind": "model_selection",
+  "note": "Promote only after eval_gate.py passes. Do not promote a pair that only worked because a 429 fell back to another tag. AGENT_MODEL is read at import time — each pair must be a fresh process.",
+  "env": {
+    "agent": "AGENT_MODEL",
+    "playbook": "PLAYBOOK_MODEL"
+  },
+  "incumbent": {
+    "id": "incumbent",
+    "agent": "gemma3:12b",
+    "playbook": "qwen2.5-coder:14b"
+  },
+  "pairs": [
+    {
+      "id": "incumbent",
+      "agent": "gemma3:12b",
+      "playbook": "qwen2.5-coder:14b"
+    },
+    {
+      "id": "coder7b",
+      "agent": "qwen2.5-coder:7b",
+      "playbook": "qwen2.5-coder:7b"
+    }
+  ],
+  "bakeoff": "python scripts/model_bakeoff.py --compose --suite core"
+}

@@ -47,12 +47,17 @@ def main() -> int:
     p.add_argument("--timeout", type=float, default=float(os.getenv("E2E_TIMEOUT", "900")))
     p.add_argument(
         "--suite",
-        choices=("core", "collections", "all"),
+        choices=("core", "collections", "safety", "all"),
         default="all",
-        help="core=5 cross-cloud cases; collections=25 (5 per collection); all=30",
+        help="core=5 platform + 2 safety; collections=25; safety=2; all=32",
     )
     p.add_argument("--collection", default=None, help="Run only one collection's 5 tests")
     p.add_argument("--case-id", action="append", dest="case_ids", help="Repeatable filter")
+    p.add_argument(
+        "--report-prefix",
+        default="e2e_platform_eval",
+        help="filename prefix under reports/",
+    )
     args = p.parse_args()
 
     suite = None if args.suite == "all" else args.suite
@@ -77,7 +82,7 @@ def main() -> int:
         print(f"\nERROR: {e}", file=sys.stderr)
         return 1
 
-    json_path, md_path = write_report(summary)
+    json_path, md_path = write_report(summary, prefix=args.report_prefix)
     g = summary.get("global") or {}
     print("\n" + "=" * 60)
     print(f"  Done. Avg score: {g.get('avg_overall_score')}/100")

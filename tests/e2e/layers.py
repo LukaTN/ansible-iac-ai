@@ -187,14 +187,16 @@ def score_playbook_quality(
 ) -> dict[str, Any]:
     """Layer 4: Validator result + golden yaml_contains rules."""
     v = validation or {}
-    pb = _strip_header_comments(playbook or "")
+    pb_raw = playbook or ""
+    pb = _strip_header_comments(pb_raw)
 
     valid = bool(v.get("is_valid"))
     contains_all = all(s in pb for s in case.yaml_contains)
     contains_any = True
     if case.yaml_contains_any:
         contains_any = any(s in pb for s in case.yaml_contains_any)
-    not_forbidden = all(s not in pb for s in case.yaml_must_not_contain)
+    # Check the raw YAML so a secret hidden in a `#` comment still fails.
+    not_forbidden = all(s not in pb_raw for s in case.yaml_must_not_contain)
 
     task_count = 0
     try:
@@ -215,6 +217,7 @@ def score_playbook_quality(
         "validation_errors": list(v.get("errors") or []),
         "yaml_contains_all": contains_all,
         "yaml_contains_any": contains_any,
+        "yaml_forbidden_absent": not_forbidden,
         "min_tasks_ok": min_tasks_ok,
         "task_count": task_count,
         "missing_contains": [s for s in case.yaml_contains if s not in pb],

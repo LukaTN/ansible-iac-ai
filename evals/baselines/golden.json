@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "kind": "e2e_golden",
+  "source": "tests/e2e/golden_dataset.yaml",
+  "refresh": "python scripts/run_e2e_eval.py --mode pipeline --suite core",
+  "measured": {
+    "at": "2026-08-22",
+    "report": "reports/e2e_platform_eval_20260822_135845.json",
+    "suite": "core",
+    "mode": "pipeline",
+    "n": 7,
+    "avg_overall_score": 98.3,
+    "pass_rate_70": 100.0,
+    "note": "One Compose run (gemma3:12b planner + qwen2.5-coder:14b draft). Floors stay conservative so a single lucky run is not the CI bar."
+  },
+  "thresholds": {
+    "pass_rate_70": 70.0,
+    "avg_overall_score": 70.0
+  },
+  "layer_weights": {
+    "intent_understanding": 0.20,
+    "retrieval_quality": 0.20,
+    "module_correctness": 0.25,
+    "playbook_quality": 0.25,
+    "runtime_behavior": 0.10
+  }
+}

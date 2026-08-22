@@ -16,6 +16,9 @@
     - Playbook system ends with a pre-emit checklist (recency bias)
     - collection_rules injected via str.replace so Jinja ``{{ }}`` stays intact
       (.format() previously collapsed ``{{ var }}`` → ``{ var }``)
+    - Phase 6b: agent_system_prompt / build_playbook_system_prompt fetch
+      Langfuse text (label production) via prompt_registry, then git fallback.
+      Never Langfuse-compile playbook text (Ansible ``{{ }}`` would be eaten).
 
   Usage (call sites): temperature 0.1 + expect_json for REASON/REPAIR;
   playbook draft ~0.1–0.35; respond ~0.25.
@@ -446,8 +449,17 @@ _COLLECTION_EXAMPLES = {
 }
 
 
+def agent_system_prompt() -> str:
+    """REASON / REPAIR / RESPOND system text (Langfuse or git)."""
+    from agent.prompt_registry import AGENT_SYSTEM_NAME, get_prompt_text
+
+    return get_prompt_text(AGENT_SYSTEM_NAME, AGENT_SYSTEM)
+
+
 def build_playbook_system_prompt(primary_collection: str | None = None) -> str:
     """Return a collection-tailored system prompt for playbook generation."""
+    from agent.prompt_registry import PLAYBOOK_SYSTEM_NAME, get_prompt_text
+
     rules = _COLLECTION_RULES.get(primary_collection or "", "")
     if not rules and primary_collection:
         rules = (
@@ -458,7 +470,9 @@ def build_playbook_system_prompt(primary_collection: str | None = None) -> str:
     if example:
         rules = f"{rules}\n{example}"
     # Avoid str.format — it collapses Ansible Jinja ``{{ }}`` in the base text.
-    return _PLAYBOOK_SYSTEM_PROMPT_BASE.replace("{collection_rules}", rules)
+    # Avoid Langfuse .compile() for the same reason (see prompt_registry).
+    base = get_prompt_text(PLAYBOOK_SYSTEM_NAME, _PLAYBOOK_SYSTEM_PROMPT_BASE)
+    return base.replace("{collection_rules}", rules)
 
 
 PLAYBOOK_SYSTEM_PROMPT = build_playbook_system_prompt(None)

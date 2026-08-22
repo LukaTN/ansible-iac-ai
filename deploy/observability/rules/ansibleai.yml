@@ -1,0 +1,73 @@
+# Phase 6b — Compose Prometheus rules (no GPU / no kube-state-metrics).
+# Alerts appear in the Prometheus UI. Alertmanager is not in this stack.
+
+groups:
+  - name: ansibleai.slo
+    rules:
+      - alert: AnsibleAIHigh5xxRatio
+        expr: |
+          (
+            sum(rate(ansibleai_http_requests_total{status=~"5.."}[5m]))
+            /
+            clamp_min(sum(rate(ansibleai_http_requests_total[5m])), 0.001)
+          ) > 0.05
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "AnsibleAI API 5xx ratio is above 5%"
+          description: "HTTP 5xx / all requests exceeded 0.05 for 5 minutes."
+
+      - alert: AnsibleAIApiNotReady
+        expr: ansibleai_ready == 0
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "AnsibleAI /readyz last check failed"
+          description: "ansibleai_ready is 0. Hard dependencies (DB, schema, KB, broker) failed."
+
+      - alert: AnsibleAIApiScrapeDown
+        expr: up{job="ansibleai-api"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Prometheus cannot scrape the AnsibleAI API"
+          description: "Job ansibleai-api is down."
+
+  - name: ansibleai.gate
+    rules:
+      - alert: AnsibleAIGatePassRateDrop
+        expr: |
+          (
+            sum(rate(ansibleai_gate_result_total{result="failed"}[15m]))
+            /
+            clamp_min(sum(rate(ansibleai_gate_result_total[15m])), 0.001)
+          ) > 0.50
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Production-gate fail rate is above 50%"
+          description: "More than half of gate outcomes in 15m are failed (not environment)."
+
+  - name: ansibleai.celery
+    rules:
+      - alert: AnsibleAICeleryQueueBacklog
+        expr: celery_queue_length{queue_name="celery"} > 8
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Celery generation queue is backing up"
+          description: "celery_queue_length > 8 for 10 minutes. Workers are slower than arrivals."
+
+      - alert: AnsibleAICeleryWorkerDown
+        expr: celery_active_worker_count == 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "No active Celery workers"
+          description: "celery_active_worker_count is 0. Generations will sit in the queue."

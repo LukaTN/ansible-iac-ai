@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "kind": "retrieval",
+  "source": "backend/rag/retrieval_benchmark.json",
+  "refresh": "python scripts/eval_retrieval.py --json reports/retrieval.latest.json",
+  "measured": {
+    "at": "2026-08-22",
+    "report": "reports/retrieval.latest.json",
+    "n": 55,
+    "top1": 0.3636,
+    "hit@k": 0.6545,
+    "mrr": 0.4748,
+    "route_ok": 0.9455,
+    "note": "Matches the post-Phase-3 tuned numbers in docs/production_progress_report.md. Floors sit just under this run."
+  },
+  "thresholds": {
+    "top1": 0.34,
+    "hit@k": 0.63,
+    "mrr": 0.45,
+    "route_ok": 0.90
+  }
+}

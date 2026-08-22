@@ -105,12 +105,16 @@ def run_case_pipeline(case: GoldenCase) -> dict[str, Any]:
     }
     try:
         from agent import handle_message
+        from app import app
 
-        resp = handle_message(
-            thread_id=0,
-            user_message=case.query,
-            history=[],
-        )
+        # pgvector / Flask-SQLAlchemy need an app context. The HTTP path
+        # has one; this in-process runner did not, which crashed every case.
+        with app.app_context():
+            resp = handle_message(
+                thread_id=0,
+                user_message=case.query,
+                history=[],
+            )
 
         validation = resp.validation or {}
         out["playbook"] = resp.playbook or ""

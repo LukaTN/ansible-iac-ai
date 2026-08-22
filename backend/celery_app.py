@@ -83,6 +83,11 @@ celery.conf.update(
     # Celery 6 changes this default; setting it silences the warning and
     # keeps a worker started before Redis from exiting immediately.
     broker_connection_retry_on_startup=True,
+
+    # Phase 6b: celery-exporter subscribes to these events for task
+    # counters. Queue length / worker count still work without them.
+    worker_send_task_events=True,
+    task_send_sent_event=True,
 )
 
 
