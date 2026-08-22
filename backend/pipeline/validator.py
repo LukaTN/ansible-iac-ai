@@ -34,8 +34,8 @@ from datetime import datetime
 import yaml
 from kb_store import load_knowledge_base as load_kb_store
 
-# Always run from project root
-os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# backend/pipeline/validator.py → repository root (data/, output/ live there)
+os.chdir(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 if hasattr(sys.stderr, "reconfigure"):

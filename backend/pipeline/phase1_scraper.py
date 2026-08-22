@@ -28,7 +28,8 @@ from urllib.parse import urljoin
 import requests
 from bs4 import BeautifulSoup
 
-os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# backend/pipeline/<file>.py → repository root
+os.chdir(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 # ─────────────────────────────────────────────
 #  COLLECTION REGISTRY

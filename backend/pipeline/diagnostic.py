@@ -9,7 +9,8 @@ import os
 
 from bs4 import BeautifulSoup
 
-os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# backend/pipeline/<file>.py → repository root
+os.chdir(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 filepath = "data/raw_html/k8s_exec_module.html"
 

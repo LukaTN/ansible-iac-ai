@@ -13,7 +13,8 @@ from datetime import datetime
 
 from kb_store import write_manifest
 
-os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# backend/pipeline/<file>.py → repository root
+os.chdir(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 INPUT_DIR = "data/parsed"
 OUTPUT_FILE = "data/kb_manifest.json"

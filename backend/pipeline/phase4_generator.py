@@ -24,8 +24,8 @@ import requests
 from dotenv import load_dotenv
 from kb_store import load_knowledge_base as load_kb_store
 
-# Always run from project root
-os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# backend/pipeline/<file>.py → repository root
+os.chdir(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 if hasattr(sys.stderr, "reconfigure"):

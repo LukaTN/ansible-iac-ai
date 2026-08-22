@@ -47,11 +47,17 @@ x-langfuse-env: &langfuse-env
   LANGFUSE_S3_MEDIA_UPLOAD_ENDPOINT: http://langfuse-minio:9000
   LANGFUSE_S3_MEDIA_UPLOAD_FORCE_PATH_STYLE: "true"
   LANGFUSE_S3_MEDIA_UPLOAD_PREFIX: media/
+  # SSRF allowlist so Playground / LLM-as-a-Judge can call host Ollama.
+  # Without this, the UI rejects http://host.docker.internal:11434/v1
+  # with "Blocked hostname detected".
+  LANGFUSE_LLM_CONNECTION_WHITELISTED_HOST: host.docker.internal
 
 services:
   langfuse-worker:
     image: docker.io/langfuse/langfuse-worker:3
     restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
       langfuse-db:
         condition: service_healthy
@@ -67,6 +73,8 @@ services:
   langfuse-web:
     image: docker.io/langfuse/langfuse:3
     restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
       langfuse-db:
         condition: service_healthy
