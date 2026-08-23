@@ -35,6 +35,8 @@ def test_helm_chart_layout_exists() -> None:
         CHART / "templates" / "pdb.yaml",
         CHART / "templates" / "job-migrate.yaml",
         CHART / "templates" / "cronjob-reindex.yaml",
+        CHART / "templates" / "servicemonitor.yaml",
+        CHART / "templates" / "deployment-celery-exporter.yaml",
         CHART / "templates" / "networkpolicy.yaml",
         CHART / "templates" / "ollama.yaml",
         CHART / "templates" / "statefulset-postgres.yaml",
@@ -86,6 +88,8 @@ def test_staging_pins_lab_image_and_ollama() -> None:
     assert values["networkPolicy"]["enabled"] is True
     assert values["localPathProvisioner"]["enabled"] is True
     assert values["ingress"]["defaultBackendToApi"] is True
+    assert values["observability"]["serviceMonitor"]["enabled"] is True
+    assert values["celeryExporter"]["enabled"] is True
     helpers = (CHART / "templates" / "_helpers.tpl").read_text(encoding="utf-8")
     assert ".Values.ingress.host" in helpers
     assert "corsOrigins" in helpers
@@ -174,4 +178,8 @@ def test_vendor_images_are_pinned() -> None:
     rule = (CHART / "templates" / "prometheusrule.yaml").read_text(encoding="utf-8")
     assert "AnsibleAIGatePassRateDrop" in rule
     assert "ansibleai_ready" in rule
+    assert "AnsibleAICeleryQueueBacklog" in rule
+    exporter = (CHART / "templates" / "deployment-celery-exporter.yaml").read_text(encoding="utf-8")
+    assert "celeryExporter.image" in exporter
+    assert "CE_BROKER_URL" in exporter
     assert str(values["postgres"]["image"]["tag"]).startswith("0.")

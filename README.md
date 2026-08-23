@@ -4,7 +4,7 @@ AI-powered Infrastructure-as-Code assistant that generates Ansible playbooks gro
 
 The stack combines a **React 19** web UI, a **Flask + PostgreSQL** API, a **Celery worker** running a **LangGraph agent** (reason → tools → draft → production gate → repair loop), and a **hybrid RAG pipeline** (pgvector dense search + BM25, OpenAI-compatible embeddings).
 
-This is an academic / PFE (end-of-studies) project in DevOps, IaC, RAG, and LLM agents. Phases **0–3**, **5/5b**, **6a**, **6b**, and **7** (GitHub Actions + Argo CD manifests + eval gate) of the production LLMOps plan are implemented. Phase **4a** (kubeadm lab) is done; the Phase **4b** Helm chart is in the repository. Phases **6c** and **8** are not implemented. See [docs/production_progress_report.md](docs/production_progress_report.md) and [docs/general_introduction.md](docs/general_introduction.md).
+This is an academic / PFE (end-of-studies) project in DevOps, IaC, RAG, and LLM agents. Phases **0–3**, **5/5b**, **6a**, **6b**, **6c** (kube-prometheus / Loki / Tempo + optional Langfuse), and **7** (GitHub Actions + Argo CD + eval gate) of the production LLMOps plan are implemented. Phase **4a** (kubeadm lab) is done; the Phase **4b** Helm chart is in the repository. Phase **8** is not implemented. See [docs/production_progress_report.md](docs/production_progress_report.md) and [docs/general_introduction.md](docs/general_introduction.md).
 
 ---
 

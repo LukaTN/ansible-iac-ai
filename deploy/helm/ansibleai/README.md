@@ -91,7 +91,7 @@ Do not deploy `values-prod.yaml` without explicit approval, TLS, and a real Secr
 
 - **SLI:** ratio of non-5xx API responses (`ansibleai_http_requests_total`).
 - **SLO:** 99.5% availability over 30 days (error budget ≈ 3.6 hours). Tighten to 99.9% when production traffic exists.
-- Scrape annotations are on API pods (`/metrics`). `PrometheusRule` stays disabled until the operator CRDs exist.
+- Scrape annotations are on API pods (`/metrics`). Staging enables `ServiceMonitor` + `PrometheusRule` (needs kube-prometheus-stack CRDs — install Phase 6c first).
 
 
 
@@ -99,7 +99,7 @@ Do not deploy `values-prod.yaml` without explicit approval, TLS, and a real Secr
 
 - Argo CD itself (manifests are under `deploy/gitops/`; install is a lab step)
 - Vault / Sealed Secrets / ESO (Phase 8)
-- kube-prometheus-stack, Loki, Tempo (Phase 6c)
+- kube-prometheus-stack / Loki / Tempo / Langfuse (Phase 6c GitOps apps under `deploy/gitops/applications/`; lab install: `scripts/lab_install_observability.sh`)
 - vLLM / GPU Operator
 - oauth2-proxy on the member Ingress (members keep in-app login)
 

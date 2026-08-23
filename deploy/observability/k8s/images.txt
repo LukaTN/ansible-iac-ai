@@ -1,0 +1,24 @@
+# Phase 6c — images the kubeadm nodes must be able to pull (or ctr import).
+# Same pattern as Argo CD / ansibleai/app:dev. Never latest.
+# Versions match the pinned Helm charts in deploy/gitops/applications/.
+
+# kube-prometheus-stack 88.5.2 (approx; confirm with helm template)
+quay.io/prometheus-operator/prometheus-operator:v0.93.1
+quay.io/prometheus/prometheus:v3.5.0
+quay.io/prometheus/alertmanager:v0.28.1
+quay.io/prometheus/node-exporter:v1.9.1
+registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.17.0
+docker.io/grafana/grafana:11.6.1
+quay.io/kiwigrid/k8s-sidecar:1.30.3
+
+# Loki 6.29 / Alloy / Tempo
+docker.io/grafana/loki:3.4.3
+docker.io/grafana/alloy:v1.7.5
+docker.io/grafana/tempo:2.7.2
+
+# AnsibleAI celery exporter (app chart)
+docker.io/danihodovic/celery-exporter:0.12.2
+
+# Langfuse (optional, manual)
+docker.io/langfuse/langfuse:3
+docker.io/langfuse/langfuse-worker:3

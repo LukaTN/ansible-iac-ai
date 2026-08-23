@@ -79,5 +79,10 @@ keda:
 
 observability:
   scrape: true
+  serviceMonitor:
+    enabled: true
   prometheusRule:
-    enabled: false
+    enabled: true
+
+celeryExporter:
+  enabled: true

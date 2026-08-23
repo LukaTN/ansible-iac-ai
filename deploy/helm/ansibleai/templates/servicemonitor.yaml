@@ -1,0 +1,46 @@
+{{- if .Values.observability.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "ansibleai.fullname" . }}-api
+  labels:
+    {{- include "ansibleai.labels" . | nindent 4 }}
+    app.kubernetes.io/component: api
+    release: {{ .Values.observability.releaseLabel | quote }}
+  annotations:
+    ansibleai.io/purpose: "Phase 6c — Prometheus Operator scrape of GET /metrics."
+spec:
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  selector:
+    matchLabels:
+      {{- include "ansibleai.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: api
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 30s
+{{- if .Values.celeryExporter.enabled }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "ansibleai.fullname" . }}-celery
+  labels:
+    {{- include "ansibleai.labels" . | nindent 4 }}
+    app.kubernetes.io/component: celery-exporter
+    release: {{ .Values.observability.releaseLabel | quote }}
+spec:
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  selector:
+    matchLabels:
+      {{- include "ansibleai.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: celery-exporter
+  endpoints:
+    - port: metrics
+      interval: 30s
+{{- end }}
+{{- end }}

@@ -1,0 +1,73 @@
+{{- if .Values.celeryExporter.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ansibleai.fullname" . }}-celery-exporter
+  labels:
+    {{- include "ansibleai.labels" . | nindent 4 }}
+    app.kubernetes.io/component: celery-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "ansibleai.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: celery-exporter
+  template:
+    metadata:
+      labels:
+        {{- include "ansibleai.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: celery-exporter
+      annotations:
+        {{- if .Values.observability.scrape }}
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9808"
+        prometheus.io/path: /metrics
+        {{- end }}
+    spec:
+      serviceAccountName: {{ include "ansibleai.saWorker" . }}
+      automountServiceAccountToken: {{ .Values.serviceAccounts.automountServiceAccountToken }}
+      securityContext:
+        {{- include "ansibleai.podSecurityContext" . | nindent 8 }}
+      containers:
+        - name: celery-exporter
+          image: {{ include "ansibleai.pinnedImage" (dict "repository" .Values.celeryExporter.image.repository "tag" .Values.celeryExporter.image.tag "name" "celeryExporter") }}
+          imagePullPolicy: {{ .Values.celeryExporter.image.pullPolicy }}
+          env:
+            - name: CE_BROKER_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "ansibleai.secretName" . }}
+                  key: CELERY_BROKER_URL
+            - name: CE_BUCKETS
+              value: {{ .Values.celeryExporter.buckets | quote }}
+          ports:
+            - name: metrics
+              containerPort: 9808
+              protocol: TCP
+          securityContext:
+            {{- include "ansibleai.containerSecurityContext" . | nindent 12 }}
+          resources:
+            {{- toYaml .Values.celeryExporter.resources | nindent 12 }}
+          volumeMounts:
+            {{- include "ansibleai.tmpVolumeMounts" . | nindent 12 }}
+      volumes:
+        {{- include "ansibleai.tmpVolumes" . | nindent 8 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ansibleai.fullname" . }}-celery-exporter
+  labels:
+    {{- include "ansibleai.labels" . | nindent 4 }}
+    app.kubernetes.io/component: celery-exporter
+spec:
+  type: ClusterIP
+  selector:
+    {{- include "ansibleai.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: celery-exporter
+  ports:
+    - name: metrics
+      port: 9808
+      targetPort: metrics
+      protocol: TCP
+{{- end }}

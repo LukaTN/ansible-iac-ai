@@ -1,0 +1,33 @@
+# Phase 6c — Grafana Alloy DaemonSet (logs → Loki).
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: alloy
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: ansibleai
+    ansibleai.io/phase: "6c"
+spec:
+  project: default
+  sources:
+    - repoURL: https://grafana.github.io/helm-charts
+      chart: alloy
+      targetRevision: 1.0.3
+      helm:
+        releaseName: alloy
+        valueFiles:
+          - $values/deploy/observability/k8s/values/alloy-lab.yaml
+    - repoURL: https://github.com/LukaTN/ansible-iac-ai.git
+      targetRevision: main
+      ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: observability
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+  revisionHistoryLimit: 5

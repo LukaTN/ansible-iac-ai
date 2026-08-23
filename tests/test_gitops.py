@@ -34,6 +34,11 @@ def test_gitops_layout_exists() -> None:
         GITOPS / "README.md",
         GITOPS / "applications" / "staging.yaml",
         GITOPS / "applications" / "production.yaml",
+        GITOPS / "applications" / "kube-prometheus.yaml",
+        GITOPS / "applications" / "loki.yaml",
+        GITOPS / "applications" / "tempo.yaml",
+        GITOPS / "applications" / "alloy.yaml",
+        GITOPS / "applications" / "langfuse.yaml",
         CHART / "values-gitops-image.yaml",
         WORKFLOWS / "ci.yml",
         WORKFLOWS / "image.yml",
@@ -72,10 +77,11 @@ def test_gitops_repo_and_no_latest() -> None:
     image = _yaml(CHART / "values-gitops-image.yaml")
     assert image["image"]["tag"] != "latest"
     assert image["image"]["tag"]
-    for name in ("staging.yaml", "production.yaml"):
-        text = (GITOPS / "applications" / name).read_text(encoding="utf-8")
+    for path in (GITOPS / "applications").glob("*.yaml"):
+        text = path.read_text(encoding="utf-8")
         assert ":latest" not in text
-        assert "LukaTN/ansible-iac-ai" in text
+        if path.name in {"staging.yaml", "production.yaml"}:
+            assert "LukaTN/ansible-iac-ai" in text
 
 
 def test_workflows_never_tag_latest() -> None:

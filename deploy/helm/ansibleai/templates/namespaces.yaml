@@ -19,5 +19,5 @@ metadata:
     pod-security.kubernetes.io/enforce: baseline
     pod-security.kubernetes.io/audit: restricted
   annotations:
-    ansibleai.io/purpose: "Placeholder for kube-prometheus-stack / Loki (Phase 6c). Not installed in 4b."
+    ansibleai.io/purpose: "Phase 6c kube-prometheus-stack / Loki / Tempo (GitOps apps in deploy/gitops/applications/)."
 {{- end }}

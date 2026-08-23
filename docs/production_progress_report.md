@@ -1,11 +1,11 @@
 # AnsibleAI — Production Deployment Progress Report
 
-> **You are here:** Phase **7** is in git. Next is Phase **6c**.
+> **You are here:** Phase **6c** is in git. Next is Phase **8**.
 >
-> **Last updated:** 22 Aug 2026 — Phase **7** workflows (ci / image / eval-gate),
-> SHA-only GHCR tags, Trivy + Syft, Argo CD Applications, and
-> `scripts/lab_eval_gate.py` are in the repository. Argo CD itself is a lab
-> install step on `.19`. Do not start 8 yet. 4-gpu stays deferred.
+> **Last updated:** 23 Aug 2026 — Phase **6c** kube-prometheus-stack, Loki,
+> Tempo, Alloy, optional Langfuse Applications, ServiceMonitor / celery-exporter
+> on the app chart, and `scripts/lab_install_observability.sh`. Install from
+> `.19` if Argo cannot fetch Helm repos. Do not start 8 yet. 4-gpu stays deferred.
 >
 > This report is the living record of every production-readiness phase.
 > Each phase adds a section describing what changed, why it changed, and
@@ -770,6 +770,28 @@ CRITICAL (first pipeline records SARIF only).
 
 ---
 
+## Phase 6c — Observability on kubeadm
+
+**Goal:** Move the Compose scrape/trace/log story onto the two-node cluster
+without putting Langfuse on the member Ingress.
+
+**Status: sources in git** (23 Aug 2026). Live install is a lab step from `.19`
+(`scripts/lab_install_observability.sh`) because repo-server HTTPS to GitHub
+and Helm repos is the same flaky path as Argo `git fetch`.
+
+| Piece | Delivered |
+|-------|-----------|
+| kube-prometheus-stack 88.5.2 | Argo `kube-prometheus` + lab values (24h retention, NodePort Grafana **30300**) |
+| Loki + Alloy | Single-binary Loki, DaemonSet logs |
+| Tempo | Local backend, OTLP :4317/:4318 (Langfuse remains the LLM trace UI) |
+| App scrape | `ServiceMonitor`, staging `PrometheusRule` (incl. Celery), `danihodovic/celery-exporter:0.12.2` |
+| Langfuse | Optional namespace `langfuse`, **manual** sync / `--with-langfuse` |
+| Dashboard | Existing AnsibleAI overview ConfigMap into Grafana sidecar |
+
+**Not in 6c:** GPU/DCGM panels, Alertmanager paging, oauth2-proxy on Grafana.
+
+---
+
 ## Phases remaining
 
 | Phase | Summary | Status |
@@ -779,12 +801,13 @@ CRITICAL (first pipeline records SARIF only).
 | 4-gpu | Optional: vLLM + TEI + NVIDIA GPU Operator + DCGM — only if NVIDIA GPU nodes appear | Deferred |
 | 5 / 5b | Keycloak identity — in-app login, Keycloak-only admins, tokens spent in Account | **Complete** (cluster Keycloak install is 4b; no oauth2-proxy on members) |
 | 6a | Prometheus + Grafana + Langfuse (operator UI) on Compose | **Complete** |
-| **6b** | LLMOps loop: data curation, prompt design, model selection, guardrails, evals; plus Celery exporter / alerts | **Complete on Compose** — live scores gated; prompts synced to Langfuse `production`; leftovers are extra safety cases + in-cluster Grafana (6c) |
-| 6c | Loki/Tempo on the cluster (GPU panels only with 4-gpu) | Pending (after 7) |
+| **6b** | LLMOps loop: data curation, prompt design, model selection, guardrails, evals; plus Celery exporter / alerts | **Complete on Compose** |
+| **6c** | kube-prometheus-stack, Loki, Tempo, Alloy, optional Langfuse | **Complete in git** — install from `.19`; GPU panels stay deferred |
 | **7** | GitHub Actions, SHA tags, Trivy, Argo CD GitOps, eval gate vs `evals/baselines/golden.json`, rolling + documented rollback | **Complete in git** — Argo install + GHCR pull-secret are lab steps |
 | 8 | Default-deny NetworkPolicies, restricted PSS, Kyverno, ESO/Sealed Secrets, CNPG PITR, Velero, k6 | Pending |
 
-**Recommended next:** Phase **6c** (Loki/Tempo on the cluster).  
-**Then:** 8 (hardening).  
+**Recommended next:** Phase **8** (hardening).  
+**Then:** optional 4-gpu.  
 **Do not wait for GPUs.** vLLM/TEI is an optional add-on.  
-**7 leftovers (lab, not more git):** install Argo CD from `.19`; add a GHCR pull-secret or keep `ctr import`; optional self-hosted runner for live `eval-gate.yml`.
+**6c leftovers (lab):** `bash scripts/lab_install_observability.sh` from `.19`; sideload images in `deploy/observability/k8s/images.txt` if ImagePullBackOff; then sync `ansibleai-staging` so ServiceMonitors apply.  
+**7 leftovers (lab, not more git):** Argo CD is installed; keep the git daemon or GHCR pull-secret; optional self-hosted runner for live `eval-gate.yml`.

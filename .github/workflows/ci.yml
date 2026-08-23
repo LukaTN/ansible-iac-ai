@@ -43,7 +43,8 @@ jobs:
             tests/test_helm_chart.py \
             tests/test_model_bakeoff.py \
             tests/test_prompt_registry.py \
-            tests/test_observability.py
+            tests/test_observability.py \
+            tests/test_observability_k8s.py
       - name: Mypy (pre-commit scope)
         # Pin matches .pre-commit-config.yaml. Do not `pip install mypy` unpinned
         # (newer mypy + no Flask on this job fails auth/models follow-imports).

@@ -36,10 +36,10 @@ ansible-iac-ai/
 ├── scripts/                   # seed_admin, smoke_auth, eval runners
 ├── tests/                     # pytest (+ tests/e2e golden dataset)
 ├── docker/                    # entrypoint.sh, ansible-collections.yml
-├── deploy/observability/      # prometheus, Grafana, Langfuse compose
+├── deploy/observability/      # Compose 6a + k8s/ Phase 6c values
 ├── deploy/ansible/            # kubeadm lab bootstrap (Phase 4a complete)
 ├── deploy/helm/ansibleai/     # Phase 4b application chart
-├── deploy/gitops/             # Phase 7 Argo CD Applications
+├── deploy/gitops/             # Phase 7 + 6c Argo CD Applications
 ├── .github/workflows/         # Phase 7 ci / image / eval-gate
 ├── docs/                      # Reports, presentations, internship materials
 ├── data/                      # Local KB / scrape artifacts (gitignored)

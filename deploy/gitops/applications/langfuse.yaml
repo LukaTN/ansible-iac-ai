@@ -1,0 +1,32 @@
+# Phase 6c — Langfuse operator UI. Manual sync (heavy on two nodes).
+# Do not expose on the member Ingress. NodePort 30301 after install.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: langfuse
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: ansibleai
+    ansibleai.io/phase: "6c"
+    ansibleai.io/optional: "true"
+spec:
+  project: default
+  sources:
+    - repoURL: https://langfuse.github.io/langfuse-k8s
+      chart: langfuse
+      targetRevision: 1.5.1
+      helm:
+        releaseName: langfuse
+        valueFiles:
+          - $values/deploy/observability/k8s/values/langfuse-lab.yaml
+    - repoURL: https://github.com/LukaTN/ansible-iac-ai.git
+      targetRevision: main
+      ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: langfuse
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+  revisionHistoryLimit: 5

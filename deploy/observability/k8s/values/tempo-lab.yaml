@@ -1,0 +1,37 @@
+# Phase 6c — Grafana Tempo (local backend) for traces.
+# Chart: grafana/tempo 1.23.2
+# The Flask app still traces to Langfuse. Tempo is the cluster sink
+# (OTLP :4317/:4318) for later Alloy / SDK export. No GPU panels.
+
+tempo:
+  reportingEnabled: false
+  metricsGenerator:
+    enabled: false
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+          endpoint: 0.0.0.0:4317
+        http:
+          endpoint: 0.0.0.0:4318
+  storage:
+    trace:
+      backend: local
+      local:
+        path: /var/tempo/traces
+
+persistence:
+  enabled: true
+  storageClassName: local-path
+  size: 5Gi
+
+service:
+  type: ClusterIP
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi

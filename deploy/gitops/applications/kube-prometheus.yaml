@@ -1,0 +1,36 @@
+# Phase 6c — kube-prometheus-stack (Prometheus Operator + Grafana).
+# Helm chart is fetched by repo-server (or install with scripts/lab_install_observability.sh
+# from .19 if GitHub / chart repos time out). Values live in this git repo.
+# Edit spec.sources[1].repoURL if you use the lab git daemon mirror.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kube-prometheus
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: ansibleai
+    ansibleai.io/phase: "6c"
+spec:
+  project: default
+  sources:
+    - repoURL: https://prometheus-community.github.io/helm-charts
+      chart: kube-prometheus-stack
+      targetRevision: 88.5.2
+      helm:
+        releaseName: kube-prometheus
+        valueFiles:
+          - $values/deploy/observability/k8s/values/kube-prometheus-lab.yaml
+    - repoURL: https://github.com/LukaTN/ansible-iac-ai.git
+      targetRevision: main
+      ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: observability
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+  revisionHistoryLimit: 5

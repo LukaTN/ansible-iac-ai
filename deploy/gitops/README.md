@@ -7,6 +7,8 @@ stays the source of truth; these Applications point Argo at it.
 |-------------|-----------|------|--------|
 | `ansibleai-staging` | `ansibleai` | automated prune + selfHeal | `values-staging.yaml` + `values-gitops-image.yaml` |
 | `ansibleai-production` | `ansibleai-prod` | **manual** | `values-prod.yaml` + `values-gitops-image.yaml` |
+| `kube-prometheus` / `loki` / `tempo` / `alloy` | `observability` | automated (chart repos) | [../observability/k8s/](../observability/k8s/) |
+| `langfuse` | `langfuse` | **manual** | optional operator UI |
 
 Image tags come from [../helm/ansibleai/values-gitops-image.yaml](../helm/ansibleai/values-gitops-image.yaml).
 Never `latest`. Bump after CI:
@@ -90,5 +92,10 @@ no service mesh.
 - Harbor (GHCR is the default registry)
 - Argo Rollouts / Image Updater
 - Preview ApplicationSets for PRs
-- Loki / Tempo (Phase 6c)
 - Vault / Sealed Secrets (Phase 8)
+- GPU / DCGM dashboards (needs 4-gpu)
+
+Phase **6c** Applications live next to this file (`kube-prometheus.yaml`, `loki.yaml`,
+`tempo.yaml`, `alloy.yaml`, `langfuse.yaml`). On this lab prefer
+`bash scripts/lab_install_observability.sh` from `.19` if repo-server cannot
+reach Helm repos. See [../observability/k8s/README.md](../observability/k8s/README.md).

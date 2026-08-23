@@ -6,8 +6,9 @@ metadata:
   labels:
     {{- include "ansibleai.labels" . | nindent 4 }}
     app.kubernetes.io/component: api
+    release: {{ .Values.observability.releaseLabel | quote }}
   annotations:
-    ansibleai.io/purpose: "SLO burn-rate on ansibleai_http_requests_total. Requires prometheus-operator CRDs (not installed in 4b)."
+    ansibleai.io/purpose: "Phase 6c — PrometheusRule picked up by kube-prometheus-stack (release label)."
 spec:
   groups:
     - name: ansibleai.slo
@@ -63,5 +64,23 @@ spec:
             severity: warning
           annotations:
             summary: "Production-gate fail rate is above 50%"
+            runbook: {{ .Values.observability.slo.runbook | quote }}
+    - name: ansibleai.celery
+      rules:
+        - alert: AnsibleAICeleryQueueBacklog
+          expr: celery_queue_length{queue_name="celery"} > 8
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Celery generation queue is backing up"
+            runbook: {{ .Values.observability.slo.runbook | quote }}
+        - alert: AnsibleAICeleryWorkerDown
+          expr: celery_active_worker_count == 0
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "No active Celery workers"
             runbook: {{ .Values.observability.slo.runbook | quote }}
 {{- end }}

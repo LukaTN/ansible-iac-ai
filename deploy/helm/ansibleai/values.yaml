@@ -184,6 +184,21 @@ reindex:
       cpu: "1"
       memory: 2Gi
 
+celeryExporter:
+  enabled: false
+  image:
+    repository: danihodovic/celery-exporter
+    tag: "0.12.2"
+    pullPolicy: IfNotPresent
+  buckets: "1,2.5,5,10,30,60,300,600,900,1800"
+  resources:
+    requests:
+      cpu: 25m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 128Mi
+
 minioBucketJob:
   enabled: true
   # Same app image as migrate/api (boto3). Do not pull an extra MinIO client on air-gapped nodes.
@@ -345,6 +360,12 @@ autoscaling:
 
 observability:
   scrape: true
+  # Label must match the kube-prometheus-stack Helm release name.
+  releaseLabel: kube-prometheus
+  langfuseNamespace: langfuse
+  langfuseEgress: false
+  serviceMonitor:
+    enabled: false
   prometheusRule:
     enabled: false
   slo:

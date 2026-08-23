@@ -1,0 +1,68 @@
+# Phase 6c — Langfuse v3 in namespace langfuse (manual sync).
+# Chart: langfuse/langfuse (https://langfuse.github.io/langfuse-k8s)
+# Operator-only. Do not put this on the member Ingress (:30080).
+# Heavy on a two-node lab — install only after kube-prometheus + Loki + Tempo.
+
+langfuse:
+  salt:
+    value: lab-only-langfuse-salt-change-me
+  nextauth:
+    url: http://192.168.1.18:30301
+    secret:
+      value: lab-only-langfuse-nextauth-secret
+  encryptionKey:
+    value: "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+
+  service:
+    type: NodePort
+    nodePort: 30301
+
+  resources:
+    web:
+      requests:
+        cpu: 100m
+        memory: 512Mi
+      limits:
+        cpu: "1"
+        memory: 1Gi
+    worker:
+      requests:
+        cpu: 50m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
+
+postgresql:
+  deploy: true
+  auth:
+    password: lab-only-langfuse-pg
+  primary:
+    persistence:
+      storageClass: local-path
+      size: 8Gi
+
+clickhouse:
+  deploy: true
+  auth:
+    password: lab-only-langfuse-ch
+  persistence:
+    storageClass: local-path
+    size: 8Gi
+
+redis:
+  deploy: true
+  auth:
+    password: lab-only-langfuse-redis
+  master:
+    persistence:
+      storageClass: local-path
+      size: 2Gi
+
+s3:
+  deploy: true
+  auth:
+    rootPassword: lab-only-langfuse-minio
+  persistence:
+    storageClass: local-path
+    size: 8Gi
