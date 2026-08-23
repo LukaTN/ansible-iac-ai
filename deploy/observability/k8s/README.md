@@ -20,6 +20,20 @@ Langfuse NodePort **30301** — not the member Ingress (`:30080`).
 Argo’s repo-server often cannot finish `git fetch` or Helm-repo HTTPS
 (same worker egress as ImagePullBackOff). Helm on `.19` uses that VM’s internet.
 
+The `observability` namespace must be **privileged** (node-exporter / Alloy
+use hostPath). The install script labels it. If a previous run died with
+`context deadline exceeded`, Helm may be stuck in `pending-install`:
+
+```bash
+helm status kube-prometheus -n observability
+helm uninstall kube-prometheus -n observability
+kubectl label ns observability \
+  pod-security.kubernetes.io/enforce=privileged \
+  pod-security.kubernetes.io/audit=privileged \
+  pod-security.kubernetes.io/warn=privileged \
+  --overwrite
+```
+
 ```bash
 export KUBECONFIG=deploy/ansible/artifacts/kubeconfig
 bash scripts/lab_install_observability.sh

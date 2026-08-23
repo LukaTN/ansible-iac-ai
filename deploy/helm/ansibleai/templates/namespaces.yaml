@@ -16,8 +16,9 @@ metadata:
   name: {{ .Values.namespaces.observability }}
   labels:
     {{- include "ansibleai.labels" . | nindent 4 }}
-    pod-security.kubernetes.io/enforce: baseline
-    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/enforce: privileged
+    pod-security.kubernetes.io/audit: privileged
+    pod-security.kubernetes.io/warn: privileged
   annotations:
     ansibleai.io/purpose: "Phase 6c kube-prometheus-stack / Loki / Tempo (GitOps apps in deploy/gitops/applications/)."
 {{- end }}

@@ -151,6 +151,10 @@ prometheus:
             target_label: component
 
 prometheus-node-exporter:
+  hostNetwork: false
+  hostPID: false
+  hostRootFsMount:
+    enabled: false
   resources:
     requests:
       cpu: 10m

@@ -109,4 +109,16 @@ def test_install_script_pins_chart_versions() -> None:
     assert "--version 1.23.2" in script
     assert "ansibleai-overview.json" in script
     assert "--with-langfuse" in script
+    assert "pod-security.kubernetes.io/enforce=privileged" in script
+    assert "pending-install" in script
     assert ":latest" not in script
+
+
+def test_observability_namespace_is_privileged() -> None:
+    text = (CHART / "templates" / "namespaces.yaml").read_text(encoding="utf-8")
+    assert "namespaces.observability" in text
+    assert text.count("enforce: privileged") >= 1
+    values = _yaml(OBS / "values" / "kube-prometheus-lab.yaml")
+    exporter = values["prometheus-node-exporter"]
+    assert exporter["hostNetwork"] is False
+    assert exporter["hostPID"] is False

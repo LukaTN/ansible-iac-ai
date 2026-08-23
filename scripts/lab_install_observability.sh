@@ -30,6 +30,18 @@ command -v helm >/dev/null
 command -v kubectl >/dev/null
 
 kubectl create namespace "$NS" --dry-run=client -o yaml | kubectl apply -f -
+# node-exporter / Alloy need hostPath. The app chart used to stamp baseline
+# on this namespace, which blocks kube-prometheus-stack.
+kubectl label namespace "$NS" \
+  pod-security.kubernetes.io/enforce=privileged \
+  pod-security.kubernetes.io/audit=privileged \
+  pod-security.kubernetes.io/warn=privileged \
+  --overwrite
+
+if helm status kube-prometheus -n "$NS" 2>/dev/null | grep -Eq 'pending-install|pending-upgrade|failed'; then
+  echo ">> leftover kube-prometheus release — uninstalling so Helm can retry"
+  helm uninstall kube-prometheus -n "$NS" --wait --timeout 5m || true
+fi
 
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo add grafana https://grafana.github.io/helm-charts
@@ -37,12 +49,25 @@ helm repo add langfuse https://langfuse.github.io/langfuse-k8s
 helm repo update
 
 echo ">> kube-prometheus-stack 88.5.2"
-helm upgrade --install kube-prometheus prometheus-community/kube-prometheus-stack \
+if ! helm upgrade --install kube-prometheus prometheus-community/kube-prometheus-stack \
   --version 88.5.2 \
   --namespace "$NS" \
   --create-namespace \
   -f "$ROOT/deploy/observability/k8s/values/kube-prometheus-lab.yaml" \
-  --wait --timeout 15m
+  --timeout 10m
+then
+  echo "helm failed. pods / recent events:" >&2
+  kubectl -n "$NS" get pods -o wide || true
+  kubectl -n "$NS" get events --sort-by=.lastTimestamp | tail -n 30 || true
+  echo "If ImagePullBackOff: sideload deploy/observability/k8s/images.txt on .18 and .12" >&2
+  echo "If Helm says pending-install: helm uninstall kube-prometheus -n $NS" >&2
+  exit 1
+fi
+kubectl wait --for=condition=Established \
+  crd/prometheuses.monitoring.coreos.com \
+  crd/servicemonitors.monitoring.coreos.com \
+  --timeout=180s
+echo ">> kube-prometheus submitted (images may still be pulling — not a Helm wait)"
 
 echo ">> Loki 6.29.0"
 helm upgrade --install loki grafana/loki \
