@@ -13,7 +13,7 @@ quay.io/kiwigrid/k8s-sidecar:1.30.3
 
 # Loki 6.29 / Alloy / Tempo
 docker.io/grafana/loki:3.4.3
-docker.io/grafana/alloy:v1.7.5
+docker.io/grafana/alloy:v1.8.3
 docker.io/grafana/tempo:2.7.2
 
 # AnsibleAI celery exporter (app chart)

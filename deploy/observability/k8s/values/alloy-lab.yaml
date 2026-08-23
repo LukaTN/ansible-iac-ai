@@ -54,6 +54,12 @@ alloy:
         }
       }
 
+# Chart default pulls quay.io/prometheus-operator/prometheus-config-reloader.
+# This lab's worker often resets quay.io (Alloy stays 0/2 ContainerCreating).
+# ConfigMap edits still roll the DaemonSet via checksum.
+configReloader:
+  enabled: false
+
 serviceMonitor:
   enabled: false
 

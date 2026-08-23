@@ -41,6 +41,21 @@ bash scripts/lab_install_observability.sh
 # bash scripts/lab_install_observability.sh --with-langfuse
 ```
 
+Helm `STATUS: deployed` only means the release was submitted. Check pods next.
+If `kube-prometheus-operator` stays `ContainerCreating` with
+`secret "kube-prometheus-admission" not found`, upgrade with TLS off
+(no uninstall):
+
+```bash
+helm upgrade kube-prometheus prometheus-community/kube-prometheus-stack \
+  --version 88.5.2 \
+  --namespace observability \
+  -f deploy/observability/k8s/values/kube-prometheus-lab.yaml \
+  --set prometheusOperator.admissionWebhooks.enabled=false \
+  --set prometheusOperator.tls.enabled=false
+kubectl -n observability get pods
+```
+
 Then apply the GitOps Applications (values-only if Helm already owns the release):
 
 ```bash

@@ -54,6 +54,8 @@ if ! helm upgrade --install kube-prometheus prometheus-community/kube-prometheus
   --namespace "$NS" \
   --create-namespace \
   -f "$ROOT/deploy/observability/k8s/values/kube-prometheus-lab.yaml" \
+  --set prometheusOperator.admissionWebhooks.enabled=false \
+  --set prometheusOperator.tls.enabled=false \
   --timeout 10m
 then
   echo "helm failed. pods / recent events:" >&2
@@ -88,6 +90,7 @@ helm upgrade --install alloy grafana/alloy \
   --version 1.0.3 \
   --namespace "$NS" \
   -f "$ROOT/deploy/observability/k8s/values/alloy-lab.yaml" \
+  --set configReloader.enabled=false \
   --wait --timeout 10m
 
 DASH="$ROOT/deploy/observability/grafana/provisioning/dashboards/json/ansibleai-overview.json"
@@ -104,7 +107,17 @@ if [[ "$WITH_LANGFUSE" -eq 1 ]]; then
     --namespace langfuse \
     --create-namespace \
     -f "$ROOT/deploy/observability/k8s/values/langfuse-lab.yaml" \
+    --set langfuse.web.service.type=NodePort \
+    --set langfuse.web.service.nodePort=30301 \
     --timeout 15m
+fi
+
+echo
+echo ">> releases submitted — check pods (Helm success is not Ready)"
+kubectl -n "$NS" get pods
+kubectl -n "$NS" get prometheus,alertmanager
+if [[ "$WITH_LANGFUSE" -eq 1 ]]; then
+  kubectl -n langfuse get pods
 fi
 
 echo

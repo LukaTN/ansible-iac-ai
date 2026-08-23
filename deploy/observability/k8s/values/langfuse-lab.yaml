@@ -1,7 +1,10 @@
 # Phase 6c — Langfuse v3 in namespace langfuse (manual sync).
-# Chart: langfuse/langfuse (https://langfuse.github.io/langfuse-k8s)
+# Chart: langfuse/langfuse 1.5.1 (https://langfuse.github.io/langfuse-k8s)
 # Operator-only. Do not put this on the member Ingress (:30080).
 # Heavy on a two-node lab — install only after kube-prometheus + Loki + Tempo.
+#
+# Chart 1.5.1 keys: langfuse.web.service / langfuse.web.resources / langfuse.worker.resources.
+# Nested langfuse.resources.web is invalid K8s Container.resources (unknown field warnings).
 
 langfuse:
   salt:
@@ -13,19 +16,20 @@ langfuse:
   encryptionKey:
     value: "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
 
-  service:
-    type: NodePort
-    nodePort: 30301
-
-  resources:
-    web:
+  web:
+    service:
+      type: NodePort
+      nodePort: 30301
+    resources:
       requests:
         cpu: 100m
         memory: 512Mi
       limits:
         cpu: "1"
         memory: 1Gi
-    worker:
+
+  worker:
+    resources:
       requests:
         cpu: 50m
         memory: 256Mi
@@ -46,6 +50,10 @@ clickhouse:
   deploy: true
   auth:
     password: lab-only-langfuse-ch
+  # Chart default is replicaCount: 3 + resourcesPreset: 2xlarge — too much for this lab.
+  replicaCount: 1
+  clusterEnabled: false
+  resourcesPreset: small
   persistence:
     storageClass: local-path
     size: 8Gi
@@ -54,7 +62,8 @@ redis:
   deploy: true
   auth:
     password: lab-only-langfuse-redis
-  master:
+  # Valkey subchart (1.5.1) uses primary, not master.
+  primary:
     persistence:
       storageClass: local-path
       size: 2Gi

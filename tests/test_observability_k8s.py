@@ -75,6 +75,11 @@ def test_langfuse_app_is_manual() -> None:
     assert app["spec"]["destination"]["namespace"] == "langfuse"
 
 
+def test_alloy_disables_quay_config_reloader() -> None:
+    values = _yaml(OBS / "values" / "alloy-lab.yaml")
+    assert values["configReloader"]["enabled"] is False
+
+
 def test_loki_is_single_binary() -> None:
     values = _yaml(OBS / "values" / "loki-lab.yaml")
     assert values["deploymentMode"] == "SingleBinary"
@@ -111,7 +116,23 @@ def test_install_script_pins_chart_versions() -> None:
     assert "--with-langfuse" in script
     assert "pod-security.kubernetes.io/enforce=privileged" in script
     assert "pending-install" in script
+    assert "prometheusOperator.tls.enabled=false" in script
+    assert "configReloader.enabled=false" in script
     assert ":latest" not in script
+
+
+def test_langfuse_values_match_chart_1_5_1() -> None:
+    values = _yaml(OBS / "values" / "langfuse-lab.yaml")
+    resources = values["langfuse"].get("resources") or {}
+    assert "web" not in resources
+    assert "worker" not in resources
+    web = values["langfuse"]["web"]
+    assert web["service"]["type"] == "NodePort"
+    assert web["service"]["nodePort"] == 30301
+    assert "requests" in web["resources"]
+    assert "requests" in values["langfuse"]["worker"]["resources"]
+    assert values["clickhouse"]["replicaCount"] == 1
+    assert values["clickhouse"]["clusterEnabled"] is False
 
 
 def test_observability_namespace_is_privileged() -> None:
@@ -122,3 +143,5 @@ def test_observability_namespace_is_privileged() -> None:
     exporter = values["prometheus-node-exporter"]
     assert exporter["hostNetwork"] is False
     assert exporter["hostPID"] is False
+    assert values["prometheusOperator"]["admissionWebhooks"]["enabled"] is False
+    assert values["prometheusOperator"]["tls"]["enabled"] is False

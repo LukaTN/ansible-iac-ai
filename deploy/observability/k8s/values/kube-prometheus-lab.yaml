@@ -27,6 +27,11 @@ kubeProxy:
 prometheusOperator:
   admissionWebhooks:
     enabled: false
+  # Chart still mounts Secret kube-prometheus-admission when TLS is on.
+  # That Secret is only created by the webhook patch Job — without it the
+  # operator stays ContainerCreating (FailedMount).
+  tls:
+    enabled: false
   resources:
     requests:
       cpu: 20m
