@@ -38,6 +38,8 @@ app:
   playbookModel: "qwen2.5-coder:14b"
   embeddingModel: nomic-embed-text
   embeddingDimensions: "768"
+  embeddingTimeout: "300"
+  embeddingMaxRetries: "4"
   s3Bucket: ansibleai-playbooks
   s3Region: us-east-1
   langfuseEnabled: "false"

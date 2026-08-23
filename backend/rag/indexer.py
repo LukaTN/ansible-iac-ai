@@ -21,6 +21,7 @@ import json
 import os
 import sys
 from datetime import datetime
+from pathlib import Path
 
 FILE_DIR = os.path.dirname(os.path.abspath(__file__))
 BACKEND_ROOT = os.path.dirname(FILE_DIR)
@@ -195,8 +196,6 @@ def build_index(
         from rag.invalidation import publish_invalidation
         publish_invalidation()
 
-        # Save report
-        os.makedirs("reports", exist_ok=True)
         report = {
             "indexed_at": datetime.now().isoformat(),
             "embed_model": EMBED_MODEL,
@@ -207,11 +206,42 @@ def build_index(
             "total_in_db": final,
             "backend": "pgvector",
         }
-        with open("reports/indexing_report.json", "w") as f:
-            json.dump(report, f, indent=2)
-        print("  Report → reports/indexing_report.json")
+        _write_indexing_report(report)
 
         return final
+
+
+def writable_reports_dir() -> Path:
+    """Prefer /app/reports (Helm scratch), then REPORTS_DIR, then TMPDIR.
+
+    The container root is read-only. A failed report must not fail the index.
+    """
+    env_dir = (os.environ.get("REPORTS_DIR") or "").strip()
+    candidates = []
+    if env_dir:
+        candidates.append(Path(env_dir))
+    candidates.append(Path(PROJECT_ROOT) / "reports")
+    candidates.append(Path(os.environ.get("TMPDIR", "/tmp")) / "ansibleai-reports")
+
+    for candidate in candidates:
+        try:
+            candidate.mkdir(parents=True, exist_ok=True)
+            probe = candidate / ".write_probe"
+            probe.write_text("ok")
+            probe.unlink()
+            return candidate
+        except OSError:
+            continue
+    raise OSError("no writable reports directory")
+
+
+def _write_indexing_report(report: dict) -> None:
+    try:
+        dest = writable_reports_dir() / "indexing_report.json"
+        dest.write_text(json.dumps(report, indent=2), encoding="utf-8")
+        print(f"  Report → {dest}")
+    except OSError as exc:
+        print(f"  Report skipped (filesystem not writable: {exc})")
 
 
 # ─────────────────────────────────────────────

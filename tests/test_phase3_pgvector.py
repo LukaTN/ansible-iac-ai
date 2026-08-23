@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import json
 import threading
+import time
 from pathlib import Path
 from typing import Any
 from unittest.mock import MagicMock, patch
@@ -124,6 +125,60 @@ class TestEmbeddingsClient:
         status = embeddings.check_health()
         assert status["ok"] is False
         assert "connection refused" in status["error"]
+
+    def test_embed_texts_retries_timeout(self, monkeypatch):
+        """A ReadTimeout on the first batch is retried, then succeeds."""
+        import httpx
+        from rag import embeddings
+
+        calls = {"n": 0}
+
+        def fake_post(url, json=None, **kwargs):
+            calls["n"] += 1
+            if calls["n"] == 1:
+                raise httpx.ReadTimeout("timed out")
+            batch_size = len(json["input"])
+            resp = MagicMock()
+            resp.json.return_value = {
+                "data": [{"index": i, "embedding": [0.1] * 768} for i in range(batch_size)]
+            }
+            resp.raise_for_status = MagicMock()
+            return resp
+
+        mock_client = MagicMock()
+        mock_client.post = fake_post
+        monkeypatch.setattr(embeddings, "_client", mock_client)
+        monkeypatch.setattr(embeddings.settings, "embedding_max_retries", 2)
+        monkeypatch.setattr(embeddings, "reset_client", lambda: None)
+        monkeypatch.setattr(time, "sleep", lambda _s: None)
+
+        result = embeddings.embed_texts(["hello"])
+        assert result.shape == (1, 768)
+        assert calls["n"] == 2
+
+
+# ─────────────────────────────────────────────
+#  Indexer report path (read-only root)
+# ─────────────────────────────────────────────
+
+
+class TestIndexerReport:
+    def test_writable_reports_dir_uses_reports_dir_env(self, tmp_path, monkeypatch):
+        from rag import indexer
+
+        target = tmp_path / "custom-reports"
+        monkeypatch.setenv("REPORTS_DIR", str(target))
+        assert indexer.writable_reports_dir() == target
+
+    def test_write_indexing_report_skips_when_unwritable(self, monkeypatch, capsys):
+        from rag import indexer
+
+        def _boom() -> Path:
+            raise OSError("Read-only file system")
+
+        monkeypatch.setattr(indexer, "writable_reports_dir", _boom)
+        indexer._write_indexing_report({"ok": True})
+        assert "Report skipped" in capsys.readouterr().out
 
 
 # ─────────────────────────────────────────────

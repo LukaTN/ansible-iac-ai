@@ -244,6 +244,9 @@ class Settings(BaseSettings):
     embedding_dimensions: int = 768
     embedding_batch_size: int = 64
     embedding_api_key: str = ""
+    # Laptop Ollama / a full 8k-chunk reindex often exceeds 60s per batch.
+    embedding_timeout: float = 300.0
+    embedding_max_retries: int = 4
 
     # ── Vector store (pgvector) ───────────────────────────────────
     # Index schema version + chunk schema version together decide

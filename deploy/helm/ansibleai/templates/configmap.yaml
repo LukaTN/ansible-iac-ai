@@ -30,6 +30,9 @@ data:
   PLAYBOOK_MODEL: {{ .Values.app.playbookModel | quote }}
   EMBEDDING_MODEL: {{ .Values.app.embeddingModel | quote }}
   EMBEDDING_DIMENSIONS: {{ .Values.app.embeddingDimensions | quote }}
+  EMBEDDING_TIMEOUT: {{ .Values.app.embeddingTimeout | quote }}
+  EMBEDDING_MAX_RETRIES: {{ .Values.app.embeddingMaxRetries | quote }}
+  REPORTS_DIR: "/app/reports"
   OLLAMA_BASE_URL: {{ include "ansibleai.ollamaBaseUrl" . | quote }}
   EMBEDDING_BASE_URL: {{ printf "%s/v1" (include "ansibleai.ollamaBaseUrl" .) | quote }}
   RAG_PARSED_DIR: "/app/data/parsed"

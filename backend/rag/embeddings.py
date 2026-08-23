@@ -44,9 +44,12 @@ def _get_client() -> httpx.Client:
         _client = httpx.Client(
             base_url=base_url.rstrip("/"),
             headers=headers,
-            timeout=60.0,
+            timeout=settings.embedding_timeout,
         )
     return _client
+
+
+_RETRYABLE = (httpx.TimeoutException, httpx.NetworkError)
 
 
 def embed_texts(
@@ -67,18 +70,42 @@ def embed_texts(
 
     all_embeddings: list[list[float]] = []
 
+    retries = max(0, int(settings.embedding_max_retries))
+
     for i in range(0, len(texts), batch_size):
         batch = list(texts[i : i + batch_size])
         t0 = time.perf_counter()
+        last_exc: Exception | None = None
 
-        resp = client.post(
-            "/embeddings",
-            json={"input": batch, "model": model},
-        )
-        resp.raise_for_status()
-        data = resp.json()["data"]
-        batch_vecs = [item["embedding"] for item in sorted(data, key=lambda x: x["index"])]
-        all_embeddings.extend(batch_vecs)
+        for attempt in range(retries + 1):
+            try:
+                resp = client.post(
+                    "/embeddings",
+                    json={"input": batch, "model": model},
+                )
+                resp.raise_for_status()
+                data = resp.json()["data"]
+                batch_vecs = [
+                    item["embedding"] for item in sorted(data, key=lambda x: x["index"])
+                ]
+                all_embeddings.extend(batch_vecs)
+                last_exc = None
+                break
+            except _RETRYABLE as exc:
+                last_exc = exc
+                log.warning(
+                    "embedding.batch.retry",
+                    batch_idx=i // batch_size,
+                    attempt=attempt + 1,
+                    retries=retries,
+                    error=str(exc),
+                )
+                reset_client()
+                client = _get_client()
+                time.sleep(min(2 ** attempt, 16))
+
+        if last_exc is not None:
+            raise last_exc
 
         log.debug(
             "embedding.batch",
