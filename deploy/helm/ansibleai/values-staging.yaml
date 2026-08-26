@@ -131,6 +131,8 @@ reindex:
 # Keycloak admin NodePort 30808 (not :30080). AUTH_MODE stays local until patched.
 identity:
   enabled: true
+  nodeSelector:
+    kubernetes.io/hostname: k8s-worker
   javaOptsAppend: "-Xms128m -Xmx256m"
   resources:
     requests:

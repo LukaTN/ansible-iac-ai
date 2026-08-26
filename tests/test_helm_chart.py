@@ -87,6 +87,7 @@ def test_staging_pins_lab_image_and_ollama() -> None:
     assert defaults["ollama"]["endpoint"]["ip"] == "192.168.1.14"
     assert values["app"]["authMode"] == "local"
     assert values["identity"]["enabled"] is True
+    assert values["identity"]["nodeSelector"]["kubernetes.io/hostname"] == "k8s-worker"
     assert values["identity"]["resources"]["requests"]["cpu"] == "100m"
     assert values["api"]["resources"]["requests"]["cpu"] == "50m"
     assert values["secrets"]["oidcClientSecret"] == "ansibleai-dev-oidc-secret"
@@ -210,6 +211,9 @@ def test_keycloak_templates_are_lab_nodeport_not_ingress() -> None:
     assert chart_realm == source_realm
     assert "JAVA_OPTS_APPEND" in keycloak
     assert "identity.javaOptsAppend" in keycloak
+    assert "identity.nodeSelector" in keycloak
+    assert "pipefail" not in keycloak
+    assert "set -eu" in keycloak
     assert "--import-realm" in keycloak
     assert "identity.namespace" in keycloak
     assert "/health/ready" in keycloak
