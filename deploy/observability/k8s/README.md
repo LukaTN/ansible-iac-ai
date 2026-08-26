@@ -1,7 +1,7 @@
 # Phase 6c — Observability on kubeadm
 
 Compose (6a/6b) stays the laptop inner loop. This directory is the **cluster**
-stack: scrape `GET /metrics`, pod logs, a Tempo OTLP sink, and optional Langfuse.
+stack: scrape `GET /metrics`, pod logs, a Tempo OTLP sink, and Langfuse.
 
 | Piece | Where | Sync |
 |-------|--------|------|
@@ -9,7 +9,7 @@ stack: scrape `GET /metrics`, pod logs, a Tempo OTLP sink, and optional Langfuse
 | Loki 6.29.0 (single binary) | `observability` | same |
 | Tempo 1.23.2 | `observability` | same |
 | Grafana Alloy (logs → Loki) | `observability` DaemonSet | same |
-| Langfuse v3 | `langfuse` | **manual** (`--with-langfuse`) |
+| Langfuse v3 | `langfuse` | **manual** (`--with-langfuse`) — required for the LLMOps UI; sized for worker 7Gi/4 vCPU |
 | AnsibleAI ServiceMonitor + PrometheusRule + celery-exporter | `ansibleai` chart (staging on) | after CRDs exist |
 
 Never `:latest`. Storage is `local-path`. Grafana NodePort **30300**.

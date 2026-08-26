@@ -1,8 +1,8 @@
 # Phase 6c — Langfuse v3 in namespace langfuse (manual sync).
 # Chart: langfuse/langfuse 1.5.1 (https://langfuse.github.io/langfuse-k8s)
-# Operator-only. Do not put this on the member Ingress (:30080).
-# Heavy on a two-node lab — install only after kube-prometheus + Loki + Tempo.
+# Operator UI. Do not put this on the member Ingress (:30080).
 #
+# Sized for k8s-worker 7Gi / 4 vCPU (with the app + kube-prometheus).
 # Chart 1.5.1 keys: langfuse.web.service / langfuse.web.resources / langfuse.worker.resources.
 # Nested langfuse.resources.web is invalid K8s Container.resources (unknown field warnings).
 
@@ -22,20 +22,20 @@ langfuse:
       nodePort: 30301
     resources:
       requests:
-        cpu: 100m
-        memory: 512Mi
-      limits:
-        cpu: "1"
-        memory: 1Gi
-
-  worker:
-    resources:
-      requests:
         cpu: 50m
         memory: 256Mi
       limits:
         cpu: 500m
         memory: 512Mi
+
+  worker:
+    resources:
+      requests:
+        cpu: 50m
+        memory: 192Mi
+      limits:
+        cpu: 400m
+        memory: 384Mi
 
 postgresql:
   deploy: true
@@ -45,18 +45,49 @@ postgresql:
     persistence:
       storageClass: local-path
       size: 8Gi
+    resourcesPreset: none
+    resources:
+      requests:
+        cpu: 50m
+        memory: 256Mi
+      limits:
+        cpu: 250m
+        memory: 512Mi
 
 clickhouse:
   deploy: true
   auth:
     password: lab-only-langfuse-ch
-  # Chart default is replicaCount: 3 + resourcesPreset: 2xlarge — too much for this lab.
+  # Chart default is replicaCount: 3 + resourcesPreset: 2xlarge.
   replicaCount: 1
   clusterEnabled: false
-  resourcesPreset: small
+  resourcesPreset: none
+  resources:
+    requests:
+      cpu: 150m
+      memory: 384Mi
+    limits:
+      cpu: 500m
+      memory: 768Mi
   persistence:
     storageClass: local-path
     size: 8Gi
+  # Bitnami ClickHouse still ships ZK×3 unless this is set. One keeper
+  # is enough for a single ClickHouse replica.
+  zookeeper:
+    replicaCount: 1
+    resourcesPreset: none
+    resources:
+      requests:
+        cpu: 50m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
+    persistence:
+      enabled: true
+      storageClass: local-path
+      size: 2Gi
 
 redis:
   deploy: true
@@ -67,6 +98,14 @@ redis:
     persistence:
       storageClass: local-path
       size: 2Gi
+    resourcesPreset: none
+    resources:
+      requests:
+        cpu: 25m
+        memory: 64Mi
+      limits:
+        cpu: 150m
+        memory: 128Mi
 
 s3:
   deploy: true
@@ -75,3 +114,11 @@ s3:
   persistence:
     storageClass: local-path
     size: 8Gi
+  resourcesPreset: none
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 250m
+      memory: 256Mi

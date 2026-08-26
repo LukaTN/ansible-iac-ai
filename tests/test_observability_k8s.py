@@ -133,6 +133,9 @@ def test_langfuse_values_match_chart_1_5_1() -> None:
     assert "requests" in values["langfuse"]["worker"]["resources"]
     assert values["clickhouse"]["replicaCount"] == 1
     assert values["clickhouse"]["clusterEnabled"] is False
+    assert values["clickhouse"]["zookeeper"]["replicaCount"] == 1
+    assert values["clickhouse"]["resources"]["requests"]["cpu"] == "150m"
+    assert values["langfuse"]["web"]["resources"]["requests"]["cpu"] == "50m"
 
 
 def test_observability_namespace_is_privileged() -> None:

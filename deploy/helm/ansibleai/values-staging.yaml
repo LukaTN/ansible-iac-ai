@@ -1,4 +1,9 @@
 # Lab overlay for the two-node kubeadm cluster.
+#
+# Hypervisor ~16Gi. VMs: ansible-control .19 = 1Gi (not a node);
+# k8s-master .18 = 4Gi / 4 vCPU (control plane — keep the taint);
+# k8s-worker .12 = 7Gi / 4 vCPU (almost every PVC + workload).
+# Requests below are pack-to-schedule (~1.3 CPU / ~4Gi), not prod SLOs.
 
 lab:
   masterIp: "192.168.1.18"
@@ -19,10 +24,24 @@ app:
 
 api:
   replicas: 1
+  resources:
+    requests:
+      cpu: 50m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
 
 worker:
   replicas: 1
   terminationGracePeriodSeconds: 120
+  resources:
+    requests:
+      cpu: 75m
+      memory: 256Mi
+    limits:
+      cpu: 750m
+      memory: 1Gi
 
 ingress:
   enabled: true
@@ -59,20 +78,67 @@ postgres:
   persistence:
     storageClass: local-path
     size: 10Gi
+  resources:
+    requests:
+      cpu: 75m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 768Mi
 
 redis:
   persistence:
     storageClass: local-path
     size: 2Gi
+  resources:
+    requests:
+      cpu: 25m
+      memory: 64Mi
+    limits:
+      cpu: 150m
+      memory: 128Mi
 
 minio:
   persistence:
     storageClass: local-path
     size: 10Gi
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 300m
+      memory: 256Mi
+
+migrate:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 250m
+      memory: 256Mi
+
+reindex:
+  resources:
+    requests:
+      cpu: 75m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
 
 # Keycloak admin NodePort 30808 (not :30080). AUTH_MODE stays local until patched.
 identity:
   enabled: true
+  javaOptsAppend: "-Xms128m -Xmx256m"
+  resources:
+    requests:
+      cpu: 100m
+      memory: 384Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
 
 networkPolicy:
   enabled: true

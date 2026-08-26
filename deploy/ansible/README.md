@@ -83,8 +83,8 @@ Clone this repo on **192.168.1.19**, then work in `deploy/ansible`.
 - Python 3
 - Worker must reach master on TCP **6443**
 - No GPU required
-- **4 GB+ RAM** on control plane recommended for kubeadm + Calico
-- **4 cores+** on control plane recommended for kubeadm + Calico 
+- **4 GB RAM / 4 vCPU** on the control plane (kubeadm + Calico + ingress). Do not shrink below this.
+- **7 GB RAM / 4 vCPU** on the worker when running the app + kube-prometheus + Loki/Tempo + Langfuse + Keycloak. CPU **requests** (not RAM) are what fill first. 
 Passwordless SSH from .19 (example):
 
 ```bash

@@ -336,11 +336,13 @@ identity:
     nodePort: 30808
   resources:
     requests:
-      cpu: 250m
-      memory: 512Mi
+      cpu: 100m
+      memory: 384Mi
     limits:
-      cpu: "1"
-      memory: 1Gi
+      cpu: 500m
+      memory: 512Mi
+  # Heap must fit in requests. start-dev is lab-only.
+  javaOptsAppend: "-Xms128m -Xmx256m"
 
 namespaces:
   createExtras: true

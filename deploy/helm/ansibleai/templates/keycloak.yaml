@@ -205,7 +205,7 @@ spec:
             - name: KC_HTTP_MANAGEMENT_HEALTH_ENABLED
               value: "true"
             - name: JAVA_OPTS_APPEND
-              value: "-Xms256m -Xmx512m"
+              value: {{ .Values.identity.javaOptsAppend | default "-Xms128m -Xmx256m" | quote }}
           securityContext:
             allowPrivilegeEscalation: false
             # start-dev writes under /opt/keycloak (not only /data). Compose is not read-only either.

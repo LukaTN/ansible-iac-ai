@@ -34,10 +34,10 @@ singleBinary:
   resources:
     requests:
       cpu: 50m
-      memory: 256Mi
+      memory: 192Mi
     limits:
-      cpu: "1"
-      memory: 768Mi
+      cpu: 400m
+      memory: 512Mi
 
 backend:
   replicas: 0

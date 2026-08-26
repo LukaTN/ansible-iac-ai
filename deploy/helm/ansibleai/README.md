@@ -22,7 +22,7 @@ Lab HTTP has no TLS, so `app.env` stays `development`. `APP_ENV=staging|producti
 
 ## Prerequisites
 
-1. Phase 4a cluster (`.18` master, `.12` worker, ingress-nginx NodePort **30080/30443**).
+1. Phase 4a cluster (`.18` master **4Gi/4 vCPU**, `.12` worker **7Gi/4 vCPU**, ingress-nginx NodePort **30080/30443**). Staging requests in `values-staging.yaml` are packed for that worker; do not restore chart defaults on this lab.
 2. Image present on **both** nodes (no registry yet):
 
 ```bash
