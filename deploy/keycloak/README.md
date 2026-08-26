@@ -111,13 +111,45 @@ worker. Members see used / remaining / cap under **Account**. Remaining
 budget is also attached to the Langfuse `generate-playbook` trace as
 `token_budget_*`.
 
-## Kubernetes (later)
+## Kubernetes (kubeadm lab)
 
-- Run Keycloak as a Deployment (or the Bitnami/operator chart) with
-  Postgres from CloudNativePG.
-- Put oauth2-proxy at ingress only if you later drop ROPC.
-- Keep in-app JWT verification for API and Socket.IO (`Authorization: Bearer` and `connect({ token })`).
-- Client secret via External Secrets + Vault (Phase 8).
+Keycloak runs in namespace **`identity`**, Service **`keycloak`**
+(`keycloak.identity.svc.cluster.local:8080`). It reuses the app Postgres
+(init container `CREATE DATABASE keycloak`) and imports
+`realm-ansibleai.json` with `--import-realm`. Image pin:
+`quay.io/keycloak/keycloak:26.2.5`.
+
+Admin console is **NodePort 30808** on the master — **not** member Ingress
+`:30080`, and **not** oauth2-proxy.
+
+| Who | URL |
+| --- | --- |
+| Browser / token `iss` | `http://192.168.1.18:30808/realms/ansibleai` (`OIDC_ISSUER`) |
+| API token + JWKS | `http://keycloak.identity.svc.cluster.local:8080` (`OIDC_INTERNAL_BASE_URL`) |
+| Admin console | `http://192.168.1.18:30808/admin` (`admin` / `lab-only-keycloak-admin` in staging values) |
+
+`values-staging.yaml` sets `identity.enabled=true` and keeps
+`app.authMode: local` so existing cluster login does not switch to ROPC
+until you patch `AUTH_MODE=hybrid`.
+
+Do **not** `helm upgrade ansibleai` when Argo owns the app (missing
+`meta.helm.sh/release-name`). From `.19`:
+
+```bash
+export KUBECONFIG=deploy/ansible/artifacts/kubeconfig
+bash scripts/lab_install_keycloak.sh
+kubectl -n identity get pods,svc
+```
+
+If the worker cannot pull `quay.io`, sideload on **both** `.18` and `.12`
+(`docker save | ssh … sudo ctr -n k8s.io images import -`). Re-import of an
+existing realm does **not** overwrite users; change the client secret in
+the JSON (fresh DB) and in the app Secret together.
+
+oauth2-proxy remains a Kubernetes ingress pattern and is **not** required
+for in-app ROPC. The unused sketch is `k8s/oauth2-proxy.yaml`.
+
+Client secret via External Secrets + Vault stays Phase 8.
 
 ## Disaster recovery
 

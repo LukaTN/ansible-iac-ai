@@ -94,7 +94,7 @@ grafana:
       type: tempo
       uid: tempo
       access: proxy
-      url: http://tempo.observability.svc.cluster.local:3100
+      url: http://tempo.observability.svc.cluster.local:3200
   resources:
     requests:
       cpu: 50m

@@ -8,7 +8,7 @@ metadata:
     pod-security.kubernetes.io/enforce: baseline
     pod-security.kubernetes.io/audit: restricted
   annotations:
-    ansibleai.io/purpose: "Keycloak lives here when identity.enabled=true. Empty until then."
+    ansibleai.io/purpose: "Keycloak namespace (identity.enabled). Admin is NodePort 30808, not member Ingress :30080."
 ---
 apiVersion: v1
 kind: Namespace

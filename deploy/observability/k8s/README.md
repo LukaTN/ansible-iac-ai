@@ -43,10 +43,17 @@ bash scripts/lab_install_observability.sh
 
 Helm `STATUS: deployed` only means the release was submitted. Check pods next.
 If `kube-prometheus-operator` stays `ContainerCreating` with
-`secret "kube-prometheus-admission" not found`, upgrade with TLS off
-(no uninstall):
+`secret "kube-prometheus-admission" not found`, create a dummy TLS Secret
+(webhooks are off) **or** upgrade with TLS off (no uninstall):
 
 ```bash
+openssl req -x509 -newkey rsa:2048 -nodes \
+  -keyout /tmp/kps.key -out /tmp/kps.crt -days 365 \
+  -subj "/CN=kube-prometheus-operator"
+kubectl -n observability create secret tls kube-prometheus-admission \
+  --cert=/tmp/kps.crt --key=/tmp/kps.key \
+  --dry-run=client -o yaml | kubectl apply -f -
+
 helm upgrade kube-prometheus prometheus-community/kube-prometheus-stack \
   --version 88.5.2 \
   --namespace observability \
@@ -74,12 +81,22 @@ lab git daemon (`git://192.168.1.19/ansible-iac-ai.git`) the same way as staging
 1. This stack (CRDs for `ServiceMonitor` / `PrometheusRule`).
 2. Sideload images on **both** `.18` and `.12` if pulls reset — list in [images.txt](images.txt).
 3. Sync `ansibleai-staging` (staging values enable ServiceMonitor, rules, celery-exporter).
-4. Open `http://192.168.1.18:30300` → **AnsibleAI overview**. Prometheus targets should show the API and celery-exporter.
+4. Open `http://192.168.1.18:30300` (`admin` / `lab-only-grafana`).
+   Loki Explore (Code): `{namespace="observability"}`.
+   Tempo datasource URL is `:3200` (not `:3100`). Empty traces are expected.
+
+Do **not** `helm upgrade ansibleai` to set Langfuse keys: Argo created those
+objects (no Helm ownership annotations). Patch ConfigMap/Secret/NetworkPolicy
+instead and keep `ansibleai-staging` manual while the patches exist.
 
 ## Langfuse (optional)
 
-After `--with-langfuse`, create a project + API keys in the Langfuse UI, then
-set on the app (do not commit real keys):
+After `--with-langfuse`, wait until `langfuse-web` is `1/1`. There is **no**
+seeded admin — **Sign up** on `http://192.168.1.18:30301` (first user is admin).
+Create a project + API keys, then set on the app (do not commit real keys).
+Use `pk-lf-…` (public) and `sk-lf-…` (secret). Chart 1.5.1 NodePort is
+`langfuse.web.service` (not `langfuse.service`). ClickHouse must stay
+`replicaCount: 1` on this two-node lab.
 
 ```yaml
 # values overlay or --set

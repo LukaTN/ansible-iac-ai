@@ -1,11 +1,12 @@
 # AnsibleAI — Production Deployment Progress Report
 
-> **You are here:** Phase **6c** is in git. Next is Phase **8**.
+> **You are here:** Phase **6c** is installed on the kubeadm lab. Cluster
+> Keycloak is in the Helm chart (`identity` ns, NodePort **30808**); install
+> with `scripts/lab_install_keycloak.sh` from `.19`. Next is Phase **8** after
+> the 6c leftovers below. 4-gpu stays deferred.
 >
-> **Last updated:** 23 Aug 2026 — Phase **6c** kube-prometheus-stack, Loki,
-> Tempo, Alloy, optional Langfuse Applications, ServiceMonitor / celery-exporter
-> on the app chart, and `scripts/lab_install_observability.sh`. Install from
-> `.19` if Argo cannot fetch Helm repos. Do not start 8 yet. 4-gpu stays deferred.
+> **Last updated:** 26 Aug 2026 — Keycloak on kubeadm (chart 0.1.5). Do not
+> `helm upgrade ansibleai` — Argo owns those objects. Do not start 8 yet.
 >
 > This report is the living record of every production-readiness phase.
 > Each phase adds a section describing what changed, why it changed, and
@@ -587,7 +588,7 @@ page’s product shape yet.
 | Roles | Keycloak group `ansibleai-admins` / realm role `ansibleai-admin` | Mapping **off** by default after 5b (`OIDC_MAP_APP_ADMIN=false`) |
 | Token budgets | `USER_DAILY_TOKEN_BUDGET` in the worker | Redis counter; Langfuse metadata `token_budget_*` for operators |
 | Compose | `--profile sso` Keycloak 26 + realm import | Default stack does not start Keycloak |
-| K8s | `deploy/keycloak/k8s/oauth2-proxy.yaml` | Placeholder for ingress; Compose never puts oauth2-proxy in front of gunicorn |
+| K8s | Chart `identity.enabled` (staging overlay on); `scripts/lab_install_keycloak.sh` | Namespace `identity`, NodePort **30808**, shared lab Postgres. **Not** oauth2-proxy on `:30080`. `AUTH_MODE` stays `local` until patched. |
 
 Design (5a): [specs/phase5_keycloak_sso_design.md](../specs/phase5_keycloak_sso_design.md).
 
@@ -657,6 +658,19 @@ Celery worker
 Pytest forces `AUTH_MODE=local` so a developer hybrid `.env` cannot send
 the suite to a live Keycloak.
 
+### Cluster Keycloak (kubeadm, 26 Aug 2026)
+
+Staging values turn `identity.enabled` on. The install script renders
+`templates/keycloak.yaml` + `templates/networkpolicy-keycloak.yaml` and
+`kubectl apply`s them (Argo-owned app objects cannot take `helm upgrade`).
+
+- Image `quay.io/keycloak/keycloak:26.2.5` (sideload if quay hangs).
+- Admin: `http://192.168.1.18:30808/admin` (`admin` / `lab-only-keycloak-admin`).
+- Member Ingress `:30080` is unchanged; `app.authMode` remains `local`.
+- Hybrid later: patch ConfigMap `AUTH_MODE` + `OIDC_*` and Secret
+  `OIDC_CLIENT_SECRET` (already `ansibleai-dev-oidc-secret` in staging values).
+  Keep `ansibleai-staging` **manual** while those patches exist.
+
 ---
 
 ## Phase 4a — kubeadm lab cluster (complete)
@@ -697,7 +711,7 @@ Chart: [deploy/helm/ansibleai](../deploy/helm/ansibleai/README.md).
 | Scalability | Interchangeable workers; KEDA ScaledObject present but **disabled** (no operator yet) |
 | Performance | Requests **and** limits on every container; Redis AOF + `noeviction`; gunicorn workers = 1 until sticky sessions are proven |
 | Security | SAs `*-api` / `*-worker` / `*-migrate`; uid 10001; drop ALL caps; read-only root + tmpfs; Secrets not ConfigMaps; default-deny NetworkPolicy + explicit DNS/data-plane/Ollama allows |
-| Lab constraints | pgvector **StatefulSet** (not CNPG); local-path provisioner (kubeadm has no StorageClass); Ollama **Endpoints** to `192.168.1.14:11434`; `AUTH_MODE=local`; `APP_ENV=development` because HTTP NodePort cannot set secure cookies |
+| Lab constraints | pgvector **StatefulSet** (not CNPG); local-path provisioner (kubeadm has no StorageClass); Ollama **Endpoints** to `192.168.1.14:11434`; `AUTH_MODE=local`; `APP_ENV=development` because HTTP NodePort cannot set secure cookies; Keycloak optional in `identity` (staging on, NodePort **30808**) |
 
 **Not in this chart:** ArgoCD, Vault, kube-prometheus-stack, oauth2-proxy, vLLM.
 
@@ -775,18 +789,28 @@ CRITICAL (first pipeline records SARIF only).
 **Goal:** Move the Compose scrape/trace/log story onto the two-node cluster
 without putting Langfuse on the member Ingress.
 
-**Status: sources in git** (23 Aug 2026). Live install is a lab step from `.19`
+**Status: lab install in progress / core stack up** (24 Aug 2026). Charts and
+values landed 23 Aug. Install is from `.19`
 (`scripts/lab_install_observability.sh`) because repo-server HTTPS to GitHub
-and Helm repos is the same flaky path as Argo `git fetch`.
+and Helm repos is the same flaky path as Argo `git fetch`. Helm
+`STATUS: deployed` is not pod Ready — do not re-run the full script to
+“retry.”
 
 | Piece | Delivered |
 |-------|-----------|
-| kube-prometheus-stack 88.5.2 | Argo `kube-prometheus` + lab values (24h retention, NodePort Grafana **30300**) |
-| Loki + Alloy | Single-binary Loki, DaemonSet logs |
-| Tempo | Local backend, OTLP :4317/:4318 (Langfuse remains the LLM trace UI) |
-| App scrape | `ServiceMonitor`, staging `PrometheusRule` (incl. Celery), `danihodovic/celery-exporter:0.12.2` |
-| Langfuse | Optional namespace `langfuse`, **manual** sync / `--with-langfuse` |
-| Dashboard | Existing AnsibleAI overview ConfigMap into Grafana sidecar |
+| kube-prometheus-stack 88.5.2 | Lab values (24h retention, NodePort Grafana **30300**, `admin` / `lab-only-grafana`). Operator TLS **off** (`admissionWebhooks` + `tls.enabled=false`). Dummy Secret `kube-prometheus-admission` unblocked `FailedMount` on this lab. Operator **1/1**, Alertmanager **2/2**, Prometheus StatefulSet created. |
+| Loki + Alloy | Single-binary Loki **Running**. Alloy DaemonSet ships logs. Chart default sidecar `quay.io/prometheus-operator/prometheus-config-reloader` hangs on worker egress — lab values set `configReloader.enabled=false`. Explore: `{namespace="observability"}` (Code mode). |
+| Tempo | Local backend, OTLP :4317/:4318. HTTP query port **3200** (chart 1.23.2). Grafana datasource must not use Loki’s :3100. Empty traces are expected until the app exports OTLP; LLM traces stay in Langfuse. |
+| App scrape | `ServiceMonitor`, staging `PrometheusRule` (incl. Celery), `danihodovic/celery-exporter:0.12.2` — apply after CRDs; `ansibleai-staging` was paused while patching Langfuse env. |
+| Langfuse | Optional namespace `langfuse`, **manual** / `--with-langfuse`. Chart 1.5.1: NodePort on `langfuse.web.service` **30301**; ClickHouse `replicaCount: 1`. No seeded admin — first **Sign up** is the instance admin. Not the member Ingress (`:30080`). |
+| Dashboard | AnsibleAI overview ConfigMap into Grafana sidecar |
+
+**Lab wiring notes**
+
+- `quay.io` pulls from `k8s-worker` often sit in `ContainerCreating` / `Pulling`. Sideload from `.19` (`ctr -n k8s.io images import`) when a pull exceeds a few minutes.
+- The app Helm release is **Argo-owned**. `helm upgrade ansibleai` fails (`missing meta.helm.sh/release-name`). Enable Langfuse on the app with `kubectl patch` on ConfigMap `ansibleai-config`, Secret `ansibleai-app`, and NetworkPolicy `ansibleai-allow-app-egress` (`langfuse` ns :3000), then rollout api/worker. Keep `ansibleai-staging` **manual** while those patches exist, or selfHeal wipes them.
+- Cluster Langfuse does not share Compose (`localhost:3000`) users, traces, or prompts. Chat traces appear only after `LANGFUSE_ENABLED=true` + keys + egress. Prompt sync is still `scripts/sync_langfuse_prompts.py` (no Job).
+- Do not apply Argo `langfuse.yaml` on top of an existing Helm Langfuse release unless you intend Argo to take it (GitHub fetch often fails here).
 
 **Not in 6c:** GPU/DCGM panels, Alertmanager paging, oauth2-proxy on Grafana.
 
@@ -799,15 +823,15 @@ and Helm repos is the same flaky path as Argo `git fetch`.
 | **4a** | kubeadm lab: control **.19**, master **.18**, worker **.12**; Calico `10.244.0.0/16`; ingress-nginx NodePort | **Complete** |
 | **4b** | Helm `deploy/helm/ansibleai` — api/worker, pgvector STS, Redis, MinIO, host Ollama Endpoints, NetworkPolicies | Chart **in git**; lab install used (`values-staging.yaml`) |
 | 4-gpu | Optional: vLLM + TEI + NVIDIA GPU Operator + DCGM — only if NVIDIA GPU nodes appear | Deferred |
-| 5 / 5b | Keycloak identity — in-app login, Keycloak-only admins, tokens spent in Account | **Complete** (cluster Keycloak install is 4b; no oauth2-proxy on members) |
+| 5 / 5b | Keycloak identity — in-app login, Keycloak-only admins, tokens spent in Account | **Complete** (cluster install: `scripts/lab_install_keycloak.sh`; no oauth2-proxy on members) |
 | 6a | Prometheus + Grafana + Langfuse (operator UI) on Compose | **Complete** |
 | **6b** | LLMOps loop: data curation, prompt design, model selection, guardrails, evals; plus Celery exporter / alerts | **Complete on Compose** |
-| **6c** | kube-prometheus-stack, Loki, Tempo, Alloy, optional Langfuse | **Complete in git** — install from `.19`; GPU panels stay deferred |
+| **6c** | kube-prometheus-stack, Loki, Tempo, Alloy, optional Langfuse | **Lab core up** (24 Aug) — leftovers below; GPU panels stay deferred |
 | **7** | GitHub Actions, SHA tags, Trivy, Argo CD GitOps, eval gate vs `evals/baselines/golden.json`, rolling + documented rollback | **Complete in git** — Argo install + GHCR pull-secret are lab steps |
 | 8 | Default-deny NetworkPolicies, restricted PSS, Kyverno, ESO/Sealed Secrets, CNPG PITR, Velero, k6 | Pending |
 
-**Recommended next:** Phase **8** (hardening).  
+**Recommended next:** finish 6c leftovers, then Phase **8** (hardening).  
 **Then:** optional 4-gpu.  
 **Do not wait for GPUs.** vLLM/TEI is an optional add-on.  
-**6c leftovers (lab):** `bash scripts/lab_install_observability.sh` from `.19`; sideload images in `deploy/observability/k8s/images.txt` if ImagePullBackOff; then sync `ansibleai-staging` so ServiceMonitors apply.  
+**6c leftovers (lab):** confirm Prometheus `2/2`; Grafana Tempo URL `:3200`; keep Alloy without the Quay reloader; Langfuse one ClickHouse replica + NodePort 30301; wire app Langfuse via `kubectl patch` (not `helm upgrade ansibleai`); resume `ansibleai-staging` only after ServiceMonitor/PrometheusRule and after deciding how keys survive selfHeal.  
 **7 leftovers (lab, not more git):** Argo CD is installed; keep the git daemon or GHCR pull-secret; optional self-hosted runner for live `eval-gate.yml`.

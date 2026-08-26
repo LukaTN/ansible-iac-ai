@@ -45,8 +45,8 @@ data:
   OIDC_BROWSER_REDIRECT: "false"
   OIDC_MAP_APP_ADMIN: "false"
 {{- if .Values.identity.enabled }}
-  OIDC_ISSUER: {{ printf "http://keycloak.%s.svc.cluster.local:8080/realms/ansibleai" .Values.identity.namespace | quote }}
-  OIDC_INTERNAL_BASE_URL: {{ printf "http://keycloak.%s.svc.cluster.local:8080" .Values.identity.namespace | quote }}
+  OIDC_ISSUER: {{ printf "%s/realms/ansibleai" (include "ansibleai.keycloakPublicUrl" .) | quote }}
+  OIDC_INTERNAL_BASE_URL: {{ include "ansibleai.keycloakInternalUrl" . | quote }}
 {{- else }}
   OIDC_ISSUER: ""
   OIDC_INTERNAL_BASE_URL: ""

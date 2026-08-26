@@ -39,6 +39,8 @@ kubectl -n argocd get secret argocd-initial-admin-secret \
 
 If the app is already a Helm release named `ansibleai` in `ansibleai`, the
 staging Application uses `helm.releaseName: ansibleai` so Argo can adopt it.
+Do **not** later `helm upgrade ansibleai` for Langfuse keys: Argo-applied
+objects lack Helm ownership annotations and the upgrade fails.
 
 ```bash
 kubectl apply -f deploy/gitops/applications/staging.yaml
@@ -95,7 +97,19 @@ no service mesh.
 - Vault / Sealed Secrets (Phase 8)
 - GPU / DCGM dashboards (needs 4-gpu)
 
+If the app is already a Helm **or Argo** install in `ansibleai`, do not
+`helm upgrade ansibleai` to add Langfuse keys: Argo-applied objects lack
+`meta.helm.sh/release-name` and Helm will refuse (`ansibleai-allow-celery-exporter`).
+Patch the ConfigMap/Secret/NetworkPolicy or set Argo helm parameters instead.
+
 Phase **6c** Applications live next to this file (`kube-prometheus.yaml`, `loki.yaml`,
 `tempo.yaml`, `alloy.yaml`, `langfuse.yaml`). On this lab prefer
 `bash scripts/lab_install_observability.sh` from `.19` if repo-server cannot
 reach Helm repos. See [../observability/k8s/README.md](../observability/k8s/README.md).
+
+Keycloak is part of the **app chart** (`identity.enabled` in
+`values-staging.yaml`), not a separate Argo Application. Install with
+`bash scripts/lab_install_keycloak.sh` from `.19` — same rule as Langfuse:
+do not `helm upgrade ansibleai`. Admin NodePort **30808**; keep
+`AUTH_MODE=local` until you patch hybrid. See
+[../keycloak/README.md](../keycloak/README.md).

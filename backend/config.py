@@ -115,7 +115,7 @@ class Settings(BaseSettings):
     # local: password only (default; tests and host `python app.py`).
     # hybrid / oidc: members type email+password on AnsibleAI; the API
     # authenticates against Keycloak (ROPC). No browser redirect.
-    auth_mode: AuthMode = "local"
+    auth_mode: AuthMode = "hybrid"
     oidc_issuer: str = ""
     # In-cluster origin used to fetch tokens/JWKS (e.g. http://keycloak:8080).
     # Token `iss` still has to match oidc_issuer (the browser-facing URL).

@@ -38,6 +38,9 @@ def test_helm_chart_layout_exists() -> None:
         CHART / "templates" / "servicemonitor.yaml",
         CHART / "templates" / "deployment-celery-exporter.yaml",
         CHART / "templates" / "networkpolicy.yaml",
+        CHART / "templates" / "networkpolicy-keycloak.yaml",
+        CHART / "templates" / "keycloak.yaml",
+        CHART / "files" / "realm-ansibleai.json",
         CHART / "templates" / "ollama.yaml",
         CHART / "templates" / "statefulset-postgres.yaml",
         CHART / "templates" / "keda-scaledobject.yaml",
@@ -83,7 +86,13 @@ def test_staging_pins_lab_image_and_ollama() -> None:
     defaults = _load_yaml(CHART / "values.yaml")
     assert defaults["ollama"]["endpoint"]["ip"] == "192.168.1.14"
     assert values["app"]["authMode"] == "local"
-    assert values["identity"]["enabled"] is False
+    assert values["identity"]["enabled"] is True
+    assert values["secrets"]["oidcClientSecret"] == "ansibleai-dev-oidc-secret"
+    assert values["secrets"]["keycloakAdminPassword"]
+    assert defaults["identity"]["enabled"] is False
+    assert defaults["identity"]["image"]["tag"] == "26.2.5"
+    assert defaults["identity"]["service"]["nodePort"] == 30808
+    assert "latest" not in defaults["identity"]["image"]["tag"].lower()
     assert values["keda"]["enabled"] is False
     assert values["networkPolicy"]["enabled"] is True
     assert values["localPathProvisioner"]["enabled"] is True
@@ -183,3 +192,42 @@ def test_vendor_images_are_pinned() -> None:
     assert "celeryExporter.image" in exporter
     assert "CE_BROKER_URL" in exporter
     assert str(values["postgres"]["image"]["tag"]).startswith("0.")
+
+
+def test_keycloak_templates_are_lab_nodeport_not_ingress() -> None:
+    keycloak = (CHART / "templates" / "keycloak.yaml").read_text(encoding="utf-8")
+    np = (CHART / "templates" / "networkpolicy-keycloak.yaml").read_text(encoding="utf-8")
+    helpers = (CHART / "templates" / "_helpers.tpl").read_text(encoding="utf-8")
+    configmap = (CHART / "templates" / "configmap.yaml").read_text(encoding="utf-8")
+    notes = (CHART / "templates" / "NOTES.txt").read_text(encoding="utf-8")
+    chart_realm = (CHART / "files" / "realm-ansibleai.json").read_text(encoding="utf-8")
+    source_realm = (CHART.parent.parent / "keycloak" / "realm-ansibleai.json").read_text(
+        encoding="utf-8"
+    )
+    assert chart_realm == source_realm
+    assert "start-dev" in keycloak
+    assert "--import-realm" in keycloak
+    assert "identity.namespace" in keycloak
+    assert "/health/ready" in keycloak
+    assert "port: management" in keycloak
+    assert "quay.io/keycloak/keycloak" in (CHART / "values.yaml").read_text(encoding="utf-8")
+    assert "oauth2-proxy" not in keycloak.lower()
+    assert "30080" not in keycloak
+    assert "allow-postgres-from-keycloak" in np
+    assert "allow-app-to-keycloak" in np
+    assert "ansibleai.keycloakPublicUrl" in configmap
+    assert "ansibleai.keycloakInternalUrl" in configmap
+    assert "keycloakPublicUrl" in helpers
+    assert "identity.enabled" in notes
+    assert "lab_install_keycloak.sh" in notes
+    script = ROOT / "scripts" / "lab_install_keycloak.sh"
+    assert script.is_file()
+    text = script.read_text(encoding="utf-8")
+    assert "helm template" in text
+    assert "helm upgrade --install" not in text
+    assert "templates/keycloak.yaml" in text
+    assert "26.2.5" in text
+    assert "identity" in text
+    prod = _load_yaml(CHART / "values-prod.yaml")
+    assert prod["identity"]["enabled"] is False
+

@@ -64,6 +64,22 @@ app.kubernetes.io/component: {{ .component }}
 {{- end }}
 {{- end }}
 
+{{- define "ansibleai.postgresFQDN" -}}
+{{- printf "%s.%s.svc.cluster.local" (include "ansibleai.postgresHost" .) .Release.Namespace }}
+{{- end }}
+
+{{- define "ansibleai.keycloakPublicUrl" -}}
+{{- if and (eq .Values.identity.service.type "NodePort") .Values.identity.service.nodePort }}
+{{- printf "http://%s:%v" .Values.lab.masterIp .Values.identity.service.nodePort }}
+{{- else }}
+{{- printf "http://keycloak.%s.svc.cluster.local:8080" .Values.identity.namespace }}
+{{- end }}
+{{- end }}
+
+{{- define "ansibleai.keycloakInternalUrl" -}}
+{{- printf "http://keycloak.%s.svc.cluster.local:8080" .Values.identity.namespace }}
+{{- end }}
+
 {{- define "ansibleai.redisHost" -}}
 {{- if .Values.redis.enabled }}
 {{- printf "%s-redis" (include "ansibleai.fullname" .) }}

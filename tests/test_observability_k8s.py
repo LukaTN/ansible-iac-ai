@@ -145,3 +145,11 @@ def test_observability_namespace_is_privileged() -> None:
     assert exporter["hostPID"] is False
     assert values["prometheusOperator"]["admissionWebhooks"]["enabled"] is False
     assert values["prometheusOperator"]["tls"]["enabled"] is False
+
+
+def test_grafana_tempo_datasource_uses_port_3200() -> None:
+    values = _yaml(OBS / "values" / "kube-prometheus-lab.yaml")
+    urls = [ds["url"] for ds in values["grafana"]["additionalDataSources"]]
+    assert "http://loki.observability.svc.cluster.local:3100" in urls
+    assert "http://tempo.observability.svc.cluster.local:3200" in urls
+    assert "http://tempo.observability.svc.cluster.local:3100" not in urls

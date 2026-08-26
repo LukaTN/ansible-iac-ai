@@ -26,7 +26,7 @@ app:
   env: development
   logLevel: INFO
   logFormat: json
-  authMode: local
+  authMode: hybrid
   registrationMode: closed
   allowedEmailDomains: ""
   corsOrigins: ""
@@ -323,6 +323,17 @@ identity:
     tag: "26.2.5"
     pullPolicy: IfNotPresent
   replicas: 1
+  database: keycloak
+  # Official image runs as uid 1000.
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
+  service:
+    type: NodePort
+    port: 8080
+    # Admin console only. Not member Ingress :30080.
+    nodePort: 30808
   resources:
     requests:
       cpu: 250m

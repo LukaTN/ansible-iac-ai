@@ -40,6 +40,9 @@ secrets:
   minioRootPassword: "lab-only-minio-password"
   bootstrapAdminEmail: "admin@localhost"
   bootstrapAdminPassword: "K8s-Lab-Bootstrap!"
+  oidcClientSecret: "ansibleai-dev-oidc-secret"
+  keycloakAdmin: admin
+  keycloakAdminPassword: "lab-only-keycloak-admin"
 
 ollama:
   enabled: true
@@ -67,8 +70,9 @@ minio:
     storageClass: local-path
     size: 10Gi
 
+# Keycloak admin NodePort 30808 (not :30080). AUTH_MODE stays local until patched.
 identity:
-  enabled: false
+  enabled: true
 
 networkPolicy:
   enabled: true

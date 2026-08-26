@@ -1231,7 +1231,7 @@ Not claimed: `RATE_LIMIT_CHAT` enforcement; idle session timeout despite `SESSIO
 | **Partially implemented** | Helm live install (chart present; production overlay not for casual use). KB scrape on API threads (not Celery). Stats are global `generations`, not per-user. Token budget fail-open if Redis is down |
 | **Configuration-dependent** | OIDC, Langfuse, S3 artifacts, ansible-lint backend, registration policy, daily token cap |
 | **Declared but unused** | `RATE_LIMIT_CHAT` (not on `/api/chat`). `SESSION_IDLE_TIMEOUT_MINUTES` (not enforced). `FLASK_ENV` (use `APP_ENV`). Audit constants `USER_ROLE_CHANGED` / `USER_ACTIVATED` / `USER_DEACTIVATED` with no admin user API |
-| **Planned / TODO (roadmap)** | Phase 6c Loki/Tempo; Phase 8 Vault/ESO, hardening, DR; vLLM/GPU Operator; `__Host-` cookie prefix (blocked on HTTP) |
+| **Planned / TODO (roadmap)** | Phase 8 Vault/ESO, hardening, DR; vLLM/GPU Operator; `__Host-` cookie prefix (blocked on HTTP) |
 | **Not implemented** | LICENSE file, payment/email/upload products, frontend env vars, in-app invite/user-admin UI, oauth2-proxy on laptop |
 
 `tests/e2e/README.md` still mentions Chroma in one sentence; the vector store is pgvector.
@@ -1263,8 +1263,9 @@ Roadmap (from existing docs):
 | 5 / 5b | Done | Keycloak in-app login |
 | 6a | Done | Metrics + Langfuse + Grafana |
 | 6b | Done on Compose | Eval floors, bake-off, Celery alerts, Langfuse prompts |
+| 6c | Lab core up | kube-prometheus / Loki / Tempo / Alloy on kubeadm; optional Langfuse |
 | 7 | Done in git | GitHub Actions, SHA tags, Trivy/Syft, Argo CD apps, eval gate |
-| 6c / 8 | Pending | Loki/Tempo, secrets/DR |
+| 8 | Pending | Secrets/DR, Kyverno, Velero, k6 |
 
 ---
 
@@ -1280,7 +1281,7 @@ Roadmap (from existing docs):
 | [deploy/helm/ansibleai/README.md](deploy/helm/ansibleai/README.md) | Helm install, SLO, rollback |
 | [deploy/gitops/README.md](deploy/gitops/README.md) | Argo CD Applications, promote, rollback |
 | [deploy/ansible/README.md](deploy/ansible/README.md) | kubeadm bootstrap |
-| [deploy/keycloak/README.md](deploy/keycloak/README.md) | SSO modes and Compose profile |
+| [deploy/keycloak/README.md](deploy/keycloak/README.md) | SSO modes, Compose profile, kubeadm NodePort 30808 |
 | [deploy/observability/README.md](deploy/observability/README.md) | Metrics and Langfuse |
 | [tests/e2e/README.md](tests/e2e/README.md) | Golden dataset and scoring |
 | [specs/phase5_keycloak_sso_design.md](specs/phase5_keycloak_sso_design.md) | Phase 5 design |

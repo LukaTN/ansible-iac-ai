@@ -45,6 +45,7 @@ def test_gitops_layout_exists() -> None:
         WORKFLOWS / "eval-gate.yml",
         ROOT / "scripts" / "set_gitops_image.py",
         ROOT / "scripts" / "lab_eval_gate.py",
+        ROOT / "scripts" / "lab_install_keycloak.sh",
     ]
     missing = [str(path.relative_to(ROOT)) for path in required if not path.is_file()]
     assert missing == []

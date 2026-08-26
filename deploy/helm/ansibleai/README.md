@@ -1,8 +1,9 @@
 # AnsibleAI Helm chart (Phase 4b)
 
 Packages the Compose stack for the kubeadm lab: API, Celery worker, pgvector,
-Redis, MinIO, and a Service+Endpoints object for **host Ollama**. Keycloak and
-kube-prometheus-stack stay off until you flip their flags.
+Redis, MinIO, a Service+Endpoints object for **host Ollama**, and optional
+**Keycloak** in namespace `identity` (`identity.enabled`). kube-prometheus-stack
+stays off until you flip its flags.
 
 ## Design (scalability, availability, security)
 
@@ -103,4 +104,11 @@ Do not deploy `values-prod.yaml` without explicit approval, TLS, and a real Secr
 - vLLM / GPU Operator
 - oauth2-proxy on the member Ingress (members keep in-app login)
 
-Keycloak: set `identity.enabled=true` only after copying the realm and creating the `keycloak` database. Lab default is `AUTH_MODE=local`.
+Keycloak (staging overlay): `identity.enabled=true` deploys `quay.io/keycloak/keycloak:26.2.5` in namespace `identity`, shares lab Postgres (`CREATE DATABASE keycloak`), and publishes the **admin** console on NodePort **30808** (`http://192.168.1.18:30808/admin`). It is **not** on member Ingress `:30080`. `app.authMode` stays `local` until you switch hybrid. Do not `helm upgrade ansibleai` when Argo owns the release:
+
+```bash
+export KUBECONFIG=deploy/ansible/artifacts/kubeconfig
+bash scripts/lab_install_keycloak.sh
+```
+
+Sideload the Keycloak image onto **both** `.18` and `.12` if `ImagePullBackOff` (quay.io is flaky from the worker). Chart default `values.yaml` keeps `identity.enabled=false`; production overlay stays off.

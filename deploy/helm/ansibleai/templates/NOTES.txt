@@ -63,3 +63,20 @@ SLO (lab)
 Availability target {{ .Values.observability.slo.availability }}% over 30 days.
 Scrape: Service annotations prometheus.io/path=/metrics on the API pods.
 PrometheusRule CRDs are off until kube-prometheus-stack (Phase 6c/7).
+
+{{- if .Values.identity.enabled }}
+
+================================================================================
+KEYCLOAK (identity.enabled — not the member Ingress)
+================================================================================
+
+Admin console (NodePort, HTTP):
+  http://{{ .Values.lab.masterIp }}:{{ .Values.identity.service.nodePort }}/admin
+  user {{ .Values.secrets.keycloakAdmin }} / secrets.keycloakAdminPassword
+
+In-cluster issuer for the API:
+  {{ include "ansibleai.keycloakInternalUrl" . }}/realms/ansibleai
+
+Member login stays AUTH_MODE={{ .Values.app.authMode }} until you switch hybrid/oidc.
+Do not helm upgrade ansibleai when Argo owns the release; use scripts/lab_install_keycloak.sh.
+{{- end }}

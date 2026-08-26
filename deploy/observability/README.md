@@ -137,7 +137,7 @@ App code: `observability/` (`metrics.py`, `tracing.py`), wired from
 | Retrieval / golden baselines (`evals/baselines/`) | **6b done** |
 | Model bake-off (`scripts/model_bakeoff.py`) | **6b done** |
 | Celery exporter + Prometheus rules | **6b done** on Compose |
-| Loki / Tempo / kube-prometheus-stack | **6c in git** — [k8s/README.md](k8s/README.md) |
+| Loki / Tempo / kube-prometheus-stack | **6c lab core up** — [k8s/README.md](k8s/README.md) |
 | vLLM / DCGM GPU dashboards | After Phase 4 (real GPU nodes) |
 
 ## Stop
