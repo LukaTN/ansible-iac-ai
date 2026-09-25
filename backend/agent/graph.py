@@ -788,14 +788,39 @@ def respond_node(state: AgentState, config: RunnableConfig) -> dict:
     _progress(config, "synthesizing", "Composing response summary")
     updates: dict = {}
 
-    # Attach the module reference chip for drafted playbooks.
-    module = state.get("module") or (state.get("search_summary") or {}).get("primary_module")
-    if state.get("draft_yaml") and module:
+    # Attach module reference chip(s) for drafted playbooks.
+    # Extract all modules from the generated playbook YAML and display them as sources.
+    if state.get("draft_yaml"):
         try:
-            updates["module_ref"] = T.get_module_info(module)
-        except Exception:
-            updates["module_ref"] = None
-    updates["module"] = module
+            # Extract all modules used in the playbook
+            modules = T.extract_modules_from_playbook_yaml(state.get("draft_yaml", ""))
+            if modules:
+                # Get reference info for all modules with proper source structure
+                updates["module_ref"] = T.get_chat_module_ref_for_playbook(modules)
+                # Also set the primary module for backward compatibility
+                updates["module"] = modules[0]
+            else:
+                # Fallback to single module if extraction fails
+                module = state.get("module") or (state.get("search_summary") or {}).get("primary_module")
+                if module:
+                    try:
+                        updates["module_ref"] = T.get_module_info(module)
+                    except Exception:
+                        updates["module_ref"] = None
+                updates["module"] = module
+        except Exception as e:
+            # Fallback on any error
+            log.warning(f"error extracting modules from playbook: {e}")
+            module = state.get("module") or (state.get("search_summary") or {}).get("primary_module")
+            if module:
+                try:
+                    updates["module_ref"] = T.get_module_info(module)
+                except Exception:
+                    updates["module_ref"] = None
+            updates["module"] = module
+    else:
+        module = state.get("module") or (state.get("search_summary") or {}).get("primary_module")
+        updates["module"] = module
 
     if state.get("low_confidence"):
         updates["final_text"] = state.get("low_confidence_reason") or (
@@ -834,7 +859,22 @@ def respond_node(state: AgentState, config: RunnableConfig) -> dict:
 
 
 def _playbook_summary_text(state: AgentState) -> str:
-    module = state.get("module") or "unknown"
+    # Extract all modules from the generated playbook
+    try:
+        modules = T.extract_modules_from_playbook_yaml(state.get("draft_yaml", "")) or []
+    except Exception:
+        modules = []
+    
+    # Format module list for display
+    if len(modules) > 1:
+        module_display = f"**{len(modules)} modules**: {', '.join(f'`{m}`' for m in modules[:4])}"
+        if len(modules) > 4:
+            module_display += f", +{len(modules) - 4} more"
+    elif modules:
+        module_display = f"`{modules[0]}`"
+    else:
+        module_display = "`unknown`"
+    
     iteration = int(state.get("iteration") or 0)
     max_iter = int(state.get("max_iterations") or 1)
     attempts = f"{iteration}/{max_iter} attempt{'s' if iteration != 1 else ''}"
@@ -858,15 +898,14 @@ def _playbook_summary_text(state: AgentState) -> str:
 
     if state.get("gate_ready"):
         return (
-            f"I generated a **production-ready** playbook using `{module}` "
+            f"I generated a **production-ready** playbook with {module_display} "
             f"({attempts}). It passed the full production gate: "
-            f"{n_passed} checks passed, 0 errors, {lint_text}, "
-            f"and no leftover placeholders. "
-            f"Review the YAML and let me know if you want adjustments."
+            f"{n_passed} checks passed, 0 errors, {lint_text}. "
+            f"Review the Playbook and let me know if you want adjustments."
         )
 
     lines = [
-        f"I generated a playbook using `{module}` ({attempts}), but it did "
+        f"I generated a playbook with {module_display} ({attempts}), but it did "
         f"**not** fully pass the production gate. {lint_text}."
     ]
     failures = list(state.get("gate_failures") or [])

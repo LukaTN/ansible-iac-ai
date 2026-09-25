@@ -462,8 +462,16 @@ class Settings(BaseSettings):
 
     @property
     def app_admin_ui(self) -> bool:
-        """KB mutation chrome belongs in local mode only (Keycloak is the admin plane)."""
-        return self.auth_mode == "local"
+        """
+        KB mutation chrome for application admins.
+
+        Local mode always exposes it. Hybrid/OIDC expose it only when
+        Keycloak groups/roles are mapped onto `users.role=admin`
+        (`OIDC_MAP_APP_ADMIN=true`); otherwise identity stays in Keycloak.
+        """
+        if self.auth_mode == "local":
+            return True
+        return bool(self.oidc_map_app_admin)
 
     @property
     def oidc_scope_list(self) -> list[str]:

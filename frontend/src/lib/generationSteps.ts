@@ -25,7 +25,7 @@ export const GENERATION_PIPELINE: PipelineStep[] = [
     key: 'generating',
     label: 'Write playbook',
     icon: '{',
-    hint: 'Drafting YAML grounded on retrieved docs…',
+    hint: 'Drafting Playbook grounded on retrieved docs…',
   },
   {
     key: 'validating',
@@ -35,7 +35,7 @@ export const GENERATION_PIPELINE: PipelineStep[] = [
   },
   {
     key: 'synthesizing',
-    label: 'Compose reply',
+    label: 'Generate',
     icon: '✦',
     hint: 'Packaging the playbook and explanation…',
   },

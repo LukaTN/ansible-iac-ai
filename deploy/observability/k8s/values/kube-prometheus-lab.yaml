@@ -39,7 +39,7 @@ prometheusOperator:
       memory: 64Mi
     limits:
       cpu: 200m
-      memory: 256Mi
+      memory: 512Mi
 
 alertmanager:
   enabled: true
@@ -84,8 +84,8 @@ grafana:
         cpu: 10m
         memory: 32Mi
       limits:
-        cpu: 50m
-        memory: 64Mi
+        cpu: 100m
+        memory: 128Mi
   additionalDataSources:
     - name: Loki
       type: loki
@@ -109,7 +109,7 @@ grafana:
       memory: 128Mi
     limits:
       cpu: 300m
-      memory: 256Mi
+      memory: 384Mi
 
 prometheus:
   prometheusSpec:
@@ -174,7 +174,7 @@ prometheus-node-exporter:
       memory: 32Mi
     limits:
       cpu: 100m
-      memory: 64Mi
+      memory: 128Mi
 
 kube-state-metrics:
   resources:
@@ -183,4 +183,4 @@ kube-state-metrics:
       memory: 64Mi
     limits:
       cpu: 200m
-      memory: 128Mi
+      memory: 256Mi

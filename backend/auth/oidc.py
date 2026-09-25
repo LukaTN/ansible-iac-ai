@@ -247,11 +247,62 @@ def exchange_password(username: str, password: str) -> tuple[dict[str, Any], boo
         raise OidcError("idp_admin_unavailable", exc.message) from exc
 
 
-def claims_from_token_response(payload: dict[str, Any]) -> dict[str, Any]:
+def _merge_authz_claims(claims: dict[str, Any], access_token: Any) -> dict[str, Any]:
+    """
+    Union groups / realm / client roles from the access token into ID-token claims.
+
+    Keycloak often puts `realm_access.roles` on the access token only
+    (`id.token.claim=false` on the roles mapper). ROPC and auth-code both
+    prefer the ID token for identity, so without this merge
+    `OIDC_ADMIN_ROLE` never matches even when the user has the realm role.
+    """
+    if not isinstance(access_token, str) or not access_token:
+        return claims
+    try:
+        access_claims = decode_access_token(access_token)
+    except OidcError:
+        return claims
+
+    merged = dict(claims)
+
+    groups: set[str] = set()
+    for raw in (merged.get("groups") or [], access_claims.get("groups") or []):
+        if isinstance(raw, list):
+            groups.update(str(g) for g in raw if g is not None)
+    if groups:
+        merged["groups"] = sorted(groups)
+
+    id_roles = list(((merged.get("realm_access") or {}).get("roles")) or [])
+    acc_roles = list(((access_claims.get("realm_access") or {}).get("roles")) or [])
+    realm_roles = list(dict.fromkeys([*map(str, id_roles), *map(str, acc_roles)]))
+    if realm_roles:
+        realm = dict(merged.get("realm_access") or {})
+        realm["roles"] = realm_roles
+        merged["realm_access"] = realm
+
+    id_res = dict(merged.get("resource_access") or {})
+    acc_res = dict(access_claims.get("resource_access") or {})
+    out_res: dict[str, Any] = {}
+    for client_id in set(id_res) | set(acc_res):
+        left = list((id_res.get(client_id) or {}).get("roles") or [])
+        right = list((acc_res.get(client_id) or {}).get("roles") or [])
+        roles = list(dict.fromkeys([*map(str, left), *map(str, right)]))
+        if roles:
+            out_res[client_id] = {"roles": roles}
+    if out_res:
+        merged["resource_access"] = out_res
+
+    return merged
+
+
+def claims_from_token_response(
+    payload: dict[str, Any], *, nonce: str | None = None
+) -> dict[str, Any]:
     id_token = payload.get("id_token")
-    if isinstance(id_token, str) and id_token:
-        return decode_id_token(id_token, nonce=None)
     access = payload.get("access_token")
+    if isinstance(id_token, str) and id_token:
+        claims = decode_id_token(id_token, nonce=nonce)
+        return _merge_authz_claims(claims, access)
     if isinstance(access, str) and access:
         return decode_access_token(access)
     raise OidcError("invalid_token")

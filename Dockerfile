@@ -106,7 +106,11 @@ ENV PYTHONUNBUFFERED=1 \
 # tini: PID 1 that reaps the threads the app spawns for backend warm-up
 #       and knowledge-base scraping.
 RUN apt-get update \
- && apt-get install -y --no-install-recommends git tini \
+ && apt-get install -y --no-install-recommends \
+      ca-certificates \
+      curl \
+      git \
+      tini \
  && rm -rf /var/lib/apt/lists/* \
  && groupadd --gid 10001 app \
  && useradd --uid 10001 --gid app --create-home --home-dir /home/app app

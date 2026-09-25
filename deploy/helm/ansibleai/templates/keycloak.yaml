@@ -91,6 +91,9 @@ metadata:
     ansibleai.io/purpose: "Lab Keycloak 26 (start-dev). Admin NodePort only — not the member Ingress."
 spec:
   replicas: {{ .Values.identity.replicas }}
+  # One replica: Recreate avoids two Pending Keycloaks (old+new) on the 4-vCPU worker.
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app.kubernetes.io/name: keycloak
@@ -210,7 +213,7 @@ spec:
             - name: KC_HTTP_MANAGEMENT_HEALTH_ENABLED
               value: "true"
             - name: JAVA_OPTS_APPEND
-              value: {{ .Values.identity.javaOptsAppend | default "-Xms128m -Xmx256m" | quote }}
+              value: {{ .Values.identity.javaOptsAppend | default "-Xms192m -Xmx384m" | quote }}
           securityContext:
             allowPrivilegeEscalation: false
             # start-dev writes under /opt/keycloak (not only /data). Compose is not read-only either.
@@ -223,7 +226,8 @@ spec:
             httpGet:
               path: /health/ready
               port: management
-            failureThreshold: 30
+            # start-dev + --import-realm on a loaded worker often exceeds 5m.
+            failureThreshold: 90
             periodSeconds: 10
           readinessProbe:
             httpGet:

@@ -30,7 +30,7 @@ api:
       memory: 256Mi
     limits:
       cpu: 500m
-      memory: 512Mi
+      memory: 768Mi
 
 worker:
   replicas: 1
@@ -95,8 +95,8 @@ redis:
       cpu: 25m
       memory: 64Mi
     limits:
-      cpu: 150m
-      memory: 128Mi
+      cpu: 250m
+      memory: 256Mi
 
 minio:
   persistence:
@@ -108,7 +108,7 @@ minio:
       memory: 128Mi
     limits:
       cpu: 300m
-      memory: 256Mi
+      memory: 384Mi
 
 migrate:
   resources:
@@ -133,14 +133,14 @@ identity:
   enabled: true
   nodeSelector:
     kubernetes.io/hostname: k8s-worker
-  javaOptsAppend: "-Xms128m -Xmx256m"
+  javaOptsAppend: "-Xms192m -Xmx384m"
   resources:
     requests:
       cpu: 100m
-      memory: 384Mi
+      memory: 512Mi
     limits:
       cpu: 500m
-      memory: 512Mi
+      memory: 768Mi
 
 networkPolicy:
   enabled: true

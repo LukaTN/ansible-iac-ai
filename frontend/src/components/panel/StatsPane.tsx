@@ -4,11 +4,11 @@ import { ModuleBarChart } from './ModuleBarChart';
 import { ValidationBreakdown } from './ValidationBreakdown';
 
 export function StatsPane() {
-  const { stats, loadOverview, tab } = usePanel();
+  const { stats, loadOverview, tab, workspaceView, collapsed } = usePanel();
 
   useEffect(() => {
-    if (tab === 'stats') loadOverview();
-  }, [tab, loadOverview]);
+    if (workspaceView === 'chat' && tab === 'stats' && !collapsed) loadOverview();
+  }, [tab, workspaceView, collapsed, loadOverview]);
 
   const total = stats?.total ?? 0;
   const valid = stats?.valid ?? 0;
@@ -17,8 +17,7 @@ export function StatsPane() {
   return (
     <>
       <p className="panel-intro">
-        Session analytics for generated playbooks. Open from the sidebar when you need validation trends or module
-        usage — not shown in the chat header.
+        Session analytics for generated playbooks. Open from the sidebar when you need validation trends or module usage information.
       </p>
 
       <h3 className="slabel">Playbook outcomes</h3>

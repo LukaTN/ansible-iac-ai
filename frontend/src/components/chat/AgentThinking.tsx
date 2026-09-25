@@ -11,13 +11,13 @@ import {
 } from '@/lib/generationSteps';
 import type { ThreadGenerationState } from '@/lib/socket';
 
-const NODE_R = 13;
-const NODE_CY = 22;
+const NODE_R = 18;
+const NODE_CY = 28;
 const NODE_SPACING = 100;
-const NODE_PAD = 20;
+const NODE_PAD = 92;
 const NODE_X = GENERATION_PIPELINE.map((_, i) => NODE_PAD + i * NODE_SPACING);
 const SVG_W = NODE_X[NODE_X.length - 1] + NODE_PAD;
-const SVG_H = 58;
+const SVG_H = 92;
 const RING_R = 19;
 const RING_C = 2 * Math.PI * RING_R;
 
@@ -181,7 +181,7 @@ export function AgentThinking({ state }: AgentThinkingProps) {
                   )}
                   <text
                     x={cx}
-                    y={SVG_H - 2}
+                    y={SVG_H - 8}
                     textAnchor="middle"
                     className="at-node-label"
                   >

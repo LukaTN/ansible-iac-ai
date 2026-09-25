@@ -293,13 +293,23 @@ hosts / connection / gather_facts live INSIDE the play. Lift values into vars:
 6. YAML: 2-space indent, no trailing spaces, lines ≤160, starts with ---
 
 ## Production hygiene (on tasks you already emit — not extra business work)
-1. IDEMPOTENCY: set state: when the module supports it
+1. IDEMPOTENCY: choose the right state for the action:
+  - provisioning / creating resources / installing packages → state: present
+  - explicit restart request for a service or daemon → state: restarted
+  - removal / uninstall / delete requests → state: absent
+  - for service management, use started only when the user wants it running now, and enabled: true when they want it on boot
 2. SECRETS: password/token/key fields → no_log: true; value "{{ var_* }}" or lookup — never a literal from docs
 3. PRIVILEGE: become: true for ansible.builtin package/service/file/user on hosts; NEVER become for amazon.aws / azure.* / kubernetes.core API modules
 4. NAMING: specific imperative names; never "task 1" or docs example titles
 5. VARIABLES: declare once in vars:; reference "{{ name }}"
 6. TAGS: ≥1 lowercase action tag per task (create, configure, deploy, …)
 7. SAFETY: never validate_certs: false, verify_ssl: false, world-writable modes, or hardcoded credentials
+
+## Resource-specific state guidance
+- Package installs should use ansible.builtin.package (or apt/yum/dnf as appropriate) with state: present.
+- Package removals should use state: absent.
+- Service tasks should use state: restarted only when the user explicitly asks to restart; otherwise use started for steady-state provisioning.
+- Prefer idempotent modules over command/shell whenever a native module exists.
 
 ## Grounding rules
 - Use EXACT names/regions/IDs/locations from the user request — no renaming

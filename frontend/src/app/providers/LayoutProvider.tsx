@@ -20,8 +20,10 @@ interface LayoutContextValue {
 const LayoutContext = createContext<LayoutContextValue | null>(null);
 
 export function LayoutProvider({ children }: { children: ReactNode }) {
-  const { collapsed, collapsePanel } = usePanel();
+  const { collapsed, collapsePanel, workspaceView, closeDocs } = usePanel();
   const [threadsRequested, setThreadsRequested] = useState(false);
+  // Allow the threads drawer while Docs is open so users can pick a chat
+  // without being forced out of the corpus view first.
   const threadsOpen = threadsRequested && collapsed;
 
   const closeThreads = useCallback(() => setThreadsRequested(false), []);
@@ -61,11 +63,15 @@ export function LayoutProvider({ children }: { children: ReactNode }) {
         setThreadsRequested(false);
         return;
       }
-      if (!collapsed) collapsePanel();
+      if (!collapsed) {
+        collapsePanel();
+        return;
+      }
+      if (workspaceView === 'docs') closeDocs();
     };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
-  }, [threadsOpen, collapsed, collapsePanel]);
+  }, [threadsOpen, collapsed, collapsePanel, workspaceView, closeDocs]);
 
   const value = useMemo(
     () => ({ threadsOpen, openThreads, closeThreads, toggleThreads, closeOverlays }),

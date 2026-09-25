@@ -9,9 +9,10 @@ import { BookIcon } from '@/components/ui/Icons';
  */
 export function AppFooter() {
   const { connected } = useSocket();
-  const { ragStatus } = usePanel();
+  const { ragStatus, workspaceView } = usePanel();
 
   const ragReady = ragStatus?.available && (ragStatus.chunks ?? 0) > 0;
+  const showComposerKeys = workspaceView === 'chat';
 
   return (
     <footer className="app-footer">
@@ -34,14 +35,22 @@ export function AppFooter() {
 
       <div className="app-footer-spacer" />
 
-      <div className="app-footer-group app-footer-keys" aria-hidden>
-        <span className="app-footer-key">
-          <kbd className="kbd">Enter</kbd> send
-        </span>
-        <span className="app-footer-key">
-          <kbd className="kbd">Shift</kbd> + <kbd className="kbd">Enter</kbd> new line
-        </span>
-      </div>
+      {showComposerKeys ? (
+        <div className="app-footer-group app-footer-keys" aria-hidden>
+          <span className="app-footer-key">
+            <kbd className="kbd">Enter</kbd> send
+          </span>
+          <span className="app-footer-key">
+            <kbd className="kbd">Shift</kbd> + <kbd className="kbd">Enter</kbd> new line
+          </span>
+        </div>
+      ) : (
+        <div className="app-footer-group app-footer-keys" aria-hidden>
+          <span className="app-footer-key">
+            <kbd className="kbd">Esc</kbd> back to chat
+          </span>
+        </div>
+      )}
 
       <div className="app-footer-group app-footer-mark">AnsibleAI · Grounded IaC</div>
     </footer>

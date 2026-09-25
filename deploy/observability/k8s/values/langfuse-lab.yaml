@@ -26,7 +26,7 @@ langfuse:
         memory: 256Mi
       limits:
         cpu: 500m
-        memory: 512Mi
+        memory: 768Mi
 
   worker:
     resources:
@@ -35,7 +35,7 @@ langfuse:
         memory: 192Mi
       limits:
         cpu: 400m
-        memory: 384Mi
+        memory: 512Mi
 
 postgresql:
   deploy: true
@@ -105,7 +105,7 @@ redis:
         memory: 64Mi
       limits:
         cpu: 150m
-        memory: 128Mi
+        memory: 256Mi
 
 s3:
   deploy: true
@@ -121,4 +121,4 @@ s3:
       memory: 128Mi
     limits:
       cpu: 250m
-      memory: 256Mi
+      memory: 512Mi

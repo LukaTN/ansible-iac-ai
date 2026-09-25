@@ -199,3 +199,4 @@ export interface ScrapeSession {
 }
 
 export type PanelTab = 'stats' | 'docs';
+export type WorkspaceView = 'chat' | 'docs';

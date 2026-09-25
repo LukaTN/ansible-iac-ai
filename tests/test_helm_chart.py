@@ -214,6 +214,8 @@ def test_keycloak_templates_are_lab_nodeport_not_ingress() -> None:
     assert "identity.nodeSelector" in keycloak
     assert "pipefail" not in keycloak
     assert "set -eu" in keycloak
+    assert "type: Recreate" in keycloak
+    assert "failureThreshold: 90" in keycloak
     assert "--import-realm" in keycloak
     assert "identity.namespace" in keycloak
     assert "/health/ready" in keycloak

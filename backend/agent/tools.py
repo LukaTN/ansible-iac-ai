@@ -329,6 +329,114 @@ def get_module_info(module: str) -> dict:
     return build_module_reference(module, kb.get("modules", {}))
 
 
+def extract_modules_from_playbook_yaml(yaml_content: str) -> list[str]:
+    """
+    Extract all Ansible module names from a playbook YAML string.
+    
+    Returns a list of unique module names (FQCN or short names).
+    For example: ['kubernetes.core.k8s', 'ansible.builtin.debug']
+    """
+    import yaml
+    
+    if not yaml_content or not isinstance(yaml_content, str):
+        return []
+    
+    try:
+        parsed = yaml.safe_load(yaml_content)
+    except Exception:
+        return []
+    
+    if not isinstance(parsed, list):
+        return []
+    
+    modules = set()
+    
+    # Ansible keywords that should never be treated as module names in a task
+    # These are structural keywords (not executable modules)
+    reserved_keywords = {
+        "name",           # task name
+        "block",          # block directive
+        "rescue",         # rescue block
+        "always",         # always block
+        "when",           # conditional
+        "register",       # output register
+        "loop", "until", "retries", "delay",  # loop/retry directives
+        "notify",         # notify handler
+        "tags",           # tags
+        "changed_when", "failed_when",  # result conditions
+        "ignore_errors",  # error handling
+        "async", "poll",  # async execution
+        "vars",           # task vars
+        "vars_files", "vars_prompt",  # var sources
+        "include_vars", "include_tasks", "import_tasks",  # file inclusion
+        "set_fact",       # This is actually a module, but often used with special syntax
+        "include", "import_playbook",  # playbook inclusion
+        "handlers", "roles", "pre_tasks", "post_tasks",  # play structure
+        "gather_facts",   # play-level fact gathering
+        "connection", "become", "become_user", "become_method",  # privilege
+        "hosts",          # play-level
+        "strategy", "serial", "throttle", "any_errors_fatal",  # play execution
+        "fact_path", "gather_subset", "gather_timeout",  # fact gathering
+        "force_handlers",
+    }
+    
+    # Iterate through plays
+    for play in parsed:
+        if not isinstance(play, dict):
+            continue
+        
+        # Iterate through tasks in the play
+        tasks = play.get("tasks", []) or []
+        if not isinstance(tasks, list):
+            continue
+        
+        for task in tasks:
+            if not isinstance(task, dict):
+                continue
+            
+            # Find module keys in the task
+            # A task can have one module (e.g., "kubernetes.core.k8s: {...}")
+            # or short form (e.g., "debug: {...}")
+            for key in task:
+                if key in reserved_keywords:
+                    continue
+                
+                # Skip if value is not a dict (module params should be dict)
+                value = task.get(key)
+                if value is None or (not isinstance(value, dict)):
+                    continue
+                
+                # This key is likely a module name
+                modules.add(key)
+    
+    return sorted(list(modules))
+
+
+def get_chat_module_ref_for_playbook(modules: list[str]) -> dict:
+    """
+    Return a structured module reference for multiple modules from a playbook.
+    
+    Returns a ModuleRef with sources array if multiple modules are found,
+    or a single module reference if only one is found.
+    This powers the stacked Source cards in the UI.
+    
+    Args:
+        modules: List of module names extracted from a playbook
+        
+    Returns:
+        A dict matching the frontend ModuleRef type
+    """
+    from app import build_chat_module_ref_from_modules
+    
+    if not modules or not isinstance(modules, list):
+        return {"found": False}
+    
+    kb = _get_kb()
+    kb_modules = kb.get("modules", {})
+    
+    return build_chat_module_ref_from_modules(modules, kb_modules)
+
+
 # ─────────────────────────────────────────────
 #  Tool: validate_yaml / validate_playbook_file
 # ─────────────────────────────────────────────

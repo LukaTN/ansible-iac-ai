@@ -12,10 +12,11 @@ import { useLayout } from '@/app/providers/LayoutProvider';
  */
 export function AppHeader() {
   const { title } = useChat();
-  const { ragStatus, toggleCollapsed, collapsed } = usePanel();
+  const { ragStatus, toggleCollapsed, collapsed, workspaceView, closeDocs } = usePanel();
   const { openGuide } = useOnboarding();
   const { threadsOpen, toggleThreads } = useLayout();
 
+  const docsOpen = workspaceView === 'docs';
   const ragReady = ragStatus?.available && (ragStatus.chunks ?? 0) > 0;
   const ragLabel = ragReady
     ? `Docs index ready · ${ragStatus.chunks.toLocaleString()} chunks`
@@ -33,17 +34,22 @@ export function AppHeader() {
       >
         <MenuIcon />
       </button>
-      <div className="app-header-brand">
+      <button
+        type="button"
+        className="app-header-brand"
+        onClick={docsOpen ? closeDocs : undefined}
+        title={docsOpen ? 'Back to chat' : undefined}
+      >
         <span className="app-header-logo" aria-hidden>
           <CodeBracketsIcon size={15} />
         </span>
         <span className="app-header-name">
           <span>Ansible</span>AI
         </span>
-      </div>
+      </button>
 
       <div className="app-header-context">
-        <div className="app-header-title">{title}</div>
+        <div className="app-header-title">{docsOpen ? 'Docs & corpus' : title}</div>
       </div>
 
       <div className="app-header-actions">
@@ -60,16 +66,18 @@ export function AppHeader() {
         >
           <HelpIcon />
         </button>
-        <button
-          type="button"
-          className={`ui-btn ui-btn-icon${collapsed ? '' : ' is-active'}`}
-          onClick={toggleCollapsed}
-          title={collapsed ? 'Show analytics panel' : 'Hide analytics panel'}
-          aria-label={collapsed ? 'Show analytics panel' : 'Hide analytics panel'}
-          aria-pressed={!collapsed}
-        >
-          <PanelIcon />
-        </button>
+        {!docsOpen ? (
+          <button
+            type="button"
+            className={`ui-btn ui-btn-icon${collapsed ? '' : ' is-active'}`}
+            onClick={toggleCollapsed}
+            title={collapsed ? 'Show analytics panel' : 'Hide analytics panel'}
+            aria-label={collapsed ? 'Show analytics panel' : 'Hide analytics panel'}
+            aria-pressed={!collapsed}
+          >
+            <PanelIcon />
+          </button>
+        ) : null}
         <AccountMenu placement="down" />
       </div>
     </header>

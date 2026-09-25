@@ -11,15 +11,17 @@ function DocCard({
   title,
   subtitle,
   actions,
+  wide,
   children,
 }: {
   title: string;
   subtitle: string;
   actions?: React.ReactNode;
+  wide?: boolean;
   children: React.ReactNode;
 }) {
   return (
-    <div className="doc-card">
+    <div className={`doc-card${wide ? ' doc-card-wide' : ''}`}>
       <div className="doc-card-hdr">
         <div>
           <div className="doc-title">{title}</div>
@@ -51,7 +53,7 @@ function pillClass(kind: string) {
 
 export function DocsPane() {
   const { isAdmin } = useAuth();
-  const { tab, connectDocsStream, closeDocsStream } = usePanel();
+  const { workspaceView, connectDocsStream, closeDocsStream } = usePanel();
   const dm = useDesignModeState();
   const [generatedAt, setGeneratedAt] = useState('—');
   const [totalMods, setTotalMods] = useState('—');
@@ -99,14 +101,10 @@ export function DocsPane() {
         return;
       }
       const det = await api.docs.session(sessions[0].id);
-      const diffs = det.session?.summary?.diffs || det.session?.summary?.changed || [];
       setChangelog(
-        diffs.slice(0, 10) as {
-          module_slug?: string;
-          slug?: string;
-          diff_summary?: string;
-          health_score?: number;
-        }[],
+        (det.session?.summary?.diffs as typeof changelog) ||
+          (det.session?.summary?.changed as typeof changelog) ||
+          [],
       );
     } catch (e) {
       console.error(e);
@@ -114,66 +112,63 @@ export function DocsPane() {
   }, []);
 
   useEffect(() => {
-    if (tab === 'docs') {
-      loadStatus();
-      loadRollback();
-      loadSessions();
-    }
-  }, [tab, loadStatus, loadRollback, loadSessions]);
+    if (workspaceView !== 'docs') return;
+    loadStatus();
+    loadRollback();
+    loadSessions();
+  }, [workspaceView, loadStatus, loadRollback, loadSessions]);
 
   useEffect(() => {
-    if (!isDesignMode()) return;
-    const apply = () => {
-      const scene = dm.docsScene;
-      void loadStatus();
-      void loadRollback();
-      void loadSessions();
-      if (scene === 'needsUpdate') {
-        setChanged(mockChangedModules);
-        setChangedSlugs(mockChangedModules.map((c) => c.slug));
-        setLiveStatus('idle');
-        setTerminal('');
-      } else if (scene === 'scraping') {
-        setChanged(mockChangedModules);
-        setChangedSlugs(mockChangedModules.map((c) => c.slug));
-        setLiveStatus('streaming');
-        setTerminal(mockScrapeLogLines.filter((line) => line !== 'STREAM_END').join('\n'));
-      } else if (scene === 'failed') {
-        setChanged([]);
-        setChangedSlugs([]);
-        setLiveStatus('failed');
-        setTerminal(mockFailedScrapeLines.filter((line) => line !== 'STREAM_END').join('\n'));
-      } else {
-        setChanged([]);
-        setChangedSlugs([]);
-        setLiveStatus(scene === 'empty' ? 'idle' : 'ok');
-        setTerminal('');
-      }
-    };
-    apply();
-  }, [dm.docsScene, loadStatus, loadRollback, loadSessions]);
+    if (!isDesignMode() || workspaceView !== 'docs') return;
+    const scene = dm.docsScene;
+    void loadStatus();
+    void loadRollback();
+    void loadSessions();
+    if (scene === 'needsUpdate') {
+      setChanged(mockChangedModules);
+      setChangedSlugs(mockChangedModules.map((c) => c.slug));
+      setLiveStatus('idle');
+      setTerminal('');
+    } else if (scene === 'scraping') {
+      setChanged(mockChangedModules);
+      setChangedSlugs(mockChangedModules.map((c) => c.slug));
+      setLiveStatus('streaming');
+      setTerminal(mockScrapeLogLines.filter((line) => line !== 'STREAM_END').join('\n'));
+    } else if (scene === 'failed') {
+      setChanged([]);
+      setChangedSlugs([]);
+      setLiveStatus('failed');
+      setTerminal(mockFailedScrapeLines.filter((line) => line !== 'STREAM_END').join('\n'));
+    } else {
+      setChanged([]);
+      setChangedSlugs([]);
+      setLiveStatus(scene === 'empty' ? 'idle' : 'ok');
+      setTerminal('');
+    }
+  }, [dm.docsScene, workspaceView, loadStatus, loadRollback, loadSessions]);
 
   useEffect(() => {
     const el = terminalRef.current;
     if (el) el.scrollTop = el.scrollHeight;
   }, [terminal]);
 
+  if (!isAdmin && !isDesignMode()) return null;
+
   const handleCheck = async () => {
-    setTerminal('');
-    setLiveStatus('running');
     setChecking(true);
-    setChanged([]);
+    setLiveStatus('running');
+    setTerminal('Checking remote docs against local scrape…\n');
     try {
       const data = await api.docs.check();
-      setLiveStatus('streaming');
       connectDocsStream(data.session_id, appendLog);
-      const out = await waitSession(data.session_id);
-      const list = out.session?.summary?.changed || [];
-      setChanged(list);
-      setChangedSlugs(list.map((c) => c.slug));
-      setLiveStatus('done');
+      const done = await waitSession(data.session_id);
       closeDocsStream();
-      await loadSessions();
+      const summary = done.session?.summary || {};
+      const nextChanged = (summary.changed as typeof changed) || [];
+      setChanged(nextChanged);
+      setChangedSlugs(nextChanged.map((c) => c.slug).filter(Boolean));
+      setLiveStatus(done.session?.status === 'failed' ? 'failed' : 'ok');
+      await loadStatus();
     } catch (e) {
       setLiveStatus('failed');
       const err = e as { body?: { error?: string }; message?: string };
@@ -185,19 +180,19 @@ export function DocsPane() {
 
   const handleRescrape = async () => {
     if (!changedSlugs.length) return;
-    if (!confirm(`Re-scrape ${changedSlugs.length} changed module(s)?`)) return;
-    setTerminal('');
-    setLiveStatus('running');
+    setLiveStatus('streaming');
+    setTerminal(`Re-scraping ${changedSlugs.length} module(s)…\n`);
     try {
       const data = await api.docs.rescrape(changedSlugs);
-      setLiveStatus('streaming');
       connectDocsStream(data.session_id, appendLog);
-      await waitSession(data.session_id);
-      await loadStatus();
-      await loadRollback();
-      await loadSessions();
-      setLiveStatus('done');
+      const done = await waitSession(data.session_id);
       closeDocsStream();
+      setLiveStatus(done.session?.status === 'failed' ? 'failed' : 'ok');
+      setChanged([]);
+      setChangedSlugs([]);
+      await loadStatus();
+      await loadSessions();
+      await loadRollback();
     } catch (e) {
       setLiveStatus('failed');
       const err = e as { body?: { error?: string }; message?: string };
@@ -221,27 +216,21 @@ export function DocsPane() {
     <>
       <DocCard
         title="Knowledge base"
-        subtitle={
-          isAdmin
-            ? 'Compare remote HTML SHA with local scrape. Re-scrape only modified modules.'
-            : 'Modules the assistant retrieves when drafting playbooks.'
-        }
+        subtitle="Compare remote HTML SHA with local scrape. Re-scrape only modified modules."
       >
-        {isAdmin ? (
-          <div className="doc-actions">
-            <button type="button" className="ui-btn ui-btn-primary btn-sm" disabled={checking} onClick={handleCheck}>
-              Check for updates
-            </button>
-            <button
-              type="button"
-              className="ui-btn ui-btn-danger btn-sm"
-              disabled={!changedSlugs.length}
-              onClick={handleRescrape}
-            >
-              Re-scrape changed
-            </button>
-          </div>
-        ) : null}
+        <div className="doc-actions">
+          <button type="button" className="ui-btn ui-btn-primary btn-sm" disabled={checking} onClick={handleCheck}>
+            Check for updates
+          </button>
+          <button
+            type="button"
+            className="ui-btn ui-btn-danger btn-sm"
+            disabled={!changedSlugs.length}
+            onClick={handleRescrape}
+          >
+            Re-scrape changed
+          </button>
+        </div>
         <div className="doc-kv">
           <div>
             <span className="kv-k">Generated at</span>
@@ -252,81 +241,58 @@ export function DocsPane() {
             <span className="kv-v">{totalMods}</span>
           </div>
         </div>
-        {isAdmin ? (
-          <div className="doc-list">
-            {!changed.length ? (
-              <div className="ui-empty">No update check run yet.</div>
-            ) : (
-              changed.map((c) => (
-                <div key={c.slug} className="doc-row">
-                  <div className="doc-row-left">
-                    <div className="doc-row-title">{c.slug}</div>
-                    <div className="doc-row-sub">
-                      remote={(c.remote_hash || '').slice(0, 10)}… · local={(c.local_hash || '').slice(0, 10)}…
-                    </div>
+        <div className="doc-list">
+          {!changed.length ? (
+            <div className="ui-empty">No update check run yet.</div>
+          ) : (
+            changed.map((c) => (
+              <div key={c.slug} className="doc-row">
+                <div className="doc-row-left">
+                  <div className="doc-row-title">{c.slug}</div>
+                  <div className="doc-row-sub">
+                    remote={(c.remote_hash || '').slice(0, 10)}… · local={(c.local_hash || '').slice(0, 10)}…
                   </div>
-                  <span className="pill warn">changed</span>
                 </div>
-              ))
-            )}
-          </div>
-        ) : null}
+                <span className="pill warn">changed</span>
+              </div>
+            ))
+          )}
+        </div>
       </DocCard>
 
-      {isAdmin ? (
-        <>
-          <DocCard
-            title="Backups"
-            subtitle="Restore a previous KB version."
-            actions={
-              <button type="button" className="ui-btn ui-btn-ghost btn-sm" onClick={loadRollback}>
-                Refresh
-              </button>
-            }
-          >
-            <div className="doc-list">
-              {!rollback.length ? (
-                <div className="ui-empty">No backups yet.</div>
-              ) : (
-                rollback.slice(0, 10).map((v) => (
-                  <div key={v.filename} className="doc-row">
-                    <div className="doc-row-left">
-                      <div className="doc-row-title">{v.filename}</div>
-                      <div className="doc-row-sub">
-                        {new Date(v.modified_at).toLocaleString()} · {(v.size / 1024).toFixed(1)} KB
-                      </div>
-                    </div>
-                    <button
-                      type="button"
-                      className="ui-btn btn-sm btn-restore"
-                      onClick={() => handleRestore(v.filename)}
-                    >
-                      Restore
-                    </button>
+      <DocCard
+        title="Backups"
+        subtitle="Restore a previous KB version."
+        actions={
+          <button type="button" className="ui-btn ui-btn-ghost btn-sm" onClick={loadRollback}>
+            Refresh
+          </button>
+        }
+      >
+        <div className="doc-list">
+          {!rollback.length ? (
+            <div className="ui-empty">No backups yet.</div>
+          ) : (
+            rollback.slice(0, 10).map((v) => (
+              <div key={v.filename} className="doc-row">
+                <div className="doc-row-left">
+                  <div className="doc-row-title">{v.filename}</div>
+                  <div className="doc-row-sub">
+                    {new Date(v.modified_at).toLocaleString()} · {(v.size / 1024).toFixed(1)} KB
                   </div>
-                ))
-              )}
-            </div>
-          </DocCard>
-
-          <DocCard
-            title="Scrape log"
-            subtitle="Real-time events via SSE."
-            actions={
-              <div className="doc-actions">
-                <span className={pillClass(liveStatus)}>{liveStatus}</span>
-                <button type="button" className="ui-btn ui-btn-ghost btn-sm" onClick={() => setTerminal('')}>
-                  Clear
+                </div>
+                <button
+                  type="button"
+                  className="ui-btn btn-sm btn-restore"
+                  onClick={() => handleRestore(v.filename)}
+                >
+                  Restore
                 </button>
               </div>
-            }
-          >
-            <div className="terminal" ref={terminalRef}>
-              {terminal}
-            </div>
-          </DocCard>
-        </>
-      ) : null}
+            ))
+          )}
+        </div>
+      </DocCard>
 
       <DocCard
         title="Module health"
@@ -356,35 +322,51 @@ export function DocsPane() {
         </div>
       </DocCard>
 
-      {isAdmin ? (
-        <DocCard
-          title="Changelog"
-          subtitle="Auto-generated per-module diffs from the latest re-scrape."
-          actions={
-            <button type="button" className="ui-btn ui-btn-ghost btn-sm" onClick={loadSessions}>
-              Refresh
-            </button>
-          }
-        >
-          <div className="doc-list">
-            {!changelog.length ? (
-              <div className="ui-empty">No sessions yet.</div>
-            ) : (
-              changelog.map((d, i) => (
-                <div key={i} className="doc-row">
-                  <div className="doc-row-left">
-                    <div className="doc-row-title">{d.module_slug || d.slug}</div>
-                    <div className="doc-row-sub">{d.diff_summary || 'changed'}</div>
-                  </div>
-                  {d.health_score != null && (
-                    <div className={`score ${d.health_score < 70 ? 'bad' : 'ok'}`}>{d.health_score}%</div>
-                  )}
+      <DocCard
+        title="Changelog"
+        subtitle="Auto-generated per-module diffs from the latest re-scrape."
+        actions={
+          <button type="button" className="ui-btn ui-btn-ghost btn-sm" onClick={loadSessions}>
+            Refresh
+          </button>
+        }
+      >
+        <div className="doc-list">
+          {!changelog.length ? (
+            <div className="ui-empty">No sessions yet.</div>
+          ) : (
+            changelog.map((d, i) => (
+              <div key={i} className="doc-row">
+                <div className="doc-row-left">
+                  <div className="doc-row-title">{d.module_slug || d.slug}</div>
+                  <div className="doc-row-sub">{d.diff_summary || 'changed'}</div>
                 </div>
-              ))
-            )}
+                {d.health_score != null && (
+                  <div className={`score ${d.health_score < 70 ? 'bad' : 'ok'}`}>{d.health_score}%</div>
+                )}
+              </div>
+            ))
+          )}
+        </div>
+      </DocCard>
+
+      <DocCard
+        wide
+        title="Scrape log"
+        subtitle="Real-time events via SSE."
+        actions={
+          <div className="doc-actions">
+            <span className={pillClass(liveStatus)}>{liveStatus}</span>
+            <button type="button" className="ui-btn ui-btn-ghost btn-sm" onClick={() => setTerminal('')}>
+              Clear
+            </button>
           </div>
-        </DocCard>
-      ) : null}
+        }
+      >
+        <div className="terminal" ref={terminalRef}>
+          {terminal}
+        </div>
+      </DocCard>
     </>
   );
 }

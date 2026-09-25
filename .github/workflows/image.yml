@@ -1,4 +1,5 @@
-# Phase 7 — build, scan, SBOM, push ghcr.io/<owner>/<repo>:<git-sha>.
+# Build, scan, then publish ghcr.io/<owner>/<repo>:<git-sha>.
+# Three jobs so the Actions graph is build → scan → publish.
 # Never tags :latest. Push only from main or workflow_dispatch (not PRs).
 name: image
 
@@ -30,11 +31,12 @@ permissions:
 
 jobs:
   build:
+    name: Build image
     runs-on: ubuntu-latest
     outputs:
-      digest: ${{ steps.push.outputs.digest }}
-      image: ${{ steps.meta.outputs.tags }}
-      sha: ${{ github.sha }}
+      image_name: ${{ steps.image.outputs.name }}
+      image_ref: ${{ steps.image.outputs.ref }}
+      sha_tag: ${{ steps.image.outputs.sha_tag }}
     steps:
       - uses: actions/checkout@v4
 
@@ -46,6 +48,7 @@ jobs:
           name="${GITHUB_REPOSITORY,,}"
           echo "name=${name}" >> "$GITHUB_OUTPUT"
           echo "ref=ghcr.io/${name}:${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
+          echo "sha_tag=ghcr.io/${name}:sha-${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
 
       - id: meta
         uses: docker/metadata-action@v5
@@ -67,6 +70,35 @@ jobs:
           cache-to: type=gha,mode=max
           labels: ${{ steps.meta.outputs.labels }}
 
+      - name: Save image
+        run: |
+          docker save \
+            "${{ steps.image.outputs.ref }}" \
+            "${{ steps.image.outputs.sha_tag }}" \
+            -o /tmp/image.tar
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: image-tar
+          path: /tmp/image.tar
+          retention-days: 1
+          if-no-files-found: error
+
+  scan:
+    name: Scan image
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: image-tar
+          path: /tmp
+
+      - name: Load image
+        run: docker load -i /tmp/image.tar
+
       - name: Trivy filesystem
         # Pin post-2026-03-19 incident (tags before 0.35.0 were moved). v0.36.0.
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25
@@ -83,7 +115,7 @@ jobs:
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25
         with:
           scan-type: image
-          image-ref: ${{ steps.image.outputs.ref }}
+          image-ref: ${{ needs.build.outputs.image_ref }}
           severity: CRITICAL,HIGH
           exit-code: "0"
           format: sarif
@@ -107,44 +139,52 @@ jobs:
       - name: Syft SBOM
         uses: anchore/sbom-action@v0
         with:
-          image: ${{ steps.image.outputs.ref }}
+          image: ${{ needs.build.outputs.image_ref }}
           format: spdx-json
           artifact-name: ansibleai-sbom.spdx.json
           upload-artifact: true
 
+  publish:
+    name: Publish commit tag
+    needs: [build, scan]
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: image-tar
+          path: /tmp
+
+      - name: Load image
+        run: docker load -i /tmp/image.tar
+
       - name: Login to GHCR
-        if: github.event_name != 'pull_request'
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - id: push
-        name: Push SHA tags
-        if: github.event_name != 'pull_request'
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          labels: ${{ steps.meta.outputs.labels }}
+      - name: Push SHA tags
+        id: push
+        run: |
+          docker push "${{ needs.build.outputs.image_ref }}"
+          docker push "${{ needs.build.outputs.sha_tag }}"
+          digest="$(docker image inspect --format '{{index .RepoDigests 0}}' "${{ needs.build.outputs.image_ref }}")"
+          echo "digest=${digest}" >> "$GITHUB_OUTPUT"
 
       - name: Cosign (optional key)
-        if: github.event_name != 'pull_request'
         env:
           COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
         run: |
           {
             echo "### Image"
-            echo "\`${{ steps.image.outputs.ref }}\`"
+            echo "\`${{ needs.build.outputs.image_ref }}\`"
             echo
             echo "Promote on the lab (never the latest tag):"
             echo "\`\`\`"
-            echo "python scripts/set_gitops_image.py --tag ${{ github.sha }} --repository ghcr.io/${{ steps.image.outputs.name }}"
+            echo "python scripts/set_gitops_image.py --tag ${{ github.sha }} --repository ghcr.io/${{ needs.build.outputs.image_name }}"
             echo "\`\`\`"
           } >> "$GITHUB_STEP_SUMMARY"
           if [ -z "$COSIGN_PRIVATE_KEY" ]; then
@@ -154,6 +194,6 @@ jobs:
           curl -sSfL https://github.com/sigstore/cosign/releases/download/v2.4.3/cosign-linux-amd64 -o /tmp/cosign
           chmod +x /tmp/cosign
           /tmp/cosign sign --yes --key env://COSIGN_PRIVATE_KEY \
-            "ghcr.io/${{ steps.image.outputs.name }}@${{ steps.push.outputs.digest }}"
-          echo "Cosign: signed digest ${{ steps.push.outputs.digest }}" >> "$GITHUB_STEP_SUMMARY"
+            "${{ steps.push.outputs.digest }}"
+          echo "Cosign: signed ${{ steps.push.outputs.digest }}" >> "$GITHUB_STEP_SUMMARY"
         continue-on-error: true

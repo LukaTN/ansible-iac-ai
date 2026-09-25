@@ -569,6 +569,52 @@ def build_chat_module_ref(
     return build_module_reference(detected_module, kb_modules)
 
 
+def build_chat_module_ref_from_modules(
+    modules: list[str],
+    kb_modules: dict,
+) -> dict:
+    """
+    Build a chat module reference from a list of module names (e.g., from a playbook).
+    
+    Returns a single ModuleRef with sources array if multiple modules found,
+    or a single module reference if only one is found. Powers stacked Source cards in the UI.
+    
+    Args:
+        modules: List of module names to build references for
+        kb_modules: The knowledge base modules dictionary
+        
+    Returns:
+        A dict with structure matching ModuleRef frontend type
+    """
+    if not modules or not isinstance(modules, list):
+        return {"found": False, "module": "unknown"}
+    
+    # Build references for each module, filtering out unfound ones
+    sources = []
+    for module_name in modules:
+        if not module_name:
+            continue
+        ref = build_module_reference(module_name, kb_modules)
+        if ref.get("found"):
+            sources.append(ref)
+    
+    # Return appropriate structure based on number of sources
+    if len(sources) >= 2:
+        return {
+            "found": True,
+            "module": modules[0] if modules else "unknown",
+            "sources": sources,
+        }
+    elif len(sources) == 1:
+        return sources[0]
+    else:
+        # No modules found in KB
+        return {
+            "found": False,
+            "module": modules[0] if modules else "unknown",
+        }
+
+
 # ─────────────────────────────────────────────
 #  DOCS MANAGEMENT — config + helpers
 # ─────────────────────────────────────────────
@@ -1032,22 +1078,26 @@ def api_threads_clear():
 
 @app.route("/stats", methods=["GET"])
 def api_stats():
+    """Per-user generation analytics for the signed-in account."""
     from sqlalchemy import func
-    total   = Generation.query.count()
-    valid   = Generation.query.filter_by(is_valid=True).count()
-    warns   = Generation.query.filter(Generation.warnings > 0).count()
+
+    q = Generation.query.filter(Generation.user_id == current_user.id)
+    total = q.count()
+    valid = q.filter_by(is_valid=True).count()
+    warns = q.filter(Generation.warnings > 0).count()
     invalid = total - valid
     module_counts = (
         db.session.query(Generation.module, func.count(Generation.id).label("cnt"))
+        .filter(Generation.user_id == current_user.id)
         .group_by(Generation.module)
         .order_by(func.count(Generation.id).desc())
         .all()
     )
     return jsonify({
-        "total"  : total,
-        "valid"  : valid,
+        "total": total,
+        "valid": valid,
         "invalid": invalid,
-        "warns"  : warns,
+        "warns": warns,
         "modules": [{"module": m, "count": c} for m, c in module_counts],
     })
 

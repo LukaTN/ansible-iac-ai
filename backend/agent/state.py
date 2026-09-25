@@ -31,6 +31,7 @@ def max_iterations_default() -> int:
 class AgentState(TypedDict, total=False):
     # ── inputs ──────────────────────────────
     thread_id: int
+    user_id: int | None
     user_message: str
     merged_request: str          # original intent + cross-turn params
     history: list[dict]
@@ -436,9 +437,11 @@ def build_initial_state(
     thread_id: int,
     user_message: str,
     history: list[dict],
+    user_id: int | None = None,
 ) -> AgentState:
     return AgentState(
         thread_id=thread_id,
+        user_id=user_id,
         user_message=user_message,
         merged_request=build_merged_request(user_message, history),
         history=list(history or []),

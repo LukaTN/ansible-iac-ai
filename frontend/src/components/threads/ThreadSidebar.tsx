@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useAuth } from '@/app/providers/AuthProvider';
 import { AWAITING_REPLY_FALLBACK, useChat } from '@/app/providers/ChatProvider';
 import { usePanel } from '@/app/providers/PanelProvider';
 import { useSocket } from '@/app/providers/SocketProvider';
@@ -17,9 +18,10 @@ type DeletePrompt =
   | { kind: 'all'; count: number };
 
 export function ThreadSidebar() {
+  const { isAdmin } = useAuth();
   const { currentId, awaitingReplyIds, newThread, openThread } = useChat();
   const { filter, setFilter, filteredItems, items, deleteThread, clearAllThreads } = useThreads();
-  const { openPanel, loadOverview } = usePanel();
+  const { openPanel, openDocs, loadOverview, workspaceView } = usePanel();
   const { threadsOpen, closeThreads } = useLayout();
   const { generationProgress } = useSocket();
   const dm = useDesignModeState();
@@ -156,7 +158,7 @@ export function ThreadSidebar() {
                     className="thread-row-open"
                     aria-current={t.id === currentId ? 'true' : undefined}
                     onClick={() => {
-                      openThread(t.id);
+                      void openThread(t.id);
                       closeThreads();
                     }}
                   >
@@ -193,10 +195,19 @@ export function ThreadSidebar() {
             <StatsIcon />
             Analytics
           </button>
-          <button type="button" className="tfoot-btn" onClick={() => openPanel('docs')}>
-            <BookIcon />
-            Docs
-          </button>
+          {isAdmin ? (
+            <button
+              type="button"
+              className={`tfoot-btn${workspaceView === 'docs' ? ' active' : ''}`}
+              onClick={() => {
+                openDocs();
+                closeThreads();
+              }}
+            >
+              <BookIcon />
+              Docs
+            </button>
+          ) : null}
           <button
             type="button"
             className="tfoot-btn danger"

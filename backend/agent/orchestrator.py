@@ -124,20 +124,28 @@ def _persist_generation(state: dict, db_session) -> None:
         return
     try:
         from models import Generation
+
         validation = state.get("validation") or {}
+        owner_id = state.get("user_id")
         entry = Generation(
-            request    = state.get("user_message") or "",
-            module     = state.get("module") or "unknown",
-            filename   = state.get("filename"),
-            playbook   = state.get("draft_yaml"),
-            is_valid   = bool(state.get("gate_ready")),
-            warnings   = len(validation.get("warnings") or []),
-            errors     = len(validation.get("errors") or []),
-            module_ref = state.get("module_ref"),
+            user_id=owner_id,
+            request=state.get("user_message") or "",
+            module=state.get("module") or "unknown",
+            filename=state.get("filename"),
+            playbook=state.get("draft_yaml"),
+            is_valid=bool(state.get("gate_ready")),
+            warnings=len(validation.get("warnings") or []),
+            errors=len(validation.get("errors") or []),
+            module_ref=state.get("module_ref"),
         )
         db_session.add(entry)
         db_session.commit()
     except Exception:
+        log.exception(
+            "generation.stats_persist_failed",
+            thread_id=state.get("thread_id"),
+            user_id=state.get("user_id"),
+        )
         db_session.rollback()
 
 
@@ -172,7 +180,7 @@ def handle_message(
         model=cfg["model"],
     )
 
-    initial_state = build_initial_state(thread_id, user_message, history)
+    initial_state = build_initial_state(thread_id, user_message, history, user_id=user_id)
     token = set_active_thread(thread_id)
     try:
         check_cancelled(thread_id)

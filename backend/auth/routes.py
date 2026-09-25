@@ -55,7 +55,7 @@ from .oidc import (
     OidcError,
     authenticate_with_password,
     build_authorization_url,
-    decode_id_token,
+    claims_from_token_response,
     exchange_code,
     new_pkce_pair,
     oidc_available,
@@ -807,7 +807,7 @@ def oidc_callback() -> Any:
 
     try:
         tokens = exchange_code(code, str(verifier))
-        claims = decode_id_token(str(tokens["id_token"]), nonce=str(nonce))
+        claims = claims_from_token_response(tokens, nonce=str(nonce))
         user, linked = upsert_user_from_claims(claims)
     except OidcError as exc:
         audit.record(

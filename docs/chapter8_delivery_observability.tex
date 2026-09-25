@@ -1,0 +1,596 @@
+\chapter{Delivery and Observability}
+\label{chap:sprint6}
+
+\section{Introduction}
+
+This chapter describes the sixth sprint of AnsibleAI. The previous sprint placed the assistant on a repeatable virtual infrastructure. This sprint closes the path from a code change to a supervised release: an integration pipeline that builds and scans an immutable image, GitOps reconciliation of the desired state, an evaluation gate before production, and an observability stack that records metrics, logs, traces, and each generation.
+
+The sprint corresponds to weeks 21--24 in Tab.~\ref{tab:sprint-breakdown} and to user stories US-18, US-19, and US-20 in Tab.~\ref{tab:product-backlog}. The administrator is the primary actor. The DevOps user of AnsibleAI continues to use the conversational product; this sprint makes that product deliverable and inspectable.
+
+\section{Sprint Objectives}
+
+The objectives of Sprint 6 are:
+
+\begin{enumerate}[label=\arabic*.,leftmargin=2em,itemsep=0.25em]
+  \item Build, test, and scan the application image in continuous integration, and publish it under an immutable tag.
+  \item Reconcile staging automatically from Git, and keep production as a manual synchronisation.
+  \item Block production promotion when the reference playbook suite regresses against a committed baseline.
+  \item Record metrics, logs, distributed traces, and per-generation traces so an administrator can follow a turn from the request to the model.
+  \item Provide a rollback path from GitOps history when a release must be withdrawn.
+\end{enumerate}
+
+\section{Sprint Backlog}
+
+Tab.~\ref{tab:sprint6-backlog} presents the tasks planned and completed during this sprint, together with their priority, effort, and status.
+
+The work represents 24 person-days across weeks 21 to 24. High-priority items establish the image pipeline, GitOps, and the evaluation gate. Medium-priority items complete the observability stack and the operational dashboards.
+
+\begingroup
+\scriptsize
+\renewcommand{\arraystretch}{1.05}
+\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}{|C{1.2cm}|L{8.7cm}|C{1.5cm}|C{1.8cm}|C{1.4cm}|}
+\caption{Sprint 6 backlog --- Delivery and observability}
+\label{tab:sprint6-backlog} \\
+\hline
+\rowcolor{black!10}
+\textbf{ID} & \textbf{Task} & \textbf{Priority} & \textbf{Effort (days)} & \textbf{Status} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{black!10}
+\textbf{ID} & \textbf{Task} & \textbf{Priority} & \textbf{Effort (days)} & \textbf{Status} \\
+\hline
+\endhead
+T6.1 & Continuous integration workflow: lint, unit tests, and image build & High & 3 & Done \\
+\hline
+T6.2 & Image scan and publication under a commit tag, never \nolinkurl{latest} & High & 2 & Done \\
+\hline
+T6.3 & Argo CD applications for staging (automatic) and production (manual) & High & 4 & Done \\
+\hline
+T6.4 & Image tag update in Git as the promotion artefact & High & 2 & Done \\
+\hline
+T6.5 & Evaluation gate against the golden playbook baseline & High & 4 & Done \\
+\hline
+T6.6 & Rollback procedure from application history & Medium & 1 & Done \\
+\hline
+T6.7 & Prometheus metrics and Grafana overview dashboard & Medium & 3 & Done \\
+\hline
+T6.8 & Loki logs and Tempo traces on the virtual infrastructure & Medium & 2 & Done \\
+\hline
+T6.9 & Langfuse traces for retrieval, drafting, the gate, and token usage & Medium & 2 & Done \\
+\hline
+T6.10 & Sprint review and validation checklist & Low & 1 & Done \\
+\hline
+\multicolumn{3}{|r|}{\textbf{Total}} & \textbf{24} & \\
+\hline
+\end{longtable}
+\endgroup
+
+The mapping to the Product Backlog is direct. GitOps synchronisation implements US-18. The reference-playbook evaluation before production implements US-19. Metrics, logs, traces, and Langfuse implement US-20.
+
+\section{Use-Case Diagram}
+
+Fig.~\ref{fig:sprint6-use-case} presents the use cases of Sprint 6. The administrator publishes an image, synchronises staging, promotes production only after evaluation, inspects traces, and supervises the platform. Supporting systems (Git, the container registry, Argo CD, and the observability stack) are not further human actors.
+
+% Figure placeholder: sprint6-use-case.png
+
+\section{Global Architecture of the Platform}
+
+AnsibleAI is built as a distributed software architecture organised in three functional layers, which separate presentation, business logic, and data and integration services. This organisation keeps the platform modular and maintainable, and it makes it possible to connect the assistant to the DevOps tools used for delivery and supervision.
+
+\begin{center}
+  \IfFileExists{figures/platform-architecture.png}{%
+    \includegraphics[width=\linewidth,height=8cm,keepaspectratio]{figures/platform-architecture.png}%
+  }{%
+    \fbox{%
+      \parbox[c][7cm][c]{0.9\linewidth}{%
+        \centering
+        Add the final diagram as \nolinkurl{figures/platform-architecture.png}.
+      }%
+    }%
+  }
+  \captionsetup{hypcap=false}
+  \captionof{figure}{Global architecture of the AnsibleAI platform}
+  \label{fig:platform-architecture}
+\end{center}
+
+Fig.~\ref{fig:platform-architecture} presents the general architecture of the AnsibleAI platform.
+
+The first layer is the presentation layer, developed with React. It provides the graphical interfaces through which the DevOps user of AnsibleAI and the administrator interact with the platform. The conversation workspace, thread list, playbook view, documentation sources, production-gate verdict, live progress, cancellation, personal statistics, and the documentation administration panel communicate only with the backend through HTTP requests in JSON, with live generation events delivered on a separate channel.
+
+The second layer is the application layer, developed with Flask. It centralises the business logic through the authentication, conversation, generation, and documentation services. It starts background generation, isolates each user's threads, applies session security, and runs the intelligence of the platform: hybrid retrieval over the official module corpus, and a LangGraph agent that drafts an Ansible playbook, evaluates the production gate, and repairs it within a bounded loop. This layer is the intermediary between the user interface, the data stores, and the model endpoint.
+
+The third layer is the integration layer. It groups persistence and the services the platform depends on. PostgreSQL, with the pgvector extension, stores users, conversations, generation records, and the vector index of the documentation chunks. Redis carries generation jobs, cancellation flags, and live events. MinIO keeps a durable archive of generated playbooks. Keycloak provides organisational identity. On the infrastructure side, Kubernetes hosts the workloads, GitHub Actions builds and scans the image, and Argo CD reconciles the desired state from Git. Prometheus, Grafana, Loki, and Tempo collect metrics, dashboards, logs, and traces. Langfuse records each generation. Ollama, on the physical host, serves embeddings and playbook generation.
+
+This layered architecture separates the responsibilities of the interface, the agent, and the surrounding services. It allows the assistant to evolve, for example by extending the corpus or the observability signals, without rewriting the conversation that the DevOps user sees.
+
+\subsection{Delivery Path}
+
+A change enters through Git. Continuous integration lints the project, runs the unit tests, builds the container image, scans it, and publishes it under the commit identifier. The desired image tag is then written back to the Git repository that Argo CD watches. Staging applies that state automatically. Production stays manual until the evaluation gate has compared the reference playbooks with the committed baseline.
+
+\subsection{Runtime Path}
+
+The DevOps user of AnsibleAI reaches the presentation layer through the cluster ingress. The application layer accepts the request, enqueues generation, and returns control to the browser. The worker retrieves documentation, drafts the playbook, and runs the production gate. PostgreSQL, Redis, and MinIO hold conversations, jobs, and the archived playbook. Ollama, outside the cluster, serves the model calls.
+
+\subsection{Observability Path}
+
+Each request and each generation emits signals that the integration layer collects. Prometheus scrapes metrics from the API. Grafana displays them. Loki stores logs. Tempo stores distributed traces. Langfuse stores the generation tree (retrieval, draft, gate, and token usage) for the administrator, without retaining the full playbook.
+
+\section{Textual Description of Sprint 6}
+\label{sec:sprint6-use-cases}
+
+\subsection{Use Case: Publish an Immutable Image}
+
+\begingroup
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{longtable}{|L{3.2cm}|L{11.6cm}|}
+\caption{Publish an immutable image use case}
+\label{tab:use-case-publish-image} \\
+\hline
+\rowcolor{black!10}
+\textbf{Field} & \textbf{Content} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{black!10}
+\textbf{Field} & \textbf{Content} \\
+\hline
+\endhead
+Use case & Publish an immutable image \\
+\hline
+Primary actor & Administrator \\
+\hline
+Objective & Obtain a scanned container image identified by the Git commit, so that a release can be reproduced. \\
+\hline
+Preconditions & The change is pushed to the repository. The integration workflow is enabled. \\
+\hline
+Postconditions & Lint and tests have passed. An image exists under the commit tag. The tag \nolinkurl{latest} is not used as the release identifier. \\
+\hline
+Main scenario & \begin{enumerate}[leftmargin=1.5em,itemsep=0.1em,topsep=0.2em]
+  \item The administrator pushes a change.
+  \item The workflow runs lint and unit tests.
+  \item The workflow builds the image.
+  \item The workflow scans the image for known vulnerabilities.
+  \item The workflow publishes the image under the commit identifier.
+\end{enumerate} \\
+\hline
+Alternative scenarios & \begin{enumerate}[label=A\arabic*.,leftmargin=2em,itemsep=0.1em,topsep=0.2em]
+  \item If lint or tests fail, the image is not published.
+  \item If the scan reports a blocking finding, publication stops and the administrator inspects the report.
+\end{enumerate} \\
+\hline
+\end{longtable}
+\endgroup
+
+\subsection{Use Case: Synchronise Staging from Git}
+
+\begingroup
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{longtable}{|L{3.2cm}|L{11.6cm}|}
+\caption{Synchronise staging from Git use case}
+\label{tab:use-case-sync-staging} \\
+\hline
+\rowcolor{black!10}
+\textbf{Field} & \textbf{Content} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{black!10}
+\textbf{Field} & \textbf{Content} \\
+\hline
+\endhead
+Use case & Synchronise staging from Git \\
+\hline
+Primary actor & Administrator \\
+\hline
+Objective & Keep the staging environment aligned with the desired state stored in Git. \\
+\hline
+Preconditions & Argo CD is installed. The staging application points at the Helm chart and the staging values, including the image tag. \\
+\hline
+Postconditions & Staging runs the image declared in Git. Resources removed from Git are pruned. Drift is corrected by self-heal. \\
+\hline
+Main scenario & \begin{enumerate}[leftmargin=1.5em,itemsep=0.1em,topsep=0.2em]
+  \item The image tag in Git is updated to the commit that passed integration.
+  \item Argo CD detects the change.
+  \item Argo CD applies the Helm release on the staging namespace.
+  \item The administrator checks that the application is healthy.
+\end{enumerate} \\
+\hline
+Alternative scenarios & \begin{enumerate}[label=A\arabic*.,leftmargin=2em,itemsep=0.1em,topsep=0.2em]
+  \item If a manifest is invalid, synchronisation fails and the previous healthy revision remains until the Git state is corrected.
+\end{enumerate} \\
+\hline
+\end{longtable}
+\endgroup
+
+\subsection{Use Case: Promote to Production after the Evaluation Gate}
+
+\begingroup
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{longtable}{|L{3.2cm}|L{11.6cm}|}
+\caption{Promote to production use case}
+\label{tab:use-case-promote-production} \\
+\hline
+\rowcolor{black!10}
+\textbf{Field} & \textbf{Content} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{black!10}
+\textbf{Field} & \textbf{Content} \\
+\hline
+\endhead
+Use case & Promote to production after the evaluation gate \\
+\hline
+Primary actor & Administrator \\
+\hline
+Objective & Update production only when the reference playbook suite does not regress against the committed baseline. \\
+\hline
+Preconditions & Staging is healthy on the candidate image. The golden suite and its baseline are available. Production synchronisation is manual. \\
+\hline
+Postconditions & If the scores meet the baseline, the administrator synchronises production. If they do not, production is left unchanged. \\
+\hline
+Main scenario & \begin{enumerate}[leftmargin=1.5em,itemsep=0.1em,topsep=0.2em]
+  \item The administrator runs the evaluation gate against the candidate.
+  \item The gate compares intent, retrieval, module choice, playbook structure, and syntax with the baseline.
+  \item The scores meet the baseline.
+  \item The administrator synchronises the production application.
+\end{enumerate} \\
+\hline
+Alternative scenarios & \begin{enumerate}[label=A\arabic*.,leftmargin=2em,itemsep=0.1em,topsep=0.2em]
+  \item If a score regresses, promotion is refused and the report identifies the failing cases.
+\end{enumerate} \\
+\hline
+\end{longtable}
+\endgroup
+
+\subsection{Use Case: Roll Back a Release}
+
+\begingroup
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{longtable}{|L{3.2cm}|L{11.6cm}|}
+\caption{Roll back a release use case}
+\label{tab:use-case-rollback-release} \\
+\hline
+\rowcolor{black!10}
+\textbf{Field} & \textbf{Content} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{black!10}
+\textbf{Field} & \textbf{Content} \\
+\hline
+\endhead
+Use case & Roll back a release \\
+\hline
+Primary actor & Administrator \\
+\hline
+Objective & Return staging or production to a previous healthy revision. \\
+\hline
+Preconditions & Argo CD holds the application history. \\
+\hline
+Postconditions & The selected revision is running. The Git tag can be updated so the next automatic sync does not restore the faulty image. \\
+\hline
+Main scenario & \begin{enumerate}[leftmargin=1.5em,itemsep=0.1em,topsep=0.2em]
+  \item The administrator opens the application history.
+  \item The administrator selects the previous healthy revision.
+  \item Argo CD applies that revision.
+  \item The administrator confirms health.
+\end{enumerate} \\
+\hline
+Alternative scenarios & \begin{enumerate}[label=A\arabic*.,leftmargin=2em,itemsep=0.1em,topsep=0.2em]
+  \item If GitOps is not yet the owner of the release, the administrator rolls back the Helm revision and then aligns Git.
+\end{enumerate} \\
+\hline
+\end{longtable}
+\endgroup
+
+\subsection{Use Case: Inspect Generation Traces}
+
+\begingroup
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{longtable}{|L{3.2cm}|L{11.6cm}|}
+\caption{Inspect generation traces use case}
+\label{tab:use-case-inspect-traces} \\
+\hline
+\rowcolor{black!10}
+\textbf{Field} & \textbf{Content} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{black!10}
+\textbf{Field} & \textbf{Content} \\
+\hline
+\endhead
+Use case & Inspect generation traces \\
+\hline
+Primary actor & Administrator \\
+\hline
+Objective & Follow one generation through retrieval, drafting, the production gate, and token usage. \\
+\hline
+Preconditions & Langfuse is enabled and a generation has completed. \\
+\hline
+Postconditions & The administrator sees the trace tree for that turn. The full playbook and secrets are not stored in the trace. \\
+\hline
+Main scenario & \begin{enumerate}[leftmargin=1.5em,itemsep=0.1em,topsep=0.2em]
+  \item A DevOps user completes a generation.
+  \item The worker records the trace.
+  \item The administrator opens the trace and inspects each step.
+\end{enumerate} \\
+\hline
+Alternative scenarios & \begin{enumerate}[label=A\arabic*.,leftmargin=2em,itemsep=0.1em,topsep=0.2em]
+  \item If tracing is disabled, the turn still completes and no trace is written.
+\end{enumerate} \\
+\hline
+\end{longtable}
+\endgroup
+
+\subsection{Use Case: Supervise the Platform}
+
+\begingroup
+\footnotesize
+\renewcommand{\arraystretch}{1.15}
+\begin{longtable}{|L{3.2cm}|L{11.6cm}|}
+\caption{Supervise the platform use case}
+\label{tab:use-case-supervise-platform} \\
+\hline
+\rowcolor{black!10}
+\textbf{Field} & \textbf{Content} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{black!10}
+\textbf{Field} & \textbf{Content} \\
+\hline
+\endhead
+Use case & Supervise the platform \\
+\hline
+Primary actor & Administrator \\
+\hline
+Objective & See whether the API, the generations, and the production gate are healthy. \\
+\hline
+Preconditions & Metrics are scraped and a dashboard is provisioned. \\
+\hline
+Postconditions & The administrator can read request rate, generation duration, gate outcomes, and repair depth. \\
+\hline
+Main scenario & \begin{enumerate}[leftmargin=1.5em,itemsep=0.1em,topsep=0.2em]
+  \item The API exposes metrics.
+  \item Prometheus scrapes them.
+  \item Grafana displays the AnsibleAI overview.
+  \item Logs and distributed traces are available for a failing turn.
+\end{enumerate} \\
+\hline
+Alternative scenarios & \begin{enumerate}[label=A\arabic*.,leftmargin=2em,itemsep=0.1em,topsep=0.2em]
+  \item If a scrape target is down, the dashboard shows the target as unavailable.
+\end{enumerate} \\
+\hline
+\end{longtable}
+\endgroup
+
+\section{Sequence Diagrams of Sprint 6}
+
+This section presents the sequence diagrams for the principal features of the sprint. Each diagram corresponds to a use case defined in Sec.~\ref{sec:sprint6-use-cases}.
+
+\subsection{Sequence Diagram --- Continuous Integration and Image Publication}
+
+The administrator pushes a commit. The workflow runs lint and tests, builds the image, scans it, and publishes it under the commit tag. A failing stage stops the pipeline before publication. This interaction is illustrated in Fig.~\ref{fig:sprint6-ci-sequence}.
+
+% \reportfigure{sprint6-ci-sequence.png}{Sequence diagram --- Continuous integration and image publication}{fig:sprint6-ci-sequence}
+
+\subsection{Sequence Diagram --- Staging Synchronisation}
+
+After the image tag is committed, Argo CD detects the Git change and applies the Helm release to staging, including prune and self-heal. The administrator observes health. This interaction is illustrated in Fig.~\ref{fig:sprint6-staging-sequence}.
+
+% \reportfigure{sprint6-staging-sequence.png}{Sequence diagram --- Staging synchronisation}{fig:sprint6-staging-sequence}
+
+\subsection{Sequence Diagram --- Evaluation Gate and Production Promotion}
+
+The administrator runs the golden suite against the candidate. The gate compares the scores with the baseline. On success the administrator synchronises production. On regression production is not synchronised. This interaction is illustrated in Fig.~\ref{fig:sprint6-eval-sequence}.
+
+% \reportfigure{sprint6-eval-sequence.png}{Sequence diagram --- Evaluation gate and production promotion}{fig:sprint6-eval-sequence}
+
+\subsection{Sequence Diagram --- Observability of a Generation}
+
+A generation on the worker emits metrics, a log line, and a Langfuse trace. Prometheus scrapes the API. The administrator reads the dashboard and opens the trace. This interaction is illustrated in Fig.~\ref{fig:sprint6-observe-sequence}.
+
+% \reportfigure{sprint6-observe-sequence.png}{Sequence diagram --- Observability of a generation}{fig:sprint6-observe-sequence}
+
+\section{Technical Design and Development}
+
+This section presents the technologies, the delivery choice, and the principal execution flows of Sprint 6.
+
+\subsection{GitOps and Choice of Argo CD}
+
+Sprint 5 installed the platform with Helm from the control machine. That install is repeatable, but the cluster can still drift from the repository if the next change is applied by hand. GitOps treats Git as the desired state: a controller in the cluster continuously compares what is running with what Git declares, and applies the difference.
+
+The following comparison evaluates the delivery options considered for that controller.
+
+\subsection{Comparative Study of Delivery Tools}
+
+Tab.~\ref{tab:sprint6-delivery-tools} compares the principal solutions considered for promoting AnsibleAI on the virtual infrastructure.
+
+\begin{table}[H]
+\centering
+\caption{Comparative study of delivery tools}
+\label{tab:sprint6-delivery-tools}
+\scriptsize
+\renewcommand{\arraystretch}{1.12}
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\textwidth}{|L{3.0cm}|L{3.6cm}|L{3.6cm}|>{\raggedright\arraybackslash}X|}
+\hline
+\rowcolor{black!10}
+\textbf{Evaluation criterion} & \textbf{Argo CD} & \textbf{Flux CD} & \textbf{Pipeline push} \\
+\hline
+Source of truth & Git, reconciled from inside the cluster & Git, reconciled from inside the cluster & The integration job applies manifests directly \\
+\hline
+Application model & Applications with health and history & Kustomizations and Helm releases & Scripts in the workflow \\
+\hline
+Staging and production & Separate applications: automatic staging, manual production & Separate paths, less of a release console & One job must encode both policies \\
+\hline
+Drift correction & Self-heal and prune & Continuous reconciliation & Drift remains until the next job \\
+\hline
+Rollback & Application history & Git revert, then reconcile & Redeploy a previous job \\
+\hline
+Fit with the Helm chart of Sprint 5 & Native Helm source and value files & Usable, with a different operating model & Reuses Helm, but bypasses a declared desired state \\
+\hline
+\end{tabularx}
+\end{table}
+
+Argo CD was selected because the Helm chart is already the packaging unit, and the project needs two explicit policies: staging may follow Git immediately, while production waits for the evaluation gate. Argo CD expresses that split as two applications, keeps a health view and a history, and corrects drift without a new pipeline job. Flux CD offers the same Git principle with a lighter interface, which is less direct for an administrator who must see staging and production side by side. A pipeline that pushes manifests from the outside leaves no desired state in the cluster once the job ends, so the next manual change is invisible until something fails.
+
+\subsection{Technologies Used}
+
+Tab.~\ref{tab:sprint6-technologies} summarises the principal technologies and their roles.
+
+\begin{table}[H]
+\centering
+\caption{Technical components of Sprint 6 --- Delivery and observability}
+\label{tab:sprint6-technologies}
+\scriptsize
+\renewcommand{\arraystretch}{1.15}
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\textwidth}{|L{3.4cm}|L{4.3cm}|>{\raggedright\arraybackslash}X|}
+\hline
+\rowcolor{black!10}
+\textbf{Component} & \textbf{Technology} & \textbf{Role} \\
+\hline
+Continuous integration & GitHub Actions & Lint, test, build, and publish on each relevant change \\
+\hline
+Image scan & Trivy & Detect known vulnerabilities before publication \\
+\hline
+Image identity & Commit tag in the container registry & Reproduce a release; forbid \nolinkurl{latest} as the deployed tag \\
+\hline
+GitOps & Argo CD & Reconcile the Helm chart from Git \\
+\hline
+Evaluation & Golden playbook suite and a committed baseline & Block promotion on regression \\
+\hline
+Metrics & Prometheus & Scrape HTTP, generation, gate, and model signals \\
+\hline
+Dashboards & Grafana & Present the AnsibleAI overview to the administrator \\
+\hline
+Logs & Loki & Centralise API and worker logs \\
+\hline
+Traces & Tempo and Langfuse & Follow a request across services, and a generation across retrieval, draft, and gate \\
+\hline
+\end{tabularx}
+\end{table}
+
+\subsection{Technical Architecture of Sprint 6}
+
+\subsubsection{Continuous Integration Pipeline}
+
+The pipeline is split so that tests can fail before an image is built, and so that an image is published only after the scan. The published name is the Git commit. The cluster never tracks a floating tag.
+
+\subsubsection{GitOps Reconciliation}
+
+Two applications point at the same chart with different value files. Staging uses automatic synchronisation, prune, and self-heal. Production is registered and synchronised only by the administrator. The image tag lives in a small values file updated after a successful publication, which is the artefact Argo CD applies.
+
+\subsubsection{Evaluation Gate}
+
+Before that manual synchronisation, the golden suite runs against the candidate. The suite scores intent, retrieval, module choice, playbook structure, and syntax. Promotion continues only when the result holds against the baseline stored with the project. A regression report names the cases that dropped, so the administrator does not promote on a single successful demo.
+
+\subsubsection{Observability Stack}
+
+The API exposes a metrics endpoint. Prometheus scrapes it on the virtual infrastructure. Grafana loads a provisioned overview of request rate, generation duration, gate outcomes, and repair depth. Loki and Tempo sit beside that overview for logs and distributed traces. Langfuse receives one trace per generation from the worker. Member screens stay on AnsibleAI; the administrator uses Grafana and Langfuse to supervise.
+
+Fig.~\ref{fig:sprint6-delivery-architecture} presents the path from Git to staging and production, and the signals collected around a running generation.
+
+% \reportfigure{sprint6-delivery-architecture.png}{Delivery and observability --- Git, image, Argo CD, and signals}{fig:sprint6-delivery-architecture}
+
+\subsection{Technical Flow --- Image Build and Scan}
+
+\begin{enumerate}[label=\arabic*.,leftmargin=2em]
+  \item \textbf{Push.} A change reaches the repository.
+  \item \textbf{Verify.} Lint and unit tests run.
+  \item \textbf{Build.} The multi-stage image is built.
+  \item \textbf{Scan.} Trivy inspects the image.
+  \item \textbf{Publish.} The image is stored under the commit identifier.
+\end{enumerate}
+
+\subsection{Technical Flow --- Staging and Production}
+
+\begin{enumerate}[label=\arabic*.,leftmargin=2em]
+  \item \textbf{Pin.} The staging values in Git record the new commit tag.
+  \item \textbf{Sync.} Argo CD applies staging and reports health.
+  \item \textbf{Evaluate.} The golden suite runs against that candidate.
+  \item \textbf{Decide.} If the baseline holds, the administrator synchronises production. Otherwise production is left unchanged.
+  \item \textbf{Recover.} If the new revision is unhealthy, the administrator restores the previous application revision and aligns Git.
+\end{enumerate}
+
+\subsection{Technical Flow --- Trace a Generation}
+
+\begin{enumerate}[label=\arabic*.,leftmargin=2em]
+  \item \textbf{Run.} The worker executes retrieval, drafting, and the gate.
+  \item \textbf{Record.} Metrics, logs, and a Langfuse trace are emitted. Prompts and outputs stored in the trace are truncated.
+  \item \textbf{Read.} The administrator opens the dashboard for rates and gate outcomes, then the trace for the steps of one turn.
+\end{enumerate}
+
+\section{Deliverables and Sprint Validation}
+
+\subsection{Deliverables}
+
+\begin{enumerate}[label=\arabic*.,leftmargin=2em,itemsep=0.2em]
+  \item Integration workflows for verification, image build, scan, and publication.
+  \item Argo CD applications for staging and production.
+  \item A committed baseline and an evaluation gate for the golden playbook suite.
+  \item Prometheus, Grafana, Loki, Tempo, and Langfuse wired to the platform.
+  \item A documented rollback from application history.
+\end{enumerate}
+
+\subsection{Validation Criteria}
+
+The sprint is accepted when:
+
+\begin{itemize}[label=--,leftmargin=1.6em,itemsep=0.15em]
+  \item a commit that fails tests does not publish an image;
+  \item a successful publication is addressable by its commit tag;
+  \item staging converges to the Git tag without a manual apply;
+  \item a regressed golden score blocks production synchronisation;
+  \item a completed generation appears in the metrics dashboard and as a Langfuse trace.
+\end{itemize}
+
+\section{Realisation}
+
+This section presents the operational evidence of Sprint 6. Screenshots are to be captured from the integration service, Argo CD, the evaluation report, Grafana, and Langfuse.
+
+\subsection{Integration Pipeline}
+
+The workflow shows lint, tests, build, scan, and publication of the commit tag, as illustrated in Fig.~\ref{fig:sprint6-ci-ui}.
+
+% \reportfigure{sprint6-ci-ui.png}{Integration pipeline --- Verify, build, scan, and publish}{fig:sprint6-ci-ui}
+
+\subsection{Argo CD Applications}
+
+Staging is healthy and automatic. Production is present and waits for a manual synchronisation, as illustrated in Fig.~\ref{fig:sprint6-argocd-ui}.
+
+% \reportfigure{sprint6-argocd-ui.png}{Argo CD --- Staging and production applications}{fig:sprint6-argocd-ui}
+
+\subsection{Evaluation Report}
+
+The gate report compares the candidate with the baseline and lists any regressed cases, as illustrated in Fig.~\ref{fig:sprint6-eval-report}.
+
+% \reportfigure{sprint6-eval-report.png}{Evaluation gate --- Baseline comparison}{fig:sprint6-eval-report}
+
+\subsection{Operational Dashboard}
+
+The overview shows request rate, generation duration, gate outcomes, and repair depth, as illustrated in Fig.~\ref{fig:sprint6-grafana}.
+
+% \reportfigure{sprint6-grafana.png}{Operational dashboard --- AnsibleAI overview}{fig:sprint6-grafana}
+
+\subsection{Langfuse Trace}
+
+A generation trace shows retrieval, drafting, the production gate, and token usage, as illustrated in Fig.~\ref{fig:sprint6-langfuse}.
+
+% \reportfigure{sprint6-langfuse.png}{Langfuse --- Generation trace}{fig:sprint6-langfuse}
+
+\section{Conclusion}
+
+This chapter presented Sprint 6, which closes delivery and supervision of AnsibleAI. Continuous integration publishes an immutable image. Argo CD keeps staging aligned with Git and leaves production under an explicit decision. The golden playbook suite blocks that decision when quality regresses. Prometheus, Grafana, Loki, Tempo, and Langfuse make a running generation visible to the administrator.
+
+These features implement US-18, US-19, and US-20. Together with the previous sprints, the platform now covers a grounded agent, a conversational product, a virtual infrastructure, organisational identity, and a controlled path from Git to a supervised release. The general conclusion of the report can now assess the objectives, the limits of a static production gate, and the perspectives for the platform.

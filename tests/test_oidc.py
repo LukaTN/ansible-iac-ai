@@ -133,6 +133,26 @@ def test_upsert_accepts_unverified_when_policy_allows(app, monkeypatch):
         assert user.email == "sso@example.com"
 
 
+def test_upsert_promotes_from_realm_role_on_existing_user(app, monkeypatch):
+    from config import settings
+
+    monkeypatch.setattr(settings, "oidc_map_app_admin", True)
+    with app.app_context():
+        user, _ = upsert_user_from_claims(_claims(sub="kc-role-promo", groups=["ansibleai-users"]))
+        db.session.commit()
+        assert user.role == ROLE_USER
+
+        user, _ = upsert_user_from_claims(
+            _claims(
+                sub="kc-role-promo",
+                groups=["ansibleai-users"],
+                realm_access={"roles": ["ansibleai-admin"]},
+            )
+        )
+        db.session.commit()
+        assert user.role == ROLE_ADMIN
+
+
 def test_claims_are_admin_from_realm_role():
     assert claims_are_admin({"realm_access": {"roles": ["ansibleai-admin"]}})
     assert not claims_are_admin({"groups": ["ansibleai-users"]})
@@ -221,12 +241,53 @@ def test_hybrid_config_hides_hosted_ui_and_registration(client, monkeypatch):
 
     monkeypatch.setattr(settings, "auth_mode", "hybrid")
     monkeypatch.setattr(settings, "oidc_browser_redirect", False)
+    monkeypatch.setattr(settings, "oidc_map_app_admin", False)
     resp = client.get("/api/auth/config")
     body = resp.get_json()
     assert body["registration_enabled"] is False
     assert body["app_admin_ui"] is False
     assert body["oidc_login_url"] is None
     assert body["local_login_enabled"] is True
+
+
+def test_hybrid_config_shows_app_admin_ui_when_mapping_enabled(client, monkeypatch):
+    from config import settings
+
+    monkeypatch.setattr(settings, "auth_mode", "hybrid")
+    monkeypatch.setattr(settings, "oidc_map_app_admin", True)
+    resp = client.get("/api/auth/config")
+    body = resp.get_json()
+    assert body["app_admin_ui"] is True
+    assert body["registration_enabled"] is False
+
+
+def test_claims_from_token_response_merges_access_token_roles(monkeypatch):
+    from auth import oidc as oidc_mod
+
+    def _id_token(_token, *, nonce=None):
+        return {
+            "sub": "kc-1",
+            "email": "admin@example.com",
+            "email_verified": True,
+            "groups": ["ansibleai-users"],
+        }
+
+    def _access_token(_token):
+        return {
+            "sub": "kc-1",
+            "realm_access": {"roles": ["ansibleai-admin", "default-roles-ansibleai"]},
+            "groups": ["/ansibleai-admins"],
+        }
+
+    monkeypatch.setattr(oidc_mod, "decode_id_token", _id_token)
+    monkeypatch.setattr(oidc_mod, "decode_access_token", _access_token)
+
+    claims = oidc_mod.claims_from_token_response(
+        {"id_token": "id.jwt", "access_token": "access.jwt"}
+    )
+    assert "ansibleai-admin" in claims["realm_access"]["roles"]
+    assert "ansibleai-admins" in {g.lstrip("/") for g in claims["groups"]}
+    assert claims_are_admin(claims)
 
 
 def test_hybrid_disables_registration(client, monkeypatch):

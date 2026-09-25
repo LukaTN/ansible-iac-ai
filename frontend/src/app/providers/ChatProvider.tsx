@@ -10,6 +10,7 @@ import {
 } from 'react';
 import type { ChatMessage, Thread } from '@/lib/types';
 import { ApiError, api } from '@/lib/api';
+import { usePanel } from '@/app/providers/PanelProvider';
 import { useSocket } from '@/app/providers/SocketProvider';
 import { getSocket, type GenerationFailed, type GenerationProgress } from '@/lib/socket';
 
@@ -58,6 +59,7 @@ export function ChatProvider({
   const [awaitingReplyIds, setAwaitingReplyIds] = useState<Set<number>>(() => new Set());
   const [hidePendingOnNewView, setHidePendingOnNewView] = useState(false);
   const { generationProgress } = useSocket();
+  const { closeDocs } = usePanel();
   const currentIdRef = useRef(currentId);
   const inFlightRef = useRef<{
     originThreadId: number | null;
@@ -258,6 +260,9 @@ export function ChatProvider({
   );
 
   const openThread = useCallback(async (id: number) => {
+    // Leaving docs/corpus must happen here so sidebar clicks always restore chat,
+    // including when the selected thread is already the current one.
+    closeDocs();
     setHidePendingOnNewView(false);
     try {
       const data = await api.threads.open(id);
@@ -270,14 +275,15 @@ export function ChatProvider({
     } catch (e) {
       console.error(e);
     }
-  }, [addAwaitingReply, removeAwaitingReply]);
+  }, [addAwaitingReply, closeDocs, removeAwaitingReply]);
 
   const newThread = useCallback(() => {
+    closeDocs();
     setHidePendingOnNewView(true);
     setCurrentId(null);
     setTitle('New chat');
     setMessages([]);
-  }, []);
+  }, [closeDocs]);
 
   /**
    * Ask the worker to stop.

@@ -7,6 +7,7 @@ import { AppHeader } from '@/components/layout/AppHeader';
 import { AppFooter } from '@/components/layout/AppFooter';
 import { ThreadSidebar } from '@/components/threads/ThreadSidebar';
 import { ChatMain } from '@/components/chat/ChatMain';
+import { DocsMain } from '@/components/panel/DocsMain';
 import { SidePanel } from '@/components/panel/SidePanel';
 import { LoginPage } from '@/components/auth/LoginPage';
 import { ForcePasswordChange } from '@/components/auth/AccountPanel';
@@ -17,19 +18,23 @@ import { DesignModeWorkspace } from '@/design-mode/DesignModeWorkspace';
 
 /**
  * Persistent shell: the header and footer never change — only the main
- * body (threads / chat / side panel) is dynamic.
+ * body (threads / chat-or-docs / side panel) is dynamic.
  */
 function AppShell() {
-  const { collapsed } = usePanel();
+  const { collapsed, workspaceView } = usePanel();
   const { threadsOpen, closeOverlays } = useLayout();
   const showScrim = threadsOpen || !collapsed;
 
   return (
-    <div className={`app${collapsed ? '' : ' panel-open'}${threadsOpen ? ' threads-open' : ''}`}>
+    <div
+      className={`app${collapsed ? '' : ' panel-open'}${threadsOpen ? ' threads-open' : ''}${
+        workspaceView === 'docs' ? ' docs-open' : ''
+      }`}
+    >
       <AppHeader />
       <div className="app-body">
         <ThreadSidebar />
-        <ChatMain />
+        {workspaceView === 'docs' ? <DocsMain /> : <ChatMain />}
         <SidePanel />
       </div>
       {showScrim ? (

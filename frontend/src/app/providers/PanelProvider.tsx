@@ -8,13 +8,15 @@ import {
   useState,
   type ReactNode,
 } from 'react';
-import type { PanelTab, RagStatus, StatsPayload } from '@/lib/types';
+import { useAuth } from '@/app/providers/AuthProvider';
+import type { PanelTab, RagStatus, StatsPayload, WorkspaceView } from '@/lib/types';
 import { api } from '@/lib/api';
 import { isDesignMode } from '@/lib/designMode';
 import { startMockDocsStream } from '@/mocks/docsStream';
 
 interface PanelContextValue {
   tab: PanelTab;
+  workspaceView: WorkspaceView;
   collapsed: boolean;
   stats: StatsPayload | null;
   ragStatus: RagStatus | null;
@@ -22,6 +24,8 @@ interface PanelContextValue {
   toggleCollapsed: () => void;
   collapsePanel: () => void;
   openPanel: (tab: PanelTab) => void;
+  openDocs: () => void;
+  closeDocs: () => void;
   loadOverview: () => Promise<void>;
   checkRagStatus: () => Promise<void>;
   connectDocsStream: (sessionId: number, onLine: (line: string) => void) => void;
@@ -31,7 +35,9 @@ interface PanelContextValue {
 const PanelContext = createContext<PanelContextValue | null>(null);
 
 export function PanelProvider({ children }: { children: ReactNode }) {
+  const { user, isAdmin } = useAuth();
   const [tab, setTabState] = useState<PanelTab>('stats');
+  const [workspaceView, setWorkspaceView] = useState<WorkspaceView>('chat');
   const [collapsed, setCollapsed] = useState(true);
   const [stats, setStats] = useState<StatsPayload | null>(null);
   const [ragStatus, setRagStatus] = useState<RagStatus | null>(null);
@@ -44,8 +50,9 @@ export function PanelProvider({ children }: { children: ReactNode }) {
 
   const setTab = useCallback(
     (next: PanelTab) => {
+      if (next === 'docs') return;
       setTabState(next);
-      if (next !== 'docs') closeDocsStream();
+      closeDocsStream();
     },
     [closeDocsStream],
   );
@@ -63,12 +70,31 @@ export function PanelProvider({ children }: { children: ReactNode }) {
     closeDocsStream();
   }, [closeDocsStream]);
 
+  const closeDocs = useCallback(() => {
+    setWorkspaceView('chat');
+    setTabState('stats');
+    closeDocsStream();
+  }, [closeDocsStream]);
+
+  const openDocs = useCallback(() => {
+    if (!isAdmin && !isDesignMode()) return;
+    setCollapsed(true);
+    setWorkspaceView('docs');
+    setTabState('docs');
+    void api.rag.status().then(setRagStatus).catch(() => {});
+  }, [isAdmin]);
+
   const openPanel = useCallback(
     (which: PanelTab) => {
+      if (which === 'docs') {
+        openDocs();
+        return;
+      }
+      setWorkspaceView('chat');
       setCollapsed(false);
-      setTab(which);
+      setTab('stats');
     },
-    [setTab],
+    [openDocs, setTab],
   );
 
   const loadOverview = useCallback(async () => {
@@ -79,6 +105,22 @@ export function PanelProvider({ children }: { children: ReactNode }) {
       console.error('stats', e);
     }
   }, []);
+
+  useEffect(() => {
+    setStats(null);
+    if (!user) return;
+    if (workspaceView === 'chat' && tab === 'stats' && !collapsed) {
+      void loadOverview();
+    }
+  }, [user?.id, tab, collapsed, loadOverview, user, workspaceView]);
+
+  useEffect(() => {
+    if (!isAdmin && workspaceView === 'docs' && !isDesignMode()) {
+      setWorkspaceView('chat');
+      setTabState('stats');
+      closeDocsStream();
+    }
+  }, [isAdmin, workspaceView, closeDocsStream]);
 
   const checkRagStatus = useCallback(async () => {
     try {
@@ -117,6 +159,7 @@ export function PanelProvider({ children }: { children: ReactNode }) {
   const value = useMemo(
     () => ({
       tab,
+      workspaceView,
       collapsed,
       stats,
       ragStatus,
@@ -124,6 +167,8 @@ export function PanelProvider({ children }: { children: ReactNode }) {
       toggleCollapsed,
       collapsePanel,
       openPanel,
+      openDocs,
+      closeDocs,
       loadOverview,
       checkRagStatus,
       connectDocsStream,
@@ -131,6 +176,7 @@ export function PanelProvider({ children }: { children: ReactNode }) {
     }),
     [
       tab,
+      workspaceView,
       collapsed,
       stats,
       ragStatus,
@@ -138,6 +184,8 @@ export function PanelProvider({ children }: { children: ReactNode }) {
       toggleCollapsed,
       collapsePanel,
       openPanel,
+      openDocs,
+      closeDocs,
       loadOverview,
       checkRagStatus,
       connectDocsStream,

@@ -18,7 +18,7 @@ function formatTokens(n: number): string {
 }
 
 export function AccountPanel({ onClose }: { onClose: () => void }) {
-  const { user, applyUser, authConfig } = useAuth();
+  const { user, applyUser } = useAuth();
   const [profile, setProfile] = useState<AuthProfile | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const titleId = useId();
@@ -59,7 +59,6 @@ export function AccountPanel({ onClose }: { onClose: () => void }) {
   const remaining = usage?.token_budget_remaining ?? 0;
   const pct = !unlimited && limit > 0 ? Math.min(100, (used / limit) * 100) : 0;
   const canChange = Boolean(user.can_change_password ?? user.has_password);
-  const showAdminBadge = authConfig.app_admin_ui && user.role === 'admin';
 
   return createPortal(
     <div className="confirm-overlay dossier-overlay" role="presentation" onClick={onClose}>
@@ -96,7 +95,7 @@ export function AccountPanel({ onClose }: { onClose: () => void }) {
             </div>
             <div>
               <dt>Role</dt>
-              <dd>{showAdminBadge ? 'Administrator' : 'Member'}</dd>
+              <dd>{user.role === 'admin' ? 'Administrator' : 'Member'}</dd>
             </div>
             <div>
               <dt>Signed in</dt>

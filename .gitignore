@@ -215,6 +215,7 @@ deploy/ansible/**/*.retry
 *.pptx
 *.docx
 *.pdf.tmp
+diagrams/
 
 # Local eval and debug output
 debug-*.log
