@@ -24,24 +24,12 @@ app:
 
 api:
   replicas: 1
-  resources:
-    requests:
-      cpu: 50m
-      memory: 256Mi
-    limits:
-      cpu: 500m
-      memory: 768Mi
+  resources: {}
 
 worker:
   replicas: 1
   terminationGracePeriodSeconds: 120
-  resources:
-    requests:
-      cpu: 75m
-      memory: 256Mi
-    limits:
-      cpu: 750m
-      memory: 1Gi
+  resources: {}
 
 ingress:
   enabled: true
@@ -78,55 +66,25 @@ postgres:
   persistence:
     storageClass: local-path
     size: 10Gi
-  resources:
-    requests:
-      cpu: 75m
-      memory: 256Mi
-    limits:
-      cpu: 500m
-      memory: 768Mi
+  resources: {}
 
 redis:
   persistence:
     storageClass: local-path
     size: 2Gi
-  resources:
-    requests:
-      cpu: 25m
-      memory: 64Mi
-    limits:
-      cpu: 250m
-      memory: 256Mi
+  resources: {}
 
 minio:
   persistence:
     storageClass: local-path
     size: 10Gi
-  resources:
-    requests:
-      cpu: 50m
-      memory: 128Mi
-    limits:
-      cpu: 300m
-      memory: 384Mi
+  resources: {}
 
 migrate:
-  resources:
-    requests:
-      cpu: 50m
-      memory: 128Mi
-    limits:
-      cpu: 250m
-      memory: 256Mi
+  resources: {}
 
 reindex:
-  resources:
-    requests:
-      cpu: 75m
-      memory: 256Mi
-    limits:
-      cpu: 500m
-      memory: 512Mi
+  resources: {}
 
 # Keycloak admin NodePort 30808 (not :30080). AUTH_MODE stays local until patched.
 identity:
@@ -134,13 +92,7 @@ identity:
   nodeSelector:
     kubernetes.io/hostname: k8s-worker
   javaOptsAppend: "-Xms192m -Xmx384m"
-  resources:
-    requests:
-      cpu: 100m
-      memory: 512Mi
-    limits:
-      cpu: 500m
-      memory: 768Mi
+  resources: {}
 
 networkPolicy:
   enabled: true

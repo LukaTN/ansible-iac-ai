@@ -88,8 +88,8 @@ def test_staging_pins_lab_image_and_ollama() -> None:
     assert values["app"]["authMode"] == "local"
     assert values["identity"]["enabled"] is True
     assert values["identity"]["nodeSelector"]["kubernetes.io/hostname"] == "k8s-worker"
-    assert values["identity"]["resources"]["requests"]["cpu"] == "100m"
-    assert values["api"]["resources"]["requests"]["cpu"] == "50m"
+    assert values["identity"]["resources"] == {}
+    assert values["api"]["resources"] == {}
     assert values["secrets"]["oidcClientSecret"] == "ansibleai-dev-oidc-secret"
     assert values["secrets"]["keycloakAdminPassword"]
     assert defaults["identity"]["enabled"] is False

@@ -33,26 +33,14 @@ prometheusOperator:
   # operator stays ContainerCreating (FailedMount).
   tls:
     enabled: false
-  resources:
-    requests:
-      cpu: 20m
-      memory: 64Mi
-    limits:
-      cpu: 200m
-      memory: 512Mi
+  resources: {}
 
 alertmanager:
   enabled: true
   alertmanagerSpec:
     replicas: 1
     retention: 24h
-    resources:
-      requests:
-        cpu: 20m
-        memory: 64Mi
-      limits:
-        cpu: 200m
-        memory: 128Mi
+    resources: {}
     storage:
       volumeClaimTemplate:
         spec:
@@ -84,13 +72,7 @@ grafana:
       label: grafana_dashboard
       labelValue: "1"
       searchNamespace: ALL
-    resources:
-      requests:
-        cpu: 10m
-        memory: 64Mi
-      limits:
-        cpu: 200m
-        memory: 256Mi
+    resources: {}
   additionalDataSources:
     # Chart 88.5.2 puts the default Prometheus entry in the sidecar
     # ConfigMap, which is disabled above. Dashboards query uid "prometheus".
@@ -118,27 +100,14 @@ grafana:
       uid: tempo
       access: proxy
       url: http://tempo.observability.svc.cluster.local:3200
-  # Grafana 13's embedded apiserver misses /api/health at 384Mi/300m.
-  resources:
-    requests:
-      cpu: 50m
-      memory: 256Mi
-    limits:
-      cpu: "1"
-      memory: 768Mi
+  resources: {}
 
 prometheus:
   prometheusSpec:
     replicas: 1
     retention: 24h
     scrapeInterval: 30s
-    resources:
-      requests:
-        cpu: 50m
-        memory: 256Mi
-      limits:
-        cpu: 500m
-        memory: 768Mi
+    resources: {}
     storageSpec:
       volumeClaimTemplate:
         spec:
@@ -184,19 +153,7 @@ prometheus-node-exporter:
   hostPID: false
   hostRootFsMount:
     enabled: false
-  resources:
-    requests:
-      cpu: 10m
-      memory: 32Mi
-    limits:
-      cpu: 100m
-      memory: 128Mi
+  resources: {}
 
 kube-state-metrics:
-  resources:
-    requests:
-      cpu: 10m
-      memory: 64Mi
-    limits:
-      cpu: 200m
-      memory: 256Mi
+  resources: {}

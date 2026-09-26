@@ -114,13 +114,6 @@ data:
           imagePullPolicy: IfNotPresent
           securityContext:
             privileged: true
-          resources:
-            requests:
-              cpu: 10m
-              memory: 16Mi
-            limits:
-              cpu: 100m
-              memory: 64Mi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -158,13 +151,6 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-          resources:
-            requests:
-              cpu: 20m
-              memory: 64Mi
-            limits:
-              cpu: 200m
-              memory: 128Mi
       volumes:
         - name: config
           configMap:

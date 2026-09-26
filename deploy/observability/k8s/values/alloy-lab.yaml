@@ -3,13 +3,7 @@
 
 controller:
   type: daemonset
-  resources:
-    requests:
-      cpu: 20m
-      memory: 64Mi
-    limits:
-      cpu: 200m
-      memory: 256Mi
+  resources: {}
 
 alloy:
   extraPorts: []

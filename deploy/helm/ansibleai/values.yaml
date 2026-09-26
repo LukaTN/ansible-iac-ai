@@ -88,13 +88,7 @@ api:
   pdb:
     enabled: true
     minAvailable: 1
-  resources:
-    requests:
-      cpu: 200m
-      memory: 512Mi
-    limits:
-      cpu: "1"
-      memory: 1Gi
+  resources: {}
   probes:
     startup:
       failureThreshold: 30
@@ -117,13 +111,7 @@ worker:
   pdb:
     enabled: true
     minAvailable: 1
-  resources:
-    requests:
-      cpu: 250m
-      memory: 512Mi
-    limits:
-      cpu: "1"
-      memory: 2Gi
+  resources: {}
   probes:
     liveness:
       periodSeconds: 30
@@ -163,26 +151,14 @@ migrate:
   enabled: true
   backoffLimit: 6
   activeDeadlineSeconds: 600
-  resources:
-    requests:
-      cpu: 100m
-      memory: 256Mi
-    limits:
-      cpu: 500m
-      memory: 512Mi
+  resources: {}
 
 reindex:
   enabled: true
   schedule: "0 3 * * 0"
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 3
-  resources:
-    requests:
-      cpu: 250m
-      memory: 512Mi
-    limits:
-      cpu: "1"
-      memory: 2Gi
+  resources: {}
 
 celeryExporter:
   enabled: false
@@ -191,24 +167,12 @@ celeryExporter:
     tag: "0.12.2"
     pullPolicy: IfNotPresent
   buckets: "1,2.5,5,10,30,60,300,600,900,1800"
-  resources:
-    requests:
-      cpu: 25m
-      memory: 64Mi
-    limits:
-      cpu: 200m
-      memory: 128Mi
+  resources: {}
 
 minioBucketJob:
   enabled: true
   # Same app image as migrate/api (boto3). Do not pull an extra MinIO client on air-gapped nodes.
-  resources:
-    requests:
-      cpu: 25m
-      memory: 64Mi
-    limits:
-      cpu: 200m
-      memory: 256Mi
+  resources: {}
 
 postgres:
   enabled: true
@@ -220,13 +184,7 @@ postgres:
     enabled: true
     storageClass: local-path
     size: 20Gi
-  resources:
-    requests:
-      cpu: 250m
-      memory: 512Mi
-    limits:
-      cpu: "1"
-      memory: 2Gi
+  resources: {}
   # Official image runs as uid 999 (postgres), not the app user.
   securityContext:
     runAsNonRoot: true
@@ -244,13 +202,7 @@ redis:
     enabled: true
     storageClass: local-path
     size: 5Gi
-  resources:
-    requests:
-      cpu: 50m
-      memory: 128Mi
-    limits:
-      cpu: 250m
-      memory: 256Mi
+  resources: {}
   securityContext:
     runAsNonRoot: true
     runAsUser: 999
@@ -266,13 +218,7 @@ minio:
     enabled: true
     storageClass: local-path
     size: 20Gi
-  resources:
-    requests:
-      cpu: 100m
-      memory: 256Mi
-    limits:
-      cpu: 500m
-      memory: 512Mi
+  resources: {}
   securityContext:
     runAsNonRoot: true
     runAsUser: 1000
@@ -336,13 +282,7 @@ identity:
     port: 8080
     # Admin console only. Not member Ingress :30080.
     nodePort: 30808
-  resources:
-    requests:
-      cpu: 100m
-      memory: 512Mi
-    limits:
-      cpu: 500m
-      memory: 768Mi
+  resources: {}
   # Heap must fit in requests. start-dev is lab-only.
   javaOptsAppend: "-Xms192m -Xmx384m"
 

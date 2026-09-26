@@ -244,13 +244,6 @@ envFrom:
           key: DATABASE_URL
   securityContext:
     {{- include "ansibleai.containerSecurityContext" . | nindent 4 }}
-  resources:
-    requests:
-      cpu: 10m
-      memory: 32Mi
-    limits:
-      cpu: 100m
-      memory: 64Mi
   volumeMounts:
     {{- include "ansibleai.tmpVolumeMounts" . | nindent 4 }}
 {{- end }}
@@ -286,13 +279,6 @@ envFrom:
           key: DATABASE_URL
   securityContext:
     {{- include "ansibleai.containerSecurityContext" . | nindent 4 }}
-  resources:
-    requests:
-      cpu: 10m
-      memory: 64Mi
-    limits:
-      cpu: 200m
-      memory: 128Mi
   volumeMounts:
     {{- include "ansibleai.tmpVolumeMounts" . | nindent 4 }}
 {{- end }}

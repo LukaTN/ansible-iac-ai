@@ -31,13 +31,7 @@ singleBinary:
     enabled: true
     storageClass: local-path
     size: 8Gi
-  resources:
-    requests:
-      cpu: 50m
-      memory: 192Mi
-    limits:
-      cpu: 400m
-      memory: 512Mi
+  resources: {}
 
 backend:
   replicas: 0

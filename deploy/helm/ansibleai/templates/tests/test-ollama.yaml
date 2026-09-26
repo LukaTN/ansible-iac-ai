@@ -27,13 +27,6 @@ spec:
           urllib.request.urlopen(url, timeout=8)
       securityContext:
         {{- include "ansibleai.containerSecurityContext" . | nindent 8 }}
-      resources:
-        requests:
-          cpu: 10m
-          memory: 32Mi
-        limits:
-          cpu: 100m
-          memory: 64Mi
       volumeMounts:
         {{- include "ansibleai.tmpVolumeMounts" . | nindent 8 }}
   volumes:

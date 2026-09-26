@@ -20,22 +20,10 @@ langfuse:
     service:
       type: NodePort
       nodePort: 30301
-    resources:
-      requests:
-        cpu: 50m
-        memory: 256Mi
-      limits:
-        cpu: 500m
-        memory: 768Mi
+    resources: {}
 
   worker:
-    resources:
-      requests:
-        cpu: 50m
-        memory: 192Mi
-      limits:
-        cpu: 400m
-        memory: 512Mi
+    resources: {}
 
 postgresql:
   deploy: true
@@ -46,13 +34,7 @@ postgresql:
       storageClass: local-path
       size: 8Gi
     resourcesPreset: none
-    resources:
-      requests:
-        cpu: 50m
-        memory: 256Mi
-      limits:
-        cpu: 250m
-        memory: 512Mi
+    resources: {}
 
 clickhouse:
   deploy: true
@@ -62,13 +44,7 @@ clickhouse:
   replicaCount: 1
   clusterEnabled: false
   resourcesPreset: none
-  resources:
-    requests:
-      cpu: 150m
-      memory: 384Mi
-    limits:
-      cpu: 500m
-      memory: 768Mi
+  resources: {}
   persistence:
     storageClass: local-path
     size: 8Gi
@@ -77,13 +53,7 @@ clickhouse:
   zookeeper:
     replicaCount: 1
     resourcesPreset: none
-    resources:
-      requests:
-        cpu: 50m
-        memory: 128Mi
-      limits:
-        cpu: 200m
-        memory: 256Mi
+    resources: {}
     persistence:
       enabled: true
       storageClass: local-path
@@ -99,13 +69,7 @@ redis:
       storageClass: local-path
       size: 2Gi
     resourcesPreset: none
-    resources:
-      requests:
-        cpu: 25m
-        memory: 64Mi
-      limits:
-        cpu: 150m
-        memory: 256Mi
+    resources: {}
 
 s3:
   deploy: true
@@ -115,10 +79,4 @@ s3:
     storageClass: local-path
     size: 8Gi
   resourcesPreset: none
-  resources:
-    requests:
-      cpu: 50m
-      memory: 128Mi
-    limits:
-      cpu: 250m
-      memory: 512Mi
+  resources: {}
