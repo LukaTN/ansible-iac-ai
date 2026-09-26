@@ -74,8 +74,9 @@ grafana:
     type: NodePort
     nodePort: 30300
   sidecar:
-    # Loki and Tempo are additionalDataSources below. The datasource
-    # watcher only CrashLooped (OOM at 128Mi on k8s-sidecar 2.10).
+    # Datasource ConfigMaps are only rendered when this sidecar is on, and
+    # that watcher CrashLooped (OOM on k8s-sidecar 2.10). Keep it off and
+    # provision Prometheus with Loki and Tempo via additionalDataSources.
     datasources:
       enabled: false
     dashboards:
@@ -91,6 +92,16 @@ grafana:
         cpu: 200m
         memory: 256Mi
   additionalDataSources:
+    # Chart 88.5.2 puts the default Prometheus entry in the sidecar
+    # ConfigMap, which is disabled above. Dashboards query uid "prometheus".
+    - name: Prometheus
+      type: prometheus
+      uid: prometheus
+      access: proxy
+      isDefault: true
+      url: http://kube-prometheus-prometheus.observability.svc.cluster.local:9090
+      jsonData:
+        timeInterval: 30s
     - name: Loki
       type: loki
       uid: loki
