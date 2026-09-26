@@ -9,6 +9,8 @@
 #  UIs:
 #    Prometheus  http://localhost:9090
 #    Grafana     http://localhost:3001  (admin / see GRAFANA_ADMIN_*)
+#    Loki        http://localhost:3100
+#    Tempo       http://localhost:3200  (OTLP gRPC :4317, HTTP :4318)
 #
 #  Langfuse is a separate compose project:
 #    deploy/observability/docker-compose.langfuse.yml
@@ -44,11 +46,35 @@ services:
     depends_on:
       - redis
 
+  loki:
+    image: grafana/loki:3.4.2
+    restart: unless-stopped
+    command: ["-config.file=/etc/loki/local-config.yaml"]
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./deploy/observability/loki-local.yaml:/etc/loki/local-config.yaml:ro
+      - loki-data:/loki
+
+  tempo:
+    image: grafana/tempo:2.7.2
+    restart: unless-stopped
+    command: ["-config.file=/etc/tempo/tempo.yaml"]
+    ports:
+      - "3200:3200"
+      - "4317:4317"
+      - "4318:4318"
+    volumes:
+      - ./deploy/observability/tempo-local.yaml:/etc/tempo/tempo.yaml:ro
+      - tempo-data:/var/tempo
+
   grafana:
     image: grafana/grafana:11.5.2
     restart: unless-stopped
     depends_on:
       - prometheus
+      - loki
+      - tempo
     environment:
       GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
       GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
@@ -63,3 +89,5 @@ services:
 volumes:
   prometheus-data:
   grafana-data:
+  loki-data:
+  tempo-data:

@@ -99,6 +99,8 @@ services:
       POSTGRES_USER: langfuse
       POSTGRES_PASSWORD: ${LANGFUSE_DB_PASSWORD:-langfuse}
       POSTGRES_DB: langfuse
+    ports:
+      - "5432:5432"
     volumes:
       - langfuse-pg-data:/var/lib/postgresql/data
     healthcheck:

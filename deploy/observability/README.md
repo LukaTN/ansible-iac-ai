@@ -4,22 +4,26 @@
 Prometheus metrics, a provisioned Grafana dashboard, and self-hosted Langfuse
 traces for every chat generation.
 
-| Stack | Compose file | UI |
-|-------|--------------|-----|
-| Prometheus + Grafana | `docker-compose.observability.yml` (repo root) | `:9090` / `:3001` |
-| Langfuse | `deploy/observability/docker-compose.langfuse.yml` | `:3000` |
+
+| Stack                | Compose file                                       | UI                |
+| -------------------- | -------------------------------------------------- | ----------------- |
+| Prometheus + Grafana | `docker-compose.observability.yml` (repo root)     | `:9090` / `:3001` |
+| Langfuse             | `deploy/observability/docker-compose.langfuse.yml` | `:3000`           |
+
 
 ## What shipped
 
 ### Metrics (`observability/metrics.py` + `GET /metrics`)
 
-| Metric | Meaning |
-|--------|---------|
-| `ansibleai_http_requests_total` / `_duration_seconds` | Flask RED |
-| `ansibleai_generation_started_total` / `_completed_total` / `_duration_seconds` | Celery agent turns |
-| `ansibleai_gate_result_total` | Production-gate `passed` / `failed` / `environment` |
-| `ansibleai_repair_iterations` | Repair-loop depth |
-| `ansibleai_llm_calls_total` / `_duration_seconds` / `_tokens_total` | LLM round-trips |
+
+| Metric                                                                          | Meaning                                             |
+| ------------------------------------------------------------------------------- | --------------------------------------------------- |
+| `ansibleai_http_requests_total` / `_duration_seconds`                           | Flask RED                                           |
+| `ansibleai_generation_started_total` / `_completed_total` / `_duration_seconds` | Celery agent turns                                  |
+| `ansibleai_gate_result_total`                                                   | Production-gate `passed` / `failed` / `environment` |
+| `ansibleai_repair_iterations`                                                   | Repair-loop depth                                   |
+| `ansibleai_llm_calls_total` / `_duration_seconds` / `_tokens_total`             | LLM round-trips                                     |
+
 
 `/metrics` is public (Prometheus scrape). Network-restrict it in real clusters.
 
@@ -33,6 +37,8 @@ traces for every chat generation.
 - Opt-in via `LANGFUSE_ENABLED` + keys (no-op when disabled)
 - Operator-only UI (`:3000`). Members see token spend in AnsibleAI Account; the SPA does not link to Langfuse
 
+
+
 ### Grafana
 
 Provisioned folder **AnsibleAI** → dashboard **AnsibleAI overview**
@@ -44,7 +50,7 @@ Provisioned folder **AnsibleAI** → dashboard **AnsibleAI overview**
 - LLM call rate, latency, tokens by model
 - Celery queue length, active workers, generation duration
 
-Direct link: http://localhost:3001/d/ansibleai-overview/ansibleai-overview
+Direct link: [http://localhost:3001/d/ansibleai-overview/ansibleai-overview](http://localhost:3001/d/ansibleai-overview/ansibleai-overview)
 
 ## Start
 
@@ -58,9 +64,11 @@ docker compose --env-file .env.docker \
   -f deploy/observability/docker-compose.langfuse.yml up -d
 ```
 
+
+
 ## Connect Langfuse to the app
 
-1. http://localhost:3000 → create organization + project (if needed).
+1. [http://localhost:3000](http://localhost:3000) → create organization + project (if needed).
 2. Project → **API Keys** → create `pk-lf-…` / `sk-lf-…`.
 3. In `.env.docker`:
 
@@ -76,13 +84,15 @@ LANGFUSE_TRACING_ENVIRONMENT=development
 (`host.docker.internal` is required: Langfuse is a **separate** Compose
 project, so `langfuse-web` is not on the app network.)
 
-4. Recreate api + worker:
+1. Recreate api + worker:
 
 ```bash
 docker compose --env-file .env.docker up -d --force-recreate api worker
 ```
 
-5. Send a chat message → Langfuse **Traces** shows `generate-playbook`.
+1. Send a chat message → Langfuse **Traces** shows `generate-playbook`.
+
+
 
 ## Secrets
 
@@ -94,15 +104,19 @@ openssl rand -base64 32   # NEXTAUTH_SECRET, SALT, LANGFUSE_REDIS_AUTH, …
 openssl rand -hex 32      # ENCRYPTION_KEY (64 hex chars)
 ```
 
+
+
 ## Verify
 
-| Check | Expect |
-|-------|--------|
-| http://localhost:3000 | Langfuse UI |
-| http://localhost:3001 → **AnsibleAI** / **AnsibleAI overview** | Dashboard loads |
-| http://localhost:9090/targets | `ansibleai-api` and `celery` **UP** |
-| `curl -s http://localhost:5000/metrics` | `ansibleai_*` series |
-| Chat turn → Langfuse Traces | Nested agent / retriever / generation / evaluator |
+
+| Check                                                                                   | Expect                                            |
+| --------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| [http://localhost:3000](http://localhost:3000)                                          | Langfuse UI                                       |
+| [http://localhost:3001](http://localhost:3001) → **AnsibleAI** / **AnsibleAI overview** | Dashboard loads                                   |
+| [http://localhost:9090/targets](http://localhost:9090/targets)                          | `ansibleai-api` and `celery` **UP**               |
+| `curl -s http://localhost:5000/metrics`                                                 | `ansibleai_*` series                              |
+| Chat turn → Langfuse Traces                                                             | Nested agent / retriever / generation / evaluator |
+
 
 After editing dashboards under `deploy/observability/grafana/`:
 
@@ -111,6 +125,8 @@ docker compose --env-file .env.docker \
   -f docker-compose.yml -f docker-compose.observability.yml \
   up -d --force-recreate grafana
 ```
+
+
 
 ## Layout
 
@@ -131,14 +147,18 @@ App code: `observability/` (`metrics.py`, `tracing.py`), wired from
 
 ## Not in 6a (later)
 
-| Item | When |
-|------|------|
-| Langfuse prompt management + `sync_langfuse_prompts.py` | **6b done** (label `production`, never compile) |
-| Retrieval / golden baselines (`evals/baselines/`) | **6b done** |
-| Model bake-off (`scripts/model_bakeoff.py`) | **6b done** |
-| Celery exporter + Prometheus rules | **6b done** on Compose |
-| Loki / Tempo / kube-prometheus-stack | **6c lab core up** — [k8s/README.md](k8s/README.md) |
-| vLLM / DCGM GPU dashboards | After Phase 4 (real GPU nodes) |
+
+| Item                                                    | When                                                |
+| ------------------------------------------------------- | --------------------------------------------------- |
+| Langfuse prompt management + `sync_langfuse_prompts.py` | **6b done** (label `production`, never compile)     |
+| Retrieval / golden baselines (`evals/baselines/`)       | **6b done**                                         |
+| Model bake-off (`scripts/model_bakeoff.py`)             | **6b done**                                         |
+| Celery exporter + Prometheus rules                      | **6b done** on Compose                              |
+| Loki / Tempo / kube-prometheus-stack                    | **6c lab core up** — [k8s/README.md](k8s/README.md) |
+| vLLM / DCGM GPU dashboards                              | After Phase 4 (real GPU nodes)                      |
+
+
+
 
 ## Stop
 
@@ -150,3 +170,4 @@ docker compose --env-file .env.docker \
 docker compose --env-file .env.docker \
   -f deploy/observability/docker-compose.langfuse.yml down
 ```
+

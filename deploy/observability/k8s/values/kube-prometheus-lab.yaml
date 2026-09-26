@@ -74,6 +74,10 @@ grafana:
     type: NodePort
     nodePort: 30300
   sidecar:
+    # Loki and Tempo are additionalDataSources below. The datasource
+    # watcher only CrashLooped (OOM at 128Mi on k8s-sidecar 2.10).
+    datasources:
+      enabled: false
     dashboards:
       enabled: true
       label: grafana_dashboard
@@ -82,10 +86,10 @@ grafana:
     resources:
       requests:
         cpu: 10m
-        memory: 32Mi
+        memory: 64Mi
       limits:
-        cpu: 100m
-        memory: 128Mi
+        cpu: 200m
+        memory: 256Mi
   additionalDataSources:
     - name: Loki
       type: loki
@@ -103,13 +107,14 @@ grafana:
       uid: tempo
       access: proxy
       url: http://tempo.observability.svc.cluster.local:3200
+  # Grafana 13's embedded apiserver misses /api/health at 384Mi/300m.
   resources:
     requests:
       cpu: 50m
-      memory: 128Mi
+      memory: 256Mi
     limits:
-      cpu: 300m
-      memory: 384Mi
+      cpu: "1"
+      memory: 768Mi
 
 prometheus:
   prometheusSpec:

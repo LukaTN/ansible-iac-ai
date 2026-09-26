@@ -106,28 +106,43 @@ export function PanelProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  useEffect(() => {
+  const userId = user?.id ?? null;
+  const [statsUserId, setStatsUserId] = useState(userId);
+  if (userId !== statsUserId) {
+    setStatsUserId(userId);
     setStats(null);
-    if (!user) return;
-    if (workspaceView === 'chat' && tab === 'stats' && !collapsed) {
-      void loadOverview();
-    }
-  }, [user?.id, tab, collapsed, loadOverview, user, workspaceView]);
+  }
+
+  if (!isAdmin && workspaceView === 'docs' && !isDesignMode()) {
+    setWorkspaceView('chat');
+    setTabState('stats');
+  }
 
   useEffect(() => {
-    if (!isAdmin && workspaceView === 'docs' && !isDesignMode()) {
-      setWorkspaceView('chat');
-      setTabState('stats');
-      closeDocsStream();
-    }
-  }, [isAdmin, workspaceView, closeDocsStream]);
+    if (!user) return;
+    if (!(workspaceView === 'chat' && tab === 'stats' && !collapsed)) return;
+    let cancelled = false;
+    api.stats
+      .get()
+      .then((data) => {
+        if (!cancelled) setStats(data);
+      })
+      .catch((e) => console.error('stats', e));
+    return () => {
+      cancelled = true;
+    };
+  }, [user, tab, collapsed, workspaceView]);
+
+  useEffect(() => {
+    if (!isAdmin && !isDesignMode()) closeDocsStream();
+  }, [isAdmin, closeDocsStream]);
 
   const checkRagStatus = useCallback(async () => {
     try {
       const data = await api.rag.status();
       setRagStatus(data);
     } catch (e) {
-      console.log('RAG status failed', e);
+      console.warn('RAG status failed', e);
     }
   }, []);
 
